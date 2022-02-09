@@ -30,7 +30,7 @@
     <data name="en-US">
 		<value>English (United States)</value>
 	</data>
-	<data name="sv">
-		<value>svenska</value>
+	<data name="sv-SE">
+		<value>svenska (Sverige)</value>
 	</data>
 </root>
