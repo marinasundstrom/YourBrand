@@ -28,6 +28,11 @@ public static class Config
                 new ApiResource("worker", "The Web Api", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
                 {
                     Scopes = new string[] { "myapi" }
+                },
+                // the api requires the role claim
+                new ApiResource("timereport", "The Web Api", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+                {
+                    Scopes = new string[] { "myapi" }
                 }
         };
 

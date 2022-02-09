@@ -1,6 +1,7 @@
 ﻿
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Skynet.TimeReport.Application.Activities;
@@ -13,6 +14,7 @@ namespace Skynet.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class ActivitiesController : ControllerBase
 {
     private readonly IMediator _mediator;

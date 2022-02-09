@@ -5,11 +5,13 @@ using Azure.Storage.Blobs;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
+using Microsoft.IdentityModel.Tokens;
 
 using Skynet.TimeReport;
 using Skynet.TimeReport.Application;
@@ -50,6 +52,25 @@ services.AddOpenApiDocument(config =>
     config.Version = "v1";
 });
 
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.Authority = "https://identity.local";
+                options.Audience = "myapi";
+
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
+
+                //options.TokenValidationParameters.ValidateAudience = false;
+
+                //options.Audience = "openid";
+
+                //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            });
+
 services.AddAzureClients(builder =>
 {
     // Add a KeyVault client
@@ -80,6 +101,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 //app.MapApplicationRequests();
 

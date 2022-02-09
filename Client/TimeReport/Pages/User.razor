@@ -1,4 +1,5 @@
 ﻿@page "/users/{userId}"
+@attribute [Authorize]
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IUsersClient UsersClient
