@@ -1,0 +1,101 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProjectsClient ProjectsClient
+@inject IActivitiesClient ActivitiesClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            <MudAutocomplete T="ProjectDto" Label="Project" Class="mb-6" Variant="Variant.Outlined" Value="Project" ValueChanged="OnProjectChanged" SearchFunc="@Search"
+                             For="() => Project"
+                             ToStringFunc="p => p?.Name"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true" CoerceValue="true"
+                             AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+
+            @if (Activities is not null)
+            {
+                <MudSelect T="ActivityDto" Label="Activity" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Activity" ToStringFunc="x => x?.Name"
+                           For="() => Activity">
+                    @foreach (var activity in Activities)
+                    {
+                        <MudSelectItem Value="@activity" />
+                    }
+                </MudSelect>
+            }
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Add</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    //public IEnumerable<ProjectDto> Projects { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public IEnumerable<ProjectDto> Projects { get; set; }
+
+    [Parameter]
+    public IEnumerable<ActivityDto> Activities { get; set; }
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public int Week { get; set; }
+
+    [Required]
+    public ProjectDto? Project { get; set; }
+
+    [Required]
+    public ActivityDto? Activity { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private async Task OnProjectChanged(ProjectDto project)
+    {
+        var page = await ActivitiesClient.GetActivitiesAsync(0, 10, project.Id, null, null, null);
+        Activities = page.Items;
+
+        Project = project;
+        Activity = Activities?.FirstOrDefault();
+    }
+    async Task OnSubmit()
+    {
+        var result = new ActivityModel
+        {
+            Activity = Activity,
+            Entries = GenerateEntriesForWeek(Year, Week).ToList()
+        };
+
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+    IEnumerable<EntryModel> GenerateEntriesForWeek(int year, int week)
+    {
+        return DateTimeHelpers.GetDatesInWeek(year, week)
+            .Select(date => new EntryModel()
+            {
+                Date = date
+            });
+    }
+
+    private async Task<IEnumerable<ProjectDto>> Search(string value)
+    {
+        var page = await ProjectsClient.GetProjectsAsync(UserId, 0, 10, value, null, null);
+
+        return page.Items;
+    }
+}

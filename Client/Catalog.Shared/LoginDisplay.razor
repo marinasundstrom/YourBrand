@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IStringLocalizer<LoginDisplay> T
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+@inject IDialogService DialogService
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopCenter" PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+            <ActivatorContent>
+                <MudAvatar Size="Size.Small" Class="mt-3 mb-3">@context.User.Identity.Name.First()</MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem OnClick="BeginSignOut">
+                    <div class="d-flex">
+                        <MudIcon Icon="@Icons.Material.Filled.Logout" class="me-2" />
+                        <MudText Style="overflow: hidden; white-space: nowrap;">@T["LogOut"]</MudText>
+                    </div>
+                </MudMenuItem>
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudIconButton Icon="@Icons.Material.Filled.Login" Size="Size.Small" Color="Color.Inherit" Edge="Edge.End" Link="authentication/login"/>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        var result = await DialogService.ShowMessageBox(T["LogOut"], T["AreYouSure"], T["Yes"], T["No"]);
+
+        if(!result.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+}

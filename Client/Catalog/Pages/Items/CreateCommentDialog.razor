@@ -1,0 +1,18 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<div style="width: 350px; max-width: 350px;">
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Description" Lines="3" Class="mt-3"
+                              @bind-Value="model.Text" For="@(() => model.Text)" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
+            </MudCardActions>
+        </MudCard>
+
+    </EditForm>
+</div>
+

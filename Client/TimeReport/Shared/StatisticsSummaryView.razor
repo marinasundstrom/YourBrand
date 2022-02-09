@@ -1,0 +1,39 @@
+﻿<MudGrid Class="mt-4">
+    @foreach (var entry in Entries)
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Class="px-4 py-4">
+                <MudText Typo="Typo.h6" Class="mb-2">@entry.Name</MudText>
+                <MudText Typo="Typo.h4">
+                    @if (entry.Value2 is not null)
+                    {
+                        @if (entry.Unit == "currency")
+                        {
+                            @entry.Value2?.ToString("c")
+                        }
+                        else
+                        {
+                            @entry.Value2
+
+                            <text>&nbsp;@entry.Unit</text>
+                        }
+                    }
+                    else
+                    {
+                        @entry.Value
+
+                        <text>&nbsp;@entry.Unit</text>
+                    }
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+    }
+</MudGrid>
+
+
+@code {
+    [Parameter]
+    public IEnumerable<StatisticsSummaryEntry> Entries { get; set; }
+}
+

@@ -1,0 +1,68 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProjectsClient ProjectsClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(ProjectId is null ? "Create" : "Save changes")</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public string? ProjectId { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(ProjectId is not null)
+        {
+            var result = await ProjectsClient.GetProjectAsync(ProjectId);
+
+            Name = result.Name;
+            Description = result.Description;
+        }
+    }
+
+    async Task OnSubmit()
+    {
+        ProjectDto? result = null;
+
+        if (ProjectId is null)
+        {
+            result = await ProjectsClient.CreateProjectAsync(new CreateProjectDto
+            {
+                Name = Name,
+                Description = Description
+            });
+        }
+        else
+        {
+            result = await ProjectsClient.UpdateProjectAsync(ProjectId, new UpdateProjectDto
+            {
+                Name = Name,
+                Description = Description
+            });
+        }
+
+        Modal.Close(DialogResult.Ok(result));
+    }
+}

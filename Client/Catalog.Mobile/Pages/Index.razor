@@ -1,0 +1,52 @@
+﻿@page "/"
+@using Microsoft.Maui.Essentials
+@implements IDisposable
+@inject IDialogService DialogService
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Hello, World!</MudText>
+
+
+<MudText Typo="Typo.body1" GutterBottom="true">Welcome to your new app.</MudText>
+
+<MudButton OnClick="async () => await OnClick()" Variant="Variant.Filled" Color="Color.Primary">@buttonText</MudButton>
+
+@if (visible)
+{
+    <MudText Typo="Typo.body1" GutterBottom="true">You are @(isConnected ? string.Empty : "not") connected to the Internet.</MudText>
+}
+
+@code {
+    bool isConnected = false;
+    bool visible = false;
+    string buttonText = "Click me!";
+
+    protected override void OnInitialized()
+    {
+#if !MACCATALYST
+        isConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
+
+        Connectivity.ConnectivityChanged += OnConnectivityChanged;
+
+        visible = true;
+#endif
+    }
+
+    protected void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs args)
+    {
+        isConnected = args.NetworkAccess == NetworkAccess.Internet;
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Connectivity.ConnectivityChanged -= OnConnectivityChanged;
+    }
+
+    public async Task OnClick()
+    {
+        buttonText = "You have clicked the button!";
+
+        await DialogService.ShowMessageBox("Message", "Hello World!");
+    }
+}

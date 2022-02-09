@@ -1,0 +1,102 @@
+﻿@page "/reports"
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IProjectsClient ProjectsClient
+@inject IUsersClient UsersClient
+@inject IReportsClient ReportsClient
+@inject IJSRuntime JS
+
+<PageTitle>Reports - Time Report</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Reports</MudText>
+
+@if (projects is not null)
+{
+    <MudCard>
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12" md="4">
+                    <MudDateRangePicker Label="Time span" HelperText="Select a date range" @bind-DateRange="selectedDateRange" />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudSelect T="UserDto" Label="User" HelperText="Select a user" Value="user" ValueChanged="OnUserChanged" Clearable=true ToStringFunc="x => ( x?.GetDisplayName() ?? AllLabel)">
+                        <MudSelectItem Value="@((UserDto)null)">@AllLabel</MudSelectItem>
+                        @foreach (var u in users)
+                        {
+                            <MudSelectItem Value="@u">@u.GetDisplayName()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudSelect Label="Projects" HelperText="Select projects" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options" ToStringFunc="x => x.Name">
+                        @foreach (var project in projects)
+                        {
+                            <MudSelectItem Value="@project">@project.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" md="12">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateReport">Create Report</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+    </MudCard>
+}
+
+@code
+{
+    const string AllLabel = "All";
+
+    private bool isLoading = false;
+
+    DateRange selectedDateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
+
+    private UserDto? user { get; set; }
+    private IEnumerable<UserDto> users { get; set; }
+
+
+    private ProjectDto? value { get; set; }
+    private IEnumerable<ProjectDto> options { get; set; } = new HashSet<ProjectDto>();
+
+    private IEnumerable<ProjectDto>? projects = null;
+
+    protected async Task OnUserChanged(UserDto user)
+    {
+        this.user = user;
+
+        var page = await ProjectsClient.GetProjectsAsync(user?.Id, 0, 10, null, null, null);
+        projects = page.Items;
+        options = new HashSet<ProjectDto>();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+
+            var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
+            users = page.Items;
+
+            var page2 = await ProjectsClient.GetProjectsAsync(null, 0, 10, null, null, null);
+            projects = page2.Items;
+        }
+        catch (Exception e)
+        {
+
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task CreateReport()
+    {
+        var fileResponse = await ReportsClient.GetReportAsync(options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End);
+
+        using var streamRef = new DotNetStreamReference(stream: fileResponse.Stream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", "TimeReport.xlsx", streamRef);
+    }
+}

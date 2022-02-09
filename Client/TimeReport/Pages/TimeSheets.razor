@@ -1,0 +1,121 @@
+﻿@page "/timesheets"
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ITimeSheetsClient TimeSheetsClient
+
+<PageTitle>Timesheets - Time Report</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Timesheets</MudText>
+
+@* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTimeSheetClicked">New TimeSheet</MudButton> *@
+
+<MudTable T="TimeSheetDto" ServerData="@(new Func<TableState, Task<TableData<TimeSheetDto>>>(ServerReload))"
+          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTimeSheet(e.Item)" GroupBy="@_groupDefinition">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="Year">Year</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="Week">Week</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="User.FirstName">First Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="User.LastName">Last Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="Status">Status</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <GroupHeaderTemplate Context="c">
+        <MudTh Class="mud-table-cell-custom-group" colspan="11">
+            <MudText Typo="Typo.h6">@($"{c.GroupName} {((dynamic)c.Key).Week}, {((dynamic)c.Key).Year}")</MudText>
+        </MudTh>
+    </GroupHeaderTemplate>
+    <RowTemplate Context="timeSheet">
+        <MudTd DataLabel="Year">@timeSheet.Year</MudTd>
+        <MudTd DataLabel="Week">@timeSheet.Week</MudTd>
+        <MudTd DataLabel="First Name">@timeSheet.User.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@timeSheet.User.LastName</MudTd>
+        <MudTd DataLabel="Status">@timeSheet.Status</MudTd>
+        <MudTd>
+            @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTimeSheetClicked(timeSheet)" /> *@
+            @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    MudTable<TimeSheetDto> table;
+    string searchString;
+
+    private TableGroupDefinition<TimeSheetDto> _groupDefinition = new()
+    {
+        GroupName = "Week",
+        Indentation = false,
+        Expandable = true,
+        Selector = (e) => new { e.Year, e.Week }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private async Task<TableData<TimeSheetDto>> ServerReload(TableState state)
+    {
+        var page = await TimeSheetsClient.GetTimeSheetsAsync(state.Page, state.PageSize, null, searchString,
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+
+        return new TableData<TimeSheetDto>() { TotalItems = page.TotalItems, Items = page.Items };
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private void GotToTimeSheet(TimeSheetDto timeSheet)
+    {
+        NavigationManager.NavigateTo($"/timeSheet/{timeSheet.Year}/{timeSheet.Week}?userId={timeSheet.User.Id}");
+    }
+
+    private async Task OnNewTimeSheetClicked()
+    {
+        /*
+        var dialogRef = DialogService.Show<TimeSheetDialog>("New TimeSheet");
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        searchString = null;
+        table.ReloadServerData();
+        */
+    }
+
+    private async Task OnEditTimeSheetClicked(TimeSheetDto timeSheet)
+    {
+        /*
+    DialogParameters parameters = new();
+    parameters.Add(nameof(TimeSheetDialog.TimeSheetId), timeSheet.Id);
+
+    var dialogRef = DialogService.Show<TimeSheetDialog>($"Edit {timeSheet.FirstName}", parameters);
+
+    var dialogResult = await dialogRef.Result;
+
+    if (dialogResult.Cancelled)
+        return;
+
+    table.ReloadServerData();
+        */
+    }
+}

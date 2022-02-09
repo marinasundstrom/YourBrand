@@ -1,0 +1,578 @@
+﻿@page "/timesheet"
+@page "/timesheet/{year:int}/{week:int}"
+
+@layout MainLayout2
+
+@using Microsoft.AspNetCore.SignalR.Client
+@using TimeReport.Client
+@using System.Globalization
+
+@implements IDisposable
+@inject ISnackbar Snackbar
+@inject IUsersClient UsersClient
+@inject ITimeSheetsClient TimeSheetsClient
+@inject IActivitiesClient ActivitiesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Timesheet - Time Report</PageTitle>
+
+@if (ActivitiesModels is not null && Year is not null && Week is not null)
+{
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Week @Week - @Year</MudText>
+
+    <div class="mb-4">
+        <MudButton Variant="@Variant.Filled" Class="me-2" StartIcon="@Icons.Material.Filled.ChevronLeft" Link="@PreviousWeekLink()">Previous week</MudButton>
+        <MudButton Variant="@Variant.Filled" EndIcon="@Icons.Material.Filled.ChevronRight" Link="@NextWeekLink()">Next week</MudButton>
+    </div>
+
+    <EditForm Model="@this">
+        <ObjectGraphDataAnnotationsValidator />
+
+        <MudTable T="ActivityModel" Items="ActivitiesModels" Hover="true" Loading="@isLoading"
+                  GroupBy="@_groupDefinition">
+
+            <ToolBarContent>
+                <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatusDto.Open">New activity</MudButton>
+                <MudAutocomplete T="UserDto" Label="User" Class="me-2" Margin="Margin.Dense" Variant="Variant.Outlined" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
+                                 For="() => User"
+                                 ToStringFunc="u => u?.GetDisplayName()"
+                                 CoerceText="false" CoerceValue="false"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+                <MudButton StartIcon="@Icons.Material.Filled.List">Templates</MudButton>
+                <MudSpacer />
+                @if (CanLockMonth)
+                    {
+                    <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="LockMonth">Lock month</MudButton>
+                    }
+                <MudText Typo="@Typo.body1" Class="ms-4 me-2"><b>Status:</b> </MudText>
+                <MudText Typo="@Typo.body1" Class="me-4">@timeSheet?.Status</MudText>
+                @if (timeSheet?.Status == TimeSheetStatusDto.Open)
+                    {
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" @onclick="OnCloseClicked"></MudIconButton>
+                    }
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh colspan="2">
+                    Activity
+                </MudTh>
+                @foreach (var date in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
+                    {
+                    <MudTh>
+                        @date.DayOfWeek.ToString().Substring(0, 3)
+                        <MudText Typo="Typo.subtitle1">@date.ToShortDateString()</MudText>
+                    </MudTh>
+                    }
+                <MudTh>Total</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+
+            <GroupHeaderTemplate Context="c">
+                <MudTh Class="mud-table-cell-custom-group" colspan="11">
+                    <MudText Typo="Typo.h6">@($"{((dynamic)c.Key).Name}")</MudText>
+                </MudTh>
+            </GroupHeaderTemplate>
+
+            <RowTemplate Context="activityLine">
+                <MudTd colspan="2" DataLabel="Activity">
+                    @activityLine.Activity.Name
+                </MudTd>
+                @foreach (var entry in activityLine.Entries)
+                    {
+                    <MudTd DataLabel="@entry.Date.DayOfWeek.ToString()">
+                        <div @onclick="() => FocusEntry(activityLine, entry)">
+                            <MudNumericField Disabled="@(timeSheet.Status != TimeSheetStatusDto.Open || entry.Status == EntryStatusDto.Locked)" T="double?" Class="@((IsWeekend(entry.Date) ? "weekendEntry" : null) + " " + IsEntrySelectedCss(entry))" Immediate="true" DebounceInterval="debounceInterval" Value="entry.Hours" ValueChanged="(value) => OnHoursChanged(value, activityLine, entry)" Variant="Variant.Filled" Margin="Margin.Dense" HideSpinButtons="true" />
+                        </div>
+                    </MudTd>
+                    }
+                <MudTd DataLabel="Total">
+                    <span>@activityLine.TotalHours h</span>
+                </MudTd>
+                <MudTd>
+                    @if (timeSheet?.Status == TimeSheetStatusDto.Open)
+                        {
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteActivity(activityLine)" />
+                        }
+                </MudTd>
+            </RowTemplate>
+
+            <FooterContent>
+                <MudTh Class="mud-table-cell-custom-group" colspan="9"></MudTh>
+                <MudTd>
+                    <MudText Typo="Typo.h6">@ActivitiesModels.Sum(x => x.TotalHours) h</MudText>
+                </MudTd>
+                <MudTd></MudTd>
+            </FooterContent>
+
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
+
+        </MudTable>
+
+        @if (selectedEntry is not null)
+            {
+            <MudCard Class="mt-4">
+                <MudCardContent>
+                    <MudText Typo="@Typo.h6" Class="mb-2">@selectedActivity.Activity.Project.Name: @selectedActivity.Activity.Name - @selectedEntry.Date.ToShortDateString()</MudText>
+                    <MudTextField Disabled="@(timeSheet.Status != TimeSheetStatusDto.Open || selectedEntry.Status == EntryStatusDto.Locked)" T="string?" Immediate="true" DebounceInterval="debounceInterval" Value="selectedEntry.Description" ValueChanged="(value) => OnDescriptionChanged(value, selectedActivity, selectedEntry)" Variant="Variant.Filled" Label="Description" Lines="3" />
+                </MudCardContent>
+            </MudCard>
+            }
+    </EditForm>
+}
+
+@code {
+
+    double debounceInterval = 500;
+
+    bool isLoading = false;
+    TimeSheetDto timeSheet;
+    IEnumerable<ActivityDto> activities = null;
+
+    UserDto? User { get; set; }
+    IEnumerable<UserDto> Users { get; set; } = null;
+
+    List<ActivityModel>? ActivitiesModels { get; } = new List<ActivityModel>();
+
+    ActivityModel? selectedActivity;
+    EntryModel? selectedEntry;
+
+    [Parameter]
+    public int? Year { get; set; }
+
+    [Parameter]
+    public int? Week { get; set; }
+
+    [SupplyParameterFromQuery(Name = "userId")]
+    [Parameter]
+    public string? UserId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+
+        try
+        {
+            var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
+            Users = page.Items;
+
+            User = Users.FirstOrDefault();
+
+            var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null);
+            activities = page2.Items;
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            Snackbar.Add(e.Result.Detail, Severity.Error);
+            isLoading = false;
+            return;
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Could not load data from server.", Severity.Error);
+            return;
+        }
+
+        await LoadTimeSheet();
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    async void OnLocationChanged(object? sender, LocationChangedEventArgs eventArgs)
+    {
+        await LoadTimeSheet();
+
+        StateHasChanged();
+    }
+
+    protected async Task LoadTimeSheet()
+    {
+        selectedActivity = null;
+        selectedEntry = null;
+        ActivitiesModels.Clear();
+
+        isLoading = true;
+
+        var date = DateTime.Now.Date;
+
+        if (Year is null && Week is null)
+        {
+            Year = date.Year;
+            Week = date.GetCurrentWeek();
+        }
+
+        try
+        {
+            timeSheet = await TimeSheetsClient.GetTimeSheetForWeekAsync(Year.GetValueOrDefault(), Week.GetValueOrDefault(), UserId ?? User.Id);
+
+            User = timeSheet.User;
+            UserId = User.Id;
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            Snackbar.Add(e.Result.Detail, Severity.Error);
+            isLoading = false;
+            return;
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Failed to download timesheet", Severity.Error);
+            isLoading = false;
+            return;
+        }
+
+        foreach (var activity in timeSheet.Activities)
+        {
+            var activityModel = new ActivityModel
+            {
+                Activity = activities.FirstOrDefault(x => x.Id == activity.Id)
+            };
+
+            activity.Entries = activity.Entries.OrderBy(x => x.Date).ToList();
+
+            ActivitiesModels.Add(activityModel);
+
+            foreach (var dayDate in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
+            {
+                var entry = activity.Entries.FirstOrDefault(x => x.Date.Date == dayDate.Date);
+
+                EntryModel? entryModel = null;
+
+                if (entry is null)
+                {
+                    var value = timeSheet?.Months.Any(x => dayDate.Month == x.Month && x.IsLocked);
+
+                    entryModel = new EntryModel
+                    {
+                        Id = null,
+                        Date = dayDate,
+                        Hours = null,
+                        Status = value.GetValueOrDefault() ? EntryStatusDto.Locked : EntryStatusDto.Unlocked
+                    };
+
+                    activityModel.Entries.Add(entryModel);
+
+                    continue;
+                }
+
+                entryModel = new EntryModel
+                {
+                    Id = entry.Id,
+                    Date = entry.Date.Date,
+                    Hours = entry.Hours,
+                    Description = entry.Description,
+                    Status = entry.Status
+                };
+
+                activityModel.Entries.Add(entryModel);
+            }
+        }
+
+        isLoading = false;
+    }
+
+    async Task NewActivity()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(NewTimeSheetActivityDialog.UserId), User.Id);
+        parameters.Add(nameof(NewTimeSheetActivityDialog.Year), Year);
+        parameters.Add(nameof(NewTimeSheetActivityDialog.Week), Week);
+
+        var dialogRef = DialogService.Show<NewTimeSheetActivityDialog>("New activity", parameters);
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        var obj = (ActivityModel)dialogResult.Data; ;
+
+        if (ActivitiesModels.Any(x => x.Activity.Id == obj.Activity.Id))
+        {
+            Snackbar.Add("Activity has already been added.", Severity.Info);
+            return;
+        }
+
+        ActivitiesModels.Add(obj);
+
+        foreach (var entryModel in obj.Entries)
+        {
+            var value = timeSheet?.Months.Any(x => entryModel.Date.Month == x.Month && x.IsLocked);
+
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(value));
+
+            entryModel.Status = value.GetValueOrDefault() ? EntryStatusDto.Locked : EntryStatusDto.Unlocked;
+        }
+    }
+
+    async Task DeleteActivity(ActivityModel activityLine)
+    {
+        var result = await DialogService.ShowMessageBox("Delete activity?", "This will delete all entries for this activity. Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        try
+        {
+            await TimeSheetsClient.DeleteActvityEntriesAsync(timeSheet.Id, activityLine.Activity.Id);
+
+            await LoadTimeSheet();
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            Snackbar.Add(e.Result.Detail, Severity.Error);
+            isLoading = false;
+            return;
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Failed to delete activity", Severity.Error);
+        }
+    }
+
+    async Task OnUserChanged(UserDto user)
+    {
+        if (user is null) return;
+
+        User = user;
+        UserId = user.Id;
+
+        NavigationManager.NavigateTo($"/timesheet/{Year}/{Week}?userId={user.Id}", replace: true); ;
+    }
+
+    private TableGroupDefinition<ActivityModel> _groupDefinition = new()
+    {
+        GroupName = "Project",
+        Indentation = false,
+        Expandable = true,
+        Selector = (e) => new { e.Activity.Project.Id, e.Activity.Project.Name }
+    };
+
+    string? IsEntrySelectedCss(EntryModel entry)
+    {
+        if (entry == selectedEntry) return "selected";
+
+        return null;
+    }
+
+    void FocusEntry(ActivityModel activity, EntryModel entry)
+    {
+        selectedActivity = activity;
+        selectedEntry = entry;
+    }
+
+    string PreviousWeekLink()
+    {
+        if (Week == 1)
+        {
+            return $"/Timesheet/{Year - 1}/{52}";
+        }
+
+        return $"/Timesheet/{Year}/{Week - 1}";
+    }
+
+    string NextWeekLink()
+    {
+        if (Week == 52)
+        {
+            return $"/Timesheet/{Year + 1}/{1}";
+        }
+
+        return $"/Timesheet/{Year}/{Week + 1}";
+    }
+
+    async Task OnHoursChanged(double? value, ActivityModel activity, EntryModel entry)
+    {
+        var oldValue = entry.Hours;
+        entry.Hours = value;
+
+        StateHasChanged();
+
+        Task.Run(async () =>
+        {
+            try
+            {
+                if (entry.Id is null)
+                {
+                    var a = activity.Activity;
+
+                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntryDto
+                    {
+                        ProjectId = a.Project.Id,
+                        ActivityId = a.Id,
+                        Date = entry.Date,
+                        Hours = value,
+                        Description = entry.Description
+                    });
+
+                    entry.Id = result.Id;
+                }
+                else
+                {
+                    await TimeSheetsClient.UpdateEntryAsync(timeSheet.Id, entry.Id, new UpdateEntryDto
+                    {
+                        Hours = value,
+                        Description = entry.Description
+                    });
+                }
+            }
+            catch (ApiException<ProblemDetails> exc)
+            {
+                entry.Hours = oldValue;
+
+                Snackbar.Add(exc.Result.Title, Severity.Error);
+            }
+            catch
+            {
+                entry.Hours = oldValue;
+
+                Snackbar.Add("Failed to update hours", Severity.Error);
+            }
+
+            StateHasChanged();
+        });
+    }
+
+    async Task OnDescriptionChanged(string? value, ActivityModel activity, EntryModel entry)
+    {
+        var oldValue = entry.Description;
+        entry.Description = value;
+
+        StateHasChanged();
+
+        Task.Run(async () =>
+        {
+            try
+            {
+                if (entry.Id is null)
+                {
+                    var a = activity.Activity;
+
+                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntryDto
+                    {
+                        ProjectId = a.Project.Id,
+                        ActivityId = a.Id,
+                        Date = entry.Date,
+                        Hours = null,
+                        Description = value
+                    });
+
+                    entry.Id = result.Id;
+                }
+                else
+                {
+                    await TimeSheetsClient.UpdateEntryDetailsAsync(timeSheet.Id, entry.Id, new UpdateEntryDetailsDto
+                    {
+                        Description = value
+                    });
+                }
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                Snackbar.Add(e.Result.Title, Severity.Error);
+                isLoading = false;
+                return;
+            }
+            catch
+            {
+                entry.Description = oldValue;
+
+                Snackbar.Add("Failed to update description", Severity.Error);
+            }
+
+            StateHasChanged();
+        });
+    }
+
+    private async Task<IEnumerable<UserDto>> Search1(string value)
+    {
+        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
+
+        return page.Items;
+    }
+
+    async Task OnCloseClicked()
+    {
+        var result = await DialogService.ShowMessageBox("Close week?", "This will close this week's timesheet. Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+        try
+        {
+            await TimeSheetsClient.UpdateTimeSheetStatusAsync(timeSheet.Id, (int)TimeSheetStatusDto.Closed);
+
+            timeSheet.Status = TimeSheetStatusDto.Closed;
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            Snackbar.Add(e.Result.Detail, Severity.Error);
+            isLoading = false;
+            return;
+        }
+        catch
+        {
+            Snackbar.Add("Failed to close week.", Severity.Error);
+        }
+    }
+
+    async Task LockMonth()
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBox("Lock month?", "This will lock the past month. Are you sure?", "Yes", "No");
+
+            if (!result.GetValueOrDefault())
+                return;
+
+            await TimeSheetsClient.LockMonthAsync(timeSheet.Id);
+
+            // Reload
+            await LoadTimeSheet();
+
+            /*
+            foreach (var activity in ActivitiesModels)
+            {
+                foreach (var entryModel in activity.Entries)
+                {
+                    var value = timeSheet?.Months.Any(x => entryModel.Date.Month == x.Month);
+
+                    entryModel.Status = value.GetValueOrDefault() ? EntryStatusDto.Locked : EntryStatusDto.Unlocked;
+                }
+            }
+            */
+
+            StateHasChanged();
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            Snackbar.Add(e.Result.Detail, Severity.Error);
+            isLoading = false;
+            return;
+        }
+        catch
+        {
+            Snackbar.Add("Failed to lock month", Severity.Error);
+        }
+    }
+
+    bool IsWeekend(DateTime date) => date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+
+    bool CanLockMonth
+    {
+        get
+        {
+            var entries = ActivitiesModels.SelectMany(a => a.Entries);
+
+            return entries.Any()
+                && entries.All(e => e.Status == EntryStatusDto.Unlocked)
+                    && timeSheet.From.Month != timeSheet.To.Month || timeSheet != null
+                    && ISOWeek.ToDateTime(Year.GetValueOrDefault(), Week.GetValueOrDefault(), DayOfWeek.Sunday).Day == DateTime.DaysInMonth(timeSheet.To.Year, timeSheet.To.Month);
+        }
+    }
+    }

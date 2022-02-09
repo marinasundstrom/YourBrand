@@ -1,0 +1,58 @@
+﻿@page "/notifications"
+@using Catalog.Client
+@attribute [Authorize]
+@inject IStringLocalizer<NotificationsPage> T
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject INotificationsClient NotificationsClient
+
+<PageTitle>@T["Notifications"]</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@T["Notifications"]</MudText>
+
+<MudTable T="NotificationDto" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<NotificationDto>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh><MudTableSortLabel T="NotificationDto" SortLabel="Title">@T["Header_Title"]</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="NotificationDto" SortLabel="Text">@T["Header_Text"]</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="NotificationDto" SortLabel="Published">@T["Header_Published"]</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>
+            @if (!context.IsRead)
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Circle" />
+            }
+        </MudTd>
+        <MudTd DataLabel="@T["Header_Title"]">@context.Title</MudTd>
+        <MudTd DataLabel="@T["Header_Text"]">@context.Text</MudTd>
+        <MudTd DataLabel="@T["Header_Published"]">@(context.Published.Date == DateTime.Now.Date ? context.Published.ToString("HH:mm") : context.Published.ToString("yyyy-MM-dd HH:mm"))</MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>@T["NoRecordsFound"]</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@T["Loading"]</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    MudTable<NotificationDto> table;
+
+    private async Task<TableData<NotificationDto>> ServerReload(TableState state)
+    {
+        var results = await NotificationsClient.GetNotificationsAsync(false, state.Page + 1, state.PageSize, state.SortLabel,
+            state.SortDirection == MudBlazor.SortDirection.Ascending ? Catalog.Client.SortDirection.Asc : Catalog.Client.SortDirection.Desc);
+
+        return new TableData<NotificationDto>() { TotalItems = results.TotalCount, Items = results.Items };
+    }
+
+    private void RowClickEvent(TableRowClickEventArgs<NotificationDto> args)
+    {
+        //NavigationManager.NavigateTo($"/notifications/{args.Item.Id}");
+    }
+}
+

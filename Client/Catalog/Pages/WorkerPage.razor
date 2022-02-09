@@ -1,0 +1,89 @@
+﻿@page "/worker"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.SignalR.Client
+@using Catalog.Client
+@implements IAsyncDisposable
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+<PageTitle>Worker</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Worker</MudText>
+
+<MudPaper Elevation="1" Class="px-4 py-4">
+    <MudText Typo="Typo.body1" GutterBottom="true">If þe servere will, þou schalt receiven a newe message every minute.</MudText>
+
+    <ul class="mt-4">
+        @foreach (var notification in notifications)
+        {
+            <li>@notification</li>
+        }
+    </ul>
+</MudPaper>
+
+@code {
+    HubConnection hubConnection = null!;
+    List<string> notifications = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl($"{NavigationManager.BaseUri}api/hubs/worker")
+                .WithAutomaticReconnect()
+                .Build();
+
+            hubConnection.On<string>("NotificationReceived", OnNotificationReceived);
+
+            hubConnection.Closed += (error) =>
+            {
+                if (error is not null)
+                {
+                    Snackbar.Add($"{error.Message}", Severity.Error);
+                }
+
+                Snackbar.Add("Connection closed");
+
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnected += (error) =>
+            {
+                Snackbar.Add("Reconnected");
+
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnecting += (error) =>
+            {
+                Snackbar.Add("Reconnecting");
+
+                return Task.CompletedTask;
+            };
+
+            await hubConnection.StartAsync();
+
+            Snackbar.Add("Connected");
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+    }
+
+    Task OnNotificationReceived(string message)
+    {
+        notifications.Add(message);
+
+        StateHasChanged();
+
+        return Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await hubConnection.DisposeAsync();
+    }
+}
+

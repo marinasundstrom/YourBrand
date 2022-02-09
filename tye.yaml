@@ -1,0 +1,107 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: webapi
+services:
+- name: webapp
+  project: Client/Catalog.Web/Catalog.Web.csproj
+  bindings:
+  - protocol: https
+    port: 5010
+
+- name: webapi
+  project: Server/AppService/WebApi/WebApi.csproj
+  bindings:
+  - protocol: https
+    port: 5020
+
+- name: worker
+  project: Server/Worker/Worker.csproj
+  bindings:
+  - protocol: https
+    port: 5030
+
+- name: identity
+  project: Server/IdentityService/IdentityService.csproj
+  bindings:
+  - protocol: https
+    port: 5040
+
+- name: timereport
+  project: Server/TimeReport/WebApi/WebApi.csproj
+  bindings:
+  - protocol: https
+    port: 5050
+
+- name: azurite
+  image: mcr.microsoft.com/azure-storage/azurite
+  args: "azurite-blob --loose --blobHost 0.0.0.0 -l /data"
+  bindings:
+    - name: blob
+      port: 10000
+      containerPort: 10000
+      protocol: http
+    - name: queue
+      port: 10001
+      containerPort: 10001
+      protocol: http
+    - name: table
+      port: 10002
+      containerPort: 10002
+      protocol: http
+  volumes:
+    - source: .data/azurite
+      target: /data
+
+- name: mssql
+  image: mcr.microsoft.com/azure-sql-edge:latest
+  env:
+  - name: MSSQL_SA_PASSWORD
+    value: P@ssw0rd
+  - name: MSSQL_PID
+    value: Developer
+  - name: ACCEPT_EULA
+    value: "Y"
+  bindings:
+    - port: 1433
+      connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD}
+  volumes:
+    - source: .data/sql-edge
+      target: /var/opt/mssql/data
+
+- name: redis
+  image: redis
+  bindings:
+  - port: 6379
+    connectionString: "${host}:${port}" 
+    
+- name: redis-cli
+  image: redis
+  args: "redis-cli -h redis MONITOR"
+
+- name: rabbitmq
+  image: rabbitmq:3-management
+  bindings:
+    - name: rabbit
+      port: 5672
+      protocol: rabbitmq
+    - name: management
+      port: 15672
+
+- name: nginx
+  image: nginx
+  bindings:
+    - name: http
+      protocol: http
+      port: 80
+    - name: https
+      protocol: https
+      port: 443
+  volumes:
+    - source: nginx.conf
+      target: /etc/nginx/templates/default.conf.template
+    - source: certs
+      target: /etc/nginx/certs

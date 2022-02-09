@@ -1,0 +1,220 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using Catalog.Client
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@implements IAsyncDisposable
+@inject IStringLocalizer<Notifications> T
+@inject INotificationsClient NotificationsClient
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IAccessTokenProvider AccessTokenProvider
+@inject IJSRuntime JSRuntime
+
+<audio id="sound" src="/pling.mp3" />
+
+<MudBadge Color="Color.Secondary" Content="BadgeText" Overlap="true" Visible="@(unreadNotificationsCount > 0)">
+    <MudMenu Icon="@(unreadNotificationsCount > 0 ? Icons.Filled.Notifications : Icons.Outlined.Notifications)" Color="Color.Inherit" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopCenter" PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+        <div class="d-flex justify-space-between align-center px-2">
+            <MudText Typo="Typo.subtitle2"><b>@T["Notifications"]</b></MudText>
+            <MudButton Disabled="@(unreadNotificationsCount == 0)" OnClick="MarkAllNotificationsAsRead" StartIcon="@Icons.Filled.DoneAll" Variant="Variant.Text" Color="Color.Primary">@T["MarkAllAsRead"]</MudButton>
+        </div>
+
+        <div>
+            @if (isLoading)
+            {
+            <MudText Typo="Typo.subtitle2">@T["Loading"]</MudText>
+            }
+            else
+            {
+            @if (notifications.Any())
+            {
+                @foreach (var notification in notifications)
+                    {
+                        var cls = $"px-2 py-0 rounded {(!notification.IsRead ? "notification-unread" : string.Empty)}";
+
+                    <MudMenuItem Class="@cls" OnClick="async () => await OnNotificationClicked(notification)">
+                        <MudText Typo="Typo.subtitle2">@notification.Title</MudText>
+                        @*<MudText Typo="Typo.body2">@notification.Text</MudText>*@
+                        <MudText Typo="Typo.body2">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
+                    </MudMenuItem>
+                    <MudDivider Class="my-2" />
+                    }
+
+                @if (totalNotificationsCount > 5)
+                    {
+                    <div class="d-flex justify-center align-center px-2 py-2 relative">
+                        <MudLink Class="mud-text-secondary my-2" Href="/notifications">@T["MoreNotifications"]</MudLink>
+                    </div>
+                    }
+                }
+                else
+                {
+                <div class="d-flex justify-center align-center px-2 py-8 relative">
+                    <MudText Class="mud-text-secondary my-12">@T["NothingNew"]</MudText>
+                </div>
+                }
+            }
+        </div>
+    </MudMenu>
+</MudBadge>
+
+@code {
+    bool isLoading = true;
+    HubConnection hubConnection = null!;
+    List<NotificationDto> notifications = new List<NotificationDto>();
+    int totalNotificationsCount = 0;
+    int unreadNotificationsCount = 0;
+    int limit = 100;
+
+    public string BadgeText
+    {
+        get
+        {
+            if (unreadNotificationsCount == 0) return null;
+
+            if (unreadNotificationsCount > limit)
+            {
+                return $"{limit}+";
+            }
+
+            return unreadNotificationsCount.ToString();
+        }
+    }
+
+    async Task OnNotificationClicked(NotificationDto notification)
+    {
+        if(!notification.IsRead) 
+        {
+            await MarkNotificationAsRead(notification);
+            notification.IsRead = true;
+        }
+
+        if (notification.Link is not null)
+        {
+            NavigationManager.NavigateTo(notification.Link);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await NotificationsClient.GetNotificationsAsync(true, 1, 5, null, null);
+            totalNotificationsCount = result.TotalCount;
+            unreadNotificationsCount = result.UnreadNotificationsCount.GetValueOrDefault();
+
+            notifications.AddRange(result.Items);
+
+            isLoading = false;
+
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl($"{NavigationManager.BaseUri}api/hubs/notifications", options =>
+                {
+                    options.AccessTokenProvider = async () =>
+                    {
+                        var results = await AccessTokenProvider.RequestAccessToken(new AccessTokenRequestOptions() { Scopes = new[] { "myapi" } });
+                        if (results.TryGetToken(out var accessToken))
+                        {
+                            return accessToken.Value;
+                        }
+                        return null!;
+                    };
+                })
+                .WithAutomaticReconnect()
+                .Build();
+
+            hubConnection.On<NotificationDto>("NotificationReceived", OnNotificationReceived);
+
+            hubConnection.Closed += (error) =>
+            {
+                if (error is not null)
+                {
+                    Snackbar.Add($"{error.Message}", Severity.Error);
+                }
+
+                Snackbar.Add("Connection closed");
+
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnected += (error) =>
+            {
+                Snackbar.Add("Reconnected");
+
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnecting += (error) =>
+            {
+                Snackbar.Add("Reconnecting");
+
+                return Task.CompletedTask;
+            };
+
+            await hubConnection.StartAsync();
+
+            Snackbar.Add("Connected");
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+    }
+
+    public async Task PlaySound()
+    {
+        await JSRuntime.InvokeAsync<string>("PlayAudio", new[] { "sound" });
+    }
+
+    async Task MarkAllNotificationsAsRead()
+    {
+        await NotificationsClient.MarkAllNotificationsAsReadAsync();
+
+        foreach (var notification in notifications)
+        {
+            notification.IsRead = true;
+        }
+
+        unreadNotificationsCount = 0;
+    }
+
+    async Task MarkNotificationAsRead(NotificationDto notification)
+    {
+        await NotificationsClient.MarkNotificationAsReadAsync(notification.Id);
+
+        notification.IsRead = true;
+        unreadNotificationsCount--;
+
+        StateHasChanged();
+    }
+
+    Task OnNotificationReceived(NotificationDto notification)
+    {
+        notifications.Insert(0, notification);
+
+        if (notifications.Count > 5)
+        {
+            notifications.Remove(notifications.Last());
+        }
+
+        totalNotificationsCount++;
+        unreadNotificationsCount++;
+
+        Snackbar.Add($"<h6>{notification.Title}</h6><p>{notification.Text}</p>", Severity.Info, options =>
+        {
+            options.VisibleStateDuration = 5000;
+            options.Onclick = async (snackbar) => await OnNotificationClicked(notification);
+        });
+
+        StateHasChanged();
+
+        PlaySound();
+
+        return Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await hubConnection.DisposeAsync();
+    }
+}
+

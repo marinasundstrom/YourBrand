@@ -1,0 +1,77 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IActivitiesClient ActivitiesClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+
+            <MudNumericField Label="Hourly Rate" Class="mb-6" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" @bind-Value="HourlyRate" For="() => HourlyRate" HideSpinButtons="true" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(ActivityId is null ? "Create" : "Save changes")</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public string? ProjectId { get; set; }
+
+    [Parameter] public string? ActivityId { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    public decimal? HourlyRate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(ActivityId is not null)
+        {
+            var result = await ActivitiesClient.GetActivityAsync(ActivityId);
+
+            Name = result.Name;
+            Description = result.Description;
+            HourlyRate = result.HourlyRate;
+        }
+    }
+
+    async Task OnSubmit()
+    {
+        ActivityDto? result = null;
+
+        if (ActivityId is null)
+        {
+            result = await ActivitiesClient.CreateActivityAsync(ProjectId, new CreateActivityDto
+            {
+                Name = Name,
+                Description = Description,
+                HourlyRate = HourlyRate
+            });
+        }
+        else
+        {
+            result = await ActivitiesClient.UpdateActivityAsync(ActivityId, new UpdateActivityDto
+            {
+                Name = Name,
+                Description = Description,
+                HourlyRate = HourlyRate
+            });
+        }
+
+        Modal.Close(DialogResult.Ok(result));
+    }
+}

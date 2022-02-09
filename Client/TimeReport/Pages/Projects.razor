@@ -1,0 +1,135 @@
+﻿@page "/projects"
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IProjectsClient ProjectsClient
+
+<PageTitle>Projects - Time Report</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Projects</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewProjectClicked">New project</MudButton>
+
+<MudTable T="ProjectDto" ServerData="@(new Func<TableState, Task<TableData<ProjectDto>>>(ServerReload))"
+          Hover="true" @ref="table" OnRowClick="(TableRowClickEventArgs<ProjectDto> project) => GotToProject(project.Item)" Class="mt-4 mb-4">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel T="ProjectDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="ProjectDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="project">
+        <MudTd DataLabel="Name">@project.Name</MudTd>
+        <MudTd DataLabel="Description">@project.Description</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditProjectClicked(project)" />
+            @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@if (data is not null)
+{
+    <MudPaper Class="pa-16 ma-2">
+
+        <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Project hours per month</MudText>
+
+        <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+    </MudPaper>
+}
+
+@if (statisticsSummary is not null)
+{
+    <StatisticsSummaryView Entries="statisticsSummary.Entries" />
+}
+
+@code {
+    MudTable<ProjectDto> table;
+    StatisticsSummary statisticsSummary;
+    string searchString;
+
+    Data? data;
+
+    private ChartOptions options = new ChartOptions()
+    {
+        YAxisFormat = "0 h",
+        YAxisTicks = 10
+    };
+    public List<ChartSeries> Series = new List<ChartSeries>();
+    public string[] XAxisLabels = new string[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await ProjectsClient.GetStatisticsAsync(null, null);
+
+        XAxisLabels = data.Labels.ToArray();
+
+        foreach (var d in data.Series)
+        {
+            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+
+        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
+    }
+
+    private async Task<TableData<ProjectDto>> ServerReload(TableState state)
+    {
+        var page = await ProjectsClient.GetProjectsAsync(null, state.Page, state.PageSize, searchString,
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+
+        return new TableData<ProjectDto>() { TotalItems = page.TotalItems, Items = page.Items };
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private void GotToProject(ProjectDto project)
+    {
+        NavigationManager.NavigateTo($"/projects/{project.Id}");
+    }
+
+    private async Task OnNewProjectClicked()
+    {
+        var dialogRef = DialogService.Show<ProjectDialog>("New project");
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        table.ReloadServerData();
+    }
+
+    private async Task OnEditProjectClicked(ProjectDto project)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(ProjectDialog.ProjectId), project.Id);
+
+        var dialogRef = DialogService.Show<ProjectDialog>($"Edit {project.Name}", parameters);
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        searchString = null;
+        table.ReloadServerData();
+    }
+}
