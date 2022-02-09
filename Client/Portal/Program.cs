@@ -1,5 +1,6 @@
 ﻿using Skynet;
 using Skynet.Portal;
+using Skynet.TimeReport;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -21,10 +22,12 @@ builder.Services.AddOidcAuthentication(options =>
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddApp();
+builder.Services
+    .AddServices()
+    .AddTimeReport();
 
 var app = builder.Build();
 
-await app.Services.UseApp();
+await app.Services.Localize();
 
 await app.RunAsync();

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace Skynet.Portal;
+namespace Skynet.Portal.Shared;
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {

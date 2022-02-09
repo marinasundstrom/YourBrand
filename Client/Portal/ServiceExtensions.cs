@@ -2,6 +2,7 @@
 using System.Globalization;
 
 using Skynet.Portal.Services;
+using Skynet.Portal.Shared;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -15,7 +16,7 @@ namespace Skynet.Portal;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddApp(this IServiceCollection services)
+    public static IServiceCollection AddServices(this IServiceCollection services)
     {
         //CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv");
         //CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("sv");
@@ -30,6 +31,13 @@ public static class ServiceExtensions
 
         services.AddScoped<CustomAuthorizationMessageHandler>();
 
+        services.AddClients();
+
+        return services;
+    }
+
+    public static IServiceCollection AddClients(this IServiceCollection services) 
+    {
         services.AddHttpClient(nameof(Skynet.Client.IClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
@@ -68,63 +76,10 @@ public static class ServiceExtensions
         .AddTypedClient<Skynet.Client.INotificationsClient>((http, sp) => new Skynet.Client.NotificationsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        SetupTimeReport(services);
-
         return services;
     }
 
-    private static void SetupTimeReport(IServiceCollection services)
-    {
-        services.AddHttpClient(nameof(Skynet.TimeReport.Client.ITimeSheetsClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
-        })
-        .AddTypedClient<Skynet.TimeReport.Client.ITimeSheetsClient>((http, sp) => new Skynet.TimeReport.Client.TimeSheetsClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(Skynet.TimeReport.Client.IProjectsClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
-        })
-        .AddTypedClient<Skynet.TimeReport.Client.IProjectsClient>((http, sp) => new Skynet.TimeReport.Client.ProjectsClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(Skynet.TimeReport.Client.IActivitiesClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
-        })
-        .AddTypedClient<Skynet.TimeReport.Client.IActivitiesClient>((http, sp) => new Skynet.TimeReport.Client.ActivitiesClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(Skynet.TimeReport.Client.IReportsClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
-        })
-        .AddTypedClient<Skynet.TimeReport.Client.IReportsClient>((http, sp) => new Skynet.TimeReport.Client.ReportsClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(Skynet.TimeReport.Client.IUsersClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
-        })
-        .AddTypedClient<Skynet.TimeReport.Client.IUsersClient>((http, sp) => new Skynet.TimeReport.Client.UsersClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(Skynet.TimeReport.Client.IExpensesClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
-        })
-        .AddTypedClient<Skynet.TimeReport.Client.IExpensesClient>((http, sp) => new Skynet.TimeReport.Client.ExpensesClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-    }
-
-    public static async Task UseApp(this IServiceProvider serviceProvider)
+    public static async Task Localize(this IServiceProvider serviceProvider)
     {
         CultureInfo culture;
         var js = serviceProvider.GetRequiredService<IJSRuntime>();
