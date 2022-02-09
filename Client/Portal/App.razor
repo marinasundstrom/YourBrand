@@ -1,0 +1,74 @@
+﻿@inject ISnackbar Snackbar
+
+<MudThemeProvider Theme="currentTheme" />
+<MudDialogProvider MaxWidth="MaxWidth.Medium" />
+<MudSnackbarProvider />
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(Skynet.TimeReport.Pages.ActivityDialog).Assembly  }">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (context.User.Identity?.IsAuthenticated != true)
+                    {
+                        <RedirectToLogin />
+                    }
+                    else
+                    {
+                        <p role="alert">You are not authorized to access this resource.</p>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+
+    MudTheme currentTheme = new MudTheme()
+    {
+        Typography = new Typography()
+        {
+            Default = new Default()
+            {
+                FontFamily = new[] { "Montserrat", "Helvetica", "Arial", "sans-serif" }
+            },
+            H1 = new H1() {
+                FontFamily = new[] { "Merriweather" }
+            },
+            H2 = new H2() {
+                FontFamily = new[] { "Merriweather" }
+            },
+            H3 = new H3() {
+                FontFamily = new[] { "Merriweather" }
+            },
+            H4 = new H4() {
+                FontFamily = new[] { "Merriweather" }
+            },
+            H5 = new H5() {
+                FontFamily = new[] { "Merriweather" }
+            },
+            H6 = new H6() {
+                FontFamily = new[] { "Merriweather" }
+            }
+        },
+        Palette = new Palette
+        {
+            AppbarBackground = "#000",
+            Primary = "#63a9cb",
+            Secondary = "#00000000"
+        }
+    };
+
+    protected override void OnInitialized()
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+    }
+}

@@ -7,7 +7,7 @@
 name: webapi
 services:
 - name: webapp
-  project: Client/Skynet.Web/Skynet.Web.csproj
+  project: Client/Portal/Portal.csproj
   bindings:
   - protocol: https
     port: 5010

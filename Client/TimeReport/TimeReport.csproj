@@ -17,6 +17,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\TimeReport.Client\TimeReport.Client.csproj" />
-		<ProjectReference Include="..\Skynet.Shared\Skynet.Shared.csproj" />
+		<ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj" />
 	</ItemGroup>
 </Project>
