@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Projects;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Projects;
 
-namespace TimeReport.Application.Activities.Commands;
+namespace Skynet.TimeReport.Application.Activities.Commands;
 
 public class UpdateActivityCommand : IRequest<ActivityDto>
 {

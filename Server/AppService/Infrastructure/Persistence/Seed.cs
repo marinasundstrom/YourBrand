@@ -1,9 +1,9 @@
-using Catalog.Domain.Entities;
-using Catalog.Infrastructure.Persistence;
+using Skynet.Domain.Entities;
+using Skynet.Infrastructure.Persistence;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalog.Infrastructure.Persistence;
+namespace Skynet.Infrastructure.Persistence;
 
 public static class Seed
 {

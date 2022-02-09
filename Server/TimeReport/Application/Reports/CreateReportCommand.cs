@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 using OfficeOpenXml;
 
-using TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Common.Interfaces;
 
-namespace TimeReport.Application.Reports.Queries;
+namespace Skynet.TimeReport.Application.Reports.Queries;
 
 public class CreateReportCommand : IRequest<Stream?>
 {

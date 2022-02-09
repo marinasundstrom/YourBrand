@@ -1,4 +1,4 @@
-﻿namespace TimeReport.Domain.Common.Interfaces;
+﻿namespace Skynet.TimeReport.Domain.Common.Interfaces;
 
 public interface ISoftDelete
 {

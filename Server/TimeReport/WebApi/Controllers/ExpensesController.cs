@@ -6,15 +6,15 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Common.Models;
-using TimeReport.Application.Expenses;
-using TimeReport.Application.Expenses.Commands;
-using TimeReport.Application.Expenses.Queries;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Common.Models;
+using Skynet.TimeReport.Application.Expenses;
+using Skynet.TimeReport.Application.Expenses.Commands;
+using Skynet.TimeReport.Application.Expenses.Queries;
 
-using static TimeReport.Application.Expenses.ExpensesHelpers;
+using static Skynet.TimeReport.Application.Expenses.ExpensesHelpers;
 
-namespace TimeReport.Controllers;
+namespace Skynet.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

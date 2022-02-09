@@ -1,16 +1,16 @@
 
 using System.Data.Common;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Application.Common.Models;
-using Catalog.Domain.Entities;
-using Catalog.Domain.Events;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Application.Common.Models;
+using Skynet.Domain.Entities;
+using Skynet.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Catalog.Application.Search.Commands;
+namespace Skynet.Application.Search.Commands;
 
 public class SearchCommand : IRequest<Results<SearchResultItem>>
 {

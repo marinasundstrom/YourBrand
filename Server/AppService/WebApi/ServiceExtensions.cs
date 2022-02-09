@@ -1,13 +1,13 @@
 ﻿using System;
 
-using Catalog.Application;
-using Catalog.Application.Common.Interfaces;
-using Catalog.Infrastructure;
+using Skynet.Application;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Infrastructure;
 
-using Catalog.WebApi.Hubs;
-using Catalog.WebApi.Services;
+using Skynet.WebApi.Hubs;
+using Skynet.WebApi.Services;
 
-namespace Catalog.WebApi;
+namespace Skynet.WebApi;
 
 public static class ServiceExtensions
 {

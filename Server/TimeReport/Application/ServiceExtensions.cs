@@ -5,9 +5,9 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using TimeReport.Application.Expenses.Queries;
+using Skynet.TimeReport.Application.Expenses.Queries;
 
-namespace TimeReport.Application;
+namespace Skynet.TimeReport.Application;
 
 public static class ServiceExtensions
 {

@@ -1,6 +1,6 @@
-﻿using TimeReport.Domain.Common;
+﻿using Skynet.TimeReport.Domain.Common;
 
-namespace TimeReport.Application.Common.Interfaces;
+namespace Skynet.TimeReport.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

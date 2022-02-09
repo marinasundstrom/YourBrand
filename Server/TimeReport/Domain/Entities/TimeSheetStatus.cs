@@ -1,4 +1,4 @@
-﻿namespace TimeReport.Domain.Entities;
+﻿namespace Skynet.TimeReport.Domain.Entities;
 
 public enum TimeSheetStatus
 {

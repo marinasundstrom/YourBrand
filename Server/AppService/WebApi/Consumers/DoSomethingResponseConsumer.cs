@@ -1,7 +1,7 @@
 ﻿using System;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.WebApi;
+using Skynet.Application.Common.Interfaces;
+using Skynet.WebApi;
 
 using Contracts;
 
@@ -9,7 +9,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Catalog.Consumers;
+namespace Skynet.Consumers;
 
 public class DoSomethingResponseConsumer : IConsumer<DoSomethingResponse>
 {

@@ -1,9 +1,9 @@
 
 using System.Data.Common;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Domain.Entities;
-using Catalog.Domain.Events;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Domain.Entities;
+using Skynet.Domain.Events;
 
 using MediatR;
 
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Worker.Client;
 
-namespace Catalog.Application.Notifications.Commands;
+namespace Skynet.Application.Notifications.Commands;
 
 public class MarkNotificationAsReadCommand : IRequest
 {

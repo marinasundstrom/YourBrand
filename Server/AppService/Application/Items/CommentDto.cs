@@ -1,4 +1,4 @@
-﻿namespace Catalog.Application.Items;
+﻿namespace Skynet.Application.Items;
 
 public record CommentDto(
     string Id, string? Text,

@@ -1,9 +1,9 @@
 ﻿
-using Catalog.Application.Common.Interfaces;
+using Skynet.Application.Common.Interfaces;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Catalog.WebApi.Hubs;
+namespace Skynet.WebApi.Hubs;
 
 public class SomethingHub : Hub<ISomethingClient>
 {

@@ -1,10 +1,10 @@
 ﻿
 using MediatR;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Domain.Entities;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain.Entities;
 
-namespace TimeReport.Application.Users.Commands;
+namespace Skynet.TimeReport.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {

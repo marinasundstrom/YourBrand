@@ -4,12 +4,11 @@ using System.Security.Claims;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using Catalog.Application;
-using Catalog.Application;
-using Catalog.Infrastructure;
-using Catalog.Infrastructure.Persistence;
-using Catalog.WebApi;
-using Catalog.WebApi.Hubs;
+using Skynet.Application;
+using Skynet.Infrastructure;
+using Skynet.Infrastructure.Persistence;
+using Skynet.WebApi;
+using Skynet.WebApi.Hubs;
 
 using MassTransit;
 

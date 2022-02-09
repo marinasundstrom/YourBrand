@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace TimeReport.Application;
+namespace Skynet.TimeReport.Application;
 
 public static class ExpressionTreesExtension
 {

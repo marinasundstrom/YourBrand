@@ -1,8 +1,8 @@
 ﻿using System;
 
-using TimeReport.Client;
+using Skynet.TimeReport.Client;
 
-namespace TimeReport.Pages;
+namespace Skynet.TimeReport.Pages;
 
 public static class UserDtoExtensions
 {

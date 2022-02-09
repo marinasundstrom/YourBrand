@@ -1,4 +1,4 @@
-﻿namespace TimeReport.Application.Common.Interfaces;
+﻿namespace Skynet.TimeReport.Application.Common.Interfaces;
 
 public interface ICurrentUserService
 {

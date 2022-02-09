@@ -4,18 +4,18 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application;
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Common.Models;
-using TimeReport.Application.Projects;
-using TimeReport.Application.Projects.Commands;
-using TimeReport.Application.Projects.Queries;
-using TimeReport.Application.Users;
-using TimeReport.Domain.Entities;
-using TimeReport.Domain.Exceptions;
-using TimeReport.Dtos;
+using Skynet.TimeReport.Application;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Common.Models;
+using Skynet.TimeReport.Application.Projects;
+using Skynet.TimeReport.Application.Projects.Commands;
+using Skynet.TimeReport.Application.Projects.Queries;
+using Skynet.TimeReport.Application.Users;
+using Skynet.TimeReport.Domain.Entities;
+using Skynet.TimeReport.Domain.Exceptions;
+using Skynet.TimeReport.Dtos;
 
-namespace TimeReport.Controllers;
+namespace Skynet.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

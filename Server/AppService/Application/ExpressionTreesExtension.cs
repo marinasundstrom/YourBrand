@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Catalog.Application;
+namespace Skynet.Application;
 
 public static class ExpressionTreesExtension
 {

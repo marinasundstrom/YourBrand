@@ -1,12 +1,12 @@
 ﻿
-using Catalog.Application;
-using Catalog.Application.Common.Interfaces;
-using Catalog.Application.Items;
-using Catalog.WebApi.Hubs;
+using Skynet.Application;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Application.Items;
+using Skynet.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Catalog.WebApi.Services;
+namespace Skynet.WebApi.Services;
 
 public class ItemsClient : IItemsClient
 {

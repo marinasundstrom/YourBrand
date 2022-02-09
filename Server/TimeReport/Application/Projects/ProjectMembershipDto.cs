@@ -1,5 +1,5 @@
-﻿using TimeReport.Application.Users;
+﻿using Skynet.TimeReport.Application.Users;
 
-namespace TimeReport.Application.Projects;
+namespace Skynet.TimeReport.Application.Projects;
 
 public record class ProjectMembershipDto(string Id, ProjectDto Project, UserDto User, DateTime? From, DateTime? Thru);

@@ -1,4 +1,4 @@
-﻿namespace TimeReport.Domain.Common;
+﻿namespace Skynet.TimeReport.Domain.Common;
 
 public abstract class DomainEvent
 {

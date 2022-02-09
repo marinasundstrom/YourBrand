@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Catalog.Domain.Common;
+using Skynet.Domain.Common;
 
-namespace Catalog.Domain.Events;
+namespace Skynet.Domain.Events;
 
 public class ItemImageUploadedEvent : DomainEvent
 {

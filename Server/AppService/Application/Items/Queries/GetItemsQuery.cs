@@ -1,13 +1,13 @@
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Application.Common.Models;
-using Catalog.Domain;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Application.Common.Models;
+using Skynet.Domain;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Catalog.Application.Items.Queries;
+namespace Skynet.Application.Items.Queries;
 
 public class GetItemsQuery : IRequest<Results<ItemDto>>
 {

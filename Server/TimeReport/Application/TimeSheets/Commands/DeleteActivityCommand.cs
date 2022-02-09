@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Domain.Entities;
-using TimeReport.Domain.Exceptions;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain.Entities;
+using Skynet.TimeReport.Domain.Exceptions;
 
-namespace TimeReport.Application.TimeSheets.Commands;
+namespace Skynet.TimeReport.Application.TimeSheets.Commands;
 
 public class DeleteActivityCommand : IRequest
 {

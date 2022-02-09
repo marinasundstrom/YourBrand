@@ -1,14 +1,14 @@
 ﻿
-using Catalog.Application.Common.Models;
-using Catalog.Application.Search;
-using Catalog.Application.Search.Commands;
+using Skynet.Application.Common.Models;
+using Skynet.Application.Search;
+using Skynet.Application.Search.Commands;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Catalog.WebApi.Controllers;
+namespace Skynet.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]

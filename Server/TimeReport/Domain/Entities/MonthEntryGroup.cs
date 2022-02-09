@@ -1,7 +1,7 @@
 ﻿
-using TimeReport.Domain.Common;
+using Skynet.TimeReport.Domain.Common;
 
-namespace TimeReport.Domain.Entities;
+namespace Skynet.TimeReport.Domain.Entities;
 
 public class MonthEntryGroup : AuditableEntity
 {

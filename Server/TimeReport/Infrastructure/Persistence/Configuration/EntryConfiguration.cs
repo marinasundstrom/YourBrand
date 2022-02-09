@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TimeReport.Domain.Entities;
+using Skynet.TimeReport.Domain.Entities;
 
-namespace TimeReport.Infrastructure.Persistence.Configurations;
+namespace Skynet.TimeReport.Infrastructure.Persistence.Configurations;
 
 public class EntryConfiguration : IEntityTypeConfiguration<Entry>
 {

@@ -4,15 +4,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Activities;
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Projects;
-using TimeReport.Domain.Entities;
-using TimeReport.Domain.Exceptions;
+using Skynet.TimeReport.Application.Activities;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Projects;
+using Skynet.TimeReport.Domain.Entities;
+using Skynet.TimeReport.Domain.Exceptions;
 
-using static TimeReport.Application.TimeSheets.Constants;
+using static Skynet.TimeReport.Application.TimeSheets.Constants;
 
-namespace TimeReport.Application.TimeSheets.Commands;
+namespace Skynet.TimeReport.Application.TimeSheets.Commands;
 
 public class CreateEntryCommand : IRequest<EntryDto>
 {

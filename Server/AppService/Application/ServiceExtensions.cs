@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Net.Http.Headers;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Application.Items.Queries;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Application.Items.Queries;
 
 using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalog.Application;
+namespace Skynet.Application;
 
 public static class ServiceExtensions
 {

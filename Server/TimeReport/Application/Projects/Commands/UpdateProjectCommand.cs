@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Domain.Exceptions;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain.Exceptions;
 
-namespace TimeReport.Application.Projects.Commands;
+namespace Skynet.TimeReport.Application.Projects.Commands;
 
 public class UpdateProjectCommand : IRequest<ProjectDto>
 {

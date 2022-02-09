@@ -1,13 +1,13 @@
 ﻿using System;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Infrastructure.Persistence;
-using Catalog.Infrastructure.Services;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Infrastructure.Persistence;
+using Skynet.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalog.Infrastructure;
+namespace Skynet.Infrastructure;
 
 public static class ServiceExtensions
 {

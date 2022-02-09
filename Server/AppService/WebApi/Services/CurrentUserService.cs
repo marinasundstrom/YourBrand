@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Security.Claims;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Infrastructure;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Infrastructure;
 
-namespace Catalog.WebApi.Services;
+namespace Skynet.WebApi.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

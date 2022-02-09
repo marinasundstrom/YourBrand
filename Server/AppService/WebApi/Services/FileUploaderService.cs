@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 
-using Catalog.Application.Common.Interfaces;
+using Skynet.Application.Common.Interfaces;
 
-namespace Catalog.WebApi.Services;
+namespace Skynet.WebApi.Services;
 
 public class FileUploaderService : IFileUploaderService
 {

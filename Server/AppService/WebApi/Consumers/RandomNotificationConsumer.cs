@@ -1,5 +1,5 @@
-﻿using Catalog.Application.Common.Interfaces;
-using Catalog.WebApi.Hubs;
+﻿using Skynet.Application.Common.Interfaces;
+using Skynet.WebApi.Hubs;
 
 using Contracts;
 
@@ -7,7 +7,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Catalog.Consumers;
+namespace Skynet.Consumers;
 
 public class RandomNotificationConsumer : IConsumer<RandomNotification>
 {

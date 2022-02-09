@@ -1,6 +1,6 @@
-﻿using TimeReport.Application.Common.Interfaces;
+﻿using Skynet.TimeReport.Application.Common.Interfaces;
 
-namespace TimeReport.Infrastructure.Services;
+namespace Skynet.TimeReport.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

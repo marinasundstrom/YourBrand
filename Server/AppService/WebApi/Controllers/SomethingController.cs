@@ -5,7 +5,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Catalog.WebApi.Controllers;
+namespace Skynet.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,0 +1,70 @@
+﻿@page "/items/{id}"
+@using Skynet.Client
+@implements IDisposable
+@attribute [Authorize]
+@inject IStringLocalizer<ItemPage> T
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IItemsClient ItemsClient
+@inject NavigationManager NavigationManager
+
+@if (item is not null)
+{
+    <PageTitle>@item.Name</PageTitle>
+
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@item.Name</MudText>
+
+    <MudPaper Class="px-8 py-8">
+
+        <MudGrid>
+            @if (item.Image is not null)
+            {
+                <MudItem xl="12" md="4">
+                    <img style="max-height: 100px" src="@item.Image" />
+                </MudItem>
+            }
+
+            <MudItem xl="12" md="8">
+                <MudText Typo="Typo.body1">@item.Description</MudText>
+            </MudItem>
+        </MudGrid>
+
+    </MudPaper>
+
+    <MudPaper Class="mt-4 px-4 py-4">
+        <MudText Typo="Typo.h6" Align="Align.Left" GutterBottom="true"> @T["Comments"]</MudText>
+
+        <MudButton @onclick="OpenDialog" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-2">
+            @T["NewComment"]
+        </MudButton>
+
+        <MudTable T="CommentDto" Elevation="0" Dense="true" @ref="table" SortLabel="@T["SortBy"]" ServerData="@(new Func<TableState, Task<TableData<CommentDto>>>(ServerReload))" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+            <HeaderContent>
+                <MudTh></MudTh>
+                <MudTh>@T["Header_Text"]</MudTh>
+                <MudTh><MudTableSortLabel T="CommentDto" SortLabel="Created">@T["Header_Created"]</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="CommentDto" SortLabel="CreatedBy">@T["Header_CreatedBy"]</MudTableSortLabel></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>
+                    <MudIcon Icon="@Icons.Material.Filled.InsertDriveFile" />
+                </MudTd>
+                <MudTd DataLabel="Name">@context.Text</MudTd>
+                <MudTd DataLabel="Created">@context.Created.ToString("g")</MudTd>
+                <MudTd DataLabel="Created by">@context.CreatedBy</MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText>@T["NoRecordsFound"]</MudText>
+            </NoRecordsContent>
+            <LoadingContent>
+                <MudText>@T["Loading"]</MudText>
+            </LoadingContent>
+            <PagerContent>
+                <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+            </PagerContent>
+        </MudTable>
+    </MudPaper>
+
+}
+
+

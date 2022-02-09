@@ -1,0 +1,64 @@
+﻿@page "/items"
+@layout MainLayout2
+@implements IAsyncDisposable
+@attribute [Authorize]
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Skynet.Client
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<ItemsPage> T
+@inject ISnackbar Snackbar
+@inject INotificationService NotificationService
+@inject IItemsClient ItemsClient
+@inject IDialogService DialogService
+@inject IAccessTokenProvider AccessTokenProvider
+
+<PageTitle>@T["Items"]</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true"><b>@T["Items"]</b></MudText>
+
+<MudPaper Elevation="1" Class="px-4 py-4">
+    <MudButton @onclick="OpenDialog" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-2">
+        @T["NewItem"]
+    </MudButton>
+
+    <MudTable T="ItemDto" Elevation="0" Bordered="false" Dense="true" @ref="table" SortLabel="@T["SortBy"]" ServerData="@(new Func<TableState, Task<TableData<ItemDto>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Name">@T["Header_Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Description">@T["Header_Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="CommentCount">@T["Header_CommentCount"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Created">@T["Header_Created"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="CreatedBy">@T["Header_CreatedBy"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="LastModified">@T["Header_LastModified"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="LastModifiedBy">@T["Header_LastModifiedBy"]</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>
+                <img style="max-height: 100px" src="@context.Image" />
+            </MudTd>
+            <MudTd DataLabel="@T["Header_Name"]">@context.Name</MudTd>
+            <MudTd DataLabel="@T["Header_Description"]">@context.Description</MudTd>
+            <MudTd DataLabel="@T["Header_Comments"]">@context.CommentCount</MudTd>
+            <MudTd DataLabel="@T["Header_Created"]">@context.Created.ToString("g")</MudTd>
+            <MudTd DataLabel="@T["Header_CreatedBy"]">@context.CreatedBy</MudTd>
+            <MudTd DataLabel="@T["Header_LastModified"]">@context.LastModified?.ToString("g")</MudTd>
+            <MudTd DataLabel="@T["Header_LastModifiedBy"]">@context.LastModifiedBy</MudTd>
+            <MudTd><MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteItem(context)" /></MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>@T["NoRecordsFound"]</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>@T["Loading"]</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+
+

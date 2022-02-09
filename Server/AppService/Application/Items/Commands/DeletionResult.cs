@@ -1,4 +1,4 @@
-namespace Catalog.Application.Items.Commands;
+namespace Skynet.Application.Items.Commands;
 
 public enum DeletionResult
 {

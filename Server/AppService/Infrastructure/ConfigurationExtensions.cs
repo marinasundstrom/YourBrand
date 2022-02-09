@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Catalog.Infrastructure;
+namespace Skynet.Infrastructure;
 
 public static class ConfigurationExtensions
 {

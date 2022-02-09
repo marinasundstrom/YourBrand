@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.WebApi.Controllers;
+namespace Skynet.WebApi.Controllers;
 
 public class AddItemDto
 {

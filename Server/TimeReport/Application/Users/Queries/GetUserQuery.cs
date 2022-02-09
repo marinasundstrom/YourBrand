@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Domain.Exceptions;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain.Exceptions;
 
-namespace TimeReport.Application.Users.Queries;
+namespace Skynet.TimeReport.Application.Users.Queries;
 
 public class GetUserQuery : IRequest<UserDto>
 {

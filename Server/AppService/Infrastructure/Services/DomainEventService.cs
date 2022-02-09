@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Application.Common.Models;
-using Catalog.Domain.Common;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Application.Common.Models;
+using Skynet.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace Catalog.Infrastructure.Services;
+namespace Skynet.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

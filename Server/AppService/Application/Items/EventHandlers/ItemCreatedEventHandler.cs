@@ -1,15 +1,15 @@
 ﻿using System;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Application.Common.Models;
-using Catalog.Domain.Events;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Application.Common.Models;
+using Skynet.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Catalog.Application.Items.EventHandlers;
+namespace Skynet.Application.Items.EventHandlers;
 
 public class ItemCreatedEventHandler : INotificationHandler<DomainEventNotification<ItemCreatedEvent>>
 {

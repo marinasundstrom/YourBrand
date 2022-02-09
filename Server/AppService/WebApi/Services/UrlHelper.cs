@@ -1,6 +1,6 @@
-﻿using Catalog.Application.Common.Interfaces;
-using Catalog.Infrastructure;
-namespace Catalog.WebApi.Services;
+﻿using Skynet.Application.Common.Interfaces;
+using Skynet.Infrastructure;
+namespace Skynet.WebApi.Services;
 
 public class UrlHelper : IUrlHelper
 {

@@ -1,7 +1,7 @@
 ﻿
-using Catalog.Domain.Common;
+using Skynet.Domain.Common;
 
-namespace Catalog.Domain.Entities;
+namespace Skynet.Domain.Entities;
 
 public class Comment : AuditableEntity, ISoftDelete, IHasDomainEvent
 {

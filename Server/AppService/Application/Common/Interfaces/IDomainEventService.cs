@@ -1,6 +1,6 @@
-﻿using Catalog.Domain.Common;
+﻿using Skynet.Domain.Common;
 
-namespace Catalog.Application.Common.Interfaces;
+namespace Skynet.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

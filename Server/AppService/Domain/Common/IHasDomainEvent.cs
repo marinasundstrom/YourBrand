@@ -1,4 +1,4 @@
-﻿namespace Catalog.Domain.Common;
+﻿namespace Skynet.Domain.Common;
 
 public interface IHasDomainEvent
 {

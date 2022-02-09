@@ -2,9 +2,9 @@
 
 using Azure.Storage.Blobs;
 
-using TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Common.Interfaces;
 
-namespace TimeReport.Services;
+namespace Skynet.TimeReport.Services;
 
 class BlobService : IBlobService
 {

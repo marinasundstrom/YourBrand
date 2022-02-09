@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json.Converters;
 
-namespace Catalog.Application.Items.Commands;
+namespace Skynet.Application.Items.Commands;
 
 public enum UploadImageResult
 {

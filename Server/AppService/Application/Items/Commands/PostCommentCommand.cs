@@ -1,11 +1,11 @@
 ﻿
-using Catalog.Application.Common.Interfaces;
+using Skynet.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Catalog.Application.Items.Commands;
+namespace Skynet.Application.Items.Commands;
 
 public class PostCommentCommand : IRequest
 {

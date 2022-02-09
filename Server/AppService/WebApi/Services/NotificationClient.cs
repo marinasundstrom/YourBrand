@@ -1,13 +1,13 @@
 ﻿using System;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.WebApi.Hubs;
+using Skynet.Application.Common.Interfaces;
+using Skynet.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
 using Worker.Client;
 
-namespace Catalog.WebApi.Services;
+namespace Skynet.WebApi.Services;
 
 public class NotificationClient : INotificationClient
 {

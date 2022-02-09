@@ -3,13 +3,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Projects;
-using TimeReport.Domain.Entities;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Projects;
+using Skynet.TimeReport.Domain.Entities;
 
-using static TimeReport.Application.Expenses.ExpensesHelpers;
+using static Skynet.TimeReport.Application.Expenses.ExpensesHelpers;
 
-namespace TimeReport.Application.Expenses.Commands;
+namespace Skynet.TimeReport.Application.Expenses.Commands;
 
 public class CreateExpenseCommand : IRequest<ExpenseDto>
 {

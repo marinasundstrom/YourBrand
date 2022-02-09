@@ -1,3 +1,3 @@
-﻿namespace TimeReport.Application.Common.Models;
+﻿namespace Skynet.TimeReport.Application.Common.Models;
 
 public record class StatisticsSummary(IEnumerable<StatisticsSummaryEntry> Entries);

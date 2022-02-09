@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Domain.Common;
-using Catalog.Domain.Entities;
-using Catalog.Infrastructure;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Domain.Common;
+using Skynet.Domain.Entities;
+using Skynet.Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Catalog.Infrastructure.Persistence;
+namespace Skynet.Infrastructure.Persistence;
 
 class CatalogContext : DbContext, ICatalogContext
 {

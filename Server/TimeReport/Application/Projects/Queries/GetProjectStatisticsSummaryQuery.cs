@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Common.Models;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Common.Models;
 
-namespace TimeReport.Application.Projects.Queries;
+namespace Skynet.TimeReport.Application.Projects.Queries;
 
 public class GetProjectStatisticsSummaryQuery : IRequest<StatisticsSummary>
 {

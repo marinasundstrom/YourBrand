@@ -1,12 +1,12 @@
 
-using Catalog.Application.Common.Interfaces;
-using Catalog.Domain.Events;
+using Skynet.Application.Common.Interfaces;
+using Skynet.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Catalog.Application.Items.Commands;
+namespace Skynet.Application.Items.Commands;
 
 public class DeleteItemCommand : IRequest<DeletionResult>
 {

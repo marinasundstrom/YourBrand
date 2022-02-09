@@ -1,10 +1,10 @@
 ﻿
-using Catalog.Domain.Entities;
+using Skynet.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Catalog.Infrastructure.Persistence.Configurations;
+namespace Skynet.Infrastructure.Persistence.Configurations;
 
 class CommentConfiguration : IEntityTypeConfiguration<Comment>
 {

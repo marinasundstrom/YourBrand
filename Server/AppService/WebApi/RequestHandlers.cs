@@ -1,10 +1,10 @@
-using Catalog.Application;
-using Catalog.Application.Common.Models;
-using Catalog.Application.Items;
-using Catalog.Application.Items.Commands;
-using Catalog.Application.Items.Queries;
-using Catalog.Infrastructure.Persistence;
-using Catalog.WebApi.Controllers;
+using Skynet.Application;
+using Skynet.Application.Common.Models;
+using Skynet.Application.Items;
+using Skynet.Application.Items.Commands;
+using Skynet.Application.Items.Queries;
+using Skynet.Infrastructure.Persistence;
+using Skynet.WebApi.Controllers;
 
 using MediatR;
 
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 using MiniValidation;
 
-namespace Catalog.WebApi;
+namespace Skynet.WebApi;
 
 static partial class RequestHandlers
 {

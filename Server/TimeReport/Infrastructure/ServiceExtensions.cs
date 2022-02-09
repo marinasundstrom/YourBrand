@@ -3,11 +3,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Infrastructure.Persistence;
-using TimeReport.Infrastructure.Services;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Infrastructure.Persistence;
+using Skynet.TimeReport.Infrastructure.Services;
 
-namespace TimeReport.Infrastructure;
+namespace Skynet.TimeReport.Infrastructure;
 
 public static class ServiceExtensions
 {

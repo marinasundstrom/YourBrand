@@ -1,0 +1,60 @@
+﻿@using Skynet.Client
+@inject IStringLocalizer<SearchBox> T
+@inject NavigationManager NavigationManager
+@inject ISearchClient SearchClient
+
+<MudAutocomplete T="SearchResultItem" Dense="false" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" DebounceInterval="300" Placeholder="@T["Placeholder"]" Variant="Variant.Outlined" Class="search-box" Style="background-color: white; color: white !important; border-radius: 5px; margin-bottom: 5px;" Value="value1" ValueChanged="OnSearchItemChanged" SearchFunc="@Search1" ToStringFunc="@(e=> e is null ? null : e.Title)">
+    <ItemTemplate Context="e">
+        @if (e.ResultType == SearchResultItemType.Item)
+        {
+            <MudText><MudIcon Icon="@Icons.Material.Filled.InsertDriveFile" Class="mb-n1 mr-3" />@e.Title</MudText>
+        }
+    </ItemTemplate>
+    <ItemSelectedTemplate Context="e">
+        @if (e.ResultType == SearchResultItemType.Item)
+        {
+            <MudText><MudIcon Icon="@Icons.Material.Filled.InsertDriveFile" Class="mb-n1 mr-3" />@e.Title</MudText>
+        }
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+
+    private SearchResultItem value1;
+
+    private async Task<IEnumerable<SearchResultItem>> Search1(string searchText)
+    {
+        if (string.IsNullOrEmpty(searchText))
+            return Array.Empty<SearchResultItem>();
+
+#if !DEBUG
+
+        if (searchText.Length < 3)
+            return Array.Empty<SearchResultItem>();
+
+#endif
+
+        try
+        {
+            var results = await SearchClient.SearchAsync(searchText, 1, 10, null, null);
+            return results.Items;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task OnSearchItemChanged(SearchResultItem searchResultItem)
+    {
+        if (searchResultItem is null) return;
+
+        NavigationManager.NavigateTo($"/items/{searchResultItem.ItemId}");
+
+        value1 = null;
+
+        StateHasChanged();
+    }
+}
+

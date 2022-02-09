@@ -11,13 +11,13 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
-using TimeReport;
-using TimeReport.Application;
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Hubs;
-using TimeReport.Infrastructure;
-using TimeReport.Infrastructure.Persistence;
-using TimeReport.Services;
+using Skynet.TimeReport;
+using Skynet.TimeReport.Application;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Hubs;
+using Skynet.TimeReport.Infrastructure;
+using Skynet.TimeReport.Infrastructure.Persistence;
+using Skynet.TimeReport.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

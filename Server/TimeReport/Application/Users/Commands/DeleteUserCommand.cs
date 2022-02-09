@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Domain.Exceptions;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain.Exceptions;
 
-namespace TimeReport.Application.Users.Commands;
+namespace Skynet.TimeReport.Application.Users.Commands;
 
 public class DeleteUserCommand : IRequest
 {

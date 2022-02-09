@@ -1,4 +1,4 @@
-﻿namespace Catalog.Application.Common.Interfaces;
+﻿namespace Skynet.Application.Common.Interfaces;
 
 public interface ICurrentUserService
 {

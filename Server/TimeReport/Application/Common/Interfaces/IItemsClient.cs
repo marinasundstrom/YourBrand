@@ -1,6 +1,6 @@
-using TimeReport.Domain.Entities;
+using Skynet.TimeReport.Domain.Entities;
 
-namespace TimeReport.Application.Common.Interfaces;
+namespace Skynet.TimeReport.Application.Common.Interfaces;
 
 public interface IItemsClient
 {

@@ -1,3 +1,3 @@
-﻿namespace TimeReport.Application.TimeSheets;
+﻿namespace Skynet.TimeReport.Application.TimeSheets;
 
 public record class MonthInfoDto(int Month, bool IsLocked);

@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TimeReport.Application.Common.Interfaces;
-using TimeReport.Application.Reports.Queries;
-using TimeReport.Infrastructure;
+using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Application.Reports.Queries;
+using Skynet.TimeReport.Infrastructure;
 
-namespace TimeReport.Controllers;
+namespace Skynet.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]
