@@ -10,6 +10,13 @@
 
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@user.GetDisplayName()</MudText>
 
+    <div class="mb-8">
+        @if (statisticsSummary is not null)
+        {
+            <StatisticsSummaryView Entries="statisticsSummary.Entries" />
+        }
+    </div>
+
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-6">Projects</MudText>
 
     <MudTable T="ProjectMembershipDto" ServerData="@(new Func<TableState, Task<TableData<ProjectMembershipDto>>>(ServerReload2))"
@@ -43,11 +50,6 @@
             <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 
         </MudPaper>
-    }
-
-    @if (statisticsSummary is not null)
-    {
-        <StatisticsSummaryView Entries="statisticsSummary.Entries" />
     }
 }
 

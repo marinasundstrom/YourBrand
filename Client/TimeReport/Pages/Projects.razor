@@ -8,6 +8,13 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Projects</MudText>
 
+<div class="mb-8">
+    @if (statisticsSummary is not null)
+    {
+        <StatisticsSummaryView Entries="statisticsSummary.Entries" />
+    }
+</div>
+
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewProjectClicked">New project</MudButton>
 
 <MudTable T="ProjectDto" ServerData="@(new Func<TableState, Task<TableData<ProjectDto>>>(ServerReload))"
@@ -51,11 +58,6 @@
         <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 
     </MudPaper>
-}
-
-@if (statisticsSummary is not null)
-{
-    <StatisticsSummaryView Entries="statisticsSummary.Entries" />
 }
 
 @code {
