@@ -38,7 +38,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker.Client", "Server\Wor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Tests", "Client\Portal.Tests\Portal.Tests.csproj", "{31825979-5DD6-42A3-AA43-C9F016CC02D2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Skynet.TimeReport", "Skynet.TimeReport", "{30791826-DF9E-408F-90CA-F13AD2394918}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TimeReport", "TimeReport", "{30791826-DF9E-408F-90CA-F13AD2394918}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Server\TimeReport\Application\Application.csproj", "{D6DA7BE9-ABF7-40F9-A23E-FDFDB901867C}"
 EndProject
@@ -48,7 +48,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Server\Ti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Server\TimeReport\WebApi\WebApi.csproj", "{D8378223-825B-49F8-B933-268F27451A2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skynet.TimeReport", "Client\TimeReport\TimeReport.csproj", "{F625D659-45E0-4375-BD38-9C176ECCD155}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport", "Client\TimeReport\TimeReport.csproj", "{F625D659-45E0-4375-BD38-9C176ECCD155}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Client", "Client\TimeReport.Client\TimeReport.Client.csproj", "{57A0B238-AAB6-41D5-A8F8-BEF04B23B424}"
 EndProject
