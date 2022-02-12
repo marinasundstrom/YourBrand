@@ -18,6 +18,12 @@
     <data name="NewItem">
 		<value>Ny sak</value>
 	</data>
+    <data name="List">
+		<value>Lista</value>
+	</data>
+    <data name="More">
+		<value>Mer</value>
+	</data>
     <data name="SortBy">
 		<value>Sortera efter</value>
 	</data>

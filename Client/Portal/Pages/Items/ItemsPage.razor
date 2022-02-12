@@ -1,4 +1,4 @@
-﻿@page "/items"
+﻿@page "/items/list"
 @layout MainLayout2
 @implements IAsyncDisposable
 @attribute [Authorize]
@@ -15,7 +15,7 @@
 
 <PageTitle>@T["Items"] - Skynet</PageTitle>
 
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true"><b>@T["Items"]</b></MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@T["Items"]</MudText>
 
 <MudPaper Elevation="1" Class="px-4 py-4">
     <MudButton @onclick="OpenDialog" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-2">

@@ -1,0 +1,54 @@
+﻿@page "/items"
+@layout MainLayout2
+@implements IAsyncDisposable
+@attribute [Authorize]
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Skynet.Client
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<ItemsPage> T
+@inject ISnackbar Snackbar
+@inject INotificationService NotificationService
+@inject IItemsClient ItemsClient
+@inject IDialogService DialogService
+@inject IAccessTokenProvider AccessTokenProvider
+
+<PageTitle>@T["Items"] - Skynet</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@T["Items"]</MudText>
+
+@if (items is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <MudButton @onclick="OpenDialog" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-8">
+        @T["NewItem"]
+    </MudButton>
+
+    <MudButton Link="/items/list" Variant="Variant.Filled" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="ms-2 mb-2 mt-2 mb-8">
+        @T["List"]
+    </MudButton>
+
+    <MudGrid>
+        @foreach (var item in items)
+        {
+            <MudItem xs="12" md="4" lg="4">
+                <MudCard>
+                    <MudCardMedia Image="@item.Image" Height="200" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">@item.Name</MudText>
+                        <MudText Typo="Typo.body1">@item.Description</MudText>
+                        <MudText Typo="Typo.body2">@item.Created.ToString("g")</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Link="@($"/items/{item.Id}")">@T["More"]</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+
+    <MudPagination Class="mt-8" Count="pageCount" Selected="selectedPage" SelectedChanged="OnPageSelected" />
+}
