@@ -10,6 +10,11 @@
 
 <p>TimeReport (module)</p>
 
+<a href="/Screenshots/projects.png">
+<img src="/Screenshots/projects.png" height="250"  alt="Projects"  /></a>
+
+<p>Projects</p>
+
 <a href="/docs/overview.png">
 <img src="/docs/overview.png" height="450"  alt="Overview"  /></a>
 
