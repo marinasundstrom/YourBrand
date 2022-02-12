@@ -8,7 +8,7 @@
 {
     <PageTitle>@user.GetDisplayName() - Skynet</PageTitle>
 
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@user.GetDisplayName()</MudText>
+    <MudText Typo="Typo.h3" GutterBottom="true">@user.GetDisplayName()</MudText>
 
     <div class="mb-8">
         @if (statisticsSummary is not null)
@@ -17,7 +17,7 @@
         }
     </div>
 
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-6">Projects</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Projects</MudText>
 
     <MudTable T="ProjectMembershipDto" ServerData="@(new Func<TableState, Task<TableData<ProjectMembershipDto>>>(ServerReload2))"
               Hover="true" @ref="table2" Class="mt-4" OnRowClick="(e) => GotToProject(e.Item)">
@@ -45,7 +45,7 @@
     {
         <MudPaper Class="pa-16 ma-2 mt-8">
 
-            <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Project hours per month</MudText>
+            <MudText Typo="Typo.h6" GutterBottom="true">Project hours per month</MudText>
 
             <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 

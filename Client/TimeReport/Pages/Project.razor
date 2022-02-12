@@ -10,7 +10,7 @@
 {
     <PageTitle>@project.Name - Skynet</PageTitle>
 
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@project.Name</MudText>
+    <MudText Typo="Typo.h3" GutterBottom="true">@project.Name</MudText>
 
     <div class="mb-8">
         @if (statisticsSummary is not null)
@@ -19,7 +19,7 @@
         }
     </div>
 
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-6">Activities</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Activities</MudText>
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewActivityClicked">New activity</MudButton>
 
@@ -51,7 +51,7 @@
         </PagerContent>
     </MudTable>
 
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-6">Expenses</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Expenses</MudText>
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddExpenseClicked">New expense</MudButton>
 
@@ -90,7 +90,7 @@
         </PagerContent>
     </MudTable>
 
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-6">Members</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Members</MudText>
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddMembershipClicked">New member</MudButton>
 
@@ -120,7 +120,7 @@
 
     <MudPaper Class="pa-16 ma-2 mt-4">
 
-        <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Activity hours per month</MudText>
+        <MudText Typo="Typo.h6" GutterBottom="true">Activity hours per month</MudText>
 
         <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 

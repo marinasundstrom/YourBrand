@@ -20,7 +20,7 @@
 
 @if (ActivitiesModels is not null && Year is not null && Week is not null)
 {
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Week @Week - @Year</MudText>
+    <MudText Typo="Typo.h3" GutterBottom="true">Week @Week - @Year</MudText>
 
     <div class="mb-4">
         <MudButton Variant="@Variant.Filled" Class="me-2" StartIcon="@Icons.Material.Filled.ChevronLeft" Link="@PreviousWeekLink()">Previous week</MudButton>
