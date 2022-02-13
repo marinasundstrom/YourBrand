@@ -28,10 +28,12 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
     public class GetTimeSheetForWeekQueryHandler : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
     {
         private readonly ITimeReportContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context)
+        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
         public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
@@ -49,10 +51,12 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
                 .Include(x => x.Activities)
                 .AsSplitQuery();
 
-            if (request.UserId is not null)
-            {
-                query = query.Where(x => x.User.Id == request.UserId);
-            }
+            query = query.Where(x => x.UserId == _currentUserService.UserId);
+
+            // if (request.UserId is not null)
+            // {
+            //     query = query.Where(x => x.User.Id == request.UserId);
+            // }
 
             var timeSheet = await query.FirstOrDefaultAsync(x => x.Year == request.Year && x.Week == request.Week, cancellationToken);
 
@@ -60,13 +64,19 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
             {
                 User? user = null;
 
-                if (request.UserId is not null)
+                user = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken);
+                
+                if(user is null)
                 {
-                    user = await _context.Users.FirstAsync(x => x.Id == request.UserId, cancellationToken);
-                }
-                else
-                {
-                    user = await _context.Users.FirstOrDefaultAsync(cancellationToken);
+                    user = new User() {
+                        Id = _currentUserService.UserId,
+                        FirstName = _currentUserService.FirstName,
+                        LastName =  _currentUserService.LastName,
+                        Email = _currentUserService.Email,
+                        SSN = ""
+                    };
+
+                    _context.Users.Add(user);
                 }
 
                 var startDate = System.Globalization.ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);
@@ -87,7 +97,7 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
             }
 
             var monthInfo = await _context.MonthEntryGroups
-                .Where(x => x.User.Id == timeSheet.User.Id)
+                .Where(x => x.User.Id == timeSheet.UserId)
                 .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
                 .ToArrayAsync(cancellationToken);
 

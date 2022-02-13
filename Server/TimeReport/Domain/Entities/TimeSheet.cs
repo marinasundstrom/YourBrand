@@ -10,6 +10,8 @@ public class TimeSheet : AuditableEntity, ISoftDelete
 
     public User? User { get; set; }
 
+    public string UserId { get; set; } = null!;
+
     public int Year { get; set; }
 
     public int Week { get; set; }

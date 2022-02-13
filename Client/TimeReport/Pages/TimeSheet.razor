@@ -35,11 +35,6 @@
 
             <ToolBarContent>
                 <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatusDto.Open">New activity</MudButton>
-                <MudAutocomplete T="UserDto" Label="User" Class="me-2" Margin="Margin.Dense" Variant="Variant.Outlined" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
-                                 For="() => User"
-                                 ToStringFunc="u => u?.GetDisplayName()"
-                                 CoerceText="false" CoerceValue="false"
-                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
                 <MudButton StartIcon="@Icons.Material.Filled.List">Templates</MudButton>
                 <MudSpacer />
                 @if (CanLockMonth)

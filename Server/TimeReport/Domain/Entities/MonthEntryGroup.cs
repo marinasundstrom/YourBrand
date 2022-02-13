@@ -9,6 +9,8 @@ public class MonthEntryGroup : AuditableEntity
 
     public User User { get; set; } = null!;
 
+    public string UserId { get; set; } = null!;
+
     public int Year { get; set; }
 
     public int Month { get; set; }

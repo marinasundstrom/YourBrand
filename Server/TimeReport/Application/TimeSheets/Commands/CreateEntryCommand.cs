@@ -41,10 +41,12 @@ public class CreateEntryCommand : IRequest<EntryDto>
     public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, EntryDto>
     {
         private readonly ITimeReportContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CreateEntryCommandHandler(ITimeReportContext context)
+        public CreateEntryCommandHandler(ITimeReportContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
         public async Task<EntryDto> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
