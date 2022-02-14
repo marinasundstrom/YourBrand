@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
+using NSwag;
+using NSwag.Generation.Processors.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 namespace IdentityService;
 
 internal static class HostingExtensions
@@ -17,6 +21,22 @@ internal static class HostingExtensions
 
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddOpenApiDocument(document =>
+        {
+            document.Title = "Identity Service API";
+            document.Version = "v1";
+
+            document.AddSecurity("JWT", new OpenApiSecurityScheme
+            {
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}."
+            });
+
+            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+        });
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -30,6 +50,10 @@ internal static class HostingExtensions
         });
 
         builder.Services.AddRazorPages();
+
+        builder.Services
+            .AddControllers()
+            .AddNewtonsoftJson();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -55,7 +79,12 @@ internal static class HostingExtensions
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<ApplicationUser>();
 
-        builder.Services.AddAuthentication()
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://identity.local";
+                options.Audience = "myapi";
+            })
             .AddGoogle(options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -77,6 +106,12 @@ internal static class HostingExtensions
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3(c =>
+            {
+                c.DocumentTitle = "Web API v1";
+            });
         }
 
         app.UseStaticFiles();
@@ -85,10 +120,13 @@ internal static class HostingExtensions
         app.UseCors(MyAllowSpecificOrigins);
 
         app.UseIdentityServer();
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapRazorPages()
             .RequireAuthorization();
+
+        app.MapControllers();
 
         return app;
     }

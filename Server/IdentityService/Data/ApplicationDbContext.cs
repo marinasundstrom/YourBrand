@@ -19,4 +19,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+    public DbSet<Team> Teams { get; set; } = null!;
+
+    public DbSet<Department> Departments { get; set; } = null!;
 }

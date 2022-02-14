@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Client", "Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Shared", "Client\Portal.Shared\Portal.Shared.csproj", "{B02F16E9-1AFC-4E43-BACA-04B4C0CA8CFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Client", "Server\IdentityService.Client\IdentityService.Client.csproj", "{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -136,6 +138,10 @@ Global
 		{B02F16E9-1AFC-4E43-BACA-04B4C0CA8CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B02F16E9-1AFC-4E43-BACA-04B4C0CA8CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B02F16E9-1AFC-4E43-BACA-04B4C0CA8CFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,5 +170,6 @@ Global
 		{C4876FBC-02BE-4E01-B97A-6B109C094074} = {0CD6BE3D-ABFE-4626-AB50-D0264076737A}
 		{F625D659-45E0-4375-BD38-9C176ECCD155} = {0CD6BE3D-ABFE-4626-AB50-D0264076737A}
 		{57A0B238-AAB6-41D5-A8F8-BEF04B23B424} = {0CD6BE3D-ABFE-4626-AB50-D0264076737A}
+		{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6} = {0835A9D5-FAED-4BE3-94E1-5D9E67ABD85C}
 	EndGlobalSection
 EndGlobal
