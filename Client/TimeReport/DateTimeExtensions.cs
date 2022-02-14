@@ -46,6 +46,7 @@ public static class DateTimeHelpers
 
     public static IEnumerable<DateTime> GetDatesInWeek(int year, int week)
     {
-        return GetDaysOfWeek().Select(dayOfWeek => ISOWeek.ToDateTime(year, week, dayOfWeek));
+        return GetDaysOfWeek().Select(dayOfWeek => ISOWeek.ToDateTime(year, week, dayOfWeek))
+            .OrderBy(x => x.Date); // Until locale is solved
     }
 }
