@@ -8,14 +8,17 @@ namespace Skynet.TimeReport.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {
-    public CreateUserCommand(string firstName, string lastName, string? displayName, string ssn, string email)
+    public CreateUserCommand(string? id, string firstName, string lastName, string? displayName, string ssn, string email)
     {
+        Id = id;
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;
         Ssn = ssn;
         Email = email;
     }
+
+    public string? Id { get; }
 
     public string FirstName { get; }
 
@@ -40,7 +43,7 @@ public class CreateUserCommand : IRequest<UserDto>
         {
             var user = new User
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = request.Id ?? Guid.NewGuid().ToString(),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DisplayName = request.DisplayName,

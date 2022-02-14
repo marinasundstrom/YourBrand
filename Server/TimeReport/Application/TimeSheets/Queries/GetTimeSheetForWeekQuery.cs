@@ -1,4 +1,5 @@
-﻿
+﻿using System.Globalization;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Skynet.TimeReport.Application.Common.Interfaces;
 using Skynet.TimeReport.Application.Projects;
 using Skynet.TimeReport.Application.Users;
+using Skynet.TimeReport.Application.Users.Commands;
 using Skynet.TimeReport.Domain.Entities;
 
 namespace Skynet.TimeReport.Application.TimeSheets.Queries;
@@ -29,11 +31,13 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
     {
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IMediator _mediator;
 
-        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context, ICurrentUserService currentUserService)
+        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context, ICurrentUserService currentUserService, IMediator mediator)
         {
             _context = context;
             _currentUserService = currentUserService;
+            _mediator = mediator;
         }
 
         public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
@@ -62,24 +66,25 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
 
             if (timeSheet is null)
             {
-                User? user = null;
-
-                user = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken);
+                User? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken);
                 
+                string? userId = user?.Id;
+
                 if(user is null)
                 {
-                    user = new User() {
-                        Id = _currentUserService.UserId,
-                        FirstName = _currentUserService.FirstName,
-                        LastName =  _currentUserService.LastName,
-                        Email = _currentUserService.Email,
-                        SSN = ""
-                    };
+                    var userDto = await _mediator.Send(new CreateUserCommand(
+                        _currentUserService.UserId,
+                        _currentUserService.FirstName,
+                         _currentUserService.LastName,
+                         string.Empty,
+                         string.Empty,
+                         _currentUserService.Email
+                    ));
 
-                    _context.Users.Add(user);
+                    userId = userDto.Id;
                 }
 
-                var startDate = System.Globalization.ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);
+                var startDate = ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);
 
                 timeSheet = new TimeSheet()
                 {
@@ -88,7 +93,7 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
                     Week = request.Week,
                     From = startDate,
                     To = startDate.AddDays(6),
-                    User = user
+                    UserId = userId!
                 };
 
                 _context.TimeSheets.Add(timeSheet);
