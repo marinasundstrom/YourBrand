@@ -19,7 +19,10 @@ public class SeedData
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
-            context.Database.Migrate();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            //context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var alice = userMgr.FindByNameAsync("alice").Result;
@@ -27,6 +30,8 @@ public class SeedData
             {
                 alice = new ApplicationUser
                 {
+                    FirstName = "Alice",
+                    LastName = "Smith",
                     UserName = "alice",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
@@ -59,6 +64,9 @@ public class SeedData
             {
                 bob = new ApplicationUser
                 {
+                    FirstName = "Bob",
+                    LastName = "Smith",
+                    DisplayName = "Bob Smith",
                     UserName = "bob",
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true
