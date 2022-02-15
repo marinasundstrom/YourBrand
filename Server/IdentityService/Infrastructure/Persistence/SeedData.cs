@@ -24,11 +24,11 @@ public class SeedData
 
             //context.Database.Migrate();
 
-            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
             var alice = userMgr.FindByNameAsync("alice").Result;
             if (alice == null)
             {
-                alice = new ApplicationUser
+                alice = new User
                 {
                     FirstName = "Alice",
                     LastName = "Smith",
@@ -62,7 +62,7 @@ public class SeedData
             var bob = userMgr.FindByNameAsync("bob").Result;
             if (bob == null)
             {
-                bob = new ApplicationUser
+                bob = new User
                 {
                     FirstName = "Bob",
                     LastName = "Smith",

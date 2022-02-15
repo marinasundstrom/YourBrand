@@ -9,7 +9,7 @@ using Skynet.IdentityService.Domain.Common.Interfaces;
 namespace Skynet.IdentityService.Domain.Entities;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
-public class ApplicationUser : IdentityUser, IAuditableEntity, ISoftDelete
+public class User : IdentityUser, IAuditableEntity, ISoftDelete
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -36,7 +36,7 @@ public class Team
 
     public Department Department { get; set; }
 
-    public List<ApplicationUser> Persons { get; } = new List<ApplicationUser>();
+    public List<User> Persons { get; } = new List<User>();
 }
 
 public class Department 
@@ -47,5 +47,5 @@ public class Department
 
     public List<Team> Teams { get; } = new List<Team>();
 
-    public List<ApplicationUser> Persons { get; } = new List<ApplicationUser>();
+    public List<User> Persons { get; } = new List<User>();
 }

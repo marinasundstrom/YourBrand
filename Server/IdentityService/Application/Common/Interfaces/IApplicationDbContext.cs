@@ -6,7 +6,7 @@ namespace Skynet.IdentityService.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<ApplicationUser> Users { get; }
+    DbSet<User> Users { get; }
     DbSet<Team> Teams { get; }
     DbSet<Department> Departments { get; }
 

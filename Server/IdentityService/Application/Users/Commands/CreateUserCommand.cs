@@ -42,10 +42,10 @@ public class CreateUserCommand : IRequest<UserDto>
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
 
-        public CreateUserCommandHandler(UserManager<ApplicationUser> userManager, IApplicationDbContext context)
+        public CreateUserCommandHandler(UserManager<User> userManager, IApplicationDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -53,7 +53,7 @@ public class CreateUserCommand : IRequest<UserDto>
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new ApplicationUser
+            var user = new User
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,

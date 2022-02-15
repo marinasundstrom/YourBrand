@@ -11,7 +11,7 @@ using Skynet.IdentityService.Infrastructure.Persistence.Configurations;
 
 namespace Skynet.IdentityService.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
@@ -34,7 +34,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationUserConfiguration).Assembly);
 
-        modelBuilder.Entity<ApplicationUser>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable(name: "Users");
         });
