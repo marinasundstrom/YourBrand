@@ -76,6 +76,14 @@ public static class ServiceExtensions
         .AddTypedClient<Skynet.Client.INotificationsClient>((http, sp) => new Skynet.Client.NotificationsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
+        services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>
+        {
+            var navigationManager = sp.GetRequiredService<NavigationManager>();
+            http.BaseAddress = new Uri($"https://identity.local/");
+        })
+        .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http))
+        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+
         return services;
     }
 

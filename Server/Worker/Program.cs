@@ -1,14 +1,9 @@
-﻿using System.Data.Common;
-using System.Data.SqlClient;
-
-using Contracts;
+﻿using System.Data.SqlClient;
 
 using Hangfire;
 using Hangfire.SqlServer;
 
 using MassTransit;
-
-using MediatR;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +15,6 @@ using Worker;
 using Worker.Application;
 using Worker.Infrastructure;
 using Worker.Infrastructure.Persistence;
-using Worker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

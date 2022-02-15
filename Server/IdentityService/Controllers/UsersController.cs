@@ -1,65 +1,101 @@
-using IdentityService.Data;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace IdentityService;
+using Skynet.IdentityService.Application.Common.Models;
+using Skynet.IdentityService.Application.Users;
+using Skynet.IdentityService.Application.Users.Commands;
+using Skynet.IdentityService.Application.Users.Queries;
+using Skynet.IdentityService.Domain.Exceptions;
+
+namespace Skynet.IdentityService;
 
 [Route("[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UsersController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IMediator _mediator;
 
-    public UsersController(ApplicationDbContext context)
+    public UsersController(IMediator mediator)
     {
-        _context = context;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ItemsResult<UserDto>>> GetUsers(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, IdentityService.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _context.Users
-            .Include(u => u.Department)
-            .Select(u => new UserDto {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                Department = u.Department == null ? null : new DepartmentDto {
-                    Id = u.Department.Id,
-                    Name = u.Department.Name
-                }
-            }).ToArrayAsync();
+        return Ok(await _mediator.Send(new GetUsersQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<UserDto>> GetUser(string id, CancellationToken cancellationToken)
+    {
+        var user = await _mediator.Send(new GetUserQuery(id), cancellationToken);
+
+        if (user is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _mediator.Send(new CreateUserCommand(null, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email, null), cancellationToken);
+
+            return Ok(user);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    [HttpPut("{id}/Details")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<UserDto>> UpdateUser(string id, UpdateUserDetailsDto updateUserDetailsDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _mediator.Send(new UpdateUserCommand(id, updateUserDetailsDto.FirstName, updateUserDetailsDto.LastName, updateUserDetailsDto.DisplayName, updateUserDetailsDto.SSN, updateUserDetailsDto.Email), cancellationToken);
+
+            return Ok(user);
+        }
+        catch (UserNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> DeleteUser(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
+
+            return Ok();
+        }
+        catch (UserNotFoundException)
+        {
+            return NotFound();
+        }
     }
 }
 
-public class UserDto 
-{
-    public string Id { get; set; }
+public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
 
-    public string FirstName { get; set; }
-
-    public string LastName { get; set; }
-
-    public string Email { get; set; }
-
-    public DepartmentDto? Department { get; set; }
-}
-
-public class DepartmentDto 
-{
-    public string Id { get; set; }
-
-    public string Name { get; set; }
-}
-
-public class TeamDto 
-{
-    public string Id { get; set; }
-
-    public string Name { get; set; }
-}
+public record class UpdateUserDetailsDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);

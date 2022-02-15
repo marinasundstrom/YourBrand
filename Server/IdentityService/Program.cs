@@ -1,6 +1,7 @@
-﻿using IdentityService;
+﻿using Skynet.IdentityService;
 
 using Serilog;
+using Skynet.IdentityService.Infrastructure.Persistence;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

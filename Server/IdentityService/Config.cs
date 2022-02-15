@@ -2,7 +2,7 @@
 
 using IdentityModel;
 
-namespace IdentityService;
+namespace Skynet.IdentityService;
 
 public static class Config
 {

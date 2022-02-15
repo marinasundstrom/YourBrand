@@ -3,17 +3,15 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
+using MassTransit;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
 
-using Skynet.TimeReport;
 using Skynet.TimeReport.Application;
 using Skynet.TimeReport.Application.Common.Interfaces;
 using Skynet.TimeReport.Hubs;
@@ -83,6 +81,18 @@ services.AddAzureClients(builder =>
     // Use DefaultAzureCredential by default
     builder.UseCredential(new DefaultAzureCredential());
 });
+
+services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumers(typeof(Program).Assembly);
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+})
+.AddMassTransitHostedService()
+.AddGenericRequestClient();
 
 services.AddSignalR();
 

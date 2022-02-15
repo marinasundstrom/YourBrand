@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/identityservice.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="IdentityService.Client">
+		<OpenApiReference Include="OpenAPIs/identityservice.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Skynet.IdentityService.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>IdentityServiceClient.cs</OutputPath>

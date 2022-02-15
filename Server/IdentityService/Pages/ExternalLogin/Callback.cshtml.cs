@@ -10,7 +10,7 @@ using Duende.IdentityServer.Services;
 
 using IdentityModel;
 
-using IdentityServerHost.Models;
+using Skynet.IdentityService.Domain.Entities;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

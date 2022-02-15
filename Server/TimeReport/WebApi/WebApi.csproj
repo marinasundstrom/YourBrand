@@ -10,6 +10,8 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Backend' " />
   <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
     <PackageReference Include="Azure.Identity" Version="1.5.0" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.3.0-beta.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.11.0-beta.2" />
@@ -31,5 +33,14 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Contracts\Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Consumers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Consumers\" />
   </ItemGroup>
 </Project>

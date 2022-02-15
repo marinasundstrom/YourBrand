@@ -1,0 +1,71 @@
+﻿@page "/users/{userId}"
+@attribute [Authorize]
+@using Skynet.TimeReport.Shared
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IdentityService.Client.IUsersClient UsersClient
+@inject Skynet.TimeReport.Client.IUsersClient UsersClient2
+
+@if (user is not null)
+{
+    <PageTitle>@user.GetDisplayName() - Skynet</PageTitle>
+
+    <MudText Typo="Typo.h3" GutterBottom="true">@user.GetDisplayName()</MudText>
+
+    <div class="mb-8">
+        @if (statisticsSummary is not null)
+        {
+            <StatisticsSummaryView Entries="statisticsSummary.Entries" />
+        }
+    </div>
+
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Projects</MudText>
+
+
+    @if (data is not null)
+    {
+        <MudPaper Class="pa-16 ma-2 mt-8">
+
+            <MudText Typo="Typo.h6" GutterBottom="true">Project hours per month</MudText>
+
+            <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+        </MudPaper>
+    }
+}
+
+@code {
+    bool isLoading = false;
+    IdentityService.Client.UserDto user;
+    MudTable<Skynet.TimeReport.Client.ProjectMembershipDto> table2;
+    Skynet.TimeReport.Client.StatisticsSummary statisticsSummary;
+
+    Skynet.TimeReport.Client.Data? data;
+
+    private ChartOptions options = new ChartOptions()
+    {
+        YAxisFormat = "0 h",
+        YAxisTicks = 10
+    };
+    public List<ChartSeries> Series = new List<ChartSeries>();
+    public string[] XAxisLabels = new string[0];
+
+    [Parameter] public string UserId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UsersClient.GetUserAsync(UserId);
+
+        data = await UsersClient2.GetStatisticsAsync(UserId, null, null);
+
+        XAxisLabels = data.Labels.ToArray();
+
+        foreach (var d in data.Series)
+        {
+            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+
+        statisticsSummary = await UsersClient2.GetStatisticsSummaryAsync(UserId);
+    }
+}
+

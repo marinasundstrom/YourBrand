@@ -33,6 +33,15 @@
     <ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Server\IdentityService.Client\IdentityService.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Users\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Users\" />
+  </ItemGroup>
 </Project>

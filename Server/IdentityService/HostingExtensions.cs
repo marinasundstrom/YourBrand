@@ -1,9 +1,5 @@
 using Duende.IdentityServer;
 
-using IdentityServerHost.Models;
-
-using IdentityService.Data;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +8,13 @@ using Serilog;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MassTransit;
+using Skynet.IdentityService.Application;
+using Skynet.IdentityService.Infrastructure.Persistence;
+using Skynet.IdentityService.Domain.Entities;
+using Skynet.IdentityService.Infrastructure.Infrastructure;
 
-namespace IdentityService;
+namespace Skynet.IdentityService;
 
 internal static class HostingExtensions
 {
@@ -21,6 +22,11 @@ internal static class HostingExtensions
 
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Services
+            .AddApplication(builder.Configuration)
+            .AddInfrastructure(builder.Configuration)
+            .AddServices();
+
         builder.Services.AddOpenApiDocument(document =>
         {
             document.Title = "Identity Service API";
@@ -36,6 +42,18 @@ internal static class HostingExtensions
 
             document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
+
+        builder.Services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+            x.AddConsumers(typeof(Program).Assembly);
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.ConfigureEndpoints(context);
+            });
+        })
+        .AddMassTransitHostedService()
+        .AddGenericRequestClient();
 
         builder.Services.AddCors(options =>
         {
