@@ -13,6 +13,8 @@ public static class ServiceExtensions
     {
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+        services.AddScoped<IEventPublisher, EventPublisher>();
+
         return services;
     }
 }

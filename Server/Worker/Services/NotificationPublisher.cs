@@ -7,7 +7,6 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 using Worker.Application.Common.Interfaces;
-using Worker.Application.Common.Interfaces;
 using Worker.Domain.Entities;
 
 namespace Worker.Services;

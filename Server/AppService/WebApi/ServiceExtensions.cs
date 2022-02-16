@@ -11,7 +11,7 @@ namespace Skynet.WebApi;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddServices(this IServiceCollection services)
+    public  static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUrlHelper, UrlHelper>();

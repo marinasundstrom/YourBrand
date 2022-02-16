@@ -9,15 +9,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using Skynet.IdentityService.Application.Common.Interfaces;
+using Skynet.IdentityService.Contracts;
 using Skynet.IdentityService.Domain.Entities;
 
 namespace Skynet.IdentityService.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {
-    public CreateUserCommand(string? id, string firstName, string lastName, string? displayName, string ssn, string email, string departmentId)
+    public CreateUserCommand(string firstName, string lastName, string? displayName, string ssn, string email, string departmentId)
     {
-        Id = id;
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;
@@ -25,8 +25,6 @@ public class CreateUserCommand : IRequest<UserDto>
         Email = email;
         DepartmentId = departmentId;
     }
-
-    public string? Id { get; }
 
     public string FirstName { get; }
 
@@ -44,11 +42,13 @@ public class CreateUserCommand : IRequest<UserDto>
     {
         private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
+        private readonly IEventPublisher _eventPublisher;
 
-        public CreateUserCommandHandler(UserManager<User> userManager, IApplicationDbContext context)
+        public CreateUserCommandHandler(UserManager<User> userManager, IApplicationDbContext context, IEventPublisher eventPublisher)
         {
             _userManager = userManager;
             _context = context;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -86,6 +86,8 @@ public class CreateUserCommand : IRequest<UserDto>
             {
                 throw new Exception(result.Errors.First().Description);
             }
+
+            await _eventPublisher.PublishEvent(new UserCreated(user.Id));
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email,
                 user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),

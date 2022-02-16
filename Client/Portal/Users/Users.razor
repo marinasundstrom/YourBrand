@@ -35,7 +35,7 @@
         <MudTd DataLabel="Email">@user.Email</MudTd>
         <MudTd>
             <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditUserClicked(user)" />
-            @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteUser(user)" />
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
@@ -63,7 +63,7 @@
         var page = await UsersClient.GetUsersAsync(state.Page, state.PageSize, searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityService.Client.SortDirection.Desc : IdentityService.Client.SortDirection.Asc);
 
-        return new TableData<UserDto>() { TotalItems = page.TotalItems, Items = page.Items };  
+        return new TableData<UserDto>() { TotalItems = page.TotalItems, Items = page.Items };
     }
 
     private void OnSearch(string text)
@@ -101,6 +101,18 @@
 
         if (dialogResult.Cancelled)
             return;
+
+        table.ReloadServerData();
+    }
+
+    private async Task DeleteUser(UserDto user)
+    {
+        var dialogResult = await DialogService.ShowMessageBox($"Delete {user.FirstName}?", "Are you sure?", "Yes", "No");
+
+        if (!dialogResult.GetValueOrDefault())
+            return;
+
+        await UsersClient.DeleteUserAsync(user.Id);
 
         table.ReloadServerData();
     }

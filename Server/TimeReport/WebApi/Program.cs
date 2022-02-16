@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
 
+using Skynet.TimeReport;
 using Skynet.TimeReport.Application;
 using Skynet.TimeReport.Application.Common.Interfaces;
 using Skynet.TimeReport.Hubs;
@@ -27,7 +28,8 @@ var Configuration = builder.Configuration;
 
 services
     .AddApplication(Configuration)
-    .AddInfrastructure(Configuration);
+    .AddInfrastructure(Configuration)
+    .AddClients();
 
 services
     .AddControllers()

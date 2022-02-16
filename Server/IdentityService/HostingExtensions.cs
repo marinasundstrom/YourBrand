@@ -13,6 +13,9 @@ using Skynet.IdentityService.Application;
 using Skynet.IdentityService.Infrastructure.Persistence;
 using Skynet.IdentityService.Domain.Entities;
 using Skynet.IdentityService.Infrastructure.Infrastructure;
+using AspNetCore.Authentication.ApiKey;
+using System.Security.Claims;
+using IdentityModel;
 
 namespace Skynet.IdentityService;
 
@@ -40,7 +43,16 @@ internal static class HostingExtensions
                 Description = "Type into the textbox: Bearer {your JWT token}."
             });
 
+            document.AddSecurity("ApiKey", new OpenApiSecurityScheme
+            {
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "X-API-KEY",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: {your API key}."
+            });
+
             document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("ApiKey"));
         });
 
         builder.Services.AddMassTransit(x =>
@@ -114,6 +126,18 @@ internal static class HostingExtensions
                 options.ClientSecret = "copy client secret from Google here";
             });
 
+        builder.Services.AddAuthentication(ApiKeyDefaults.AuthenticationScheme)
+
+            // The below AddApiKeyInHeaderOrQueryParams without type parameter will require options.Events.OnValidateKey delegete to be set.
+            //.AddApiKeyInHeaderOrQueryParams(options =>
+
+            // The below AddApiKeyInHeaderOrQueryParams with type parameter will add the ApiKeyProvider to the dependency container. 
+            .AddApiKeyInHeaderOrQueryParams<ApiKeyProvider>(options =>
+            {
+                options.Realm = "Identity Service API";
+                options.KeyName = "X-API-KEY";
+            });
+
         return builder.Build();
     }
 
@@ -148,4 +172,50 @@ internal static class HostingExtensions
 
         return app;
     }
+}
+
+public class ApiKeyProvider : IApiKeyProvider
+{
+    private readonly ILogger<IApiKeyProvider> _logger;
+
+    public ApiKeyProvider(ILogger<IApiKeyProvider> logger)
+    {
+        _logger = logger;
+    }
+
+    public async Task<IApiKey> ProvideAsync(string key)
+    {
+        try
+        {
+            if(key != "foobar") 
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return new ApiKey(key, "Foobar", new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Subject, "Foobar"),
+                new Claim(ClaimTypes.NameIdentifier, "Foobar")
+            });
+        }
+        catch (System.Exception exception)
+        {
+            _logger.LogError(exception, exception.Message);
+            throw;
+        }
+    }
+}
+
+class ApiKey : IApiKey
+{
+    public ApiKey(string key, string owner, List<Claim> claims = null)
+    {
+        Key = key;
+        OwnerName = owner;
+        Claims = claims ?? new List<Claim>();
+    }
+
+    public string Key { get; }
+    public string OwnerName { get; }
+    public IReadOnlyCollection<Claim> Claims { get; }
 }

@@ -36,6 +36,9 @@
     <ProjectReference Include="..\..\Contracts\Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\IdentityService.Contracts\IdentityService.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Remove="Consumers\" />

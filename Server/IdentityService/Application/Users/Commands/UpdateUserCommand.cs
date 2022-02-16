@@ -1,9 +1,9 @@
-﻿
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using Skynet.IdentityService.Application.Common.Interfaces;
+using Skynet.IdentityService.Contracts;
 using Skynet.IdentityService.Domain.Exceptions;
 
 namespace Skynet.IdentityService.Application.Users.Commands;
@@ -35,10 +35,12 @@ public class UpdateUserCommand : IRequest<UserDto>
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IEventPublisher _eventPublisher;
 
-        public UpdateUserCommandHandler(IApplicationDbContext context)
+        public UpdateUserCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher)
         {
             _context = context;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -60,6 +62,8 @@ public class UpdateUserCommand : IRequest<UserDto>
             user.Email = request.Email;
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            await _eventPublisher.PublishEvent(new UserUpdated(user.Id));
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email,
                 user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),

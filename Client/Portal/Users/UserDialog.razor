@@ -68,18 +68,17 @@
 
         if (UserId is null)
         {
-            /* result = */ await UsersClient.CreateUserAsync(new CreateUserDto
+            result = await UsersClient.CreateUserAsync(new CreateUserDto
             {
                 FirstName = FirstName,
                 LastName = LastName,
-                //DisplayName = DisplayName,
-                //Ssn = SSN,
+                DisplayName = DisplayName,
+                Ssn = SSN,
                 Email = Email
             });
         }
         else
         {
-            /*
             result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetailsDto
             {
                 FirstName = FirstName,
@@ -88,7 +87,6 @@
                 Ssn = SSN,
                 Email = Email
             });
-            */
         }
 
         Modal.Close(DialogResult.Ok(result));

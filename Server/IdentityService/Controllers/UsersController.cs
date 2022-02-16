@@ -1,4 +1,6 @@
 
+using AspNetCore.Authentication.ApiKey;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,9 +17,13 @@ namespace Skynet.IdentityService;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = AuthSchemes)]
 public class UsersController : Controller
 {
+    private const string AuthSchemes =
+        JwtBearerDefaults.AuthenticationScheme + "," +
+        ApiKeyDefaults.AuthenticationScheme;
+
     private readonly IMediator _mediator;
 
     public UsersController(IMediator mediator)
@@ -53,7 +59,7 @@ public class UsersController : Controller
     {
         try
         {
-            var user = await _mediator.Send(new CreateUserCommand(null, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email, null), cancellationToken);
+            var user = await _mediator.Send(new CreateUserCommand(createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email, null), cancellationToken);
 
             return Ok(user);
         }

@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\IdentityService.Contracts\IdentityService.Contracts.csproj" />
+    <ProjectReference Include="..\..\IdentityService.Client\IdentityService.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
