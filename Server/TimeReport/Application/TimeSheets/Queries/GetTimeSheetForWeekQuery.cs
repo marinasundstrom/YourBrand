@@ -55,20 +55,17 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
                 .Include(x => x.Activities)
                 .AsSplitQuery();
 
-            query = query.Where(x => x.UserId == _currentUserService.UserId);
+            string? userId = request.UserId ?? _currentUserService.UserId;
 
-            // if (request.UserId is not null)
-            // {
-            //     query = query.Where(x => x.User.Id == request.UserId);
-            // }
+            query = query.Where(x => x.UserId == userId);
 
             var timeSheet = await query.FirstOrDefaultAsync(x => x.Year == request.Year && x.Week == request.Week, cancellationToken);
 
             if (timeSheet is null)
             {
-                User? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken);
+                User? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
                 
-                string? userId = user?.Id;
+                userId = user?.Id;
 
                 if(user is null)
                 {

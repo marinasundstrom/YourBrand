@@ -44,20 +44,22 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
         {
             var query = _context.Users
                 .OrderBy(p => p.Created)
-                .Skip(request.PageSize * request.Page)
-                .Take(request.PageSize)
                 .AsNoTracking()
                 .AsSplitQuery();
 
             if (request.SearchString is not null)
             {
                 query = query.Where(p =>
-                p.FirstName.ToLower().Contains(request.SearchString.ToLower())
-                || p.LastName.ToLower().Contains(request.SearchString.ToLower())
-                || ((p.DisplayName ?? "").ToLower().Contains(request.SearchString.ToLower()))
-                || p.SSN.ToLower().Contains(request.SearchString.ToLower())
-                || p.Email.ToLower().Contains(request.SearchString.ToLower()));
+                    p.FirstName.ToLower().Contains(request.SearchString.ToLower())
+                    || p.LastName.ToLower().Contains(request.SearchString.ToLower())
+                    || ((p.DisplayName ?? "").ToLower().Contains(request.SearchString.ToLower()))
+                    || p.SSN.ToLower().Contains(request.SearchString.ToLower())
+                    || p.Email.ToLower().Contains(request.SearchString.ToLower()));
             }
+
+            query = query
+                .Skip(request.PageSize * request.Page)
+                .Take(request.PageSize);
 
             var totalItems = await query.CountAsync(cancellationToken);
 
