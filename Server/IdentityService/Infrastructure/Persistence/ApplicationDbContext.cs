@@ -78,6 +78,9 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         });
     }
 
+    
+    public DbSet<UserDependant> UserDependants { get; set; } = null!;
+
     public DbSet<Team> Teams { get; set; } = null!;
 
     public DbSet<Department> Departments { get; set; } = null!;

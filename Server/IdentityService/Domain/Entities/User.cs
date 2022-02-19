@@ -19,6 +19,8 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
     public Department Department { get; set; }
     public List<Team> Teams { get; } = new List<Team>();
 
+    public List<UserDependant> Dependants { get; } = new List<UserDependant>();
+
     public DateTime Created { get; set; }
     public string CreatedBy { get; set; }
     public DateTime? LastModified { get; set; }
@@ -48,4 +50,25 @@ public class Department
     public List<Team> Teams { get; } = new List<Team>();
 
     public List<User> Persons { get; } = new List<User>();
+}
+
+public class UserDependant 
+{
+    public string Id { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public DependantRelationship Relationship { get; set; }
+
+    public string PhoneNumber { get; set; }
+}
+
+public enum DependantRelationship
+{
+    Spouse,
+    Child,
+    Mother,
+    Father,
 }

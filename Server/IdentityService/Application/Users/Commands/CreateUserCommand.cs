@@ -61,7 +61,7 @@ public class CreateUserCommand : IRequest<UserDto>
                 SSN = request.SSN,
                 UserName = request.Email,
                 Email = request.Email,
-                EmailConfirmed = true,
+                EmailConfirmed = true
             };
 
             if (request.DepartmentId is not null)
