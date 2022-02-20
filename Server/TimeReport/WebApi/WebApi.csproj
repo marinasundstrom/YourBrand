@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22114.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Consumers\" />
+    <None Remove="System.CommandLine.DragonFruit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Consumers\" />

@@ -16,131 +16,145 @@ using Worker.Application;
 using Worker.Infrastructure;
 using Worker.Infrastructure.Persistence;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var Configuration = builder.Configuration;
-
-var services = builder.Services;
-
-services.AddApplication(Configuration);
-services.AddInfrastructure(Configuration);
-services.AddServices();
-
-services
-    .AddControllers()
-    .AddNewtonsoftJson();
-
-builder.Services.AddHttpContextAccessor();
-
-services.AddEndpointsApiExplorer();
-
-// Register the Swagger services
-services.AddOpenApiDocument(document =>
+static class Program
 {
-    document.Title = "Worker API";
-    document.Version = "v1";
-
-    document.AddSecurity("JWT", new OpenApiSecurityScheme
+    /// <param name="seed">Seed the database</param>
+    /// <param name="args">The rest of the arguments</param>
+    /// <returns></returns>
+    static async Task Main(bool seed, string[] args)
     {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Type into the textbox: Bearer {your JWT token}."
-    });
+        var builder = WebApplication.CreateBuilder(args);
 
-    document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-});
+        var Configuration = builder.Configuration;
 
-services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+        var services = builder.Services;
+
+        services.AddApplication(Configuration);
+        services.AddInfrastructure(Configuration);
+        services.AddServices();
+
+        services
+            .AddControllers()
+            .AddNewtonsoftJson();
+
+        builder.Services.AddHttpContextAccessor();
+
+        services.AddEndpointsApiExplorer();
+
+        // Register the Swagger services
+        services.AddOpenApiDocument(document =>
+        {
+            document.Title = "Worker API";
+            document.Version = "v1";
+
+            document.AddSecurity("JWT", new OpenApiSecurityScheme
             {
-                options.Authority = "https://identity.local";
-                options.Audience = "myapi";
-
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    NameClaimType = "name",
-                    RoleClaimType = "role"
-                };
-
-                //options.TokenValidationParameters.ValidateAudience = false;
-
-                //options.Audience = "openid";
-
-                //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}."
             });
 
-builder.Services.AddMassTransit(x =>
-{
-    x.SetKebabCaseEndpointNameFormatter();
-    x.AddConsumers(typeof(Program).Assembly);
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context);
-    });
-})
-.AddMassTransitHostedService()
-.AddGenericRequestClient();
+            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+        });
 
-// Add Hangfire services.
-builder.Services.AddHangfire(configuration => configuration
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
-    {
-        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-        QueuePollInterval = TimeSpan.Zero,
-        UseRecommendedIsolationLevel = true,
-        DisableGlobalLocks = true
-    }));
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                    {
+                        options.Authority = "https://identity.local";
+                        options.Audience = "myapi";
 
-builder.Services.AddHangfireServer();
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            NameClaimType = "name",
+                            RoleClaimType = "role"
+                        };
 
-var app = builder.Build();
+                        //options.TokenValidationParameters.ValidateAudience = false;
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
+                        //options.Audience = "openid";
 
-    app.UseOpenApi();
-    app.UseSwaggerUi3(c =>
-    {
-        c.DocumentTitle = "Worker API v1";
-    });
-}
+                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    });
 
-//await app.Services.SeedAsync();
+        builder.Services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+            x.AddConsumers(typeof(Program).Assembly);
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.ConfigureEndpoints(context);
+            });
+        })
+        .AddMassTransitHostedService()
+        .AddGenericRequestClient();
 
-app.UseHttpsRedirection();
+        // Add Hangfire services.
+        builder.Services.AddHangfire(configuration => configuration
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.Zero,
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            }));
 
-app.UseRouting();
+        builder.Services.AddHangfireServer();
 
-app.UseAuthentication();
-app.UseAuthorization();
+        var app = builder.Build();
 
-app.MapHangfireDashboard();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
 
-app.MapGet("/", () => "Hello World!");
+            app.UseOpenApi();
+            app.UseSwaggerUi3(c =>
+            {
+                c.DocumentTitle = "Worker API v1";
+            });
+        }
 
-app.MapControllers();
+        app.UseHttpsRedirection();
 
-var configuration = app.Services.GetService<IConfiguration>();
+        app.UseRouting();
 
-using (var connection = new SqlConnection(configuration.GetConnectionString("HangfireConnection", "HangfireDB")))
-{
-    connection.Open();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
-    using (var command = new SqlCommand(string.Format(
-        @"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'{0}') 
+        app.MapHangfireDashboard();
+
+        app.MapGet("/", () => "Hello World!");
+
+        app.MapControllers();
+
+        var configuration = app.Services.GetService<IConfiguration>();
+
+        if (seed)
+        {
+            await app.Services.SeedAsync();
+
+            using (var connection = new SqlConnection(configuration.GetConnectionString("HangfireConnection", "HangfireDB")))
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand(string.Format(
+                    @"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'{0}') 
                                     create database [{0}];
                       ", "HangfireDB"), connection))
-    {
-        command.ExecuteNonQuery();
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            return;
+        }
+
+        app.Services.InitializeJobs();
+
+        app.Run();
     }
 }
-
-app.Services.InitializeJobs();
-
-app.Run();

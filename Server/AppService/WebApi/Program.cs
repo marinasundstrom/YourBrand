@@ -22,154 +22,167 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var services = builder.Services;
-
-var Configuration = builder.Configuration;
-
-services.AddApplication(Configuration);
-services.AddInfrastructure(Configuration);
-services.AddServices();
-
-services
-    .AddControllers()
-    .AddNewtonsoftJson();
-
-services.AddHttpContextAccessor();
-
-services.AddEndpointsApiExplorer();
-
-// Register the Swagger services
-services.AddOpenApiDocument(document =>
+static class Program
 {
-    document.Title = "Web API";
-    document.Version = "v1";
-
-    document.AddSecurity("JWT", new OpenApiSecurityScheme
+    /// <param name="seed">Seed the database</param>
+    /// <param name="args">The rest of the arguments</param>
+    /// <returns></returns>
+    static async Task Main(bool seed, string[] args)
     {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Type into the textbox: Bearer {your JWT token}."
-    });
 
-    document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-});
+        var builder = WebApplication.CreateBuilder(args);
 
-services.AddAzureClients(builder =>
-{
-    // Add a KeyVault client
-    //builder.AddSecretClient(keyVaultUrl);
+        var services = builder.Services;
 
-    // Add a Storage account client
-    builder.AddBlobServiceClient(Configuration.GetConnectionString("Azure:Storage"))
-            .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+        var Configuration = builder.Configuration;
 
-    // Use DefaultAzureCredential by default
-    builder.UseCredential(new DefaultAzureCredential());
-});
+        services.AddApplication(Configuration);
+        services.AddInfrastructure(Configuration);
+        services.AddServices();
 
-services.AddSignalR();
+        services
+            .AddControllers()
+            .AddNewtonsoftJson();
 
-services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
+        services.AddHttpContextAccessor();
 
-services.AddMassTransit(x =>
-{
-    x.SetKebabCaseEndpointNameFormatter();
-    x.AddConsumers(typeof(Program).Assembly);
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context);
-    });
-})
-.AddMassTransitHostedService()
-.AddGenericRequestClient();
+        services.AddEndpointsApiExplorer();
 
-services.AddStackExchangeRedisCache(o =>
-{
-    o.Configuration = Configuration.GetConnectionString("redis");
-});
+        // Register the Swagger services
+        services.AddOpenApiDocument(document =>
+        {
+            document.Title = "Web API";
+            document.Version = "v1";
 
-#if DEBUG
-IdentityModelEventSource.ShowPII = true;
-#endif
-
-services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            document.AddSecurity("JWT", new OpenApiSecurityScheme
             {
-                options.Authority = "https://identity.local";
-                options.Audience = "myapi";
-
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    NameClaimType = "name",
-                    RoleClaimType = "role"
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        // Add the access_token as a claim, as we may actually need it
-                        var accessToken = context.SecurityToken as JwtSecurityToken;
-                        if (accessToken != null)
-                        {
-                            ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
-                            if (identity != null)
-                            {
-                                identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                            }
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
-
-                //options.TokenValidationParameters.ValidateAudience = false;
-
-                //options.Audience = "openid";
-
-                //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}."
             });
 
-var app = builder.Build();
+            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+        });
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
+        services.AddAzureClients(builder =>
+        {
+            // Add a KeyVault client
+            //builder.AddSecretClient(keyVaultUrl);
 
-    app.UseOpenApi();
-    app.UseSwaggerUi3(c =>
-    {
-        c.DocumentTitle = "Web API v1";
-    });
+            // Add a Storage account client
+            builder.AddBlobServiceClient(Configuration.GetConnectionString("Azure:Storage"))
+                            .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+
+            // Use DefaultAzureCredential by default
+            builder.UseCredential(new DefaultAzureCredential());
+        });
+
+        services.AddSignalR();
+
+        services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
+
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+            x.AddConsumers(typeof(Program).Assembly);
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.ConfigureEndpoints(context);
+            });
+        })
+        .AddMassTransitHostedService()
+        .AddGenericRequestClient();
+
+        services.AddStackExchangeRedisCache(o =>
+        {
+            o.Configuration = Configuration.GetConnectionString("redis");
+        });
+
+#if DEBUG
+        IdentityModelEventSource.ShowPII = true;
+#endif
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                    {
+                        options.Authority = "https://identity.local";
+                        options.Audience = "myapi";
+
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            NameClaimType = "name",
+                            RoleClaimType = "role"
+                        };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnTokenValidated = context =>
+                            {
+                                // Add the access_token as a claim, as we may actually need it
+                                var accessToken = context.SecurityToken as JwtSecurityToken;
+                                if (accessToken != null)
+                                {
+                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
+                                    if (identity != null)
+                                    {
+                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                                    }
+                                }
+
+                                return Task.CompletedTask;
+                            }
+                        };
+
+                        //options.TokenValidationParameters.ValidateAudience = false;
+
+                        //options.Audience = "openid";
+
+                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    });
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3(c =>
+            {
+                c.DocumentTitle = "Web API v1";
+            });
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapApplicationRequests();
+
+        app.MapGet("/info", () =>
+        {
+            return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
+        })
+        .WithDisplayName("GetInfo")
+        .WithName("GetInfo")
+        .WithTags("Info")
+        .Produces<string>();
+
+        app.MapControllers();
+        app.MapHub<ItemsHub>("/hubs/items");
+        app.MapHub<SomethingHub>("/hubs/something");
+        app.MapHub<WorkerHub>("/hubs/worker");
+        app.MapHub<NotificationHub>("/hubs/notifications");
+
+        if(seed)
+        {
+            await app.Services.SeedAsync();
+        }
+
+        app.Run();
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapApplicationRequests();
-
-app.MapGet("/info", () =>
-{
-    return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
-})
-.WithDisplayName("GetInfo")
-.WithName("GetInfo")
-.WithTags("Info")
-.Produces<string>();
-
-//await app.Services.SeedAsync();
-
-app.MapControllers();
-app.MapHub<ItemsHub>("/hubs/items");
-app.MapHub<SomethingHub>("/hubs/something");
-app.MapHub<WorkerHub>("/hubs/worker");
-app.MapHub<NotificationHub>("/hubs/notifications");
-
-app.Run();

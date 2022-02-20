@@ -30,6 +30,7 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="6.0.1" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22114.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IdentityService.Contracts\IdentityService.Contracts.csproj">
@@ -46,6 +47,7 @@
     <None Remove="Services\" />
     <None Remove="Domain\Exceptions\" />
     <None Remove="AspNetCore.Authentication.ApiKey" />
+    <None Remove="System.CommandLine.DragonFruit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Users\Queries\" />

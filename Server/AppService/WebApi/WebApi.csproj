@@ -29,6 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
     <PackageReference Include="MiniValidation" Version="0.4.1-pre.20220107.41" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22114.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,4 +47,7 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="System.CommandLine.DragonFruit" />
+  </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.0-beta4" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.0-beta4" />
     <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="6.0.1" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22114.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,5 +30,6 @@
 
   <ItemGroup>
     <None Remove="AspNetCore.Authentication.ApiKey" />
+    <None Remove="System.CommandLine.DragonFruit" />
   </ItemGroup>
 </Project>

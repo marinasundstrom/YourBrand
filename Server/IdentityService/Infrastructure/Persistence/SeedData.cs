@@ -14,7 +14,7 @@ namespace Skynet.IdentityService.Infrastructure.Persistence;
 
 public class SeedData
 {
-    public static void EnsureSeedData(WebApplication app)
+    public static async Task EnsureSeedData(WebApplication app)
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
