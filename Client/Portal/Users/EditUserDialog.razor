@@ -1,0 +1,75 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using IdentityService.Client
+@inject IUsersClient UsersClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
+
+            <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
+
+            <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
+
+            <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
+
+            <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save changes</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; } = null!;
+
+    [Parameter] public string? UserId { get; set; }
+
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+
+    public string? DisplayName { get; set; }
+
+    [Required]
+    public string SSN { get; set; } = null!;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await UsersClient.GetUserAsync(UserId);
+
+        FirstName = result.FirstName;
+        LastName = result.LastName;
+        DisplayName = result.DisplayName;
+        SSN = result.Ssn;
+        Email = result.Email;
+    }
+
+    async Task OnSubmit()
+    {
+        UserDto result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetailsDto
+        {
+            FirstName = FirstName,
+            LastName = LastName,
+            DisplayName = DisplayName,
+            Ssn = SSN,
+            Email = Email
+        });
+
+        Modal.Close(DialogResult.Ok(result));
+    }
+}

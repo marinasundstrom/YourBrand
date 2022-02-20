@@ -79,7 +79,7 @@
 
     private async Task OnNewUserClicked()
     {
-        var dialogRef = DialogService.Show<UserDialog>("New User");
+        var dialogRef = DialogService.Show<CreateUserDialog>("New User");
 
         var dialogResult = await dialogRef.Result;
 
@@ -93,9 +93,9 @@
     private async Task OnEditUserClicked(UserDto user)
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(UserDialog.UserId), user.Id);
+        parameters.Add(nameof(EditUserDialog.UserId), user.Id);
 
-        var dialogRef = DialogService.Show<UserDialog>($"Edit {user.FirstName}", parameters);
+        var dialogRef = DialogService.Show<EditUserDialog>($"Edit {user.FirstName}", parameters);
 
         var dialogResult = await dialogRef.Result;
 

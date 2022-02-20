@@ -22,6 +22,8 @@ public class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
+            return;
+
             //context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();

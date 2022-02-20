@@ -13,7 +13,8 @@ await usersClient.CreateUserAsync(new CreateUserDto
     LastName = "Bar",
     DisplayName = "Barry",
     Ssn = "123456",
-    Email = "barry@email.com"
+    Email = "barry@email.com",
+    Password = "Abc123!?"
 });
 
 Console.WriteLine("Created user");

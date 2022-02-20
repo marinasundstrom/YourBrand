@@ -33,7 +33,12 @@ public class UpdateUserPasswordCommand : IRequest
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
 
-            await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
 
             return Unit.Value;
         }

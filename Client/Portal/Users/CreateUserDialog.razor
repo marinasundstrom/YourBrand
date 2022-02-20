@@ -18,11 +18,15 @@
 
             <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
 
+            <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
+
+            <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
+
         </DialogContent>
 
         <DialogActions>
             <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(UserId is null ? "Create" : "Save changes")</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
         </DialogActions>
     </MudDialog>
 
@@ -30,8 +34,6 @@
 
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; } = null!;
-
-    [Parameter] public string? UserId { get; set; }
 
     [Required]
     public string FirstName { get; set; } = null!;
@@ -48,46 +50,24 @@
     [EmailAddress]
     public string Email { get; set; } = null!;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if(UserId is not null)
-        {
-            var result = await UsersClient.GetUserAsync(UserId);
+    [Required]
+    public string Password { get; set; } = null!;
 
-            FirstName = result.FirstName;
-            LastName = result.LastName;
-            DisplayName = result.DisplayName;
-            SSN = result.Ssn;
-            Email = result.Email;
-        }
-    }
+    [Required]
+    [Compare(nameof(Password))]
+    public string RepeatPassword { get; set; } = null!;
 
     async Task OnSubmit()
     {
-        UserDto? result = null;
-
-        if (UserId is null)
+        UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
         {
-            result = await UsersClient.CreateUserAsync(new CreateUserDto
-            {
-                FirstName = FirstName,
-                LastName = LastName,
-                DisplayName = DisplayName,
-                Ssn = SSN,
-                Email = Email
-            });
-        }
-        else
-        {
-            result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetailsDto
-            {
-                FirstName = FirstName,
-                LastName = LastName,
-                DisplayName = DisplayName,
-                Ssn = SSN,
-                Email = Email
-            });
-        }
+            FirstName = FirstName,
+            LastName = LastName,
+            DisplayName = DisplayName,
+            Ssn = SSN,
+            Email = Email,
+            Password = Password
+        });
 
         Modal.Close(DialogResult.Ok(result));
     }

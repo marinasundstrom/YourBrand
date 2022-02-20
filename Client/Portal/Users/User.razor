@@ -12,6 +12,7 @@
 
     <MudText Typo="Typo.h3" GutterBottom="true">@user.GetDisplayName()</MudText>
 
+    <MudButton Variant="Variant.Filled" StartIcon="Icons.Material.Filled.Edit" IconColor="Color.Default" Class="me-2" OnClick="ChangeUserDetails">Edit details</MudButton>
     <MudButton Variant="Variant.Filled" OnClick="ChangePassword">Change password</MudButton>
 
     <div class="mb-8">
@@ -68,6 +69,21 @@
         }
 
         statisticsSummary = await UsersClient2.GetStatisticsSummaryAsync(UserId);
+    }
+
+    async Task ChangeUserDetails()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(EditUserDialog.UserId), UserId);
+
+        var dialogRef = DialogService.Show<EditUserDialog>($"Edit {user.FirstName}", parameters);
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        user = await UsersClient.GetUserAsync(UserId);
     }
 
     async Task ChangePassword()

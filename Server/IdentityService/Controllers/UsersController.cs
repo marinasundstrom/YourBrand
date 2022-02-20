@@ -59,7 +59,7 @@ public class UsersController : Controller
     {
         try
         {
-            var user = await _mediator.Send(new CreateUserCommand(createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email, null), cancellationToken);
+            var user = await _mediator.Send(new CreateUserCommand(createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email, null, createUserDto.Password), cancellationToken);
 
             return Ok(user);
         }
@@ -118,7 +118,7 @@ public class UsersController : Controller
     }
 }
 
-public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
+public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email, string Password);
 
 public record class UpdateUserDetailsDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
 

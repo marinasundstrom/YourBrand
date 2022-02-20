@@ -16,7 +16,7 @@ namespace Skynet.IdentityService.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {
-    public CreateUserCommand(string firstName, string lastName, string? displayName, string ssn, string email, string departmentId)
+    public CreateUserCommand(string firstName, string lastName, string? displayName, string ssn, string email, string departmentId, string password)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -24,6 +24,7 @@ public class CreateUserCommand : IRequest<UserDto>
         SSN = ssn;
         Email = email;
         DepartmentId = departmentId;
+        Password = password;
     }
 
     public string FirstName { get; }
@@ -37,6 +38,8 @@ public class CreateUserCommand : IRequest<UserDto>
     public string Email { get; }
 
     public string DepartmentId { get; }
+
+    public string Password { get; }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
@@ -69,7 +72,7 @@ public class CreateUserCommand : IRequest<UserDto>
                 user.Department = await _context.Departments.FirstAsync(x => x.Id == request.DepartmentId);
             }
 
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
             {
