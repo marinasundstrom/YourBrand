@@ -89,6 +89,9 @@
         "security": [
           {
             "JWT": []
+          },
+          {
+            "ApiKey": []
           }
         ]
       },
@@ -124,6 +127,9 @@
         "security": [
           {
             "JWT": []
+          },
+          {
+            "ApiKey": []
           }
         ]
       }
@@ -161,6 +167,9 @@
         "security": [
           {
             "JWT": []
+          },
+          {
+            "ApiKey": []
           }
         ]
       },
@@ -189,6 +198,9 @@
         "security": [
           {
             "JWT": []
+          },
+          {
+            "ApiKey": []
           }
         ]
       }
@@ -238,6 +250,54 @@
         "security": [
           {
             "JWT": []
+          },
+          {
+            "ApiKey": []
+          }
+        ]
+      }
+    },
+    "/Users/{id}/ChangePassword": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ChangePassword",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "changePasswordDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          },
+          {
+            "ApiKey": []
           }
         ]
       }
@@ -386,6 +446,20 @@
             "nullable": true
           }
         }
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -393,6 +467,12 @@
         "type": "apiKey",
         "description": "Type into the textbox: Bearer {your JWT token}.",
         "name": "Authorization",
+        "in": "header"
+      },
+      "ApiKey": {
+        "type": "apiKey",
+        "description": "Type into the textbox: {your API key}.",
+        "name": "X-API-KEY",
         "in": "header"
       }
     }

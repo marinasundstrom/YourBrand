@@ -75,9 +75,25 @@ public class UsersController : Controller
     {
         try
         {
-            var user = await _mediator.Send(new UpdateUserCommand(id, updateUserDetailsDto.FirstName, updateUserDetailsDto.LastName, updateUserDetailsDto.DisplayName, updateUserDetailsDto.SSN, updateUserDetailsDto.Email), cancellationToken);
+            var user = await _mediator.Send(new UpdateUserDetailsCommand(id, updateUserDetailsDto.FirstName, updateUserDetailsDto.LastName, updateUserDetailsDto.DisplayName, updateUserDetailsDto.SSN, updateUserDetailsDto.Email), cancellationToken);
 
             return Ok(user);
+        }
+        catch (UserNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost("{id}/ChangePassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> ChangePassword(string id, ChangePasswordDto changePasswordDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(new UpdateUserPasswordCommand(id, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword), cancellationToken);
+
+            return Ok();
         }
         catch (UserNotFoundException)
         {
@@ -105,3 +121,5 @@ public class UsersController : Controller
 public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
 
 public record class UpdateUserDetailsDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
+
+public record class ChangePasswordDto(string CurrentPassword, string NewPassword);

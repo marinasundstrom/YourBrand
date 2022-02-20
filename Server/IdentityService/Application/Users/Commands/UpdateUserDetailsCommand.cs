@@ -8,9 +8,9 @@ using Skynet.IdentityService.Domain.Exceptions;
 
 namespace Skynet.IdentityService.Application.Users.Commands;
 
-public class UpdateUserCommand : IRequest<UserDto>
+public class UpdateUserDetailsCommand : IRequest<UserDto>
 {
-    public UpdateUserCommand(string userId, string firstName, string lastName, string? displayName, string ssn, string email)
+    public UpdateUserDetailsCommand(string userId, string firstName, string lastName, string? displayName, string ssn, string email)
     {
         UserId = userId;
         FirstName = firstName;
@@ -32,18 +32,18 @@ public class UpdateUserCommand : IRequest<UserDto>
 
     public string Email { get; }
 
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
+    public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserDetailsCommand, UserDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly IEventPublisher _eventPublisher;
 
-        public UpdateUserCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher)
+        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher)
         {
             _context = context;
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<UserDto> Handle(UpdateUserDetailsCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .Include(u => u.Department)

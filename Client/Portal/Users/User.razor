@@ -12,6 +12,8 @@
 
     <MudText Typo="Typo.h3" GutterBottom="true">@user.GetDisplayName()</MudText>
 
+    <MudButton Variant="Variant.Filled" OnClick="ChangePassword">Change password</MudButton>
+
     <div class="mb-8">
         @if (statisticsSummary is not null)
         {
@@ -66,6 +68,14 @@
         }
 
         statisticsSummary = await UsersClient2.GetStatisticsSummaryAsync(UserId);
+    }
+
+    async Task ChangePassword()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(ChangePasswordDialog.UserId), UserId);
+
+        var r = DialogService.Show<ChangePasswordDialog>("Change password", parameters);
     }
 }
 
