@@ -93,7 +93,7 @@ public class GetTimeSheetsQuery : IRequest<ItemsResult<TimeSheetDto>>
                 timeSheets.Select(timeSheet =>
                 {
                     var m = monthInfo
-                            .Where(x => x.User.Id == timeSheet.UserId)
+                            .Where(x => x.UserId == timeSheet.UserId)
                             .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month);
 
                     return timeSheet.ToDto(m);

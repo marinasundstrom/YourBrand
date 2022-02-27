@@ -72,8 +72,9 @@ public class CreateEntryCommand : IRequest<EntryDto>
             }
 
             var group = await _context.MonthEntryGroups
+            .Include(x => x.User)
                 .FirstOrDefaultAsync(meg =>
-                    meg.User.Id == timeSheet.User.Id
+                    meg.UserId == timeSheet.User.Id
                     && meg.Year == request.Date.Year
                     && meg.Month == request.Date.Month, cancellationToken);
 

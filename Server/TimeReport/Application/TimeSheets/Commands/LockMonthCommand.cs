@@ -82,7 +82,7 @@ public class LockMonthCommand : IRequest
             var group = await _context.MonthEntryGroups
                .Include(meg => meg.Entries)
                .FirstOrDefaultAsync(meg =>
-                   meg.User.Id == userId
+                   meg.UserId == userId
                    && meg.Year == lastDate.Date.Year
                    && meg.Month == lastDate.Date.Month);
 

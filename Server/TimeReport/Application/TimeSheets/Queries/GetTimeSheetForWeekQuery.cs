@@ -99,7 +99,7 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
             }
 
             var monthInfo = await _context.MonthEntryGroups
-                .Where(x => x.User.Id == timeSheet.UserId)
+                .Where(x => x.UserId == timeSheet.UserId)
                 .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
                 .ToArrayAsync(cancellationToken);
 
