@@ -29,11 +29,14 @@ public class GetItemQuery : IRequest<ItemDto?>
 
         public async Task<ItemDto?> Handle(GetItemQuery request, CancellationToken cancellationToken)
         {
-            var item = await context.Items.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var item = await context.Items
+                .Include(i => i.CreatedBy)
+                .Include(i => i.LastModifiedBy)
+                .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (item is null) return null;
 
-            return new ItemDto(item.Id, item.Name, item.Description, urlHelper.CreateImageUrl(item.Image!), item.CommentCount, item.Created, item.CreatedById, item.LastModified, item.LastModifiedById);
-        }
+            return new ItemDto(item.Id, item.Name, item.Description, urlHelper.CreateImageUrl(item.Image), item.CommentCount, item.Created, item.CreatedBy!.ToDto()!, item.LastModified, item.LastModifiedBy?.ToDto());
+         }
     }
 }

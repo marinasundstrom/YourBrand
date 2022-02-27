@@ -674,7 +674,7 @@
             "format": "date-time"
           },
           "createdBy": {
-            "type": "string"
+            "$ref": "#/components/schemas/UserDto"
           },
           "lastModified": {
             "type": "string",
@@ -682,7 +682,45 @@
             "nullable": true
           },
           "lastModifiedBy": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            ]
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "displayName": {
             "type": "string",
+            "nullable": true
+          },
+          "ssn": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }

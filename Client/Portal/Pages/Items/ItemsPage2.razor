@@ -40,7 +40,17 @@ else
                     <MudCardContent>
                         <MudText Typo="Typo.h5">@item.Name</MudText>
                         <MudText Typo="Typo.body1">@item.Description</MudText>
-                        <MudText Typo="Typo.body2">@item.Created.ToString("g")</MudText>
+
+                        <div class="mt-4">
+                            <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.FirstName @item.CreatedBy.LastName</MudText>
+                        </div>
+
+                        @if (item.LastModifiedBy is not null)
+                        {
+                            <div class="mt-2">
+                                <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy.FirstName @item.LastModifiedBy.LastName</MudText>
+                            </div>
+                        }
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton Variant="Variant.Text" Color="Color.Primary" Link="@($"/items/{item.Id}")">@T["More"]</MudButton>

@@ -1,5 +1,7 @@
-﻿namespace Skynet.Application.Items;
+﻿using Skynet.Application.Users;
+
+namespace Skynet.Application.Items;
 
 public record ItemDto(
     string Id, string Name, string? Description, string? Image, int CommentCount,
-    DateTime Created, string CreatedBy, DateTime? LastModified, string? LastModifiedBy);
+    DateTime Created, UserDto CreatedBy, DateTime? LastModified, UserDto? LastModifiedBy);
