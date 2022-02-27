@@ -2,19 +2,26 @@
 
 <MudNavMenu>
     <MudSpacer />
-    
+
     <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="/" Match="NavLinkMatch.All" Class="mb-4">@T["Dashboard"]</MudNavLink>
 
     <MudText Typo="Typo.caption" Class="ms-4"><b>@T["General"]</b></MudText>
+
     <AuthorizeView>
         <MudNavLink Icon="@Icons.Material.Filled.List" Href="/items">@T["Items"]</MudNavLink>
     </AuthorizeView>
+
     <MudNavLink Icon="@Icons.Material.Filled.List" Href="/worker">@T["Worker"]</MudNavLink>
     <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>@T["Projects"]</b></MudText>
+
     <AuthorizeView>
         <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">List</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.AccessTime" Href="/timesheet">@T["ReportTime"]</MudNavLink>
         <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/reports">Reports</MudNavLink>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Administrator,Manager">
+        <MudNavLink Icon="@Icons.Material.Filled.List" Href="/timesheets">Timesheets</MudNavLink>
 
         <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>Administration</b></MudText>
         <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/users">Users</MudNavLink>
