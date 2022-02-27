@@ -154,7 +154,7 @@
             var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
             Users = page.Items;
 
-            User = Users.FirstOrDefault();
+            //User = Users.FirstOrDefault();
 
             var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null);
             activities = page2.Items;
@@ -206,7 +206,7 @@
 
         try
         {
-            timeSheet = await TimeSheetsClient.GetTimeSheetForWeekAsync(Year.GetValueOrDefault(), Week.GetValueOrDefault(), UserId ?? User.Id);
+            timeSheet = await TimeSheetsClient.GetTimeSheetForWeekAsync(Year.GetValueOrDefault(), Week.GetValueOrDefault(), UserId ?? User?.Id);
 
             User = timeSheet.User;
             UserId = User.Id;
