@@ -20,6 +20,8 @@
 
 @if (ActivitiesModels is not null && Year is not null && Week is not null)
 {
+    <MudText Typo="Typo.h5">@timeSheet?.User?.GetDisplayName()</MudText>
+
     <MudText Typo="Typo.h3" GutterBottom="true">Week @Week - @Year</MudText>
 
     <div class="mb-4">
@@ -38,15 +40,15 @@
                 <MudButton StartIcon="@Icons.Material.Filled.List">Templates</MudButton>
                 <MudSpacer />
                 @if (CanLockMonth)
-                    {
+                {
                     <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="LockMonth">Lock month</MudButton>
-                    }
+                }
                 <MudText Typo="@Typo.body1" Class="ms-4 me-2"><b>Status:</b> </MudText>
                 <MudText Typo="@Typo.body1" Class="me-4">@timeSheet?.Status</MudText>
                 @if (timeSheet?.Status == TimeSheetStatusDto.Open)
-                    {
+                {
                     <MudIconButton Icon="@Icons.Material.Filled.Close" @onclick="OnCloseClicked"></MudIconButton>
-                    }
+                }
             </ToolBarContent>
 
             <HeaderContent>
@@ -54,12 +56,12 @@
                     Activity
                 </MudTh>
                 @foreach (var date in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
-                    {
+                {
                     <MudTh>
                         @date.DayOfWeek.ToString().Substring(0, 3)
                         <MudText Typo="Typo.subtitle1">@date.ToShortDateString()</MudText>
                     </MudTh>
-                    }
+                }
                 <MudTh>Total</MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
@@ -75,21 +77,21 @@
                     @activityLine.Activity.Name
                 </MudTd>
                 @foreach (var entry in activityLine.Entries)
-                    {
+                {
                     <MudTd DataLabel="@entry.Date.DayOfWeek.ToString()">
                         <div @onclick="() => FocusEntry(activityLine, entry)">
                             <MudNumericField Disabled="@(timeSheet.Status != TimeSheetStatusDto.Open || entry.Status == EntryStatusDto.Locked)" T="double?" Class="@((IsWeekend(entry.Date) ? "weekendEntry" : null) + " " + IsEntrySelectedCss(entry))" Immediate="true" DebounceInterval="debounceInterval" Value="entry.Hours" ValueChanged="(value) => OnHoursChanged(value, activityLine, entry)" Variant="Variant.Filled" Margin="Margin.Dense" HideSpinButtons="true" />
                         </div>
                     </MudTd>
-                    }
+                }
                 <MudTd DataLabel="Total">
                     <span>@activityLine.TotalHours h</span>
                 </MudTd>
                 <MudTd>
                     @if (timeSheet?.Status == TimeSheetStatusDto.Open)
-                        {
+                    {
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteActivity(activityLine)" />
-                        }
+                    }
                 </MudTd>
             </RowTemplate>
 
@@ -108,14 +110,14 @@
         </MudTable>
 
         @if (selectedEntry is not null)
-            {
+        {
             <MudCard Class="mt-4">
                 <MudCardContent>
                     <MudText Typo="@Typo.h6" Class="mb-2">@selectedActivity.Activity.Project.Name: @selectedActivity.Activity.Name - @selectedEntry.Date.ToShortDateString()</MudText>
                     <MudTextField Disabled="@(timeSheet.Status != TimeSheetStatusDto.Open || selectedEntry.Status == EntryStatusDto.Locked)" T="string?" Immediate="true" DebounceInterval="debounceInterval" Value="selectedEntry.Description" ValueChanged="(value) => OnDescriptionChanged(value, selectedActivity, selectedEntry)" Variant="Variant.Filled" Label="Description" Lines="3" />
                 </MudCardContent>
             </MudCard>
-            }
+        }
     </EditForm>
 }
 
@@ -575,4 +577,4 @@
                     && ISOWeek.ToDateTime(Year.GetValueOrDefault(), Week.GetValueOrDefault(), DayOfWeek.Sunday).Day == DateTime.DaysInMonth(timeSheet.To.Year, timeSheet.To.Month);
         }
     }
-    }
+}
