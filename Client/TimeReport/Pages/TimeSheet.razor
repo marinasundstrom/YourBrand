@@ -408,6 +408,8 @@
                     });
 
                     entry.Id = result.Id;
+
+                    Snackbar.Add("Entry was created", Severity.Success);
                 }
                 else
                 {
@@ -416,6 +418,8 @@
                         Hours = value,
                         Description = entry.Description
                     });
+
+                    Snackbar.Add("Entry was updated", Severity.Success);
                 }
             }
             catch (ApiException<ProblemDetails> exc)
