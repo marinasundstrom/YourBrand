@@ -34,6 +34,6 @@ public class UserUpdatedConsumer : IConsumer<UserUpdated>
         var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.UpdatedById)));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
+        var result = await _mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
     }
 }
