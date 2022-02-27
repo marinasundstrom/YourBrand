@@ -87,7 +87,7 @@ internal static class HostingExtensions
 
         builder.Services.AddInfrastructure(builder.Configuration);
 
-        builder.Services.AddIdentity<User, IdentityRole>()
+        builder.Services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 

@@ -9,10 +9,11 @@ using Skynet.IdentityService.Domain.Entities;
 
 namespace Skynet.IdentityService.Application.Users.Queries;
 
-public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
+public class GetUserRolesQuery : IRequest<ItemsResult<RoleDto>>
 {
-    public GetUsersQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, IdentityService.Application.Common.Models.SortDirection? sortDirection = null)
+    public GetUserRolesQuery(string userId, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, IdentityService.Application.Common.Models.SortDirection? sortDirection = null)
     {
+        UserId = userId;
         Page = page;
         PageSize = pageSize;
         SearchString = searchString;
@@ -20,11 +21,11 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
         SortDirection = sortDirection;
     }
 
+    public string UserId { get; }
+
     public int Page { get; }
 
     public int PageSize { get; }
-
-    public string? UserId { get; }
 
     public string? SearchString { get; }
 
@@ -32,20 +33,28 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
 
     public IdentityService.Application.Common.Models.SortDirection? SortDirection { get; }
 
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
+    public class GetUserRolesQueryHandler : IRequestHandler<GetUserRolesQuery, ItemsResult<RoleDto>>
     {
         private readonly IApplicationDbContext _context;
 
-        public GetUsersQueryHandler(IApplicationDbContext context)
+        public GetUserRolesQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ItemsResult<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<RoleDto>> Handle(GetUserRolesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Users
-                .Include(u => u.Roles)
-                .OrderBy(p => p.Created)
+            var user = await _context.Users
+                  .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+
+            if (user is null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var query = _context.Roles
+                .Where(x => x.Users.Any(x => x.Id == request.UserId))
+                //.OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
                 .AsNoTracking()
@@ -54,11 +63,7 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
             if (request.SearchString is not null)
             {
                 query = query.Where(p =>
-                p.FirstName.ToLower().Contains(request.SearchString.ToLower())
-                || p.LastName.ToLower().Contains(request.SearchString.ToLower())
-                || ((p.DisplayName ?? "").ToLower().Contains(request.SearchString.ToLower()))
-                || p.SSN.ToLower().Contains(request.SearchString.ToLower())
-                || p.Email.ToLower().Contains(request.SearchString.ToLower()));
+                    p.Name.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalItems = await query.CountAsync(cancellationToken);
@@ -68,15 +73,12 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
                 query = query.OrderBy(request.SortBy, request.SortDirection == IdentityService.Application.Common.Models.SortDirection.Desc ? IdentityService.SortDirection.Descending : IdentityService.SortDirection.Ascending);
             }
 
-            var users = await query
-                .Include(u => u.Department)
+            var roles = await query
                 .ToListAsync(cancellationToken);
 
-            var dtos = users.Select(user => new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Roles.First().Name, user.SSN, user.Email,
-                user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),
-                    user.Created, user.LastModified));
+            var dtos = roles.Select(role => new RoleDto(role.Id, role.Name, default));
 
-            return new ItemsResult<UserDto>(dtos, totalItems);
+            return new ItemsResult<RoleDto>(dtos, totalItems);
         }
     }
 }

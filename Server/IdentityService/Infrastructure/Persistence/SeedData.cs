@@ -22,6 +22,39 @@ public class SeedData
 
             //await context.Database.MigrateAsync();
 
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+
+
+            var result = await roleManager.CreateAsync(new Role()
+            {
+                Name = "Administrator"
+            });
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            result = await roleManager.CreateAsync(new Role()
+            {
+                Name = "Manager"
+            });
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            result = await roleManager.CreateAsync(new Role()
+            {
+                Name = "User"
+            });
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
             /*
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
             var alice = userMgr.FindByNameAsync("alice").Result;

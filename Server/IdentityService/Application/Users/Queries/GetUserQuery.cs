@@ -29,6 +29,7 @@ public class GetUserQuery : IRequest<UserDto>
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
+                .Include(u => u.Roles)
                 .Include(u => u.Department)
                 .AsNoTracking()
                 .AsSplitQuery()
@@ -39,9 +40,9 @@ public class GetUserQuery : IRequest<UserDto>
                 return null!;
             }
 
-            return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email,
+            return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Roles.First().Name, user.SSN, user.Email,
                 user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),
-                    user.Created, user.Deleted);
+                    user.Created, user.LastModified);
         }
     }
 }

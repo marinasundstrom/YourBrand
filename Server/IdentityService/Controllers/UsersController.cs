@@ -53,13 +53,21 @@ public class UsersController : Controller
         return Ok(user);
     }
 
+    [HttpGet("{id}/Roles")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ItemsResult<RoleDto>>> GetUserRoles(string id, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, IdentityService.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    {
+        return Ok(await _mediator.Send(new GetUserRolesQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _mediator.Send(new CreateUserCommand(createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email, null, createUserDto.Password), cancellationToken);
+            var user = await _mediator.Send(new CreateUserCommand(createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.Role, createUserDto.SSN, createUserDto.Email, null, createUserDto.Password), cancellationToken);
 
             return Ok(user);
         }
@@ -101,6 +109,22 @@ public class UsersController : Controller
         }
     }
 
+    [HttpPost("{id}/Role")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> UpdateRole(string id, UpdateUserRoleDto updateUserRoleDtoDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(new UpdateUserRoleCommand(id, updateUserRoleDtoDto.Role), cancellationToken);
+
+            return Ok();
+        }
+        catch (UserNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteUser(string id, CancellationToken cancellationToken)
@@ -118,8 +142,10 @@ public class UsersController : Controller
     }
 }
 
-public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email, string Password);
+public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string Role, string SSN, string Email, string Password);
 
 public record class UpdateUserDetailsDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
 
 public record class ChangePasswordDto(string CurrentPassword, string NewPassword);
+
+public record class UpdateUserRoleDto(string Role);

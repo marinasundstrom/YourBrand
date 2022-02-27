@@ -11,7 +11,7 @@ using Skynet.IdentityService.Infrastructure.Persistence.Configurations;
 
 namespace Skynet.IdentityService.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
@@ -48,12 +48,12 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
             entity.ToTable(name: "Users");
         });
 
-        modelBuilder.Entity<IdentityRole>(entity =>
+        modelBuilder.Entity<Role>(entity =>
         {
             entity.ToTable(name: "Roles");
         });
 
-        modelBuilder.Entity<IdentityUserRole<string>>(entity =>
+        modelBuilder.Entity<UserRole>(entity =>
         {
             entity.ToTable("UserRoles");
             //in case you chagned the TKey type
@@ -87,7 +87,8 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         });
     }
 
-    
+    public DbSet<Role> Roles { get; set; } = null!;
+
     public DbSet<UserDependant> UserDependants { get; set; } = null!;
 
     public DbSet<Team> Teams { get; set; } = null!;

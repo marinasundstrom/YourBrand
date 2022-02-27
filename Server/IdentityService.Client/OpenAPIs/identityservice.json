@@ -11,6 +11,91 @@
     }
   ],
   "paths": {
+    "/Roles": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_GetRoles",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            },
+            "x-position": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 2
+          },
+          {
+            "name": "searchString",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SortDirection"
+                    }
+                  ]
+                }
+              ]
+            },
+            "x-position": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsResultOfRoleDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          },
+          {
+            "ApiKey": []
+          }
+        ]
+      }
+    },
     "/Users": {
       "get": {
         "tags": [
@@ -205,6 +290,101 @@
         ]
       }
     },
+    "/Users/{id}/Roles": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetUserRoles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            },
+            "x-position": 2
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 3
+          },
+          {
+            "name": "searchString",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 5
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SortDirection"
+                    }
+                  ]
+                }
+              ]
+            },
+            "x-position": 6
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsResultOfRoleDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          },
+          {
+            "ApiKey": []
+          }
+        ]
+      }
+    },
     "/Users/{id}/Details": {
       "put": {
         "tags": [
@@ -301,10 +481,102 @@
           }
         ]
       }
+    },
+    "/Users/{id}/Role": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_UpdateRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "updateUserRoleDtoDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRoleDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          },
+          {
+            "ApiKey": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "ItemsResultOfRoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/RoleDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SortDirection": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Desc",
+          "Asc"
+        ],
+        "enum": [
+          "Desc",
+          "Asc"
+        ]
+      },
       "ItemsResultOfUserDto": {
         "type": "object",
         "additionalProperties": false,
@@ -342,6 +614,10 @@
             "type": "string",
             "nullable": true
           },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
           "ssn": {
             "type": "string",
             "nullable": true
@@ -362,7 +638,7 @@
             "type": "string",
             "format": "date-time"
           },
-          "modified": {
+          "lastModified": {
             "type": "string",
             "format": "date-time",
             "nullable": true
@@ -383,18 +659,6 @@
           }
         }
       },
-      "SortDirection": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "Desc",
-          "Asc"
-        ],
-        "enum": [
-          "Desc",
-          "Asc"
-        ]
-      },
       "CreateUserDto": {
         "type": "object",
         "additionalProperties": false,
@@ -408,6 +672,10 @@
             "nullable": true
           },
           "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
             "type": "string",
             "nullable": true
           },
@@ -460,6 +728,16 @@
             "nullable": true
           },
           "newPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateUserRoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
             "type": "string",
             "nullable": true
           }

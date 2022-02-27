@@ -9,11 +9,12 @@ var usersClient = services.GetRequiredService<IUsersClient>();
 
 await usersClient.CreateUserAsync(new CreateUserDto
 {
-    FirstName = "Foo",
-    LastName = "Bar",
-    DisplayName = "Barry",
-    Ssn = "123456",
-    Email = "barry@email.com",
+    FirstName = "Administrator",
+    LastName = "Administrator",
+    DisplayName = "Administrator",
+    Role = "Administrator",
+    Ssn = "",
+    Email = "admin@email.com",
     Password = "Abc123!?"
 });
 
