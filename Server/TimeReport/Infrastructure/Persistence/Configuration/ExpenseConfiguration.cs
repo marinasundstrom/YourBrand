@@ -16,5 +16,17 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
             .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));
 
         builder.HasQueryFilter(i => i.Deleted == null);
+
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.LastModifiedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.DeletedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -23,7 +23,8 @@ public class Comment : AuditableEntity, ISoftDelete, IHasDomainEvent
     public string Text { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedBy { get; set; }
+    public string? DeletedById { get; set; }
+    public User? DeletedBy { get; set; }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

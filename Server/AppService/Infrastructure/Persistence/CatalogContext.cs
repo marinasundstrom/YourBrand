@@ -28,6 +28,15 @@ class CatalogContext : DbContext, ICatalogContext
         _dateTime = dateTime;
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+#if DEBUG
+        optionsBuilder.EnableSensitiveDataLogging(); //.LogTo(Console.WriteLine);
+#endif
+
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -41,6 +50,8 @@ class CatalogContext : DbContext, ICatalogContext
 
     public DbSet<Comment> Comments { get; set; } = null!;
 
+    public DbSet<User> Users { get; set; } = null!;
+
 #nullable restore
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -50,19 +61,19 @@ class CatalogContext : DbContext, ICatalogContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = _currentUserService.UserId;
+                    entry.Entity.CreatedById = _currentUserService.UserId;
                     entry.Entity.Created = _dateTime.Now;
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    entry.Entity.LastModifiedById = _currentUserService.UserId;
                     entry.Entity.LastModified = _dateTime.Now;
                     break;
 
                 case EntityState.Deleted:
                     if (entry.Entity is ISoftDelete softDelete)
                     {
-                        softDelete.DeletedBy = _currentUserService.UserId;
+                        softDelete.DeletedById = _currentUserService.UserId;
                         softDelete.Deleted = _dateTime.Now;
 
                         entry.State = EntityState.Modified;

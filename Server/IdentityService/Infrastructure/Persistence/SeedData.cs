@@ -5,10 +5,8 @@ using IdentityModel;
 using Skynet.IdentityService.Domain.Entities;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 using Serilog;
-using Skynet.IdentityService.Infrastructure.Persistence;
 
 namespace Skynet.IdentityService.Infrastructure.Persistence;
 
@@ -22,10 +20,9 @@ public class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            return;
+            //await context.Database.MigrateAsync();
 
-            //context.Database.Migrate();
-
+            /*
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
             var alice = userMgr.FindByNameAsync("alice").Result;
             if (alice == null)
@@ -92,6 +89,8 @@ public class SeedData
             {
                 Log.Debug("bob already exists");
             }
+
+            */
         }
     }
 }

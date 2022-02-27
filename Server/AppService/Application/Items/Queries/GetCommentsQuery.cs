@@ -58,7 +58,7 @@ public class GetCommentsQuery : IRequest<Results<CommentDto>>
             var comments = await query.ToListAsync(cancellationToken);
 
             return new Results<CommentDto>(
-                comments.Select(comment => new CommentDto(comment.Id, comment.Text, comment.Created, comment.CreatedBy, comment.LastModified, comment.LastModifiedBy)),
+                comments.Select(comment => new CommentDto(comment.Id, comment.Text, comment.Created, comment.CreatedById, comment.LastModified, comment.LastModifiedById)),
                 totalCount);
         }
     }

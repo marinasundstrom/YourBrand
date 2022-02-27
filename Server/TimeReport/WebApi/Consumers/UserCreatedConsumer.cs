@@ -15,20 +15,25 @@ namespace Skynet.TimeReport.Consumers;
 public class UserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
-    private readonly IUsersClient _usersClient;
+    private readonly IRequestClient<GetUser> _requestClient;
+    private readonly ICurrentUserService _currentUserService;
 
-    public UserCreatedConsumer(IMediator mediator, IUsersClient usersClient)
+    public UserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
-        _usersClient = usersClient;
+        _requestClient = requestClient;
+        _currentUserService = currentUserService;
     }
 
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
         var message = context.Message;
 
-        var userResponse = await _usersClient.GetUserAsync(message.UserId);
+        _currentUserService.SetCurrentUser(message.CreatedById);
 
-        var result = await _mediator.Send(new CreateUserCommand(userResponse.Id, userResponse.FirstName, userResponse.LastName, userResponse.DisplayName, userResponse.Ssn, userResponse.Email));
+        var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.CreatedById));
+        var message2 = messageR.Message;
+
+        var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
     }
 }

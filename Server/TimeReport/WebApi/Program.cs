@@ -25,13 +25,15 @@ static class Program
     /// <param name="seed">Seed the database</param>
     /// <param name="args">The rest of the arguments</param>
     /// <returns></returns>
-    static async Task Main(bool seed, string[] args)
+    static async Task Main(bool seed, string? connectionString, string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
         var services = builder.Services;
 
         var Configuration = builder.Configuration;
+
+        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
         services
             .AddApplication(Configuration)
@@ -100,7 +102,7 @@ static class Program
                 cfg.ConfigureEndpoints(context);
             });
         })
-        .AddMassTransitHostedService()
+        .AddMassTransitHostedService(true)
         .AddGenericRequestClient();
 
         services.AddSignalR();
@@ -141,6 +143,8 @@ static class Program
         if (seed)
         {
             await app.Services.SeedAsync();
+
+            return;
         }
 
         app.Run();

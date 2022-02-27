@@ -45,12 +45,14 @@ public class CreateUserCommand : IRequest<UserDto>
     {
         private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreateUserCommandHandler(UserManager<User> userManager, IApplicationDbContext context, IEventPublisher eventPublisher)
+        public CreateUserCommandHandler(UserManager<User> userManager, IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
         {
             _userManager = userManager;
             _context = context;
+            _currentUserService = currentUserService;
             _eventPublisher = eventPublisher;
         }
 
@@ -90,7 +92,7 @@ public class CreateUserCommand : IRequest<UserDto>
                 throw new Exception(result.Errors.First().Description);
             }
 
-            await _eventPublisher.PublishEvent(new UserCreated(user.Id));
+            await _eventPublisher.PublishEvent(new UserCreated(user.Id, _currentUserService.UserId));
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email,
                 user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),

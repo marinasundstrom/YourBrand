@@ -17,5 +17,8 @@ public class User : AuditableEntity, ISoftDelete
     public string Email { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedBy { get; set; }
+    public string? DeletedById { get; set; }
+    public User? DeletedBy { get; set; }
+
+    public bool Hidden { get; set; }
 }

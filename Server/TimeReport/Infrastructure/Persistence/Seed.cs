@@ -18,13 +18,32 @@ public static class Seed
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
+        if (!context.Users.Any())
+        {
+            context.Users.Add(new User
+            {
+                Id = "api",
+                FirstName = "API",
+                LastName = "User",
+                SSN = "213",
+                Email = "test@foo.com",
+                Hidden = true
+            });
+
+            await context.SaveChangesAsync();
+        }
+
+        return;
+
+        /*
+
         var project = new Project
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Internal",
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         context.Projects.Add(project);
@@ -37,7 +56,7 @@ public static class Seed
             MaxHoursPerDay = null,
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         project.Activities.Add(activity);
@@ -50,7 +69,7 @@ public static class Seed
             MaxHoursPerDay = null,
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         project.Activities.Add(activity3);
@@ -61,7 +80,7 @@ public static class Seed
             Name = "ACME",
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         context.Projects.Add(project2);
@@ -77,7 +96,7 @@ public static class Seed
             MaxHoursPerDay = null,
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         project2.Activities.Add(activity2);
@@ -94,7 +113,7 @@ public static class Seed
             Email = "alice.mcdonald@onestop.io",
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         var user2 = new User()
@@ -108,7 +127,7 @@ public static class Seed
             Email = "bob.johnson@onestop.io",
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         };
 
         context.Users.AddRange(new User[] {
@@ -123,7 +142,7 @@ public static class Seed
             User = user1,
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         });
 
         project.Memberships.Add(new ProjectMembership()
@@ -132,7 +151,7 @@ public static class Seed
             User = user2,
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         });
 
         project2.Memberships.Add(new ProjectMembership()
@@ -141,9 +160,11 @@ public static class Seed
             User = user2,
 
             Created = DateTime.Now,
-            CreatedBy = "N/A"
+            CreatedById = "N/A"
         });
 
         await context.SaveChangesAsync();
+
+        */
     }
 }

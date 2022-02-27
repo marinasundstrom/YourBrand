@@ -11,5 +11,13 @@ public class MonthEntryGroupConfiguration : IEntityTypeConfiguration<MonthEntryG
     public void Configure(EntityTypeBuilder<MonthEntryGroup> builder)
     {
         builder.ToTable("MonthEntryGroups", t => t.IsTemporal());
+
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.LastModifiedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

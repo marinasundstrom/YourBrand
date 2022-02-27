@@ -20,7 +20,7 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<TimeReportContext>(configuration.GetConnectionString("mssql", "TimeReport"));
+        services.AddSqlServer<TimeReportContext>(configuration.GetConnectionString("mssql", "TimeReport") ?? configuration.GetConnectionString("DefaultConnection"));
 
         services.AddScoped<ITimeReportContext>(sp => sp.GetRequiredService<TimeReportContext>());
 

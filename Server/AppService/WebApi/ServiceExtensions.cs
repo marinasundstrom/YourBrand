@@ -30,6 +30,13 @@ public static class ServiceExtensions
         services.AddScoped<INotificationClient, NotificationClient>();
         services.AddScoped<ISomethingClient, SomethingClient>();
 
+        services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>
+        {
+            http.BaseAddress = new Uri($"https://identity.local/");
+            http.DefaultRequestHeaders.Add("X-API-KEY", "foobar");
+        })
+        .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http));
+
         return services;
     }
 }

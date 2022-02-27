@@ -1,4 +1,6 @@
-﻿namespace Skynet.TimeReport.Application.Common.Interfaces;
+﻿using Skynet.TimeReport.Domain.Entities;
+
+namespace Skynet.TimeReport.Application.Common.Interfaces;
 
 public interface ICurrentUserService
 {
@@ -6,4 +8,8 @@ public interface ICurrentUserService
     string FirstName { get; }
     string LastName { get; }
     string Email { get; }
+
+    string? GetAccessToken();
+
+    void SetCurrentUser(string userId);
 }

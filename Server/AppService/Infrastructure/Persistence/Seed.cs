@@ -15,15 +15,18 @@ public static class Seed
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
-        /*
-        if (!context.Items.Any())
+        if (!context.Users.Any())
         {
-            context.Items.AddRange(new Item[] {
-                new Item("Hat", "Green hat")
+            context.Users.Add(new User {
+                Id = "api",
+                FirstName = "API",
+                LastName = "User",
+                SSN = "213",
+                Email = "test@foo.com",
+                Hidden = true
             });
 
             await context.SaveChangesAsync();
         }
-        */
     }
 }

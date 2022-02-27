@@ -22,7 +22,7 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
     public List<UserDependant> Dependants { get; } = new List<UserDependant>();
 
     public DateTime Created { get; set; }
-    public string CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public DateTime? LastModified { get; set; }
     public string? LastModifiedBy { get; set; }
 

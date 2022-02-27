@@ -33,7 +33,7 @@ public class GetItemQuery : IRequest<ItemDto?>
 
             if (item is null) return null;
 
-            return new ItemDto(item.Id, item.Name, item.Description, urlHelper.CreateImageUrl(item.Image!), item.CommentCount, item.Created, item.CreatedBy, item.LastModified, item.LastModifiedBy);
+            return new ItemDto(item.Id, item.Name, item.Description, urlHelper.CreateImageUrl(item.Image!), item.CommentCount, item.Created, item.CreatedById, item.LastModified, item.LastModifiedById);
         }
     }
 }

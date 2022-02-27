@@ -22,11 +22,13 @@ public class DeleteUserCommand : IRequest
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
         private readonly UserManager<User> _userManager;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IEventPublisher _eventPublisher;
 
-        public DeleteUserCommandHandler(UserManager<User> userManager, IEventPublisher eventPublisher)
+        public DeleteUserCommandHandler(UserManager<User> userManager, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
         {
             _userManager = userManager;
+            _currentUserService = currentUserService;
             _eventPublisher = eventPublisher;
         }
 
@@ -41,7 +43,7 @@ public class DeleteUserCommand : IRequest
 
             await _userManager.DeleteAsync(user);
 
-            await _eventPublisher.PublishEvent(new UserDeleted(user.Id));
+            await _eventPublisher.PublishEvent(new UserDeleted(user.Id, _currentUserService.UserId));
 
             return Unit.Value;
         }

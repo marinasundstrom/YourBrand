@@ -21,9 +21,11 @@ static class Program
     /// <param name="seed">Seed the database</param>
     /// <param name="args">The rest of the arguments</param>
     /// <returns></returns>
-    static async Task Main(bool seed, string[] args)
+    static async Task Main(bool seed, string? connectionString, string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
         var Configuration = builder.Configuration;
 
@@ -86,7 +88,7 @@ static class Program
                 cfg.ConfigureEndpoints(context);
             });
         })
-        .AddMassTransitHostedService()
+        .AddMassTransitHostedService(true)
         .AddGenericRequestClient();
 
         // Add Hangfire services.

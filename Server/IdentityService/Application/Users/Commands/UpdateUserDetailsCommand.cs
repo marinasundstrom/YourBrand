@@ -35,11 +35,13 @@ public class UpdateUserDetailsCommand : IRequest<UserDto>
     public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserDetailsCommand, UserDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IEventPublisher _eventPublisher;
 
-        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher)
+        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
         {
             _context = context;
+            _currentUserService = currentUserService;
             _eventPublisher = eventPublisher;
         }
 
@@ -63,7 +65,7 @@ public class UpdateUserDetailsCommand : IRequest<UserDto>
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserUpdated(user.Id));
+            await _eventPublisher.PublishEvent(new UserUpdated(user.Id, _currentUserService.UserId));
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email,
                 user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),

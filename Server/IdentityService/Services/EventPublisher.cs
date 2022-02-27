@@ -22,10 +22,16 @@ public class EventPublisher : IEventPublisher
         _logger = logger;
     }
 
-    public async Task PublishEvent(object ev)
+    public async Task PublishEvent<T>(T ev)
+        where T : class
     {
         _logger.LogInformation("Sending event");
 
-        await _bus.Publish(ev);
+        //var endpoint = await _bus.GetPublishSendEndpoint<T>();
+
+        //await endpoint.Send(ev);
+
+        await _bus.Publish<T>(ev);
+
     }
 }

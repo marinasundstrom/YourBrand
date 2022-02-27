@@ -5,4 +5,6 @@ public interface ICurrentUserService
     string? UserId { get; }
 
     string? GetAccessToken();
+
+    void SetCurrentUser(string userId);
 }

@@ -2,5 +2,6 @@
 
 public interface IEventPublisher
 {
-    Task PublishEvent(object ev);
+    Task PublishEvent<T>(T ev)
+        where T : class;
 }

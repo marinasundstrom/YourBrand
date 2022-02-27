@@ -23,6 +23,7 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
      <ProjectReference Include="..\..\IdentityService.Client\IdentityService.Client.csproj" />
+     <ProjectReference Include="..\..\IdentityService.Contracts\IdentityService.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +32,12 @@
     <None Remove="Microsoft.Extensions.Http" />
     <None Remove="Microsoft.Tye.Extensions.Configuration" />
     <None Remove="Notifications\Commands\" />
+    <None Remove="Users\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Notifications\" />
     <Folder Include="Notifications\Queries\" />
     <Folder Include="Notifications\Commands\" />
+    <Folder Include="Users\" />
   </ItemGroup>
 </Project>

@@ -20,7 +20,7 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<WorkerContext>(configuration.GetConnectionString("mssql", "Worker"));
+        services.AddSqlServer<WorkerContext>(configuration.GetConnectionString("mssql", "Worker") ?? configuration.GetConnectionString("DefaultConnection"));
 
         services.AddScoped<IWorkerContext>(sp => sp.GetRequiredService<WorkerContext>());
 

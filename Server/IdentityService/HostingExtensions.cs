@@ -64,7 +64,7 @@ internal static class HostingExtensions
                 cfg.ConfigureEndpoints(context);
             });
         })
-        .AddMassTransitHostedService()
+        .AddMassTransitHostedService(true)
         .AddGenericRequestClient();
 
         builder.Services.AddCors(options =>
@@ -85,8 +85,7 @@ internal static class HostingExtensions
             .AddControllers()
             .AddNewtonsoftJson();
 
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddInfrastructure(builder.Configuration);
 
         builder.Services.AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -192,10 +191,10 @@ public class ApiKeyProvider : IApiKeyProvider
                 throw new UnauthorizedAccessException();
             }
 
-            return new ApiKey(key, "Foobar", new List<Claim>
+            return new ApiKey(key, "api", new List<Claim>
             {
-                new Claim(JwtClaimTypes.Subject, "Foobar"),
-                new Claim(ClaimTypes.NameIdentifier, "Foobar")
+                new Claim(JwtClaimTypes.Subject, "api"),
+                new Claim(ClaimTypes.NameIdentifier, "api")
             });
         }
         catch (System.Exception exception)

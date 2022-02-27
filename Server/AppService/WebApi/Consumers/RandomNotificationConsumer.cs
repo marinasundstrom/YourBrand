@@ -1,11 +1,8 @@
 ﻿using Skynet.Application.Common.Interfaces;
-using Skynet.WebApi.Hubs;
 
 using Contracts;
 
 using MassTransit;
-
-using Microsoft.AspNetCore.SignalR;
 
 namespace Skynet.Consumers;
 

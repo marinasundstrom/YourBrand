@@ -48,6 +48,7 @@
     <None Remove="Domain\Exceptions\" />
     <None Remove="AspNetCore.Authentication.ApiKey" />
     <None Remove="System.CommandLine.DragonFruit" />
+    <None Remove="Consumers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Users\Queries\" />
@@ -58,5 +59,6 @@
     <Folder Include="Domain\Common\Interfaces\" />
     <Folder Include="Services\" />
     <Folder Include="Domain\Exceptions\" />
+    <Folder Include="Consumers\" />
   </ItemGroup>
 </Project>

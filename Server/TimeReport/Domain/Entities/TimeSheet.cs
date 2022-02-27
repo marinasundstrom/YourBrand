@@ -27,5 +27,6 @@ public class TimeSheet : AuditableEntity, ISoftDelete
     public List<Entry> Entries { get; set; } = new List<Entry>();
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedBy { get; set; }
+    public string? DeletedById { get; set; }
+    public User? DeletedBy { get; set; }
 }

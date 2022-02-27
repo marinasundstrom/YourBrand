@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +21,8 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddSqlServer<ApplicationDbContext>(configuration.GetConnectionString("mssql", "TimeReport"));
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("mssql", "IdentityServer") ?? configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 

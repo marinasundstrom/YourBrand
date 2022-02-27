@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IdentityService.Client\IdentityService.Client.csproj" />
+    <ProjectReference Include="..\..\Client\TimeReport.Client\TimeReport.Client.csproj" />
+
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.Extensions.Http" />

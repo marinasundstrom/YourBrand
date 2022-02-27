@@ -11,6 +11,8 @@ public interface ICatalogContext
 
     DbSet<Comment> Comments { get; }
 
+    DbSet<User> Users { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<ITransaction> BeginTransactionAsync();

@@ -21,13 +21,16 @@ using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Skynet.IdentityService.Contracts;
+using Skynet.Consumers;
 
 static class Program
 {
     /// <param name="seed">Seed the database</param>
+    /// <param name="connectionString">The connection string of the database to act on</param>
     /// <param name="args">The rest of the arguments</param>
     /// <returns></returns>
-    static async Task Main(bool seed, string[] args)
+    static async Task Main(bool seed, string connectionString, string[] args)
     {
 
         var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +38,8 @@ static class Program
         var services = builder.Services;
 
         var Configuration = builder.Configuration;
+
+        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
         services.AddApplication(Configuration);
         services.AddInfrastructure(Configuration);
@@ -85,13 +90,16 @@ static class Program
         services.AddMassTransit(x =>
         {
             x.SetKebabCaseEndpointNameFormatter();
+
             x.AddConsumers(typeof(Program).Assembly);
+            //x.AddConsumer(typeof(UserCreatedConsumer), typeof(UserCreatedConsumerDefinition));
+
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.ConfigureEndpoints(context);
             });
         })
-        .AddMassTransitHostedService()
+        .AddMassTransitHostedService(true)
         .AddGenericRequestClient();
 
         services.AddStackExchangeRedisCache(o =>
@@ -181,6 +189,8 @@ static class Program
         if(seed)
         {
             await app.Services.SeedAsync();
+
+            return;
         }
 
         app.Run();

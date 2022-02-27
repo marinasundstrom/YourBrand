@@ -28,6 +28,15 @@ class WorkerContext : DbContext, IWorkerContext
         _dateTime = dateTime;
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+#if DEBUG
+        optionsBuilder.EnableSensitiveDataLogging(); //.LogTo(Console.WriteLine);
+#endif
+
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -8,7 +8,7 @@ static class Program
     /// <param name="seed">Seed the database</param>
     /// <param name="args">The rest of the arguments</param>
     /// <returns></returns>
-    static async Task Main(bool seed, string[] args)
+    static async Task Main(bool seed, string? connectionString, string[] args)
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
@@ -19,6 +19,8 @@ static class Program
         try
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
             builder.Host.UseSerilog((ctx, lc) => lc
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
@@ -38,6 +40,7 @@ static class Program
                 Log.Information("Seeding database...");
                 await SeedData.EnsureSeedData(app);
                 Log.Information("Done seeding database. Exiting.");
+
                 return;
             }
 

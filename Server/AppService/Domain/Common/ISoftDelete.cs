@@ -1,8 +1,12 @@
-﻿namespace Skynet.Domain.Common;
+﻿using Skynet.Domain.Entities;
+
+namespace Skynet.Domain.Common;
 
 public interface ISoftDelete
 {
     DateTime? Deleted { get; set; }
 
-    string? DeletedBy { get; set; }
+    string? DeletedById { get; set; }
+
+    User? DeletedBy { get; set; }
 }
