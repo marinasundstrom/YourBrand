@@ -1,5 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IActivitiesClient ActivitiesClient
+@inject IStringLocalizer<ActivityDialog> T
+
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -7,17 +9,17 @@
     <MudDialog>
         <DialogContent>
 
-            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+            <MudTextField Label="@(T["Name"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
-            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+            <MudTextField Lines="3" Label="@(T["Description"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
-            <MudNumericField Label="Hourly Rate" Class="mb-6" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" @bind-Value="HourlyRate" For="() => HourlyRate" HideSpinButtons="true" />
+            <MudNumericField Label="@(T["HourlyRate"])" Class="mb-6" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" @bind-Value="HourlyRate" For="() => HourlyRate" HideSpinButtons="true" />
 
         </DialogContent>
 
         <DialogActions>
-            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(ActivityId is null ? "Create" : "Save changes")</MudButton>
+            <MudButton OnClick="() => Modal.Cancel()">@T["Cancel"]</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(ActivityId is null ? T["Create"] : T["SaveChanges"])</MudButton>
         </DialogActions>
     </MudDialog>
 
@@ -39,7 +41,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(ActivityId is not null)
+        if (ActivityId is not null)
         {
             var result = await ActivitiesClient.GetActivityAsync(ActivityId);
 
