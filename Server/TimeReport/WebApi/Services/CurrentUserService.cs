@@ -4,16 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Domain.Entities;
 
 namespace Skynet.TimeReport.Services;
 
 public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITimeReportContext _context;
-    private string _currentUserId;
-    private User _currentUser;
+    private string? _currentUserId;
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
@@ -33,9 +30,11 @@ public class CurrentUserService : ICurrentUserService
         _currentUserId = userId;
     }
 
-    public string FirstName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty;
+    public string? FirstName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName);
 
-    public string LastName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty;
+    public string? LastName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName);
 
-    public string Email => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
+    public string? Email => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
+
+    public string? Role => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
 }

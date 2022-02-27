@@ -9,7 +9,7 @@ namespace Skynet.WebApi.Services;
 public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private string _currentUserId;
+    private string? _currentUserId;
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
@@ -17,6 +17,8 @@ public class CurrentUserService : ICurrentUserService
     }
 
     public string? UserId => _currentUserId ??= _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    public string? Role => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
 
     public string? GetAccessToken() => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
