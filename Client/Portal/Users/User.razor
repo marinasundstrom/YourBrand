@@ -1,5 +1,5 @@
 ﻿@page "/users/{userId}"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Administrator,Manager")]
 @using Skynet.TimeReport.Shared
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
