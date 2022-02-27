@@ -25,6 +25,7 @@
         <MudTh><MudTableSortLabel T="UserDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="UserDto" SortLabel="Ssn">SSN</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="UserDto" SortLabel="Email">Email</MudTableSortLabel></MudTh>
+        <MudTh>Role</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate Context="user">
@@ -33,6 +34,7 @@
         <MudTd DataLabel="Display Name">@user.DisplayName</MudTd>
         <MudTd DataLabel="SSN">@user.Ssn</MudTd>
         <MudTd DataLabel="Email">@user.Email</MudTd>
+        <MudTd DataLabel="Role">@user.Role</MudTd>
         <MudTd>
             <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditUserClicked(user)" />
             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteUser(user)" />

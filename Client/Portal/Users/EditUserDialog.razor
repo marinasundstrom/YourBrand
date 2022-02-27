@@ -18,6 +18,8 @@
 
             <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
 
+            <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined">@Role</MudField>
+
         </DialogContent>
 
         <DialogActions>
@@ -48,6 +50,8 @@
     [EmailAddress]
     public string Email { get; set; } = null!;
 
+    public string Role { get; set; } = null!;
+
     protected override async Task OnInitializedAsync()
     {
         var result = await UsersClient.GetUserAsync(UserId);
@@ -57,6 +61,7 @@
         DisplayName = result.DisplayName;
         SSN = result.Ssn;
         Email = result.Email;
+        Role = result.Role;
     }
 
     async Task OnSubmit()

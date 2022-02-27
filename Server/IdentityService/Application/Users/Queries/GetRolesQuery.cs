@@ -67,7 +67,7 @@ public class GetRolesQuery : IRequest<ItemsResult<RoleDto>>
 
             var users = await query.ToListAsync(cancellationToken);
 
-            var dtos = users.Select(user => new RoleDto(user.Id, user.Name, default));
+            var dtos = users.Select(user => new RoleDto(user.Id, user.Name));
 
             return new ItemsResult<RoleDto>(dtos, totalItems);
         }

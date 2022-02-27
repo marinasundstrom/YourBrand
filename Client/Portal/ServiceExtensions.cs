@@ -84,6 +84,14 @@ public static class ServiceExtensions
         .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
+        services.AddHttpClient(nameof(IdentityService.Client.IRolesClient) + "2", (sp, http) =>
+        {
+            var navigationManager = sp.GetRequiredService<NavigationManager>();
+            http.BaseAddress = new Uri($"https://identity.local/");
+        })
+       .AddTypedClient<IdentityService.Client.IRolesClient>((http, sp) => new IdentityService.Client.RolesClient(http))
+       .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+
         return services;
     }
 

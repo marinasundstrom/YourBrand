@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using IdentityService.Client
 @inject IUsersClient UsersClient
+@inject IRolesClient RolesClient
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -17,6 +18,16 @@
             <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
 
             <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+
+            <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role" SearchFunc="SearchRole" ToStringFunc="(x) => x.Name">
+                <ItemTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemTemplate>
+
+                <ItemSelectedTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemSelectedTemplate>
+            </MudAutocomplete>
 
             <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
 
@@ -47,6 +58,9 @@
     public string SSN { get; set; } = null!;
 
     [Required]
+    public RoleDto Role { get; set; } = null!;
+
+    [Required]
     [EmailAddress]
     public string Email { get; set; } = null!;
 
@@ -66,9 +80,16 @@
             DisplayName = DisplayName,
             Ssn = SSN,
             Email = Email,
+            Role = Role.Name,
             Password = Password
         });
 
         Modal.Close(DialogResult.Ok(result));
+    }
+
+    async Task<IEnumerable<RoleDto>> SearchRole(string text)
+    {
+        var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
+        return results.Items;
     }
 }
