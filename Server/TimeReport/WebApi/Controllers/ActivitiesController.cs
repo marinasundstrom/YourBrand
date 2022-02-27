@@ -46,6 +46,7 @@ public class ActivitiesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ActivityDto>> CreateActivity(string projectId, CreateActivityDto createActivityDto, CancellationToken cancellationToken)
     {
@@ -78,6 +79,7 @@ public class ActivitiesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteActivity(string id, CancellationToken cancellationToken)
     {

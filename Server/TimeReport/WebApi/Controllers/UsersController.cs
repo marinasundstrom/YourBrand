@@ -51,6 +51,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto, CancellationToken cancellationToken)
     {
@@ -67,6 +68,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}/Details")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> UpdateUser(string id, UpdateUserDetailsDto updateUserDetailsDto, CancellationToken cancellationToken)
     {
@@ -83,6 +85,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteUser(string id, CancellationToken cancellationToken)
     {

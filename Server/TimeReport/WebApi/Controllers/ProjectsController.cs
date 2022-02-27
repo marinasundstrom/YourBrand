@@ -34,6 +34,8 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(string? userId = null, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
+        var user = Request.HttpContext.User; 
+
         return Ok(await _mediator.Send(new GetProjectsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
     }
 
@@ -52,6 +54,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDto>> CreateProject(CreateProjectDto createProjectDto, CancellationToken cancellationToken)
     {
@@ -68,6 +71,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDto>> UpdateProject(string id, UpdateProjectDto updateProjectDto, CancellationToken cancellationToken)
     {
@@ -84,6 +88,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteProject(string id, CancellationToken cancellationToken)
     {
@@ -180,6 +185,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost("{id}/Memberships")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectMembershipDto>> CreateProjectMembership(string id, CreateProjectMembershipDto createProjectMembershipDto, CancellationToken cancellationToken)
     {
@@ -194,6 +200,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}/Memberships/{membershipId}")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectMembershipDto>> UpdateProjectMembership(string id, string membershipId, UpdateProjectMembershipDto updateProjectMembershipDto, CancellationToken cancellationToken)
     {
@@ -212,6 +219,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id}/Memberships/{membershipId}")]
+    [Authorize(Roles = "Administrator,Manager")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteProjectMembership(string id, string membershipId, CancellationToken cancellationToken)
     {

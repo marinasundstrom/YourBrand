@@ -119,8 +119,8 @@ static class Program
 
                         options.TokenValidationParameters = new TokenValidationParameters()
                         {
-                            NameClaimType = "name",
-                            RoleClaimType = "role"
+                            NameClaimType = "name"
+                            
                         };
 
                         options.Events = new JwtBearerEvents
