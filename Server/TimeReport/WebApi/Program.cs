@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
 
+using NSwag;
+using NSwag.Generation.Processors.Security;
+
 using Skynet.TimeReport;
 using Skynet.TimeReport.Application;
 using Skynet.TimeReport.Application.Common.Interfaces;
@@ -59,6 +62,17 @@ static class Program
         {
             config.Title = "Web API";
             config.Version = "v1";
+
+
+            config.AddSecurity("JWT", new OpenApiSecurityScheme
+            {
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}."
+            });
+
+            config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
