@@ -57,33 +57,47 @@
 
     protected override async Task OnInitializedAsync()
     {
-        user = await UsersClient.GetUserAsync(UserId);
-
-        data = await UsersClient2.GetStatisticsAsync(UserId, null, null);
-
-        XAxisLabels = data.Labels.ToArray();
-
-        foreach (var d in data.Series)
+        try
         {
-            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
-        }
+            user = await UsersClient.GetUserAsync(UserId);
 
-        statisticsSummary = await UsersClient2.GetStatisticsSummaryAsync(UserId);
+            data = await UsersClient2.GetStatisticsAsync(UserId, null, null);
+
+            XAxisLabels = data.Labels.ToArray();
+
+            foreach (var d in data.Series)
+            {
+                Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            }
+
+            statisticsSummary = await UsersClient2.GetStatisticsSummaryAsync(UserId);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 
     async Task ChangeUserDetails()
     {
-        DialogParameters parameters = new();
-        parameters.Add(nameof(EditUserDialog.UserId), UserId);
+        try
+        {
+            DialogParameters parameters = new();
+            parameters.Add(nameof(EditUserDialog.UserId), UserId);
 
-        var dialogRef = DialogService.Show<EditUserDialog>($"Edit {user.FirstName}", parameters);
+            var dialogRef = DialogService.Show<EditUserDialog>($"Edit {user.FirstName}", parameters);
 
-        var dialogResult = await dialogRef.Result;
+            var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
-            return;
+            if (dialogResult.Cancelled)
+                return;
 
-        user = await UsersClient.GetUserAsync(UserId);
+            user = await UsersClient.GetUserAsync(UserId);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 
     async Task ChangePassword()

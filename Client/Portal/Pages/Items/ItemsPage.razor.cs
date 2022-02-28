@@ -71,6 +71,10 @@ namespace Skynet.Portal.Pages.Items
                 {
                     await ItemsClient.UploadImageAsync(item.Id, new FileParameter(imageToUpload));
                 }
+                catch (AccessTokenNotAvailableException exception)
+                {
+                    exception.Redirect();
+                }
                 catch (Exception exc)
                 {
                     Snackbar.Add(exc.Message, Severity.Error);
@@ -102,10 +106,12 @@ namespace Skynet.Portal.Pages.Items
                 return new TableData<ItemDto>()
                 {TotalItems = results.TotalCount, Items = results.Items};
             }
-            catch (AccessTokenNotAvailableException exc)
+            catch (AccessTokenNotAvailableException exception)
             {
-                return null !;
+                exception.Redirect();
             }
+
+            return null!;
         }
 
         private void RowClickEvent(TableRowClickEventArgs<ItemDto> args)
@@ -135,10 +141,17 @@ namespace Skynet.Portal.Pages.Items
 
         async Task DeleteItem(ItemDto item)
         {
-            var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
-            if (result.GetValueOrDefault())
+            try
             {
-                await ItemsClient.DeleteItemAsync(item.Id);
+                var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
+                if (result.GetValueOrDefault())
+                {
+                    await ItemsClient.DeleteItemAsync(item.Id);
+                }
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
             }
         }
 

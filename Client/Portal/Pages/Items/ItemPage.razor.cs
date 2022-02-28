@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Skynet.Client;
 using MudBlazor;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace Skynet.Portal.Pages.Items
 {
@@ -29,10 +30,14 @@ namespace Skynet.Portal.Pages.Items
             {
                 Snackbar.Add(exc.Result.Detail, Severity.Error);
             }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
             catch (Exception exc)
             {
                 Snackbar.Add(exc.Message, Severity.Error);
-            }
+            }           
         }
 
         async void OnLocationChanged(object sender, LocationChangedEventArgs ev)
@@ -44,9 +49,22 @@ namespace Skynet.Portal.Pages.Items
 
         private async Task<TableData<CommentDto>> ServerReload(TableState state)
         {
-            var results = await ItemsClient.GetCommentsAsync(Id, state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Client.SortDirection.Asc : Skynet.Client.SortDirection.Desc);
-            return new TableData<CommentDto>()
-            {TotalItems = results.TotalCount, Items = results.Items};
+            try
+            { 
+                var results = await ItemsClient.GetCommentsAsync(Id, state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Client.SortDirection.Asc : Skynet.Client.SortDirection.Desc);
+                return new TableData<CommentDto>()
+                {
+                    TotalItems = results.TotalCount,
+                    Items = results.Items
+                };
+
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
+
+            return null!;
         }
 
         private async Task OpenDialog()
@@ -61,6 +79,11 @@ namespace Skynet.Portal.Pages.Items
                 await ItemsClient.PostCommentAsync(Id, new PostCommentDto()
                 {Text = model.Text});
                 await table.ReloadServerData();
+
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
             }
             catch (Exception exc)
             {

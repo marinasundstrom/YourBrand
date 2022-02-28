@@ -62,10 +62,19 @@
 
     private async Task<TableData<UserDto>> ServerReload(TableState state)
     {
-        var page = await UsersClient.GetUsersAsync(state.Page, state.PageSize, searchString,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityService.Client.SortDirection.Desc : IdentityService.Client.SortDirection.Asc);
+        try
+        {
+            var page = await UsersClient.GetUsersAsync(state.Page, state.PageSize, searchString,
+                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityService.Client.SortDirection.Desc : IdentityService.Client.SortDirection.Asc);
 
-        return new TableData<UserDto>() { TotalItems = page.TotalItems, Items = page.Items };
+            return new TableData<UserDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null!;
     }
 
     private void OnSearch(string text)
@@ -109,13 +118,20 @@
 
     private async Task DeleteUser(UserDto user)
     {
-        var dialogResult = await DialogService.ShowMessageBox($"Delete {user.FirstName}?", "Are you sure?", "Yes", "No");
+        try
+        {
+            var dialogResult = await DialogService.ShowMessageBox($"Delete {user.FirstName}?", "Are you sure?", "Yes", "No");
 
-        if (!dialogResult.GetValueOrDefault())
-            return;
+            if (!dialogResult.GetValueOrDefault())
+                return;
 
-        await UsersClient.DeleteUserAsync(user.Id);
+            await UsersClient.DeleteUserAsync(user.Id);
 
-        table.ReloadServerData();
+            table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 }

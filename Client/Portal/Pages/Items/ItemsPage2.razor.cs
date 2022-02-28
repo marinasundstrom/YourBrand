@@ -69,22 +69,29 @@ namespace Skynet.Portal.Pages.Items
 
         async Task OnItemAdded(ItemDto item)
         {
-            Snackbar.Add("Item was added", Severity.Success);
-            if (imageToUpload is not null)
+            try
             {
-                try
+                Snackbar.Add("Item was added", Severity.Success);
+                if (imageToUpload is not null)
                 {
-                    await ItemsClient.UploadImageAsync(item.Id, new FileParameter(imageToUpload));
+                    try
+                    {
+                        await ItemsClient.UploadImageAsync(item.Id, new FileParameter(imageToUpload));
+                    }
+                    catch (Exception exc)
+                    {
+                        Snackbar.Add(exc.Message, Severity.Error);
+                    }
                 }
-                catch (Exception exc)
-                {
-                    Snackbar.Add(exc.Message, Severity.Error);
-                }
-            }
 
-            imageToUpload?.Dispose();
-            imageToUpload = null;
-            await OnPageSelected(selectedPage);
+                imageToUpload?.Dispose();
+                imageToUpload = null;
+                await OnPageSelected(selectedPage);
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
         }
 
         async Task OnItemDeleted(string id, string name)
@@ -118,9 +125,9 @@ namespace Skynet.Portal.Pages.Items
                     pageCount++;
                 }
             }
-            catch (AccessTokenNotAvailableException exc)
+            catch (AccessTokenNotAvailableException exception)
             {
-
+                exception.Redirect();
             }
 
             StateHasChanged();
@@ -145,6 +152,10 @@ namespace Skynet.Portal.Pages.Items
                 await ItemsClient.AddItemAsync(new AddItemDto()
                 {Name = model.Name, Description = model.Description});
             }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
             catch (Exception exc)
             {
                 Snackbar.Add(exc.Message.ToString(), Severity.Error);
@@ -153,10 +164,17 @@ namespace Skynet.Portal.Pages.Items
 
         async Task DeleteItem(ItemDto item)
         {
-            var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
-            if (result.GetValueOrDefault())
+            try
             {
-                await ItemsClient.DeleteItemAsync(item.Id);
+                var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
+                if (result.GetValueOrDefault())
+                {
+                    await ItemsClient.DeleteItemAsync(item.Id);
+                }
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
             }
         }
 

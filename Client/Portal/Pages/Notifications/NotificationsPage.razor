@@ -44,10 +44,19 @@
 
     private async Task<TableData<NotificationDto>> ServerReload(TableState state)
     {
-        var results = await NotificationsClient.GetNotificationsAsync(false, state.Page + 1, state.PageSize, state.SortLabel,
-            state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Client.SortDirection.Asc : Skynet.Client.SortDirection.Desc);
+        try
+        {
+            var results = await NotificationsClient.GetNotificationsAsync(false, state.Page + 1, state.PageSize, state.SortLabel,
+                state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Client.SortDirection.Asc : Skynet.Client.SortDirection.Desc);
 
-        return new TableData<NotificationDto>() { TotalItems = results.TotalCount, Items = results.Items };
+            return new TableData<NotificationDto>() { TotalItems = results.TotalCount, Items = results.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
     }
 
     private void RowClickEvent(TableRowClickEventArgs<NotificationDto> args)

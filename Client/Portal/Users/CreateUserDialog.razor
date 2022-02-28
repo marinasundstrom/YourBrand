@@ -73,23 +73,39 @@
 
     async Task OnSubmit()
     {
-        UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
+        try
         {
-            FirstName = FirstName,
-            LastName = LastName,
-            DisplayName = DisplayName,
-            Ssn = SSN,
-            Email = Email,
-            Role = Role.Name,
-            Password = Password
-        });
+            UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName,
+                Ssn = SSN,
+                Email = Email,
+                Role = Role.Name,
+                Password = Password
+            });
 
-        Modal.Close(DialogResult.Ok(result));
+            Modal.Close(DialogResult.Ok(result));
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 
     async Task<IEnumerable<RoleDto>> SearchRole(string text)
     {
-        var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
-        return results.Items;
+        try
+        {
+            var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
     }
 }

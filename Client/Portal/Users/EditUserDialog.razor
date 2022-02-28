@@ -66,15 +66,22 @@
 
     async Task OnSubmit()
     {
-        UserDto result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetailsDto
+        try
         {
-            FirstName = FirstName,
-            LastName = LastName,
-            DisplayName = DisplayName,
-            Ssn = SSN,
-            Email = Email
-        });
+            UserDto result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetailsDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName,
+                Ssn = SSN,
+                Email = Email
+            });
 
-        Modal.Close(DialogResult.Ok(result));
+            Modal.Close(DialogResult.Ok(result));
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 }
