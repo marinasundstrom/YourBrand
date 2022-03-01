@@ -10,7 +10,7 @@
 
     <MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Edit @user?.GetDisplayName()</MudText>
 
-    <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+    <MudContainer Class="mt-16 mb-16" MaxWidth="MaxWidth.ExtraSmall">
 
         <EditForm Model="@this" OnValidSubmit="OnSubmit">
             <DataAnnotationsValidator />
@@ -27,7 +27,7 @@
 
             <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
 
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save changes</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save changes</MudButton>
 
         </EditForm>
 

@@ -11,7 +11,7 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Create user</MudText>
 
-<MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+<MudContainer Class="mt-16 mb-16" MaxWidth="MaxWidth.ExtraSmall">
 
     <EditForm Model="@this" OnValidSubmit="OnSubmit">
         <DataAnnotationsValidator />
@@ -42,7 +42,7 @@
 
         <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
 
-        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
 
     </EditForm>
 
