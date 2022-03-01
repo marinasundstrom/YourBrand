@@ -1,4 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using Skynet.Client
+@inject IItemsClient ItemsClient
+@inject ISnackbar Snackbar
 
 <div style="width: 350px; max-width: 350px;">
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">

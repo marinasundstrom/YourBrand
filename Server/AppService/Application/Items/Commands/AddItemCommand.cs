@@ -9,18 +9,8 @@ using MediatR;
 
 namespace Skynet.Application.Items.Commands;
 
-public class AddItemCommand : IRequest
+public record AddItemCommand(string Name, string Description) : IRequest
 {
-    public string Name { get; set; } = null!;
-
-    public string Description { get; set; } = null!;
-
-    public AddItemCommand(string name, string description)
-    {
-        Name = name;
-        Description = description;
-    }
-
     public class AddItemCommandHandler : IRequestHandler<AddItemCommand>
     {
         private readonly ICatalogContext context;

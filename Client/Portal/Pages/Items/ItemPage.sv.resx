@@ -33,10 +33,10 @@
     <data name="Header_CreatedBy">
 		<value>Skapad av</value>
 	</data>
-    <data name="Header_LastModified">
+    <data name="Header_Edited">
 		<value>Senast ändrad</value>
 	</data>
-    <data name="Header_LastModifiedBy">
+    <data name="Header_EditedBy">
 		<value>Ändrad av</value>
 	</data>
     <data name="NoRecordsFound">

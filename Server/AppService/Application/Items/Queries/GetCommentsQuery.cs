@@ -39,8 +39,11 @@ public class GetCommentsQuery : IRequest<Results<CommentDto>>
         public async Task<Results<CommentDto>> Handle(GetCommentsQuery request, CancellationToken cancellationToken)
         {
             var query = context.Comments
+                .Include(c => c.CreatedBy)
+                .Include(c => c.LastModifiedBy)
                 .Where(c => c.Item.Id == request.ItemId)
                 .OrderByDescending(c => c.Created)
+                .AsSplitQuery()
                 .AsQueryable();
 
             var totalCount = await query.CountAsync(cancellationToken);
@@ -58,7 +61,7 @@ public class GetCommentsQuery : IRequest<Results<CommentDto>>
             var comments = await query.ToListAsync(cancellationToken);
 
             return new Results<CommentDto>(
-                comments.Select(comment => new CommentDto(comment.Id, comment.Text, comment.Created, comment.CreatedById, comment.LastModified, comment.LastModifiedById)),
+                comments.Select(comment => new CommentDto(comment.Id, comment.Text, comment.Created, comment.CreatedBy?.ToDto(), comment.LastModified, comment.LastModifiedBy?.ToDto())),
                 totalCount);
         }
     }

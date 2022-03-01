@@ -45,7 +45,7 @@
     <MudPaper Class="mt-4 px-4 py-4">
         <MudText Typo="Typo.h6" Align="Align.Left" GutterBottom="true"> @T["Comments"]</MudText>
 
-        <MudButton @onclick="OpenDialog" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-2">
+        <MudButton OnClick="async () => await OpenDialog(null)" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-2">
             @T["NewComment"]
         </MudButton>
 
@@ -55,6 +55,9 @@
                 <MudTh>@T["Header_Text"]</MudTh>
                 <MudTh><MudTableSortLabel T="CommentDto" SortLabel="Created">@T["Header_Created"]</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel T="CommentDto" SortLabel="CreatedBy">@T["Header_CreatedBy"]</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="CommentDto" SortLabel="Created">@T["Header_Edited"]</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="CommentDto" SortLabel="CreatedBy">@T["Header_EditedBy"]</MudTableSortLabel></MudTh>
+                <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>
@@ -62,7 +65,12 @@
                 </MudTd>
                 <MudTd DataLabel="Name">@context.Text</MudTd>
                 <MudTd DataLabel="Created">@context.Created.ToString("g")</MudTd>
-                <MudTd DataLabel="Created by">@context.CreatedBy</MudTd>
+                <MudTd DataLabel="Created by">@context.CreatedBy.GetDisplayName()</MudTd>
+                <MudTd DataLabel="Created">@context.LastModified?.ToString("g")</MudTd>
+                <MudTd DataLabel="Created by">@context.LastModifiedBy?.GetDisplayName()</MudTd>
+                <MudTh>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OpenDialog(context)"></MudIconButton>
+                </MudTh>
             </RowTemplate>
             <NoRecordsContent>
                 <MudText>@T["NoRecordsFound"]</MudText>

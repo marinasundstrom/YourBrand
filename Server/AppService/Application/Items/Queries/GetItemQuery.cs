@@ -32,11 +32,12 @@ public class GetItemQuery : IRequest<ItemDto?>
             var item = await context.Items
                 .Include(i => i.CreatedBy)
                 .Include(i => i.LastModifiedBy)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (item is null) return null;
 
-            return new ItemDto(item.Id, item.Name, item.Description, urlHelper.CreateImageUrl(item.Image), item.CommentCount, item.Created, item.CreatedBy!.ToDto()!, item.LastModified, item.LastModifiedBy?.ToDto());
+            return item.ToDto(urlHelper);
          }
     }
 }

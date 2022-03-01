@@ -29,7 +29,6 @@ public class DeleteUserCommand : IRequest
         public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                        //.AsSplitQuery()
                         .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)

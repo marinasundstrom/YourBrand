@@ -2,7 +2,7 @@
 
 namespace Skynet.WebApi.Controllers;
 
-public class PostCommentDto
+public class UpdateCommentDto
 {
     [Required]
     public string Text { get; set; } = null!;

@@ -67,28 +67,20 @@ namespace Skynet.Portal.Pages.Items
             return null!;
         }
 
-        private async Task OpenDialog()
+        private async Task OpenDialog(CommentDto? comment)
         {
-            var dialogReference = DialogService.Show<CreateCommentDialog>("Write a comment");
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(CommentDialog.ItemId), Id);
+            parameters.Add(nameof(CommentDialog.CommentId), comment?.Id);
+
+            var dialogReference = DialogService.Show<CommentDialog>(comment is not null ? "Update comment" : "Write a comment", parameters);
             var result = await dialogReference.Result;
-            var model = (CreateCommentDialog.FormModel)result.Data;
+            var model = (CommentDialog.FormModel)result.Data;
+
             if (result.Cancelled)
                 return;
-            try
-            {
-                await ItemsClient.PostCommentAsync(Id, new PostCommentDto()
-                {Text = model.Text});
-                await table.ReloadServerData();
 
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
-            catch (Exception exc)
-            {
-                Snackbar.Add(exc.Message.ToString(), Severity.Error);
-            }
+            await table.ReloadServerData();
         }
 
         public void Dispose()

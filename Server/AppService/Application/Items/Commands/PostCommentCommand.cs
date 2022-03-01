@@ -7,18 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Skynet.Application.Items.Commands;
 
-public class PostCommentCommand : IRequest
+public record PostCommentCommand(string ItemId, string Text) : IRequest
 {
-    public string ItemId { get; set; } = null!;
-
-    public string Text { get; set; } = null!;
-
-    public PostCommentCommand(string itemId, string text)
-    {
-        ItemId = itemId;
-        Text = text;
-    }
-
     public class PostCommentCommandHandler : IRequestHandler<PostCommentCommand>
     {
         private readonly ICatalogContext context;

@@ -33,11 +33,11 @@
     <data name="Header_CreatedBy">
         <value>Created by</value>
     </data>
-    <data name="Header_LastModified">
-        <value>Last Modified by</value>
+    <data name="Header_Edited">
+        <value>Last edited</value>
     </data>
-    <data name="Header_LastModifiedBy">
-        <value>Last Modified by</value>
+    <data name="Header_EditedBy">
+        <value>Edited by</value>
     </data>
     <data name="NoRecordsFound">
         <value>No records found</value>

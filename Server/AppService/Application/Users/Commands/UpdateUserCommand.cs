@@ -44,7 +44,6 @@ public class UpdateUserCommand : IRequest<UserDto>
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                //.AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)

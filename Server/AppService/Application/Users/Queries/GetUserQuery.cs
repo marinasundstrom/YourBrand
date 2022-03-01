@@ -30,7 +30,6 @@ public class GetUserQuery : IRequest<UserDto>
         {
             var user = await _context.Users
                 .AsNoTracking()
-                //.AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)

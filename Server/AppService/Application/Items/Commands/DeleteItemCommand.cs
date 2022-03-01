@@ -8,15 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Skynet.Application.Items.Commands;
 
-public class DeleteItemCommand : IRequest<DeletionResult>
+public record DeleteItemCommand(string Id) : IRequest<DeletionResult>
 {
-    public string Id { get; set; }
-
-    public DeleteItemCommand(string id)
-    {
-        Id = id;
-    }
-
     public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand, DeletionResult>
     {
         private readonly ICatalogContext context;

@@ -60,13 +60,13 @@
                         Id = Guid.NewGuid().ToString(),
                         Text = "hello",
                         Created = DateTime.Now,
-                        CreatedBy = "Alice" /* new UserDto()
+                        CreatedBy = new UserDto()
                         {
                             Id = Guid.NewGuid().ToString(),
                             FirstName = "Bob",
                             LastName = "Smith",
                             Created = DateTime.Now
-                        } */
+                        }
                     }
                 },
                 TotalCount = 1

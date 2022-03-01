@@ -8,18 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Skynet.Application.Items.Commands;
 
-public class UploadImageCommand : IRequest<UploadImageResult>
+public record UploadImageCommand(string Id, Stream Stream) : IRequest<UploadImageResult>
 {
-    public string Id { get; set; }
-
-    public Stream Stream { get; set; }
-
-    public UploadImageCommand(string id, Stream stream)
-    {
-        Id = id;
-        Stream = stream;
-    }
-
     public class UploadImageCommandHandler : IRequestHandler<UploadImageCommand, UploadImageResult>
     {
         private readonly ICatalogContext context;
