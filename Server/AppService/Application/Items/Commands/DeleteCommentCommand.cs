@@ -20,12 +20,16 @@ public record DeleteCommentCommand(string CommentId) : IRequest
 
         public async Task<Unit> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
         {
-            var comment = await context.Comments.FirstOrDefaultAsync(i => i.Id == request.CommentId, cancellationToken);
+            var comment = await context.Comments
+                .Include(x => x.Item)
+                .FirstOrDefaultAsync(i => i.Id == request.CommentId, cancellationToken);
 
             if (comment is null) throw new Exception();
 
             context.Comments.Remove(comment);
 
+            comment.Item.CommentCount--;
+           
             await context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

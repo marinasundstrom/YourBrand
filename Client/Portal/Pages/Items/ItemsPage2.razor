@@ -35,27 +35,29 @@ else
         @foreach (var item in items)
         {
             <MudItem xs="12" md="4" lg="4">
-                <MudCard>
-                    <MudCardMedia Image="@item.Image" Height="200" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5">@item.Name</MudText>
-                        <MudText Typo="Typo.body1">@item.Description</MudText>
+                <MudBadge Color="Color.Primary" Visible="@(item.CommentCount > 0)" Content="@item.CommentCount">
+                    <MudCard>
+                        <MudCardMedia Image="@item.Image" Height="200" />
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@item.Name</MudText>
+                            <MudText Typo="Typo.body1">@item.Description</MudText>
 
-                        <div class="mt-4">
-                            <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.GetDisplayName()</MudText>
-                        </div>
-
-                        @if (item.LastModifiedBy is not null)
-                        {
-                            <div class="mt-2">
-                                <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy.GetDisplayName()</MudText>
+                            <div class="mt-4">
+                                <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.GetDisplayName()</MudText>
                             </div>
-                        }
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary" Link="@($"/items/{item.Id}")">@T["More"]</MudButton>
-                    </MudCardActions>
-                </MudCard>
+
+                            @if (item.LastModifiedBy is not null)
+                            {
+                                <div class="mt-2">
+                                    <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy.GetDisplayName()</MudText>
+                                </div>
+                            }
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" Link="@($"/items/{item.Id}")">@T["More"]</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudBadge>
             </MudItem>
         }
     </MudGrid>
