@@ -12,40 +12,41 @@
 <MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Create user</MudText>
 
 <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+    <MudPaper Elevation="1" Class="pa-8">
 
-    <EditForm Model="@this" OnValidSubmit="OnSubmit">
-        <DataAnnotationsValidator />
+        <EditForm Model="@this" OnValidSubmit="OnSubmit">
+            <DataAnnotationsValidator />
 
-        <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
+            <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
 
-        <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
+            <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
 
-        <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
+            <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
 
-        <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
+            <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
 
-        <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+            <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
 
-        <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role" SearchFunc="SearchRole" ToStringFunc="(x) => x.Name">
-            <ItemTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
-            </ItemTemplate>
+            <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role" SearchFunc="SearchRole" ToStringFunc="(x) => x.Name">
+                <ItemTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemTemplate>
 
-            <ItemSelectedTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
-            </ItemSelectedTemplate>
-        </MudAutocomplete>
+                <ItemSelectedTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemSelectedTemplate>
+            </MudAutocomplete>
 
-        <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Password</MudText>
+            <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Password</MudText>
 
-        <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
+            <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
 
-        <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
+            <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
 
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
 
-    </EditForm>
-
+        </EditForm>
+    </MudPaper>
 </MudContainer>
 
 @code {

@@ -12,24 +12,27 @@
 
     <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
 
-        <EditForm Model="@this" OnValidSubmit="OnSubmit">
-            <DataAnnotationsValidator />
+        <MudPaper Elevation="1" Class="pa-8">
 
-            <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
+            <EditForm Model="@this" OnValidSubmit="OnSubmit">
+                <DataAnnotationsValidator />
 
-            <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
+                <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
 
-            <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
+                <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
 
-            <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
+                <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
 
-            <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+                <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
 
-            <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
+                <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
 
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save changes</MudButton>
+                <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
 
-        </EditForm>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save changes</MudButton>
+
+            </EditForm>
+        </MudPaper>
 
     </MudContainer>
 }
