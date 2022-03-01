@@ -42,13 +42,13 @@ else
                         <MudText Typo="Typo.body1">@item.Description</MudText>
 
                         <div class="mt-4">
-                            <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.FirstName @item.CreatedBy.LastName</MudText>
+                            <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.GetDisplayName()</MudText>
                         </div>
 
                         @if (item.LastModifiedBy is not null)
                         {
                             <div class="mt-2">
-                                <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy.FirstName @item.LastModifiedBy.LastName</MudText>
+                                <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy.GetDisplayName()</MudText>
                             </div>
                         }
                     </MudCardContent>

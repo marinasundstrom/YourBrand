@@ -42,9 +42,9 @@
             <MudTd DataLabel="@T["Header_Description"]">@context.Description</MudTd>
             <MudTd DataLabel="@T["Header_Comments"]">@context.CommentCount</MudTd>
             <MudTd DataLabel="@T["Header_Created"]">@context.Created.ToString("g")</MudTd>
-            <MudTd DataLabel="@T["Header_CreatedBy"]">@context.CreatedBy.FirstName @context.CreatedBy.LastName</MudTd>
+            <MudTd DataLabel="@T["Header_CreatedBy"]">@context.CreatedBy.GetDisplayName()</MudTd>
             <MudTd DataLabel="@T["Header_LastModified"]">@context.LastModified?.ToString("g")</MudTd>
-            <MudTd DataLabel="@T["Header_LastModifiedBy"]">@context.LastModifiedBy?.FirstName @context.LastModifiedBy?.LastName</MudTd>
+            <MudTd DataLabel="@T["Header_LastModifiedBy"]">@context.LastModifiedBy?.GetDisplayName()</MudTd>
             <MudTd><MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteItem(context)" /></MudTd>
         </RowTemplate>
         <NoRecordsContent>

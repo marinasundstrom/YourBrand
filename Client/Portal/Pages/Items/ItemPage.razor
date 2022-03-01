@@ -29,13 +29,13 @@
             </MudItem>
 
             <MudItem xl="12" md="8">
-                <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.FirstName @item.CreatedBy.LastName</MudText>
+                <MudText Typo="Typo.body2">Created on @item.Created.ToString("g") by @item.CreatedBy.GetDisplayName()</MudText>
             </MudItem>
 
             @if (item.LastModifiedBy is not null)
             {
                 <MudItem xl="12" md="8">
-                    <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy.FirstName @item.LastModifiedBy.LastName</MudText>
+                    <MudText Typo="Typo.body2">Last modified on @item.LastModified?.ToString("g") by @item.LastModifiedBy?.GetDisplayName()</MudText>
                 </MudItem>
             }
         </MudGrid>
