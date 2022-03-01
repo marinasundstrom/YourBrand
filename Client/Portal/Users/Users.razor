@@ -85,35 +85,17 @@
 
     private void GotToUser(UserDto user)
     {
-        NavigationManager.NavigateTo($"/users/{user.Id}"); ;
+        NavigationManager.NavigateTo($"/Users/{user.Id}"); ;
     }
 
     private async Task OnNewUserClicked()
     {
-        var dialogRef = DialogService.Show<CreateUserDialog>("New User");
-
-        var dialogResult = await dialogRef.Result;
-
-        if (dialogResult.Cancelled)
-            return;
-
-        searchString = null;
-        table.ReloadServerData();
+        NavigationManager.NavigateTo($"/Users/Create");
     }
 
     private async Task OnEditUserClicked(UserDto user)
     {
-        DialogParameters parameters = new();
-        parameters.Add(nameof(EditUserDialog.UserId), user.Id);
-
-        var dialogRef = DialogService.Show<EditUserDialog>($"Edit {user.FirstName}", parameters);
-
-        var dialogResult = await dialogRef.Result;
-
-        if (dialogResult.Cancelled)
-            return;
-
-        table.ReloadServerData();
+        NavigationManager.NavigateTo($"/Users/{user.Id}/Edit");
     }
 
     private async Task DeleteUser(UserDto user)

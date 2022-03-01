@@ -1,0 +1,121 @@
+﻿@page "/users/create"
+@using System.ComponentModel.DataAnnotations
+@using IdentityService.Client
+@inject IUsersClient UsersClient
+@inject IRolesClient RolesClient
+@inject NavigationManager NavigationManager
+
+@* <MudBreadcrumbs Items="_items"></MudBreadcrumbs> *@
+
+<PageTitle>Create user - Skynet</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Create user</MudText>
+
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+
+    <EditForm Model="@this" OnValidSubmit="OnSubmit">
+        <DataAnnotationsValidator />
+
+        <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
+
+        <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
+
+        <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
+
+        <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
+
+        <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+
+        <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role" SearchFunc="SearchRole" ToStringFunc="(x) => x.Name">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+
+        <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Password</MudText>
+
+        <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
+
+        <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
+
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
+
+    </EditForm>
+
+</MudContainer>
+
+@code {
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+
+    public string? DisplayName { get; set; }
+
+    [Required]
+    public string SSN { get; set; } = null!;
+
+    [Required]
+    public RoleDto Role { get; set; } = null!;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+
+    [Required]
+    public string Password { get; set; } = null!;
+
+    [Required]
+    [Compare(nameof(Password))]
+    public string RepeatPassword { get; set; } = null!;
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "/"),
+        new BreadcrumbItem("Users", href: "/Users"),
+        new BreadcrumbItem("Create users", href: null, disabled: true)
+    };
+
+    async Task OnSubmit()
+    {
+        try
+        {
+            UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName,
+                Ssn = SSN,
+                Email = Email,
+                Role = Role.Name,
+                Password = Password
+            });
+
+            NavigationManager.NavigateTo($"/Users/{result.Id}");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task<IEnumerable<RoleDto>> SearchRole(string text)
+    {
+        try
+        {
+            var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

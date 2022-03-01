@@ -80,24 +80,7 @@
 
     async Task ChangeUserDetails()
     {
-        try
-        {
-            DialogParameters parameters = new();
-            parameters.Add(nameof(EditUserDialog.UserId), UserId);
-
-            var dialogRef = DialogService.Show<EditUserDialog>($"Edit {user.FirstName}", parameters);
-
-            var dialogResult = await dialogRef.Result;
-
-            if (dialogResult.Cancelled)
-                return;
-
-            user = await UsersClient.GetUserAsync(UserId);
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        NavigationManager.NavigateTo($"/Users/{user.Id}/Edit");
     }
 
     async Task ChangePassword()

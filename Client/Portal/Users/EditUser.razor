@@ -1,12 +1,19 @@
-﻿@using System.ComponentModel.DataAnnotations
+﻿@page "/users/{UserId}/edit"
+@using System.ComponentModel.DataAnnotations
 @using IdentityService.Client
 @inject IUsersClient UsersClient
+@inject NavigationManager NavigationManager
 
-<EditForm Model="@this" OnValidSubmit="OnSubmit">
-    <DataAnnotationsValidator />
+@if (user is not null)
+{
+    <PageTitle>Edit @user?.GetDisplayName() - Skynet</PageTitle>
 
-    <MudDialog>
-        <DialogContent>
+    <MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Edit @user?.GetDisplayName()</MudText>
+
+    <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+
+        <EditForm Model="@this" OnValidSubmit="OnSubmit">
+            <DataAnnotationsValidator />
 
             <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
 
@@ -20,15 +27,12 @@
 
             <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
 
-        </DialogContent>
-
-        <DialogActions>
-            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save changes</MudButton>
-        </DialogActions>
-    </MudDialog>
 
-</EditForm>
+        </EditForm>
+
+    </MudContainer>
+}
 
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; } = null!;
@@ -52,9 +56,13 @@
 
     public string Role { get; set; } = null!;
 
+    UserDto? user;
+
     protected override async Task OnInitializedAsync()
     {
         var result = await UsersClient.GetUserAsync(UserId);
+
+        user = result;
 
         FirstName = result.FirstName;
         LastName = result.LastName;
@@ -77,7 +85,7 @@
                 Email = Email
             });
 
-            Modal.Close(DialogResult.Ok(result));
+            NavigationManager.NavigateTo($"/Users/{result.Id}");
         }
         catch (AccessTokenNotAvailableException exception)
         {
