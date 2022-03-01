@@ -70,6 +70,7 @@
                 <MudTd DataLabel="Created by">@context.LastModifiedBy?.GetDisplayName()</MudTd>
                 <MudTh>
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OpenDialog(context)"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteComment(context)"></MudIconButton>
                 </MudTh>
             </RowTemplate>
             <NoRecordsContent>

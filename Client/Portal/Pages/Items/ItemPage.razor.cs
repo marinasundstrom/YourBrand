@@ -83,6 +83,17 @@ namespace Skynet.Portal.Pages.Items
             await table.ReloadServerData();
         }
 
+        private async Task DeleteComment(CommentDto comment)
+        {
+            var result = await DialogService.ShowMessageBox($"Delete comment?", "Are you sure?", "Yes", "No");
+            if (result.GetValueOrDefault())
+            {
+                await ItemsClient.DeleteCommentAsync(Id, comment.Id);
+
+                await table.ReloadServerData();
+            }
+        }
+
         public void Dispose()
         {
             NavigationManager.LocationChanged -= OnLocationChanged;
