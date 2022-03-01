@@ -20,9 +20,15 @@
                             Description = "A description",
                             CommentCount = 0,
                             Created = DateTime.Now,
-                            CreatedBy = "Alice"
+                            CreatedBy = new UserDto()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                FirstName = "Alice",
+                                LastName = "Smith",
+                                Created = DateTime.Now
+                            }
                         }
-                        },
+                },
                 TotalCount = 1
             });
 
@@ -35,7 +41,13 @@
                 CommentCount = 1,
                 Image = null,
                 Created = DateTime.Now,
-                CreatedBy = "Alice"
+                CreatedBy = new UserDto()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FirstName = "Alice",
+                    LastName = "Smith",
+                    Created = DateTime.Now
+                }
             });
 
         client.GetCommentsAsync("foo", 0, 10, null, null)
@@ -48,7 +60,13 @@
                         Id = Guid.NewGuid().ToString(),
                         Text = "hello",
                         Created = DateTime.Now,
-                        CreatedBy = "Alice"
+                        CreatedBy = "Alice" /* new UserDto()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            FirstName = "Bob",
+                            LastName = "Smith",
+                            Created = DateTime.Now
+                        } */
                     }
                 },
                 TotalCount = 1
