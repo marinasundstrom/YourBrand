@@ -81,6 +81,7 @@ public class LockMonthCommand : IRequest
 
             var group = await _context.MonthEntryGroups
                .Include(meg => meg.Entries)
+               .ThenInclude(e => e.TimeSheet)
                .FirstOrDefaultAsync(meg =>
                    meg.UserId == userId
                    && meg.Year == lastDate.Date.Year
@@ -100,7 +101,17 @@ public class LockMonthCommand : IRequest
                     return Unit.Value;
                 }
 
-                // TODO: Cannot lock month with open Timesheets
+                // Cannot lock month with open Timesheets
+
+                var hasTimeSheetsOpen = group.Entries
+                    .Select(x => x.TimeSheet)
+                    .Distinct()
+                    .Any(x => x.Status == TimeSheetStatus.Open);
+
+                if(hasTimeSheetsOpen) 
+                {
+                    throw new Exception("Cannot lock month since timesheets are open.");
+                }
 
                 group.Status = EntryStatus.Locked;
 
