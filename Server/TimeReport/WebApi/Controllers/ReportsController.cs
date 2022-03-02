@@ -23,9 +23,9 @@ public class ReportsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<FileStreamResult> GetReport([FromQuery] string[] projectIds, [FromQuery] string? userId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, CancellationToken cancellationToken)
+    public async Task<FileStreamResult> GetReport([FromQuery] string[] projectIds, [FromQuery] string? userId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] bool includeUnlocked, CancellationToken cancellationToken)
     {
-        var stream = await _mediator.Send(new CreateReportCommand(projectIds, userId, startDate, endDate), cancellationToken);
+        var stream = await _mediator.Send(new CreateReportCommand(projectIds, userId, startDate, endDate, includeUnlocked), cancellationToken);
 
         if (stream is null) throw new Exception();
 

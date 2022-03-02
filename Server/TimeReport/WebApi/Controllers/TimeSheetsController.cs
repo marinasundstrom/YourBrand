@@ -222,6 +222,38 @@ public class TimeSheetsController : ControllerBase
         }
     }
 
+    [HttpPost("{timeSheetId}/OpenWeek")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> OpenWeek([FromRoute] string timeSheetId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(new OpenWeekCommand(timeSheetId), cancellationToken);
+            return Ok();
+        }
+        catch (TimeSheetNotFoundException exc)
+        {
+            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
+        }
+    }
+
+    [HttpPost("{timeSheetId}/Approve")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> ApproveWeek([FromRoute] string timeSheetId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(new ApproveWeekCommand(timeSheetId), cancellationToken);
+            return Ok();
+        }
+        catch (TimeSheetNotFoundException exc)
+        {
+            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
+        }
+    }
+
     [HttpPut("{timeSheetId}/Status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]

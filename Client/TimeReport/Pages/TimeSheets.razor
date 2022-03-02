@@ -37,6 +37,15 @@
         <MudTd DataLabel="Last Name">@timeSheet.User.LastName</MudTd>
         <MudTd DataLabel="Status">@timeSheet.Status</MudTd>
         <MudTd>
+            @if (timeSheet.Status == TimeSheetStatusDto.Open || timeSheet.Status == TimeSheetStatusDto.Closed)
+            { 
+                <MudIconButton Icon="@(timeSheet.Status == TimeSheetStatusDto.Closed ? Icons.Material.Filled.LockReset : Icons.Material.Filled.LockOpen)" OnClick="async () => await ToggleStatus(timeSheet)" />
+            }
+
+            @if (timeSheet.Status != TimeSheetStatusDto.Approved && timeSheet.Status != TimeSheetStatusDto.Open)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Check" OnClick="async () => await Approve(timeSheet)" />
+            }
             @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTimeSheetClicked(timeSheet)" /> *@
             @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
         </MudTd>
@@ -75,6 +84,29 @@
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<TimeSheetDto>() { TotalItems = page.TotalItems, Items = page.Items };
+    }
+
+    async Task ToggleStatus(TimeSheetDto timeSheet)
+    {
+        if(timeSheet.Status == TimeSheetStatusDto.Closed)
+        {
+            await TimeSheetsClient.OpenWeekAsync(timeSheet.Id);
+
+            timeSheet.Status = TimeSheetStatusDto.Open;
+        }
+        else
+        {
+            await TimeSheetsClient.CloseWeekAsync(timeSheet.Id);
+
+            timeSheet.Status = TimeSheetStatusDto.Closed;
+        }
+    }
+
+    async Task Approve(TimeSheetDto timeSheet)
+    {
+        await TimeSheetsClient.ApproveWeekAsync(timeSheet.Id);
+
+        timeSheet.Status = TimeSheetStatusDto.Approved;
     }
 
     private void OnSearch(string text)
@@ -119,4 +151,4 @@
     table.ReloadServerData();
         */
     }
-}
+    }

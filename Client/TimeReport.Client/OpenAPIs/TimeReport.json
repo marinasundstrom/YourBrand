@@ -163,7 +163,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -275,7 +278,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -740,7 +746,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -824,7 +833,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       },
@@ -852,7 +864,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -1148,7 +1163,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -1252,7 +1270,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       },
@@ -1290,7 +1311,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -1342,6 +1366,14 @@
               "format": "date-time"
             },
             "x-position": 4
+          },
+          {
+            "name": "includeUnlocked",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "x-position": 5
           }
         ],
         "responses": {
@@ -1865,6 +1897,86 @@
         ]
       }
     },
+    "/TimeSheets/{timeSheetId}/OpenWeek": {
+      "post": {
+        "tags": [
+          "TimeSheets"
+        ],
+        "operationId": "TimeSheets_OpenWeek",
+        "parameters": [
+          {
+            "name": "timeSheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/TimeSheets/{timeSheetId}/Approve": {
+      "post": {
+        "tags": [
+          "TimeSheets"
+        ],
+        "operationId": "TimeSheets_ApproveWeek",
+        "parameters": [
+          {
+            "name": "timeSheetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/TimeSheets/{timeSheetId}/Status": {
       "put": {
         "tags": [
@@ -2066,7 +2178,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -2131,7 +2246,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }
@@ -2180,7 +2298,10 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator",
+              "Manager"
+            ]
           }
         ]
       }

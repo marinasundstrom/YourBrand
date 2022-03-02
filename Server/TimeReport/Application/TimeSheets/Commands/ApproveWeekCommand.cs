@@ -9,25 +9,25 @@ using Skynet.TimeReport.Domain.Exceptions;
 
 namespace Skynet.TimeReport.Application.TimeSheets.Commands;
 
-public class CloseWeekCommand : IRequest
+public class ApproveWeekCommand : IRequest
 {
-    public CloseWeekCommand(string timeSheetId)
+    public ApproveWeekCommand(string timeSheetId)
     {
         TimeSheetId = timeSheetId;
     }
 
     public string TimeSheetId { get; }
 
-    public class CloseWeekCommandHandler : IRequestHandler<CloseWeekCommand>
+    public class ApproveWeekCommandHandler : IRequestHandler<ApproveWeekCommand>
     {
         private readonly ITimeReportContext _context;
 
-        public CloseWeekCommandHandler(ITimeReportContext context)
+        public ApproveWeekCommandHandler(ITimeReportContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(CloseWeekCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ApproveWeekCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _context.TimeSheets
                 .Include(x => x.Entries)
@@ -45,7 +45,7 @@ public class CloseWeekCommand : IRequest
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.Status = TimeSheetStatus.Closed;
+            timeSheet.Status = TimeSheetStatus.Approved;
 
             foreach (var entry in timeSheet.Entries)
             {

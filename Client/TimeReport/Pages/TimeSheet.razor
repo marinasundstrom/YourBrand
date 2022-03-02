@@ -18,7 +18,7 @@
 
 <PageTitle>Timesheet - Skynet</PageTitle>
 
-@if (ActivitiesModels is not null && Year is not null && Week is not null)
+@if (timeSheet is not null && ActivitiesModels is not null && Year is not null && Week is not null)
 {
     <MudText Typo="Typo.h5">@timeSheet?.User?.GetDisplayName()</MudText>
 

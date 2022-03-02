@@ -11,12 +11,13 @@ namespace Skynet.TimeReport.Application.Reports.Queries;
 
 public class CreateReportCommand : IRequest<Stream?>
 {
-    public CreateReportCommand(string[] projectIds, string? userId, DateTime startDate, DateTime endDate)
+    public CreateReportCommand(string[] projectIds, string? userId, DateTime startDate, DateTime endDate, bool includeUnlocked)
     {
         ProjectIds = projectIds;
         UserId = userId;
         StartDate = startDate;
         EndDate = endDate;
+        IncludeUnlocked = includeUnlocked;
     }
 
     public string[] ProjectIds { get; }
@@ -26,6 +27,8 @@ public class CreateReportCommand : IRequest<Stream?>
     public DateTime StartDate { get; }
 
     public DateTime EndDate { get; }
+
+    public bool IncludeUnlocked { get; }
 
     public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Stream?>
     {
@@ -49,6 +52,11 @@ public class CreateReportCommand : IRequest<Stream?>
                 .Where(p => request.ProjectIds.Any(x => x == p.Project.Id))
                 .Where(p => p.Date >= startDate2 && p.Date <= endDate2)
                 .AsSplitQuery();
+
+            if(!request.IncludeUnlocked)
+            {
+                query = query.Where(x => x.Status == Domain.Entities.EntryStatus.Locked);
+            }
 
             if (request.UserId is not null)
             {
@@ -78,7 +86,7 @@ public class CreateReportCommand : IRequest<Stream?>
                     {
                         var data = activityGroup
                             .OrderBy(e => e.Date)
-                            .Select(e => new { e.Date, User = $" {e.TimeSheet.User.LastName}, {e.TimeSheet.User.FirstName}", Activity = e.Activity.Name, e.Hours, e.Description });
+                            .Select(e => new { e.Date, User = $" {e.TimeSheet.User.LastName}, {e.TimeSheet.User.FirstName}", Activity = e.Activity.Name, e.Hours, e.Description, Unlocked = e.Status == Domain.Entities.EntryStatus.Unlocked ? "*" : String.Empty });
 
                         worksheet.Cells[row, 1]
                             .LoadFromCollection(data);

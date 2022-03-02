@@ -35,6 +35,7 @@
                             <MudSelectItem Value="@project">@project.Name</MudSelectItem>
                         }
                     </MudSelect>
+                    <MudCheckBox Label="Include unlocked" Class="mt-8" @bind-Checked="includeUnlocked" />
                 </MudItem>
                 <MudItem xs="12" md="12">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateReport">Create Report</MudButton>
@@ -60,6 +61,8 @@
     private IEnumerable<ProjectDto> options { get; set; } = new HashSet<ProjectDto>();
 
     private IEnumerable<ProjectDto>? projects = null;
+
+    private bool includeUnlocked = false; 
 
     protected async Task OnUserChanged(UserDto user)
     {
@@ -94,7 +97,7 @@
 
     private async Task CreateReport()
     {
-        var fileResponse = await ReportsClient.GetReportAsync(options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End);
+        var fileResponse = await ReportsClient.GetReportAsync(options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End, includeUnlocked);
 
         using var streamRef = new DotNetStreamReference(stream: fileResponse.Stream);
 
