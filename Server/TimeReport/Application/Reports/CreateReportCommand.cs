@@ -6,18 +6,26 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
 using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain.Entities;
 
 namespace Skynet.TimeReport.Application.Reports.Queries;
 
+public enum ReportMode 
+{
+    User,
+    Project
+}
+
 public class CreateReportCommand : IRequest<Stream?>
 {
-    public CreateReportCommand(string[] projectIds, string? userId, DateTime startDate, DateTime endDate, bool includeUnlocked)
+    public CreateReportCommand(string[] projectIds, string? userId, DateTime startDate, DateTime endDate, int[] statuses, ReportMode mode)
     {
         ProjectIds = projectIds;
         UserId = userId;
         StartDate = startDate;
         EndDate = endDate;
-        IncludeUnlocked = includeUnlocked;
+        Statuses = statuses;
+        Mode = mode;
     }
 
     public string[] ProjectIds { get; }
@@ -28,7 +36,8 @@ public class CreateReportCommand : IRequest<Stream?>
 
     public DateTime EndDate { get; }
 
-    public bool IncludeUnlocked { get; }
+    public int[] Statuses { get; }
+    public ReportMode Mode { get; }
 
     public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Stream?>
     {
@@ -53,10 +62,7 @@ public class CreateReportCommand : IRequest<Stream?>
                 .Where(p => p.Date >= startDate2 && p.Date <= endDate2)
                 .AsSplitQuery();
 
-            if(!request.IncludeUnlocked)
-            {
-                query = query.Where(x => x.Status == Domain.Entities.EntryStatus.Locked);
-            }
+            query = query.Where(x => request.Statuses.Any(x2 => x2 == (int)x.TimeSheet.Status));
 
             if (request.UserId is not null)
             {
@@ -65,39 +71,84 @@ public class CreateReportCommand : IRequest<Stream?>
 
             var entries = await query.ToListAsync(cancellationToken);
 
+            if(!entries.Any())
+            {
+                return Stream.Null;
+            }
+
             int row = 1;
 
             using (var package = new ExcelPackage())
             {
-                var worksheet = package.Workbook.Worksheets.Add("Projects");
-
-                var projectGroups = entries.GroupBy(x => x.Project);
-
-                foreach (var project in projectGroups)
+                IEnumerable<IGrouping<string, Entry>> entryGroups = default!;
+                
+                if(request.Mode == ReportMode.User) 
                 {
-                    worksheet.Cells[row++, 1]
-                          .LoadFromCollection(new[] { new { Project = project.Key.Name } });
+                    entryGroups = entries.GroupBy(x => x.UserId);
+                }
+                else if(request.Mode == ReportMode.Project) 
+                {
+                    entryGroups = entries.GroupBy(x => x.Project.Id);
+                }
 
-                    int headerRow = row - 1;
+                foreach(var entryGroup in entryGroups) 
+                {
+                    string worksheetName = default!;
 
-                    var activityGroups = project.GroupBy(x => x.Activity);
-
-                    foreach (var activityGroup in activityGroups)
+                    if(request.Mode == ReportMode.User) 
                     {
-                        var data = activityGroup
-                            .OrderBy(e => e.Date)
-                            .Select(e => new { e.Date, User = $" {e.TimeSheet.User.LastName}, {e.TimeSheet.User.FirstName}", Activity = e.Activity.Name, e.Hours, e.Description, Unlocked = e.Status == Domain.Entities.EntryStatus.Unlocked ? "*" : String.Empty });
-
-                        worksheet.Cells[row, 1]
-                            .LoadFromCollection(data);
-
-                        row += data.Count();
-
-                        worksheet.Cells[headerRow, 4]
-                            .Value = data.Sum(e => e.Hours.GetValueOrDefault());
+                        worksheetName = $"{entryGroup.First().User.FirstName} {entryGroup.First().User.LastName}";
+                    }
+                    else if(request.Mode == ReportMode.Project) 
+                    {
+                        worksheetName = entryGroup.First().Project.Name;
                     }
 
-                    row++;
+                    var worksheet = package.Workbook.Worksheets.Add(worksheetName);
+
+                    var projectGroups = entryGroup.GroupBy(x => x.Project);
+
+                    row = 1;
+
+                    foreach (var project in projectGroups)
+                    {
+                        int headerRow = row;
+
+                        if(request.Mode == ReportMode.User) 
+                        {
+                            worksheet.Cells[row++, 1]
+                                .LoadFromCollection(new[] { new { Project = project.Key.Name } });
+                            
+                            headerRow = row - 1;
+                        }
+                        
+                        var activityGroups = project.GroupBy(x => x.Activity);
+
+                        foreach (var activityGroup in activityGroups)
+                        {
+                            var data = activityGroup
+                                .OrderBy(e => e.Date)
+                                .Select(e => new { e.Date, User = $" {e.TimeSheet.User.LastName}, {e.TimeSheet.User.FirstName}", Project = e.Project.Name, Activity = e.Activity.Name, e.Hours, e.Description, Status = e.Status.ToString(), e.TimeSheet.Id });
+
+                            worksheet.Cells[row, 1]
+                                .LoadFromCollection(data);
+
+                            row += data.Count();
+
+                            if(request.Mode == ReportMode.User)
+                            {
+                                worksheet.Cells[headerRow, 5]
+                                    .Value = data.Sum(e => e.Hours.GetValueOrDefault());
+                            }
+                            else 
+                            {
+                                worksheet.Cells[row++, 5]
+                                    .Value = data.Sum(e => e.Hours.GetValueOrDefault());
+                            }
+                        }
+
+                        row++;
+                    }
                 }
 
                 Stream stream = new MemoryStream(package.GetAsByteArray());

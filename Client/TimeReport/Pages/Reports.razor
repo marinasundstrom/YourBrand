@@ -18,6 +18,11 @@
             <MudGrid>
                 <MudItem xs="12" md="4">
                     <MudDateRangePicker Label="Time span" HelperText="Select a date range" @bind-DateRange="selectedDateRange" />
+
+                    <MudSelect Label="Grouping" Class="mt-8" HelperText="Select grouping mode" @bind-Value="mode" ToStringFunc="x => x.ToString()">
+                        <MudSelectItem Value="@ReportModeDto.Project">Project</MudSelectItem>
+                        <MudSelectItem Value="@ReportModeDto.User">User</MudSelectItem>
+                    </MudSelect>
                 </MudItem>
                 <MudItem xs="12" md="4">
                     <MudSelect T="UserDto" Label="User" HelperText="Select a user" Value="user" ValueChanged="OnUserChanged" Clearable=true ToStringFunc="x => ( x?.GetDisplayName() ?? AllLabel)">
@@ -35,7 +40,13 @@
                             <MudSelectItem Value="@project">@project.Name</MudSelectItem>
                         }
                     </MudSelect>
-                    <MudCheckBox Label="Include unlocked" Class="mt-8" @bind-Checked="includeUnlocked" />
+
+                    <MudSelect Label="Statuses" Class="mt-8" HelperText="Select statuses of timesheets to include" MultiSelection="true" @bind-SelectedValues="selectedStatuses" ToStringFunc="x => x?.ToString()">
+                        @foreach (var status in statuses)
+                        {
+                            <MudSelectItem Value="@status">@status.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
                 </MudItem>
                 <MudItem xs="12" md="12">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateReport">Create Report</MudButton>
@@ -54,15 +65,22 @@
     DateRange selectedDateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
 
     private UserDto? user { get; set; }
+
     private IEnumerable<UserDto> users { get; set; }
 
-
     private ProjectDto? value { get; set; }
+
     private IEnumerable<ProjectDto> options { get; set; } = new HashSet<ProjectDto>();
 
     private IEnumerable<ProjectDto>? projects = null;
 
-    private bool includeUnlocked = false; 
+    private TimeSheetStatusDto? status { get; set; }
+
+    private IEnumerable<TimeSheetStatusDto?>? statuses = null;
+
+    private IEnumerable<TimeSheetStatusDto?> selectedStatuses { get; set; } = new HashSet<TimeSheetStatusDto?>();
+
+    private ReportModeDto mode = ReportModeDto.Project;
 
     protected async Task OnUserChanged(UserDto user)
     {
@@ -84,6 +102,9 @@
 
             var page2 = await ProjectsClient.GetProjectsAsync(null, 0, 10, null, null, null);
             projects = page2.Items;
+
+            statuses = Enum.GetValues<TimeSheetStatusDto>().Select(x => (TimeSheetStatusDto?)x);
+            ((HashSet<TimeSheetStatusDto?>)selectedStatuses).Add(TimeSheetStatusDto.Approved);
         }
         catch (Exception e)
         {
@@ -97,7 +118,7 @@
 
     private async Task CreateReport()
     {
-        var fileResponse = await ReportsClient.GetReportAsync(options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End, includeUnlocked);
+        var fileResponse = await ReportsClient.GetReportAsync(options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End, selectedStatuses.Select(x => (int)x), mode);
 
         using var streamRef = new DotNetStreamReference(stream: fileResponse.Stream);
 

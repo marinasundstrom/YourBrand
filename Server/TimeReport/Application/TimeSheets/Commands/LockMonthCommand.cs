@@ -100,6 +100,8 @@ public class LockMonthCommand : IRequest
                     return Unit.Value;
                 }
 
+                // TODO: Cannot lock month with open Timesheets
+
                 group.Status = EntryStatus.Locked;
 
                 foreach (var entry in group.Entries)

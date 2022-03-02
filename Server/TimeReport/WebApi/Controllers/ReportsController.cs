@@ -23,12 +23,18 @@ public class ReportsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<FileStreamResult> GetReport([FromQuery] string[] projectIds, [FromQuery] string? userId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] bool includeUnlocked, CancellationToken cancellationToken)
+    public async Task<FileStreamResult> GetReport([FromQuery] string[] projectIds, [FromQuery] string? userId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int[] statuses, ReportModeDto mode = ReportModeDto.Project, CancellationToken cancellationToken = default)
     {
-        var stream = await _mediator.Send(new CreateReportCommand(projectIds, userId, startDate, endDate, includeUnlocked), cancellationToken);
+        var stream = await _mediator.Send(new CreateReportCommand(projectIds, userId, startDate, endDate, statuses, (ReportMode?)mode ?? ReportMode.Project), cancellationToken);
 
         if (stream is null) throw new Exception();
 
         return File(stream, "application/vnd.ms-excel", "TimeReport.xlsx");
     }
+}
+
+public enum ReportModeDto
+{
+    User,
+    Project
 }

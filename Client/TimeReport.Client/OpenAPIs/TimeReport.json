@@ -1368,12 +1368,32 @@
             "x-position": 4
           },
           {
-            "name": "includeUnlocked",
+            "name": "statuses",
             "in": "query",
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "boolean"
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
             },
             "x-position": 5
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ReportModeDto"
+                }
+              ]
+            },
+            "x-position": 6
           }
         ],
         "responses": {
@@ -2890,6 +2910,18 @@
             "nullable": true
           }
         }
+      },
+      "ReportModeDto": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "User",
+          "Project"
+        ],
+        "enum": [
+          0,
+          1
+        ]
       },
       "ItemsResultOfTimeSheetDto": {
         "type": "object",
