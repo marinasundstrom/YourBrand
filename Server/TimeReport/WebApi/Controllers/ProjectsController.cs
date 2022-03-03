@@ -32,11 +32,11 @@ public class ProjectsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(string? userId = null, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
         var user = Request.HttpContext.User; 
 
-        return Ok(await _mediator.Send(new GetProjectsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await _mediator.Send(new GetProjectsQuery(page, pageSize, userId, searchString, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpGet("{id}")]

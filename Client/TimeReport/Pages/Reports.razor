@@ -86,7 +86,7 @@
     {
         this.user = user;
 
-        var page = await ProjectsClient.GetProjectsAsync(user?.Id, 0, 10, null, null, null);
+        var page = await ProjectsClient.GetProjectsAsync(0, 10, user?.Id, null, null, null);
         projects = page.Items;
         options = new HashSet<ProjectDto>();
     }
@@ -100,7 +100,7 @@
             var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
             users = page.Items;
 
-            var page2 = await ProjectsClient.GetProjectsAsync(null, 0, 10, null, null, null);
+            var page2 = await ProjectsClient.GetProjectsAsync(0, 10, null, null, null, null);
             projects = page2.Items;
 
             statuses = Enum.GetValues<TimeSheetStatusDto>().Select(x => (TimeSheetStatusDto?)x);

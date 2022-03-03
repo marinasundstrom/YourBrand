@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IProjectsClient ProjectsClient
 @inject IActivitiesClient ActivitiesClient
 
@@ -34,10 +35,8 @@
 </EditForm>
 
 @code {
-    //public IEnumerable<ProjectDto> Projects { get; set; }
-
     [Parameter]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     [Parameter]
     public IEnumerable<ProjectDto> Projects { get; set; }
@@ -66,7 +65,16 @@
 
     private async Task OnProjectChanged(ProjectDto project)
     {
-        var page = await ActivitiesClient.GetActivitiesAsync(0, 10, project.Id, null, null, null);
+        if(project is null)
+        {
+            Activities = Array.Empty<ActivityDto>();
+            Project = null;
+            Activity = null;
+
+            return;
+        };
+
+        var page = await ActivitiesClient.GetActivitiesAsync(0, 10, project?.Id, UserId, null, null, null);
         Activities = page.Items;
 
         Project = project;
@@ -94,7 +102,7 @@
 
     private async Task<IEnumerable<ProjectDto>> Search(string value)
     {
-        var page = await ProjectsClient.GetProjectsAsync(UserId, 0, 10, value, null, null);
+        var page = await ProjectsClient.GetProjectsAsync(0, 10, UserId, value, null, null);
 
         return page.Items;
     }

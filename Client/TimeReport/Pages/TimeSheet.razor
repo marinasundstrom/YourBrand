@@ -169,13 +169,15 @@
         {
             if(user.IsInRole("Administrator") || user.IsInRole("Manager"))
             {
+                // TODO: Fix. The expected user might not be in the result.
+
                 var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
                 Users = page.Items;
 
                 User = Users.FirstOrDefault(x => x.Id == user.FindFirst(c => c.Type == "sub").Value);
             }
 
-            var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null);
+            var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null, null);
             activities = page2.Items;
         }
         catch (ApiException<ProblemDetails> e)
@@ -295,8 +297,12 @@
 
     async Task NewActivity()
     {
+        var user = (await authenticationStateTask).User;
+
+        var userId = user.FindFirst(c => c.Type == "sub").Value;
+
         DialogParameters parameters = new();
-        parameters.Add(nameof(NewTimeSheetActivityDialog.UserId), User.Id);
+        parameters.Add(nameof(NewTimeSheetActivityDialog.UserId), User?.Id ?? userId);
         parameters.Add(nameof(NewTimeSheetActivityDialog.Year), Year);
         parameters.Add(nameof(NewTimeSheetActivityDialog.Week), Week);
 
@@ -594,4 +600,4 @@
                     && ISOWeek.ToDateTime(Year.GetValueOrDefault(), Week.GetValueOrDefault(), DayOfWeek.Sunday).Day == DateTime.DaysInMonth(timeSheet.To.Year, timeSheet.To.Month);
         }
     }
-}
+    }

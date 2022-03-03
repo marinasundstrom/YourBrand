@@ -26,9 +26,9 @@ public class ActivitiesController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ActivityDto>>> GetActivities(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ActivityDto>>> GetActivities(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetActivitiesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await _mediator.Send(new GetActivitiesQuery(page, pageSize, projectId, userId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]

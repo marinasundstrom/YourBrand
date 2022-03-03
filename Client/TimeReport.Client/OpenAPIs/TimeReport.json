@@ -68,7 +68,7 @@
             "x-position": 3
           },
           {
-            "name": "searchString",
+            "name": "userId",
             "in": "query",
             "schema": {
               "type": "string",
@@ -77,13 +77,22 @@
             "x-position": 4
           },
           {
-            "name": "sortBy",
+            "name": "searchString",
             "in": "query",
             "schema": {
               "type": "string",
               "nullable": true
             },
             "x-position": 5
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 6
           },
           {
             "name": "sortDirection",
@@ -100,7 +109,7 @@
                 }
               ]
             },
-            "x-position": 6
+            "x-position": 7
           }
         ],
         "responses": {
@@ -633,15 +642,6 @@
         "operationId": "Projects_GetProjects",
         "parameters": [
           {
-            "name": "userId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          },
-          {
             "name": "page",
             "in": "query",
             "schema": {
@@ -649,7 +649,7 @@
               "format": "int32",
               "default": 0
             },
-            "x-position": 2
+            "x-position": 1
           },
           {
             "name": "pageSize",
@@ -658,6 +658,15 @@
               "type": "integer",
               "format": "int32",
               "default": 10
+            },
+            "x-position": 2
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
             },
             "x-position": 3
           },

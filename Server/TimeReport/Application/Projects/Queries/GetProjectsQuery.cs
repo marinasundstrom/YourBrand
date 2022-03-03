@@ -10,10 +10,11 @@ namespace Skynet.TimeReport.Application.Projects.Queries;
 
 public class GetProjectsQuery : IRequest<ItemsResult<ProjectDto>>
 {
-    public GetProjectsQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
+    public GetProjectsQuery(int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
     {
         Page = page;
         PageSize = pageSize;
+        UserId = userId;
         SearchString = searchString;
         SortBy = sortBy;
         SortDirection = sortDirection;
@@ -22,6 +23,8 @@ public class GetProjectsQuery : IRequest<ItemsResult<ProjectDto>>
     public int Page { get; }
 
     public int PageSize { get; }
+
+    public string? UserId { get; }
 
     public string? ProjectId { get; }
 
@@ -43,9 +46,15 @@ public class GetProjectsQuery : IRequest<ItemsResult<ProjectDto>>
         public async Task<ItemsResult<ProjectDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Projects
+                .Include(p => p.Memberships)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()
                 .AsSplitQuery();
+
+            if (request.UserId is not null)
+            {
+                query = query.Where(project => project.Memberships.Any(pm => pm.User.Id == request.UserId));
+            }
 
             if (request.SearchString is not null)
             {

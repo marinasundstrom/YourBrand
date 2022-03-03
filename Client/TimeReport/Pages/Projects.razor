@@ -91,7 +91,7 @@
 
     private async Task<TableData<ProjectDto>> ServerReload(TableState state)
     {
-        var page = await ProjectsClient.GetProjectsAsync(null, state.Page, state.PageSize, searchString,
+        var page = await ProjectsClient.GetProjectsAsync(state.Page, state.PageSize, null, searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<ProjectDto>() { TotalItems = page.TotalItems, Items = page.Items };

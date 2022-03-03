@@ -163,7 +163,7 @@
 
     private async Task<TableData<ActivityDto>> ServerReload(TableState state)
     {
-        var result = await ActivitiesClient.GetActivitiesAsync(state.Page, state.PageSize, ProjectId, null,
+        var result = await ActivitiesClient.GetActivitiesAsync(state.Page, state.PageSize, ProjectId, null, null,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<ActivityDto>() { TotalItems = result.TotalItems, Items = result.Items };
