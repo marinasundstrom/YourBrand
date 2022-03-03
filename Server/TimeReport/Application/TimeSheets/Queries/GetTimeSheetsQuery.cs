@@ -13,11 +13,12 @@ namespace Skynet.TimeReport.Application.TimeSheets.Queries;
 
 public class GetTimeSheetsQuery : IRequest<ItemsResult<TimeSheetDto>>
 {
-    public GetTimeSheetsQuery(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Common.Models.SortDirection? sortDirection = null)
+    public GetTimeSheetsQuery(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, Common.Models.SortDirection? sortDirection = null)
     {
         Page = page;
         PageSize = pageSize;
         ProjectId = projectId;
+        UserId = userId;
         SearchString = searchString;
         SortBy = sortBy;
         SortDirection = sortDirection;
@@ -28,6 +29,8 @@ public class GetTimeSheetsQuery : IRequest<ItemsResult<TimeSheetDto>>
     public int PageSize { get; }
 
     public string? ProjectId { get; }
+
+    public string? UserId { get; }
 
     public string? SearchString { get; }
 
@@ -68,9 +71,19 @@ public class GetTimeSheetsQuery : IRequest<ItemsResult<TimeSheetDto>>
                 query = query.Where(timeSheet => timeSheet.Activities.Any(x => x.Project.Id == request.ProjectId));
             }
 
+             if (request.UserId is not null)
+            {
+                query = query.Where(timeSheet => timeSheet.UserId == request.UserId);
+            }
+
             if (request.SearchString is not null)
             {
-                query = query.Where(timeSheet => timeSheet.Id.ToLower().Contains(request.SearchString.ToLower()));
+                query = query.Where(timeSheet =>
+                    timeSheet.Id.ToLower().Contains(request.SearchString.ToLower())
+                    || timeSheet.Week.ToString().Contains(request.SearchString.ToLower())
+                    || timeSheet.User.FirstName.ToLower().Contains(request.SearchString.ToLower())
+                    || timeSheet.User.LastName.ToLower().Contains(request.SearchString.ToLower())
+                    || timeSheet.User.DisplayName.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalItems = await query.CountAsync(cancellationToken);

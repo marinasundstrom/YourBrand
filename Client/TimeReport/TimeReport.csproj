@@ -20,4 +20,10 @@
 		<ProjectReference Include="..\TimeReport.Client\TimeReport.Client.csproj" />
 		<ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Users\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Users\" />
+	</ItemGroup>
 </Project>

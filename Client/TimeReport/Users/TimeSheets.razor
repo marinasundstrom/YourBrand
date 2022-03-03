@@ -1,9 +1,10 @@
-﻿@page "/timesheets"
-@attribute [Authorize(Roles = "Administrator,Manager")]
+﻿@page "/user/timesheets"
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@attribute [Authorize]
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject ITimeSheetsClient TimeSheetsClient
-@inject IUsersClient UsersClient
 
 <PageTitle>Timesheets - Skynet</PageTitle>
 
@@ -14,12 +15,6 @@
 <MudTable T="TimeSheetDto" ServerData="@(new Func<TableState, Task<TableData<TimeSheetDto>>>(ServerReload))"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTimeSheet(e.Item)" GroupBy="@_groupDefinition">
     <ToolBarContent>
-        <MudAutocomplete T="UserDto" Label="User" Variant="Variant.Text" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
-                         For="() => User"
-                         ToStringFunc="u => u?.GetDisplayName()"
-                         ResetValueOnEmptyText="true"
-                         CoerceText="true" CoerceValue="true"
-                         AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -48,11 +43,6 @@
             { 
                 <MudIconButton Icon="@(timeSheet.Status == TimeSheetStatusDto.Closed ? Icons.Material.Filled.LockReset : Icons.Material.Filled.LockOpen)" OnClick="async () => await ToggleStatus(timeSheet)" />
             }
-
-            @if (timeSheet.Status != TimeSheetStatusDto.Approved && timeSheet.Status != TimeSheetStatusDto.Open)
-            {
-                <MudIconButton Icon="@Icons.Material.Filled.Check" OnClick="async () => await Approve(timeSheet)" />
-            }
             @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTimeSheetClicked(timeSheet)" /> *@
             @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
         </MudTd>
@@ -80,7 +70,8 @@
         Selector = (e) => new { e.Year, e.Week }
     };
 
-    UserDto? User { get; set; }
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,8 +80,11 @@
 
     private async Task<TableData<TimeSheetDto>> ServerReload(TableState state)
     {
-        var page = await TimeSheetsClient.GetTimeSheetsAsync(state.Page, state.PageSize, null, User?.Id, searchString,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+        var user = (await authenticationStateTask).User;
+        var userId = user.FindFirst(x => x.Type.Contains("sub")).Value;
+
+        var page = await TimeSheetsClient.GetTimeSheetsAsync(state.Page, state.PageSize, null, userId, searchString,
+        state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<TimeSheetDto>() { TotalItems = page.TotalItems, Items = page.Items };
     }
@@ -111,30 +105,9 @@
         }
     }
 
-    async Task Approve(TimeSheetDto timeSheet)
-    {
-        await TimeSheetsClient.ApproveWeekAsync(timeSheet.Id);
-
-        timeSheet.Status = TimeSheetStatusDto.Approved;
-    }
-
     private void OnSearch(string text)
     {
         searchString = text;
-        table.ReloadServerData();
-    }
-
-    private async Task<IEnumerable<UserDto>> Search1(string value)
-    {
-        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
-
-        return page.Items;
-    }
-
-    void OnUserChanged(UserDto user)
-    {
-        User = user;
-
         table.ReloadServerData();
     }
 

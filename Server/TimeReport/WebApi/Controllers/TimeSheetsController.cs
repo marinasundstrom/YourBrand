@@ -3,22 +3,13 @@ using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application;
-using Skynet.TimeReport.Application.Activities;
-using Skynet.TimeReport.Application.Common.Interfaces;
 using Skynet.TimeReport.Application.Common.Models;
-using Skynet.TimeReport.Application.Projects;
 using Skynet.TimeReport.Application.TimeSheets;
 using Skynet.TimeReport.Application.TimeSheets.Commands;
 using Skynet.TimeReport.Application.TimeSheets.Queries;
-using Skynet.TimeReport.Application.Users;
-using Skynet.TimeReport.Domain.Entities;
 using Skynet.TimeReport.Domain.Exceptions;
 using Skynet.TimeReport.Dtos;
-
-using static Skynet.TimeReport.Application.TimeSheets.Constants;
 
 namespace Skynet.TimeReport.Controllers;
 
@@ -36,9 +27,9 @@ public class TimeSheetsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<TimeSheetDto>>> GetTimeSheets(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null)
+    public async Task<ActionResult<ItemsResult<TimeSheetDto>>> GetTimeSheets(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null)
     {
-        return Ok(await _mediator.Send(new GetTimeSheetsQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await _mediator.Send(new GetTimeSheetsQuery(page, pageSize, projectId, userId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]

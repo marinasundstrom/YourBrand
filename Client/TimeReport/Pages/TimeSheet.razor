@@ -38,7 +38,7 @@
 
             <ToolBarContent>
                 <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatusDto.Open">New activity</MudButton>
-                <MudButton StartIcon="@Icons.Material.Filled.List">Templates</MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.List" Class="me-2">Templates</MudButton>
                 <AuthorizeView Roles="Administrator,Manager" Context="usersList">
                     <MudAutocomplete T="UserDto" Label="User" Variant="Variant.Outlined" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
                                  For="() => User"
@@ -172,7 +172,7 @@
                 var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
                 Users = page.Items;
 
-                //User = Users.FirstOrDefault();
+                User = Users.FirstOrDefault(x => x.Id == user.FindFirst(c => c.Type == "sub").Value);
             }
 
             var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null);
