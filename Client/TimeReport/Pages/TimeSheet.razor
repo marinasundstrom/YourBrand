@@ -4,6 +4,7 @@
 
 @layout MainLayout2
 
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.SignalR.Client
 @using Skynet.TimeReport.Client
 @using System.Globalization
@@ -38,6 +39,14 @@
             <ToolBarContent>
                 <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatusDto.Open">New activity</MudButton>
                 <MudButton StartIcon="@Icons.Material.Filled.List">Templates</MudButton>
+                <AuthorizeView Roles="Administrator,Manager" Context="usersList">
+                    <MudAutocomplete T="UserDto" Label="User" Variant="Variant.Outlined" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
+                                 For="() => User"
+                                 ToStringFunc="u => u?.GetDisplayName()"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true" CoerceValue="true"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+                </AuthorizeView>    
                 <MudSpacer />
                 @if (CanLockMonth)
                 {
@@ -147,16 +156,24 @@
     [Parameter]
     public string? UserId { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         NavigationManager.LocationChanged += OnLocationChanged;
 
+        var user = (await authenticationStateTask).User;
+
         try
         {
-            var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
-            Users = page.Items;
+            if(user.IsInRole("Administrator") || user.IsInRole("Manager"))
+            {
+                var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
+                Users = page.Items;
 
-            //User = Users.FirstOrDefault();
+                //User = Users.FirstOrDefault();
+            }
 
             var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null);
             activities = page2.Items;
