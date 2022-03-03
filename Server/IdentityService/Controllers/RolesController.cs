@@ -17,13 +17,9 @@ namespace Skynet.IdentityService;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = AuthSchemes)]
+[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
 public class RolesController : Controller
 {
-    private const string AuthSchemes =
-        JwtBearerDefaults.AuthenticationScheme + "," +
-        ApiKeyDefaults.AuthenticationScheme;
-
     private readonly IMediator _mediator;
 
     public RolesController(IMediator mediator)

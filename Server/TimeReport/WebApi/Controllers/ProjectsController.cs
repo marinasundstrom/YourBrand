@@ -54,7 +54,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Administrator,Manager")]
+    [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDto>> CreateProject(CreateProjectDto createProjectDto, CancellationToken cancellationToken)
     {
@@ -71,7 +71,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Administrator,Manager")]
+    [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDto>> UpdateProject(string id, UpdateProjectDto updateProjectDto, CancellationToken cancellationToken)
     {
@@ -88,7 +88,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Administrator,Manager")]
+    [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteProject(string id, CancellationToken cancellationToken)
     {
@@ -185,7 +185,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost("{id}/Memberships")]
-    [Authorize(Roles = "Administrator,Manager")]
+    [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectMembershipDto>> CreateProjectMembership(string id, CreateProjectMembershipDto createProjectMembershipDto, CancellationToken cancellationToken)
     {
@@ -200,7 +200,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id}/Memberships/{membershipId}")]
-    [Authorize(Roles = "Administrator,Manager")]
+    [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectMembershipDto>> UpdateProjectMembership(string id, string membershipId, UpdateProjectMembershipDto updateProjectMembershipDto, CancellationToken cancellationToken)
     {
@@ -219,7 +219,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id}/Memberships/{membershipId}")]
-    [Authorize(Roles = "Administrator,Manager")]
+    [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteProjectMembership(string id, string membershipId, CancellationToken cancellationToken)
     {
