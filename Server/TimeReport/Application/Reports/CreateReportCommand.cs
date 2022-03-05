@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
 using Skynet.TimeReport.Application.Common.Interfaces;
+using Skynet.TimeReport.Domain;
 using Skynet.TimeReport.Domain.Entities;
 
 namespace Skynet.TimeReport.Application.Reports.Queries;
@@ -128,7 +129,7 @@ public class CreateReportCommand : IRequest<Stream?>
                         {
                             var data = activityGroup
                                 .OrderBy(e => e.Date)
-                                .Select(e => new { e.Date, User = $" {e.TimeSheet.User.LastName}, {e.TimeSheet.User.FirstName}", Project = e.Project.Name, Activity = e.Activity.Name, e.Hours, e.Description, Status = e.Status.ToString(), e.TimeSheet.Id });
+                                .Select(e => new { e.Date, User = e.TimeSheet.User.GetDisplayName(), Project = e.Project.Name, Activity = e.Activity.Name, e.Hours, e.Description, Status = e.Status.ToString(), e.TimeSheet.Id });
 
                             worksheet.Cells[row, 1]
                                 .LoadFromCollection(data);
