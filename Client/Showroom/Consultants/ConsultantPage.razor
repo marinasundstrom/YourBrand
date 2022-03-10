@@ -21,8 +21,8 @@
     </div>
 
     <MudGrid Spacing="6">
-        <MudItem xs="12" sm="6" md="6">
-            <MudCard>
+        <MudItem xs="12" sm="12" md="6">
+            <MudCard Class="mb-8">
                 <MudCardContent>
                     @if (!string.IsNullOrEmpty(consultant.ProfileVideo))
                     {
@@ -36,9 +36,29 @@
                     <MudButton Variant="Variant.Text" Color="Color.Primary">Contact @consultant.FirstName</MudButton>
                 </MudCardActions>
             </MudCard>
+
+            <MudCard Class="mb-8">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6" Class="mb-4">
+                        Experience
+                    </MudText>
+
+
+                </MudCardContent>
+            </MudCard>
+
+             <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6" Class="mb-4">
+                        Skills
+                    </MudText>
+
+
+                </MudCardContent>
+            </MudCard>
         </MudItem>
 
-        <MudItem xs="12" sm="6" md="6">
+        <MudItem xs="12" sm="12" md="6">
             <MudGrid Spacing="6">
                 <MudItem xs="12" sm="12" md="12">
                     <MudCard>
