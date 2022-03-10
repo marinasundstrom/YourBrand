@@ -1,12 +1,9 @@
-﻿using Skynet;
-using Skynet.Portal;
-using Skynet.TimeReport;
-
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-using MudBlazor.Services;
+using Skynet.Portal;
+using Skynet.Showroom;
+using Skynet.TimeReport;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -24,7 +21,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services
     .AddServices()
-    .AddTimeReport();
+    .AddTimeReport()
+    .AddShowroom();
 
 var app = builder.Build();
 

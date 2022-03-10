@@ -12,6 +12,14 @@
     </AuthorizeView>
 
     <MudNavLink Icon="@Icons.Material.Filled.List" Href="/worker">@T["Worker"]</MudNavLink>
+
+    <AuthorizeView Roles="Administrator,Manager">
+        <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>Showroom</b></MudText>
+        <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/consultants">Consultants</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/cases">Cases</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/contracts">Contracts</MudNavLink>
+    </AuthorizeView>
+
     <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>@T["Projects"]</b></MudText>
 
     <AuthorizeView>

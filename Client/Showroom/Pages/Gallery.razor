@@ -1,0 +1,158 @@
+@page "/gallery"
+@attribute [Authorize]
+@inject IConsultantsClient ConsultantProfilesClient
+@inject IOrganizationsClient OrganizationsClient
+@inject ICompetenceAreasClient CompetenceAreasClient
+
+@inject NavigationManager NavigationManager
+
+<MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Consultants</MudText>
+
+<MudPaper Class="pa-8 mb-10" Elevation="1">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudAutocomplete T="OrganizationDto" Label="Organization" HelperText="Pick an organization" Variant="Variant.Outlined" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+                <ItemTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemTemplate>
+
+                <ItemSelectedTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemSelectedTemplate>
+            </MudAutocomplete>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" HelperText="Pick a competence area" Variant="Variant.Outlined" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+                <ItemTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemTemplate>
+
+                <ItemSelectedTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                </ItemSelectedTemplate>
+            </MudAutocomplete>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date" Variant="Variant.Outlined" DateChanged="async x => { AvailableFromDate = x.GetValueOrDefault(); await Search(); }" />
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+@if (consultants != null)
+{
+    <MudGrid Spacing="6">
+        @foreach (var consultant in consultants)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <a href="/consultants/@consultant.Id">
+
+                    <div class="d-flex justify-center">
+                        <img src="@consultant.ProfileImage" alt="Profile picuture" style="height:220px;width:220px; margin-left: auto; margin-right: auto; background-color: lightgray" class="rounded-circle" />
+                    </div>
+                    <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
+                        @if (@consultant.DisplayName != null)
+                        {@consultant.DisplayName }
+                    else
+                    { <text>@consultant.FirstName @consultant.LastName</text>}
+                    </MudText>
+                    <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline</MudText>
+                </a>
+            </MudItem>
+        }
+    </MudGrid>
+
+    @if (consultants.Count() < total)
+    {
+        <MudButton OnClick="LoadMore">Ladda fler (@(total - consultants.Count()) kvar)</MudButton>
+    }
+}
+
+@code {
+    private List<ConsultantProfileDto>? consultants;
+    private Task? task;
+
+    public OrganizationDto? Organization { get; set; }
+    public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    public DateTime AvailableFromDate { get; set; } = DateTime.Today;
+
+    int page = 1;
+    int total = 0;
+
+    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
+    {
+        try
+        {
+            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    private async Task Search()
+    {
+        page = 1;
+        var results = (await ConsultantProfilesClient.GetConsultantsAsync(1, 10, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
+        consultants = results.Items.ToList();
+        total = results.TotalCount;
+
+        StateHasChanged();
+    }
+
+    private async Task LoadMore()
+    {
+        if(total == consultants.Count())
+        {
+            return;
+        }
+
+        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 10, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
+        consultants.AddRange(results.Items);
+
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        task = Search();
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<ConsultantProfileDto> ev)
+    {
+        var item = ev.Item;
+
+        NavigationManager.NavigateTo($"/Consultants/{item.Id}");
+    }
+
+    private async Task OnOrganizationChanged(OrganizationDto o) 
+    {
+        Organization = o;
+        await Search();
+    }
+
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca) 
+    {
+        CompetenceArea = ca;
+        await Search();
+    }
+}

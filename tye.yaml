@@ -36,6 +36,12 @@ services:
   - protocol: https
     port: 5050
 
+- name: showroom
+  project: Server/Showroom/WebApi/WebApi.csproj
+  bindings:
+  - protocol: https
+    port: 5070
+
 - name: azurite
   image: mcr.microsoft.com/azure-storage/azurite
   args: "azurite-blob --loose --blobHost 0.0.0.0 -l /data"

@@ -18,6 +18,10 @@ echo "Seeding TimeReport"
 dotnet run --project ./TimeReport/WebApi/WebApi.csproj -- --seed --connection-string "$CS;Database=TimeReport"
 echo "Done"
 
+echo "Seeding Showroom"
+dotnet run --project ./Showroom/WebApi/WebApi.csproj -- --seed --connection-string "$CS;Database=Showroom"
+echo "Done"
+
 echo "Seeding Worker"
 dotnet run --project ./Worker/Worker.csproj -- --seed --connection-string "$CS;Database=Worker"
 echo "Done"

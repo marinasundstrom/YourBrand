@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Skynet.Showroom.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+     <ProjectReference Include="..\..\Worker.Client\Worker.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+     <ProjectReference Include="..\..\IdentityService.Client\IdentityService.Client.csproj" />
+     <ProjectReference Include="..\..\IdentityService.Contracts\IdentityService.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="CompetenceAreas\Commands\" />
+    <None Remove="Organizations\Commands\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CompetenceAreas\Commands\" />
+    <Folder Include="Organizations\Commands\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Organizations\Commands\UpdateCompetenceAreaCommand.cs" />
+  </ItemGroup>
+</Project>
