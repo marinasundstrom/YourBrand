@@ -6,49 +6,58 @@ using Skynet.Showroom.Application.Common.Interfaces;
 using Skynet.Showroom.Domain.Entities;
 using Skynet.Showroom.Domain.Exceptions;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Commands
+namespace Skynet.Showroom.Application.ConsultantProfiles.Commands;
+
+public class UpdateConsultantProfileCommand : IRequest<ConsultantProfileDto>
 {
-    public class UpdateConsultantProfileCommand : IRequest<ConsultantProfileDto>
+    public UpdateConsultantProfileCommand(string id, UpdateConsultantProfileDto consultantProfile)
     {
-        public UpdateConsultantProfileCommand(UpdateConsultantProfileDto consultantProfile)
+        Id = id;
+        ConsultantProfile = consultantProfile;
+    }
+
+    public string Id { get; set; }
+
+    public UpdateConsultantProfileDto ConsultantProfile { get; }
+
+    class UpdateConsultantProfileCommandHandler : IRequestHandler<UpdateConsultantProfileCommand, ConsultantProfileDto>
+    {
+        private readonly IShowroomContext _context;
+        private readonly ICurrentUserService currentUserService;
+
+        public UpdateConsultantProfileCommandHandler(
+            IShowroomContext context,
+            ICurrentUserService currentUserService)
         {
-            ConsultantProfile = consultantProfile;
+            _context = context;
+            this.currentUserService = currentUserService;
         }
 
-        public UpdateConsultantProfileDto ConsultantProfile { get; }
-
-        class UpdateConsultantProfileCommandHandler : IRequestHandler<UpdateConsultantProfileCommand, ConsultantProfileDto>
+        public async Task<ConsultantProfileDto> Handle(UpdateConsultantProfileCommand request, CancellationToken cancellationToken)
         {
-            private readonly IShowroomContext _context;
-            private readonly ICurrentUserService currentUserService;
-
-            public UpdateConsultantProfileCommandHandler(
-                IShowroomContext context,
-                ICurrentUserService currentUserService)
+            var consultantProfile = await _context.ConsultantProfiles.FindAsync(request.Id);
+            if (consultantProfile is null)
             {
-                _context = context;
-                this.currentUserService = currentUserService;
+                return null;
             }
 
-            public async Task<ConsultantProfileDto> Handle(UpdateConsultantProfileCommand request, CancellationToken cancellationToken)
+            consultantProfile.FirstName = request.ConsultantProfile.FirstName;
+            consultantProfile.LastName = request.ConsultantProfile.LastName;
+            consultantProfile.DisplayName = request.ConsultantProfile.DisplayName;
+            consultantProfile.OrganizationId = request.ConsultantProfile.OrganizationId;
+            consultantProfile.CompetenceAreaId = request.ConsultantProfile.CompetenceAreaId;
+            consultantProfile.ManagerId = "";
+            consultantProfile.ShortPresentation = "";
+            consultantProfile.Presentation = "";
+
+            if (consultantProfile.AvailableFromDate is not null)
             {
-                var consultantProfile = await _context.ConsultantProfiles.FindAsync(request.ConsultantProfile.Id);
-                if (consultantProfile == null)
-                {
-                    return null;
-                }
-
-                consultantProfile.DisplayName = request.ConsultantProfile.DisplayName;
-
-                if (consultantProfile.AvailableFromDate != null)
-                {
-                    consultantProfile.AvailableFromDate = consultantProfile.AvailableFromDate?.Date;
-                }
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return consultantProfile.ToDto(null);
+                consultantProfile.AvailableFromDate = consultantProfile.AvailableFromDate?.Date;
             }
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return consultantProfile.ToDto(null);
         }
     }
 }

@@ -324,6 +324,29 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_CreateConsultant",
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddConsultantProfileDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
       }
     },
     "/Consultants/{id}": {
@@ -354,6 +377,64 @@
                 }
               }
             }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_UpdateConsultant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConsultantProfileDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_DeleteConsultant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -719,6 +800,95 @@
           },
           "country": {
             "type": "string"
+          }
+        }
+      },
+      "AddConsultantProfileDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "competenceAreaId": {
+            "type": "string"
+          },
+          "managerId": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "shortPresentation": {
+            "type": "string"
+          },
+          "presentation": {
+            "type": "string"
+          },
+          "availableFromDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateConsultantProfileDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ConsultantProfileViewModelDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ConsultantProfileViewModelDto": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "competenceAreaId": {
+            "type": "string"
+          },
+          "managerId": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "shortPresentation": {
+            "type": "string"
+          },
+          "presentation": {
+            "type": "string"
+          },
+          "availableFromDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

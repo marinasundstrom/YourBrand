@@ -1,0 +1,123 @@
+@page "/consultants/create"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [Authorize]
+@inject IConsultantsClient ConsultantProfilesClient
+@inject IOrganizationsClient OrganizationsClient
+@inject ICompetenceAreasClient CompetenceAreasClient
+@inject NavigationManager NavigationManager
+
+<MudText Typo="Typo.h3" Class="mb-4">New Consultant</MudText>
+
+<MudPaper Class="pa-4">
+    <EditForm Model="@this" OnValidSubmit="Submit">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="First Name" Variant="Variant.Outlined" Class="mb-4" @bind-Value="FirstName" For="() => FirstName"></MudTextField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Last Name" Variant="Variant.Outlined" Class="mb-4" @bind-Value="LastName" For="() => LastName"></MudTextField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Display Name" Variant="Variant.Outlined" Class="mb-4" @bind-Value="DisplayName" For="() => DisplayName"></MudTextField>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudAutocomplete T="OrganizationDto" Label="Organization" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+                        <ItemTemplate Context="context2">
+                            <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        </ItemTemplate>
+
+                        <ItemSelectedTemplate Context="context2">
+                            <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        </ItemSelectedTemplate>
+                    </MudAutocomplete>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Variant="Variant.Outlined" Class="mb-4" @bind-Value="CompetenceArea" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+                        <ItemTemplate Context="context2">
+                            <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        </ItemTemplate>
+
+                        <ItemSelectedTemplate Context="context2">
+                            <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        </ItemSelectedTemplate>
+                    </MudAutocomplete>
+                </MudItem>
+            </MudGrid>
+
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">Create</MudButton>
+    </EditForm>
+</MudPaper>
+
+@code {
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+
+    public string? DisplayName { get; set; }
+
+    [Required]
+    public OrganizationDto? Organization { get; set; }
+
+    [Required]
+    public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    private async Task Submit()
+    {
+        await ConsultantProfilesClient.CreateConsultantAsync(new AddConsultantProfileDto {
+            FirstName = FirstName,
+            LastName = LastName,
+            DisplayName = DisplayName,
+            Headline = "",
+            OrganizationId = Organization!.Id,
+            CompetenceAreaId = CompetenceArea!.Id,
+            ShortPresentation = "",
+            Presentation = "",
+            ManagerId = ""
+        });
+
+        string id = "x";
+
+        NavigationManager.NavigateTo($"/consultants/{id}");
+    }
+
+    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
+    {
+        try
+        {
+            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

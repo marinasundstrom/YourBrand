@@ -7,32 +7,36 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Consultants</MudText>
 
-<MudButton Link="/gallery" Variant="Variant.Filled" Color="Color.Default" Class="mb-2">Gallery</MudButton>
+<MudButton Link="/gallery" Variant="Variant.Filled" Color="Color.Default" Class="mb-2 me-2">Gallery</MudButton>
+
+<MudButton Link="/consultants/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+    New consultant
+</MudButton>
 
 <MudTable @ref="table" T="ConsultantProfileDto" Elevation="1" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
-    Striped="true" OnRowClick="ItemOnClick">
+          Striped="true" OnRowClick="ItemOnClick">
     <ToolBarContent>
-            <MudAutocomplete T="OrganizationDto" Label="Organization" Dense="true" Variant="Variant.Text" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
-                <ItemTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemTemplate>
+        <MudAutocomplete T="OrganizationDto" Label="Organization" Dense="true" Variant="Variant.Text" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
 
-                <ItemSelectedTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemSelectedTemplate>
-            </MudAutocomplete>
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
 
-            <MudSpacer />
+        <MudSpacer />
 
-            <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Dense="true" Variant="Variant.Text" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                <ItemTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemTemplate>
+        <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Dense="true" Variant="Variant.Text" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
 
-                <ItemSelectedTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemSelectedTemplate>
-            </MudAutocomplete>
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
 
         <MudSpacer />
 
@@ -45,8 +49,9 @@
         <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Name">@context.FirstName</MudTd>
-        <MudTd DataLabel="Name">@context.LastName</MudTd>
+        <MudTd DataLabel="First Name">@context.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+        <MudTd DataLabel="Display Name">@context.DisplayName</MudTd>
         <MudTd DataLabel="Competence Area">@context.CompetenceArea?.Name</MudTd>
         <MudTd DataLabel="Organization">@context.Organization?.Name</MudTd>
     </RowTemplate>
@@ -66,7 +71,7 @@
     {
         try
         {
-            var results = await ConsultantProfilesClient.GetConsultantsAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString,  state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Showroom.Client.SortDirection.Asc : Skynet.Showroom.Client.SortDirection.Desc);
+            var results = await ConsultantProfilesClient.GetConsultantsAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Showroom.Client.SortDirection.Asc : Skynet.Showroom.Client.SortDirection.Desc);
             return new TableData<ConsultantProfileDto> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
@@ -126,13 +131,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnOrganizationChanged(OrganizationDto o) 
+    private async Task OnOrganizationChanged(OrganizationDto o)
     {
         Organization = o;
         table.ReloadServerData();
     }
 
-    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca) 
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
     {
         CompetenceArea = ca;
         table.ReloadServerData();

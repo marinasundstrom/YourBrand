@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Skynet.Showroom.Application.Common.Models;
 using Skynet.Showroom.Application.ConsultantProfiles;
+using Skynet.Showroom.Application.ConsultantProfiles.Commands;
 using Skynet.Showroom.Application.ConsultantProfiles.Queries;
 
 namespace Skynet.Showroom.WebApi.Controllers;
@@ -30,6 +31,24 @@ public class ConsultantsController : ControllerBase
     public async Task<ConsultantProfileDto?> GetConsultant(string id, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new GetConsultantProfileQuery(id), cancellationToken);
+    }
+
+    [HttpPost]
+    public async Task CreateConsultant(AddConsultantProfileDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new CreateConsultantProfileCommand(dto), cancellationToken);
+    }
+
+    [HttpPut("{id}")]
+    public async Task UpdateConsultant(string id, UpdateConsultantProfileDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UpdateConsultantProfileCommand(id, dto), cancellationToken);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task DeleteConsultant(string id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteConsultantProfileCommand(id), cancellationToken);
     }
 }
 

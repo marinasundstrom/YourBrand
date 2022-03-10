@@ -1,10 +1,7 @@
 ﻿using System;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles
-{
+namespace Skynet.Showroom.Application.ConsultantProfiles;
 
-    public class UpdateConsultantProfileDto : ConsultantProfileViewModelDto
-    {
-        public string Id { get; set; }
-    }
+public class UpdateConsultantProfileDto : ConsultantProfileViewModelDto
+{
 }
