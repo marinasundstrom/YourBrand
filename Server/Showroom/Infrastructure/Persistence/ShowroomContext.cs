@@ -62,6 +62,10 @@ class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<Skill> Skills { get; set; } = null!;
 
+    public DbSet<ConsultantProfileSkill> ConsultantProfileSkills { get;  set; } = null!;
+
+    public DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get;  set; } = null!;
+
 
 #nullable restore
 

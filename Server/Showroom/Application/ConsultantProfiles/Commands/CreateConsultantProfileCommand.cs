@@ -2,6 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
 using Skynet.Showroom.Application.Common.Interfaces;
 using Skynet.Showroom.Domain.Entities;
 using Skynet.Showroom.Domain.Exceptions;
@@ -10,12 +13,12 @@ namespace Skynet.Showroom.Application.ConsultantProfiles.Commands;
 
 public class CreateConsultantProfileCommand : IRequest<ConsultantProfileDto>
 {
-    public CreateConsultantProfileCommand(AddConsultantProfileDto consultantProfile)
+    public CreateConsultantProfileCommand(CreateConsultantProfileDto consultantProfile)
     {
         ConsultantProfile = consultantProfile;
     }
 
-    public AddConsultantProfileDto ConsultantProfile { get; }
+    public CreateConsultantProfileDto ConsultantProfile { get; }
 
     class CreateConsultantProfileCommandHandler : IRequestHandler<CreateConsultantProfileCommand, ConsultantProfileDto>
     {
@@ -41,7 +44,7 @@ public class CreateConsultantProfileCommand : IRequest<ConsultantProfileDto>
                 Headline = request.ConsultantProfile.Headline,
                 ShortPresentation = "",
                 Presentation = "",
-                ManagerId = ""
+                //ManagerId = ""
             };
 
             if (consultantProfile.AvailableFromDate is not null)
@@ -62,6 +65,11 @@ public class CreateConsultantProfileCommand : IRequest<ConsultantProfileDto>
             _context.ConsultantProfiles.Add(consultantProfile);
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            consultantProfile = await _context.ConsultantProfiles
+                .Include(x => x.Organization)
+                .Include(x => x.CompetenceArea)
+                .FirstOrDefaultAsync(x => x.Id == consultantProfile.Id);
 
             return consultantProfile.ToDto(null);
         }

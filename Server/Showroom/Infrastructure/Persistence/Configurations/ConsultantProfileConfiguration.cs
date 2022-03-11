@@ -14,6 +14,22 @@ class ConsultantProfileConfiguration : IEntityTypeConfiguration<ConsultantProfil
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder
+            .HasMany(p => p.Skills)
+            .WithMany(p => p.ConsultantProfiles)
+            .UsingEntity<ConsultantProfileSkill>(
+                j => j
+                    .HasOne(pt => pt.Skill)
+                    .WithMany(p => p.ConsultantProfileSkills)
+                    .HasForeignKey(pt => pt.SkillId)
+                    .OnDelete(DeleteBehavior.NoAction),
+                j => j
+                    .HasOne(pt => pt.ConsultantProfile)
+                    .WithMany(t => t.ConsultantProfileSkills)
+                    .HasForeignKey(pt => pt.ConsultantProfileId)
+                    .OnDelete(DeleteBehavior.NoAction)
+                );
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

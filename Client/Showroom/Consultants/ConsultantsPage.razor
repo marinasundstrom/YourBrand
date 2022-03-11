@@ -17,7 +17,7 @@
     <MudTable @ref="table" T="ConsultantProfileDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
-            <MudAutocomplete T="OrganizationDto" Label="Organization" Dense="true" Variant="Variant.Text" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+            <MudAutocomplete T="OrganizationDto" Label="Organization" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
                 <ItemTemplate Context="context2">
                     <MudText Typo="Typo.body1">@context2.Name</MudText>
                 </ItemTemplate>
@@ -29,7 +29,7 @@
 
             <MudSpacer />
 
-            <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Dense="true" Variant="Variant.Text" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+            <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
                 <ItemTemplate Context="context2">
                     <MudText Typo="Typo.body1">@context2.Name</MudText>
                 </ItemTemplate>

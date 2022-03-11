@@ -33,8 +33,14 @@ public class ConsultantsController : ControllerBase
         return await _mediator.Send(new GetConsultantProfileQuery(id), cancellationToken);
     }
 
+    [HttpGet("{id}/Experiences")]
+    public async Task<Results<ExperienceDto>> GetExperiences(int page = 1, int pageSize = 10, string? consultantProfileId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    {
+        return await _mediator.Send(new GetExperiencesQuery(page - 1, pageSize, consultantProfileId, searchString, sortBy, sortDirection), cancellationToken);
+    }
+
     [HttpPost]
-    public async Task CreateConsultant(AddConsultantProfileDto dto, CancellationToken cancellationToken)
+    public async Task CreateConsultant(CreateConsultantProfileDto dto, CancellationToken cancellationToken)
     {
         await _mediator.Send(new CreateConsultantProfileCommand(dto), cancellationToken);
     }

@@ -36,9 +36,9 @@ public class ConsultantProfile : AuditableEntity, ISoftDelete
 
     public string? ProfileVideo { get; set; }
 
-    public User Manager { get; set; }  = null!;
+    public User? Manager { get; set; }  = null!;
 
-    public string ManagerId { get; set; } = null!;
+    public string? ManagerId { get; set; } = null!;
 
     public DateTime? AvailableFromDate { get; set; }
 
@@ -46,6 +46,11 @@ public class ConsultantProfile : AuditableEntity, ISoftDelete
 
     public string? PhoneNumber { get; set; }
 
+    public List<ConsultantProfileExperience> Experience { get; set; } = new List<ConsultantProfileExperience>();
+
+    public List<Skill> Skills { get; set; } = new List<Skill>();
+
+    public List<ConsultantProfileSkill> ConsultantProfileSkills { get; set; } = new List<ConsultantProfileSkill>();
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

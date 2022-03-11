@@ -52,4 +52,9 @@ public static class Mapper
     {
         return new AddressDto(address.Address1, address.Address2, address.PostalCode, address.Locality, address.SubAdminArea, address.AdminArea, address.Country);
     }
+
+    public static ExperienceDto ToDto(this Domain.Entities.ConsultantProfileExperience experience)
+    {
+        return new ExperienceDto(experience.Id, experience.Title, experience.CompanyName, experience.Location, experience.StartDate, experience.EndDate, experience.Description);
+    }
 }

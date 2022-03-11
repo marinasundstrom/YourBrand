@@ -1,6 +1,6 @@
 ﻿namespace Skynet.Showroom.Application.ConsultantProfiles;
 
-public class AddConsultantProfileDto
+public class CreateConsultantProfileDto
 {
     public string FirstName { get; set; }
 

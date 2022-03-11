@@ -23,6 +23,10 @@ public interface IShowroomContext
 
     DbSet<Skill> Skills { get; }
 
+    DbSet<ConsultantProfileSkill> ConsultantProfileSkills { get; }
+
+    DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<ITransaction> BeginTransactionAsync();
