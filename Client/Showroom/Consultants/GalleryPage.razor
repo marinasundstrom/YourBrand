@@ -6,7 +6,7 @@
 
 @inject NavigationManager NavigationManager
 
-<MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Consultants</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" Class="mb-14">Consultants</MudText>
 
 <MudExpansionPanels Class="mb-10">
     <MudExpansionPanel Text="Find consultant" Class="pa-4" @bind-IsExpanded="isExpanded">
@@ -49,7 +49,7 @@
                 <a href="/consultants/@consultant.Id">
 
                     <div class="d-flex justify-center">
-                        <img src="@consultant.ProfileImage" alt="Profile picuture" style="height:220px;width:220px; margin-left: auto; margin-right: auto; background-color: lightgray" class="rounded-circle" />
+                        <img src="@(consultant.ProfileImage ?? "/placeholder.jpeg")" alt="Profile picuture" style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
                     </div>
                     <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
                         @if (@consultant.DisplayName != null)

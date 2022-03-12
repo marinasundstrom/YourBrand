@@ -7,7 +7,7 @@
 @if (consultant != null)
 {
     <div class="d-flex justify-center mb-4">
-        <img src="@consultant.ProfileImage" alt="Profile picuture" style="height:220px;width:220px; margin-left: auto; margin-right: auto; background-color: lightgray" class="rounded-circle" />
+        <img src="@(consultant.ProfileImage ?? "/placeholder.jpeg")" alt="Profile picuture" style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
     </div>
     <div class="d-flex justify-center">
         <MudText Typo="Typo.h3" Class="mb-4">
