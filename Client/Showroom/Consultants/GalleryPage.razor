@@ -8,35 +8,37 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Consultants</MudText>
 
-<MudPaper Class="pa-8 mb-10" Elevation="1">
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="OrganizationDto" Label="Organization" HelperText="Pick an organization" Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
-                <ItemTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemTemplate>
+<MudExpansionPanels Class="mb-10">
+    <MudExpansionPanel Text="Find consultant" Class="pa-4" @bind-IsExpanded="isExpanded">
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudAutocomplete T="OrganizationDto" Label="Organization" HelperText="Pick an organization" Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemTemplate>
 
-                <ItemSelectedTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemSelectedTemplate>
-            </MudAutocomplete>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" HelperText="Pick a competence area" Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                <ItemTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemTemplate>
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" HelperText="Pick a competence area" Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemTemplate>
 
-                <ItemSelectedTemplate Context="context2">
-                    <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemSelectedTemplate>
-            </MudAutocomplete>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date" Variant="Variant.Outlined" DateChanged="async x => { AvailableFromDate = x.GetValueOrDefault(); await Search(); }" />
-        </MudItem>
-    </MudGrid>
-</MudPaper>
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date" Variant="Variant.Outlined" DateChanged="async x => { AvailableFromDate = x.GetValueOrDefault(); await Search(); }" />
+            </MudItem>
+        </MudGrid>
+    </MudExpansionPanel>
+</MudExpansionPanels>
 
 @if (consultants != null)
 {
@@ -63,13 +65,17 @@
 
     @if (consultants.Count() < total)
     {
-        <MudButton OnClick="LoadMore">Ladda fler (@(total - consultants.Count()) kvar)</MudButton>
+        <div Class="d-flex justify-center flex-grow-1 mt-8">
+            <MudButton OnClick="LoadMore">Ladda fler (@(total - consultants.Count()) kvar)</MudButton>
+        </div>
     }
 }
 
 @code {
     private List<ConsultantProfileDto>? consultants;
     private Task? task;
+
+    bool isExpanded = true;
 
     public OrganizationDto? Organization { get; set; }
     public CompetenceAreaDto? CompetenceArea { get; set; }
@@ -121,7 +127,7 @@
 
     private async Task LoadMore()
     {
-        if(total == consultants.Count())
+        if (total == consultants.Count())
         {
             return;
         }
@@ -144,13 +150,13 @@
         NavigationManager.NavigateTo($"/Consultants/{item.Id}");
     }
 
-    private async Task OnOrganizationChanged(OrganizationDto o) 
+    private async Task OnOrganizationChanged(OrganizationDto o)
     {
         Organization = o;
         await Search();
     }
 
-    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca) 
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
     {
         CompetenceArea = ca;
         await Search();

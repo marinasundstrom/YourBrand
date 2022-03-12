@@ -1,5 +1,6 @@
 @page "/consultants/{Id}"
 @attribute [Authorize]
+@using Humanizer
 @inject IConsultantsClient ConsultantsClient
 @inject NavigationManager NavigationManager
 
@@ -37,19 +38,31 @@
                 </MudCardActions>
             </MudCard>
 
-            <MudCard Class="mb-8">
-                <MudCardContent>
-                    <MudText Typo="Typo.h6" Class="mb-4">
-                        Experience
-                    </MudText>
+            @if(experiences is not null)
+            {
+                <MudCard Class="mb-8">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5" Class="mb-4">
+                            Experience
+                        </MudText>
+                        @foreach (var experience in experiences)
+                        {
+                            <MudText Typo="Typo.h6" Class="mb-4">
+                                @experience.Title
+                            </MudText>
 
+                            <MudText Typo="Typo.subtitle1">@experience.CompanyName · Contract</MudText>
+                            <MudText Typo="Typo.subtitle1">@experience.StartDate.ToString("MMMM yyyy") - @(experience.EndDate?.ToString("MMMM yyyy") ?? "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit: Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))</MudText>
 
-                </MudCardContent>
-            </MudCard>
+                            <MudText Class="mt-4 mb-4">@experience.Description</MudText>
+                        }
+                    </MudCardContent>
+                </MudCard>
+             }
 
              <MudCard>
                 <MudCardContent>
-                    <MudText Typo="Typo.h6" Class="mb-4">
+                    <MudText Typo="Typo.h5" Class="mb-4">
                         Skills
                     </MudText>
 
@@ -63,7 +76,7 @@
                 <MudItem xs="12" sm="12" md="12">
                     <MudCard>
                         <MudCardContent>
-                            <MudText Typo="Typo.h6" Class="mb-4">
+                            <MudText Typo="Typo.h5" Class="mb-4">
                                 <text>
                                     About @if (@consultant.DisplayName != null)
                                     {
@@ -80,7 +93,7 @@
                 <MudItem xs="12" sm="12" md="12">
                     <MudCard>
                         <MudCardContent>
-                            <MudText Typo="Typo.h6" Class="mb-4">
+                            <MudText Typo="Typo.h5" Class="mb-4">
                                 Information
                             </MudText>
 
@@ -125,6 +138,7 @@
 @code {
     private ConsultantProfileDto? consultant;
     private Task? task;
+    private IEnumerable<ExperienceDto>? experiences;
 
     [Parameter]
     public string Id { get; set; } = null!;
@@ -139,6 +153,9 @@
         try
         {
             consultant = await ConsultantsClient.GetConsultantAsync(Id);
+
+            var experiencesResult = await ConsultantsClient.GetExperiencesAsync(1, 3, Id, null, null, null, Id);
+            experiences = experiencesResult.Items;
         }
         /*catch (ApiException exc)
         {
