@@ -66,7 +66,7 @@
     @if (consultants.Count() < total)
     {
         <div Class="d-flex justify-center flex-grow-1 mt-8">
-            <MudButton OnClick="LoadMore">Ladda fler (@(total - consultants.Count()) kvar)</MudButton>
+            <MudButton Variant="Variant.Filled" OnClick="LoadMore">Ladda fler (@(total - consultants.Count()) kvar)</MudButton>
         </div>
     }
 }
@@ -118,7 +118,7 @@
     private async Task Search()
     {
         page = 1;
-        var results = (await ConsultantProfilesClient.GetConsultantsAsync(1, 10, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
+        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
         consultants = results.Items.ToList();
         total = results.TotalCount;
 
@@ -132,7 +132,7 @@
             return;
         }
 
-        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 10, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
+        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
         consultants.AddRange(results.Items);
 
         StateHasChanged();
