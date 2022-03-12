@@ -36,7 +36,7 @@
         @if (experiences.Count() < total)
         {
             <div Class="d-flex justify-center flex-grow-1 mt-8">
-                <MudButton Variant="Variant.Filled" OnClick="LoadMore">Ladda fler (@(total - experiences.Count()) återstår)</MudButton>
+                <MudButton Variant="Variant.Text" OnClick="LoadMore">Ladda fler (@(total - experiences.Count()))</MudButton>
             </div>
         }
     </MudCardContent>

@@ -48,6 +48,18 @@ public class ConsultantsController : ControllerBase
         await _mediator.Send(new UpdateConsultantProfileCommand(id, dto), cancellationToken);
     }
 
+    [HttpPut("{id}/Headline")]
+    public async Task UpdateHeadline(string id, [FromBody] string text, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UpdateHeadlineCommand(id, text), cancellationToken);
+    }
+
+    [HttpPut("{id}/Presentation")]
+    public async Task UpdatePresentation(string id, [FromBody] string text, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UpdatePresentationCommand(id, text), cancellationToken);
+    }
+
     [HttpDelete("{id}")]
     public async Task DeleteConsultant(string id, CancellationToken cancellationToken)
     {

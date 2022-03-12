@@ -1,0 +1,63 @@
+﻿@inject IConsultantsClient ConsultantsClient
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    @if (IsEditing)
+    {
+        <MudTextField Label="Headline" Class="mt-3" @bind-Value="Headline"
+                      For="@(() => Headline)" />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel"
+                   OnClick="ToggleEditing"></MudIconButton>
+
+        <MudIconButton Color="Color.Primary" ButtonType="ButtonType.Submit"
+                   Icon="@Icons.Material.Filled.Save"></MudIconButton>
+    }
+    else
+    {
+        @if (!string.IsNullOrEmpty(ConsultantProfile?.Headline))
+        {
+            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@ConsultantProfile.Headline</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: gray;">Add a headline</MudText>
+        }
+
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="ToggleEditing" />
+    }
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public ConsultantProfileDto ConsultantProfile { get; set; } = null!;
+
+    public bool IsEditing { get; set; } = false;
+
+    public string? Headline { get; set; }
+
+    private void ToggleEditing()
+    {
+        if (IsEditing)
+        {
+            IsEditing = false;
+
+            Headline = null;
+        }
+        else
+        {
+            IsEditing = true;
+
+            Headline = ConsultantProfile.Headline;
+        }
+    }
+
+    private async Task Submit()
+    {
+        await ConsultantsClient.UpdateHeadlineAsync(ConsultantProfile.Id, Headline);
+
+        ConsultantProfile.Headline = Headline;
+
+        IsEditing = false;
+    }
+}

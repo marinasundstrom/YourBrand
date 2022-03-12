@@ -21,15 +21,7 @@
         </MudText>
     </div>
     <div class="d-flex justify-center mb-4">
-        @if (!string.IsNullOrEmpty(consultant.Headline))
-        {
-            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline</MudText>
-        }
-        else
-        {
-            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: gray;">Add a headline</MudText>
-        }
-        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" />
+        <HeadlineSection ConsultantProfile="consultant" />
     </div>
 
     <MudGrid Spacing="3">
