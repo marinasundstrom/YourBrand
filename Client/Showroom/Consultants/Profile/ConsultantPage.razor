@@ -144,43 +144,4 @@
 
         StateHasChanged();
     }
-
-    private async Task AddOrEditExperience(ExperienceDto? experience)
-    {
-        var dialogReference = DialogService.Show<ExperienceDialog>("New experience");
-        var result = await dialogReference.Result;
-        /*
-        var model = (ExperienceDialog)result.Data;
-        if (result.Cancelled)
-            return;
-        try
-        {
-            imageToUpload = model.Stream;
-            await ItemsClient.AddItemAsync(new AddItemDto()
-            { Name = model.Name, Description = model.Description });
-        }
-        catch (Exception exc)
-        {
-            Snackbar.Add(exc.Message.ToString(), Severity.Error);
-        }
-        */
-    }
-
-    async Task RemoveExperience(ExperienceDto experience)
-    {
-        /*
-        try
-        {
-            var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
-            if (result.GetValueOrDefault())
-            {
-                await ItemsClient.DeleteItemAsync(item.Id);
-            }
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-        */
-    }
 }

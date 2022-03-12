@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@inject IConsultantsClient ConsultantsClient
 @inject ISnackbar Snackbar
 
 <div style="width: 350px; max-width: 350px;">
@@ -34,6 +35,15 @@
 
 @code
 {
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string ConsultantProfileId { get; set; } = null!;
+
+    [Parameter]
+    public ExperienceDto? Experience { get; set; }
+
     [Required]
     public string Title { get; set; }
 
@@ -51,8 +61,46 @@
     [MaxLength(1024)]
     public string? Description { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (Experience is not null) 
+        {
+                Title = Experience.Title;
+                Company = Experience.CompanyName;
+                Location = Experience.Location;
+                StartDate = Experience.StartDate.Date;
+                EndDate = Experience.EndDate?.Date;
+                Description = Experience.Description;
+        }
+    }
+
     public async Task OnValidSubmit()
     {
+        if (Experience is null)
+        {
+            await ConsultantsClient.AddExperienceAsync(ConsultantProfileId, new CreateExperienceDto
+            {
+                Title = Title,
+                CompanyName = Company,
+                Location = Location,
+                StartDate = StartDate.GetValueOrDefault().Date,
+                EndDate = EndDate,
+                Description = Description
+            });
+        }
+        else
+        {
+            await ConsultantsClient.UpdateExperienceAsync(ConsultantProfileId, Experience.Id, new UpdateExperienceDto
+            {
+                Title = Title,
+                CompanyName = Company,
+                Location = Location,
+                StartDate = StartDate.GetValueOrDefault().Date,
+                EndDate = EndDate,
+                Description = Description
+            });
+        }
 
+        Dialog.Close(DialogResult.Ok(true));
     }
-}
+    }
