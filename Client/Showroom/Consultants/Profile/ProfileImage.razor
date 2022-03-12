@@ -1,0 +1,72 @@
+﻿@inject ISnackbar Snackbar
+@inject IConsultantsClient ConsultantsClient
+
+<InputFile id="fileInput" OnChange="UploadFiles" Class="mt-3" hidden accept=".jpg, .jpeg, .png" />
+
+<label for="fileInput">
+    <MudBadge Color="Color.Primary" Icon="@Icons.Filled.CloudUpload">
+        <img src="@Image()" alt="Profile picuture" style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+    </MudBadge>
+</label>
+
+@code {
+    InputFile fileInput;
+    byte[] imageBytes;
+    Stream Stream;
+
+    [Parameter]
+    public ConsultantProfileDto ConsultantProfile { get; set; } = null!;
+
+    string Image()
+    {
+        if (imageBytes is not null)
+        {
+            return $"data:image/png;base64,{Convert.ToBase64String(imageBytes)}";
+        }
+
+        return ConsultantProfile.ProfileImage ?? "/placeholder.jpeg";
+    }
+
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        if (e.File.Size > Constants.FileMaxSize)
+        {
+            Snackbar.Add("Image is too big.", Severity.Error);
+            return;
+        }
+
+        var stream = e.File.OpenReadStream(Constants.FileMaxSize);
+        await Process(stream);
+    }
+
+    private async Task Process(Stream stream)
+    {
+        var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+
+        memoryStream.Seek(0, SeekOrigin.Begin);
+        var bytes = await GetBytes(memoryStream);
+
+        memoryStream.Seek(0, SeekOrigin.Begin);
+
+        Stream = memoryStream;
+
+        try
+        {
+            await ConsultantsClient.UpdatePictureAsync(ConsultantProfile.Id, new FileParameter(Stream));
+
+            imageBytes = bytes;
+        }
+        catch(Exception)
+        {
+            Snackbar.Add("Failed to upload image", Severity.Error);
+        }
+    }
+
+    private async Task<byte[]> GetBytes(MemoryStream memoryStream)
+    {
+        var imageBytes = memoryStream.ToArray();
+        return imageBytes;
+    }
+}
+

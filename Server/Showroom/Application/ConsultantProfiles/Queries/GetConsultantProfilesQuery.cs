@@ -36,13 +36,16 @@ public class GetConsultantProfilesQuery : IRequest<Results<ConsultantProfileDto>
     {
         private readonly IShowroomContext _context;
         private readonly ICurrentUserService currentUserService;
+        private readonly IUrlHelper _urlHelper;
 
         public GetConsultantProfilesQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IUrlHelper urlHelper)
         {
             _context = context;
             this.currentUserService = currentUserService;
+            _urlHelper = urlHelper;
         }
 
         public async Task<Results<ConsultantProfileDto>> Handle(GetConsultantProfilesQuery request, CancellationToken cancellationToken)
@@ -99,7 +102,7 @@ public class GetConsultantProfilesQuery : IRequest<Results<ConsultantProfileDto>
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var items2 = items.Select(cp => cp.ToDto(null)).ToList();
+            var items2 = items.Select(cp => cp.ToDto(_urlHelper)).ToList();
 
             return new Results<ConsultantProfileDto>(items2, totalCount);
         }

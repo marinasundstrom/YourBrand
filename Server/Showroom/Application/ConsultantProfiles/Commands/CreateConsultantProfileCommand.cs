@@ -24,13 +24,16 @@ public class CreateConsultantProfileCommand : IRequest<ConsultantProfileDto>
     {
         private readonly IShowroomContext _context;
         private readonly ICurrentUserService currentUserService;
+        private readonly IUrlHelper _urlHelper;
 
         public CreateConsultantProfileCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IUrlHelper urlHelper)
         {
             _context = context;
             this.currentUserService = currentUserService;
+            _urlHelper = urlHelper;
         }
 
         public async Task<ConsultantProfileDto> Handle(CreateConsultantProfileCommand request, CancellationToken cancellationToken)
@@ -71,7 +74,7 @@ public class CreateConsultantProfileCommand : IRequest<ConsultantProfileDto>
                 .Include(x => x.CompetenceArea)
                 .FirstOrDefaultAsync(x => x.Id == consultantProfile.Id);
 
-            return consultantProfile.ToDto(null);
+            return consultantProfile.ToDto(_urlHelper);
         }
     }
 }

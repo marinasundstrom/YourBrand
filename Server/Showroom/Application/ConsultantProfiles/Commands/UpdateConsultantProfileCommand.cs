@@ -24,13 +24,16 @@ public class UpdateConsultantProfileCommand : IRequest<ConsultantProfileDto>
     {
         private readonly IShowroomContext _context;
         private readonly ICurrentUserService currentUserService;
+        private readonly IUrlHelper _urlHelper;
 
         public UpdateConsultantProfileCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IUrlHelper urlHelper)
         {
             _context = context;
             this.currentUserService = currentUserService;
+            _urlHelper = urlHelper;
         }
 
         public async Task<ConsultantProfileDto> Handle(UpdateConsultantProfileCommand request, CancellationToken cancellationToken)
@@ -57,7 +60,7 @@ public class UpdateConsultantProfileCommand : IRequest<ConsultantProfileDto>
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return consultantProfile.ToDto(null);
+            return consultantProfile.ToDto(_urlHelper);
         }
     }
 }

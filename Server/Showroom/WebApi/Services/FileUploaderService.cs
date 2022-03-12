@@ -17,6 +17,8 @@ public class FileUploaderService : IFileUploaderService
     {
         var blobContainerClient = _blobServiceClient.GetBlobContainerClient("images");
 
+        await blobContainerClient.DeleteBlobIfExistsAsync(id);
+
         var response = await blobContainerClient.UploadBlobAsync(id, stream, cancellationToken);
     }
 }

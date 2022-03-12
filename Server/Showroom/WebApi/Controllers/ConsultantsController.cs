@@ -60,6 +60,12 @@ public class ConsultantsController : ControllerBase
         await _mediator.Send(new UpdatePresentationCommand(id, text), cancellationToken);
     }
 
+    [HttpPut("{id}/Picture")]
+    public async Task UpdatePicture(string id, IFormFile file, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UploadImageCommand(id, file.OpenReadStream()), cancellationToken);
+    }
+
     [HttpDelete("{id}")]
     public async Task DeleteConsultant(string id, CancellationToken cancellationToken)
     {

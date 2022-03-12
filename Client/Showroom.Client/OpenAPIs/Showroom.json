@@ -513,6 +513,47 @@
         }
       }
     },
+    "/Consultants/{id}/Picture": {
+      "put": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_UpdatePicture",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/Consultants/{id}/Experiences": {
       "get": {
         "tags": [

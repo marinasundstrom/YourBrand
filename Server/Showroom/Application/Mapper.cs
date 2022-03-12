@@ -27,7 +27,7 @@ public static class Mapper
             consultantProfile.DisplayName,
             consultantProfile.Organization.ToDto(),
             consultantProfile.CompetenceArea.ToDto(),
-            consultantProfile.ProfileImage,
+            urlHelper.CreateImageUrl(consultantProfile.ProfileImage),
             consultantProfile.Headline,
             consultantProfile.ShortPresentation,
             consultantProfile.Presentation,
