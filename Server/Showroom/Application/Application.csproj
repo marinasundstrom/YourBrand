@@ -30,6 +30,7 @@
   <ItemGroup>
     <None Remove="CompetenceAreas\Commands\" />
     <None Remove="Organizations\Commands\" />
+    <None Remove="ConsultantProfiles\Commands\AddExperienceCommand" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompetenceAreas\Commands\" />

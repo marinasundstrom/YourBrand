@@ -18,119 +18,151 @@
         </MudText>
     </div>
     <div class="d-flex justify-center mb-4">
-        <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline</MudText>
+        @if (!string.IsNullOrEmpty(consultant.Headline))
+        {
+            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: gray;">Add a headline</MudText>
+        }
+        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" />
     </div>
 
-    <MudGrid Spacing="6">
-        <MudItem xs="12" sm="12" md="6">
-            <MudCard Class="mb-8">
-                <MudCardContent>
-                    @if (!string.IsNullOrEmpty(consultant.ProfileVideo))
-                    {
+    <MudGrid Spacing="3">
+        @if (!string.IsNullOrEmpty(consultant.ProfileVideo))
+        {
+            <MudItem xs="12" sm="12" md="6">
+
+                <MudCard Class="mb-8">
+                    <MudCardContent>
+
                         <video style="width: 100%" controls>
                             <source src="@consultant.ProfileVideo" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
-                    }
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton Variant="Variant.Text" Color="Color.Primary">Contact @consultant.FirstName</MudButton>
-                </MudCardActions>
-            </MudCard>
 
-            @if(experiences is not null)
-            {
-                <MudCard Class="mb-8">
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5" Class="mb-4">
-                            Experience
-                        </MudText>
-                        @foreach (var experience in experiences)
-                        {
-                            <MudText Typo="Typo.h6" Class="mb-4">
-                                @experience.Title
-                            </MudText>
-
-                            <MudText Typo="Typo.subtitle1">@experience.CompanyName · Contract</MudText>
-                            <MudText Typo="Typo.subtitle1">@experience.StartDate.ToString("MMMM yyyy") - @(experience.EndDate?.ToString("MMMM yyyy") ?? "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit: Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))</MudText>
-
-                            <MudText Class="mt-4 mb-4">@experience.Description</MudText>
-                        }
                     </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary">Contact @consultant.FirstName</MudButton>
+                    </MudCardActions>
                 </MudCard>
-             }
 
-             <MudCard>
+            </MudItem>
+        }
+
+        <MudItem xs="12" sm="12" md="6">
+            <MudCard>
                 <MudCardContent>
-                    <MudText Typo="Typo.h5" Class="mb-4">
-                        Skills
-                    </MudText>
+                    <div class="d-flex justify-space-between align-center">
+                        <MudText Typo="Typo.h5" Class="mb-4">
+                            About @if (@consultant.DisplayName != null)
+                            {
+                                @consultant.DisplayName }
+                            else
+                            { <text>@consultant.FirstName</text>}
+                        </MudText>
 
-
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                    </div>
+                    <MudText Typo="Typo.body2">@consultant.Presentation</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
 
         <MudItem xs="12" sm="12" md="6">
-            <MudGrid Spacing="6">
-                <MudItem xs="12" sm="12" md="12">
-                    <MudCard>
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5" Class="mb-4">
-                                <text>
-                                    About @if (@consultant.DisplayName != null)
-                                    {
-                                        @consultant.DisplayName }
-                                    else
-                                    { <text>@consultant.FirstName</text>}
-                                </text>
-                            </MudText>
-                            <MudText>@consultant.Presentation</MudText>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
+            <MudCard>
+                <MudCardContent>
+                    <div class="d-flex justify-space-between align-center">
+                        <MudText Typo="Typo.h5" Class="mb-4">
+                            Information
+                        </MudText>
 
-                <MudItem xs="12" sm="12" md="12">
-                    <MudCard>
-                        <MudCardContent>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                    </div>
+
+                    <dl class="dl-horizontal">
+                        <dt>Region</dt>
+                        <dd>@consultant.Organization.Name</dd>
+                        <dt>Competence Area</dt>
+                        <dd>@consultant.CompetenceArea.Name</dd>
+                        @if (consultant.AvailableFromDate != null)
+                        {
+                            <dt>Available</dt>
+                            <dd>
+                                @if (consultant.AvailableFromDate?.DateTime.Date > DateTime.Now.Date)
+                                {
+                                    <span>@consultant.AvailableFromDate?.DateTime.Date.ToString("yyyy/MM/dd")</span>
+                                }
+                                else
+                                {
+                                    <span>Immediately</span>
+                                }
+                            </dd>
+                        }
+                        @if (!string.IsNullOrEmpty(consultant.PhoneNumber))
+                        {
+                            <dt>Phone</dt>
+                            <dd><a href="tel:@consultant.PhoneNumber">@consultant.PhoneNumber</a></dd>
+                        }
+                        @if (!string.IsNullOrEmpty(consultant.Email))
+                        {
+                            <dt>Email</dt>
+                            <dd><MudLink Href="@("mailto:" + consultant.Email)">@consultant.Email</MudLink></dd>
+                        }
+                    </dl>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="12">
+            @if (experiences is not null)
+            {
+                <MudCard>
+                    <MudCardContent>
+                        <div class="d-flex justify-space-between align-center">
                             <MudText Typo="Typo.h5" Class="mb-4">
-                                Information
+                                Experience
                             </MudText>
 
-                            <dl class="dl-horizontal">
-                                <dt>Region</dt>
-                                <dd>@consultant.Organization.Name</dd>
-                                <dt>Competence Area</dt>
-                                <dd>@consultant.CompetenceArea.Name</dd>
-                                @if (consultant.AvailableFromDate != null)
-                                {
-                                    <dt>Available</dt>
-                                    <dd>
-                                        @if (consultant.AvailableFromDate?.DateTime.Date > DateTime.Now.Date)
-                                        {
-                                            <span>@consultant.AvailableFromDate?.DateTime.Date.ToString("yyyy/MM/dd")</span>
-                                        }
-                                        else
-                                        {
-                                            <span>Immediately</span>
-                                        }
-                                    </dd>
-                                }
-                                @if (!string.IsNullOrEmpty(consultant.PhoneNumber))
-                                {
-                                    <dt>Phone</dt>
-                                    <dd><a href="tel:@consultant.PhoneNumber">@consultant.PhoneNumber</a></dd>
-                                }
-                                @if (!string.IsNullOrEmpty(consultant.Email))
-                                {
-                                    <dt>Email</dt>
-                                    <dd><MudLink Href="@("mailto:" + consultant.Email)">@consultant.Email</MudLink></dd>
-                                }
-                            </dl>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
-            </MudGrid>
+                            <MudIconButton Icon="@Icons.Material.Filled.Add" />
+                        </div>
+                        @foreach (var experience in experiences)
+                        {
+                            <div class="d-flex justify-space-between align-center">
+                                <MudText Typo="Typo.h6" Class="mb-4">
+                                    @experience.Title
+                                </MudText>
+
+                                <div>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" />
+                                </div>
+                            </div>
+
+                            <MudText Typo="Typo.body2">@experience.CompanyName · Contract</MudText>
+                            <MudText Typo="Typo.body2">@experience.StartDate.ToString("MMMM yyyy") - @(experience.EndDate?.ToString("MMMM yyyy") ?? "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit: Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))</MudText>
+
+                            <MudText Class="mt-4 mb-4">@experience.Description</MudText>
+                        }
+                    </MudCardContent>
+                </MudCard>
+            }
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="12">
+            <MudCard>
+                <MudCardContent>
+                    <div class="d-flex justify-space-between align-center">
+                        <MudText Typo="Typo.h5" Class="mb-4">
+                            Skills
+                        </MudText>
+
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                    </div>
+
+                </MudCardContent>
+            </MudCard>
         </MudItem>
     </MudGrid>
 }
@@ -154,7 +186,7 @@
         {
             consultant = await ConsultantsClient.GetConsultantAsync(Id);
 
-            var experiencesResult = await ConsultantsClient.GetExperiencesAsync(1, 3, Id, null, null, null, Id);
+            var experiencesResult = await ConsultantsClient.GetExperiencesAsync(Id, 1, 3, null, null, null);
             experiences = experiencesResult.Items;
         }
         /*catch (ApiException exc)

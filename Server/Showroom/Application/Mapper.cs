@@ -7,6 +7,7 @@ using Skynet.Showroom.Application.CompetenceAreas;
 using Skynet.Showroom.Application.Users;
 using Skynet.Showroom.Application.Common.Models;
 using Skynet.Showroom.Application.Organizations;
+using Skynet.Showroom.Application.ConsultantProfiles.Experiences;
 
 namespace Skynet.Showroom.Application;
 

@@ -335,7 +335,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddConsultantProfileDto"
+                "$ref": "#/components/schemas/CreateConsultantProfileDto"
               }
             }
           },
@@ -447,6 +447,16 @@
         "operationId": "Consultants_GetExperiences",
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
             "name": "page",
             "in": "query",
             "schema": {
@@ -454,7 +464,7 @@
               "format": "int32",
               "default": 1
             },
-            "x-position": 1
+            "x-position": 2
           },
           {
             "name": "pageSize",
@@ -463,15 +473,6 @@
               "type": "integer",
               "format": "int32",
               "default": 10
-            },
-            "x-position": 2
-          },
-          {
-            "name": "consultantProfileId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
             },
             "x-position": 3
           },
@@ -509,15 +510,6 @@
               ]
             },
             "x-position": 6
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 7
           }
         ],
         "responses": {
@@ -530,6 +522,161 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_AddExperience",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateExperienceDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Consultants/{id}/Experiences/{experienceId}": {
+      "get": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_GetExperience",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "experienceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_UpdateExperience",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "experienceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExperienceDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_RemoveExperience",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "experienceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -898,55 +1045,7 @@
           }
         }
       },
-      "ResultsOfExperienceDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ExperienceDto"
-            }
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ExperienceDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "companyName": {
-            "type": "string"
-          },
-          "location": {
-            "type": "string",
-            "nullable": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "AddConsultantProfileDto": {
+      "CreateConsultantProfileDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1031,6 +1130,112 @@
           "availableFromDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "ResultsOfExperienceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExperienceDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ExperienceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateExperienceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateExperienceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
             "nullable": true
           }
         }

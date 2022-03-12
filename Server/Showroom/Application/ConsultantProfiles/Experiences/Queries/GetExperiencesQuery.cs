@@ -7,7 +7,7 @@ using Skynet.Showroom.Application.Common.Interfaces;
 using Skynet.Showroom.Application.Common.Models;
 using Skynet.Showroom.Domain.Entities;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Queries;
+namespace Skynet.Showroom.Application.ConsultantProfiles.Experiences.Queries;
 
 public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
 {

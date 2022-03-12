@@ -16,7 +16,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatR(typeof(GetConsultantProfilesQuery));
-
+        
         services.AddScoped<Handler>();
 
         services.AddHttpClient(nameof(Worker.Client.INotificationsClient), (sp, http) =>
