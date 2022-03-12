@@ -54,26 +54,11 @@
             </MudItem>
         }
 
-        <MudItem xs="12" sm="12" md="6">
-            <MudCard>
-                <MudCardContent>
-                    <div class="d-flex justify-space-between align-center">
-                        <MudText Typo="Typo.h5" Class="mb-4">
-                            About @if (@consultant.DisplayName != null)
-                            {
-                                @consultant.DisplayName }
-                            else
-                            { <text>@consultant.FirstName</text>}
-                        </MudText>
-
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
-                    </div>
-                    <MudText Typo="Typo.body2">@consultant.Presentation</MudText>
-                </MudCardContent>
-            </MudCard>
+        <MudItem xs="12" sm="12" md="8">
+            <AboutSection ConsultantProfile="consultant" />
         </MudItem>
 
-        <MudItem xs="12" sm="12" md="6">
+        <MudItem xs="12" sm="12" md="4">
             <MudCard>
                 <MudCardContent>
                     <div class="d-flex justify-space-between align-center">

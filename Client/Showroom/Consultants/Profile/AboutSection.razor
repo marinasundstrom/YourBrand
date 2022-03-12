@@ -1,0 +1,75 @@
+﻿@inject IConsultantsClient ConsultantsClient
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <MudCard>
+        <MudCardContent>
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.h5" Class="mb-4">
+                    About @(ConsultantProfile.DisplayName ?? ConsultantProfile.FirstName)
+                </MudText>
+
+                @if (!IsEditing)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="ToggleEditing" />
+                }
+            </div>
+
+            @if (IsEditing)
+            {
+                <MudTextField Label="Presentation" Lines="10" Class="mt-3" @bind-Value="Presentation"
+                For="@(() => Presentation)" />
+            }
+            else
+            {
+                @ConsultantProfile.Presentation
+            }
+
+        </MudCardContent>
+
+        @if (IsEditing)
+        {
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Cancel" Class="me-2"
+                OnClick="ToggleEditing">Cancel</MudButton>
+
+                <MudButton Variant="Variant.Text" Color="Color.Primary" ButtonType="ButtonType.Submit"
+                StartIcon="@Icons.Material.Filled.Save">Save</MudButton>
+            </MudCardActions>
+        }
+    </MudCard>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public ConsultantProfileDto ConsultantProfile { get; set; } = null!;
+
+    public bool IsEditing { get; set; } = false;
+
+    public string? Presentation { get; set; }
+
+    private void ToggleEditing()
+    {
+        if (IsEditing)
+        {
+            IsEditing = false;
+
+            Presentation = null;
+        }
+        else
+        {
+            IsEditing = true;
+
+            Presentation = ConsultantProfile.Presentation;
+        }
+    }
+
+    private async Task Submit()
+    {
+        //await ConsultantsClient.UpdatePresentationAsync(ConsultantProfile.Id, Presentation);
+
+        ConsultantProfile.Presentation = Presentation;
+
+        IsEditing = false;
+    }
+}
