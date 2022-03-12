@@ -46,6 +46,7 @@ public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
             IQueryable<ConsultantProfileExperience> result = _context
                     .ConsultantProfileExperiences
                     .OrderByDescending(x => x.StartDate)
+                    .ThenByDescending(x => x.EndDate)
                     .AsQueryable();
 
             if (!string.IsNullOrEmpty(request.ConsultantProfileId))

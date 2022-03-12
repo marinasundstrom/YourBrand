@@ -1,0 +1,58 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject ISnackbar Snackbar
+
+<div style="width: 350px; max-width: 350px;">
+    <EditForm Model="@this" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Title"
+                              @bind-Value="Title" For="@(() => Title)" />
+                <MudTextField Label="Company" Class="mt-3"
+                              @bind-Value="Company" For="@(() => Company)" />
+                <MudTextField Label="Location" Class="mt-3"
+                              @bind-Value="Location" For="@(() => Location)" />
+                <MudGrid>
+                    <MudItem xs="12" sm="6" md="6">
+                        <MudDatePicker Label="Start date" @bind-Date="StartDate" For="@(() => StartDate)" />
+                    </MudItem>
+
+                    <MudItem xs="12" sm="6" md="6">
+                        <MudDatePicker Label="End date" @bind-Date="EndDate" For="@(() => EndDate)" />
+                    </MudItem>
+                </MudGrid>
+                <MudTextField Label="Description" Lines="5" Class="mt-3"
+                              @bind-Value="Description" For="@(() => Description)" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
+            </MudCardActions>
+        </MudCard>
+
+    </EditForm>
+</div>
+
+@code
+{
+    [Required]
+    public string Title { get; set; }
+
+    [Required]
+    public string Company { get; set; }
+
+    [Required]
+    public string Location { get; set; }
+
+    [Required]
+    public DateTime? StartDate { get; set; }
+
+    public DateTime? EndDate { get; set; }
+
+    [MaxLength(1024)]
+    public string? Description { get; set; }
+
+    public async Task OnValidSubmit()
+    {
+
+    }
+}

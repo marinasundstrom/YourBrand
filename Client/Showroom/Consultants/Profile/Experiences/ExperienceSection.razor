@@ -1,0 +1,100 @@
+﻿@using Humanizer
+@using Experiences
+@inject IConsultantsClient ConsultantsClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudCard>
+    <MudCardContent>
+        <div class="d-flex justify-space-between align-center">
+            <MudText Typo="Typo.h5" Class="mb-4">
+                Experience
+            </MudText>
+
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="async () => await AddOrEditExperience(null)" />
+        </div>
+        @foreach (var experience in experiences)
+        {
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.h6" Class="mb-4">
+                    @experience.Title
+                </MudText>
+
+                <div>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" />
+                </div>
+            </div>
+
+            <MudText Typo="Typo.body2">@experience.CompanyName · Contract</MudText>
+            <MudText Typo="Typo.body2">@experience.StartDate.ToString("MMMM yyyy") - @(experience.EndDate?.ToString("MMMM yyyy") ?? "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit: Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))</MudText>
+
+            <MudText Class="mt-4 mb-4">@experience.Description</MudText>
+        }
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private IEnumerable<ExperienceDto>? experiences = new List<ExperienceDto>();
+
+    [Parameter]
+    public string ConsultantProfileId { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var experiencesResult = await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 3, null, null, null);
+            experiences = experiencesResult.Items;
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+    }
+
+    private async Task AddOrEditExperience(ExperienceDto? experience)
+    {
+        var dialogReference = DialogService.Show<ExperienceDialog>("New experience");
+        var result = await dialogReference.Result;
+        /*
+        var model = (ExperienceDialog)result.Data;
+        if (result.Cancelled)
+            return;
+        try
+        {
+            imageToUpload = model.Stream;
+            await ItemsClient.AddItemAsync(new AddItemDto()
+            { Name = model.Name, Description = model.Description });
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+        */
+    }
+
+    async Task RemoveExperience(ExperienceDto experience)
+    {
+        /*
+        try
+        {
+            var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
+            if (result.GetValueOrDefault())
+            {
+                await ItemsClient.DeleteItemAsync(item.Id);
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        */
+    }
+}

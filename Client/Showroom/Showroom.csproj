@@ -7,7 +7,6 @@
     <RootNamespace>Skynet.Showroom</RootNamespace>
   </PropertyGroup>
 
-
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
@@ -23,13 +22,5 @@
     <ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj" />
     <ProjectReference Include="..\Showroom.Client\Showroom.Client.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Microsoft.Extensions.Http" />
-    <None Remove="MudBlazor" />
-    <None Remove="Consultants\" />
-    <None Remove="Humanizer" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Consultants\" />
-  </ItemGroup>
+
 </Project>
