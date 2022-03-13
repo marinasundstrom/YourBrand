@@ -27,8 +27,9 @@
                 </div>
             </div>
 
-            <MudText Typo="Typo.body2">@experience.CompanyName · Contract</MudText>
+            <MudText Typo="Typo.body2">@experience.CompanyName</MudText>
             <MudText Typo="Typo.body2">@experience.StartDate.ToString("MMMM yyyy") - @(experience.EndDate?.ToString("MMMM yyyy") ?? "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit: Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))</MudText>
+            <MudText Typo="Typo.body2">@experience.Location</MudText>
 
             <MudText Class="mt-4 mb-4">@experience.Description</MudText>
         }

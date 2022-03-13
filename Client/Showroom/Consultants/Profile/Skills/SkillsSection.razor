@@ -8,11 +8,74 @@
             <MudIconButton Icon="@Icons.Material.Filled.Edit" />
         </div>
 
+        @foreach(var skillGroup in SkillGroups) 
+        {
+            <section class="mb-4">
+                <MudText Typo="Typo.h6">
+                    @skillGroup.Name
+                </MudText>
+
+                <MudChipSet>
+                    @foreach(var skill in skillGroup.Skills) 
+                    {
+                        <MudChip>@skill.Name</MudChip>
+                    }
+                </MudChipSet>
+            </section>
+        }
+
     </MudCardContent>
 </MudCard>
 
 @code {
     [Parameter]
     public string ConsultantProfileId { get; set; } = null!;
+
+    public List<SkillGroup> SkillGroups = new List<SkillGroup>();
+
+    protected override void OnInitialized() 
+    {
+        SkillGroups.Add(new SkillGroup() {
+            Name = "Software Architecture",
+            Skills = new List<Skill>() 
+            {
+                new Skill() {
+                    Name = "Microservices",
+                }
+            }
+        });
+
+         SkillGroups.Add(new SkillGroup() {
+            Name = "Development Platforms",
+            Skills = new List<Skill>() 
+            {
+                new Skill() {
+                    Name = ".NET",
+                },
+                new Skill() {
+                    Name = "Node",
+                },
+                new Skill() {
+                    Name = "Web",
+                }
+            }
+        });
+    }
+
+    public class SkillGroup 
+    {
+        public string Id { get; set; } = null!;
+
+        public string Name { get; set; } = null!;
+
+        public List<Skill> Skills = new List<Skill>();
+    }
+
+    public class Skill
+    {
+        public string Id { get; set; } = null!;
+
+        public string Name { get; set; } = null!;
+    }
 }
 
