@@ -48,6 +48,12 @@ public class ConsultantsController : ControllerBase
         await _mediator.Send(new UpdateConsultantProfileCommand(id, dto), cancellationToken);
     }
 
+    [HttpPut("{id}/Details")]
+    public async Task UpdateDetails(string id, [FromBody] ConsultantProfileDetailsDto details, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UpdateDetailsCommand(id, details), cancellationToken);
+    }
+
     [HttpPut("{id}/Headline")]
     public async Task UpdateHeadline(string id, [FromBody] string text, CancellationToken cancellationToken)
     {
@@ -107,4 +113,3 @@ public class ConsultantsController : ControllerBase
         await _mediator.Send(new RemoveExperienceCommand(id, experienceId), cancellationToken);
     }
 }
-

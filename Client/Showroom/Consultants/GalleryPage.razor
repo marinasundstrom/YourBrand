@@ -62,7 +62,7 @@
                     class="rounded-circle" />
                     </div>
                     <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
-                        @if (@consultant.DisplayName != null)
+                        @if (!string.IsNullOrEmpty(consultant.DisplayName))
                         {
                             @consultant.DisplayName
                         }

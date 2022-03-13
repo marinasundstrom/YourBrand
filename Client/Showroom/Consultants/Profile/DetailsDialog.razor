@@ -1,0 +1,76 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IConsultantsClient ConsultantsClient
+@inject ISnackbar Snackbar
+
+<div style="width: 350px; max-width: 350px;">
+    <EditForm Model="@this" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudDialog>
+            <DialogContent>
+                <MudTextField Label="First Name" Variant="Variant.Outlined" @bind-Value="FirstName"
+                    For="@(() => FirstName)" />
+                <MudTextField Label="Last Name" Class="mb-2" Variant="Variant.Outlined" @bind-Value="LastName"
+                    For="@(() => LastName)" />
+                <MudTextField Label="Display Name" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="DisplayName"
+                    For="@(() => DisplayName)" />
+            </DialogContent>
+            <DialogActions>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel
+                </MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Update
+                </MudButton>
+            </DialogActions>
+        </MudDialog>
+
+    </EditForm>
+</div>
+
+@code
+{
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public ConsultantProfileDto? ConsultantProfile { get; set; }
+
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+
+    public string? DisplayName { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        if (ConsultantProfile is not null)
+        {
+            FirstName = ConsultantProfile.FirstName;
+            LastName = ConsultantProfile.LastName;
+            DisplayName = ConsultantProfile.DisplayName;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        try 
+        {
+            await ConsultantsClient.UpdateDetailsAsync(ConsultantProfile.Id, new ConsultantProfileDetailsDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName
+            });
+
+            ConsultantProfile.FirstName = FirstName;
+            ConsultantProfile.LastName = LastName;
+            ConsultantProfile.DisplayName = DisplayName;
+
+            Dialog.Close(DialogResult.Ok(true));
+        }
+        catch(Exception exc) 
+        {
+            Snackbar.Add("Failed to update details.", Severity.Error);
+        }
+    }
+}

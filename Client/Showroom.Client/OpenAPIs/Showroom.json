@@ -439,6 +439,43 @@
         }
       }
     },
+    "/Consultants/{id}/Details": {
+      "put": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_UpdateDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultantProfileDetailsDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/Consultants/{id}/Headline": {
       "put": {
         "tags": [
@@ -1245,6 +1282,22 @@
           "availableFromDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "ConsultantProfileDetailsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string",
             "nullable": true
           }
         }

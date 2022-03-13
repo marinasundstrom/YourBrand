@@ -6,26 +6,27 @@
 @inject IConsultantsClient ConsultantsClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 @if (consultant is null)
 {
-    @if(loadingFailed) 
+    @if (loadingFailed)
     {
         <MudText Typo="Typo.h3" Class="mb-4">Erro when loading profile.</MudText>
     }
-    else 
+    else
     {
         <LoadingIndicator />
     }
 }
 else
 {
-<div class="d-flex justify-center mb-4">
-    <ProfileImage ConsultantProfile="consultant" IsEditable="true" />
-</div>
+    <div class="d-flex justify-center mb-4">
+        <ProfileImage ConsultantProfile="consultant" IsEditable="true" />
+    </div>
     <div class="d-flex justify-center">
         <MudText Typo="Typo.h3" Class="mb-4">
-            @if (@consultant.DisplayName != null)
+            @if (!string.IsNullOrEmpty(consultant.DisplayName))
             {@consultant.DisplayName }
         else
         { <text>@consultant.FirstName @consultant.LastName</text>}
@@ -69,14 +70,28 @@ else
                             Information
                         </MudText>
 
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateDetails" />
                     </div>
 
                     <dl class="dl-horizontal">
+                        <dt>First Name</dt>
+                        <dd>@consultant.FirstName</dd>
+
+                        <dt>Last Name</dt>
+                        <dd>@consultant.LastName</dd>
+
+                        @if (!string.IsNullOrEmpty(consultant.DisplayName))
+                        {
+                            <dt>Display Name</dt>
+                            <dd>@consultant.DisplayName</dd>
+                        }
+
                         <dt>Region</dt>
                         <dd>@consultant.Organization.Name</dd>
+
                         <dt>Competence Area</dt>
                         <dd>@consultant.CompetenceArea.Name</dd>
+
                         @if (consultant.AvailableFromDate != null)
                         {
                             <dt>Available</dt>
@@ -127,11 +142,11 @@ else
     {
         loadingFailed = false;
 
-        #if DEBUG
+#if DEBUG
 
         await Task.Delay(2000);
 
-        #endif
+#endif
 
         try
         {
@@ -150,5 +165,19 @@ else
         }
 
         StateHasChanged();
+    }
+
+    private async Task UpdateDetails()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(DetailsDialog.ConsultantProfile), consultant);
+
+        var dialogReference = DialogService.Show<DetailsDialog>("Update details", parameters);
+        var result = await dialogReference.Result;
+
+        if (result.Cancelled)
+            return;
+
+        Snackbar.Add("Details updated.", Severity.Success);
     }
 }
