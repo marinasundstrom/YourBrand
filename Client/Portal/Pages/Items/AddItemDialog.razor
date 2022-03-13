@@ -5,8 +5,8 @@
 <div style="width: 350px; max-width: 350px;">
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
-        <MudCard>
-            <MudCardContent>
+        <MudDialog>
+            <DialogContent>
                 <MudTextField Label="Name" HelperText="Max. 60 characters"
                               @bind-Value="model.Name" For="@(() => model.Name)" />
                 <MudTextField Label="Description" Lines="3" Class="mt-3"
@@ -55,11 +55,13 @@
 
                 <MudText Typo="Typo.subtitle2" GutterBottom="true" Class="mt-3">Max 2 mb.</MudText>
 
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
-            </MudCardActions>
-        </MudCard>
+            </DialogContent>
+
+            <DialogActions>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => MudDialog.Cancel()">Cancel</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Add</MudButton>
+            </DialogActions>
+        </MudDialog>
 
     </EditForm>
 </div>
