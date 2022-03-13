@@ -12,7 +12,7 @@
 {
     @if (loadingFailed)
     {
-        <MudText Typo="Typo.h3" Class="mb-4">Erro when loading profile.</MudText>
+        <MudText Typo="Typo.h3" Class="mb-4">Error when loading profile.</MudText>
     }
     else
     {
@@ -86,13 +86,19 @@ else
                             <dd>@consultant.DisplayName</dd>
                         }
 
+                        @if (consultant.BirthDate is not null)
+                        {
+                            <dt>Birth Date</dt>
+                            <dd>@consultant.BirthDate?.ToString("yyyy/MM/dd") (@(Span.Humanize(minUnit: Humanizer.Localisation.TimeUnit.Year, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2)))</dd>
+                        }
+
                         <dt>Organization</dt>
                         <dd>@consultant.Organization.Name</dd>
 
                         <dt>Competence Area</dt>
                         <dd>@consultant.CompetenceArea.Name</dd>
 
-                        @if (consultant.AvailableFromDate != null)
+                        @if (consultant.AvailableFromDate is not null)
                         {
                             <dt>Available</dt>
                             <dd>
@@ -137,6 +143,8 @@ else
 
     [Parameter]
     public string Id { get; set; } = null!;
+
+    public TimeSpan Span => DateTime.Now - consultant!.BirthDate.GetValueOrDefault();
 
     protected override async Task OnInitializedAsync()
     {

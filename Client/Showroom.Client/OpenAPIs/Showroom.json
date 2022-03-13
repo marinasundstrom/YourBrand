@@ -1117,6 +1117,11 @@
             "type": "string",
             "nullable": true
           },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "organization": {
             "$ref": "#/components/schemas/OrganizationDto"
           },
@@ -1298,6 +1303,11 @@
           },
           "displayName": {
             "type": "string",
+            "nullable": true
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }

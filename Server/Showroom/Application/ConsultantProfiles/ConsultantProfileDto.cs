@@ -10,6 +10,7 @@ public record ConsultantProfileDto(
     string FirstName,
     string LastName,
     string? DisplayName,
+    DateTime? BirthDate,
     OrganizationDto Organization,
     CompetenceAreaDto CompetenceArea,
     string? ProfileImage,
