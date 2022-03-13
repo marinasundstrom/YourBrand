@@ -7,7 +7,18 @@
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 
-@if (consultant != null)
+@if (consultant is null)
+{
+    @if(loadingFailed) 
+    {
+        <MudText Typo="Typo.h3" Class="mb-4">Erro when loading profile.</MudText>
+    }
+    else 
+    {
+        <LoadingIndicator />
+    }
+}
+else
 {
 <div class="d-flex justify-center mb-4">
     <ProfileImage ConsultantProfile="consultant" IsEditable="true" />
@@ -107,18 +118,21 @@
 
 @code {
     private ConsultantProfileDto? consultant;
-    private Task? task;
+    private bool loadingFailed = false;
 
     [Parameter]
     public string Id { get; set; } = null!;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        task = OnInitialize();
-    }
+        loadingFailed = false;
 
-    private async Task OnInitialize()
-    {
+        #if DEBUG
+
+        await Task.Delay(2000);
+
+        #endif
+
         try
         {
             consultant = await ConsultantsClient.GetConsultantAsync(Id);
@@ -131,6 +145,7 @@
         }*/
         catch (Exception exc)
         {
+            loadingFailed = true;
             //await JSHelpers.Alert(exc.Message);
         }
 
