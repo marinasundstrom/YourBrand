@@ -1,5 +1,6 @@
 @page "/consultants"
 @attribute [Authorize]
+@using Skynet.Showroom.Consultants.Profile
 @inject IConsultantsClient ConsultantProfilesClient
 @inject IOrganizationsClient OrganizationsClient
 @inject ICompetenceAreasClient CompetenceAreasClient
@@ -44,6 +45,7 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
+            <MudTh></MudTh>
             <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
@@ -52,6 +54,9 @@
             <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
+            <MudTd>
+                <ProfileImage ConsultantProfile="context" Height="50" Width="50" />
+            </MudTd>
             <MudTd DataLabel="First Name">@context.FirstName</MudTd>
             <MudTd DataLabel="Last Name">@context.LastName</MudTd>
             <MudTd DataLabel="Display Name">@context.DisplayName</MudTd>

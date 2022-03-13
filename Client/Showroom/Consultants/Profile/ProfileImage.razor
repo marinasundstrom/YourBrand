@@ -1,13 +1,21 @@
 ﻿@inject ISnackbar Snackbar
 @inject IConsultantsClient ConsultantsClient
 
-<InputFile id="fileInput" OnChange="UploadFiles" Class="mt-3" hidden accept=".jpg, .jpeg, .png" />
+@if (IsEditable)
+{
+    <InputFile id="fileInput" OnChange="UploadFiles" Class="mt-3" hidden accept=".jpg, .jpeg, .png" />
 
-<label for="fileInput">
-    <MudBadge Color="Color.Primary" Icon="@Icons.Filled.CloudUpload">
-        <img src="@Image()" alt="Profile picuture" style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
-    </MudBadge>
-</label>
+    <label for="fileInput">
+        <MudBadge Color="Color.Primary" Visible="IsEditable" Icon="@Icons.Filled.CloudUpload">
+            <img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+        </MudBadge>
+    </label>
+}
+else
+{
+<img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+}
+
 
 @code {
     InputFile fileInput;
@@ -16,6 +24,15 @@
 
     [Parameter]
     public ConsultantProfileDto ConsultantProfile { get; set; } = null!;
+
+    [Parameter]
+    public bool IsEditable { get; set; }
+
+    [Parameter]
+    public int Height { get; set; } = 220;
+
+    [Parameter]
+    public int Width { get; set; } = 220;
 
     string Image()
     {
@@ -57,7 +74,7 @@
 
             imageBytes = bytes;
         }
-        catch(Exception)
+        catch (Exception)
         {
             Snackbar.Add("Failed to upload image", Severity.Error);
         }
