@@ -1,6 +1,9 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IConsultantsClient ConsultantsClient
 @inject ISnackbar Snackbar
+@inject ICompetenceAreasClient CompetenceAreasClient
+@inject IOrganizationsClient OrganizationsClient
+@inject ICompetenceAreasClient CompetenceAreasClient
 
 <div style="width: 350px; max-width: 350px;">
     <EditForm Model="@this" OnValidSubmit="OnValidSubmit">
@@ -8,16 +11,43 @@
         <MudDialog>
             <DialogContent>
                 <MudTextField Label="First Name" Variant="Variant.Outlined" @bind-Value="FirstName"
-                    For="@(() => FirstName)" />
+                              For="@(() => FirstName)" />
                 <MudTextField Label="Last Name" Class="mb-2" Variant="Variant.Outlined" @bind-Value="LastName"
-                    For="@(() => LastName)" />
+                              For="@(() => LastName)" />
                 <MudTextField Label="Display Name" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="DisplayName"
-                    For="@(() => DisplayName)" />
+                              For="@(() => DisplayName)" />
+
+                @*
+        <MudAutocomplete T="OrganizationDto" Label="Organization" Class="mb-2"
+                         Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Organization" For="() => Organization"
+                         SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+        <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Class="mb-2"
+                         Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="CompetenceArea" For="() => CompetenceArea"
+                         SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+                *@
             </DialogContent>
             <DialogActions>
-                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">
+                    Cancel
                 </MudButton>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Update
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                    Update
                 </MudButton>
             </DialogActions>
         </MudDialog>
@@ -41,6 +71,10 @@
 
     public string? DisplayName { get; set; } = null!;
 
+    public OrganizationDto? Organization { get; set; } = null!;
+
+    public CompetenceAreaDto? CompetenceArea { get; set; } = null!;
+
     protected override void OnInitialized()
     {
         if (ConsultantProfile is not null)
@@ -48,12 +82,14 @@
             FirstName = ConsultantProfile.FirstName;
             LastName = ConsultantProfile.LastName;
             DisplayName = ConsultantProfile.DisplayName;
+            Organization = ConsultantProfile.Organization;
+            CompetenceArea = ConsultantProfile.CompetenceArea;
         }
     }
 
     public async Task OnValidSubmit()
     {
-        try 
+        try
         {
             await ConsultantsClient.UpdateDetailsAsync(ConsultantProfile.Id, new ConsultantProfileDetailsDto
             {
@@ -68,9 +104,39 @@
 
             Dialog.Close(DialogResult.Ok(true));
         }
-        catch(Exception exc) 
+        catch (Exception exc)
         {
             Snackbar.Add("Failed to update details.", Severity.Error);
         }
+    }
+
+    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
+    {
+        try
+        {
+            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
     }
 }
