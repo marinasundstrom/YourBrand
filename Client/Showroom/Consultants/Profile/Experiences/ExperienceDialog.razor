@@ -5,30 +5,31 @@
 <div style="width: 350px; max-width: 350px;">
     <EditForm Model="@this" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
-        <MudCard>
-            <MudCardContent>
-                <MudTextField Label="Title"
+        <MudDialog>
+            <DialogContent>
+                <MudTextField Label="Title" Variant="Variant.Outlined"
                               @bind-Value="Title" For="@(() => Title)" />
-                <MudTextField Label="Company" Class="mt-3"
+                <MudTextField Label="Company" Class="mb-2" Variant="Variant.Outlined"
                               @bind-Value="Company" For="@(() => Company)" />
-                <MudTextField Label="Location" Class="mt-3"
+                <MudTextField Label="Location" Class="mb-2" Variant="Variant.Outlined"
                               @bind-Value="Location" For="@(() => Location)" />
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="6">
-                        <MudDatePicker Label="Start date" @bind-Date="StartDate" For="@(() => StartDate)" />
+                        <MudDatePicker Label="Start date" Variant="Variant.Outlined" @bind-Date="StartDate" For="@(() => StartDate)" Class="mb-2" />
                     </MudItem>
 
                     <MudItem xs="12" sm="6" md="6">
-                        <MudDatePicker Label="End date" @bind-Date="EndDate" For="@(() => EndDate)" />
+                        <MudDatePicker Label="End date" HelperText="Optional" Variant="Variant.Outlined" @bind-Date="EndDate" For="@(() => EndDate)" Class="mb-2" />
                     </MudItem>
                 </MudGrid>
-                <MudTextField Label="Description" Lines="5" Class="mt-3"
+                <MudTextField Label="Description" Lines="5" Variant="Variant.Outlined" Class="mb-2"
                               @bind-Value="Description" For="@(() => Description)" />
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
-            </MudCardActions>
-        </MudCard>
+            </DialogContent>
+            <DialogActions>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Add</MudButton>
+            </DialogActions>
+        </MudDialog>
 
     </EditForm>
 </div>

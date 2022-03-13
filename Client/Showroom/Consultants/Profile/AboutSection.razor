@@ -1,4 +1,5 @@
 ﻿@inject IConsultantsClient ConsultantsClient
+@inject ISnackbar Snackbar
 
 <EditForm Model="@this" OnValidSubmit="Submit">
     <MudCard>
@@ -66,10 +67,19 @@
 
     private async Task Submit()
     {
-        await ConsultantsClient.UpdatePresentationAsync(ConsultantProfile.Id, Presentation);
+        try 
+        {
+            await ConsultantsClient.UpdatePresentationAsync(ConsultantProfile.Id, Presentation);
 
-        ConsultantProfile.Presentation = Presentation;
+            ConsultantProfile.Presentation = Presentation;
 
-        IsEditing = false;
+            IsEditing = false;
+
+            Snackbar.Add("Presentation updated.", Severity.Success);
+        }
+        catch(Exception exc) 
+        {
+            Snackbar.Add("Failed to update presentation.", Severity.Error);
+        }
     }
 }

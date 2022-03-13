@@ -85,6 +85,8 @@ else
             await ConsultantsClient.UpdatePictureAsync(ConsultantProfile.Id, new FileParameter(Stream));
 
             imageBytes = bytes;
+
+            Snackbar.Add("Profile image updated.", Severity.Success);
         }
         catch (Exception)
         {
