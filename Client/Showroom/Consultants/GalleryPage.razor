@@ -12,7 +12,10 @@
     <MudExpansionPanel Text="Find consultant" Class="pa-4" @bind-IsExpanded="isExpanded">
         <MudGrid>
             <MudItem xs="12" sm="6" md="4">
-                <MudAutocomplete T="OrganizationDto" Label="Organization" HelperText="Pick an organization" Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
+                <MudAutocomplete T="OrganizationDto" Label="Organization" HelperText="Pick an organization"
+                    Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="Organization"
+                    ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization"
+                    SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
                     <ItemTemplate Context="context2">
                         <MudText Typo="Typo.body1">@context2.Name</MudText>
                     </ItemTemplate>
@@ -23,7 +26,10 @@
                 </MudAutocomplete>
             </MudItem>
             <MudItem xs="12" sm="6" md="4">
-                <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" HelperText="Pick a competence area" Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+                <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" HelperText="Pick a competence area"
+                    Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="CompetenceArea"
+                    ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea"
+                    SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
                     <ItemTemplate Context="context2">
                         <MudText Typo="Typo.body1">@context2.Name</MudText>
                     </ItemTemplate>
@@ -34,7 +40,9 @@
                 </MudAutocomplete>
             </MudItem>
             <MudItem xs="12" sm="6" md="4">
-                <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date" Variant="Variant.Outlined" DateChanged="async x => { AvailableFromDate = x.GetValueOrDefault(); await Search(); }" />
+                <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date"
+                    Variant="Variant.Outlined"
+                    DateChanged="async x => { AvailableFromDate = x.GetValueOrDefault(); await Search(); }" />
             </MudItem>
         </MudGrid>
     </MudExpansionPanel>
@@ -43,30 +51,48 @@
 @if (consultants != null)
 {
     <MudGrid Spacing="6">
-        @foreach (var consultant in consultants)
+    @foreach (var consultant in consultants)
         {
             <MudItem xs="12" sm="6" md="4">
                 <a href="/consultants/@consultant.Id">
 
                     <div class="d-flex justify-center">
-                        <img src="@(consultant.ProfileImage ?? "/placeholder.jpeg")" alt="Profile picuture" style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+                        <img src="@(consultant.ProfileImage ?? "/placeholder.jpeg")" alt="Profile picuture"
+                    style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;"
+                    class="rounded-circle" />
                     </div>
                     <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
                         @if (@consultant.DisplayName != null)
-                        {@consultant.DisplayName }
-                    else
-                    { <text>@consultant.FirstName @consultant.LastName</text>}
+                        {
+                            @consultant.DisplayName
+                        }
+                        else
+                        { 
+                            <text>@consultant.FirstName @consultant.LastName</text>
+                        }
                     </MudText>
-                    <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline</MudText>
+                    <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline
+                    </MudText>
                 </a>
             </MudItem>
         }
-    </MudGrid>
+        </MudGrid>
 
     @if (consultants.Count() < total)
     {
         <div Class="d-flex justify-center flex-grow-1 mt-8">
-            <MudButton Variant="Variant.Outlined" OnClick="LoadMore">Ladda fler (@(total - consultants.Count()))</MudButton>
+    @if (isLoading)
+            {
+                <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+            }
+            else
+            {
+                <MudButton Variant="Variant.Outlined" OnClick="LoadMore" Disabled="isLoading">
+
+                    <text>Ladda fler (@(total - consultants.Count()))</text>
+
+                </MudButton>
+            }
         </div>
     }
 }
@@ -76,6 +102,7 @@
     private Task? task;
 
     bool isExpanded = true;
+    bool isLoading = false;
 
     public OrganizationDto? Organization { get; set; }
     public CompetenceAreaDto? CompetenceArea { get; set; }
@@ -118,7 +145,8 @@
     private async Task Search()
     {
         page = 1;
-        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
+        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id,
+        AvailableFromDate, null, null, null));
         consultants = results.Items.ToList();
         total = results.TotalCount;
 
@@ -132,8 +160,13 @@
             return;
         }
 
-        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id, AvailableFromDate, null, null, null));
+        isLoading = true;
+
+        var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id,
+        AvailableFromDate, null, null, null));
         consultants.AddRange(results.Items);
+
+        isLoading = false;
 
         StateHasChanged();
     }

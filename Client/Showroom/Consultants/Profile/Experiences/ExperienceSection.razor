@@ -36,7 +36,16 @@
         @if (experiences.Count() < total)
         {
             <div Class="d-flex justify-center flex-grow-1 mt-8">
-                <MudButton Variant="Variant.Text" OnClick="LoadMore">Ladda fler (@(total - experiences.Count()))</MudButton>
+                    @if(isLoading) 
+                    {
+                        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                    } 
+                    else 
+                    {
+                        <MudButton Variant="Variant.Text" OnClick="LoadMore" Disabled="isLoading">
+                            Ladda fler (@(total - experiences.Count()))
+                        </MudButton>
+                    }
             </div>
         }
     </MudCardContent>
@@ -44,6 +53,8 @@
 
 @code {
     private List<ExperienceDto>? experiences = new List<ExperienceDto>();
+
+    bool isLoading = false;
 
     int page = 1;
     int total = 0;
@@ -80,8 +91,12 @@
             return;
         }
 
+        isLoading = true;
+
         var experiencesResult = await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, page++, 3, null, null, null);
         experiences.AddRange(experiencesResult.Items);
+
+        isLoading = false;
 
         StateHasChanged();
     }

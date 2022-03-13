@@ -7,13 +7,22 @@
 
     <label for="fileInput">
         <MudBadge Color="Color.Primary" Visible="IsEditable" Icon="@Icons.Filled.CloudUpload">
-            <img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+            @if(isUploading) 
+            {
+                <div style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle">
+                    <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                </div>
+            }
+            else 
+            {
+                <img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+            }
         </MudBadge>
     </label>
 }
 else
 {
-<img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+    <img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
 }
 
 
@@ -21,6 +30,7 @@ else
     InputFile fileInput;
     byte[] imageBytes;
     Stream Stream;
+    bool isUploading = false;
 
     [Parameter]
     public ConsultantProfileDto ConsultantProfile { get; set; } = null!;
@@ -68,6 +78,8 @@ else
 
         Stream = memoryStream;
 
+        isUploading = true;
+
         try
         {
             await ConsultantsClient.UpdatePictureAsync(ConsultantProfile.Id, new FileParameter(Stream));
@@ -77,6 +89,10 @@ else
         catch (Exception)
         {
             Snackbar.Add("Failed to upload image", Severity.Error);
+        }
+        finally 
+        {
+            isUploading = false;
         }
     }
 
