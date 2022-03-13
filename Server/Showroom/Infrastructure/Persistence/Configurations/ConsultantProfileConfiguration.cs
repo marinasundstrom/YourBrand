@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Skynet.Showroom.Infrastructure.Persistence.Configurations;
 
-class ConsultantProfileConfiguration : IEntityTypeConfiguration<ConsultantProfile>
+class ConsultantProfilCaseConfigurationConfiguration : IEntityTypeConfiguration<ConsultantProfile>
 {
     public void Configure(EntityTypeBuilder<ConsultantProfile> builder)
     {

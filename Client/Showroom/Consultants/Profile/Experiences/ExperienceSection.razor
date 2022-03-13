@@ -23,7 +23,7 @@
 
                 <div>
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await AddOrEditExperience(experience)" />
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await RemoveExperience(experience)" />
                 </div>
             </div>
 
@@ -127,19 +127,23 @@
 
     async Task RemoveExperience(ExperienceDto experience)
     {
-        /*
         try
         {
-            var result = await DialogService.ShowMessageBox($"Delete '{item.Name}'?", "Are you sure?", "Yes", "No");
+            var result = await DialogService.ShowMessageBox($"Delete experience at {experience.CompanyName}?", "Are you sure?", "Yes", "No");
             if (result.GetValueOrDefault())
             {
-                await ItemsClient.DeleteItemAsync(item.Id);
+                await ConsultantsClient.RemoveExperienceAsync(ConsultantProfileId, experience.Id);
             }
+
+            page = 1;
+
+            var experiencesResult = await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, page++, 3, null, null, null);
+            experiences = experiencesResult.Items.ToList();
+            total = experiencesResult.TotalCount;
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
-        */
     }
 }

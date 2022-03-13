@@ -41,7 +41,7 @@ class ShowroomContext : DbContext, IShowroomContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.ConsultantProfileConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.ConsultantProfilCaseConfigurationConfiguration).Assembly);
     }
 
 #nullable disable

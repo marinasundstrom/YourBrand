@@ -2,6 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
 using Skynet.Showroom.Application.Common.Interfaces;
 using Skynet.Showroom.Domain.Entities;
 using Skynet.Showroom.Domain.Exceptions;
@@ -25,8 +28,8 @@ public record RemoveExperienceCommand(string ConsultantProfileId, string Id) : I
 
         public async Task<Unit> Handle(RemoveExperienceCommand request, CancellationToken cancellationToken)
         {
-            var experience = await _context.ConsultantProfileExperiences.FindAsync(request.Id, cancellationToken);
-            if (experience == null)
+            var experience = await _context.ConsultantProfileExperiences.FirstAsync(x => x.Id == request.Id, cancellationToken);
+            if (experience is null)
             {
                 throw new Exception("Not found");
             }
