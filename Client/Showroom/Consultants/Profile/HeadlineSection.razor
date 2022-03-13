@@ -1,4 +1,5 @@
 ﻿@inject IConsultantsClient ConsultantsClient
+@inject ISnackbar Snackbar
 
 <EditForm Model="@this" OnValidSubmit="Submit">
     @if (IsEditing)
@@ -54,10 +55,19 @@
 
     private async Task Submit()
     {
-        await ConsultantsClient.UpdateHeadlineAsync(ConsultantProfile.Id, Headline);
+        try 
+        {
+            await ConsultantsClient.UpdateHeadlineAsync(ConsultantProfile.Id, Headline);
 
-        ConsultantProfile.Headline = Headline;
+            ConsultantProfile.Headline = Headline;
 
-        IsEditing = false;
+            IsEditing = false;
+
+            Snackbar.Add("Headline updated.", Severity.Success);
+        }
+        catch(Exception e) 
+        {
+            Snackbar.Add("Failed to update headline.", Severity.Error);
+        }
     }
 }
