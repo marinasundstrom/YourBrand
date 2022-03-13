@@ -16,11 +16,11 @@
     {
         @if (!string.IsNullOrEmpty(ConsultantProfile?.Headline))
         {
-            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@ConsultantProfile.Headline</MudText>
+            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E; display: inline;">@ConsultantProfile.Headline</MudText>
         }
         else
         {
-            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: gray;">Add a headline</MudText>
+            <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: gray; display: inline;">Add a headline</MudText>
         }
 
         <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="ToggleEditing" />
