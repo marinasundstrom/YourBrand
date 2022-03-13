@@ -18,7 +18,7 @@
                 <MudChipSet>
                     @foreach(var skill in skillGroup.Skills) 
                     {
-                        <MudChip>@skill.Name</MudChip>
+                        <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Name</MudChip>
                     }
                 </MudChipSet>
             </section>
@@ -60,6 +60,16 @@
                 }
             }
         });
+    }
+
+    async Task RemoveSkill(SkillGroup skillGroup, Skill skill)
+    {
+        skillGroup.Skills.Remove(skill);
+
+        if(!skillGroup.Skills.Any())
+        {
+            SkillGroups.Remove(skillGroup);
+        }
     }
 
     public class SkillGroup 
