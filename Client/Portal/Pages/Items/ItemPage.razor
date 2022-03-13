@@ -8,7 +8,20 @@
 @inject IItemsClient ItemsClient
 @inject NavigationManager NavigationManager
 
-@if (item is not null)
+@if (item is null)
+{
+    if(loadingFailed) 
+    {
+        <MudText Typo="Typo.h3" GutterBottom="true">Failed to load page</MudText>
+
+        <MudText Typo="Typo.body1">Please try again later.</MudText>
+    }
+    else 
+    {
+        <LoadingIndicator />
+    }
+}
+else 
 {
     <PageTitle>@item.Name - Skynet</PageTitle>
 

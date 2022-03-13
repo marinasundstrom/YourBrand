@@ -10,6 +10,7 @@ namespace Skynet.Portal.Pages.Items
     {
         MudTable<CommentDto> table;
         ItemDto? item;
+        bool loadingFailed = false;
 
         [Parameter]
         public string Id { get; set; } = null !;
@@ -22,12 +23,22 @@ namespace Skynet.Portal.Pages.Items
 
         async Task LoadAsync()
         {
+            loadingFailed = false;
+
+            #if DEBUG
+            await Task.Delay(2000);
+            #endif
+
             try
             {
+                //throw new Exception();
+
                 item = await ItemsClient.GetItemAsync(Id);
             }
             catch (ApiException<ProblemDetails> exc)
             {
+                loadingFailed = true;
+
                 Snackbar.Add(exc.Result.Detail, Severity.Error);
             }
             catch (AccessTokenNotAvailableException exception)
@@ -36,8 +47,10 @@ namespace Skynet.Portal.Pages.Items
             }
             catch (Exception exc)
             {
+                loadingFailed = true;
+
                 Snackbar.Add(exc.Message, Severity.Error);
-            }           
+            }
         }
 
         async void OnLocationChanged(object sender, LocationChangedEventArgs ev)
