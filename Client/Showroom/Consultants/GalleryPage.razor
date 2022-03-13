@@ -162,6 +162,10 @@
 
         isLoading = true;
 
+        #if DEBUG
+        await Task.Delay(2000);
+        #endif
+
         var results = (await ConsultantProfilesClient.GetConsultantsAsync(page++, 12, Organization?.Id, CompetenceArea?.Id,
         AvailableFromDate, null, null, null));
         consultants.AddRange(results.Items);
