@@ -43,8 +43,8 @@ public class GetSkillsQuery : IRequest<Results<SkillDto>>
         {
             IQueryable<Skill> result = _context
                     .Skills
-                     .OrderBy(o => o.Created)
-                     .AsQueryable();
+                    .OrderBy(o => o.Created)
+                    .AsQueryable();
 
             if (request.SearchString is not null)
             {
@@ -59,6 +59,7 @@ public class GetSkillsQuery : IRequest<Results<SkillDto>>
             }
 
             var items = await result
+                .Include(x => x.Area)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);

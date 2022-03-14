@@ -1,14 +1,39 @@
-﻿<MudCard>
+﻿@inject IConsultantsClient ConsultantsClient
+@inject ISkillsClient SkillsClient
+@inject ISnackbar Snackbar
+
+<MudCard>
     <MudCardContent>
         <div class="d-flex justify-space-between align-center mb-4">
             <MudText Typo="Typo.h5">
                 Skills
             </MudText>
 
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="ToggleEdit" />
         </div>
 
-        @foreach(var skillGroup in SkillGroups) 
+        @if (IsEditing)
+        {
+            <div class="d-flex flex-grow-1 gap-4 mb-4">
+
+                <MudAutocomplete T="SkillDto" Label="Find skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
+                    For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+
+                <MudIconButton Icon="@Icons.Filled.Add" Disabled="@(Skill is null)" OnClick="AddSkill" />
+
+            </div>
+        }
+
+        @foreach (var skillGroup in SkillAreas)
         {
             <section class="mb-4">
                 <MudText Typo="Typo.h6">
@@ -16,9 +41,16 @@
                 </MudText>
 
                 <MudChipSet>
-                    @foreach(var skill in skillGroup.Skills) 
+                    @foreach (var skill in skillGroup.Skills)
                     {
-                        <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Name</MudChip>
+                        @if (IsEditing) 
+                        {
+                            <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Name</MudChip>
+                        }
+                        else 
+                        {
+                            <MudChip>@skill.Name</MudChip>   
+                        }
                     }
                 </MudChipSet>
             </section>
@@ -31,61 +63,103 @@
     [Parameter]
     public string ConsultantProfileId { get; set; } = null!;
 
-    public List<SkillGroup> SkillGroups = new List<SkillGroup>();
+    [Parameter]
+    public bool IsEditing { get; set; }
 
-    protected override void OnInitialized() 
+    public SkillDto Skill { get; set; }
+
+    public List<SkillArea> SkillAreas  { get; set; } = new List<SkillArea>();
+
+    protected override async Task OnInitializedAsync()
     {
-        SkillGroups.Add(new SkillGroup() {
-            Name = "Software Architecture",
-            Skills = new List<Skill>() 
+        var skills = await ConsultantsClient.GetSkillsAsync(ConsultantProfileId, 1, null, null, null, null);
+
+        foreach(var skill in skills.Items) 
+        {          
+            var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == skill.Skill.Area.Id);
+            if(skillGroup is null) 
             {
-                new Skill() {
-                    Name = "Microservices",
-                }
+                skillGroup = new SkillArea() {
+                    Id = skill.Skill.Area.Id,
+                    Name = skill.Skill.Area.Name
+                };
+                
+                SkillAreas.Add(skillGroup);
+
+                SkillAreas = SkillAreas.OrderBy(x => x.Name).ToList();
             }
-        });
 
-         SkillGroups.Add(new SkillGroup() {
-            Name = "Development Platforms",
-            Skills = new List<Skill>() 
-            {
-                new Skill() {
-                    Name = ".NET",
-                },
-                new Skill() {
-                    Name = "Node",
-                },
-                new Skill() {
-                    Name = "Web",
-                }
-            }
-        });
-    }
-
-    async Task RemoveSkill(SkillGroup skillGroup, Skill skill)
-    {
-        skillGroup.Skills.Remove(skill);
-
-        if(!skillGroup.Skills.Any())
-        {
-            SkillGroups.Remove(skillGroup);
+            skillGroup.Skills.Add(new SkillDto() { Id = skill.Skill.Id, Name = skill.Skill.Name });
         }
     }
 
-    public class SkillGroup 
+    async Task AddSkill() 
     {
-        public string Id { get; set; } = null!;
+        var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == Skill.Area.Id);
+        if(skillGroup is null) 
+        {
+            skillGroup = new SkillArea() {
+              Id = Skill.Area.Id,
+              Name = Skill.Area.Name 
+            };
+            
+            SkillAreas.Add(skillGroup);
 
-        public string Name { get; set; } = null!;
+            SkillAreas = SkillAreas.OrderBy(x => x.Name).ToList();
+        }
 
-        public List<Skill> Skills = new List<Skill>();
+        var skill = skillGroup.Skills.FirstOrDefault(x => x.Id == Skill.Id);
+
+        if(skill is not null) 
+        {
+            Snackbar.Add($"The skill \"{skill.Name}\" has already been added.", Severity.Error);
+
+            Skill = null;
+            return;
+        }
+
+        await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto() { SkillId = Skill.Id });
+
+        skillGroup.Skills.Add(new SkillDto() { Id = Skill.Id, Name = Skill.Name });
+
+        Skill = null;
     }
 
-    public class Skill
+    async Task RemoveSkill(SkillArea skillGroup, SkillDto skill)
+    {
+        await ConsultantsClient.RemoveSkillAsync(ConsultantProfileId, skill.Id);
+
+        skillGroup.Skills.Remove(skill);
+
+        if (!skillGroup.Skills.Any())
+        {
+            SkillAreas.Remove(skillGroup);
+        }
+    }
+
+    void ToggleEdit() => IsEditing = !IsEditing;
+
+    public class SkillArea
     {
         public string Id { get; set; } = null!;
 
         public string Name { get; set; } = null!;
+
+        public List<SkillDto> Skills  { get; set; } = new List<SkillDto>();
+    }
+
+    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
+    {
+        try
+        {
+            var results = await SkillsClient.GetSkillsAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
     }
 }
-

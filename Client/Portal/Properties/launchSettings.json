@@ -8,12 +8,12 @@
     }
   },
   "profiles": {
-    "Catalog.Web": {
+    "Portal": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "https://localhost:7212;http://localhost:5240",
+      "applicationUrl": "https://localhost;http://localhost",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

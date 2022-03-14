@@ -66,11 +66,16 @@ public class GetSkillsQuery : IRequest<Results<ConsultantProfileSkillDto>>
 
             if(request.PageSize is null) 
             {
-                items = result.AsQueryable();
+                items = result
+                    .Include(x => x.Skill)
+                    .ThenInclude(x => x.Area)
+                    .AsQueryable();
             }
             else 
             {
                 items = result
+                    .Include(x => x.Skill)
+                    .ThenInclude(x => x.Area)
                     .Skip((request.Page) * request.PageSize.GetValueOrDefault())
                     .Take(request.PageSize.GetValueOrDefault());
             }

@@ -32,6 +32,8 @@ public class GetSkillQuery : IRequest<ConsultantProfileSkillDto?>
         {
             var consultantProfileSkill = await _context
                .ConsultantProfileSkills
+               .Include(x => x.Skill)
+               .ThenInclude(x => x.Area)
                .FirstAsync(c => c.SkillId == request.Id, cancellationToken);
 
             if (consultantProfileSkill is null)

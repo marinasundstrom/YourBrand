@@ -40,6 +40,14 @@ public static class ServiceExtensions
         .AddTypedClient<Skynet.Showroom.Client.ICompetenceAreasClient>((http, sp) => new Skynet.Showroom.Client.CompetenceAreasClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
+        services.AddHttpClient(nameof(Skynet.Showroom.Client.ISkillsClient), (sp, http) =>
+        {
+            var navigationManager = sp.GetRequiredService<NavigationManager>();
+            http.BaseAddress = new Uri($"{navigationManager.BaseUri}showroom/");
+        })
+        .AddTypedClient<Skynet.Showroom.Client.ISkillsClient>((http, sp) => new Skynet.Showroom.Client.SkillsClient(http))
+        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+
         return services;
     }
 }
