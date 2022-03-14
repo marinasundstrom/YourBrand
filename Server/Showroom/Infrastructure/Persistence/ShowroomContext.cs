@@ -58,7 +58,7 @@ class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<CaseConsultant> CaseConsultants { get; set; } = null!;
 
-    public DbSet<SkillGroup> SkillGroups { get; set; } = null!;
+    public DbSet<SkillArea> SkillAreas { get; set; } = null!;
 
     public DbSet<Skill> Skills { get; set; } = null!;
 

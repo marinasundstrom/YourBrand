@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Skynet.Showroom.Infrastructure.Persistence.Configurations;
 
-class SkillGroupConfiguration : IEntityTypeConfiguration<SkillGroup>
+class SkillAreaConfiguration : IEntityTypeConfiguration<SkillArea>
 {
-    public void Configure(EntityTypeBuilder<SkillGroup> builder)
+    public void Configure(EntityTypeBuilder<SkillArea> builder)
     {
-        builder.ToTable("SkillGroups");
+        builder.ToTable("SkillAreas");
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 

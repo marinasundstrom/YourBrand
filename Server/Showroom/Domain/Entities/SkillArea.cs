@@ -2,11 +2,11 @@
 
 namespace Skynet.Showroom.Domain.Entities;
 
-public class SkillGroup : AuditableEntity, ISoftDelete
+public class SkillArea : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = null!;
 
-    public CompetenceArea CompetenceArea { get; set; } = null!;
+    public CompetenceArea? CompetenceArea { get; set; } = null!;
 
     public string Name { get; set; }  = null!;
     public string? Description { get; set; }

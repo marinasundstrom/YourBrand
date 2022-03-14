@@ -72,5 +72,56 @@ public static class Seed
 
             await context.SaveChangesAsync();
         }
+
+        if (!context.SkillAreas.Any())
+        {
+            var area1 = new SkillArea
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Software Architecture"
+            };
+
+            area1.Skills.Add(new Skill {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Micro services"
+            });
+
+            area1.Skills.Add(new Skill {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Event-driven Architecture"
+            });
+
+            context.SkillAreas.Add(area1);
+
+            var area2 = new SkillArea
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Development Platforms"
+            };
+
+            area2.Skills.Add(new Skill {
+                Id = Guid.NewGuid().ToString(),
+                Name = ".NET"
+            });
+
+            area2.Skills.Add(new Skill {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Java"
+            });
+
+            area2.Skills.Add(new Skill {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Node"
+            });
+
+            area2.Skills.Add(new Skill {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Web"
+            });
+
+            context.SkillAreas.Add(area2);
+
+            await context.SaveChangesAsync();
+        }
     }
 }

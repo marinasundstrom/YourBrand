@@ -1,6 +1,7 @@
 ﻿
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Skynet.Showroom.Application.Common.Models;
@@ -10,9 +11,12 @@ using Skynet.Showroom.Application.ConsultantProfiles.Experiences;
 using Skynet.Showroom.Application.ConsultantProfiles.Experiences.Commands;
 using Skynet.Showroom.Application.ConsultantProfiles.Experiences.Queries;
 using Skynet.Showroom.Application.ConsultantProfiles.Queries;
+using Skynet.Showroom.Application.ConsultantProfiles.Skills.Commands;
+using Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 namespace Skynet.Showroom.WebApi.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 [ApiController]
 public class ConsultantsController : ControllerBase
@@ -79,7 +83,7 @@ public class ConsultantsController : ControllerBase
     }
 
     [HttpGet("{id}/Experiences")]
-    public async Task<Results<ExperienceDto>> GetExperiences(string? id, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<Results<ExperienceDto>> GetExperiences(string? id, int page = 1, int? pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send(new GetExperiencesQuery(page - 1, pageSize, id, searchString, sortBy, sortDirection), cancellationToken);
     }
@@ -112,4 +116,42 @@ public class ConsultantsController : ControllerBase
     {
         await _mediator.Send(new RemoveExperienceCommand(id, experienceId), cancellationToken);
     }
+
+    [HttpGet("{id}/Skills")]
+    public async Task<Results<ConsultantProfileSkillDto>> GetSkills(string id, int page = 1, int? pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    {
+        return await _mediator.Send(new GetSkillsQuery(id, page - 1, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+    }
+
+    [HttpGet("{id}/Skills/{skillId}")]
+    public async Task<ConsultantProfileSkillDto?> GetSkill(string id, string skillId, CancellationToken cancellationToken)
+    {
+        return await _mediator.Send(new GetSkillQuery(skillId), cancellationToken);
+    }
+
+    [HttpPost("{id}/Skills")]
+    public async Task AddSkill(string id, AddConsultantProfileSkillDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new AddSkillCommand(id, dto.SkillId),
+            cancellationToken);
+    }
+
+    [HttpPut("{id}/Skills/{skillId}")]
+    public async Task UpdateSkill(string id, string skillId, UpdateConsultantProfileSkillDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new UpdateSkillCommand(skillId, string.Empty),
+            cancellationToken);
+    }
+
+    [HttpDelete("{id}/Skills/{skillId}")]
+    public async Task RemoveSkill(string id, string skillId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new RemoveSkillCommand(skillId), cancellationToken);
+    }
 }
+
+public record AddConsultantProfileSkillDto(string SkillId);
+
+public record UpdateConsultantProfileSkillDto(string SkillId);

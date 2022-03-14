@@ -7,33 +7,33 @@ using Skynet.Showroom.Application.Common.Interfaces;
 using Skynet.Showroom.Application.Common.Models;
 using Skynet.Showroom.Domain.Entities;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Experiences.Queries;
+namespace Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
-public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
+public class GetSkillsQuery : IRequest<Results<ConsultantProfileSkillDto>>
 {
-    public GetExperiencesQuery(int page = 0, int? pageSize = 10, string? consultantProfileId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
+    public GetSkillsQuery(string consultantProfileId, int page = 0, int? pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
     {
+        ConsultantProfileId = consultantProfileId;
         Page = page;
         PageSize = pageSize;
-        ConsultantProfileId = consultantProfileId;
         SearchString = searchString;
         SortBy = sortBy;
         SortDirection = sortDirection;
     }
 
-    public string? ConsultantProfileId { get; }
     public string? SearchString { get; }
     public string? SortBy { get; }
     public Common.Models.SortDirection? SortDirection { get; }
+    public string ConsultantProfileId { get; }
     public int Page { get; }
     public int? PageSize { get; }
 
-    class GetExperiencesQueryHandler : IRequestHandler<GetExperiencesQuery, Results<ExperienceDto>>
+    class GetSkillsQueryHandler : IRequestHandler<GetSkillsQuery, Results<ConsultantProfileSkillDto>>
     {
         private readonly IShowroomContext _context;
         private readonly ICurrentUserService currentUserService;
 
-        public GetExperiencesQueryHandler(
+        public GetSkillsQueryHandler(
             IShowroomContext context,
             ICurrentUserService currentUserService)
         {
@@ -41,25 +41,18 @@ public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
             this.currentUserService = currentUserService;
         }
 
-        public async Task<Results<ExperienceDto>> Handle(GetExperiencesQuery request, CancellationToken cancellationToken)
+        public async Task<Results<ConsultantProfileSkillDto>> Handle(GetSkillsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<ConsultantProfileExperience> result = _context
-                    .ConsultantProfileExperiences
-                    .OrderByDescending(x => x.StartDate)
-                    .ThenByDescending(x => x.EndDate)
+            IQueryable<ConsultantProfileSkill> result = _context
+                    .ConsultantProfileSkills
+                    .Include(x => x.Skill)
+                    .Where(x => x.ConsultantProfileId == request.ConsultantProfileId)
+                    .OrderBy(o => o.Created)
                     .AsQueryable();
-
-            if (!string.IsNullOrEmpty(request.ConsultantProfileId))
-            {
-                result = result.Where(e => e.ConsultantProfile.Id == request.ConsultantProfileId);
-            }
 
             if (request.SearchString is not null)
             {
-                result = result.Where(p =>
-                    p.CompanyName.ToLower().Contains(request.SearchString.ToLower())
-                    || p.Location!.ToLower().Contains(request.SearchString.ToLower())
-                    || p.Title.ToLower().Contains(request.SearchString.ToLower()));
+                result = result.Where(ca => ca.Skill.Name.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalCount = await result.CountAsync(cancellationToken);
@@ -69,7 +62,7 @@ public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
 
-            IQueryable<ConsultantProfileExperience> items = null!;
+            IQueryable<ConsultantProfileSkill> items = null!;
 
             if(request.PageSize is null) 
             {
@@ -82,9 +75,7 @@ public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
                     .Take(request.PageSize.GetValueOrDefault());
             }
 
-            return new Results<ExperienceDto>(
-                items.Select(e => e.ToDto()), 
-                totalCount);
+            return new Results<ConsultantProfileSkillDto>(items.Select(cp => cp.ToDto()), totalCount);
         }
     }
 }

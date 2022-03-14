@@ -6,7 +6,7 @@ public class Skill : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = null!;
 
-    public SkillGroup Group { get; set; } = null!;
+    public SkillArea Area { get; set; } = null!;
 
     public string Name { get; set; }  = null!;
     public string? Description { get; set; }

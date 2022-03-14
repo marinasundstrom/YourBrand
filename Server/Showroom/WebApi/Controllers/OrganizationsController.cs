@@ -1,6 +1,7 @@
 ﻿
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Skynet.Showroom.Application.Common.Models;
@@ -10,6 +11,7 @@ using Skynet.Showroom.Application.Organizations.Queries;
 
 namespace Skynet.Showroom.WebApi.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 [ApiController]
 public class OrganizationsController : ControllerBase

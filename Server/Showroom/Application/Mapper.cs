@@ -8,6 +8,8 @@ using Skynet.Showroom.Application.Users;
 using Skynet.Showroom.Application.Common.Models;
 using Skynet.Showroom.Application.Organizations;
 using Skynet.Showroom.Application.ConsultantProfiles.Experiences;
+using Skynet.Showroom.Application.Skills;
+using Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 namespace Skynet.Showroom.Application;
 
@@ -58,5 +60,20 @@ public static class Mapper
     public static ExperienceDto ToDto(this Domain.Entities.ConsultantProfileExperience experience)
     {
         return new ExperienceDto(experience.Id, experience.Title, experience.CompanyName, experience.Location, experience.StartDate, experience.EndDate, experience.Description);
+    }
+
+    public static SkillDto ToDto(this Domain.Entities.Skill skill)
+    {
+        return new SkillDto(skill.Id, skill.Name, skill.Area.ToDto());
+    }
+
+    public static SkillAreaDto ToDto(this Domain.Entities.SkillArea skillArea)
+    {
+        return new SkillAreaDto(skillArea.Id, skillArea.Name);
+    }
+
+    public static ConsultantProfileSkillDto ToDto(this Domain.Entities.ConsultantProfileSkill consultantProfileSkill)
+    {
+        return new ConsultantProfileSkillDto(consultantProfileSkill.Id, consultantProfileSkill.Skill.ToDto());
     }
 }

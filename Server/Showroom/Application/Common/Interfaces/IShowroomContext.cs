@@ -19,7 +19,7 @@ public interface IShowroomContext
 
     DbSet<CaseConsultant> CaseConsultants { get; }
 
-    DbSet<SkillGroup> SkillGroups { get; }
+    DbSet<SkillArea> SkillAreas { get; }
 
     DbSet<Skill> Skills { get; }
 
