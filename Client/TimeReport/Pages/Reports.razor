@@ -9,10 +9,14 @@
 
 <PageTitle>Reports - Skynet</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Reports</MudText>
-
-@if (projects is not null)
+@if (projects is null)
 {
+    <LoadingIndicator />
+}
+else
+{
+    <MudText Typo="Typo.h3" GutterBottom="true">Reports</MudText>
+    
     <MudCard>
         <MudCardContent>
             <MudGrid>

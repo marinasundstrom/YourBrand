@@ -6,7 +6,11 @@
 @inject IProjectsClient ProjectsClient
 @inject IExpensesClient ExpensesClient
 
-@if (project is not null)
+@if (project is null)
+{
+    <LoadingIndicator />
+}
+else
 {
     <PageTitle>@project.Name - Skynet</PageTitle>
 

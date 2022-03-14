@@ -6,7 +6,11 @@
 @inject IdentityService.Client.IUsersClient UsersClient
 @inject Skynet.TimeReport.Client.IUsersClient UsersClient2
 
-@if (user is not null)
+@if (user is null)
+{
+    <LoadingIndicator />
+}
+else 
 {
     <PageTitle>@user.GetDisplayName() - Skynet</PageTitle>
 
