@@ -10,6 +10,7 @@ using Skynet.Showroom.Application.Organizations;
 using Skynet.Showroom.Application.ConsultantProfiles.Experiences;
 using Skynet.Showroom.Application.Skills;
 using Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
+using Skynet.Showroom.Application.Cases;
 
 namespace Skynet.Showroom.Application;
 
@@ -75,5 +76,10 @@ public static class Mapper
     public static ConsultantProfileSkillDto ToDto(this Domain.Entities.ConsultantProfileSkill consultantProfileSkill)
     {
         return new ConsultantProfileSkillDto(consultantProfileSkill.Id, consultantProfileSkill.Skill.ToDto());
+    }
+
+    public static CaseDto ToDto(this Domain.Entities.Case @case)
+    {
+        return new CaseDto(@case.Id, @case.Description);
     }
 }
