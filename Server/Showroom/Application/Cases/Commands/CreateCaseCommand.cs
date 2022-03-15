@@ -18,12 +18,10 @@ public record CreateCaseCommand(string? Description) : IRequest
 
         public async Task<Unit> Handle(CreateCaseCommand request, CancellationToken cancellationToken)
         {
-            var @case = await context.Cases.FirstOrDefaultAsync(i => i.Description == request.Description, cancellationToken);
-
-            if (@case is not null) throw new Exception();
-
-            @case = new Domain.Entities.Case
+            var @case = new Domain.Entities.Case
             {
+                Id = Guid.NewGuid().ToString(),
+                Status = Domain.Entities.CaseStatus.Created,
                 Description = request.Description
             };
 

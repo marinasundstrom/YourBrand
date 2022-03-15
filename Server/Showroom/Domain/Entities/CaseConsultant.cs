@@ -6,7 +6,7 @@ public class CaseConsultant : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = null!;
 
-    public User User { get; set; } = null!;
+    public ConsultantProfile ConsultantProfile { get; set; } = null!;
 
     public string? Presentation { get; set; }
 

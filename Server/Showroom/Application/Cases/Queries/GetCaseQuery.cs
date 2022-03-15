@@ -26,13 +26,16 @@ public class GetCaseQuery : IRequest<CaseDto?>
     {
         private readonly IShowroomContext _context;
         private readonly ICurrentUserService currentUserService;
+        private readonly IUrlHelper _urlHelper;
 
         public GetCaseQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IUrlHelper urlHelper)
         {
             _context = context;
             this.currentUserService = currentUserService;
+            _urlHelper = urlHelper;
         }
 
         public async Task<CaseDto?> Handle(GetCaseQuery request, CancellationToken cancellationToken)
@@ -46,7 +49,7 @@ public class GetCaseQuery : IRequest<CaseDto?>
                 return null;
             }
 
-            return @case.ToDto();
+            return @case.ToDto(_urlHelper);
         }
     }
 }

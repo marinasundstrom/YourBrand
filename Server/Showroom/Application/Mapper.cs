@@ -78,8 +78,13 @@ public static class Mapper
         return new ConsultantProfileSkillDto(consultantProfileSkill.Id, consultantProfileSkill.Skill.ToDto());
     }
 
-    public static CaseDto ToDto(this Domain.Entities.Case @case)
+    public static CaseDto ToDto(this Domain.Entities.Case @case, IUrlHelper urlHelper)
     {
-        return new CaseDto(@case.Id, @case.Description);
+        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.Consultants.Select(x => x.ToDto(urlHelper)));
+    }
+
+    public static CaseConsultantDto ToDto(this Domain.Entities.CaseConsultant caseConsultant, IUrlHelper urlHelper)
+    {
+        return new CaseConsultantDto(caseConsultant.Id, caseConsultant.ConsultantProfile.ToDto(urlHelper), caseConsultant.Presentation);
     }
 }

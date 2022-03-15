@@ -37,13 +37,16 @@ public class GetCasesQuery : IRequest<Results<CaseDto>>
     {
         private readonly IShowroomContext _context;
         private readonly ICurrentUserService currentUserService;
+        private readonly IUrlHelper _urlHelper;
 
         public GetCasesQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IUrlHelper urlHelper)
         {
             _context = context;
             this.currentUserService = currentUserService;
+            _urlHelper = urlHelper;
         }
 
         public async Task<Results<CaseDto>> Handle(GetCasesQuery request, CancellationToken cancellationToken)
@@ -70,7 +73,7 @@ public class GetCasesQuery : IRequest<Results<CaseDto>>
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);
 
-            return new Results<CaseDto>(items.Select(cp => cp.ToDto()), totalCount);
+            return new Results<CaseDto>(items.Select(cp => cp.ToDto(_urlHelper)), totalCount);
         }
     }
 }
