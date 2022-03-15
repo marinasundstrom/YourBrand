@@ -61,7 +61,7 @@
                     style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;"
                     class="rounded-circle" />
                     </div>
-                    <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
+                    <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-4 mb-2" Style="text-align: center;">
                         @if (!string.IsNullOrEmpty(consultant.DisplayName))
                         {
                             @consultant.DisplayName
@@ -71,7 +71,7 @@
                             <text>@consultant.FirstName @consultant.LastName</text>
                         }
                     </MudText>
-                    <MudText Typo="Typo.h6" Class="mb-4" Style="text-align: center; color: #9E9E9E;">@consultant.Headline
+                    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-4" Style="color: #9E9E9E;">@consultant.Headline
                     </MudText>
                 </a>
             </MudItem>
