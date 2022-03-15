@@ -44,7 +44,6 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
         public async Task<ItemsResult<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Users
-                .Include(u => u.Roles)
                 .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
@@ -69,6 +68,7 @@ public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
             }
 
             var users = await query
+                .Include(u => u.Roles)
                 .Include(u => u.Department)
                 .ToListAsync(cancellationToken);
 
