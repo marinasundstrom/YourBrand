@@ -16,6 +16,8 @@ public class ConsultantProfile : AuditableEntity, ISoftDelete
 
     public DateTime? BirthDate { get; set; }
 
+    public string? Location { get; set; }
+
     public User? User { get; set; }
 
     public string? UserId { get; set; }

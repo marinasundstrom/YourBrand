@@ -18,7 +18,8 @@
                               For="@(() => DisplayName)" />
                 <MudDatePicker Label="Birth Date" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Date="BirthDate"
                               For="@(() => BirthDate)" />
-
+                <MudTextField Label="Location" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="Location"
+                              For="@(() => Location)" />
                 @*
         <MudAutocomplete T="OrganizationDto" Label="Organization" Class="mb-2"
                          Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Organization" For="() => Organization"
@@ -75,6 +76,8 @@
 
     public DateTime? BirthDate { get; set; } = null!;
 
+    public string? Location { get; set; } = null!;
+
     public OrganizationDto? Organization { get; set; } = null!;
 
     public CompetenceAreaDto? CompetenceArea { get; set; } = null!;
@@ -87,6 +90,7 @@
             LastName = ConsultantProfile.LastName;
             DisplayName = ConsultantProfile.DisplayName;
             BirthDate = ConsultantProfile.BirthDate?.Date;
+            Location = ConsultantProfile.Location;
             Organization = ConsultantProfile.Organization;
             CompetenceArea = ConsultantProfile.CompetenceArea;
         }
@@ -101,13 +105,15 @@
                 FirstName = FirstName,
                 LastName = LastName,
                 DisplayName = DisplayName,
-                BirthDate = BirthDate
+                BirthDate = BirthDate,
+                Location = Location
             });
 
             ConsultantProfile.FirstName = FirstName;
             ConsultantProfile.LastName = LastName;
             ConsultantProfile.DisplayName = DisplayName;
             ConsultantProfile.BirthDate = BirthDate;
+            ConsultantProfile.Location = Location;
 
             Dialog.Close(DialogResult.Ok(true));
         }

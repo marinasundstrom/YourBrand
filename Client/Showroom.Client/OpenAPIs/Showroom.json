@@ -2083,103 +2083,34 @@
           "id": {
             "type": "string"
           },
+          "status": {
+            "type": "string"
+          },
           "description": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "SortDirection": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "Desc",
-          "Asc"
-        ],
-        "enum": [
-          "Desc",
-          "Asc"
-        ]
-      },
-      "CreateCaseDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "description": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "UpdateCaseDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "description": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "ResultsOfCompetenceAreaDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
+          },
+          "consultants": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CompetenceAreaDto"
+              "$ref": "#/components/schemas/CaseConsultantDto"
             }
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
-      "CompetenceAreaDto": {
+      "CaseConsultantDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
             "type": "string"
           },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "CreateCompetenceAreaDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdateCompetenceAreaDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "ResultsOfConsultantProfileDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ConsultantProfileDto"
-            }
+          "consultant": {
+            "$ref": "#/components/schemas/ConsultantProfileDto"
           },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
+          "presentation": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -2203,6 +2134,10 @@
           "birthDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
             "nullable": true
           },
           "organization": {
@@ -2282,6 +2217,100 @@
           },
           "country": {
             "type": "string"
+          }
+        }
+      },
+      "CompetenceAreaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SortDirection": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Desc",
+          "Asc"
+        ],
+        "enum": [
+          "Desc",
+          "Asc"
+        ]
+      },
+      "CreateCaseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateCaseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResultsOfCompetenceAreaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompetenceAreaDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CreateCompetenceAreaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateCompetenceAreaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultsOfConsultantProfileDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConsultantProfileDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -2391,6 +2420,10 @@
           "birthDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
             "nullable": true
           }
         }

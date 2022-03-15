@@ -92,6 +92,12 @@ else
                             <dd>@consultant.BirthDate?.ToString("yyyy/MM/dd") (@(Span.Humanize(minUnit: Humanizer.Localisation.TimeUnit.Year, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2)))</dd>
                         }
 
+                        @if (!string.IsNullOrEmpty(consultant.Location))
+                        {
+                            <dt>Location</dt>
+                            <dd>@consultant.Location</dd>
+                        }
+
                         <dt>Organization</dt>
                         <dd>@consultant.Organization.Name</dd>
 

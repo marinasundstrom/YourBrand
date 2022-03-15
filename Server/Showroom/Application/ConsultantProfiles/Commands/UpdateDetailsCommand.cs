@@ -35,6 +35,7 @@ public record UpdateDetailsCommand(string Id, ConsultantProfileDetailsDto Detail
             consultantProfile.LastName = request.Details.LastName;
             consultantProfile.DisplayName = request.Details.DisplayName;
             consultantProfile.BirthDate = request.Details.BirthDate;
+            consultantProfile.Location = request.Details.Location;
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -43,4 +44,4 @@ public record UpdateDetailsCommand(string Id, ConsultantProfileDetailsDto Detail
     }
 }
 
-public record ConsultantProfileDetailsDto(string FirstName, string LastName, string? DisplayName, DateTime? BirthDate);
+public record ConsultantProfileDetailsDto(string FirstName, string LastName, string? DisplayName, DateTime? BirthDate, string? Location);
