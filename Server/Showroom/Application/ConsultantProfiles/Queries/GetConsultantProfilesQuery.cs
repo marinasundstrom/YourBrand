@@ -57,6 +57,7 @@ public class GetConsultantProfilesQuery : IRequest<Results<ConsultantProfileDto>
                     .Include(x => x.Organization)
                     .Include(c => c.CompetenceArea)
                     //.Include(c => c.Manager)
+                    .AsNoTracking()
                     .AsQueryable();
 
             if (!string.IsNullOrEmpty(request.OrganizationId))

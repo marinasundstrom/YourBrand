@@ -51,6 +51,7 @@ public class GetOrganizationsQuery : IRequest<Results<OrganizationDto>>
             IQueryable<Organization> result = _context
                     .Organizations
                     .OrderBy(o => o.Created)
+                    .AsNoTracking()
                     .AsQueryable();
 
             if (request.SearchString is not null)

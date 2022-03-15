@@ -45,9 +45,9 @@ public class GetSkillsQuery : IRequest<Results<ConsultantProfileSkillDto>>
         {
             IQueryable<ConsultantProfileSkill> result = _context
                     .ConsultantProfileSkills
-                    .Include(x => x.Skill)
                     .Where(x => x.ConsultantProfileId == request.ConsultantProfileId)
                     .OrderBy(o => o.Created)
+                    .AsNoTracking()
                     .AsQueryable();
 
             if (request.SearchString is not null)

@@ -45,6 +45,7 @@ public class GetConsultantProfileQuery : IRequest<ConsultantProfileDto>
                .Include(x => x.Organization)
                .Include(c => c.CompetenceArea)
                //.Include(c => c.Manager)
+               .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 
             if (consultantProfile is null)

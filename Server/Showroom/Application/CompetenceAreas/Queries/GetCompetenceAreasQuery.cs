@@ -51,6 +51,7 @@ public class GetCompetenceAreasQuery : IRequest<Results<CompetenceAreaDto>>
             IQueryable<CompetenceArea> result = _context
                     .CompetenceAreas
                      .OrderBy(o => o.Created)
+                     .AsNoTracking()
                      .AsQueryable();
 
             if (request.SearchString is not null)

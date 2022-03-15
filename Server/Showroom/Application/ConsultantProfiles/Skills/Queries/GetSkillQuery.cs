@@ -34,6 +34,7 @@ public class GetSkillQuery : IRequest<ConsultantProfileSkillDto?>
                .ConsultantProfileSkills
                .Include(x => x.Skill)
                .ThenInclude(x => x.Area)
+               .AsNoTracking()
                .FirstAsync(c => c.SkillId == request.Id, cancellationToken);
 
             if (consultantProfileSkill is null)

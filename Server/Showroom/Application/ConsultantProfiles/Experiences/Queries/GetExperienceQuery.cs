@@ -33,6 +33,7 @@ public record GetExperienceQuery(string ConsultantProfileId, string Id) : IReque
             var experience = await _context
                .ConsultantProfileExperiences
                //.Include(c => c.Manager)
+               .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 
             if (experience is null)

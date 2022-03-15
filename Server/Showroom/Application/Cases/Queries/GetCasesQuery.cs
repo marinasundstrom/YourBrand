@@ -54,6 +54,7 @@ public class GetCasesQuery : IRequest<Results<CaseDto>>
             IQueryable<Case> result = _context
                     .Cases
                      .OrderBy(o => o.Created)
+                     .AsNoTracking()
                      .AsQueryable();
 
             if (request.SearchString is not null)

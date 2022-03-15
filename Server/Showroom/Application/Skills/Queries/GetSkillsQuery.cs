@@ -44,6 +44,7 @@ public class GetSkillsQuery : IRequest<Results<SkillDto>>
             IQueryable<Skill> result = _context
                     .Skills
                     .OrderBy(o => o.Created)
+                    .AsNoTracking()
                     .AsQueryable();
 
             if (request.SearchString is not null)

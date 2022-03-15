@@ -41,6 +41,7 @@ public class GetOrganizationQuery : IRequest<OrganizationDto?>
         {
             var organization = await _context
                .Organizations
+               .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 
             if (organization is null)

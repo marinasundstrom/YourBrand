@@ -32,6 +32,7 @@ public class GetSkillAreaQuery : IRequest<SkillAreaDto?>
         {
             var skillArea = await _context
                .SkillAreas
+               .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id, cancellationToken);
 
             if (skillArea is null)
