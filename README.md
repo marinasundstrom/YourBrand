@@ -1,12 +1,12 @@
 # YourCompany
 
-App for managing a consultancy business - from sales to running a project. 
+App for managing a consultancy business - from sales to running a project - A private business network.
 
 This project brings [TimeReport](https://github.com/marinasundstrom/timereport) and a re-imagined [Showroom](https://github.com/marinasundstrom/showroom) together into one product.
 
 This is a concept developed when learning building distributed applications. It is not production ready. But please, be inspired! :)
 
-Based on the [item-catalog](https://github.com/marinasundstrom/item-catalog) project - which at the moment is more evolved.
+Based on the [item-catalog](https://github.com/marinasundstrom/item-catalog) project - which at the moment is more evolved. I try to keep the common functionality in sync.
 
 ## Screenshots
 
