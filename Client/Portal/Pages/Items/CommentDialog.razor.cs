@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 using MudBlazor;
 
-using Skynet.Client;
+using Skynet.AppService.Client;
 
 using System.ComponentModel.DataAnnotations;
 

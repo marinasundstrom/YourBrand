@@ -5,7 +5,7 @@ VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Server\AppService\WebApi\WebApi.csproj", "{FE6903F2-2B09-494A-8F14-5F9D9428FA04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skynet.Client", "Client\Skynet.Client\Skynet.Client.csproj", "{C4876FBC-02BE-4E01-B97A-6B109C094074}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppService.Client", "Client\AppService.Client\AppService.Client.csproj", "{C4876FBC-02BE-4E01-B97A-6B109C094074}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4543430-B73F-4E9B-A833-54A5A7E6E016}"
 	ProjectSection(SolutionItems) = preProject

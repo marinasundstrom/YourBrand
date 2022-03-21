@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Skynet.Client;
+using Skynet.AppService.Client;
 using MudBlazor;
 
 namespace Skynet.Portal.Pages.Items
@@ -114,7 +114,7 @@ namespace Skynet.Portal.Pages.Items
             {
                 selectedPage = page;
 
-                var results = await ItemsClient.GetItemsAsync(selectedPage - 1, pageSize, null, Skynet.Client.SortDirection.Asc);
+                var results = await ItemsClient.GetItemsAsync(selectedPage - 1, pageSize, null, Skynet.AppService.Client.SortDirection.Asc);
 
                 items = results.Items;
 

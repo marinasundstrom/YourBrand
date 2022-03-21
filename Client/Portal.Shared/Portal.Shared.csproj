@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Skynet.Client\Skynet.Client.csproj" />
+    <ProjectReference Include="..\AppService.Client\AppService.Client.csproj" />
   </ItemGroup>
 </Project>

@@ -38,42 +38,42 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddClients(this IServiceCollection services) 
     {
-        services.AddHttpClient(nameof(Skynet.Client.IClient), (sp, http) =>
+        services.AddHttpClient(nameof(Skynet.AppService.Client.IClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<Skynet.Client.IClient>((http, sp) => new Skynet.Client.Client(http));
+        .AddTypedClient<Skynet.AppService.Client.IClient>((http, sp) => new Skynet.AppService.Client.Client(http));
 
-        services.AddHttpClient(nameof(Skynet.Client.IItemsClient), (sp, http) =>
+        services.AddHttpClient(nameof(Skynet.AppService.Client.IItemsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<Skynet.Client.IItemsClient>((http, sp) => new Skynet.Client.ItemsClient(http))
+        .AddTypedClient<Skynet.AppService.Client.IItemsClient>((http, sp) => new Skynet.AppService.Client.ItemsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(Skynet.Client.IDoSomethingClient), (sp, http) =>
+        services.AddHttpClient(nameof(Skynet.AppService.Client.IDoSomethingClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<Skynet.Client.IDoSomethingClient>((http, sp) => new Skynet.Client.DoSomethingClient(http));
+        .AddTypedClient<Skynet.AppService.Client.IDoSomethingClient>((http, sp) => new Skynet.AppService.Client.DoSomethingClient(http));
 
-        services.AddHttpClient(nameof(Skynet.Client.ISearchClient), (sp, http) =>
+        services.AddHttpClient(nameof(Skynet.AppService.Client.ISearchClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<Skynet.Client.ISearchClient>((http, sp) => new Skynet.Client.SearchClient(http))
+        .AddTypedClient<Skynet.AppService.Client.ISearchClient>((http, sp) => new Skynet.AppService.Client.SearchClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(Skynet.Client.INotificationsClient), (sp, http) =>
+        services.AddHttpClient(nameof(Skynet.AppService.Client.INotificationsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<Skynet.Client.INotificationsClient>((http, sp) => new Skynet.Client.NotificationsClient(http))
+        .AddTypedClient<Skynet.AppService.Client.INotificationsClient>((http, sp) => new Skynet.AppService.Client.NotificationsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
         services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>

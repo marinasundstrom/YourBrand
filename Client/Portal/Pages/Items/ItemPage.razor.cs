@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using Skynet.Client;
+using Skynet.AppService.Client;
 using MudBlazor;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -64,7 +64,7 @@ namespace Skynet.Portal.Pages.Items
         {
             try
             { 
-                var results = await ItemsClient.GetCommentsAsync(Id, state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Client.SortDirection.Asc : Skynet.Client.SortDirection.Desc);
+                var results = await ItemsClient.GetCommentsAsync(Id, state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.AppService.Client.SortDirection.Asc : Skynet.AppService.Client.SortDirection.Desc);
                 return new TableData<CommentDto>()
                 {
                     TotalItems = results.TotalCount,

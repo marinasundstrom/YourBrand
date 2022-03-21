@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Skynet.Client;
+using Skynet.AppService.Client;
 using MudBlazor;
 
 namespace Skynet.Portal.Pages.Items
@@ -102,7 +102,7 @@ namespace Skynet.Portal.Pages.Items
         {
             try
             {
-                var results = await ItemsClient.GetItemsAsync(state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.Client.SortDirection.Asc : Skynet.Client.SortDirection.Desc);
+                var results = await ItemsClient.GetItemsAsync(state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.AppService.Client.SortDirection.Asc : Skynet.AppService.Client.SortDirection.Desc);
                 return new TableData<ItemDto>()
                 {TotalItems = results.TotalCount, Items = results.Items};
             }

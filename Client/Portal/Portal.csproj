@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Skynet.Client\Skynet.Client.csproj">
+    <ProjectReference Include="..\AppService.Client\AppService.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\TimeReport\TimeReport.csproj">
