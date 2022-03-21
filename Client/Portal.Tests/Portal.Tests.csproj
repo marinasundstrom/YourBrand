@@ -28,9 +28,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Portal\Portal.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="bunit" />
-    <None Remove="Shouldly" />
-    <None Remove="NSubstitute" />
-  </ItemGroup>
+
 </Project>

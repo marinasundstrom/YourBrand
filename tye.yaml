@@ -19,13 +19,13 @@ services:
     port: 5020
 
 - name: worker
-  project: Server/Worker/Worker.csproj
+  project: Server/Worker/Worker/Worker.csproj
   bindings:
   - protocol: https
     port: 5030
 
 - name: identity
-  project: Server/IdentityService/IdentityService.csproj
+  project: Server/IdentityService/IdentityService/IdentityService.csproj
   bindings:
   - protocol: https
     port: 5040

@@ -8,13 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IdentityService.Client\IdentityService.Client.csproj" />
-    <ProjectReference Include="..\..\Client\TimeReport.Client\TimeReport.Client.csproj" />
+    <ProjectReference Include="..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
+    <ProjectReference Include="..\TimeReport\TimeReport.Client\TimeReport.Client.csproj" />
+  </ItemGroup>
 
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Microsoft.Extensions.Http" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
   </ItemGroup>

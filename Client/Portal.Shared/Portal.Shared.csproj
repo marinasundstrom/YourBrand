@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppService.Client\AppService.Client.csproj" />
+    <ProjectReference Include="..\..\Server\AppService\AppService.Client\AppService.Client.csproj" />
   </ItemGroup>
 </Project>

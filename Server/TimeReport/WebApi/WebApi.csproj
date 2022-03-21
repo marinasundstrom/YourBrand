@@ -37,15 +37,12 @@
     <ProjectReference Include="..\..\Contracts\Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\IdentityService.Contracts\IdentityService.Contracts.csproj">
+    <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Consumers\" />
-    <None Remove="System.CommandLine.DragonFruit" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Consumers\" />
-  </ItemGroup>
+
 </Project>

@@ -5,7 +5,7 @@ VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Server\AppService\WebApi\WebApi.csproj", "{FE6903F2-2B09-494A-8F14-5F9D9428FA04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppService.Client", "Client\AppService.Client\AppService.Client.csproj", "{C4876FBC-02BE-4E01-B97A-6B109C094074}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppService.Client", "Server\AppService\AppService.Client\AppService.Client.csproj", "{C4876FBC-02BE-4E01-B97A-6B109C094074}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4543430-B73F-4E9B-A833-54A5A7E6E016}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal", "Client\Portal\Portal.csproj", "{477A0CC5-4676-461D-B440-98AE44366007}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Server\Worker\Worker.csproj", "{B1340B6E-DFEF-474F-AF38-E3785E87580C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Server\Worker\Worker\Worker.csproj", "{B1340B6E-DFEF-474F-AF38-E3785E87580C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Server\Contracts\Contracts.csproj", "{6C545AF3-D120-42E1-9085-84304FC9365E}"
 EndProject
@@ -32,9 +32,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{0CD6BE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppService", "AppService", "{A127FB06-772A-4F77-A65E-6EDA88A9622F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "Server\IdentityService\IdentityService.csproj", "{ABD9C8C1-56B2-4513-B15B-29BED2C71CDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "Server\IdentityService\IdentityService\IdentityService.csproj", "{ABD9C8C1-56B2-4513-B15B-29BED2C71CDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker.Client", "Server\Worker.Client\Worker.Client.csproj", "{09733348-AD4B-4BB4-9C19-1852414BCB99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker.Client", "Server\Worker\Worker.Client\Worker.Client.csproj", "{09733348-AD4B-4BB4-9C19-1852414BCB99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Tests", "Client\Portal.Tests\Portal.Tests.csproj", "{31825979-5DD6-42A3-AA43-C9F016CC02D2}"
 EndProject
@@ -50,13 +50,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Server\TimeReport
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport", "Client\TimeReport\TimeReport.csproj", "{F625D659-45E0-4375-BD38-9C176ECCD155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Client", "Client\TimeReport.Client\TimeReport.Client.csproj", "{57A0B238-AAB6-41D5-A8F8-BEF04B23B424}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Client", "Server\TimeReport\TimeReport.Client\TimeReport.Client.csproj", "{57A0B238-AAB6-41D5-A8F8-BEF04B23B424}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Shared", "Client\Portal.Shared\Portal.Shared.csproj", "{B02F16E9-1AFC-4E43-BACA-04B4C0CA8CFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Client", "Server\IdentityService.Client\IdentityService.Client.csproj", "{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Client", "Server\IdentityService\IdentityService.Client\IdentityService.Client.csproj", "{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Contracts", "Server\IdentityService.Contracts\IdentityService.Contracts.csproj", "{38BBC401-4119-430C-BC04-C6993D7C1078}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Contracts", "Server\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj", "{38BBC401-4119-430C-BC04-C6993D7C1078}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seeder", "Server\Seeder\Seeder.csproj", "{3D78673B-B3BA-4399-A9A0-9A9A05387321}"
 EndProject
@@ -82,7 +82,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Showroom", "Showroom", "{15
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showroom", "Client\Showroom\Showroom.csproj", "{2D32698D-4BA0-41E9-A017-FF6C8AE3B2FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showroom.Client", "Client\Showroom.Client\Showroom.Client.csproj", "{F72A9A95-36BF-42EB-83F8-79038FF4D6A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showroom.Client", "Server\Showroom\Showroom.Client\Showroom.Client.csproj", "{F72A9A95-36BF-42EB-83F8-79038FF4D6A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,9 +227,9 @@ Global
 		{477A0CC5-4676-461D-B440-98AE44366007} = {CCC61AFB-9D10-425B-8767-2654025A01CB}
 		{B02F16E9-1AFC-4E43-BACA-04B4C0CA8CFF} = {CCC61AFB-9D10-425B-8767-2654025A01CB}
 		{31825979-5DD6-42A3-AA43-C9F016CC02D2} = {CCC61AFB-9D10-425B-8767-2654025A01CB}
-		{C4876FBC-02BE-4E01-B97A-6B109C094074} = {0CD6BE3D-ABFE-4626-AB50-D0264076737A}
+		{C4876FBC-02BE-4E01-B97A-6B109C094074} = {A127FB06-772A-4F77-A65E-6EDA88A9622F}
 		{F625D659-45E0-4375-BD38-9C176ECCD155} = {4112561F-0106-4FCE-B3B7-DDD6578D007F}
-		{57A0B238-AAB6-41D5-A8F8-BEF04B23B424} = {4112561F-0106-4FCE-B3B7-DDD6578D007F}
+		{57A0B238-AAB6-41D5-A8F8-BEF04B23B424} = {30791826-DF9E-408F-90CA-F13AD2394918}
 		{169EBFFD-F29E-4FAB-A1AE-39E187D11BA6} = {A1A71766-1DD8-4DBB-BBD0-0915F7B9A6ED}
 		{38BBC401-4119-430C-BC04-C6993D7C1078} = {A1A71766-1DD8-4DBB-BBD0-0915F7B9A6ED}
 		{3D78673B-B3BA-4399-A9A0-9A9A05387321} = {0835A9D5-FAED-4BE3-94E1-5D9E67ABD85C}
@@ -244,6 +244,6 @@ Global
 		{1D46D92D-B600-4348-B7B3-BA5DDB47F7CC} = {83ADF70C-E559-4551-BF3C-E0851D0390EC}
 		{15E03994-590C-4386-A674-DAA27939F932} = {0CD6BE3D-ABFE-4626-AB50-D0264076737A}
 		{2D32698D-4BA0-41E9-A017-FF6C8AE3B2FC} = {15E03994-590C-4386-A674-DAA27939F932}
-		{F72A9A95-36BF-42EB-83F8-79038FF4D6A9} = {15E03994-590C-4386-A674-DAA27939F932}
+		{F72A9A95-36BF-42EB-83F8-79038FF4D6A9} = {83ADF70C-E559-4551-BF3C-E0851D0390EC}
 	EndGlobalSection
 EndGlobal

@@ -23,13 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Contracts\Contracts.csproj">
+    <ProjectReference Include="..\..\Contracts\Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="AspNetCore.Authentication.ApiKey" />
-    <None Remove="System.CommandLine.DragonFruit" />
   </ItemGroup>
 </Project>

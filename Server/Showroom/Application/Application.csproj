@@ -20,23 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-     <ProjectReference Include="..\..\Worker.Client\Worker.Client.csproj">
+     <ProjectReference Include="..\..\Worker\Worker.Client\Worker.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-     <ProjectReference Include="..\..\IdentityService.Client\IdentityService.Client.csproj" />
-     <ProjectReference Include="..\..\IdentityService.Contracts\IdentityService.Contracts.csproj" />
+     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
+     <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="CompetenceAreas\Commands\" />
-    <None Remove="Organizations\Commands\" />
-    <None Remove="ConsultantProfiles\Commands\AddExperienceCommand" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CompetenceAreas\Commands\" />
-    <Folder Include="Organizations\Commands\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Organizations\Commands\UpdateCompetenceAreaCommand.cs" />
-  </ItemGroup>
 </Project>
