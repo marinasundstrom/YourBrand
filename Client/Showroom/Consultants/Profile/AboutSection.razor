@@ -22,7 +22,7 @@
             }
             else
             {
-                @ConsultantProfile.Presentation
+                @((MarkupString)ConsultantProfile.Presentation.Replace("\n", "<br />"))
             }
 
         </MudCardContent>
