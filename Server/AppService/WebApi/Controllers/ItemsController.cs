@@ -1,12 +1,12 @@
 ﻿
-using Skynet.Application.Items.Commands;
+using YourCompany.Application.Items.Commands;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Skynet.WebApi.Controllers;
+namespace YourCompany.WebApi.Controllers;
 
 [ApiController]
 [Route("/")]

@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Application.Common.Models;
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Application.Common.Models;
+using YourCompany.IdentityService.Domain.Entities;
 
-namespace Skynet.IdentityService.Application.Users.Queries;
+namespace YourCompany.IdentityService.Application.Users.Queries;
 
 public class GetRolesQuery : IRequest<ItemsResult<RoleDto>>
 {

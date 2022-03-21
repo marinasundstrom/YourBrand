@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Common.Models;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Models;
 
-namespace Skynet.TimeReport.Application.Users.Queries;
+namespace YourCompany.TimeReport.Application.Users.Queries;
 
 public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
 {

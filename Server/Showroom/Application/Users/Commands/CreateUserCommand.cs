@@ -1,10 +1,10 @@
 ﻿
 using MediatR;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Domain.Entities;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Domain.Entities;
 
-namespace Skynet.Showroom.Application.Users.Commands;
+namespace YourCompany.Showroom.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {

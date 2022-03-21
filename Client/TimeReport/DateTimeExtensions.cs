@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Skynet.TimeReport;
+namespace YourCompany.TimeReport;
 
 public static class DateTimeExtensions
 {

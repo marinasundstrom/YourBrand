@@ -1,11 +1,11 @@
 ﻿
-using Skynet.Application.Common.Interfaces;
+using YourCompany.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Skynet.Application.Items.Queries;
+namespace YourCompany.Application.Items.Queries;
 
 public class GetCommentQuery : IRequest<CommentDto?>
 {

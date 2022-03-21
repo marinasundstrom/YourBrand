@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Skynet.IdentityService.Data.Migrations
+namespace YourCompany.IdentityService.Data.Migrations
 {
     public partial class Users3 : Migration
     {

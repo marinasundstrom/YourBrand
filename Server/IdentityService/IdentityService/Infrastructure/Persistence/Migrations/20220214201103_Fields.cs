@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Skynet.IdentityService.Infrastructure.Persistence
+namespace YourCompany.IdentityService.Infrastructure.Persistence
 {
     public partial class Fields : Migration
     {

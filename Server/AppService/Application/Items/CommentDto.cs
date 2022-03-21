@@ -1,6 +1,6 @@
-﻿using Skynet.Application.Users;
+﻿using YourCompany.Application.Users;
 
-namespace Skynet.Application.Items;
+namespace YourCompany.Application.Items;
 
 public record CommentDto(
     string Id, string? Text,

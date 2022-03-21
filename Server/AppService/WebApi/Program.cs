@@ -4,11 +4,11 @@ using System.Security.Claims;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using Skynet.Application;
-using Skynet.Infrastructure;
-using Skynet.Infrastructure.Persistence;
-using Skynet.WebApi;
-using Skynet.WebApi.Hubs;
+using YourCompany.Application;
+using YourCompany.Infrastructure;
+using YourCompany.Infrastructure.Persistence;
+using YourCompany.WebApi;
+using YourCompany.WebApi.Hubs;
 
 using MassTransit;
 
@@ -21,8 +21,8 @@ using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using Skynet.IdentityService.Contracts;
-using Skynet.Consumers;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.Consumers;
 
 static class Program
 {

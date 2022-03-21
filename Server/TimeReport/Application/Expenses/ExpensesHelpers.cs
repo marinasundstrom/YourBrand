@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.TimeReport.Application.Expenses;
+namespace YourCompany.TimeReport.Application.Expenses;
 
 public static class ExpensesHelpers
 {

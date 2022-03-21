@@ -8,13 +8,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.Common.Models;
-using Skynet.Showroom.Application.Cases;
-using Skynet.Showroom.Domain.Entities;
-using Skynet.Showroom.Domain.Exceptions;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Application.Cases;
+using YourCompany.Showroom.Domain.Entities;
+using YourCompany.Showroom.Domain.Exceptions;
 
-namespace Skynet.Showroom.Application.Cases.Queries;
+namespace YourCompany.Showroom.Application.Cases.Queries;
 
 public class GetCasesQuery : IRequest<Results<CaseDto>>
 {

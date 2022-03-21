@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.Cases.Commands;
+namespace YourCompany.Showroom.Application.Cases.Commands;
 
 public record CreateCaseCommand(string? Description) : IRequest
 {

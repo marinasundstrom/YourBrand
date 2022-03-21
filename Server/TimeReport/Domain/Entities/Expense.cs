@@ -1,8 +1,8 @@
 ﻿
-using Skynet.TimeReport.Domain.Common;
-using Skynet.TimeReport.Domain.Common.Interfaces;
+using YourCompany.TimeReport.Domain.Common;
+using YourCompany.TimeReport.Domain.Common.Interfaces;
 
-namespace Skynet.TimeReport.Domain.Entities;
+namespace YourCompany.TimeReport.Domain.Entities;
 
 public class Expense : AuditableEntity, ISoftDelete
 {

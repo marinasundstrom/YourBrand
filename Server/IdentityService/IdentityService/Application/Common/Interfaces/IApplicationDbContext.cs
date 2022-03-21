@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Domain.Entities;
 
-namespace Skynet.IdentityService.Application.Common.Interfaces;
+namespace YourCompany.IdentityService.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {

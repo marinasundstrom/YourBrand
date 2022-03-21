@@ -3,12 +3,12 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Users;
-using Skynet.TimeReport.Domain.Entities;
-using Skynet.TimeReport.Domain.Exceptions;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Users;
+using YourCompany.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Domain.Exceptions;
 
-namespace Skynet.TimeReport.Application.Projects.Commands;
+namespace YourCompany.TimeReport.Application.Projects.Commands;
 
 public partial class CreateProjectMembershipCommand : IRequest<ProjectMembershipDto>
 {

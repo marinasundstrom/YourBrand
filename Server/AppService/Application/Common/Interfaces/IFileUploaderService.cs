@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skynet.Application.Common.Interfaces;
+namespace YourCompany.Application.Common.Interfaces;
 
 public interface IFileUploaderService
 {

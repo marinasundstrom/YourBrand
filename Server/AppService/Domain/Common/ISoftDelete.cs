@@ -1,6 +1,6 @@
-﻿using Skynet.Domain.Entities;
+﻿using YourCompany.Domain.Entities;
 
-namespace Skynet.Domain.Common;
+namespace YourCompany.Domain.Common;
 
 public interface ISoftDelete
 {

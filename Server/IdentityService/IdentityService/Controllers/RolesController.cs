@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Skynet.IdentityService.Application.Common.Models;
-using Skynet.IdentityService.Application.Users;
-using Skynet.IdentityService.Application.Users.Commands;
-using Skynet.IdentityService.Application.Users.Queries;
-using Skynet.IdentityService.Domain.Exceptions;
+using YourCompany.IdentityService.Application.Common.Models;
+using YourCompany.IdentityService.Application.Users;
+using YourCompany.IdentityService.Application.Users.Commands;
+using YourCompany.IdentityService.Application.Users.Queries;
+using YourCompany.IdentityService.Domain.Exceptions;
 
-namespace Skynet.IdentityService;
+namespace YourCompany.IdentityService;
 
 [Route("[controller]")]
 [ApiController]

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Skynet.Showroom.Application;
-using Skynet.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Application;
+using YourCompany.Showroom.Application.Common.Models;
 
-namespace Skynet.Showroom.Application.Organizations;
+namespace YourCompany.Showroom.Application.Organizations;
 
 public record OrganizationDto
 (

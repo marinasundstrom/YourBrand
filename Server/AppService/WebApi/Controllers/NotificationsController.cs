@@ -1,16 +1,16 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-using Skynet.Application.Notifications;
-using Skynet.Application.Notifications.Commands;
-using Skynet.Application.Notifications.Queries;
+using YourCompany.Application.Notifications;
+using YourCompany.Application.Notifications.Commands;
+using YourCompany.Application.Notifications.Queries;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Skynet.WebApi.Controllers;
+namespace YourCompany.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]

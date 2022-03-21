@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Domain.Common;
-using Skynet.TimeReport.Domain.Common.Interfaces;
-using Skynet.TimeReport.Domain.Entities;
-using Skynet.TimeReport.Infrastructure.Persistence.Configurations;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Domain.Common;
+using YourCompany.TimeReport.Domain.Common.Interfaces;
+using YourCompany.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Infrastructure.Persistence.Configurations;
 
-namespace Skynet.TimeReport.Infrastructure.Persistence;
+namespace YourCompany.TimeReport.Infrastructure.Persistence;
 
 public class TimeReportContext : DbContext, ITimeReportContext
 {

@@ -2,11 +2,11 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Contracts;
-using Skynet.IdentityService.Domain.Exceptions;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.IdentityService.Domain.Exceptions;
 
-namespace Skynet.IdentityService.Application.Users.Commands;
+namespace YourCompany.IdentityService.Application.Users.Commands;
 
 public class UpdateUserDetailsCommand : IRequest<UserDto>
 {

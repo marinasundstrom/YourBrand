@@ -8,13 +8,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.Common.Models;
-using Skynet.Showroom.Application.CompetenceAreas;
-using Skynet.Showroom.Domain.Entities;
-using Skynet.Showroom.Domain.Exceptions;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Application.CompetenceAreas;
+using YourCompany.Showroom.Domain.Entities;
+using YourCompany.Showroom.Domain.Exceptions;
 
-namespace Skynet.Showroom.Application.Organizations.Queries;
+namespace YourCompany.Showroom.Application.Organizations.Queries;
 
 public class GetOrganizationsQuery : IRequest<Results<OrganizationDto>>
 {

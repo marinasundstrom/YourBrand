@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Domain.Exceptions;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Domain.Exceptions;
 
-namespace Skynet.Application.Users.Commands;
+namespace YourCompany.Application.Users.Commands;
 
 public class DeleteUserCommand : IRequest
 {

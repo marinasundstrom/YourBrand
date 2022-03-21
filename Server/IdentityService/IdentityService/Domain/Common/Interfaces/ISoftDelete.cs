@@ -1,4 +1,4 @@
-﻿namespace Skynet.IdentityService.Domain.Common.Interfaces;
+﻿namespace YourCompany.IdentityService.Domain.Common.Interfaces;
 
 public interface ISoftDelete
 {

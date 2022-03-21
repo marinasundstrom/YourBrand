@@ -1,6 +1,6 @@
-﻿using Skynet.IdentityService.Domain.Common;
+﻿using YourCompany.IdentityService.Domain.Common;
 
-namespace Skynet.IdentityService.Application.Common.Interfaces;
+namespace YourCompany.IdentityService.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

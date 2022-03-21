@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Net.Http.Headers;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.ConsultantProfiles.Queries;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.ConsultantProfiles.Queries;
 
 using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Skynet.Showroom.Application;
+namespace YourCompany.Showroom.Application;
 
 public static class ServiceExtensions
 {

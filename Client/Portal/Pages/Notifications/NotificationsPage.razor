@@ -1,12 +1,12 @@
 ﻿@page "/notifications"
-@using Skynet.AppService.Client
+@using YourCompany.AppService.Client
 @attribute [Authorize]
 @inject IStringLocalizer<NotificationsPage> T
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject INotificationsClient NotificationsClient
 
-<PageTitle>@T["Notifications"] - Skynet</PageTitle>
+<PageTitle>@T["Notifications"] - YourCompany</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Notifications"]</MudText>
 
@@ -47,7 +47,7 @@
         try
         {
             var results = await NotificationsClient.GetNotificationsAsync(false, state.Page + 1, state.PageSize, state.SortLabel,
-                state.SortDirection == MudBlazor.SortDirection.Ascending ? Skynet.AppService.Client.SortDirection.Asc : Skynet.AppService.Client.SortDirection.Desc);
+                state.SortDirection == MudBlazor.SortDirection.Ascending ? YourCompany.AppService.Client.SortDirection.Asc : YourCompany.AppService.Client.SortDirection.Desc);
 
             return new TableData<NotificationDto>() { TotalItems = results.TotalCount, Items = results.Items };
         }

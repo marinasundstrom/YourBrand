@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Skynet.Application.Common.Models;
+using YourCompany.Application.Common.Models;
 
-namespace Skynet.Application.Notifications;
+namespace YourCompany.Application.Notifications;
 
 public record class NotificationsResults(IEnumerable<NotificationDto> Items, int? UnreadNotificationsCount, int TotalCount)
     : Results<NotificationDto>(Items, TotalCount);

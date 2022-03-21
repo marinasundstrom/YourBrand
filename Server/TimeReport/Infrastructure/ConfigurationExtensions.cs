@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Skynet.TimeReport.Infrastructure;
+namespace YourCompany.TimeReport.Infrastructure;
 
 public static class ConfigurationExtensions
 {

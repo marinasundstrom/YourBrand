@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.TimeReport;
+namespace YourCompany.TimeReport;
 
 public static class Roles
 {

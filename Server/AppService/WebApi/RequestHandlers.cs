@@ -1,10 +1,10 @@
-using Skynet.Application;
-using Skynet.Application.Common.Models;
-using Skynet.Application.Items;
-using Skynet.Application.Items.Commands;
-using Skynet.Application.Items.Queries;
-using Skynet.Infrastructure.Persistence;
-using Skynet.WebApi.Controllers;
+using YourCompany.Application;
+using YourCompany.Application.Common.Models;
+using YourCompany.Application.Items;
+using YourCompany.Application.Items.Commands;
+using YourCompany.Application.Items.Queries;
+using YourCompany.Infrastructure.Persistence;
+using YourCompany.WebApi.Controllers;
 
 using MediatR;
 
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 using MiniValidation;
 
-namespace Skynet.WebApi;
+namespace YourCompany.WebApi;
 
 static partial class RequestHandlers
 {

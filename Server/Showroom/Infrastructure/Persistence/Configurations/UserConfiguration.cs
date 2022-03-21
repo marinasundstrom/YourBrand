@@ -1,10 +1,10 @@
 ﻿
-using Skynet.Showroom.Domain.Entities;
+using YourCompany.Showroom.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Skynet.Showroom.Infrastructure.Persistence.Configurations;
+namespace YourCompany.Showroom.Infrastructure.Persistence.Configurations;
 
 class UserConfiguration : IEntityTypeConfiguration<User>
 {

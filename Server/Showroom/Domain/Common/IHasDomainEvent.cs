@@ -1,4 +1,4 @@
-﻿namespace Skynet.Showroom.Domain.Common;
+﻿namespace YourCompany.Showroom.Domain.Common;
 
 public interface IHasDomainEvent
 {

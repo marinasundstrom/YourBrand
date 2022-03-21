@@ -1,12 +1,12 @@
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Domain.Events;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Skynet.Application.Items.Commands;
+namespace YourCompany.Application.Items.Commands;
 
 public record UploadImageCommand(string Id, Stream Stream) : IRequest<UploadImageResult>
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Skynet.Showroom.Application.CompetenceAreas;
+namespace YourCompany.Showroom.Application.CompetenceAreas;
 
 public record CompetenceAreaDto
 (

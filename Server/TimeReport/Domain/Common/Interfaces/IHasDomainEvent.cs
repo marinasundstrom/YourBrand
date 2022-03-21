@@ -1,4 +1,4 @@
-﻿namespace Skynet.TimeReport.Domain.Common.Interfaces;
+﻿namespace YourCompany.TimeReport.Domain.Common.Interfaces;
 
 public interface IHasDomainEvent
 {

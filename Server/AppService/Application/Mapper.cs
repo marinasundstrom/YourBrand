@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Application.Items;
-using Skynet.Application.Users;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Application.Items;
+using YourCompany.Application.Users;
 
-namespace Skynet.Application;
+namespace YourCompany.Application;
 
 public static class Mapper
 {

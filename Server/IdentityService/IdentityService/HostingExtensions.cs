@@ -9,15 +9,15 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MassTransit;
-using Skynet.IdentityService.Application;
-using Skynet.IdentityService.Infrastructure.Persistence;
-using Skynet.IdentityService.Domain.Entities;
-using Skynet.IdentityService.Infrastructure.Infrastructure;
+using YourCompany.IdentityService.Application;
+using YourCompany.IdentityService.Infrastructure.Persistence;
+using YourCompany.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Infrastructure.Infrastructure;
 using AspNetCore.Authentication.ApiKey;
 using System.Security.Claims;
 using IdentityModel;
 
-namespace Skynet.IdentityService;
+namespace YourCompany.IdentityService;
 
 internal static class HostingExtensions
 {

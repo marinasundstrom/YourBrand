@@ -1,4 +1,4 @@
-﻿namespace Skynet.Domain.Common;
+﻿namespace YourCompany.Domain.Common;
 
 public abstract class DomainEvent
 {

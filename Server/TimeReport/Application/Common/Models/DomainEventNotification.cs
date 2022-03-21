@@ -2,9 +2,9 @@
 
 using MediatR;
 
-using Skynet.TimeReport.Domain.Common;
+using YourCompany.TimeReport.Domain.Common;
 
-namespace Skynet.TimeReport.Application.Common.Models;
+namespace YourCompany.TimeReport.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

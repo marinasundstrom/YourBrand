@@ -1,9 +1,9 @@
-using Skynet.Showroom.Domain.Entities;
+using YourCompany.Showroom.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Skynet.Showroom.Application.Common.Interfaces;
+namespace YourCompany.Showroom.Application.Common.Interfaces;
 
 public interface IShowroomContext
 {

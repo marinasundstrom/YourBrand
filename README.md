@@ -1,4 +1,4 @@
-# Skynet
+# YourCompany
 
 <a href="/Screenshots/items.png">
 <img src="/Screenshots/items.png" height="250"  alt="Items"  /></a>

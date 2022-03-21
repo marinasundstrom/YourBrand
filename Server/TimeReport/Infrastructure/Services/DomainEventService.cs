@@ -4,11 +4,11 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Common.Models;
-using Skynet.TimeReport.Domain.Common;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Models;
+using YourCompany.TimeReport.Domain.Common;
 
-namespace Skynet.TimeReport.Infrastructure.Services;
+namespace YourCompany.TimeReport.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

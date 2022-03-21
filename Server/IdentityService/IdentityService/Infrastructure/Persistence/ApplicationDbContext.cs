@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Domain.Common;
-using Skynet.IdentityService.Domain.Common.Interfaces;
-using Skynet.IdentityService.Domain.Entities;
-using Skynet.IdentityService.Infrastructure.Persistence.Configurations;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Domain.Common;
+using YourCompany.IdentityService.Domain.Common.Interfaces;
+using YourCompany.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Infrastructure.Persistence.Configurations;
 
-namespace Skynet.IdentityService.Infrastructure.Persistence;
+namespace YourCompany.IdentityService.Infrastructure.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {

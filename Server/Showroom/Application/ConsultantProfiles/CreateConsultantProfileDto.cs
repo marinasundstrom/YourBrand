@@ -1,4 +1,4 @@
-﻿namespace Skynet.Showroom.Application.ConsultantProfiles;
+﻿namespace YourCompany.Showroom.Application.ConsultantProfiles;
 
 public class CreateConsultantProfileDto
 {

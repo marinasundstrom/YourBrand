@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Skynet.TimeReport.Domain.Common;
+using YourCompany.TimeReport.Domain.Common;
 
-namespace Skynet.TimeReport.Domain.Events;
+namespace YourCompany.TimeReport.Domain.Events;
 
 public class EntryHoursUpdatedEvent : DomainEvent
 {

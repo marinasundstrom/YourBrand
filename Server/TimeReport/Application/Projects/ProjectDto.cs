@@ -1,3 +1,3 @@
-﻿namespace Skynet.TimeReport.Application.Projects;
+﻿namespace YourCompany.TimeReport.Application.Projects;
 
 public record class ProjectDto(string Id, string Name, string? Description);

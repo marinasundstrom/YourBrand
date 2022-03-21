@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-using Skynet.Portal;
-using Skynet.Showroom;
-using Skynet.TimeReport;
+using YourCompany.Portal;
+using YourCompany.Showroom;
+using YourCompany.TimeReport;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

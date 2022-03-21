@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skynet.TimeReport.Application.TimeSheets;
+namespace YourCompany.TimeReport.Application.TimeSheets;
 
 public static class Constants
 {

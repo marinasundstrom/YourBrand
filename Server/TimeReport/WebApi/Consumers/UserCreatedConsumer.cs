@@ -4,13 +4,13 @@ using MassTransit;
 
 using MediatR;
 
-using Skynet.IdentityService.Client;
-using Skynet.IdentityService.Contracts;
-using Skynet.TimeReport.Application;
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Users.Commands;
+using YourCompany.IdentityService.Client;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.TimeReport.Application;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Users.Commands;
 
-namespace Skynet.TimeReport.Consumers;
+namespace YourCompany.TimeReport.Consumers;
 
 public class UserCreatedConsumer : IConsumer<UserCreated>
 {

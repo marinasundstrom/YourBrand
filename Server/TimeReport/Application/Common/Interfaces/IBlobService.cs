@@ -1,4 +1,4 @@
-﻿namespace Skynet.TimeReport.Application.Common.Interfaces;
+﻿namespace YourCompany.TimeReport.Application.Common.Interfaces;
 
 public interface IBlobService
 {

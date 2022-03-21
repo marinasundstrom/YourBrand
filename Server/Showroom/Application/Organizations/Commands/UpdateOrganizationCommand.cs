@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.Organizations.Commands;
+namespace YourCompany.Showroom.Application.Organizations.Commands;
 
 public record UpdateOrganizationCommand(string Id, string Name) : IRequest
 {

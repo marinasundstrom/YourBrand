@@ -1,10 +1,10 @@
-﻿using Skynet.Application.Common.Interfaces;
+﻿using YourCompany.Application.Common.Interfaces;
 
 using Contracts;
 
 using MassTransit;
 
-namespace Skynet.Consumers;
+namespace YourCompany.Consumers;
 
 public class RandomNotificationConsumer : IConsumer<RandomNotification>
 {

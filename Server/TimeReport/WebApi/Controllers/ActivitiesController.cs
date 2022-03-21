@@ -4,13 +4,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Skynet.TimeReport.Application.Activities;
-using Skynet.TimeReport.Application.Activities.Commands;
-using Skynet.TimeReport.Application.Activities.Queries;
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Common.Models;
+using YourCompany.TimeReport.Application.Activities;
+using YourCompany.TimeReport.Application.Activities.Commands;
+using YourCompany.TimeReport.Application.Activities.Queries;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Models;
 
-namespace Skynet.TimeReport.Controllers;
+namespace YourCompany.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

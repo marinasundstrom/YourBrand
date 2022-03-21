@@ -1,6 +1,6 @@
-﻿using Skynet.Showroom.Domain.Entities;
+﻿using YourCompany.Showroom.Domain.Entities;
 
-namespace Skynet.Showroom.Domain.Common;
+namespace YourCompany.Showroom.Domain.Common;
 
 public abstract class AuditableEntity
 {

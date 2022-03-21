@@ -2,10 +2,10 @@
 using MassTransit;
 
 using MediatR;
-using Skynet.IdentityService.Contracts;
-using Skynet.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.IdentityService.Application.Common.Interfaces;
 
-namespace Skynet.IdentityService.Consumers;
+namespace YourCompany.IdentityService.Consumers;
 
 public class GetUserConsumer : IConsumer<GetUser>
 {
@@ -22,7 +22,7 @@ public class GetUserConsumer : IConsumer<GetUser>
     {
         var message = context.Message;
 
-        var user = await _mediator.Send(new Skynet.IdentityService.Application.Users.Queries.GetUserQuery(message.UserId));
+        var user = await _mediator.Send(new YourCompany.IdentityService.Application.Users.Queries.GetUserQuery(message.UserId));
 
         await context.RespondAsync(new GetUserResponse(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email));
     }

@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Skills.Commands;
+namespace YourCompany.Showroom.Application.ConsultantProfiles.Skills.Commands;
 
 public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IRequest
 {

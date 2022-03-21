@@ -4,11 +4,11 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Application.Common.Models;
-using Skynet.IdentityService.Domain.Common;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Application.Common.Models;
+using YourCompany.IdentityService.Domain.Common;
 
-namespace Skynet.IdentityService.Infrastructure.Services;
+namespace YourCompany.IdentityService.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

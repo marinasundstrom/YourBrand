@@ -1,13 +1,13 @@
 ﻿
-using Skynet.Application.Common.Interfaces;
-using Skynet.Application.Common.Models;
-using Skynet.Domain.Events;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Application.Common.Models;
+using YourCompany.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Skynet.Application.Items.EventHandlers;
+namespace YourCompany.Application.Items.EventHandlers;
 
 public class ItemImageUploadedEventHandler : INotificationHandler<DomainEventNotification<ItemImageUploadedEvent>>
 {

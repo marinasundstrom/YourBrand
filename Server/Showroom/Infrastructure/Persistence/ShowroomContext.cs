@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Domain.Common;
-using Skynet.Showroom.Domain.Entities;
-using Skynet.Showroom.Infrastructure;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Domain.Common;
+using YourCompany.Showroom.Domain.Entities;
+using YourCompany.Showroom.Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Skynet.Showroom.Infrastructure.Persistence;
+namespace YourCompany.Showroom.Infrastructure.Persistence;
 
 class ShowroomContext : DbContext, IShowroomContext
 {

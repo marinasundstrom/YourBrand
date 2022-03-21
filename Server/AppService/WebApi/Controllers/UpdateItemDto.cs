@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Skynet.WebApi.Controllers;
+namespace YourCompany.WebApi.Controllers;
 
 public class UpdateItemDto
 {

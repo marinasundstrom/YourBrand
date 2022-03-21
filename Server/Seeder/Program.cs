@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Skynet.IdentityService.Client;
+using YourCompany.IdentityService.Client;
 
 const string ApiKey = "foobar";
 
@@ -32,12 +32,12 @@ static IServiceProvider BuildServiceProvider()
     .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http));
 
     /*
-    services.AddHttpClient(nameof(Skynet.TimeReport.Client.IProjectsClient), (sp, http) =>
+    services.AddHttpClient(nameof(YourCompany.TimeReport.Client.IProjectsClient), (sp, http) =>
     {
         http.BaseAddress = new Uri($"https://localhost:5050/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
-    .AddTypedClient<Skynet.TimeReport.Client.IProjectsClient>((http, sp) => new Skynet.TimeReport.Client.ProjectsClient(http));
+    .AddTypedClient<YourCompany.TimeReport.Client.IProjectsClient>((http, sp) => new YourCompany.TimeReport.Client.ProjectsClient(http));
     */
 
     return services.BuildServiceProvider();

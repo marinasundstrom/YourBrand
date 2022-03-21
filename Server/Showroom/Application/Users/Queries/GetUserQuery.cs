@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Domain.Exceptions;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Domain.Exceptions;
 
-namespace Skynet.Showroom.Application.Users.Queries;
+namespace YourCompany.Showroom.Application.Users.Queries;
 
 public class GetUserQuery : IRequest<UserDto>
 {

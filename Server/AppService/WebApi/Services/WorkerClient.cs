@@ -1,10 +1,10 @@
 ﻿
-using Skynet.Application.Common.Interfaces;
-using Skynet.WebApi.Hubs;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Skynet.WebApi.Services;
+namespace YourCompany.WebApi.Services;
 
 public class WorkerClient : IWorkerClient
 {

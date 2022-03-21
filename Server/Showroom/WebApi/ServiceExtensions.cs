@@ -1,12 +1,12 @@
 ﻿using System;
 
-using Skynet.Showroom.Application;
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Infrastructure;
+using YourCompany.Showroom.Application;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Infrastructure;
 
-using Skynet.Showroom.WebApi.Services;
+using YourCompany.Showroom.WebApi.Services;
 
-namespace Skynet.Showroom.WebApi;
+namespace YourCompany.Showroom.WebApi;
 
 public static class ServiceExtensions
 {

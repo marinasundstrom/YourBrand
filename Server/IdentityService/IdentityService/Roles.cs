@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.IdentityService;
+namespace YourCompany.IdentityService;
 
 public static class Roles
 {

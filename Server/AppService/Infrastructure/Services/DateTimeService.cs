@@ -1,6 +1,6 @@
-﻿using Skynet.Application.Common.Interfaces;
+﻿using YourCompany.Application.Common.Interfaces;
 
-namespace Skynet.Infrastructure.Services;
+namespace YourCompany.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

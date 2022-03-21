@@ -3,9 +3,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Interfaces;
 
-namespace Skynet.TimeReport.Services;
+namespace YourCompany.TimeReport.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

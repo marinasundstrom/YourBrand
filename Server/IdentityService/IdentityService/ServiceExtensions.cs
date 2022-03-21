@@ -1,11 +1,11 @@
 ﻿using System;
 
-using Skynet.IdentityService.Application;
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Infrastructure;
-using Skynet.IdentityService.Services;
+using YourCompany.IdentityService.Application;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Infrastructure;
+using YourCompany.IdentityService.Services;
 
-namespace Skynet.IdentityService;
+namespace YourCompany.IdentityService;
 
 public static class ServiceExtensions
 {

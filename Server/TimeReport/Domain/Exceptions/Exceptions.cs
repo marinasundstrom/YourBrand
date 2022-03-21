@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.TimeReport.Domain.Exceptions;
+namespace YourCompany.TimeReport.Domain.Exceptions;
 
 public class DomainException : Exception
 {

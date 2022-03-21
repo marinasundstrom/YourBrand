@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.Identity;
 
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Domain.Entities;
 
-namespace Skynet.IdentityService.Application.Users.Commands;
+namespace YourCompany.IdentityService.Application.Users.Commands;
 
 public class UpdateUserPasswordCommand : IRequest
 {

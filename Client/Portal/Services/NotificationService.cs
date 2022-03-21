@@ -1,9 +1,9 @@
-using Skynet.Portal.Services;
+using YourCompany.Portal.Services;
 
 using MudBlazor;
 
 
-namespace Skynet.Portal.Services;
+namespace YourCompany.Portal.Services;
 
 public class NotificationService : INotificationService
 {

@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace Skynet.IdentityService;
+namespace YourCompany.IdentityService;
 
 public static class AuthSchemes
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 
-using Skynet.Showroom.Domain.Common;
+using YourCompany.Showroom.Domain.Common;
 
 using MediatR;
 
-namespace Skynet.Showroom.Application.Common.Models;
+namespace YourCompany.Showroom.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

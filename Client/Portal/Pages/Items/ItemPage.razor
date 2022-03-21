@@ -1,5 +1,5 @@
 ﻿@page "/items/{id}"
-@using Skynet.AppService.Client
+@using YourCompany.AppService.Client
 @implements IDisposable
 @attribute [Authorize]
 @inject IStringLocalizer<ItemPage> T
@@ -23,7 +23,7 @@
 }
 else 
 {
-    <PageTitle>@item.Name - Skynet</PageTitle>
+    <PageTitle>@item.Name - YourCompany</PageTitle>
 
     <MudText Typo="Typo.h3" GutterBottom="true">@item.Name</MudText>
 

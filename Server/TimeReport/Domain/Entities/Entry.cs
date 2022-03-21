@@ -1,9 +1,9 @@
 ﻿
-using Skynet.TimeReport.Domain.Common;
-using Skynet.TimeReport.Domain.Common.Interfaces;
-using Skynet.TimeReport.Domain.Events;
+using YourCompany.TimeReport.Domain.Common;
+using YourCompany.TimeReport.Domain.Common.Interfaces;
+using YourCompany.TimeReport.Domain.Events;
 
-namespace Skynet.TimeReport.Domain.Entities;
+namespace YourCompany.TimeReport.Domain.Entities;
 
 public class Entry : AuditableEntity, IHasDomainEvent
 {

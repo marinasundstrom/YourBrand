@@ -1,6 +1,6 @@
-﻿using Skynet.TimeReport.Domain.Entities;
+﻿using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Domain.Common.Interfaces;
+namespace YourCompany.TimeReport.Domain.Common.Interfaces;
 
 public interface ISoftDelete
 {

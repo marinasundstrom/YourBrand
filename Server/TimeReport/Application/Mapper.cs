@@ -1,14 +1,14 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-using Skynet.TimeReport.Application.Activities;
-using Skynet.TimeReport.Application.Expenses;
-using Skynet.TimeReport.Application.Projects;
-using Skynet.TimeReport.Application.TimeSheets;
-using Skynet.TimeReport.Application.Users;
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Application.Activities;
+using YourCompany.TimeReport.Application.Expenses;
+using YourCompany.TimeReport.Application.Projects;
+using YourCompany.TimeReport.Application.TimeSheets;
+using YourCompany.TimeReport.Application.Users;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Application;
+namespace YourCompany.TimeReport.Application;
 
 public static class Mapper
 {

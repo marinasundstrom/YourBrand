@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skynet.Application.Notifications;
+namespace YourCompany.Application.Notifications;
 
 public record NotificationDto(
     string Id, string Title, string? Text, string? Link, DateTime Published, bool IsRead);

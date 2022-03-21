@@ -1,7 +1,7 @@
 ﻿
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Domain.Entities;
 
-namespace Skynet.IdentityService.Domain.Common.Interfaces;
+namespace YourCompany.IdentityService.Domain.Common.Interfaces;
 
 public interface IAuditableEntity
 {

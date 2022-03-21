@@ -1,13 +1,13 @@
 ﻿using System;
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Infrastructure.Persistence;
-using Skynet.Infrastructure.Services;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Infrastructure.Persistence;
+using YourCompany.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Skynet.Infrastructure;
+namespace YourCompany.Infrastructure;
 
 public static class ServiceExtensions
 {

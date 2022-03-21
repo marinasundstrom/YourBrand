@@ -1,4 +1,4 @@
-﻿namespace Skynet.TimeReport.Domain.Entities;
+﻿namespace YourCompany.TimeReport.Domain.Entities;
 
 public enum EntryStatus
 {

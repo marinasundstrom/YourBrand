@@ -1,6 +1,6 @@
-using Skynet.Application.Items;
+using YourCompany.Application.Items;
 
-namespace Skynet.Application.Common.Interfaces;
+namespace YourCompany.Application.Common.Interfaces;
 
 public interface IItemsClient
 {

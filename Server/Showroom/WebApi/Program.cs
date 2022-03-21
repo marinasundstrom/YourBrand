@@ -4,10 +4,10 @@ using System.Security.Claims;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using Skynet.Showroom.Application;
-using Skynet.Showroom.Infrastructure;
-using Skynet.Showroom.Infrastructure.Persistence;
-using Skynet.Showroom.WebApi;
+using YourCompany.Showroom.Application;
+using YourCompany.Showroom.Infrastructure;
+using YourCompany.Showroom.Infrastructure.Persistence;
+using YourCompany.Showroom.WebApi;
 
 using MassTransit;
 

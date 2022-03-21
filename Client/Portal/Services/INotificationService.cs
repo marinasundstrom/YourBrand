@@ -1,4 +1,4 @@
-namespace Skynet.Portal.Services;
+namespace YourCompany.Portal.Services;
 
 public interface INotificationService
 {

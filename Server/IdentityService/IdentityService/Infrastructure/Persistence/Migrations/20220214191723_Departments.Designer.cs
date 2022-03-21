@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Skynet.IdentityService.Infrastructure.Persistence
+namespace YourCompany.IdentityService.Infrastructure.Persistence
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220214191723_Departments")]

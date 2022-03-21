@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.Domain.Exceptions;
+namespace YourCompany.Domain.Exceptions;
 
 public class DomainException : Exception
 {

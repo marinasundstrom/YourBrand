@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application;
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Common.Models;
-using Skynet.TimeReport.Application.Projects;
-using Skynet.TimeReport.Application.Projects.Commands;
-using Skynet.TimeReport.Application.Projects.Queries;
-using Skynet.TimeReport.Application.Users;
-using Skynet.TimeReport.Domain.Entities;
-using Skynet.TimeReport.Domain.Exceptions;
-using Skynet.TimeReport.Dtos;
+using YourCompany.TimeReport.Application;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Models;
+using YourCompany.TimeReport.Application.Projects;
+using YourCompany.TimeReport.Application.Projects.Commands;
+using YourCompany.TimeReport.Application.Projects.Queries;
+using YourCompany.TimeReport.Application.Users;
+using YourCompany.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Domain.Exceptions;
+using YourCompany.TimeReport.Dtos;
 
-namespace Skynet.TimeReport.Controllers;
+namespace YourCompany.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

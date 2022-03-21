@@ -1,10 +1,10 @@
 ﻿@page "/users/{userId}"
 @attribute [Authorize(Roles = "Administrator,Manager")]
-@using Skynet.TimeReport.Shared
+@using YourCompany.TimeReport.Shared
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IdentityService.Client.IUsersClient UsersClient
-@inject Skynet.TimeReport.Client.IUsersClient UsersClient2
+@inject YourCompany.TimeReport.Client.IUsersClient UsersClient2
 
 @if (user is null)
 {
@@ -12,7 +12,7 @@
 }
 else 
 {
-    <PageTitle>@user.GetDisplayName() - Skynet</PageTitle>
+    <PageTitle>@user.GetDisplayName() - YourCompany</PageTitle>
 
     <MudText Typo="Typo.h3" GutterBottom="true">@user.GetDisplayName()</MudText>
 
@@ -44,10 +44,10 @@ else
 @code {
     bool isLoading = false;
     IdentityService.Client.UserDto user;
-    MudTable<Skynet.TimeReport.Client.ProjectMembershipDto> table2;
-    Skynet.TimeReport.Client.StatisticsSummary statisticsSummary;
+    MudTable<YourCompany.TimeReport.Client.ProjectMembershipDto> table2;
+    YourCompany.TimeReport.Client.StatisticsSummary statisticsSummary;
 
-    Skynet.TimeReport.Client.Data? data;
+    YourCompany.TimeReport.Client.Data? data;
 
     private ChartOptions options = new ChartOptions()
     {

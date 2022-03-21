@@ -1,4 +1,4 @@
-﻿namespace Skynet.Showroom.Domain.Entities;
+﻿namespace YourCompany.Showroom.Domain.Entities;
 
 public enum CaseStatus
 {

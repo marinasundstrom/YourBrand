@@ -1,11 +1,11 @@
 
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Commands;
+namespace YourCompany.Showroom.Application.ConsultantProfiles.Commands;
 
 public record UploadImageCommand(string Id, Stream Stream) : IRequest
 {

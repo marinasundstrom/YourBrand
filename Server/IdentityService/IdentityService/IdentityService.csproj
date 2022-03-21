@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFramework>net6.0</TargetFramework>
 	  <ImplicitUsings>enable</ImplicitUsings>
-	  <RootNamespace>Skynet.IdentityService</RootNamespace>
+	  <RootNamespace>YourCompany.IdentityService</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHost' " />

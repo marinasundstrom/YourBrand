@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.Http;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Application.Common.Interfaces;
 
-namespace Skynet.IdentityService.Services;
+namespace YourCompany.IdentityService.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

@@ -2,7 +2,7 @@
 
 using IdentityModel;
 
-namespace Skynet.IdentityService;
+namespace YourCompany.IdentityService;
 
 public class ProfileWithRoleIdentityResource : IdentityResources.Profile
 {

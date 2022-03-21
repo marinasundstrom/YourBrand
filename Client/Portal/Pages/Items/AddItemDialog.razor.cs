@@ -5,7 +5,7 @@ using MudBlazor;
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Skynet.Portal.Pages.Items
+namespace YourCompany.Portal.Pages.Items
 {
     public partial class AddItemDialog
     {

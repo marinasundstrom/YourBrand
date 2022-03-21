@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.Skills.SkillAreas.Queries;
+namespace YourCompany.Showroom.Application.Skills.SkillAreas.Queries;
 
 public class GetSkillAreaQuery : IRequest<SkillAreaDto?>
 {

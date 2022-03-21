@@ -6,7 +6,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>Skynet.Portal</RootNamespace>
+    <RootNamespace>YourCompany.Portal</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

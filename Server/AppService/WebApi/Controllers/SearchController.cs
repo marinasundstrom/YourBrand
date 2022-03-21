@@ -1,14 +1,14 @@
 ﻿
-using Skynet.Application.Common.Models;
-using Skynet.Application.Search;
-using Skynet.Application.Search.Commands;
+using YourCompany.Application.Common.Models;
+using YourCompany.Application.Search;
+using YourCompany.Application.Search.Commands;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Skynet.WebApi.Controllers;
+namespace YourCompany.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]

@@ -1,10 +1,10 @@
 ﻿
 using MediatR;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Application.Projects.Commands;
+namespace YourCompany.TimeReport.Application.Projects.Commands;
 
 public class CreateProjectCommand : IRequest<ProjectDto>
 {

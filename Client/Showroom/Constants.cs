@@ -1,4 +1,4 @@
-﻿namespace Skynet.Showroom;
+﻿namespace YourCompany.Showroom;
 
 public static class Constants
 {

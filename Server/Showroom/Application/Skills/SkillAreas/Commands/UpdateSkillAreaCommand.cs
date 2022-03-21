@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.Skills.SkillAreas.Commands;
+namespace YourCompany.Showroom.Application.Skills.SkillAreas.Commands;
 
 public record UpdateSkillAreaCommand(string Id, string Name) : IRequest
 {

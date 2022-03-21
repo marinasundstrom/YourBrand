@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 using MudBlazor;
 
-using Skynet.AppService.Client;
+using YourCompany.AppService.Client;
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Skynet.Portal.Pages.Items
+namespace YourCompany.Portal.Pages.Items
 {
     public partial class CommentDialog
     {

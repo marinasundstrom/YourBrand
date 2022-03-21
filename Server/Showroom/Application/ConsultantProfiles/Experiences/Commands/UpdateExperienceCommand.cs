@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 using MediatR;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Domain.Entities;
-using Skynet.Showroom.Domain.Exceptions;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Domain.Entities;
+using YourCompany.Showroom.Domain.Exceptions;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Experiences.Commands;
+namespace YourCompany.Showroom.Application.ConsultantProfiles.Experiences.Commands;
 
 public record UpdateExperienceCommand(
     string ConsultantProfileId,

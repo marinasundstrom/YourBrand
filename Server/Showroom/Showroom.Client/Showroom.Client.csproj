@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/Showroom.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Skynet.Showroom.Client">
+		<OpenApiReference Include="OpenAPIs/Showroom.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourCompany.Showroom.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>ShowroomClient.cs</OutputPath>

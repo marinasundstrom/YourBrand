@@ -1,3 +1,3 @@
-﻿namespace Skynet.TimeReport.Dtos;
+﻿namespace YourCompany.TimeReport.Dtos;
 
 public record class UpdateProjectMembershipDto(DateTime? From, DateTime? Thru);

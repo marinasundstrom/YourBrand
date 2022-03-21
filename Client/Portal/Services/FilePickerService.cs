@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.Portal.Services;
+namespace YourCompany.Portal.Services;
 
 public class FilePickerService : IFilePickerService
 {

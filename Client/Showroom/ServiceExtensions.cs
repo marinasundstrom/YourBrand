@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 
-using Skynet.Portal.Shared;
+using YourCompany.Portal.Shared;
 
-namespace Skynet.Showroom;
+namespace YourCompany.Showroom;
 
 public static class ServiceExtensions
 {
@@ -16,36 +16,36 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddClients(this IServiceCollection services)
     {
-        services.AddHttpClient(nameof(Skynet.Showroom.Client.IConsultantsClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourCompany.Showroom.Client.IConsultantsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}showroom/");
         })
-        .AddTypedClient<Skynet.Showroom.Client.IConsultantsClient>((http, sp) => new Skynet.Showroom.Client.ConsultantsClient(http))
+        .AddTypedClient<YourCompany.Showroom.Client.IConsultantsClient>((http, sp) => new YourCompany.Showroom.Client.ConsultantsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(Skynet.Showroom.Client.IOrganizationsClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourCompany.Showroom.Client.IOrganizationsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}showroom/");
         })
-        .AddTypedClient<Skynet.Showroom.Client.IOrganizationsClient>((http, sp) => new Skynet.Showroom.Client.OrganizationsClient(http))
+        .AddTypedClient<YourCompany.Showroom.Client.IOrganizationsClient>((http, sp) => new YourCompany.Showroom.Client.OrganizationsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(Skynet.Showroom.Client.ICompetenceAreasClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourCompany.Showroom.Client.ICompetenceAreasClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}showroom/");
         })
-        .AddTypedClient<Skynet.Showroom.Client.ICompetenceAreasClient>((http, sp) => new Skynet.Showroom.Client.CompetenceAreasClient(http))
+        .AddTypedClient<YourCompany.Showroom.Client.ICompetenceAreasClient>((http, sp) => new YourCompany.Showroom.Client.CompetenceAreasClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(Skynet.Showroom.Client.ISkillsClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourCompany.Showroom.Client.ISkillsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}showroom/");
         })
-        .AddTypedClient<Skynet.Showroom.Client.ISkillsClient>((http, sp) => new Skynet.Showroom.Client.SkillsClient(http))
+        .AddTypedClient<YourCompany.Showroom.Client.ISkillsClient>((http, sp) => new YourCompany.Showroom.Client.SkillsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
         return services;

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-using Skynet.Showroom.WebApi;
+using YourCompany.Showroom.WebApi;
 
 using Microsoft.AspNetCore.SignalR;
 

@@ -4,13 +4,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Projects;
-using Skynet.TimeReport.Application.Users;
-using Skynet.TimeReport.Application.Users.Commands;
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Projects;
+using YourCompany.TimeReport.Application.Users;
+using YourCompany.TimeReport.Application.Users.Commands;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Application.TimeSheets.Queries;
+namespace YourCompany.TimeReport.Application.TimeSheets.Queries;
 
 public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
 {

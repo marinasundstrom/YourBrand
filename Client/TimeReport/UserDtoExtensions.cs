@@ -1,12 +1,12 @@
 ﻿using System;
 
-using Skynet.TimeReport.Client;
+using YourCompany.TimeReport.Client;
 
-namespace Skynet.TimeReport;
+namespace YourCompany.TimeReport;
 
 public static class UserDtoExtensions
 {
-    public static string? GetDisplayName(this Skynet.AppService.Client.UserDto user) => !String.IsNullOrEmpty(user.DisplayName) ? user?.DisplayName : $"{user.FirstName} {user?.LastName}";
+    public static string? GetDisplayName(this YourCompany.AppService.Client.UserDto user) => !String.IsNullOrEmpty(user.DisplayName) ? user?.DisplayName : $"{user.FirstName} {user?.LastName}";
 
     public static string? GetDisplayName(this UserDto user) => !String.IsNullOrEmpty(user.DisplayName) ? user?.DisplayName : $"{user.FirstName} {user?.LastName}";
 }

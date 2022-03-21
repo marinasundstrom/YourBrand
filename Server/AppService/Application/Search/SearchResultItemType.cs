@@ -1,4 +1,4 @@
-﻿namespace Skynet.Application.Search;
+﻿namespace YourCompany.Application.Search;
 
 public enum SearchResultItemType
 {

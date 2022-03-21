@@ -1,4 +1,4 @@
-﻿namespace Skynet.Showroom.Application.Common.Interfaces;
+﻿namespace YourCompany.Showroom.Application.Common.Interfaces;
 
 public interface IUrlHelper
 {

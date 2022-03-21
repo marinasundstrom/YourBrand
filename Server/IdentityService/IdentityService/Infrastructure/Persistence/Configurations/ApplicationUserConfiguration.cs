@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Domain.Entities;
 
-namespace Skynet.IdentityService.Infrastructure.Persistence.Configurations;
+namespace YourCompany.IdentityService.Infrastructure.Persistence.Configurations;
 
 public class ApplicationUserConfiguration : IEntityTypeConfiguration<User>
 {

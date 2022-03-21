@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Application.Common.Models;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Application.Common.Models;
 
-namespace Skynet.Application.Users.Queries;
+namespace YourCompany.Application.Users.Queries;
 
 public class GetUsersQuery : IRequest<Results<UserDto>>
 {
@@ -32,7 +32,8 @@ public class GetUsersQuery : IRequest<Results<UserDto>>
     public Application.Common.Models.SortDirection? SortDirection { get; }
 
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Results<UserDto>>
-    {         readonly ICatalogContext _context;
+    { 
+        readonly ICatalogContext _context;
 
         public GetUsersQueryHandler(ICatalogContext context)
         {
@@ -64,7 +65,7 @@ public class GetUsersQuery : IRequest<Results<UserDto>>
 
             if (request.SortBy is not null)
             {
-                query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Skynet.Application.SortDirection.Descending : Skynet.Application.SortDirection.Ascending);
+                query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? YourCompany.Application.SortDirection.Descending : YourCompany.Application.SortDirection.Ascending);
             }
 
             var users = await query.ToListAsync(cancellationToken);

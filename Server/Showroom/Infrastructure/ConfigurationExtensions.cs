@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Skynet.Showroom.Infrastructure;
+namespace YourCompany.Showroom.Infrastructure;
 
 public static class ConfigurationExtensions
 {

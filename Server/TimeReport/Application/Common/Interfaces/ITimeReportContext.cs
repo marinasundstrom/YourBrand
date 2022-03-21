@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Application.Common.Interfaces;
+namespace YourCompany.TimeReport.Application.Common.Interfaces;
 
 public interface ITimeReportContext
 {

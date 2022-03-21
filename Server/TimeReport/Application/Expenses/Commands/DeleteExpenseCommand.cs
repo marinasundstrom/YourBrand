@@ -3,9 +3,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Interfaces;
 
-namespace Skynet.TimeReport.Application.Expenses.Commands;
+namespace YourCompany.TimeReport.Application.Expenses.Commands;
 
 public class DeleteExpenseCommand : IRequest
 {

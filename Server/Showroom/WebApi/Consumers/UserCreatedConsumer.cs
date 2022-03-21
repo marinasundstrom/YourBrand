@@ -1,10 +1,10 @@
 ﻿using MassTransit;
 
 using MediatR;
-using Skynet.IdentityService.Contracts;
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.Users.Commands;
-namespace Skynet.Showroom.Consumers;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Users.Commands;
+namespace YourCompany.Showroom.Consumers;
 
 public class UserCreated1Consumer : IConsumer<UserCreated>
 {

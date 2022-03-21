@@ -1,7 +1,7 @@
-﻿using Skynet.IdentityService;
+﻿using YourCompany.IdentityService;
 
 using Serilog;
-using Skynet.IdentityService.Infrastructure.Persistence;
+using YourCompany.IdentityService.Infrastructure.Persistence;
 
 static class Program
 {

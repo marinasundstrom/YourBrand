@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skynet.IdentityService.Domain.Exceptions;
+namespace YourCompany.IdentityService.Domain.Exceptions;
 
 public class DomainException : Exception
 {

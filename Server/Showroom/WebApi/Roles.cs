@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.Showroom.WebApi;
+namespace YourCompany.Showroom.WebApi;
 
 public static class Roles
 {

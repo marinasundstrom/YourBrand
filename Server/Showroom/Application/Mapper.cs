@@ -1,18 +1,18 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.ConsultantProfiles;
-using Skynet.Showroom.Application.CompetenceAreas;
-using Skynet.Showroom.Application.Users;
-using Skynet.Showroom.Application.Common.Models;
-using Skynet.Showroom.Application.Organizations;
-using Skynet.Showroom.Application.ConsultantProfiles.Experiences;
-using Skynet.Showroom.Application.Skills;
-using Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
-using Skynet.Showroom.Application.Cases;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.ConsultantProfiles;
+using YourCompany.Showroom.Application.CompetenceAreas;
+using YourCompany.Showroom.Application.Users;
+using YourCompany.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Application.Organizations;
+using YourCompany.Showroom.Application.ConsultantProfiles.Experiences;
+using YourCompany.Showroom.Application.Skills;
+using YourCompany.Showroom.Application.ConsultantProfiles.Skills.Queries;
+using YourCompany.Showroom.Application.Cases;
 
-namespace Skynet.Showroom.Application;
+namespace YourCompany.Showroom.Application;
 
 public static class Mapper
 {

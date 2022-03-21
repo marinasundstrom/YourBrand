@@ -1,7 +1,7 @@
 
-using Skynet.Showroom.Application.ConsultantProfiles;
+using YourCompany.Showroom.Application.ConsultantProfiles;
 
-namespace Skynet.Showroom.Application.Cases;
+namespace YourCompany.Showroom.Application.Cases;
 
 public record CaseConsultantDto
 (

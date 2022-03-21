@@ -6,10 +6,11 @@
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
         OnClick="@(async (e) => await DrawerToggleCallback.InvokeAsync())" />
     <a href="/">
-        <img style="height: 30px; width: auto;" class="mt-1" src="brand.svg" />
+        <MudIcon Icon="@Icons.Filled.DataUsage" Color="@Color.Primary" Class="mt-1" />
+        @* <img style="height: 30px; width: auto;" class="mt-1" src="brand.svg" /> *@
     </a>
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudText Typo="Typo.h5" Class="ms-3"><b>@T["Catalog"]</b></MudText>
+        <MudText Typo="Typo.h5" Class="ms-2"><b>@T["Catalog"]</b></MudText>
     </MudHidden>
     <MudSpacer />
     <AuthorizeView>

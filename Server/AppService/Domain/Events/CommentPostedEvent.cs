@@ -1,6 +1,6 @@
-﻿using Skynet.Domain.Common;
+﻿using YourCompany.Domain.Common;
 
-namespace Skynet.Domain.Events;
+namespace YourCompany.Domain.Events;
 
 public class CommentPostedEvent : DomainEvent
 {

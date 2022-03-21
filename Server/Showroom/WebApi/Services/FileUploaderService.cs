@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.WebApi.Services;
+namespace YourCompany.Showroom.WebApi.Services;
 
 public class FileUploaderService : IFileUploaderService
 {

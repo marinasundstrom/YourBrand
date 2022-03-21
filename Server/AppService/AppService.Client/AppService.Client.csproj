@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/Skynet.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Skynet.AppService.Client">
+		<OpenApiReference Include="OpenAPIs/AppService.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourCompany.AppService.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>AppServiceClient.cs</OutputPath>

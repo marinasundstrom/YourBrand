@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.AspNetCore.Identity;
 
-using Skynet.IdentityService.Domain.Common.Interfaces;
+using YourCompany.IdentityService.Domain.Common.Interfaces;
 
-namespace Skynet.IdentityService.Domain.Entities;
+namespace YourCompany.IdentityService.Domain.Entities;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class User : IdentityUser, IAuditableEntity, ISoftDelete

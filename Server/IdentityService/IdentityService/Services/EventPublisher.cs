@@ -4,10 +4,10 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Domain.Entities;
 
-namespace Skynet.IdentityService.Services;
+namespace YourCompany.IdentityService.Services;
 
 public class EventPublisher : IEventPublisher
 {

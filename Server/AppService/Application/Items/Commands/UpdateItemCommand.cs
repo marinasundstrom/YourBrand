@@ -1,11 +1,11 @@
 ﻿
-using Skynet.Application.Common.Interfaces;
+using YourCompany.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Skynet.Application.Items.Commands;
+namespace YourCompany.Application.Items.Commands;
 
 public record UpdateItemCommand(string Id, string Name, string Description) : IRequest
 {

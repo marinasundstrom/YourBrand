@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Common.Models;
-using Skynet.TimeReport.Application.Expenses;
-using Skynet.TimeReport.Application.Expenses.Commands;
-using Skynet.TimeReport.Application.Expenses.Queries;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Models;
+using YourCompany.TimeReport.Application.Expenses;
+using YourCompany.TimeReport.Application.Expenses.Commands;
+using YourCompany.TimeReport.Application.Expenses.Queries;
 
-using static Skynet.TimeReport.Application.Expenses.ExpensesHelpers;
+using static YourCompany.TimeReport.Application.Expenses.ExpensesHelpers;
 
-namespace Skynet.TimeReport.Controllers;
+namespace YourCompany.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

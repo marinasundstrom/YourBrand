@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Domain;
+namespace YourCompany.TimeReport.Domain;
 
 public static class UserDtoExtensions
 {

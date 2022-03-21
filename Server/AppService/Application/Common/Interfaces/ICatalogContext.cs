@@ -1,9 +1,9 @@
-using Skynet.Domain.Entities;
+using YourCompany.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Skynet.Application.Common.Interfaces;
+namespace YourCompany.Application.Common.Interfaces;
 
 public interface ICatalogContext
 {

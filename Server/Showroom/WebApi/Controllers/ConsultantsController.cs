@@ -4,17 +4,17 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Skynet.Showroom.Application.Common.Models;
-using Skynet.Showroom.Application.ConsultantProfiles;
-using Skynet.Showroom.Application.ConsultantProfiles.Commands;
-using Skynet.Showroom.Application.ConsultantProfiles.Experiences;
-using Skynet.Showroom.Application.ConsultantProfiles.Experiences.Commands;
-using Skynet.Showroom.Application.ConsultantProfiles.Experiences.Queries;
-using Skynet.Showroom.Application.ConsultantProfiles.Queries;
-using Skynet.Showroom.Application.ConsultantProfiles.Skills.Commands;
-using Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
+using YourCompany.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Application.ConsultantProfiles;
+using YourCompany.Showroom.Application.ConsultantProfiles.Commands;
+using YourCompany.Showroom.Application.ConsultantProfiles.Experiences;
+using YourCompany.Showroom.Application.ConsultantProfiles.Experiences.Commands;
+using YourCompany.Showroom.Application.ConsultantProfiles.Experiences.Queries;
+using YourCompany.Showroom.Application.ConsultantProfiles.Queries;
+using YourCompany.Showroom.Application.ConsultantProfiles.Skills.Commands;
+using YourCompany.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
-namespace Skynet.Showroom.WebApi.Controllers;
+namespace YourCompany.Showroom.WebApi.Controllers;
 
 [Authorize]
 [Route("[controller]")]

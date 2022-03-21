@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles.Skills.Queries;
+namespace YourCompany.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 public class GetSkillQuery : IRequest<ConsultantProfileSkillDto?>
 {

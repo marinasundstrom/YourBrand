@@ -1,5 +1,5 @@
 ﻿
-using Skynet.Application.Common.Interfaces;
+using YourCompany.Application.Common.Interfaces;
 
 using MediatR;
 
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Worker.Client;
 
-namespace Skynet.Application.Notifications.Commands;
+namespace YourCompany.Application.Notifications.Commands;
 
 public class MarkAllNotificationsAsReadCommand : IRequest
 {

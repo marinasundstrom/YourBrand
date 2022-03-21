@@ -1,10 +1,10 @@
 ﻿
 using MediatR;
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Domain.Entities;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Domain.Entities;
 
-namespace Skynet.Application.Users.Commands;
+namespace YourCompany.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {
@@ -31,7 +31,8 @@ public class CreateUserCommand : IRequest<UserDto>
     public string Email { get; }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
-    {         readonly ICatalogContext _context;
+    { 
+        readonly ICatalogContext _context;
 
         public CreateUserCommandHandler(ICatalogContext context)
         {

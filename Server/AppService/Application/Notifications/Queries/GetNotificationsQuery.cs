@@ -1,13 +1,13 @@
 
-using Skynet.Application.Common.Interfaces;
-using Skynet.Application.Common.Models;
-using Skynet.Domain;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Application.Common.Models;
+using YourCompany.Domain;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Skynet.Application.Notifications.Queries;
+namespace YourCompany.Application.Notifications.Queries;
 
 public class GetNotificationsQuery : IRequest<NotificationsResults>
 {

@@ -1,3 +1,3 @@
-﻿namespace Skynet.IdentityService.Application.Users;
+﻿namespace YourCompany.IdentityService.Application.Users;
 
 public record class RoleDto(string Id, string Name);

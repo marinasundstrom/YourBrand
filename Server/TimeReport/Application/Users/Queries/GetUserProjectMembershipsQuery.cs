@@ -3,13 +3,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Common.Models;
-using Skynet.TimeReport.Application.Projects;
-using Skynet.TimeReport.Application.Users;
-using Skynet.TimeReport.Domain.Exceptions;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Common.Models;
+using YourCompany.TimeReport.Application.Projects;
+using YourCompany.TimeReport.Application.Users;
+using YourCompany.TimeReport.Domain.Exceptions;
 
-namespace Skynet.TimeReport.Application.Users.Queries;
+namespace YourCompany.TimeReport.Application.Users.Queries;
 
 public class GetUserProjectMembershipsQuery : IRequest<ItemsResult<ProjectMembershipDto>>
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-using Skynet.TimeReport.Client;
+using YourCompany.TimeReport.Client;
 
-namespace Skynet.TimeReport.Pages;
+namespace YourCompany.TimeReport.Pages;
 
 public class ActivityModel
 {

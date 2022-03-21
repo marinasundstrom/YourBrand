@@ -1,9 +1,9 @@
-using Skynet.Domain.Entities;
-using Skynet.Infrastructure.Persistence;
+using YourCompany.Domain.Entities;
+using YourCompany.Infrastructure.Persistence;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Skynet.Infrastructure.Persistence;
+namespace YourCompany.Infrastructure.Persistence;
 
 public static class Seed
 {

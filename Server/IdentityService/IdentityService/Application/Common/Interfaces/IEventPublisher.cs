@@ -1,4 +1,4 @@
-﻿namespace Skynet.IdentityService.Application.Common.Interfaces;
+﻿namespace YourCompany.IdentityService.Application.Common.Interfaces;
 
 public interface IEventPublisher
 {

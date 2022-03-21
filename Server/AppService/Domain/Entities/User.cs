@@ -1,7 +1,7 @@
 ﻿
-using Skynet.Domain.Common;
+using YourCompany.Domain.Common;
 
-namespace Skynet.Domain.Entities;
+namespace YourCompany.Domain.Entities;
 
 public class User : AuditableEntity, ISoftDelete
 {

@@ -2,13 +2,13 @@
 
 using IdentityModel;
 
-using Skynet.IdentityService.Domain.Entities;
+using YourCompany.IdentityService.Domain.Entities;
 
 using Microsoft.AspNetCore.Identity;
 
 using Serilog;
 
-namespace Skynet.IdentityService.Infrastructure.Persistence;
+namespace YourCompany.IdentityService.Infrastructure.Persistence;
 
 public class SeedData
 {

@@ -1,4 +1,4 @@
-﻿namespace Skynet.Portal;
+﻿namespace YourCompany.Portal;
 
 public static class Constants
 {

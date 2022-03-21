@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Skynet.IdentityService.Application.Common.Interfaces;
-using Skynet.IdentityService.Infrastructure.Persistence;
-using Skynet.IdentityService.Infrastructure.Services;
+using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourCompany.IdentityService.Infrastructure.Persistence;
+using YourCompany.IdentityService.Infrastructure.Services;
 
-namespace Skynet.IdentityService.Infrastructure.Infrastructure;
+namespace YourCompany.IdentityService.Infrastructure.Infrastructure;
 
 public static class ServiceExtensions
 {

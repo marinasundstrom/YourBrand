@@ -1,12 +1,12 @@
 ﻿@page "/users"
 @attribute [Authorize(Roles = "Administrator,Manager")]
-@using Skynet.TimeReport.Shared
+@using YourCompany.TimeReport.Shared
 @using IdentityService.Client
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IUsersClient UsersClient
 
-<PageTitle>Users - Skynet</PageTitle>
+<PageTitle>Users - YourCompany</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">Users</MudText>
 

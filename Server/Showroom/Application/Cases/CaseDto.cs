@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Skynet.Showroom.Application.Cases;
+namespace YourCompany.Showroom.Application.Cases;
 
 public record CaseDto
 (

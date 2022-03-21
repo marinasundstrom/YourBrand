@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 using OfficeOpenXml;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Domain;
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Domain;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Application.Reports.Queries;
+namespace YourCompany.TimeReport.Application.Reports.Queries;
 
 public enum ReportMode 
 {

@@ -1,13 +1,13 @@
 ﻿using System;
 
-using Skynet.Application;
-using Skynet.Application.Common.Interfaces;
-using Skynet.Infrastructure;
+using YourCompany.Application;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Infrastructure;
 
-using Skynet.WebApi.Hubs;
-using Skynet.WebApi.Services;
+using YourCompany.WebApi.Hubs;
+using YourCompany.WebApi.Services;
 
-namespace Skynet.WebApi;
+namespace YourCompany.WebApi;
 
 public static class ServiceExtensions
 {

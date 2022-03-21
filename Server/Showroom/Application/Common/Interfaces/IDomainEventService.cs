@@ -1,6 +1,6 @@
-﻿using Skynet.Showroom.Domain.Common;
+﻿using YourCompany.Showroom.Domain.Common;
 
-namespace Skynet.Showroom.Application.Common.Interfaces;
+namespace YourCompany.Showroom.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

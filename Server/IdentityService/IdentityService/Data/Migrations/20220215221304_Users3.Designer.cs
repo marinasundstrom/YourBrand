@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Skynet.IdentityService.Infrastructure.Persistence;
+using YourCompany.IdentityService.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace Skynet.IdentityService.Data.Migrations
+namespace YourCompany.IdentityService.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220215221304_Users3")]
@@ -172,7 +172,7 @@ namespace Skynet.IdentityService.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Skynet.IdentityService.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("YourCompany.IdentityService.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -272,7 +272,7 @@ namespace Skynet.IdentityService.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Skynet.IdentityService.Domain.Entities.Department", b =>
+            modelBuilder.Entity("YourCompany.IdentityService.Domain.Entities.Department", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -285,7 +285,7 @@ namespace Skynet.IdentityService.Data.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("Skynet.IdentityService.Domain.Entities.Team", b =>
+            modelBuilder.Entity("YourCompany.IdentityService.Domain.Entities.Team", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -305,13 +305,13 @@ namespace Skynet.IdentityService.Data.Migrations
 
             modelBuilder.Entity("ApplicationUserTeam", b =>
                 {
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("PersonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.Team", null)
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.Team", null)
                         .WithMany()
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -329,7 +329,7 @@ namespace Skynet.IdentityService.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -338,7 +338,7 @@ namespace Skynet.IdentityService.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -353,7 +353,7 @@ namespace Skynet.IdentityService.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -362,32 +362,32 @@ namespace Skynet.IdentityService.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Skynet.IdentityService.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("YourCompany.IdentityService.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.Department", "Department")
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.Department", "Department")
                         .WithMany("Persons")
                         .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("Skynet.IdentityService.Domain.Entities.Team", b =>
+            modelBuilder.Entity("YourCompany.IdentityService.Domain.Entities.Team", b =>
                 {
-                    b.HasOne("Skynet.IdentityService.Domain.Entities.Department", "Department")
+                    b.HasOne("YourCompany.IdentityService.Domain.Entities.Department", "Department")
                         .WithMany("Teams")
                         .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("Skynet.IdentityService.Domain.Entities.Department", b =>
+            modelBuilder.Entity("YourCompany.IdentityService.Domain.Entities.Department", b =>
                 {
                     b.Navigation("Persons");
 

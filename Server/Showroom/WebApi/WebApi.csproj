@@ -5,7 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Skynet.Showroom.WebApi</RootNamespace>
+    <RootNamespace>YourCompany.Showroom.WebApi</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -1,4 +1,4 @@
-namespace Skynet.Showroom.Application.ConsultantProfiles.Experiences;
+namespace YourCompany.Showroom.Application.ConsultantProfiles.Experiences;
 
 public record ExperienceDto(string Id, string Title, string CompanyName, string? Location, DateTime StartDate, DateTime? EndDate, string? Description);
 

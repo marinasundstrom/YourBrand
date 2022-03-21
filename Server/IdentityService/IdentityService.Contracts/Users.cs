@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skynet.IdentityService.Contracts;
+namespace YourCompany.IdentityService.Contracts;
 
 public record UserCreated(string UserId, string CreatedById);
 

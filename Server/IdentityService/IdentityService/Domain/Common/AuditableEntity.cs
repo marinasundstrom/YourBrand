@@ -1,4 +1,4 @@
-﻿namespace Skynet.IdentityService.Domain.Common;
+﻿namespace YourCompany.IdentityService.Domain.Common;
 
 public abstract class AuditableEntity
 {

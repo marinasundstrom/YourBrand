@@ -5,9 +5,9 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Skynet.IdentityService.Application.Users.Commands;
+using YourCompany.IdentityService.Application.Users.Commands;
 
-namespace Skynet.IdentityService.Application;
+namespace YourCompany.IdentityService.Application;
 
 public static class ServiceExtensions
 {

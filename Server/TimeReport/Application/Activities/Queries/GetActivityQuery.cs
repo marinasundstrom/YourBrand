@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Projects;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Projects;
 
-namespace Skynet.TimeReport.Application.Activities.Queries;
+namespace YourCompany.TimeReport.Application.Activities.Queries;
 
 public class GetActivityQuery : IRequest<ActivityDto>
 {

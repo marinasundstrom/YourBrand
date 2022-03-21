@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.Common.Models;
-using Skynet.Showroom.Domain.Common;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace Skynet.Showroom.Infrastructure.Services;
+namespace YourCompany.Showroom.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

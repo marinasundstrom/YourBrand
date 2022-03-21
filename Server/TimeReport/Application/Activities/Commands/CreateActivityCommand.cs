@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Projects;
-using Skynet.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Projects;
+using YourCompany.TimeReport.Domain.Entities;
 
-namespace Skynet.TimeReport.Application.Activities.Commands;
+namespace YourCompany.TimeReport.Application.Activities.Commands;
 
 public class CreateActivityCommand : IRequest<ActivityDto>
 {

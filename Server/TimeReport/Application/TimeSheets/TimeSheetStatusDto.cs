@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Skynet.TimeReport.Application.TimeSheets;
+namespace YourCompany.TimeReport.Application.TimeSheets;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum TimeSheetStatusDto

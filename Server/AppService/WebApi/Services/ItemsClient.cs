@@ -1,12 +1,12 @@
 ﻿
-using Skynet.Application;
-using Skynet.Application.Common.Interfaces;
-using Skynet.Application.Items;
-using Skynet.WebApi.Hubs;
+using YourCompany.Application;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Application.Items;
+using YourCompany.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Skynet.WebApi.Services;
+namespace YourCompany.WebApi.Services;
 
 public class ItemsClient : IItemsClient
 {

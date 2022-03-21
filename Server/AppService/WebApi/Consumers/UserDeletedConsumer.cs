@@ -3,12 +3,12 @@ using MassTransit;
 
 using MediatR;
 
-using Skynet.IdentityService.Client;
-using Skynet.IdentityService.Contracts;
-using Skynet.Application.Common.Interfaces;
-using Skynet.Application.Users.Commands;
+using YourCompany.IdentityService.Client;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.Application.Common.Interfaces;
+using YourCompany.Application.Users.Commands;
 
-namespace Skynet.Consumers;
+namespace YourCompany.Consumers;
 
 public class UserDeleted0Consumer : IConsumer<UserDeleted>
 {

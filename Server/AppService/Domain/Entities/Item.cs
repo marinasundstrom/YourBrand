@@ -1,9 +1,9 @@
 ﻿using System;
 
-using Skynet.Domain.Common;
-using Skynet.Domain.Events;
+using YourCompany.Domain.Common;
+using YourCompany.Domain.Events;
 
-namespace Skynet.Domain.Entities;
+namespace YourCompany.Domain.Entities;
 
 public class Item : AuditableEntity, ISoftDelete, IHasDomainEvent
 {

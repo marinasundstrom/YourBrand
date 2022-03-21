@@ -15,13 +15,13 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
-using Skynet.TimeReport;
-using Skynet.TimeReport.Application;
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Hubs;
-using Skynet.TimeReport.Infrastructure;
-using Skynet.TimeReport.Infrastructure.Persistence;
-using Skynet.TimeReport.Services;
+using YourCompany.TimeReport;
+using YourCompany.TimeReport.Application;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Hubs;
+using YourCompany.TimeReport.Infrastructure;
+using YourCompany.TimeReport.Infrastructure.Persistence;
+using YourCompany.TimeReport.Services;
 
 static class Program
 {

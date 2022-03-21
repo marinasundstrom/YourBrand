@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Skynet.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Interfaces;
 
-namespace Skynet.Showroom.Application.CompetenceAreas.Commands;
+namespace YourCompany.Showroom.Application.CompetenceAreas.Commands;
 
 public record DeleteCompetenceAreaCommand(string Id) : IRequest
 {

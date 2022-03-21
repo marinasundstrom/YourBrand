@@ -1,11 +1,11 @@
 ﻿using System;
 
-using Skynet.Domain.Entities;
+using YourCompany.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Skynet.Infrastructure.Persistence.Configurations;
+namespace YourCompany.Infrastructure.Persistence.Configurations;
 
 class ItemConfiguration : IEntityTypeConfiguration<Item>
 {

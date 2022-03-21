@@ -1,6 +1,6 @@
-﻿using Skynet.Application.Common.Interfaces;
-using Skynet.Infrastructure;
-namespace Skynet.WebApi.Services;
+﻿using YourCompany.Application.Common.Interfaces;
+using YourCompany.Infrastructure;
+namespace YourCompany.WebApi.Services;
 
 public class UrlHelper : IUrlHelper
 {

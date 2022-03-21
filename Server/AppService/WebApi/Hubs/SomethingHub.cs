@@ -1,9 +1,9 @@
 ﻿
-using Skynet.Application.Common.Interfaces;
+using YourCompany.Application.Common.Interfaces;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace Skynet.WebApi.Hubs;
+namespace YourCompany.WebApi.Hubs;
 
 public class SomethingHub : Hub<ISomethingClient>
 {

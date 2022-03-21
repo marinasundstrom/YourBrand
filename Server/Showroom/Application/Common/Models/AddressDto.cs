@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Skynet.Showroom.Application.Common.Models;
+namespace YourCompany.Showroom.Application.Common.Models;
 
 public record AddressDto
 (

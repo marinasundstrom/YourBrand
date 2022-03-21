@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles;
+namespace YourCompany.Showroom.Application.ConsultantProfiles;
 
 public abstract class ConsultantProfileViewModelDto
 {

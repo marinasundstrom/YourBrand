@@ -1,9 +1,9 @@
 ﻿using System;
 
-using Skynet.Showroom.Application.CompetenceAreas;
-using Skynet.Showroom.Application.Organizations;
+using YourCompany.Showroom.Application.CompetenceAreas;
+using YourCompany.Showroom.Application.Organizations;
 
-namespace Skynet.Showroom.Application.ConsultantProfiles;
+namespace YourCompany.Showroom.Application.ConsultantProfiles;
 
 public record ConsultantProfileDto(
     string Id,

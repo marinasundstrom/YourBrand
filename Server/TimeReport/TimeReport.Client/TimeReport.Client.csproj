@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/TimeReport.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Skynet.TimeReport.Client">
+		<OpenApiReference Include="OpenAPIs/TimeReport.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourCompany.TimeReport.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>TimeReportClient.cs</OutputPath>

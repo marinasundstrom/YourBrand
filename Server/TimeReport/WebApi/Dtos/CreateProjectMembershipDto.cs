@@ -1,3 +1,3 @@
-﻿namespace Skynet.TimeReport.Dtos;
+﻿namespace YourCompany.TimeReport.Dtos;
 
 public record class CreateProjectMembershipDto(string UserId, DateTime? From, DateTime? Thru);

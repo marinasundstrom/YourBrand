@@ -7,13 +7,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Organizations;
+using YourCompany.Showroom.Application.Organizations;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Domain.Entities;
-using Skynet.Showroom.Domain.Exceptions;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Domain.Entities;
+using YourCompany.Showroom.Domain.Exceptions;
 
-namespace Skynet.Showroom.Application.Organizations.Queries;
+namespace YourCompany.Showroom.Application.Organizations.Queries;
 
 public class GetOrganizationQuery : IRequest<OrganizationDto?>
 {

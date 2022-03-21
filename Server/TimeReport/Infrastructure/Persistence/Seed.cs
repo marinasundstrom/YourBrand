@@ -3,10 +3,10 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-using Skynet.TimeReport.Domain.Entities;
-using Skynet.TimeReport.Infrastructure;
+using YourCompany.TimeReport.Domain.Entities;
+using YourCompany.TimeReport.Infrastructure;
 
-namespace Skynet.TimeReport.Infrastructure.Persistence;
+namespace YourCompany.TimeReport.Infrastructure.Persistence;
 
 public static class Seed
 {

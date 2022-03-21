@@ -5,12 +5,12 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.IdentityService.Client;
-using Skynet.IdentityService.Contracts;
-using Skynet.TimeReport.Application.Common.Interfaces;
-using Skynet.TimeReport.Application.Users.Commands;
+using YourCompany.IdentityService.Client;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourCompany.TimeReport.Application.Users.Commands;
 
-namespace Skynet.TimeReport.Consumers;
+namespace YourCompany.TimeReport.Consumers;
 
 public class UserUpdatedConsumer : IConsumer<UserUpdated>
 {

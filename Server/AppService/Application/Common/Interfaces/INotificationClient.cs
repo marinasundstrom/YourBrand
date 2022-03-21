@@ -1,6 +1,6 @@
 ﻿using Worker.Client;
 
-namespace Skynet.Application.Common.Interfaces;
+namespace YourCompany.Application.Common.Interfaces;
 
 public interface INotificationClient
 {

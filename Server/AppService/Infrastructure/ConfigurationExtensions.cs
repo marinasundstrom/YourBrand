@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Skynet.Infrastructure;
+namespace YourCompany.Infrastructure;
 
 public static class ConfigurationExtensions
 {

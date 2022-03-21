@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Skynet.Showroom.Application.Skills;
+namespace YourCompany.Showroom.Application.Skills;
 
 public record SkillDto
 (

@@ -2,11 +2,11 @@
 using MassTransit;
 
 using MediatR;
-using Skynet.IdentityService.Contracts;
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.Users.Commands;
+using YourCompany.IdentityService.Contracts;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Users.Commands;
 
-namespace Skynet.Showroom.Consumers;
+namespace YourCompany.Showroom.Consumers;
 
 public class UserUpdated1Consumer : IConsumer<UserUpdated>
 {

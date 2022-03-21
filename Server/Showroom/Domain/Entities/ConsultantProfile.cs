@@ -1,8 +1,8 @@
 using System;
 
-using Skynet.Showroom.Domain.Common;
+using YourCompany.Showroom.Domain.Common;
 
-namespace Skynet.Showroom.Domain.Entities;
+namespace YourCompany.Showroom.Domain.Entities;
 
 public class ConsultantProfile : AuditableEntity, ISoftDelete
 {

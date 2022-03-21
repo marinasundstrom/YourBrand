@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Skynet.Showroom.Application.Common.Interfaces;
-using Skynet.Showroom.Application.Common.Models;
-using Skynet.Showroom.Domain.Entities;
+using YourCompany.Showroom.Application.Common.Interfaces;
+using YourCompany.Showroom.Application.Common.Models;
+using YourCompany.Showroom.Domain.Entities;
 
-namespace Skynet.Showroom.Application.Skills.SkillAreas.Queries;
+namespace YourCompany.Showroom.Application.Skills.SkillAreas.Queries;
 
 public class GetSkillAreasQuery : IRequest<Results<SkillAreaDto>>
 {
