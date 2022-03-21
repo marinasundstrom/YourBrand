@@ -16,3 +16,16 @@ public class Case : AuditableEntity, ISoftDelete
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }
+
+public class Location : AuditableEntity, ISoftDelete
+{
+    public string Id { get; set; } = null!;
+
+    public string? CityOrDistrict { get; set; }
+
+    public string? Cou { get; set; }
+
+    public DateTime? Deleted { get; set; }
+    public string? DeletedById { get; set; }
+    public User? DeletedBy { get; set; }
+}
