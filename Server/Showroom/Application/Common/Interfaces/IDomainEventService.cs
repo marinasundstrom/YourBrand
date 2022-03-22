@@ -1,6 +1,6 @@
-﻿using YourCompany.Showroom.Domain.Common;
+﻿using YourBrand.Showroom.Domain.Common;
 
-namespace YourCompany.Showroom.Application.Common.Interfaces;
+namespace YourBrand.Showroom.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

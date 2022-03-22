@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourCompany.IdentityService.Contracts;
+namespace YourBrand.IdentityService.Contracts;
 
 public record UserCreated(string UserId, string CreatedById);
 

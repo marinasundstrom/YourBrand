@@ -1,8 +1,8 @@
 ﻿
-using YourCompany.TimeReport.Domain.Common;
-using YourCompany.TimeReport.Domain.Common.Interfaces;
+using YourBrand.TimeReport.Domain.Common;
+using YourBrand.TimeReport.Domain.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Domain.Entities;
+namespace YourBrand.TimeReport.Domain.Entities;
 
 public class User : AuditableEntity, ISoftDelete
 {

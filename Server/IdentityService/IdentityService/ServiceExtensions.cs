@@ -1,11 +1,11 @@
 ﻿using System;
 
-using YourCompany.IdentityService.Application;
-using YourCompany.IdentityService.Application.Common.Interfaces;
-using YourCompany.IdentityService.Infrastructure;
-using YourCompany.IdentityService.Services;
+using YourBrand.IdentityService.Application;
+using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Infrastructure;
+using YourBrand.IdentityService.Services;
 
-namespace YourCompany.IdentityService;
+namespace YourBrand.IdentityService;
 
 public static class ServiceExtensions
 {

@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.Application.Skills.SkillAreas.Queries;
+namespace YourBrand.Showroom.Application.Skills.SkillAreas.Queries;
 
 public class GetSkillAreaQuery : IRequest<SkillAreaDto?>
 {

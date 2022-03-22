@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-using YourCompany.WebApi;
+using YourBrand.WebApi;
 
 using Microsoft.AspNetCore.SignalR;
 

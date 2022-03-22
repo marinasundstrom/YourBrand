@@ -1,6 +1,6 @@
-﻿using YourCompany.IdentityService.Domain.Common;
+﻿using YourBrand.IdentityService.Domain.Common;
 
-namespace YourCompany.IdentityService.Application.Common.Interfaces;
+namespace YourBrand.IdentityService.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

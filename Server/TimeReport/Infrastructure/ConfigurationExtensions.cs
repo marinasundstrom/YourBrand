@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace YourCompany.TimeReport.Infrastructure;
+namespace YourBrand.TimeReport.Infrastructure;
 
 public static class ConfigurationExtensions
 {

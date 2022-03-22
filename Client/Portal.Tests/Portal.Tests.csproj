@@ -6,7 +6,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>YourCompany.Portal</RootNamespace>
+    <RootNamespace>YourBrand.Portal</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

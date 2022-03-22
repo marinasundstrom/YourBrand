@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.AspNetCore.Identity;
 
-using YourCompany.IdentityService.Domain.Common.Interfaces;
+using YourBrand.IdentityService.Domain.Common.Interfaces;
 
-namespace YourCompany.IdentityService.Domain.Entities;
+namespace YourBrand.IdentityService.Domain.Entities;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class User : IdentityUser, IAuditableEntity, ISoftDelete

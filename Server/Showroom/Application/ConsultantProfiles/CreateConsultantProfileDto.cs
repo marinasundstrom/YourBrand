@@ -1,4 +1,4 @@
-﻿namespace YourCompany.Showroom.Application.ConsultantProfiles;
+﻿namespace YourBrand.Showroom.Application.ConsultantProfiles;
 
 public class CreateConsultantProfileDto
 {

@@ -1,6 +1,6 @@
-﻿using YourCompany.Application.Users;
+﻿using YourBrand.Application.Users;
 
-namespace YourCompany.Application.Items;
+namespace YourBrand.Application.Items;
 
 public record ItemDto(
     string Id, string Name, string? Description, string? Image, int CommentCount,

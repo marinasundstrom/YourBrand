@@ -1,10 +1,10 @@
-﻿using YourCompany.Application.Common.Interfaces;
+﻿using YourBrand.Application.Common.Interfaces;
 
 using Contracts;
 
 using MassTransit;
 
-namespace YourCompany.Consumers;
+namespace YourBrand.Consumers;
 
 public class RandomNotificationConsumer : IConsumer<RandomNotification>
 {

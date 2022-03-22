@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Application.Common.Models;
-using YourCompany.Showroom.Domain.Entities;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Domain.Entities;
 
-namespace YourCompany.Showroom.Application.Skills.Queries;
+namespace YourBrand.Showroom.Application.Skills.Queries;
 
 public class GetSkillsQuery : IRequest<Results<SkillDto>>
 {

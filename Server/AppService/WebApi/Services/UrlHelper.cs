@@ -1,6 +1,6 @@
-﻿using YourCompany.Application.Common.Interfaces;
-using YourCompany.Infrastructure;
-namespace YourCompany.WebApi.Services;
+﻿using YourBrand.Application.Common.Interfaces;
+using YourBrand.Infrastructure;
+namespace YourBrand.WebApi.Services;
 
 public class UrlHelper : IUrlHelper
 {

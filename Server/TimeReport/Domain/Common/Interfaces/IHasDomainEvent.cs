@@ -1,4 +1,4 @@
-﻿namespace YourCompany.TimeReport.Domain.Common.Interfaces;
+﻿namespace YourBrand.TimeReport.Domain.Common.Interfaces;
 
 public interface IHasDomainEvent
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourCompany.TimeReport;
+namespace YourBrand.TimeReport;
 
 public static class ServiceExtensions
 {

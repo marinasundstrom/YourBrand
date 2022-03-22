@@ -1,13 +1,13 @@
 ﻿using System;
 
-using YourCompany.Application;
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Infrastructure;
+using YourBrand.Application;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Infrastructure;
 
-using YourCompany.WebApi.Hubs;
-using YourCompany.WebApi.Services;
+using YourBrand.WebApi.Hubs;
+using YourBrand.WebApi.Services;
 
-namespace YourCompany.WebApi;
+namespace YourBrand.WebApi;
 
 public static class ServiceExtensions
 {

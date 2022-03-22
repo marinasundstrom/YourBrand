@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Net.Http.Headers;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Application.ConsultantProfiles.Queries;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.ConsultantProfiles.Queries;
 
 using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace YourCompany.Showroom.Application;
+namespace YourBrand.Showroom.Application;
 
 public static class ServiceExtensions
 {

@@ -1,9 +1,9 @@
-using YourCompany.Showroom.Domain.Entities;
+using YourBrand.Showroom.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace YourCompany.Showroom.Application.Common.Interfaces;
+namespace YourBrand.Showroom.Application.Common.Interfaces;
 
 public interface IShowroomContext
 {

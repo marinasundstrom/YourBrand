@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application;
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Common.Models;
-using YourCompany.TimeReport.Application.Projects;
-using YourCompany.TimeReport.Application.Users;
-using YourCompany.TimeReport.Application.Users.Commands;
-using YourCompany.TimeReport.Application.Users.Queries;
-using YourCompany.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Application;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Application.Users;
+using YourBrand.TimeReport.Application.Users.Commands;
+using YourBrand.TimeReport.Application.Users.Queries;
+using YourBrand.TimeReport.Domain.Exceptions;
 
-namespace YourCompany.TimeReport.Controllers;
+namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

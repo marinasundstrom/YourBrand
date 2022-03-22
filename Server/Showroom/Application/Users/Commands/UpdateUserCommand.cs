@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Domain.Exceptions;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Exceptions;
 
-namespace YourCompany.Showroom.Application.Users.Commands;
+namespace YourBrand.Showroom.Application.Users.Commands;
 
 public class UpdateUserCommand : IRequest<UserDto>
 {

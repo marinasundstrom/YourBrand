@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourCompany.IdentityService.Domain.Exceptions;
+namespace YourBrand.IdentityService.Domain.Exceptions;
 
 public class DomainException : Exception
 {

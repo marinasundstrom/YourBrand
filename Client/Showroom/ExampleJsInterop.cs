@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace YourCompany.Showroom;
+namespace YourBrand.Showroom;
 
 // This class provides an example of how JavaScript functionality can be wrapped
 // in a .NET class for easy consumption. The associated JavaScript module is

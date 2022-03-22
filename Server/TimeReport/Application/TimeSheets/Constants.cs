@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourCompany.TimeReport.Application.TimeSheets;
+namespace YourBrand.TimeReport.Application.TimeSheets;
 
 public static class Constants
 {

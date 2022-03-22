@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using YourCompany.AppService.Client;
+using YourBrand.AppService.Client;
 using MudBlazor;
 
-namespace YourCompany.Portal.Pages.Items
+namespace YourBrand.Portal.Pages.Items
 {
     public partial class ItemsPage
     {
@@ -102,7 +102,7 @@ namespace YourCompany.Portal.Pages.Items
         {
             try
             {
-                var results = await ItemsClient.GetItemsAsync(state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourCompany.AppService.Client.SortDirection.Asc : YourCompany.AppService.Client.SortDirection.Desc);
+                var results = await ItemsClient.GetItemsAsync(state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc);
                 return new TableData<ItemDto>()
                 {TotalItems = results.TotalCount, Items = results.Items};
             }

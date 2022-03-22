@@ -1,6 +1,6 @@
-﻿using YourCompany.Domain.Common;
+﻿using YourBrand.Domain.Common;
 
-namespace YourCompany.Application.Common.Interfaces;
+namespace YourBrand.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

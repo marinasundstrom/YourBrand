@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace YourCompany.TimeReport;
+namespace YourBrand.TimeReport;
 
 public static class DateTimeExtensions
 {

@@ -1,6 +1,6 @@
 ﻿using Worker.Client;
 
-namespace YourCompany.Application.Common.Interfaces;
+namespace YourBrand.Application.Common.Interfaces;
 
 public interface INotificationClient
 {

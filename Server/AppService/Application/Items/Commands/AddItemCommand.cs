@@ -1,13 +1,13 @@
 
 using System.Data.Common;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Domain.Entities;
-using YourCompany.Domain.Events;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Entities;
+using YourBrand.Domain.Events;
 
 using MediatR;
 
-namespace YourCompany.Application.Items.Commands;
+namespace YourBrand.Application.Items.Commands;
 
 public record AddItemCommand(string Name, string Description) : IRequest
 {

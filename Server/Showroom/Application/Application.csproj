@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>YourCompany.Showroom.Application</RootNamespace>
+    <RootNamespace>YourBrand.Showroom.Application</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,13 +8,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Application.Common.Models;
-using YourCompany.Showroom.Application.CompetenceAreas;
-using YourCompany.Showroom.Domain.Entities;
-using YourCompany.Showroom.Domain.Exceptions;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Application.CompetenceAreas;
+using YourBrand.Showroom.Domain.Entities;
+using YourBrand.Showroom.Domain.Exceptions;
 
-namespace YourCompany.Showroom.Application.CompetenceAreas.Queries;
+namespace YourBrand.Showroom.Application.CompetenceAreas.Queries;
 
 public class GetCompetenceAreasQuery : IRequest<Results<CompetenceAreaDto>>
 {

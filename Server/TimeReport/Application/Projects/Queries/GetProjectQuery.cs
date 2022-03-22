@@ -3,9 +3,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Application.Projects.Queries;
+namespace YourBrand.TimeReport.Application.Projects.Queries;
 
 public class GetProjectQuery : IRequest<ProjectDto?>
 {

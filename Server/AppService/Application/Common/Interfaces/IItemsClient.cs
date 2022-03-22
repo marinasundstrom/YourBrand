@@ -1,6 +1,6 @@
-using YourCompany.Application.Items;
+using YourBrand.Application.Items;
 
-namespace YourCompany.Application.Common.Interfaces;
+namespace YourBrand.Application.Common.Interfaces;
 
 public interface IItemsClient
 {

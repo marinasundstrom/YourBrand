@@ -1,4 +1,4 @@
-# YourCompany
+# YourBrand
 
 App for managing a consultancy business - from sales to running a project - A private business network.
 

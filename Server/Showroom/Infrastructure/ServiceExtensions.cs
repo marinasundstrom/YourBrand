@@ -1,13 +1,13 @@
 ﻿using System;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Infrastructure.Persistence;
-using YourCompany.Showroom.Infrastructure.Services;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Infrastructure.Persistence;
+using YourBrand.Showroom.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace YourCompany.Showroom.Infrastructure;
+namespace YourBrand.Showroom.Infrastructure;
 
 public static class ServiceExtensions
 {

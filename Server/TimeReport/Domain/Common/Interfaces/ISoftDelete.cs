@@ -1,6 +1,6 @@
-﻿using YourCompany.TimeReport.Domain.Entities;
+﻿using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Domain.Common.Interfaces;
+namespace YourBrand.TimeReport.Domain.Common.Interfaces;
 
 public interface ISoftDelete
 {

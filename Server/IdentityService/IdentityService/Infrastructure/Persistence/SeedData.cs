@@ -2,13 +2,13 @@
 
 using IdentityModel;
 
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Domain.Entities;
 
 using Microsoft.AspNetCore.Identity;
 
 using Serilog;
 
-namespace YourCompany.IdentityService.Infrastructure.Persistence;
+namespace YourBrand.IdentityService.Infrastructure.Persistence;
 
 public class SeedData
 {

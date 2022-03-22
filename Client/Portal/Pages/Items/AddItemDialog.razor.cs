@@ -5,7 +5,7 @@ using MudBlazor;
 
 using System.ComponentModel.DataAnnotations;
 
-namespace YourCompany.Portal.Pages.Items
+namespace YourBrand.Portal.Pages.Items
 {
     public partial class AddItemDialog
     {

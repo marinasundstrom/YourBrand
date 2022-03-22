@@ -1,3 +1,3 @@
-﻿namespace YourCompany.Application.Users;
+﻿namespace YourBrand.Application.Users;
 
 public record class UserDto(string Id, string FirstName, string LastName, string? DisplayName, string SSN, string Email, DateTime Created, DateTime? LastModified);

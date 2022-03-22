@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YourCompany.Showroom.Application.CompetenceAreas;
+namespace YourBrand.Showroom.Application.CompetenceAreas;
 
 public record CompetenceAreaDto
 (

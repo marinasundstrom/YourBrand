@@ -4,11 +4,11 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Common.Models;
-using YourCompany.TimeReport.Domain.Common;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Domain.Common;
 
-namespace YourCompany.TimeReport.Infrastructure.Services;
+namespace YourBrand.TimeReport.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

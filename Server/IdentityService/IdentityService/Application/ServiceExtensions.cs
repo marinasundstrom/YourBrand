@@ -5,9 +5,9 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourCompany.IdentityService.Application.Users.Commands;
+using YourBrand.IdentityService.Application.Users.Commands;
 
-namespace YourCompany.IdentityService.Application;
+namespace YourBrand.IdentityService.Application;
 
 public static class ServiceExtensions
 {

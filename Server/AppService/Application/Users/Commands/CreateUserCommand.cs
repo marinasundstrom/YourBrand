@@ -1,10 +1,10 @@
 ﻿
 using MediatR;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Domain.Entities;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Entities;
 
-namespace YourCompany.Application.Users.Commands;
+namespace YourBrand.Application.Users.Commands;
 
 public class CreateUserCommand : IRequest<UserDto>
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json.Converters;
 
-namespace YourCompany.Application.Items.Commands;
+namespace YourBrand.Application.Items.Commands;
 
 public enum UploadImageResult
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using YourCompany.IdentityService.Client;
+using YourBrand.IdentityService.Client;
 
 const string ApiKey = "foobar";
 
@@ -32,12 +32,12 @@ static IServiceProvider BuildServiceProvider()
     .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http));
 
     /*
-    services.AddHttpClient(nameof(YourCompany.TimeReport.Client.IProjectsClient), (sp, http) =>
+    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IProjectsClient), (sp, http) =>
     {
         http.BaseAddress = new Uri($"https://localhost:5050/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
-    .AddTypedClient<YourCompany.TimeReport.Client.IProjectsClient>((http, sp) => new YourCompany.TimeReport.Client.ProjectsClient(http));
+    .AddTypedClient<YourBrand.TimeReport.Client.IProjectsClient>((http, sp) => new YourBrand.TimeReport.Client.ProjectsClient(http));
     */
 
     return services.BuildServiceProvider();

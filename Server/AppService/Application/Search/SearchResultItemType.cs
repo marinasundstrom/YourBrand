@@ -1,4 +1,4 @@
-﻿namespace YourCompany.Application.Search;
+﻿namespace YourBrand.Application.Search;
 
 public enum SearchResultItemType
 {

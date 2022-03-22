@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace YourCompany.IdentityService;
+namespace YourBrand.IdentityService;
 
 public static class AuthSchemes
 {

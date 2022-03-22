@@ -1,7 +1,7 @@
-﻿using YourCompany.IdentityService;
+﻿using YourBrand.IdentityService;
 
 using Serilog;
-using YourCompany.IdentityService.Infrastructure.Persistence;
+using YourBrand.IdentityService.Infrastructure.Persistence;
 
 static class Program
 {

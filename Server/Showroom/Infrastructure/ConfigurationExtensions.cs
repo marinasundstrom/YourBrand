@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace YourCompany.Showroom.Infrastructure;
+namespace YourBrand.Showroom.Infrastructure;
 
 public static class ConfigurationExtensions
 {

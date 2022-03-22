@@ -1,14 +1,14 @@
 ﻿using System;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Domain.Common;
-using YourCompany.Domain.Entities;
-using YourCompany.Infrastructure;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Common;
+using YourBrand.Domain.Entities;
+using YourBrand.Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace YourCompany.Infrastructure.Persistence;
+namespace YourBrand.Infrastructure.Persistence;
 
 class CatalogContext : DbContext, ICatalogContext
 {

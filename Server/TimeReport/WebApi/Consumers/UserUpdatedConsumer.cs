@@ -5,12 +5,12 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.IdentityService.Client;
-using YourCompany.IdentityService.Contracts;
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Users.Commands;
+using YourBrand.IdentityService.Client;
+using YourBrand.IdentityService.Contracts;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Users.Commands;
 
-namespace YourCompany.TimeReport.Consumers;
+namespace YourBrand.TimeReport.Consumers;
 
 public class UserUpdatedConsumer : IConsumer<UserUpdated>
 {

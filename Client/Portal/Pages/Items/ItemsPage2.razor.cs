@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using YourCompany.AppService.Client;
+using YourBrand.AppService.Client;
 using MudBlazor;
 
-namespace YourCompany.Portal.Pages.Items
+namespace YourBrand.Portal.Pages.Items
 {
     public partial class ItemsPage2
     {
@@ -114,7 +114,7 @@ namespace YourCompany.Portal.Pages.Items
             {
                 selectedPage = page;
 
-                var results = await ItemsClient.GetItemsAsync(selectedPage - 1, pageSize, null, YourCompany.AppService.Client.SortDirection.Asc);
+                var results = await ItemsClient.GetItemsAsync(selectedPage - 1, pageSize, null, YourBrand.AppService.Client.SortDirection.Asc);
 
                 items = results.Items;
 

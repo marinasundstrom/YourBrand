@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Common.Models;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Common.Models;
 
-namespace YourCompany.Application.Users.Queries;
+namespace YourBrand.Application.Users.Queries;
 
 public class GetUsersQuery : IRequest<Results<UserDto>>
 {
@@ -65,7 +65,7 @@ public class GetUsersQuery : IRequest<Results<UserDto>>
 
             if (request.SortBy is not null)
             {
-                query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? YourCompany.Application.SortDirection.Descending : YourCompany.Application.SortDirection.Ascending);
+                query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? YourBrand.Application.SortDirection.Descending : YourBrand.Application.SortDirection.Ascending);
             }
 
             var users = await query.ToListAsync(cancellationToken);

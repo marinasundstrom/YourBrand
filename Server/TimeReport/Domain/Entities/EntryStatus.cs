@@ -1,4 +1,4 @@
-﻿namespace YourCompany.TimeReport.Domain.Entities;
+﻿namespace YourBrand.TimeReport.Domain.Entities;
 
 public enum EntryStatus
 {

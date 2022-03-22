@@ -1,6 +1,6 @@
-﻿using YourCompany.Application.Users;
+﻿using YourBrand.Application.Users;
 
-namespace YourCompany.Application.Items;
+namespace YourBrand.Application.Items;
 
 public record CommentDto(
     string Id, string? Text,

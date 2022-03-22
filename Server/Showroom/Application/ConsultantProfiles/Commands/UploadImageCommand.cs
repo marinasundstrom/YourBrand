@@ -1,11 +1,11 @@
 
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles.Commands;
+namespace YourBrand.Showroom.Application.ConsultantProfiles.Commands;
 
 public record UploadImageCommand(string Id, Stream Stream) : IRequest
 {

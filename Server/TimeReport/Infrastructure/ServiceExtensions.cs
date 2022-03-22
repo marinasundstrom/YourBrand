@@ -3,11 +3,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Infrastructure.Persistence;
-using YourCompany.TimeReport.Infrastructure.Services;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Infrastructure.Persistence;
+using YourBrand.TimeReport.Infrastructure.Services;
 
-namespace YourCompany.TimeReport.Infrastructure;
+namespace YourBrand.TimeReport.Infrastructure;
 
 public static class ServiceExtensions
 {

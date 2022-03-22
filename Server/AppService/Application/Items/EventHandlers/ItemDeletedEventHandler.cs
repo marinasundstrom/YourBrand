@@ -1,13 +1,13 @@
 ﻿
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Common.Models;
-using YourCompany.Domain.Events;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Common.Models;
+using YourBrand.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourCompany.Application.Items.EventHandlers;
+namespace YourBrand.Application.Items.EventHandlers;
 
 public class ItemDeletedEventHandler : INotificationHandler<DomainEventNotification<ItemDeletedEvent>>
 {

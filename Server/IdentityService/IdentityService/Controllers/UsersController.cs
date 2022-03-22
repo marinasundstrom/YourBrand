@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourCompany.IdentityService.Application.Common.Models;
-using YourCompany.IdentityService.Application.Users;
-using YourCompany.IdentityService.Application.Users.Commands;
-using YourCompany.IdentityService.Application.Users.Queries;
-using YourCompany.IdentityService.Domain.Exceptions;
+using YourBrand.IdentityService.Application.Common.Models;
+using YourBrand.IdentityService.Application.Users;
+using YourBrand.IdentityService.Application.Users.Commands;
+using YourBrand.IdentityService.Application.Users.Queries;
+using YourBrand.IdentityService.Domain.Exceptions;
 
-namespace YourCompany.IdentityService;
+namespace YourBrand.IdentityService;
 
 [Route("[controller]")]
 [ApiController]

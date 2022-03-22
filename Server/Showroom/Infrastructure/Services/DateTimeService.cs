@@ -1,6 +1,6 @@
-﻿using YourCompany.Showroom.Application.Common.Interfaces;
+﻿using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.Infrastructure.Services;
+namespace YourBrand.Showroom.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

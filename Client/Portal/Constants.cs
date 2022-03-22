@@ -1,4 +1,4 @@
-﻿namespace YourCompany.Portal;
+﻿namespace YourBrand.Portal;
 
 public static class Constants
 {

@@ -1,5 +1,5 @@
 ﻿@page "/items/{id}"
-@using YourCompany.AppService.Client
+@using YourBrand.AppService.Client
 @implements IDisposable
 @attribute [Authorize]
 @inject IStringLocalizer<ItemPage> T
@@ -23,7 +23,7 @@
 }
 else 
 {
-    <PageTitle>@item.Name - YourCompany</PageTitle>
+    <PageTitle>@item.Name - YourBrand</PageTitle>
 
     <MudText Typo="Typo.h3" GutterBottom="true">@item.Name</MudText>
 

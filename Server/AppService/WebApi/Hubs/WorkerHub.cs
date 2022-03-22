@@ -1,9 +1,9 @@
 ﻿
-using YourCompany.Application.Common.Interfaces;
+using YourBrand.Application.Common.Interfaces;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace YourCompany.WebApi.Hubs;
+namespace YourBrand.WebApi.Hubs;
 
 public class WorkerHub : Hub<IWorkerClient>
 {

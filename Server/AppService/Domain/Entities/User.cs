@@ -1,7 +1,7 @@
 ﻿
-using YourCompany.Domain.Common;
+using YourBrand.Domain.Common;
 
-namespace YourCompany.Domain.Entities;
+namespace YourBrand.Domain.Entities;
 
 public class User : AuditableEntity, ISoftDelete
 {

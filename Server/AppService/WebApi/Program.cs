@@ -4,11 +4,11 @@ using System.Security.Claims;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using YourCompany.Application;
-using YourCompany.Infrastructure;
-using YourCompany.Infrastructure.Persistence;
-using YourCompany.WebApi;
-using YourCompany.WebApi.Hubs;
+using YourBrand.Application;
+using YourBrand.Infrastructure;
+using YourBrand.Infrastructure.Persistence;
+using YourBrand.WebApi;
+using YourBrand.WebApi.Hubs;
 
 using MassTransit;
 
@@ -21,8 +21,8 @@ using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using YourCompany.IdentityService.Contracts;
-using YourCompany.Consumers;
+using YourBrand.IdentityService.Contracts;
+using YourBrand.Consumers;
 
 static class Program
 {

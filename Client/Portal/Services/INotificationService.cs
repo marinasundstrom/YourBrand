@@ -1,4 +1,4 @@
-namespace YourCompany.Portal.Services;
+namespace YourBrand.Portal.Services;
 
 public interface INotificationService
 {

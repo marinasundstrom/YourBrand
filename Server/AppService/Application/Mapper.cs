@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Items;
-using YourCompany.Application.Users;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Items;
+using YourBrand.Application.Users;
 
-namespace YourCompany.Application;
+namespace YourBrand.Application;
 
 public static class Mapper
 {

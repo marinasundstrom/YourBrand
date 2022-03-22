@@ -5,7 +5,7 @@
 <MudSnackbarProvider />
 
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(YourCompany.TimeReport.Pages.ActivityDialog).Assembly, typeof(YourCompany.Showroom.Consultants.ConsultantsPage).Assembly  }">
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(YourBrand.TimeReport.Pages.ActivityDialog).Assembly, typeof(YourBrand.Showroom.Consultants.ConsultantsPage).Assembly  }">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
@@ -22,7 +22,7 @@
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
-            <PageTitle>Not found - YourCompany</PageTitle>
+            <PageTitle>Not found - YourBrand</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
                 <p role="alert">Sorry, there's nothing at this address.</p>
             </LayoutView>

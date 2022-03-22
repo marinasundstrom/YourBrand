@@ -1,10 +1,10 @@
 ﻿using MassTransit;
 
 using MediatR;
-using YourCompany.IdentityService.Contracts;
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Application.Users.Commands;
-namespace YourCompany.Showroom.Consumers;
+using YourBrand.IdentityService.Contracts;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Users.Commands;
+namespace YourBrand.Showroom.Consumers;
 
 public class UserCreated1Consumer : IConsumer<UserCreated>
 {

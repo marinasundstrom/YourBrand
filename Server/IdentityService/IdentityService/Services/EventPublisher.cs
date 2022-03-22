@@ -4,10 +4,10 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.IdentityService.Application.Common.Interfaces;
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Domain.Entities;
 
-namespace YourCompany.IdentityService.Services;
+namespace YourBrand.IdentityService.Services;
 
 public class EventPublisher : IEventPublisher
 {

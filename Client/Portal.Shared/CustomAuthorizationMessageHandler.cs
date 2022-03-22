@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace YourCompany.Portal.Shared;
+namespace YourBrand.Portal.Shared;
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {

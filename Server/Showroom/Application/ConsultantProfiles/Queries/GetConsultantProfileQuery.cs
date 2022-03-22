@@ -7,11 +7,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Domain.Entities;
-using YourCompany.Showroom.Domain.Exceptions;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Entities;
+using YourBrand.Showroom.Domain.Exceptions;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles.Queries;
+namespace YourBrand.Showroom.Application.ConsultantProfiles.Queries;
 
 public class GetConsultantProfileQuery : IRequest<ConsultantProfileDto>
 {

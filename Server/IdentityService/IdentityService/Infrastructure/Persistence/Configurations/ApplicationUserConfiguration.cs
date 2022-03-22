@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Domain.Entities;
 
-namespace YourCompany.IdentityService.Infrastructure.Persistence.Configurations;
+namespace YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
 public class ApplicationUserConfiguration : IEntityTypeConfiguration<User>
 {

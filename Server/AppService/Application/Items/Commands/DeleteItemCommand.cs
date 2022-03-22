@@ -1,12 +1,12 @@
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Domain.Events;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourCompany.Application.Items.Commands;
+namespace YourBrand.Application.Items.Commands;
 
 public record DeleteItemCommand(string Id) : IRequest<DeletionResult>
 {

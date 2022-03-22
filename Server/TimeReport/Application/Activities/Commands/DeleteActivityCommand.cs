@@ -3,9 +3,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Application.Activities.Commands;
+namespace YourBrand.TimeReport.Application.Activities.Commands;
 
 public class DeleteActivityCommand : IRequest
 {

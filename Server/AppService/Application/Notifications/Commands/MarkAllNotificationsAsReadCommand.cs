@@ -1,5 +1,5 @@
 ﻿
-using YourCompany.Application.Common.Interfaces;
+using YourBrand.Application.Common.Interfaces;
 
 using MediatR;
 
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Worker.Client;
 
-namespace YourCompany.Application.Notifications.Commands;
+namespace YourBrand.Application.Notifications.Commands;
 
 public class MarkAllNotificationsAsReadCommand : IRequest
 {

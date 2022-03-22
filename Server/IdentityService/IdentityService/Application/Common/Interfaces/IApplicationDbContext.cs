@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Domain.Entities;
 
-namespace YourCompany.IdentityService.Application.Common.Interfaces;
+namespace YourBrand.IdentityService.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {

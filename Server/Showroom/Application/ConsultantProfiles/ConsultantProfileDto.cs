@@ -1,9 +1,9 @@
 ﻿using System;
 
-using YourCompany.Showroom.Application.CompetenceAreas;
-using YourCompany.Showroom.Application.Organizations;
+using YourBrand.Showroom.Application.CompetenceAreas;
+using YourBrand.Showroom.Application.Organizations;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles;
+namespace YourBrand.Showroom.Application.ConsultantProfiles;
 
 public record ConsultantProfileDto(
     string Id,

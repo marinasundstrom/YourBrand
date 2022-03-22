@@ -1,4 +1,4 @@
-﻿namespace YourCompany.IdentityService.Domain.Common.Interfaces;
+﻿namespace YourBrand.IdentityService.Domain.Common.Interfaces;
 
 public interface IHasDomainEvent
 {

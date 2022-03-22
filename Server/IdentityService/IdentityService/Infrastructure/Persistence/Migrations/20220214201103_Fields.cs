@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace YourCompany.IdentityService.Infrastructure.Persistence
+namespace YourBrand.IdentityService.Infrastructure.Persistence
 {
     public partial class Fields : Migration
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles;
+namespace YourBrand.Showroom.Application.ConsultantProfiles;
 
 public abstract class ConsultantProfileViewModelDto
 {

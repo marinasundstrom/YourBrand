@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.Application.Organizations.Commands;
+namespace YourBrand.Showroom.Application.Organizations.Commands;
 
 public record CreateOrganizationCommand(string Name) : IRequest
 {

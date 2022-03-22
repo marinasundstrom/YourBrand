@@ -1,4 +1,4 @@
-namespace YourCompany.Showroom.Application.Skills;
+namespace YourBrand.Showroom.Application.Skills;
 
 public record SkillAreaDto
 (

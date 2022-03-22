@@ -1,12 +1,12 @@
 ﻿
-using YourCompany.Application;
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Items;
-using YourCompany.WebApi.Hubs;
+using YourBrand.Application;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Items;
+using YourBrand.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace YourCompany.WebApi.Services;
+namespace YourBrand.WebApi.Services;
 
 public class ItemsClient : IItemsClient
 {

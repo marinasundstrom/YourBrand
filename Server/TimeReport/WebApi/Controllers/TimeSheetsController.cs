@@ -4,14 +4,14 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourCompany.TimeReport.Application.Common.Models;
-using YourCompany.TimeReport.Application.TimeSheets;
-using YourCompany.TimeReport.Application.TimeSheets.Commands;
-using YourCompany.TimeReport.Application.TimeSheets.Queries;
-using YourCompany.TimeReport.Domain.Exceptions;
-using YourCompany.TimeReport.Dtos;
+using YourBrand.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Application.TimeSheets;
+using YourBrand.TimeReport.Application.TimeSheets.Commands;
+using YourBrand.TimeReport.Application.TimeSheets.Queries;
+using YourBrand.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Dtos;
 
-namespace YourCompany.TimeReport.Controllers;
+namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,7 +1,7 @@
 ﻿using System;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.WebApi;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.WebApi;
 
 using Contracts;
 
@@ -9,7 +9,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace YourCompany.Consumers;
+namespace YourBrand.Consumers;
 
 public class DoSomethingResponseConsumer : IConsumer<DoSomethingResponse>
 {

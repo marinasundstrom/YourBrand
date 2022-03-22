@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.SignalR;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Hubs;
+namespace YourBrand.TimeReport.Hubs;
 
 public class ItemsHub : Hub<IItemsClient>
 {

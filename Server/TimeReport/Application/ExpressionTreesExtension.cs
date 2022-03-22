@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace YourCompany.TimeReport.Application;
+namespace YourBrand.TimeReport.Application;
 
 public static class ExpressionTreesExtension
 {

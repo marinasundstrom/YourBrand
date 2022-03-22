@@ -1,5 +1,5 @@
 ﻿using System;
-namespace YourCompany.WebApi;
+namespace YourBrand.WebApi;
 
 public static class Roles
 {

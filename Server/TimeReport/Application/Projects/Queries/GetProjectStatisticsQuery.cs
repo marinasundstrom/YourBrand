@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Models;
 
-namespace YourCompany.TimeReport.Application.Projects.Queries;
+namespace YourBrand.TimeReport.Application.Projects.Queries;
 
 public class GetProjectStatisticsQuery : IRequest<Data>
 {

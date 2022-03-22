@@ -1,16 +1,16 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-using YourCompany.Application.Notifications;
-using YourCompany.Application.Notifications.Commands;
-using YourCompany.Application.Notifications.Queries;
+using YourBrand.Application.Notifications;
+using YourBrand.Application.Notifications.Commands;
+using YourBrand.Application.Notifications.Queries;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YourCompany.WebApi.Controllers;
+namespace YourBrand.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]

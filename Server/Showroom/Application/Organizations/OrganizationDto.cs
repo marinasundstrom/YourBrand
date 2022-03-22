@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using YourCompany.Showroom.Application;
-using YourCompany.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Application;
+using YourBrand.Showroom.Application.Common.Models;
 
-namespace YourCompany.Showroom.Application.Organizations;
+namespace YourBrand.Showroom.Application.Organizations;
 
 public record OrganizationDto
 (

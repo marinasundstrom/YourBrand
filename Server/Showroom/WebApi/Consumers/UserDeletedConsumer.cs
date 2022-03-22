@@ -3,12 +3,12 @@ using MassTransit;
 
 using MediatR;
 
-using YourCompany.IdentityService.Client;
-using YourCompany.IdentityService.Contracts;
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Application.Users.Commands;
+using YourBrand.IdentityService.Client;
+using YourBrand.IdentityService.Contracts;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Users.Commands;
 
-namespace YourCompany.Showroom.Consumers;
+namespace YourBrand.Showroom.Consumers;
 
 public class UserDeleted1Consumer : IConsumer<UserDeleted>
 {

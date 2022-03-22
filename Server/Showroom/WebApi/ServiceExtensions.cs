@@ -1,12 +1,12 @@
 ﻿using System;
 
-using YourCompany.Showroom.Application;
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Infrastructure;
+using YourBrand.Showroom.Application;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Infrastructure;
 
-using YourCompany.Showroom.WebApi.Services;
+using YourBrand.Showroom.WebApi.Services;
 
-namespace YourCompany.Showroom.WebApi;
+namespace YourBrand.Showroom.WebApi;
 
 public static class ServiceExtensions
 {

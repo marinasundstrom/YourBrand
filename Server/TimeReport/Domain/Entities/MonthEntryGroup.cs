@@ -1,7 +1,7 @@
 ﻿
-using YourCompany.TimeReport.Domain.Common;
+using YourBrand.TimeReport.Domain.Common;
 
-namespace YourCompany.TimeReport.Domain.Entities;
+namespace YourBrand.TimeReport.Domain.Entities;
 
 public class MonthEntryGroup : AuditableEntity
 {

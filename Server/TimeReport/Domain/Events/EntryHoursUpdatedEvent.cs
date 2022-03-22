@@ -1,8 +1,8 @@
 ﻿using System;
 
-using YourCompany.TimeReport.Domain.Common;
+using YourBrand.TimeReport.Domain.Common;
 
-namespace YourCompany.TimeReport.Domain.Events;
+namespace YourBrand.TimeReport.Domain.Events;
 
 public class EntryHoursUpdatedEvent : DomainEvent
 {

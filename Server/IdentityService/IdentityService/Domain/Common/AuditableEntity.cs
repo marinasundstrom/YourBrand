@@ -1,4 +1,4 @@
-﻿namespace YourCompany.IdentityService.Domain.Common;
+﻿namespace YourBrand.IdentityService.Domain.Common;
 
 public abstract class AuditableEntity
 {

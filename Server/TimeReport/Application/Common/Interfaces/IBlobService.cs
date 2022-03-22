@@ -1,4 +1,4 @@
-﻿namespace YourCompany.TimeReport.Application.Common.Interfaces;
+﻿namespace YourBrand.TimeReport.Application.Common.Interfaces;
 
 public interface IBlobService
 {

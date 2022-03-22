@@ -1,8 +1,8 @@
 ﻿using System;
 
-using YourCompany.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Domain;
+namespace YourBrand.TimeReport.Domain;
 
 public static class UserDtoExtensions
 {

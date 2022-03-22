@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 
-using YourCompany.Application.Common.Interfaces;
+using YourBrand.Application.Common.Interfaces;
 
-namespace YourCompany.WebApi.Services;
+namespace YourBrand.WebApi.Services;
 
 public class FileUploaderService : IFileUploaderService
 {

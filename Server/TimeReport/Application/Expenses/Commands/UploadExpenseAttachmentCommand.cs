@@ -3,12 +3,12 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Projects;
 
-using static YourCompany.TimeReport.Application.Expenses.ExpensesHelpers;
+using static YourBrand.TimeReport.Application.Expenses.ExpensesHelpers;
 
-namespace YourCompany.TimeReport.Application.Expenses.Commands;
+namespace YourBrand.TimeReport.Application.Expenses.Commands;
 
 public class UploadExpenseAttachmentCommand : IRequest<string?>
 {

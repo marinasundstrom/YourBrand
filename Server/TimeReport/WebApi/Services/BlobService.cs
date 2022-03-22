@@ -2,9 +2,9 @@
 
 using Azure.Storage.Blobs;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Services;
+namespace YourBrand.TimeReport.Services;
 
 class BlobService : IBlobService
 {

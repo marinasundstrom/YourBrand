@@ -1,10 +1,10 @@
 ﻿@page "/users/{userId}"
 @attribute [Authorize(Roles = "Administrator,Manager")]
-@using YourCompany.TimeReport.Shared
+@using YourBrand.TimeReport.Shared
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IdentityService.Client.IUsersClient UsersClient
-@inject YourCompany.TimeReport.Client.IUsersClient UsersClient2
+@inject YourBrand.TimeReport.Client.IUsersClient UsersClient2
 
 @if (user is null)
 {
@@ -12,7 +12,7 @@
 }
 else 
 {
-    <PageTitle>@user.GetDisplayName() - YourCompany</PageTitle>
+    <PageTitle>@user.GetDisplayName() - YourBrand</PageTitle>
 
     <MudText Typo="Typo.h3" GutterBottom="true">@user.GetDisplayName()</MudText>
 
@@ -44,10 +44,10 @@ else
 @code {
     bool isLoading = false;
     IdentityService.Client.UserDto user;
-    MudTable<YourCompany.TimeReport.Client.ProjectMembershipDto> table2;
-    YourCompany.TimeReport.Client.StatisticsSummary statisticsSummary;
+    MudTable<YourBrand.TimeReport.Client.ProjectMembershipDto> table2;
+    YourBrand.TimeReport.Client.StatisticsSummary statisticsSummary;
 
-    YourCompany.TimeReport.Client.Data? data;
+    YourBrand.TimeReport.Client.Data? data;
 
     private ChartOptions options = new ChartOptions()
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace YourCompany.IdentityService;
+namespace YourBrand.IdentityService;
 
 public static class Roles
 {

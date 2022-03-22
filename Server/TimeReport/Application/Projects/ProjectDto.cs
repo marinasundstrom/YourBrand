@@ -1,3 +1,3 @@
-﻿namespace YourCompany.TimeReport.Application.Projects;
+﻿namespace YourBrand.TimeReport.Application.Projects;
 
 public record class ProjectDto(string Id, string Name, string? Description);

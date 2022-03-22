@@ -1,9 +1,9 @@
-using YourCompany.Showroom.Domain.Entities;
-using YourCompany.Showroom.Infrastructure.Persistence;
+using YourBrand.Showroom.Domain.Entities;
+using YourBrand.Showroom.Infrastructure.Persistence;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace YourCompany.Showroom.Infrastructure.Persistence;
+namespace YourBrand.Showroom.Infrastructure.Persistence;
 
 public static class Seed
 {

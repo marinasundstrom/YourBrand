@@ -5,7 +5,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace YourCompany.WebApi.Controllers;
+namespace YourBrand.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]

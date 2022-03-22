@@ -5,9 +5,9 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourCompany.TimeReport.Application.Expenses.Queries;
+using YourBrand.TimeReport.Application.Expenses.Queries;
 
-namespace YourCompany.TimeReport.Application;
+namespace YourBrand.TimeReport.Application;
 
 public static class ServiceExtensions
 {

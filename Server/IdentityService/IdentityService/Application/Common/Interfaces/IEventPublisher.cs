@@ -1,4 +1,4 @@
-﻿namespace YourCompany.IdentityService.Application.Common.Interfaces;
+﻿namespace YourBrand.IdentityService.Application.Common.Interfaces;
 
 public interface IEventPublisher
 {

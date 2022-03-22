@@ -1,3 +1,3 @@
-﻿namespace YourCompany.TimeReport.Dtos;
+﻿namespace YourBrand.TimeReport.Dtos;
 
 public record class UpdateEntryDetailsDto(string? Description);

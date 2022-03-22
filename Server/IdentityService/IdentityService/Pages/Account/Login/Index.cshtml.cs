@@ -7,7 +7,7 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Domain.Entities;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

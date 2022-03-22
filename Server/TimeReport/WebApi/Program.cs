@@ -15,13 +15,13 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
-using YourCompany.TimeReport;
-using YourCompany.TimeReport.Application;
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Hubs;
-using YourCompany.TimeReport.Infrastructure;
-using YourCompany.TimeReport.Infrastructure.Persistence;
-using YourCompany.TimeReport.Services;
+using YourBrand.TimeReport;
+using YourBrand.TimeReport.Application;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Hubs;
+using YourBrand.TimeReport.Infrastructure;
+using YourBrand.TimeReport.Infrastructure.Persistence;
+using YourBrand.TimeReport.Services;
 
 static class Program
 {

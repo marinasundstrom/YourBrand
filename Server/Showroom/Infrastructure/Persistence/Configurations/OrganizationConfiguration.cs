@@ -1,10 +1,10 @@
 ﻿
-using YourCompany.Showroom.Domain.Entities;
+using YourBrand.Showroom.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace YourCompany.Showroom.Infrastructure.Persistence.Configurations;
+namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
 class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
 {

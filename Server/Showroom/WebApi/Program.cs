@@ -4,10 +4,10 @@ using System.Security.Claims;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using YourCompany.Showroom.Application;
-using YourCompany.Showroom.Infrastructure;
-using YourCompany.Showroom.Infrastructure.Persistence;
-using YourCompany.Showroom.WebApi;
+using YourBrand.Showroom.Application;
+using YourBrand.Showroom.Infrastructure;
+using YourBrand.Showroom.Infrastructure.Persistence;
+using YourBrand.Showroom.WebApi;
 
 using MassTransit;
 

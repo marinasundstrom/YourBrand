@@ -1,14 +1,14 @@
 ﻿using System;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Domain.Common;
-using YourCompany.Showroom.Domain.Entities;
-using YourCompany.Showroom.Infrastructure;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Common;
+using YourBrand.Showroom.Domain.Entities;
+using YourBrand.Showroom.Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace YourCompany.Showroom.Infrastructure.Persistence;
+namespace YourBrand.Showroom.Infrastructure.Persistence;
 
 class ShowroomContext : DbContext, IShowroomContext
 {

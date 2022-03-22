@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Domain.Entities;
-using YourCompany.Showroom.Domain.Exceptions;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Entities;
+using YourBrand.Showroom.Domain.Exceptions;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles.Commands;
+namespace YourBrand.Showroom.Application.ConsultantProfiles.Commands;
 
 public class DeleteConsultantProfileCommand : IRequest
 {

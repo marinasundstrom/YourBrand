@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Common.Models;
-using YourCompany.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Application.Projects;
 
-namespace YourCompany.TimeReport.Application.Activities.Queries;
+namespace YourBrand.TimeReport.Application.Activities.Queries;
 
 public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
 {

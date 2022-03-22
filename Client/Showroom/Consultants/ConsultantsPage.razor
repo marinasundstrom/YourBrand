@@ -1,6 +1,6 @@
 @page "/consultants"
 @attribute [Authorize]
-@using YourCompany.Showroom.Consultants.Profile
+@using YourBrand.Showroom.Consultants.Profile
 @inject IConsultantsClient ConsultantProfilesClient
 @inject IOrganizationsClient OrganizationsClient
 @inject ICompetenceAreasClient CompetenceAreasClient
@@ -82,7 +82,7 @@
     {
         try
         {
-            var results = await ConsultantProfilesClient.GetConsultantsAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourCompany.Showroom.Client.SortDirection.Asc : YourCompany.Showroom.Client.SortDirection.Desc);
+            var results = await ConsultantProfilesClient.GetConsultantsAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc);
             return new TableData<ConsultantProfileDto> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)

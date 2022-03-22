@@ -1,5 +1,5 @@
 ﻿using System;
-namespace YourCompany.TimeReport.Domain.Exceptions;
+namespace YourBrand.TimeReport.Domain.Exceptions;
 
 public class DomainException : Exception
 {

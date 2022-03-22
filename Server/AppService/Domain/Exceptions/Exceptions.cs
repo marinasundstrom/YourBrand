@@ -1,5 +1,5 @@
 ﻿using System;
-namespace YourCompany.Domain.Exceptions;
+namespace YourBrand.Domain.Exceptions;
 
 public class DomainException : Exception
 {

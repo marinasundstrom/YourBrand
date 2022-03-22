@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.WebApi.Services;
+namespace YourBrand.Showroom.WebApi.Services;
 
 public class FileUploaderService : IFileUploaderService
 {

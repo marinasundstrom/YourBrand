@@ -4,12 +4,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourCompany.Showroom.Application.Common.Models;
-using YourCompany.Showroom.Application.Skills;
-using YourCompany.Showroom.Application.Skills.Commands;
-using YourCompany.Showroom.Application.Skills.Queries;
+using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Application.Skills;
+using YourBrand.Showroom.Application.Skills.Commands;
+using YourBrand.Showroom.Application.Skills.Queries;
 
-namespace YourCompany.Showroom.WebApi.Controllers;
+namespace YourBrand.Showroom.WebApi.Controllers;
 
 [Authorize]
 [Route("[controller]")]

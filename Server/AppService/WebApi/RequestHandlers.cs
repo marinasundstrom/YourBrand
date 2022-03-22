@@ -1,10 +1,10 @@
-using YourCompany.Application;
-using YourCompany.Application.Common.Models;
-using YourCompany.Application.Items;
-using YourCompany.Application.Items.Commands;
-using YourCompany.Application.Items.Queries;
-using YourCompany.Infrastructure.Persistence;
-using YourCompany.WebApi.Controllers;
+using YourBrand.Application;
+using YourBrand.Application.Common.Models;
+using YourBrand.Application.Items;
+using YourBrand.Application.Items.Commands;
+using YourBrand.Application.Items.Queries;
+using YourBrand.Infrastructure.Persistence;
+using YourBrand.WebApi.Controllers;
 
 using MediatR;
 
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 using MiniValidation;
 
-namespace YourCompany.WebApi;
+namespace YourBrand.WebApi;
 
 static partial class RequestHandlers
 {

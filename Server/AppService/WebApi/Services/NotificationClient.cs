@@ -1,13 +1,13 @@
 ﻿using System;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.WebApi.Hubs;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
 using Worker.Client;
 
-namespace YourCompany.WebApi.Services;
+namespace YourBrand.WebApi.Services;
 
 public class NotificationClient : INotificationClient
 {

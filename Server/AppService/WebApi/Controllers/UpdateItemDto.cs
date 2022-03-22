@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YourCompany.WebApi.Controllers;
+namespace YourBrand.WebApi.Controllers;
 
 public class UpdateItemDto
 {

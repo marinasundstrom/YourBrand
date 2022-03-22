@@ -1,10 +1,10 @@
 ﻿
-using YourCompany.Domain.Entities;
+using YourBrand.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace YourCompany.Infrastructure.Persistence.Configurations;
+namespace YourBrand.Infrastructure.Persistence.Configurations;
 
 class CommentConfiguration : IEntityTypeConfiguration<Comment>
 {

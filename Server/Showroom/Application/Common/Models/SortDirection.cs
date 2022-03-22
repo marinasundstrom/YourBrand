@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 using Newtonsoft.Json.Converters;
 
-namespace YourCompany.Showroom.Application.Common.Models;
+namespace YourBrand.Showroom.Application.Common.Models;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum SortDirection

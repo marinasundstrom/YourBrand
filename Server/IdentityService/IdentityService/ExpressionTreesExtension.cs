@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace YourCompany.IdentityService;
+namespace YourBrand.IdentityService;
 
 public static class ExpressionTreesExtension
 {

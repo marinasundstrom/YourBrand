@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.Application.Cases.Commands;
+namespace YourBrand.Showroom.Application.Cases.Commands;
 
 public record DeleteCaseCommand(string Id) : IRequest
 {

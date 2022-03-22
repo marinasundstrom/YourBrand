@@ -2,11 +2,11 @@
 using MassTransit;
 
 using MediatR;
-using YourCompany.IdentityService.Contracts;
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Users.Commands;
+using YourBrand.IdentityService.Contracts;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Users.Commands;
 
-namespace YourCompany.Consumers;
+namespace YourBrand.Consumers;
 
 public class UserUpdated0Consumer : IConsumer<UserUpdated>
 {

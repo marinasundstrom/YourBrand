@@ -1,12 +1,12 @@
 ﻿
-using YourCompany.Application.Items.Commands;
+using YourBrand.Application.Items.Commands;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YourCompany.WebApi.Controllers;
+namespace YourBrand.WebApi.Controllers;
 
 [ApiController]
 [Route("/")]

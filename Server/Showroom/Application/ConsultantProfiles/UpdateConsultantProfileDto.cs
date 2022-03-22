@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles;
+namespace YourBrand.Showroom.Application.ConsultantProfiles;
 
 public class UpdateConsultantProfileDto : ConsultantProfileViewModelDto
 {

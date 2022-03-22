@@ -1,5 +1,5 @@
-﻿using YourCompany.Application.Common.Interfaces;
-using YourCompany.WebApi.Hubs;
+﻿using YourBrand.Application.Common.Interfaces;
+using YourBrand.WebApi.Hubs;
 
 using Contracts;
 
@@ -7,7 +7,7 @@ using MassTransit;
 
 using Microsoft.AspNetCore.SignalR;
 
-namespace YourCompany.Consumers;
+namespace YourBrand.Consumers;
 
 public class NotificationConsumer : IConsumer<NotificationDto>
 {

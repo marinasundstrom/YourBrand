@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace YourCompany.TimeReport.Application.Common.Models;
+namespace YourBrand.TimeReport.Application.Common.Models;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum SortDirection

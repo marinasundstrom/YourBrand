@@ -1,10 +1,10 @@
 ﻿
 using MediatR;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Application.Projects.Commands;
+namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public class CreateProjectCommand : IRequest<ProjectDto>
 {

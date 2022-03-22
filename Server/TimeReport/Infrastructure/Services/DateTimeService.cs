@@ -1,6 +1,6 @@
-﻿using YourCompany.TimeReport.Application.Common.Interfaces;
+﻿using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Infrastructure.Services;
+namespace YourBrand.TimeReport.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

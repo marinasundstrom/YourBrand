@@ -1,13 +1,13 @@
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Common.Models;
-using YourCompany.Domain;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Common.Models;
+using YourBrand.Domain;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourCompany.Application.Items.Queries;
+namespace YourBrand.Application.Items.Queries;
 
 public class GetItemsQuery : IRequest<Results<ItemDto>>
 {

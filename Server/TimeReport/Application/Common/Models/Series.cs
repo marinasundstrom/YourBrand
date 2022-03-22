@@ -1,3 +1,3 @@
-﻿namespace YourCompany.TimeReport.Application.Common.Models;
+﻿namespace YourBrand.TimeReport.Application.Common.Models;
 
 public record class Series(string Name, IEnumerable<decimal> Data);

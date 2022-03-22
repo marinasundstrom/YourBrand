@@ -1,3 +1,3 @@
-﻿namespace YourCompany.TimeReport.Application.TimeSheets;
+﻿namespace YourBrand.TimeReport.Application.TimeSheets;
 
 public record class MonthInfoDto(int Month, bool IsLocked);

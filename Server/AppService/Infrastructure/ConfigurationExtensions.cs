@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace YourCompany.Infrastructure;
+namespace YourBrand.Infrastructure;
 
 public static class ConfigurationExtensions
 {

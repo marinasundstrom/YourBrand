@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using YourCompany.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Infrastructure.Persistence.Configurations;
+namespace YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 
 public class TimeSheetActivityConfiguration : IEntityTypeConfiguration<TimeSheetActivity>
 {

@@ -1,14 +1,14 @@
 ﻿
-using YourCompany.Application.Common.Models;
-using YourCompany.Application.Search;
-using YourCompany.Application.Search.Commands;
+using YourBrand.Application.Common.Models;
+using YourBrand.Application.Search;
+using YourBrand.Application.Search.Commands;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YourCompany.WebApi.Controllers;
+namespace YourBrand.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]

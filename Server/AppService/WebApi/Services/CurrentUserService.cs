@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Security.Claims;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Infrastructure;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Infrastructure;
 
-namespace YourCompany.WebApi.Services;
+namespace YourBrand.WebApi.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

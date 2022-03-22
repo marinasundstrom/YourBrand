@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourCompany.IdentityService.Application.Common.Interfaces;
-using YourCompany.IdentityService.Infrastructure.Persistence;
-using YourCompany.IdentityService.Infrastructure.Services;
+using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Infrastructure.Persistence;
+using YourBrand.IdentityService.Infrastructure.Services;
 
-namespace YourCompany.IdentityService.Infrastructure.Infrastructure;
+namespace YourBrand.IdentityService.Infrastructure.Infrastructure;
 
 public static class ServiceExtensions
 {

@@ -1,9 +1,9 @@
-using YourCompany.Domain.Entities;
+using YourBrand.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace YourCompany.Application.Common.Interfaces;
+namespace YourBrand.Application.Common.Interfaces;
 
 public interface ICatalogContext
 {

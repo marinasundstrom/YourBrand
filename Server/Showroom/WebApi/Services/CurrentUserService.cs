@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Security.Claims;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Infrastructure;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Infrastructure;
 
-namespace YourCompany.Showroom.WebApi.Services;
+namespace YourBrand.Showroom.WebApi.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

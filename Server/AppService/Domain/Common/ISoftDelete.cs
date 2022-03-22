@@ -1,6 +1,6 @@
-﻿using YourCompany.Domain.Entities;
+﻿using YourBrand.Domain.Entities;
 
-namespace YourCompany.Domain.Common;
+namespace YourBrand.Domain.Common;
 
 public interface ISoftDelete
 {

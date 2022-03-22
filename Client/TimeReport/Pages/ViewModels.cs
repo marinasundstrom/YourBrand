@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-using YourCompany.TimeReport.Client;
+using YourBrand.TimeReport.Client;
 
-namespace YourCompany.TimeReport.Pages;
+namespace YourBrand.TimeReport.Pages;
 
 public class ActivityModel
 {

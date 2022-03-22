@@ -1,14 +1,14 @@
 ﻿using System;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Common.Models;
-using YourCompany.Domain.Common;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Common.Models;
+using YourBrand.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace YourCompany.Infrastructure.Services;
+namespace YourBrand.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

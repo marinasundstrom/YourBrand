@@ -1,4 +1,4 @@
-﻿namespace YourCompany.TimeReport.Domain.Common;
+﻿namespace YourBrand.TimeReport.Domain.Common;
 
 public abstract class DomainEvent
 {

@@ -1,5 +1,5 @@
-using YourCompany.Showroom.Application.Skills;
+using YourBrand.Showroom.Application.Skills;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles.Skills.Queries;
+namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 public record ConsultantProfileSkillDto(string Id, SkillDto Skill);

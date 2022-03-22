@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles.Skills.Queries;
+namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 public class GetSkillQuery : IRequest<ConsultantProfileSkillDto?>
 {

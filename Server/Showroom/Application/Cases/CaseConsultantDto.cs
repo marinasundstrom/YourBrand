@@ -1,7 +1,7 @@
 
-using YourCompany.Showroom.Application.ConsultantProfiles;
+using YourBrand.Showroom.Application.ConsultantProfiles;
 
-namespace YourCompany.Showroom.Application.Cases;
+namespace YourBrand.Showroom.Application.Cases;
 
 public record CaseConsultantDto
 (

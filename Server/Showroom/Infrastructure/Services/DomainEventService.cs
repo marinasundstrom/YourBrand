@@ -1,14 +1,14 @@
 ﻿using System;
 
-using YourCompany.Showroom.Application.Common.Interfaces;
-using YourCompany.Showroom.Application.Common.Models;
-using YourCompany.Showroom.Domain.Common;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace YourCompany.Showroom.Infrastructure.Services;
+namespace YourBrand.Showroom.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

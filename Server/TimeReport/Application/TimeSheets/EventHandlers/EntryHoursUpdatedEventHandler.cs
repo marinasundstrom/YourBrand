@@ -4,10 +4,10 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-using YourCompany.TimeReport.Application.Common.Models;
-using YourCompany.TimeReport.Domain.Events;
+using YourBrand.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Domain.Events;
 
-namespace YourCompany.TimeReport.Application.TimeSheets.EventHandlers;
+namespace YourBrand.TimeReport.Application.TimeSheets.EventHandlers;
 
 public class EntryHoursUpdatedEventHandler : INotificationHandler<DomainEventNotification<EntryHoursUpdatedEvent>>
 {

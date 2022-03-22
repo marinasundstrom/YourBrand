@@ -1,6 +1,6 @@
-﻿using YourCompany.TimeReport.Domain.Common;
+﻿using YourBrand.TimeReport.Domain.Common;
 
-namespace YourCompany.TimeReport.Application.Common.Interfaces;
+namespace YourBrand.TimeReport.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

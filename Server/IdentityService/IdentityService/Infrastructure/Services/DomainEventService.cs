@@ -4,11 +4,11 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-using YourCompany.IdentityService.Application.Common.Interfaces;
-using YourCompany.IdentityService.Application.Common.Models;
-using YourCompany.IdentityService.Domain.Common;
+using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Application.Common.Models;
+using YourBrand.IdentityService.Domain.Common;
 
-namespace YourCompany.IdentityService.Infrastructure.Services;
+namespace YourBrand.IdentityService.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

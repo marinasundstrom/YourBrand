@@ -1,6 +1,6 @@
-﻿using YourCompany.Showroom.Domain.Entities;
+﻿using YourBrand.Showroom.Domain.Entities;
 
-namespace YourCompany.Showroom.Domain.Common;
+namespace YourBrand.Showroom.Domain.Common;
 
 public abstract class AuditableEntity
 {

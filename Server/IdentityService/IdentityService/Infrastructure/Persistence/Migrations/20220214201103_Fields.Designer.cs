@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace YourCompany.IdentityService.Infrastructure.Persistence
+namespace YourBrand.IdentityService.Infrastructure.Persistence
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220214201103_Fields")]

@@ -3,9 +3,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Services;
+namespace YourBrand.TimeReport.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

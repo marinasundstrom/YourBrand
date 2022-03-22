@@ -1,4 +1,4 @@
-﻿namespace YourCompany.Showroom;
+﻿namespace YourBrand.Showroom;
 
 public static class Constants
 {

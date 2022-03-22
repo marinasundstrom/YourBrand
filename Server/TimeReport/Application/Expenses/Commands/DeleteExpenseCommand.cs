@@ -3,9 +3,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourCompany.TimeReport.Application.Expenses.Commands;
+namespace YourBrand.TimeReport.Application.Expenses.Commands;
 
 public class DeleteExpenseCommand : IRequest
 {

@@ -3,15 +3,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Activities;
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Projects;
-using YourCompany.TimeReport.Domain.Entities;
-using YourCompany.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Application.Activities;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Exceptions;
 
-using static YourCompany.TimeReport.Application.TimeSheets.Constants;
+using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
-namespace YourCompany.TimeReport.Application.TimeSheets.Commands;
+namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public class UpdateEntryCommand : IRequest<EntryDto>
 {

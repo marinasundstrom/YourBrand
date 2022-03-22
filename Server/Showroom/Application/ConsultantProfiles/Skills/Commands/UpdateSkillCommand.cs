@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourCompany.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Interfaces;
 
-namespace YourCompany.Showroom.Application.ConsultantProfiles.Skills.Commands;
+namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Commands;
 
 public record UpdateSkillCommand(string Id, string Name) : IRequest
 {

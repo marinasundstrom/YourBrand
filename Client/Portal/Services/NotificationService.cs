@@ -1,9 +1,9 @@
-using YourCompany.Portal.Services;
+using YourBrand.Portal.Services;
 
 using MudBlazor;
 
 
-namespace YourCompany.Portal.Services;
+namespace YourBrand.Portal.Services;
 
 public class NotificationService : INotificationService
 {

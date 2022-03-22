@@ -4,7 +4,7 @@
 @attribute [Authorize]
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using YourCompany.AppService.Client
+@using YourBrand.AppService.Client
 @inject NavigationManager NavigationManager
 @inject IStringLocalizer<ItemsPage> T
 @inject ISnackbar Snackbar
@@ -13,7 +13,7 @@
 @inject IDialogService DialogService
 @inject IAccessTokenProvider AccessTokenProvider
 
-<PageTitle>@T["Items"] - YourCompany</PageTitle>
+<PageTitle>@T["Items"] - YourBrand</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Items"]</MudText>
 

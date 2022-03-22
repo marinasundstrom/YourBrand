@@ -2,11 +2,11 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.IdentityService.Application.Common.Interfaces;
-using YourCompany.IdentityService.Contracts;
-using YourCompany.IdentityService.Domain.Exceptions;
+using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Contracts;
+using YourBrand.IdentityService.Domain.Exceptions;
 
-namespace YourCompany.IdentityService.Application.Users.Commands;
+namespace YourBrand.IdentityService.Application.Users.Commands;
 
 public class UpdateUserDetailsCommand : IRequest<UserDto>
 {

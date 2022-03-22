@@ -1,6 +1,6 @@
-﻿using YourCompany.TimeReport.Domain.Entities;
+﻿using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Domain.Common;
+namespace YourBrand.TimeReport.Domain.Common;
 
 public abstract class AuditableEntity
 {

@@ -1,13 +1,13 @@
 ﻿using System;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Infrastructure.Persistence;
-using YourCompany.Infrastructure.Services;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Infrastructure.Persistence;
+using YourBrand.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace YourCompany.Infrastructure;
+namespace YourBrand.Infrastructure;
 
 public static class ServiceExtensions
 {

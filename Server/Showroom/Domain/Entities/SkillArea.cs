@@ -1,6 +1,6 @@
-﻿using YourCompany.Showroom.Domain.Common;
+﻿using YourBrand.Showroom.Domain.Common;
 
-namespace YourCompany.Showroom.Domain.Entities;
+namespace YourBrand.Showroom.Domain.Entities;
 
 public class SkillArea : AuditableEntity, ISoftDelete
 {

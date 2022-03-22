@@ -4,11 +4,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Reports.Queries;
-using YourCompany.TimeReport.Infrastructure;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Reports.Queries;
+using YourBrand.TimeReport.Infrastructure;
 
-namespace YourCompany.TimeReport.Controllers;
+namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]

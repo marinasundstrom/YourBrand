@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YourCompany.Showroom.Application.Skills;
+namespace YourBrand.Showroom.Application.Skills;
 
 public record SkillDto
 (

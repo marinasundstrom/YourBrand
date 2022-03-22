@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.IdentityService.Application.Common.Interfaces;
-using YourCompany.IdentityService.Application.Common.Models;
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Application.Common.Models;
+using YourBrand.IdentityService.Domain.Entities;
 
-namespace YourCompany.IdentityService.Application.Users.Queries;
+namespace YourBrand.IdentityService.Application.Users.Queries;
 
 public class GetUserRolesQuery : IRequest<ItemsResult<RoleDto>>
 {

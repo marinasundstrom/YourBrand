@@ -1,9 +1,9 @@
 ﻿using System;
 
-using YourCompany.Domain.Common;
-using YourCompany.Domain.Events;
+using YourBrand.Domain.Common;
+using YourBrand.Domain.Events;
 
-namespace YourCompany.Domain.Entities;
+namespace YourBrand.Domain.Entities;
 
 public class Item : AuditableEntity, ISoftDelete, IHasDomainEvent
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 
-using YourCompany.Portal.Services;
-using YourCompany.Portal.Shared;
+using YourBrand.Portal.Services;
+using YourBrand.Portal.Shared;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -12,7 +12,7 @@ using Microsoft.JSInterop;
 
 using MudBlazor.Services;
 
-namespace YourCompany.Portal;
+namespace YourBrand.Portal;
 
 public static class ServiceExtensions
 {
@@ -38,42 +38,42 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddClients(this IServiceCollection services) 
     {
-        services.AddHttpClient(nameof(YourCompany.AppService.Client.IClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourBrand.AppService.Client.IClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<YourCompany.AppService.Client.IClient>((http, sp) => new YourCompany.AppService.Client.Client(http));
+        .AddTypedClient<YourBrand.AppService.Client.IClient>((http, sp) => new YourBrand.AppService.Client.Client(http));
 
-        services.AddHttpClient(nameof(YourCompany.AppService.Client.IItemsClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourBrand.AppService.Client.IItemsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<YourCompany.AppService.Client.IItemsClient>((http, sp) => new YourCompany.AppService.Client.ItemsClient(http))
+        .AddTypedClient<YourBrand.AppService.Client.IItemsClient>((http, sp) => new YourBrand.AppService.Client.ItemsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(YourCompany.AppService.Client.IDoSomethingClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourBrand.AppService.Client.IDoSomethingClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<YourCompany.AppService.Client.IDoSomethingClient>((http, sp) => new YourCompany.AppService.Client.DoSomethingClient(http));
+        .AddTypedClient<YourBrand.AppService.Client.IDoSomethingClient>((http, sp) => new YourBrand.AppService.Client.DoSomethingClient(http));
 
-        services.AddHttpClient(nameof(YourCompany.AppService.Client.ISearchClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourBrand.AppService.Client.ISearchClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<YourCompany.AppService.Client.ISearchClient>((http, sp) => new YourCompany.AppService.Client.SearchClient(http))
+        .AddTypedClient<YourBrand.AppService.Client.ISearchClient>((http, sp) => new YourBrand.AppService.Client.SearchClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
-        services.AddHttpClient(nameof(YourCompany.AppService.Client.INotificationsClient), (sp, http) =>
+        services.AddHttpClient(nameof(YourBrand.AppService.Client.INotificationsClient), (sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
         })
-        .AddTypedClient<YourCompany.AppService.Client.INotificationsClient>((http, sp) => new YourCompany.AppService.Client.NotificationsClient(http))
+        .AddTypedClient<YourBrand.AppService.Client.INotificationsClient>((http, sp) => new YourBrand.AppService.Client.NotificationsClient(http))
         .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
         services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>

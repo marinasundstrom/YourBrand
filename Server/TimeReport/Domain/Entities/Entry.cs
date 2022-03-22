@@ -1,9 +1,9 @@
 ﻿
-using YourCompany.TimeReport.Domain.Common;
-using YourCompany.TimeReport.Domain.Common.Interfaces;
-using YourCompany.TimeReport.Domain.Events;
+using YourBrand.TimeReport.Domain.Common;
+using YourBrand.TimeReport.Domain.Common.Interfaces;
+using YourBrand.TimeReport.Domain.Events;
 
-namespace YourCompany.TimeReport.Domain.Entities;
+namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Entry : AuditableEntity, IHasDomainEvent
 {

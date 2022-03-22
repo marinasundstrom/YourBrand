@@ -1,10 +1,10 @@
 ﻿using System;
 
-using YourCompany.Domain.Common;
+using YourBrand.Domain.Common;
 
 using MediatR;
 
-namespace YourCompany.Application.Common.Models;
+namespace YourBrand.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

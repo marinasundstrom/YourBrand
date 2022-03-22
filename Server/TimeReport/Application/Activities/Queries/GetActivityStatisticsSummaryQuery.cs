@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Models;
 
-namespace YourCompany.TimeReport.Application.Activities.Queries;
+namespace YourBrand.TimeReport.Application.Activities.Queries;
 
 public class GetActivityStatisticsSummaryQuery : IRequest<StatisticsSummary>
 {

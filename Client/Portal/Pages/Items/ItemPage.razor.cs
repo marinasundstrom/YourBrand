@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
-using YourCompany.AppService.Client;
+using YourBrand.AppService.Client;
 using MudBlazor;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace YourCompany.Portal.Pages.Items
+namespace YourBrand.Portal.Pages.Items
 {
     public partial class ItemPage
     {
@@ -64,7 +64,7 @@ namespace YourCompany.Portal.Pages.Items
         {
             try
             { 
-                var results = await ItemsClient.GetCommentsAsync(Id, state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourCompany.AppService.Client.SortDirection.Asc : YourCompany.AppService.Client.SortDirection.Desc);
+                var results = await ItemsClient.GetCommentsAsync(Id, state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc);
                 return new TableData<CommentDto>()
                 {
                     TotalItems = results.TotalCount,

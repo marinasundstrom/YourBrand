@@ -1,4 +1,4 @@
-namespace YourCompany.Showroom.Domain.Entities;
+namespace YourBrand.Showroom.Domain.Entities;
 
 public class Address 
 {

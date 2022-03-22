@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Net.Http.Headers;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Items.Queries;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Items.Queries;
 
 using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace YourCompany.Application;
+namespace YourBrand.Application;
 
 public static class ServiceExtensions
 {

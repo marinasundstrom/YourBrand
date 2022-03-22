@@ -1,4 +1,4 @@
-﻿namespace YourCompany.Domain.Common;
+﻿namespace YourBrand.Domain.Common;
 
 public interface IHasDomainEvent
 {

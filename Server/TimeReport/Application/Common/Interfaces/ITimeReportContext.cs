@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Application.Common.Interfaces;
+namespace YourBrand.TimeReport.Application.Common.Interfaces;
 
 public interface ITimeReportContext
 {

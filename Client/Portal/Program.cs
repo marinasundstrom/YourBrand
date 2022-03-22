@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-using YourCompany.Portal;
-using YourCompany.Showroom;
-using YourCompany.TimeReport;
+using YourBrand.Portal;
+using YourBrand.Showroom;
+using YourBrand.TimeReport;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

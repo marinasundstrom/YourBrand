@@ -3,11 +3,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Application.Users;
-using YourCompany.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Users;
+using YourBrand.TimeReport.Domain.Exceptions;
 
-namespace YourCompany.TimeReport.Application.Projects.Commands;
+namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public class UpdateProjectMembershipCommand : IRequest<ProjectMembershipDto>
 {

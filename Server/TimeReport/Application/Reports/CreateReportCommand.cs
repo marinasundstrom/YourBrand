@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 using OfficeOpenXml;
 
-using YourCompany.TimeReport.Application.Common.Interfaces;
-using YourCompany.TimeReport.Domain;
-using YourCompany.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Domain;
+using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourCompany.TimeReport.Application.Reports.Queries;
+namespace YourBrand.TimeReport.Application.Reports.Queries;
 
 public enum ReportMode 
 {

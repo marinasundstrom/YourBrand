@@ -1,9 +1,9 @@
 
 using System.Data.Common;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Domain.Entities;
-using YourCompany.Domain.Events;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Entities;
+using YourBrand.Domain.Events;
 
 using MediatR;
 
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Worker.Client;
 
-namespace YourCompany.Application.Notifications.Commands;
+namespace YourBrand.Application.Notifications.Commands;
 
 public class MarkNotificationAsReadCommand : IRequest
 {

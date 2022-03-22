@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.Identity;
 
-using YourCompany.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Domain.Entities;
 
-namespace YourCompany.IdentityService.Application.Users.Commands;
+namespace YourBrand.IdentityService.Application.Users.Commands;
 
 public class UpdateUserRoleCommand : IRequest
 {

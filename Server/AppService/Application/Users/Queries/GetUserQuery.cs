@@ -3,10 +3,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Domain.Exceptions;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Exceptions;
 
-namespace YourCompany.Application.Users.Queries;
+namespace YourBrand.Application.Users.Queries;
 
 public class GetUserQuery : IRequest<UserDto>
 {

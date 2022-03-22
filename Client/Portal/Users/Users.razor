@@ -1,12 +1,12 @@
 ﻿@page "/users"
 @attribute [Authorize(Roles = "Administrator,Manager")]
-@using YourCompany.TimeReport.Shared
+@using YourBrand.TimeReport.Shared
 @using IdentityService.Client
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IUsersClient UsersClient
 
-<PageTitle>Users - YourCompany</PageTitle>
+<PageTitle>Users - YourBrand</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">Users</MudText>
 

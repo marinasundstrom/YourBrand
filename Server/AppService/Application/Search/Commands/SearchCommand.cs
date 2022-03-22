@@ -1,16 +1,16 @@
 
 using System.Data.Common;
 
-using YourCompany.Application.Common.Interfaces;
-using YourCompany.Application.Common.Models;
-using YourCompany.Domain.Entities;
-using YourCompany.Domain.Events;
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Common.Models;
+using YourBrand.Domain.Entities;
+using YourBrand.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourCompany.Application.Search.Commands;
+namespace YourBrand.Application.Search.Commands;
 
 public class SearchCommand : IRequest<Results<SearchResultItem>>
 {

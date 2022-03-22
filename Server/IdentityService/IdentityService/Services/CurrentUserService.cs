@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.Http;
 
-using YourCompany.IdentityService.Application.Common.Interfaces;
+using YourBrand.IdentityService.Application.Common.Interfaces;
 
-namespace YourCompany.IdentityService.Services;
+namespace YourBrand.IdentityService.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

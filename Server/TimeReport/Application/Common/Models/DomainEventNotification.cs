@@ -2,9 +2,9 @@
 
 using MediatR;
 
-using YourCompany.TimeReport.Domain.Common;
+using YourBrand.TimeReport.Domain.Common;
 
-namespace YourCompany.TimeReport.Application.Common.Models;
+namespace YourBrand.TimeReport.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

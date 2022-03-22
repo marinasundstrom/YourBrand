@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>YourCompany.TimeReport.Domain</RootNamespace>
+    <RootNamespace>YourBrand.TimeReport.Domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

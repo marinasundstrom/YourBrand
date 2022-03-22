@@ -1,8 +1,8 @@
 ﻿using System;
 
-using YourCompany.Domain.Common;
+using YourBrand.Domain.Common;
 
-namespace YourCompany.Domain.Events;
+namespace YourBrand.Domain.Events;
 
 public class ItemImageUploadedEvent : DomainEvent
 {

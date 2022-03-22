@@ -1,10 +1,10 @@
 ﻿
-using YourCompany.Application.Common.Interfaces;
+using YourBrand.Application.Common.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace YourCompany.WebApi.Hubs;
+namespace YourBrand.WebApi.Hubs;
 
 [Authorize]
 public class NotificationHub : Hub<INotificationClient>

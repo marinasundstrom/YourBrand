@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 using MudBlazor;
 
-using YourCompany.AppService.Client;
+using YourBrand.AppService.Client;
 
 using System.ComponentModel.DataAnnotations;
 
-namespace YourCompany.Portal.Pages.Items
+namespace YourBrand.Portal.Pages.Items
 {
     public partial class CommentDialog
     {
