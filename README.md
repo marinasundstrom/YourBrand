@@ -6,6 +6,8 @@ This project brings [TimeReport](https://github.com/marinasundstrom/timereport) 
 
 This is a concept developed when learning building distributed applications. It is not production ready. But please, be inspired! :)
 
+Watch the [video](https://www.youtube.com/watch?v=mOtbuWFD650).
+
 Based on the [item-catalog](https://github.com/marinasundstrom/item-catalog) project - which at the moment is more evolved. I try to keep the common functionality in sync.
 
 ## Screenshots
