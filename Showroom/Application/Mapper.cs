@@ -54,7 +54,7 @@ public static class Mapper
         return new OrganizationDto(organization.Id, organization.Name, organization.Address.ToDto());
     }
 
-    public static AddressDto ToDto(this Domain.Entities.Address address)
+    public static AddressDto ToDto(this Domain.ValueObjects.Address address)
     {
         return new AddressDto(address.Address1, address.Address2, address.PostalCode, address.Locality, address.SubAdminArea, address.AdminArea, address.Country);
     }

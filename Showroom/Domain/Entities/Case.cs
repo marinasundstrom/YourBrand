@@ -1,4 +1,5 @@
 ﻿using YourBrand.Showroom.Domain.Common;
+using YourBrand.Showroom.Domain.Enums;
 
 namespace YourBrand.Showroom.Domain.Entities;
 

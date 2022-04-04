@@ -1,4 +1,5 @@
 using YourBrand.Showroom.Domain.Entities;
+using YourBrand.Showroom.Domain.ValueObjects;
 using YourBrand.Showroom.Infrastructure.Persistence;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,29 @@ public static class Seed
 
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
+
+        if (!context.Languages.Any())
+        {
+            var language = new Language
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Swedish",
+                NativeName = "svenska",
+                ISO639 = "sv"
+            };
+
+            context.Languages.Add(language);
+
+        language = new Language
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "English",
+                NativeName = "English",
+                ISO639 = "en"
+            };
+
+            context.Languages.Add(language);
+        }
 
         if (!context.Users.Any())
         {

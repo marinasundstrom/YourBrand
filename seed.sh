@@ -24,4 +24,6 @@ echo "Seeding Worker"
 dotnet run --project ./Worker/Worker/Worker.csproj -- --seed --connection-string "$CS;Database=Worker"
 echo "Done"
 
+dotnet run --project Seeder/Seeder.csproj
+
 echo "All done"

@@ -21,7 +21,7 @@ public record CreateCaseCommand(string? Description) : IRequest
             var @case = new Domain.Entities.Case
             {
                 Id = Guid.NewGuid().ToString(),
-                Status = Domain.Entities.CaseStatus.Created,
+                Status = Domain.Enums.CaseStatus.Created,
                 Description = request.Description
             };
 

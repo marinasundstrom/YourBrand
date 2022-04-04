@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Showroom.Domain.Entities;
+﻿namespace YourBrand.Showroom.Domain.Enums;
 
 public enum CaseStatus
 {

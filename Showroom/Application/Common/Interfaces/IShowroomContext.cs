@@ -27,6 +27,12 @@ public interface IShowroomContext
 
     DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get; }
 
+    DbSet<ConsultantProfileEducation> ConsultantProfileEducation { get; }
+
+    DbSet<ConsultantProfileLanguage> ConsultantProfileLanguages { get; }
+
+    DbSet<Language> Languages { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<ITransaction> BeginTransactionAsync();

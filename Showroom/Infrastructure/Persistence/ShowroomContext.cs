@@ -66,6 +66,11 @@ class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get;  set; } = null!;
 
+    public DbSet<ConsultantProfileEducation> ConsultantProfileEducation { get;  set; } = null!;
+
+    public DbSet<ConsultantProfileLanguage> ConsultantProfileLanguages { get;  set; } = null!;
+
+    public DbSet<Language> Languages { get;  set; } = null!;
 
 #nullable restore
 
