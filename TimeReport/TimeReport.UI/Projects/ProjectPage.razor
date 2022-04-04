@@ -1,5 +1,7 @@
 ﻿@page "/projects/{projectId}"
 @attribute [Authorize]
+@using TimeReport.Projects.Activities
+@using TimeReport.Projects.Expenses
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IActivitiesClient ActivitiesClient

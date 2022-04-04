@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 using YourBrand.TimeReport.Client;
 
-namespace YourBrand.TimeReport.Pages;
+namespace YourBrand.TimeReport.TimeSheets;
 
 public class ActivityModel
 {
