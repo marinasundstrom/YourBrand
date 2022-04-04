@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj" />
-    <ProjectReference Include="..\..\Server\Showroom\Showroom.Client\Showroom.Client.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
+    <ProjectReference Include="..\Showroom.Client\Showroom.Client.csproj" />
   </ItemGroup>
 
 </Project>

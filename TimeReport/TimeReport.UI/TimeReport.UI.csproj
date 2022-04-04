@@ -17,7 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Server\TimeReport\TimeReport.Client\TimeReport.Client.csproj" />
-		<ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj" />
+		<ProjectReference Include="..\TimeReport.Client\TimeReport.Client.csproj" />
+		<ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
+		<ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj" />
 	</ItemGroup>
 </Project>

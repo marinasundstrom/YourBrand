@@ -24,19 +24,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Server\AppService\AppService.Client\AppService.Client.csproj">
+    <ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\TimeReport\TimeReport.csproj">
+    <ProjectReference Include="..\..\TimeReport\TimeReport.UI\TimeReport.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Server\IdentityService\IdentityService.Client\IdentityService.Client.csproj">
+    <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Showroom\Showroom.csproj">
+    <ProjectReference Include="..\..\Showroom\Showroom.UI\Showroom.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
