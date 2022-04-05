@@ -16,6 +16,8 @@ public class ConsultantProfileSkill : AuditableEntity, ISoftDelete
 
     public int? Years { get; set; }
 
+    //public int? Level { get; set; }
+
     public List<ConsultantProfile> ConsultantProfiles { get; set; } = new List<ConsultantProfile>();
 
     public DateTime? Deleted { get; set; }
