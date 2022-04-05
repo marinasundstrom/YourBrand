@@ -29,11 +29,7 @@ public class LockMonthCommand : IRequest
 
         public async Task<Unit> Handle(LockMonthCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets
-                        .Include(x => x.Entries)
-                        .Include(x => x.User)
-                        .AsSplitQuery()
-                        .FirstAsync(x => x.Id == request.TimeSheetId);
+            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -79,13 +75,7 @@ public class LockMonthCommand : IRequest
 
             var userId = timeSheet.User.Id;
 
-            var group = await _context.MonthEntryGroups
-               .Include(meg => meg.Entries)
-               .ThenInclude(e => e.TimeSheet)
-               .FirstOrDefaultAsync(meg =>
-                   meg.UserId == userId
-                   && meg.Year == lastDate.Date.Year
-                   && meg.Month == lastDate.Date.Month);
+            var group = await _context.MonthEntryGroups.GetMonthGroup(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
 
             if (group is not null)
             {
@@ -113,11 +103,11 @@ public class LockMonthCommand : IRequest
                     throw new Exception("Cannot lock month since timesheets are open.");
                 }
 
-                group.Status = EntryStatus.Locked;
+                group.UpdateStatus(EntryStatus.Locked);
 
                 foreach (var entry in group.Entries)
                 {
-                    entry.Status = EntryStatus.Locked;
+                    entry.UpdateStatus(EntryStatus.Locked);
                 }
 
                 await _context.SaveChangesAsync();

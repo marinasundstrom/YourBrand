@@ -1,8 +1,6 @@
 ﻿
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
@@ -29,23 +27,14 @@ public class UpdateTimeSheetStatusCommand : IRequest
 
         public async Task<Unit> Handle(UpdateTimeSheetStatusCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets
-                .Include(x => x.Entries)
-                .ThenInclude(x => x.Project)
-                .Include(x => x.Entries)
-                .ThenInclude(x => x.Activity)
-                .Include(x => x.Entries)
-                .ThenInclude(x => x.Activity)
-                .ThenInclude(x => x.Project)
-                .AsSplitQuery()
-                .FirstAsync(x => x.Id == request.TimeSheetId);
+            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.Status = TimeSheetStatus.Closed;
+            timeSheet.UpdateStatus(TimeSheetStatus.Closed);
             await _context.SaveChangesAsync();
 
             return Unit.Value;

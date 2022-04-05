@@ -51,15 +51,7 @@ public class CreateEntryCommand : IRequest<EntryDto>
 
         public async Task<EntryDto> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets
-               .Include(x => x.User)
-               .Include(x => x.Entries)
-               .ThenInclude(x => x.Project)
-               .Include(x => x.Entries)
-               .ThenInclude(x => x.Activity)
-               .ThenInclude(x => x.Project)
-               .AsSplitQuery()
-               .FirstAsync(x => x.Id == request.TimeSheetId, cancellationToken);
+            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -71,23 +63,11 @@ public class CreateEntryCommand : IRequest<EntryDto>
                 throw new TimeSheetClosedException(request.TimeSheetId);
             }
 
-            var group = await _context.MonthEntryGroups
-            .Include(x => x.User)
-                .FirstOrDefaultAsync(meg =>
-                    meg.UserId == timeSheet.User.Id
-                    && meg.Year == request.Date.Year
-                    && meg.Month == request.Date.Month, cancellationToken);
+            var group = await _context.MonthEntryGroups.GetMonthGroup(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
 
             if (group is null)
             {
-                group = new MonthEntryGroup
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    User = timeSheet.User,
-                    Year = request.Date.Year,
-                    Month = request.Date.Month,
-                    Status = EntryStatus.Unlocked
-                };
+                group = new MonthEntryGroup(timeSheet.User, request.Date.Year, request.Date.Month);
 
                 _context.MonthEntryGroups.Add(group);
             }
@@ -127,7 +107,7 @@ public class CreateEntryCommand : IRequest<EntryDto>
 
             var dateOnly = request.Date;
 
-            double totalHoursDay = timeSheet.Entries.Where(e => e.Date == dateOnly).Sum(e => e.Hours.GetValueOrDefault())
+            double totalHoursDay = timeSheet.GetTotalHoursForDate(dateOnly)
                 + request.Hours.GetValueOrDefault();
 
             if (totalHoursDay > WorkingDayHours)
@@ -135,47 +115,25 @@ public class CreateEntryCommand : IRequest<EntryDto>
                 throw new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, dateOnly);
             }
 
-            double totalHoursWeek = timeSheet.Entries.Sum(x => x.Hours.GetValueOrDefault())
-                + request.Hours.GetValueOrDefault();
+            double totalHoursWeek = timeSheet.GetTotalHours() + request.Hours.GetValueOrDefault();
 
             if (totalHoursWeek > WorkingWeekHours)
             {
                 throw new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId);
             }
 
-            var timeSheetActivity = await _context.TimeSheetActivities
-                .FirstOrDefaultAsync(x => x.TimeSheet.Id == timeSheet.Id && x.Activity.Id == activity.Id, cancellationToken);
+            var timeSheetActivity = timeSheet.GetActivity(activity);
 
             if (timeSheetActivity is null)
             {
-                timeSheetActivity = new TimeSheetActivity
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    TimeSheet = timeSheet,
-                    Project = project,
-                    Activity = activity
-                };
-
-                _context.TimeSheetActivities.Add(timeSheetActivity);
+                timeSheetActivity = timeSheet.AddActivity(activity);
             }
 
-            var entry = new Entry
-            {
-                Id = Guid.NewGuid().ToString(),
-                User = timeSheet.User,
-                Project = project,
-                Activity = activity,
-                TimeSheetActivity = timeSheetActivity,
-                Date = request.Date,
-                Hours = request.Hours,
-                Description = request.Description
-            };
+            var entry = timeSheetActivity.AddEntry(request.Date, request.Hours, request.Description);
 
-            timeSheet.Entries.Add(entry);
+            //entry.MonthGroup = group;
 
-            entry.MonthGroup = group;
-
-            group.Entries.Add(entry);
+            group.AddEntry(entry);
 
             await _context.SaveChangesAsync(cancellationToken);
 

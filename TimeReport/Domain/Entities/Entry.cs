@@ -7,19 +7,38 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Entry : AuditableEntity, IHasDomainEvent
 {
-    public string Id { get; set; } = null!;
+    public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
+        DateOnly date, double? hours, string? description)
+    {
+        Id = Guid.NewGuid().ToString();
+        User = user;
+        Project = project;
+        Activity = activity;
+        TimeSheet = timeSheet;
+        TimeSheetActivity = timeSheetActivity;
+        Date = date;
+        Hours = hours;
+        Description = description;
+    }
 
-    public User User { get; set; } = null!;
+    internal Entry()
+    {
 
-    public string UserId { get; set; } = null!;
+    }
 
-    public Project Project { get; set; } = null!;
+    public string Id { get; private set; } = null!;
 
-    public Activity Activity { get; set; } = null!;
+    public User User { get; private set; } = null!;
 
-    public TimeSheet TimeSheet { get; set; } = null!;
+    public string UserId { get; private set; } = null!;
 
-    public TimeSheetActivity TimeSheetActivity { get; set; } = null!;
+    public Project Project { get; private set; } = null!;
+
+    public Activity Activity { get; private set; } = null!;
+
+    public TimeSheet TimeSheet { get; private set; } = null!;
+
+    public TimeSheetActivity TimeSheetActivity { get; private set; } = null!;
 
     public MonthEntryGroup? MonthGroup { get; set; }
 
@@ -29,7 +48,12 @@ public class Entry : AuditableEntity, IHasDomainEvent
 
     public string? Description { get; set; }
 
-    public EntryStatus Status { get; set; } = EntryStatus.Unlocked;
+    public EntryStatus Status { get; private set; } = EntryStatus.Unlocked;
+
+    public void UpdateStatus(EntryStatus status)
+    {
+        Status = status;
+    }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 

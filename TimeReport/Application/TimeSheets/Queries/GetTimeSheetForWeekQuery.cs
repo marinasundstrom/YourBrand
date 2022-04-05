@@ -83,15 +83,7 @@ public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
 
                 var startDate = ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);
 
-                timeSheet = new TimeSheet()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Year = request.Year,
-                    Week = request.Week,
-                    From = startDate,
-                    To = startDate.AddDays(6),
-                    UserId = userId!
-                };
+                timeSheet = new TimeSheet(user!, request.Year, request.Week);
 
                 _context.TimeSheets.Add(timeSheet);
 

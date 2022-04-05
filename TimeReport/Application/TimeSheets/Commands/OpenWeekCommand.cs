@@ -29,27 +29,18 @@ public class OpenWeekCommand : IRequest
 
         public async Task<Unit> Handle(OpenWeekCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets
-                .Include(x => x.Entries)
-                .ThenInclude(x => x.Project)
-                .Include(x => x.Entries)
-                .ThenInclude(x => x.Activity)
-                .Include(x => x.Entries)
-                .ThenInclude(x => x.Activity)
-                .ThenInclude(x => x.Project)
-                .AsSplitQuery()
-                .FirstAsync(x => x.Id == request.TimeSheetId, cancellationToken);
+            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.Status = TimeSheetStatus.Open;
+            timeSheet.UpdateStatus(TimeSheetStatus.Open);
 
             foreach (var entry in timeSheet.Entries)
             {
-                entry.Status = EntryStatus.Unlocked;
+                entry.UpdateStatus(EntryStatus.Unlocked);
             }
 
             await _context.SaveChangesAsync(cancellationToken);

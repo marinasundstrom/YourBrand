@@ -32,16 +32,7 @@ public class DeleteActivityCommand : IRequest
 
         public async Task<Unit> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets
-                        .Include(x => x.Entries)
-                        .ThenInclude(x => x.Project)
-                        .Include(x => x.Entries)
-                        .ThenInclude(x => x.Activity)
-                        .Include(x => x.Entries)
-                        .ThenInclude(x => x.Activity)
-                        .ThenInclude(x => x.Project)
-                        .AsSplitQuery()
-                        .FirstAsync(x => x.Id == request.TimeSheetId, cancellationToken);
+            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
