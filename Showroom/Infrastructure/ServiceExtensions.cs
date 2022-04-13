@@ -20,7 +20,9 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<ShowroomContext>(configuration.GetConnectionString("mssql", "Showroom") ?? configuration.GetConnectionString("DefaultConnection"));
+        services.AddSqlServer<ShowroomContext>(
+            configuration.GetConnectionString("mssql", "Showroom") ?? configuration.GetConnectionString("DefaultConnection"),
+            options => options.EnableRetryOnFailure());
 
         services.AddScoped<IShowroomContext>(sp => sp.GetRequiredService<ShowroomContext>());
 
