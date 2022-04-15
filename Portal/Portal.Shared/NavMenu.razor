@@ -3,40 +3,47 @@
 <MudNavMenu>
     <MudSpacer />
 
-    <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="/" Match="NavLinkMatch.All" Class="mb-4">@T["Dashboard"]</MudNavLink>
+    <MudNavGroup Title="@T["General"]" Expanded="true">
 
-    <MudText Typo="Typo.caption" Class="ms-4"><b>@T["General"]</b></MudText>
+        <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="/" Match="NavLinkMatch.All">
+            @T["Dashboard"]
+        </MudNavLink>
 
-    <AuthorizeView>
-        <MudNavLink Icon="@Icons.Material.Filled.List" Href="/items">@T["Items"]</MudNavLink>
-    </AuthorizeView>
+        <AuthorizeView>
+            <MudNavLink Icon="@Icons.Material.Filled.List" Href="/items">@T["Items"]</MudNavLink>
+        </AuthorizeView>
 
-    <MudNavLink Icon="@Icons.Material.Filled.List" Href="/worker">@T["Worker"]</MudNavLink>
-
-    <AuthorizeView Roles="Administrator,Manager">
-        <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>Showroom</b></MudText>
-        <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/consultants">Consultants</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/cases">Cases</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/contracts">Contracts</MudNavLink>
-    </AuthorizeView>
-
-    <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>@T["Projects"]</b></MudText>
+        <MudNavLink Icon="@Icons.Material.Filled.List" Href="/worker">@T["Worker"]</MudNavLink>
+    </MudNavGroup>
 
     <AuthorizeView>
-        <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">List</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.AccessTime" Href="/timesheet">@T["ReportTime"]</MudNavLink>
-        <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/reports">Reports</MudNavLink>
+        <MudNavGroup Title="Showroom" Expanded="true">
+            <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/consultants">Consultants</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/cases">Cases</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/contracts">Contracts</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+
+    <AuthorizeView>
+        <MudNavGroup Title="@T["Projects"]" Expanded="true">
+            <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">List</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.AccessTime" Href="/timesheet">@T["ReportTime"]</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/reports">Reports</MudNavLink>
+
+            <AuthorizeView Roles="Administrator,Manager" Context="context2">
+                <MudNavLink Icon="@Icons.Material.Filled.List" Href="/timesheets">Timesheets</MudNavLink>
+            </AuthorizeView>
+        </MudNavGroup>
     </AuthorizeView>
 
     <AuthorizeView Roles="Administrator,Manager">
-        <MudNavLink Icon="@Icons.Material.Filled.List" Href="/timesheets">Timesheets</MudNavLink>
-
-        <MudText Typo="Typo.caption" Class="ms-4 mt-4"><b>Administration</b></MudText>
-        <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/users">Users</MudNavLink>
+        <MudNavGroup Title="Administration" Expanded="true">
+            <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/users">Users</MudNavLink>
+        </MudNavGroup>
     </AuthorizeView>
     @*
         <MudNavGroup Title="Settings" Expanded="true">
-            <MudNavLink Href="/users">Users</MudNavLink>
-            <MudNavLink Href="/security">Security</MudNavLink>
+        <MudNavLink Href="/users">Users</MudNavLink>
+        <MudNavLink Href="/security">Security</MudNavLink>
         </MudNavGroup> *@
 </MudNavMenu>
