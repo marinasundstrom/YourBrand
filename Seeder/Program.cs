@@ -18,6 +18,16 @@ await usersClient.CreateUserAsync(new CreateUserDto
     Password = "Abc123!?"
 });
 
+await usersClient.CreateUserAsync(new CreateUserDto
+{
+    FirstName = "Test",
+    LastName = "Testsson",
+    Role = "User",
+    Ssn = "",
+    Email = "test@email.com",
+    Password = "Abc123!?"
+});
+
 Console.WriteLine("Created user");
 
 static IServiceProvider BuildServiceProvider()

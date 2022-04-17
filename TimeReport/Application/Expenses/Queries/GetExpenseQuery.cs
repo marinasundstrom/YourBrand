@@ -41,7 +41,7 @@ public class GetExpenseQuery : IRequest<ExpenseDto>
                 throw new Exception();
             }
 
-            return new ExpenseDto(expense.Id, expense.Date.ToDateTime(TimeOnly.Parse("1:00")), expense.Amount, expense.Description, GetAttachmentUrl(expense.Attachment), new ProjectDto(expense.Project.Id, expense.Project.Name, expense.Project.Description));
+            return expense.ToDto();
         }
     }
 }

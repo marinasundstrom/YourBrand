@@ -8,6 +8,8 @@ namespace YourBrand.TimeReport.Application.Common.Interfaces;
 public interface ITimeReportContext
 {
     DbSet<User> Users { get; set; }
+    DbSet<Absence> Absence { get; set; }
+    DbSet<AbsenceType> AbsenceTypes { get; set; }
     DbSet<Project> Projects { get; set; }
     DbSet<ProjectMembership> ProjectMemberships { get; set; }
     DbSet<Expense> Expenses { get; set; }

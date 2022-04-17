@@ -7,13 +7,13 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects;
 
-using static YourBrand.TimeReport.Application.Expenses.ExpensesHelpers;
+using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
-namespace YourBrand.TimeReport.Application.Expenses.Queries;
+namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 
-public class GetExpensesQuery : IRequest<ItemsResult<ExpenseDto>>
+public class GetAbsencesQuery : IRequest<ItemsResult<AbsenceDto>>
 {
-    public GetExpensesQuery(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
+    public GetAbsencesQuery(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
     {
         Page = page;
         PageSize = pageSize;
@@ -35,18 +35,18 @@ public class GetExpensesQuery : IRequest<ItemsResult<ExpenseDto>>
 
     public Application.Common.Models.SortDirection? SortDirection { get; }
 
-    public class GetExpensesQueryHandler : IRequestHandler<GetExpensesQuery, ItemsResult<ExpenseDto>>
+    public class GetAbsencesQueryHandler : IRequestHandler<GetAbsencesQuery, ItemsResult<AbsenceDto>>
     {
         private readonly ITimeReportContext _context;
 
-        public GetExpensesQueryHandler(ITimeReportContext context)
+        public GetAbsencesQueryHandler(ITimeReportContext context)
         {
             _context = context;
         }
 
-        public async Task<ItemsResult<ExpenseDto>> Handle(GetExpensesQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<AbsenceDto>> Handle(GetAbsencesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Expenses
+            var query = _context.Absence
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()
@@ -54,12 +54,12 @@ public class GetExpensesQuery : IRequest<ItemsResult<ExpenseDto>>
 
             if (request.ProjectId is not null)
             {
-                query = query.Where(expense => expense.Project.Id == request.ProjectId);
+                query = query.Where(absence => absence.Project.Id == request.ProjectId);
             }
 
             if (request.SearchString is not null)
             {
-                query = query.Where(expense => expense.Description.ToLower().Contains(request.SearchString.ToLower()));
+                query = query.Where(absence => absence.Note.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalItems = await query.CountAsync(cancellationToken);
@@ -69,14 +69,14 @@ public class GetExpensesQuery : IRequest<ItemsResult<ExpenseDto>>
                 query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? TimeReport.Application.SortDirection.Descending : TimeReport.Application.SortDirection.Ascending);
             }
 
-            var expenses = await query
+            var absences = await query
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var dtos = expenses.Select(expense => expense.ToDto());
+            var dtos = absences.Select(absence => absence.ToDto());
 
-            return new ItemsResult<ExpenseDto>(dtos, totalItems);
+            return new ItemsResult<AbsenceDto>(dtos, totalItems);
         }
     }
 }

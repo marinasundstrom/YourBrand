@@ -6,6 +6,7 @@ using YourBrand.TimeReport.Application.Expenses;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.TimeSheets;
 using YourBrand.TimeReport.Application.Users;
+using YourBrand.TimeReport.Application.Users.Absence;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application;
@@ -52,5 +53,10 @@ public static class Mapper
     public static TimeSheetEntryDto ToTimeSheetEntryDto(this Domain.Entities.Entry entry)
     {
         return new TimeSheetEntryDto(entry.Id, entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
+    }
+
+    public static AbsenceDto ToDto(this Domain.Entities.Absence absence)
+    {
+        return new AbsenceDto(absence.Id, absence.Date.GetValueOrDefault().ToDateTime(TimeOnly.Parse("00:01")), absence.Note, new ProjectDto(absence.Project.Id, absence.Project.Name, absence.Project.Description));
     }
 }

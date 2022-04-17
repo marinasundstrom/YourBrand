@@ -45,6 +45,10 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<User> Users { get; set; } = null!;
 
+    public DbSet<Absence> Absence { get; set; } = null!;
+
+    public DbSet<AbsenceType> AbsenceTypes { get; set; } = null!;
+
     public DbSet<Project> Projects { get; set; } = null!;
 
     public DbSet<ProjectMembership> ProjectMemberships { get; set; } = null!;

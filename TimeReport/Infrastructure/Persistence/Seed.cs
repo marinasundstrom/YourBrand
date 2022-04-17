@@ -32,6 +32,23 @@ public static class Seed
 
             await context.SaveChangesAsync();
         }
+        
+        if (!context.AbsenceTypes.Any())
+        {
+            context.AbsenceTypes.Add(new AbsenceType
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Vacation"
+            });
+
+            context.AbsenceTypes.Add(new AbsenceType
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Sickness"
+            });
+
+            await context.SaveChangesAsync();
+        }
 
         return;
 
