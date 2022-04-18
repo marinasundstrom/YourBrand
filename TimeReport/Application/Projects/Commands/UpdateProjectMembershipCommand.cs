@@ -11,12 +11,12 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public class UpdateProjectMembershipCommand : IRequest<ProjectMembershipDto>
 {
-    public UpdateProjectMembershipCommand(string projectId, string membershipId, DateTime? from, DateTime? thru)
+    public UpdateProjectMembershipCommand(string projectId, string membershipId, DateTime? from, DateTime? to)
     {
         ProjectId = projectId;
         MembershipId = membershipId;
         From = from;
-        Thru = thru;
+        Thru = to;
     }
 
     public string ProjectId { get; }
@@ -58,13 +58,13 @@ public class UpdateProjectMembershipCommand : IRequest<ProjectMembershipDto>
             }
 
             m.From = request.From;
-            m.Thru = request.Thru;
+            m.To = request.Thru;
 
             await _context.SaveChangesAsync(cancellationToken);
 
             return new ProjectMembershipDto(m.Id, new ProjectDto(m.Project.Id, m.Project.Name, m.Project.Description),
                 new UserDto(m.User.Id, m.User.FirstName, m.User.LastName, m.User.DisplayName, m.User.SSN, m.User.Email, m.User.Created, m.User.Deleted),
-                m.From, m.Thru);
+                m.From, m.To);
         }
     }
 }

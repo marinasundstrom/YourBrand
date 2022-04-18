@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.TimeReport.Application.Expenses.Queries;
+using YourBrand.TimeReport.Application.Projects.Expenses.Queries;
 
 namespace YourBrand.TimeReport.Application;
 

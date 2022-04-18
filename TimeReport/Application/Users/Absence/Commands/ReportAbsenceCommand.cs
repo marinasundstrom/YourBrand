@@ -11,9 +11,9 @@ using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public class CreateAbsenceCommand : IRequest<AbsenceDto>
+public class ReportAbsenceCommand : IRequest<AbsenceDto>
 {
-    public CreateAbsenceCommand(string projectId, DateTime date, decimal amount, string? description)
+    public ReportAbsenceCommand(string projectId, DateTime date, decimal amount, string? description)
     {
         ProjectId = projectId;
         Date = date;
@@ -29,16 +29,16 @@ public class CreateAbsenceCommand : IRequest<AbsenceDto>
 
     public string? Description { get; }
 
-    public class CreateAbsenceCommandHandler : IRequestHandler<CreateAbsenceCommand, AbsenceDto>
+    public class ReportAbsenceCommandHandler : IRequestHandler<ReportAbsenceCommand, AbsenceDto>
     {
         private readonly ITimeReportContext _context;
 
-        public CreateAbsenceCommandHandler(ITimeReportContext context)
+        public ReportAbsenceCommandHandler(ITimeReportContext context)
         {
             _context = context;
         }
 
-        public async Task<AbsenceDto> Handle(CreateAbsenceCommand request, CancellationToken cancellationToken)
+        public async Task<AbsenceDto> Handle(ReportAbsenceCommand request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
                .AsSplitQuery()

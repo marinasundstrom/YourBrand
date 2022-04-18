@@ -1,19 +1,13 @@
 ﻿
-using Azure.Storage.Blobs;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Application.Expenses;
-using YourBrand.TimeReport.Application.Expenses.Commands;
-using YourBrand.TimeReport.Application.Expenses.Queries;
-
-using static YourBrand.TimeReport.Application.Expenses.ExpensesHelpers;
+using YourBrand.TimeReport.Application.Projects.Expenses;
+using YourBrand.TimeReport.Application.Projects.Expenses.Commands;
+using YourBrand.TimeReport.Application.Projects.Expenses.Queries;
 
 namespace YourBrand.TimeReport.Controllers;
 

@@ -5,11 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Application.Projects;
 
-using static YourBrand.TimeReport.Application.Expenses.ExpensesHelpers;
-
-namespace YourBrand.TimeReport.Application.Expenses.Queries;
+namespace YourBrand.TimeReport.Application.Projects.Expenses.Queries;
 
 public class GetExpensesQuery : IRequest<ItemsResult<ExpenseDto>>
 {

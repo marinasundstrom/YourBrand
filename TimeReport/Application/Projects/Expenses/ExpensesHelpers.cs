@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.TimeReport.Application.Expenses;
+﻿namespace YourBrand.TimeReport.Application.Projects.Expenses;
 
 public static class ExpensesHelpers
 {

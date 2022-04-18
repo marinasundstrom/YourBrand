@@ -68,7 +68,7 @@ public class GetUserProjectMembershipsQuery : IRequest<ItemsResult<ProjectMember
                 .DistinctBy(x => x.Project) // Temp
                 .Select(m => new ProjectMembershipDto(m.Id, new ProjectDto(m.Project.Id, m.Project.Name, m.Project.Description),
                 new UserDto(m.User.Id, m.User.FirstName, m.User.LastName, m.User.DisplayName, m.User.SSN, m.User.Email, m.User.Created, m.User.Deleted),
-                m.From, m.Thru));
+                m.From, m.To));
 
             return new ItemsResult<ProjectMembershipDto>(dtos, totalItems);
         }

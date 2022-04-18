@@ -11,12 +11,6 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Reports.Queries;
 
-public enum ReportMode 
-{
-    User,
-    Project
-}
-
 public class CreateReportCommand : IRequest<Stream?>
 {
     public CreateReportCommand(string[] projectIds, string? userId, DateTime startDate, DateTime endDate, int[] statuses, ReportMode mode)

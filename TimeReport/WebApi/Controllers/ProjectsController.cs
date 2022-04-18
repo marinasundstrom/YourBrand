@@ -3,16 +3,11 @@ using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using YourBrand.TimeReport.Application;
-using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Projects.Commands;
 using YourBrand.TimeReport.Application.Projects.Queries;
-using YourBrand.TimeReport.Application.Users;
-using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Dtos;
 

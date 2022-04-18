@@ -4,12 +4,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Domain.Entities;
 
-using static YourBrand.TimeReport.Application.Expenses.ExpensesHelpers;
-
-namespace YourBrand.TimeReport.Application.Expenses.Commands;
+namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
 public class CreateExpenseCommand : IRequest<ExpenseDto>
 {

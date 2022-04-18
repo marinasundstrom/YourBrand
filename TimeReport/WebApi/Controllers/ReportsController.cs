@@ -4,9 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Reports.Queries;
-using YourBrand.TimeReport.Infrastructure;
 
 namespace YourBrand.TimeReport.Controllers;
 

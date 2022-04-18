@@ -12,12 +12,12 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public partial class CreateProjectMembershipCommand : IRequest<ProjectMembershipDto>
 {
-    public CreateProjectMembershipCommand(string projectId, string userId, DateTime? from, DateTime? thru)
+    public CreateProjectMembershipCommand(string projectId, string userId, DateTime? from, DateTime? to)
     {
         ProjectId = projectId;
         UserId = userId;
         From = from;
-        Thru = thru;
+        To = to;
     }
 
     public string ProjectId { get; }
@@ -26,7 +26,7 @@ public partial class CreateProjectMembershipCommand : IRequest<ProjectMembership
 
     public DateTime? From { get; }
 
-    public DateTime? Thru { get; }
+    public DateTime? To { get; }
 
     public class CreateProjectMembershipCommandHandler : IRequestHandler<CreateProjectMembershipCommand, ProjectMembershipDto>
     {
@@ -72,7 +72,7 @@ public partial class CreateProjectMembershipCommand : IRequest<ProjectMembership
                 Project = project,
                 User = user,
                 From = request.From,
-                Thru = request.Thru
+                To = request.To
             };
 
             _context.ProjectMemberships.Add(m);
@@ -81,7 +81,7 @@ public partial class CreateProjectMembershipCommand : IRequest<ProjectMembership
 
             return new ProjectMembershipDto(m.Id, new ProjectDto(m.Project.Id, m.Project.Name, m.Project.Description),
                 new UserDto(m.User.Id, m.User.FirstName, m.User.LastName, m.User.DisplayName, m.User.SSN, m.User.Email, m.User.Created, m.User.Deleted),
-                m.From, m.Thru);
+                m.From, m.To);
         }
     }
 }

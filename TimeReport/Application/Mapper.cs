@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 using YourBrand.TimeReport.Application.Activities;
-using YourBrand.TimeReport.Application.Expenses;
+using YourBrand.TimeReport.Application.Projects.Expenses;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.TimeSheets;
 using YourBrand.TimeReport.Application.Users;

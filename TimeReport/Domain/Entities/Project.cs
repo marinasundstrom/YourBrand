@@ -12,6 +12,16 @@ public class Project : AuditableEntity, ISoftDelete
 
     public string? Description { get; set; }
 
+    /// <summary>
+    /// Expected hours per week / timesheet
+    /// </summary>
+    public double? ExpectedHoursWeekly { get; set; }
+
+    /// <summary>
+    /// Required hours per week / timesheet
+    /// </summary>
+    public double? RequiredHoursWeekly { get; set; }
+
     public List<Expense> Expenses { get; set; } = new List<Expense>();
 
     public List<Activity> Activities { get; set; } = new List<Activity>();

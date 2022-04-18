@@ -52,7 +52,7 @@ public class GetProjectMembershipQuery : IRequest<ProjectMembershipDto>
 
             return new ProjectMembershipDto(m.Id, new ProjectDto(m.Project.Id, m.Project.Name, m.Project.Description),
                 new UserDto(m.User.Id, m.User.FirstName, m.User.LastName, m.User.DisplayName, m.User.SSN, m.User.Email, m.User.Created, m.User.Deleted),
-                m.From, m.Thru);
+                m.From, m.To);
         }
     }
 }

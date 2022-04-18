@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourBrand.TimeReport.Application.Expenses.Commands;
+namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
 public class DeleteExpenseCommand : IRequest
 {

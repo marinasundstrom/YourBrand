@@ -14,12 +14,17 @@ public class ProjectMembership : AuditableEntity, ISoftDelete
 
     public DateTime? From { get; set; }
 
-    public DateTime? Thru { get; set; }
+    public DateTime? To { get; set; }
 
     /// <summary>
     /// Expected hours per week / timesheet
     /// </summary>
     public double? ExpectedHoursWeekly { get; set; }
+
+    /// <summary>
+    /// Required hours per week / timesheet
+    /// </summary>
+    public double? RequiredHoursWeekly { get; set; }
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
