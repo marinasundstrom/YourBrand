@@ -10,6 +10,8 @@ public class AbsenceType: AuditableEntity, ISoftDelete
 
     public string Name { get; set; } = null!;
 
+    public bool FullDays { get; set; }
+
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

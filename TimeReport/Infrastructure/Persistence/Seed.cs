@@ -38,13 +38,20 @@ public static class Seed
             context.AbsenceTypes.Add(new AbsenceType
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Vacation"
+                Name = "Vacation",
+                FullDays = true
             });
 
             context.AbsenceTypes.Add(new AbsenceType
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Sickness"
+                Name = "Sick leave"
+            });
+
+            context.AbsenceTypes.Add(new AbsenceType
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Compensatory leave"
             });
 
             await context.SaveChangesAsync();
