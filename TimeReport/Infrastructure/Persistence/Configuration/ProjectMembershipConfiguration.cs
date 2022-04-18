@@ -10,7 +10,7 @@ public class ProjectMembershipConfiguration : IEntityTypeConfiguration<ProjectMe
 {
     public void Configure(EntityTypeBuilder<ProjectMembership> builder)
     {
-        builder.ToTable("ProjectMemberships", t => t.IsTemporal());
+        builder.ToTable("ProjectMemberships");
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasOne(x => x.CreatedBy)

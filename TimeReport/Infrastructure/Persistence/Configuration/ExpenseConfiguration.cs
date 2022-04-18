@@ -10,7 +10,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
 {
     public void Configure(EntityTypeBuilder<Expense> builder)
     {
-        builder.ToTable("Expenses", t => t.IsTemporal());
+        builder.ToTable("Expenses");
 
         builder.Property(x => x.Date)
             .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));

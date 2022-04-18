@@ -10,7 +10,7 @@ public class TimeSheetActivityConfiguration : IEntityTypeConfiguration<TimeSheet
 {
     public void Configure(EntityTypeBuilder<TimeSheetActivity> builder)
     {
-        builder.ToTable("TimeSheetActivities", t => t.IsTemporal());
+        builder.ToTable("TimeSheetActivities");
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasOne(x => x.CreatedBy)

@@ -10,7 +10,7 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<Absence>
 {
     public void Configure(EntityTypeBuilder<Absence> builder)
     {
-        builder.ToTable("Absence", t => t.IsTemporal());
+        builder.ToTable("Absence");
 
         builder.Property(x => x.Date)
             .HasConversion<DateTime?>(

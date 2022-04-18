@@ -10,7 +10,7 @@ public class AbsenceTypeConfiguration : IEntityTypeConfiguration<AbsenceType>
 {
     public void Configure(EntityTypeBuilder<AbsenceType> builder)
     {
-        builder.ToTable("AbsenceTypes", t => t.IsTemporal());
+        builder.ToTable("AbsenceTypes");
         
         builder.HasQueryFilter(i => i.Deleted == null);
 
