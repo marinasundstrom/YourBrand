@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>YourBrand.ApiKeys</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AspNetCore.Authentication.ApiKey" Version="6.0.1" />
+		<PackageReference Include="IdentityModel" Version="6.0.0" />
+    </ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ApiKeys.Client\ApiKeys.Client.csproj" />
+	</ItemGroup>
+
+</Project>

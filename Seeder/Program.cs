@@ -1,13 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using YourBrand.IdentityService.Client;
 
-const string ApiKey = "foobar";
+const string ApiKey = "asdsr34#34rswert35234aedae?2!";
 
 var services = BuildServiceProvider();
 
 var usersClient = services.GetRequiredService<IUsersClient>();
 
-await usersClient.CreateUserAsync(new CreateUserDto
+Console.WriteLine("Creating users...");
+
+var userAdmin = await usersClient.CreateUserAsync(new CreateUserDto
 {
     FirstName = "Administrator",
     LastName = "Administrator",
@@ -18,7 +20,7 @@ await usersClient.CreateUserAsync(new CreateUserDto
     Password = "Abc123!?"
 });
 
-await usersClient.CreateUserAsync(new CreateUserDto
+var userTest = await usersClient.CreateUserAsync(new CreateUserDto
 {
     FirstName = "Test",
     LastName = "Testsson",
@@ -28,7 +30,46 @@ await usersClient.CreateUserAsync(new CreateUserDto
     Password = "Abc123!?"
 });
 
-Console.WriteLine("Created user");
+Console.WriteLine("Users created");
+
+Console.WriteLine("Creating projects...");
+
+var projectsClient = services.GetRequiredService<YourBrand.TimeReport.Client.IProjectsClient>();
+var activitiesClient = services.GetRequiredService<YourBrand.TimeReport.Client.IActivitiesClient>();
+
+var projectMyProject = await projectsClient.CreateProjectAsync(new YourBrand.TimeReport.Client.CreateProjectDto() {
+    Name = "My project"
+});
+
+var activityWork = await activitiesClient.CreateActivityAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
+    Name = "Work"
+});
+
+var activityMisc = await activitiesClient.CreateActivityAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
+    Name = "Misc"
+});
+
+await projectsClient.CreateProjectMembershipAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateProjectMembershipDto {
+    UserId = userTest.Id
+});
+
+var projectInternal = await projectsClient.CreateProjectAsync(new YourBrand.TimeReport.Client.CreateProjectDto() {
+    Name = "Internal"
+});
+
+var activitySick = await activitiesClient.CreateActivityAsync(projectInternal.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
+    Name = "Sick"
+});
+
+await projectsClient.CreateProjectMembershipAsync(projectInternal.Id, new YourBrand.TimeReport.Client.CreateProjectMembershipDto {
+    UserId = userAdmin.Id
+});
+
+await projectsClient.CreateProjectMembershipAsync(projectInternal.Id, new YourBrand.TimeReport.Client.CreateProjectMembershipDto {
+    UserId = userTest.Id
+});
+
+Console.WriteLine("Projects created");
 
 static IServiceProvider BuildServiceProvider()
 {
@@ -41,14 +82,19 @@ static IServiceProvider BuildServiceProvider()
     })
     .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http));
 
-    /*
     services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IProjectsClient), (sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost:5050/");
+        http.BaseAddress = new Uri($"https://localhost/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
     .AddTypedClient<YourBrand.TimeReport.Client.IProjectsClient>((http, sp) => new YourBrand.TimeReport.Client.ProjectsClient(http));
-    */
+
+    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IActivitiesClient), (sp, http) =>
+    {
+        http.BaseAddress = new Uri($"https://localhost/timereport/");
+        http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
+    })
+    .AddTypedClient<YourBrand.TimeReport.Client.IActivitiesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivitiesClient(http));
 
     return services.BuildServiceProvider();
 }

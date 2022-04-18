@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Activities;
 using YourBrand.TimeReport.Application.Activities.Commands;
 using YourBrand.TimeReport.Application.Activities.Queries;
@@ -14,7 +15,7 @@ namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
 public class ActivitiesController : ControllerBase
 {
     private readonly IMediator _mediator;

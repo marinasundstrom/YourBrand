@@ -1,8 +1,7 @@
-﻿using AspNetCore.Authentication.ApiKey;
+﻿
+using AspNetCore.Authentication.ApiKey;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-namespace YourBrand.IdentityService;
+namespace YourBrand.ApiKeys;
 
 public static class AuthSchemes
 {

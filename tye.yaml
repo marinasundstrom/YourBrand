@@ -42,6 +42,12 @@ services:
   - protocol: https
     port: 5070
 
+- name: apikeys
+  project: ApiKeys/ApiKeys/ApiKeys.csproj
+  bindings:
+  - protocol: https
+    port: 5080
+
 - name: azurite
   image: mcr.microsoft.com/azure-storage/azurite
   args: "azurite-blob --loose --blobHost 0.0.0.0 -l /data"

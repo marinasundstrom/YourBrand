@@ -43,6 +43,9 @@
     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

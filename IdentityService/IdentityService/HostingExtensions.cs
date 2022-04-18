@@ -1,4 +1,4 @@
-using Duende.IdentityServer;
+﻿using Duende.IdentityServer;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +16,7 @@ using YourBrand.IdentityService.Infrastructure.Infrastructure;
 using AspNetCore.Authentication.ApiKey;
 using System.Security.Claims;
 using IdentityModel;
+using YourBrand.ApiKeys;
 
 namespace YourBrand.IdentityService;
 
@@ -125,17 +126,7 @@ internal static class HostingExtensions
                 options.ClientSecret = "copy client secret from Google here";
             });
 
-        builder.Services.AddAuthentication(ApiKeyDefaults.AuthenticationScheme)
-
-            // The below AddApiKeyInHeaderOrQueryParams without type parameter will require options.Events.OnValidateKey delegete to be set.
-            //.AddApiKeyInHeaderOrQueryParams(options =>
-
-            // The below AddApiKeyInHeaderOrQueryParams with type parameter will add the ApiKeyProvider to the dependency container. 
-            .AddApiKeyInHeaderOrQueryParams<ApiKeyProvider>(options =>
-            {
-                options.Realm = "Identity Service API";
-                options.KeyName = "X-API-KEY";
-            });
+        builder.Services.AddApiKeyAuthentication("https://localhost/apikeys/");
 
         return builder.Build();
     }

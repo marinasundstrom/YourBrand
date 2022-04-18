@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 
+using YourBrand.ApiKeys;
 using YourBrand.TimeReport;
 using YourBrand.TimeReport.Application;
 using YourBrand.TimeReport.Application.Common.Interfaces;
@@ -92,6 +93,8 @@ static class Program
 
                         //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                     });
+
+        services.AddApiKeyAuthentication("https://localhost/apikeys/");
 
         services.AddAzureClients(builder =>
         {

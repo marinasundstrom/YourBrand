@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using YourBrand.ApiKeys;
 
 static class Program
 {
@@ -145,6 +146,8 @@ static class Program
 
                         //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                     });
+
+        services.AddApiKeyAuthentication("https://localhost/apikeys/");
 
         var app = builder.Build();
 

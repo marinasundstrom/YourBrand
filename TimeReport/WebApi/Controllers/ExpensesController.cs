@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects.Expenses;
 using YourBrand.TimeReport.Application.Projects.Expenses.Commands;
@@ -13,7 +14,7 @@ namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
 public class ExpensesController : ControllerBase
 {
     private readonly IMediator _mediator;

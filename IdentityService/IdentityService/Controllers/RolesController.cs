@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.ApiKeys;
 using YourBrand.IdentityService.Application.Common.Models;
 using YourBrand.IdentityService.Application.Users;
 using YourBrand.IdentityService.Application.Users.Commands;
