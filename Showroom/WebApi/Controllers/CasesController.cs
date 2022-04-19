@@ -8,12 +8,13 @@ using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Cases;
 using YourBrand.Showroom.Application.Cases.Commands;
 using YourBrand.Showroom.Application.Cases.Queries;
+using YourBrand.ApiKeys;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
-[Authorize]
 [Route("[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
 public class CasesController : ControllerBase
 {
     private readonly IMediator _mediator;

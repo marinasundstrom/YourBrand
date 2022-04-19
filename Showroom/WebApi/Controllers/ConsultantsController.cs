@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.ApiKeys;
 using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.ConsultantProfiles;
 using YourBrand.Showroom.Application.ConsultantProfiles.Commands;
@@ -16,9 +17,9 @@ using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
-[Authorize]
 [Route("[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
 public class ConsultantsController : ControllerBase
 {
     private readonly IMediator _mediator;

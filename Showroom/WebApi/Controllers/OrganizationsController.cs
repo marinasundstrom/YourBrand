@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.ApiKeys;
 using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Organizations;
 using YourBrand.Showroom.Application.Organizations.Commands;
@@ -11,9 +12,9 @@ using YourBrand.Showroom.Application.Organizations.Queries;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
-[Authorize]
 [Route("[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
 public class OrganizationsController : ControllerBase
 {
     private readonly IMediator _mediator;
