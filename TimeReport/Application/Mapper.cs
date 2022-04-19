@@ -9,6 +9,7 @@ using YourBrand.TimeReport.Application.Users;
 using YourBrand.TimeReport.Application.Users.Absence;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Application.Activities.ActivityTypes;
+using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
 
 namespace YourBrand.TimeReport.Application;
 
@@ -37,6 +38,11 @@ public static class Mapper
     public static ExpenseDto ToDto(this Domain.Entities.Expense expense)
     {
         return new (expense.Id, expense.Date.ToDateTime(TimeOnly.Parse("01:00")), expense.Amount, expense.Description, expense.Attachment, expense.Project.ToDto());
+    }
+
+    public static ExpenseTypeDto ToDto(this Domain.Entities.ExpenseType expenseType)
+    {
+        return new (expenseType.Id, expenseType.Name, expenseType.Description, expenseType.Project?.ToDto());
     }
 
     public static TimeSheetDto ToDto(this Domain.Entities.TimeSheet timeSheet, IEnumerable<MonthEntryGroup> monthInfo)

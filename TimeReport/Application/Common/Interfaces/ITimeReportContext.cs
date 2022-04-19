@@ -11,6 +11,7 @@ public interface ITimeReportContext
     DbSet<Absence> Absence { get; set; }
     DbSet<AbsenceType> AbsenceTypes { get; set; }
     DbSet<Project> Projects { get; set; }
+    DbSet<ExpenseType> ExpenseTypes { get; set; }
     DbSet<ProjectMembership> ProjectMemberships { get; set; }
     DbSet<Expense> Expenses { get; set; }
     DbSet<Activity> Activities { get; set; }

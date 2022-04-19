@@ -1,16 +1,14 @@
 ﻿
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
+namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Commands;
 
-public record CreateExpenseCommand(string ProjectId, DateTime Date, string ExpenseTypeId, decimal Amount, string? Description) : IRequest<ExpenseDto>
+public record CreateExpenseTypeCommand(string Name, string? Description) : IRequest<ExpenseTypeDto>
 {
-    public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseCommand, ExpenseDto>
+    public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseTypeCommand, ExpenseTypeDto>
     {
         private readonly ITimeReportContext _context;
 
@@ -19,8 +17,9 @@ public record CreateExpenseCommand(string ProjectId, DateTime Date, string Expen
             _context = context;
         }
 
-        public async Task<ExpenseDto> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
+        public async Task<ExpenseTypeDto> Handle(CreateExpenseTypeCommand request, CancellationToken cancellationToken)
         {
+            /*
             var project = await _context.Projects
                .AsSplitQuery()
                .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
@@ -29,22 +28,21 @@ public record CreateExpenseCommand(string ProjectId, DateTime Date, string Expen
             {
                 throw new Exception();
             }
+            */
 
-            var expense = new Expense
+            var expenseType = new ExpenseType
             {
                 Id = Guid.NewGuid().ToString(),
-                Type = await _context.ExpenseTypes.FirstAsync(et => et.Id == request.ExpenseTypeId),
-                Date = DateOnly.FromDateTime(request.Date),
-                Amount = request.Amount,
+                Name = request.Name,
                 Description = request.Description,
-                Project = project
+                //Project = project
             };
 
-            _context.Expenses.Add(expense);
+            _context.ExpenseTypes.Add(expenseType);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return expense.ToDto();
+            return expenseType.ToDto();
         }
     }
 }

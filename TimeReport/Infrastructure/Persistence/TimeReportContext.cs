@@ -55,6 +55,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<Expense> Expenses { get; set; } = null!;
 
+    public DbSet<ExpenseType> ExpenseTypes { get; set; } = null!;
+
     public DbSet<Activity> Activities { get; set; } = null!;
 
     public DbSet<ActivityType> ActivityTypes { get; set; } = null!;

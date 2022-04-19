@@ -51,7 +51,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new CreateExpenseCommand(projectId, createExpenseDto.Date, createExpenseDto.Amount, createExpenseDto.Description), cancellationToken);
+            var activity = await _mediator.Send(new CreateExpenseCommand(projectId, createExpenseDto.Date, createExpenseDto.ExpenseTypeId, createExpenseDto.Amount, createExpenseDto.Description), cancellationToken);
 
             return Ok(activity);
         }
@@ -137,6 +137,6 @@ public class ExpensesController : ControllerBase
     */
 }
 
-public record class CreateExpenseDto(DateTime Date, decimal Amount, string? Description);
+public record class CreateExpenseDto(DateTime Date, string ExpenseTypeId, decimal Amount, string? Description);
 
 public record class UpdateExpenseDto(DateTime Date, decimal Amount, string? Description);

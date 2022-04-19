@@ -1,24 +1,20 @@
-﻿
+
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Expense : AuditableEntity, ISoftDelete
+public class ExpenseType : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = null!;
 
-    public Project Project { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    public ExpenseType Type { get; set; } = null!;
+    public string? Description { get; set; } = null!;
 
-    public DateOnly Date { get; set; }
+    public Project? Project { get; set; } = null!;
 
-    public decimal Amount { get; set; }
-
-    public string? Description { get; set; }
-
-    public string? Attachment { get; set; }
+    public List<Project> Projects { get; set; } = new List<Project>();
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

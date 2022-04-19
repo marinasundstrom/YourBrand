@@ -36,6 +36,10 @@ public static class ServiceExtensions
             services.AddHttpClient(nameof(IExpensesClient), configureClient)
             .AddTypedClient<IExpensesClient>((http, sp) => new ExpensesClient(http)));
 
+        builder(
+            services.AddHttpClient(nameof(IExpenseTypesClient), configureClient)
+            .AddTypedClient<IExpenseTypesClient>((http, sp) => new ExpenseTypesClient(http)));
+
         return services;
     }
 }
