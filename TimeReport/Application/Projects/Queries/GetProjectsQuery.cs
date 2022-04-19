@@ -49,7 +49,7 @@ public record GetProjectsQuery(int Page = 0, int PageSize = 10, string? UserId =
                 .Take(request.PageSize)
                 .ToListAsync();
 
-            var dtos = projects.Select(project => new ProjectDto(project.Id, project.Name, project.Description));
+            var dtos = projects.Select(project => project.ToDto());
 
             return new ItemsResult<ProjectDto>(dtos, totalItems);
         }

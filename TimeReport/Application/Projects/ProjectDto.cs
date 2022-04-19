@@ -1,3 +1,5 @@
-﻿namespace YourBrand.TimeReport.Application.Projects;
+﻿using YourBrand.TimeReport.Application.Organizations;
 
-public record class ProjectDto(string Id, string Name, string? Description);
+namespace YourBrand.TimeReport.Application.Projects;
+
+public record class ProjectDto(string Id, string Name, string? Description, OrganizationDto Organization);

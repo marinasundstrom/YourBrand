@@ -3,12 +3,11 @@
 using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 
-namespace YourBrand.TimeReport.Application.Organizations
-.Commands;
+namespace YourBrand.TimeReport.Application.Organizations.Commands;
 
-public record CreateOrganizationCommand(string Name) : IRequest
+public record CreateOrganizationCommand(string Name) : IRequest<OrganizationDto>
 {
-    public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand>
+    public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
         private readonly ITimeReportContext context;
 
@@ -17,7 +16,7 @@ public record CreateOrganizationCommand(string Name) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
+        public async Task<OrganizationDto> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = await context.Organizations.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
@@ -25,6 +24,7 @@ public record CreateOrganizationCommand(string Name) : IRequest
 
             organization = new Domain.Entities.Organization
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = request.Name
             };
 
@@ -32,7 +32,7 @@ public record CreateOrganizationCommand(string Name) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return organization.ToDto();
         }
     }
 }

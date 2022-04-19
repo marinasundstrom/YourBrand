@@ -12,6 +12,8 @@ public class Project : AuditableEntity, ISoftDelete
 
     public string? Description { get; set; }
 
+    public Organization Organization { get; set; } = null!;
+
     /// <summary>
     /// Expected hours per week / timesheet
     /// </summary>

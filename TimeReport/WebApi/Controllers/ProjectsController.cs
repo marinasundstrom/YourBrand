@@ -56,7 +56,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            var project = await _mediator.Send(new CreateProjectCommand(createProjectDto.Name, createProjectDto.Description), cancellationToken);
+            var project = await _mediator.Send(new CreateProjectCommand(createProjectDto.Name, createProjectDto.Description, createProjectDto.OrganizationId), cancellationToken);
 
             return Ok(project);
         }
@@ -73,7 +73,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            var project = await _mediator.Send(new UpdateProjectCommand(id, updateProjectDto.Name, updateProjectDto.Description), cancellationToken);
+            var project = await _mediator.Send(new UpdateProjectCommand(id, updateProjectDto.Name, updateProjectDto.Description, updateProjectDto.OrganizationId), cancellationToken);
 
             return Ok(project);
         }
@@ -236,6 +236,6 @@ public class ProjectsController : ControllerBase
     }
 }
 
-public record class CreateProjectDto(string Name, string? Description);
+public record class CreateProjectDto(string Name, string? Description, string OrganizationId);
 
-public record class UpdateProjectDto(string Name, string? Description);
+public record class UpdateProjectDto(string Name, string? Description, string OrganizationId);

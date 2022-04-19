@@ -37,15 +37,15 @@ public class OrganizationsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task CreateOrganization(CreateOrganizationDto dto, CancellationToken cancellationToken)
+    public async Task<OrganizationDto> CreateOrganization(CreateOrganizationDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateOrganizationCommand(dto.Name), cancellationToken);
+        return await _mediator.Send(new CreateOrganizationCommand(dto.Name), cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task UpdateOrganization(string id, UpdateOrganizationDto dto, CancellationToken cancellationToken)
+    public async Task<OrganizationDto> UpdateOrganization(string id, UpdateOrganizationDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateOrganizationCommand(id, dto.Name), cancellationToken);
+        return await _mediator.Send(new UpdateOrganizationCommand(id, dto.Name), cancellationToken);
     }
 
 

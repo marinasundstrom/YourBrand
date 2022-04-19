@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record UpdateProjectCommand(string ProjectId, string Name, string? Description) : IRequest<ProjectDto>
+public record UpdateProjectCommand(string ProjectId, string Name, string? Description, string OrganizationId) : IRequest<ProjectDto>
 {
     public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, ProjectDto>
     {
@@ -32,10 +32,11 @@ public record UpdateProjectCommand(string ProjectId, string Name, string? Descri
 
             project.Name = request.Name;
             project.Description = request.Description;
+            project.Organization = await _context.Organizations.FirstAsync(o => o.Id == request.OrganizationId);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new ProjectDto(project.Id, project.Name, project.Description);
+            return project.ToDto();
         }
     }
 }

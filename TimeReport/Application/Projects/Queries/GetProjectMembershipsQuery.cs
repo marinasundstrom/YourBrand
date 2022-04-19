@@ -51,9 +51,7 @@ public record GetProjectMembershipsQuery(string ProjectId, int Page = 0, int Pag
                     .ToArrayAsync();
 
             var dtos = memberships
-                .Select(m => new ProjectMembershipDto(m.Id, new ProjectDto(m.Project.Id, m.Project.Name, m.Project.Description),
-                new UserDto(m.User.Id, m.User.FirstName, m.User.LastName, m.User.DisplayName, m.User.SSN, m.User.Email, m.User.Created, m.User.Deleted),
-                m.From, m.To));
+                .Select(m => m.ToDto());
 
             return new ItemsResult<ProjectMembershipDto>(dtos, totalItems);
         }

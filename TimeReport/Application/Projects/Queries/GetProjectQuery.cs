@@ -30,7 +30,7 @@ public record GetProjectQuery(string ProjectId) : IRequest<ProjectDto?>
                 return null;
             }
 
-            return new ProjectDto(project.Id, project.Name, project.Description);
+            return project.ToDto();
         }
     }
 }

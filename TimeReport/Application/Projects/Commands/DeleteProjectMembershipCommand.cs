@@ -22,6 +22,7 @@ public record DeleteProjectMembershipCommand(string ProjectId, string Membership
         public async Task<Unit> Handle(DeleteProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
+                .Include(p => p.Organization)
                 .Include(p => p.Memberships)
                 .ThenInclude(m => m.User)
                 .AsSplitQuery()

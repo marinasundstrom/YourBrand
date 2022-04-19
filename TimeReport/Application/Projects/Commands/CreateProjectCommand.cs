@@ -1,12 +1,14 @@
 ﻿
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record CreateProjectCommand(string Name, string? Description) : IRequest<ProjectDto>
+public record CreateProjectCommand(string Name, string? Description, string OrganizationId) : IRequest<ProjectDto>
 {
     public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, ProjectDto>
     {
@@ -23,14 +25,15 @@ public record CreateProjectCommand(string Name, string? Description) : IRequest<
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = request.Name,
-                Description = request.Description
+                Description = request.Description,
+                Organization = await _context.Organizations.FirstAsync(o => o.Id == request.OrganizationId)
             };
 
             _context.Projects.Add(project);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new ProjectDto(project.Id, project.Name, project.Description);
+            return project.ToDto();
         }
     }
 }

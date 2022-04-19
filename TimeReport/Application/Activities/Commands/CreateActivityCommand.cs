@@ -24,6 +24,15 @@ public record CreateActivityCommand(string ProjectId, string Name, string Activi
         {
             var project = await _context.Projects
                .AsSplitQuery()
+               .Include(at => at.Organization)
+               .ThenInclude(at => at.CreatedBy)
+               .Include(at => at.Organization)
+               .ThenInclude(at => at.LastModifiedBy)
+               .Include(at => at.Organization)
+               .ThenInclude(at => at.DeletedBy)
+               .Include(at => at.CreatedBy)
+               .Include(at => at.LastModifiedBy)
+               .Include(at => at.DeletedBy)
                .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 
             if (project is null)
@@ -35,7 +44,10 @@ public record CreateActivityCommand(string ProjectId, string Name, string Activi
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = request.Name,
-                ActivityType = await _context.ActivityTypes.FirstAsync(at => at.Id == request.ActivityTypeId),
+                ActivityType = await _context.ActivityTypes
+                    .AsSingleQuery()
+                    .IncludeAll()
+                    .FirstAsync(at => at.Id == request.ActivityTypeId),
                 Description = request.Description,
                 Project = project,
                 HourlyRate = request.HourlyRate

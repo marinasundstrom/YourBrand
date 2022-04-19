@@ -24,7 +24,7 @@ public record CreateProjectMembershipCommand(string ProjectId, string UserId, Da
         public async Task<ProjectMembershipDto> Handle(CreateProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
-                        .Include(p => p.Memberships)
+                        .Include(p => p.Organization)
                         .Include(p => p.Memberships)
                         .ThenInclude(m => m.User)
                         .AsSplitQuery()
@@ -63,9 +63,7 @@ public record CreateProjectMembershipCommand(string ProjectId, string UserId, Da
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new ProjectMembershipDto(m.Id, new ProjectDto(m.Project.Id, m.Project.Name, m.Project.Description),
-                new UserDto(m.User.Id, m.User.FirstName, m.User.LastName, m.User.DisplayName, m.User.SSN, m.User.Email, m.User.Created, m.User.Deleted),
-                m.From, m.To);
+            return m.ToDto();
         }
     }
 }

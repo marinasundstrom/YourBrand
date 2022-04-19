@@ -131,7 +131,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -208,7 +215,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -3617,6 +3631,9 @@
           "description": {
             "type": "string",
             "nullable": true
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationDto"
           }
         }
       },
@@ -3986,6 +4003,9 @@
           "description": {
             "type": "string",
             "nullable": true
+          },
+          "organizationId": {
+            "type": "string"
           }
         }
       },
@@ -3999,6 +4019,9 @@
           "description": {
             "type": "string",
             "nullable": true
+          },
+          "organizationId": {
+            "type": "string"
           }
         }
       },

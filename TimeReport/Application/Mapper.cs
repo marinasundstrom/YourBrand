@@ -24,7 +24,7 @@ public static class Mapper
 
     public static ProjectDto ToDto(this Domain.Entities.Project project)
     {
-        return new (project.Id, project.Name, project.Description);
+        return new (project.Id, project.Name, project.Description, project.Organization.ToDto());
     }
 
     public static ProjectGroupDto ToDto(this Domain.Entities.ProjectGroup projectGroup)
@@ -32,6 +32,13 @@ public static class Mapper
         return new (projectGroup.Id, projectGroup.Name, projectGroup.Description, projectGroup.Project?.ToDto());
     }
 
+    public static ProjectMembershipDto ToDto(this Domain.Entities.ProjectMembership projectMembership)
+    {
+        return new ProjectMembershipDto(projectMembership.Id, projectMembership.Project.ToDto(),
+                projectMembership.User.ToDto(),
+                projectMembership.From, projectMembership.To);
+    }
+    
     public static ActivityDto ToDto(this Domain.Entities.Activity activity)
     {
         return new (activity.Id, activity.Name, activity.ActivityType.ToDto(), activity.Description, activity.HourlyRate, activity.Project.ToDto());
@@ -76,12 +83,12 @@ public static class Mapper
 
     public static EntryDto ToDto(this Domain.Entities.Entry entry)
     {
-        return new (entry.Id, new ProjectDto(entry.Project.Id, entry.Project.Name, entry.Project.Description), new ActivityDto(entry.Activity.Id, entry.Activity.Name, entry.Activity.ActivityType.ToDto(), entry.Activity.Description, entry.Activity.HourlyRate, new ProjectDto(entry.Activity.Project.Id, entry.Activity.Project.Name, entry.Activity.Project.Description)), entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
+        return new (entry.Id, entry.Project.ToDto(), entry.Activity.ToDto(), entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
     }
 
     public static AbsenceDto ToDto(this Domain.Entities.Absence absence)
     {
-        return new (absence.Id, absence.Date.GetValueOrDefault().ToDateTime(TimeOnly.Parse("00:01")), absence.Note, new ProjectDto(absence.Project.Id, absence.Project.Name, absence.Project.Description));
+        return new (absence.Id, absence.Date.GetValueOrDefault().ToDateTime(TimeOnly.Parse("00:01")), absence.Note, absence.Project?.ToDto());
     }
 
     public static OrganizationDto ToDto(this Domain.Entities.Organization organization)
