@@ -14,9 +14,9 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<EntryDto>
+public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<ResultWithValue<EntryDto, Exception>>
 {
-    public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, EntryDto>
+    public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, ResultWithValue<EntryDto, Exception>>
     {
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
@@ -27,18 +27,18 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
             _currentUserService = currentUserService;
         }
 
-        public async Task<EntryDto> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<ResultWithValue<EntryDto, Exception>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                throw new TimeSheetNotFoundException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, Exception>.Error(new TimeSheetNotFoundException(request.TimeSheetId));
             }
 
             if (timeSheet.Status != TimeSheetStatus.Open)
             {
-                throw new TimeSheetClosedException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, Exception>.Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
             var group = await _context.MonthEntryGroups.GetMonthGroup(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
@@ -53,7 +53,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
             {
                 if (group.Status == EntryStatus.Locked)
                 {
-                    throw new MonthLockedException(request.TimeSheetId); ;
+                    return new ResultWithValue<EntryDto, Exception>.Error(new MonthLockedException(request.TimeSheetId));
                 }
             }
 
@@ -64,23 +64,24 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             if (existingEntryWithDate is not null)
             {
-                throw new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId);
+                return new ResultWithValue<EntryDto, Exception>.Error(new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId));
             }
 
             var project = await _context.Projects
                 .Include(x => x.Activities)
+                .ThenInclude(x => x.ActivityType)
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ResultWithValue<EntryDto, Exception>.Error(new ProjectNotFoundException(request.ProjectId));
             }
 
             var activity = project!.Activities.FirstOrDefault(x => x.Id == request.ActivityId);
 
             if (activity is null)
             {
-                throw new ActivityNotFoundException(request.ProjectId);
+                return new ResultWithValue<EntryDto, Exception>.Error(new ActivityNotFoundException(request.ProjectId));
             }
 
             var dateOnly = request.Date;
@@ -90,14 +91,14 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             if (totalHoursDay > WorkingDayHours)
             {
-                throw new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, dateOnly);
+                return new ResultWithValue<EntryDto, Exception>.Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, dateOnly));
             }
 
             double totalHoursWeek = timeSheet.GetTotalHours() + request.Hours.GetValueOrDefault();
 
             if (totalHoursWeek > WorkingWeekHours)
             {
-                throw new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, Exception>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
             var timeSheetActivity = timeSheet.GetActivity(activity);
@@ -117,7 +118,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             var e = entry;
 
-            return new EntryDto(e.Id, new ProjectDto(e.Project.Id, e.Project.Name, e.Project.Description), new ActivityDto(e.Activity.Id, e.Activity.Name, e.Activity.ActivityType.ToDto(), e.Activity.Description, e.Activity.HourlyRate, new ProjectDto(e.Activity.Project.Id, e.Activity.Project.Name, e.Activity.Project.Description)), e.Date.ToDateTime(TimeOnly.Parse("01:00")), e.Hours, e.Description, (EntryStatusDto)e.MonthGroup.Status);
+            return new ResultWithValue<EntryDto, Exception>.Ok(new EntryDto(e.Id, new ProjectDto(e.Project.Id, e.Project.Name, e.Project.Description), new ActivityDto(e.Activity.Id, e.Activity.Name, e.Activity.ActivityType.ToDto(), e.Activity.Description, e.Activity.HourlyRate, new ProjectDto(e.Activity.Project.Id, e.Activity.Project.Name, e.Activity.Project.Description)), e.Date.ToDateTime(TimeOnly.Parse("01:00")), e.Hours, e.Description, (EntryStatusDto)e.MonthGroup.Status));
         }
     }
 }

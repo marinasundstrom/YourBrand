@@ -21,6 +21,9 @@ public static class Extensions
                 .ThenInclude(x => x.Activity)
                 .Include(x => x.Entries)
                 .ThenInclude(x => x.Activity)
+                .ThenInclude(x => x.ActivityType)
+                .Include(x => x.Entries)
+                .ThenInclude(x => x.Activity)
                 .ThenInclude(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == timeSheetId, cancellationToken);

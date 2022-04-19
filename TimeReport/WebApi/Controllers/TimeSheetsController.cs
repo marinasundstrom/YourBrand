@@ -60,44 +60,23 @@ public class TimeSheetsController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EntryDto>> CreateEntry([FromRoute] string timeSheetId, CreateEntryDto dto, CancellationToken cancellationToken)
     {
-        try
+        var date = DateOnly.FromDateTime(dto.Date);
+
+        var result = await _mediator.Send(new CreateEntryCommand(timeSheetId, dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
+
+        return result switch
         {
-            var date = DateOnly.FromDateTime(dto.Date);
-            var newDto = await _mediator.Send(new CreateEntryCommand(timeSheetId, dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
-            return Ok(newDto);
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (TimeSheetClosedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (MonthLockedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (EntryAlreadyExistsException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (ProjectNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (ActivityNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (DayHoursExceedPermittedDailyWorkingHoursException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (WeekHoursExceedPermittedWeeklyWorkingHoursException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+            ResultWithValue<EntryDto, Exception>.Ok(EntryDto value) => Ok(value),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is TimeSheetNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is TimeSheetClosedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is MonthLockedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is EntryAlreadyExistsException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is ProjectMembershipNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is ActivityNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is DayHoursExceedPermittedDailyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            ResultWithValue<EntryDto, Exception>.Error(Exception exception) when exception is WeekHoursExceedPermittedWeeklyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            _ => BadRequest()
+        };
     }
 
     [HttpPut("{timeSheetId}/{entryId}")]

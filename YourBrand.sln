@@ -88,6 +88,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiKeys.Client", "ApiKeys\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiKeys.Integration", "ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj", "{CB7B5A01-E32C-4606-99C7-0F9288D045D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{AEEF0B61-5D65-440A-885D-8CAE046BFCF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -218,6 +220,10 @@ Global
 		{CB7B5A01-E32C-4606-99C7-0F9288D045D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB7B5A01-E32C-4606-99C7-0F9288D045D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB7B5A01-E32C-4606-99C7-0F9288D045D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEEF0B61-5D65-440A-885D-8CAE046BFCF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEEF0B61-5D65-440A-885D-8CAE046BFCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEEF0B61-5D65-440A-885D-8CAE046BFCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEEF0B61-5D65-440A-885D-8CAE046BFCF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
