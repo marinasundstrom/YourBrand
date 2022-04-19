@@ -14,9 +14,9 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<ResultWithValue<EntryDto, Exception>>
+public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<ResultWithValue<EntryDto, DomainException>>
 {
-    public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, ResultWithValue<EntryDto, Exception>>
+    public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, ResultWithValue<EntryDto, DomainException>>
     {
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
@@ -27,18 +27,18 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
             _currentUserService = currentUserService;
         }
 
-        public async Task<ResultWithValue<EntryDto, Exception>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<ResultWithValue<EntryDto, DomainException>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new TimeSheetNotFoundException(request.TimeSheetId));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetNotFoundException(request.TimeSheetId));
             }
 
             if (timeSheet.Status != TimeSheetStatus.Open)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new TimeSheetClosedException(request.TimeSheetId));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
             var group = await _context.MonthEntryGroups.GetMonthGroup(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
@@ -53,7 +53,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
             {
                 if (group.Status == EntryStatus.Locked)
                 {
-                    return new ResultWithValue<EntryDto, Exception>.Error(new MonthLockedException(request.TimeSheetId));
+                    return new ResultWithValue<EntryDto, DomainException>.Error(new MonthLockedException(request.TimeSheetId));
                 }
             }
 
@@ -64,7 +64,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             if (existingEntryWithDate is not null)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId));
             }
 
             var project = await _context.Projects
@@ -74,14 +74,14 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             if (project is null)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new ProjectNotFoundException(request.ProjectId));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new ProjectNotFoundException(request.ProjectId));
             }
 
             var activity = project!.Activities.FirstOrDefault(x => x.Id == request.ActivityId);
 
             if (activity is null)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new ActivityNotFoundException(request.ProjectId));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new ActivityNotFoundException(request.ProjectId));
             }
 
             var dateOnly = request.Date;
@@ -91,14 +91,14 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             if (totalHoursDay > WorkingDayHours)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, dateOnly));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, dateOnly));
             }
 
             double totalHoursWeek = timeSheet.GetTotalHours() + request.Hours.GetValueOrDefault();
 
             if (totalHoursWeek > WorkingWeekHours)
             {
-                return new ResultWithValue<EntryDto, Exception>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
+                return new ResultWithValue<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
             var timeSheetActivity = timeSheet.GetActivity(activity);
@@ -118,7 +118,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             var e = entry;
 
-            return new ResultWithValue<EntryDto, Exception>.Ok(new EntryDto(e.Id, new ProjectDto(e.Project.Id, e.Project.Name, e.Project.Description), new ActivityDto(e.Activity.Id, e.Activity.Name, e.Activity.ActivityType.ToDto(), e.Activity.Description, e.Activity.HourlyRate, new ProjectDto(e.Activity.Project.Id, e.Activity.Project.Name, e.Activity.Project.Description)), e.Date.ToDateTime(TimeOnly.Parse("01:00")), e.Hours, e.Description, (EntryStatusDto)e.MonthGroup.Status));
+            return new ResultWithValue<EntryDto, DomainException>.Ok(new EntryDto(e.Id, new ProjectDto(e.Project.Id, e.Project.Name, e.Project.Description), new ActivityDto(e.Activity.Id, e.Activity.Name, e.Activity.ActivityType.ToDto(), e.Activity.Description, e.Activity.HourlyRate, new ProjectDto(e.Activity.Project.Id, e.Activity.Project.Name, e.Activity.Project.Description)), e.Date.ToDateTime(TimeOnly.Parse("01:00")), e.Hours, e.Description, (EntryStatusDto)e.MonthGroup.Status));
         }
     }
 }
