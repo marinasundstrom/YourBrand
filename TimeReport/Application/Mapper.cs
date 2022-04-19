@@ -11,6 +11,7 @@ using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Application.Activities.ActivityTypes;
 using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
 using YourBrand.TimeReport.Application.Projects.ProjectGroups;
+using YourBrand.TimeReport.Application.Organizations;
 
 namespace YourBrand.TimeReport.Application;
 
@@ -81,5 +82,10 @@ public static class Mapper
     public static AbsenceDto ToDto(this Domain.Entities.Absence absence)
     {
         return new (absence.Id, absence.Date.GetValueOrDefault().ToDateTime(TimeOnly.Parse("00:01")), absence.Note, new ProjectDto(absence.Project.Id, absence.Project.Name, absence.Project.Description));
+    }
+
+    public static OrganizationDto ToDto(this Domain.Entities.Organization organization)
+    {
+        return new (organization.Id, organization.Name);
     }
 }

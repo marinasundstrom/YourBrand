@@ -9,6 +9,14 @@ public static class ServiceExtensions
     public static IServiceCollection AddTimeReportClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder> builder)
     {
         builder(
+            services.AddHttpClient(nameof(IUsersClient) + "TR", configureClient)
+            .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http)));
+
+        builder(
+            services.AddHttpClient(nameof(IOrganizationsClient) + "TR", configureClient)
+            .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http)));
+
+        builder(
             services.AddHttpClient(nameof(ITimeSheetsClient), configureClient)
             .AddTypedClient<ITimeSheetsClient>((http, sp) => new TimeSheetsClient(http)));
 
@@ -32,10 +40,6 @@ public static class ServiceExtensions
             services.AddHttpClient(nameof(IReportsClient), configureClient)
             .AddTypedClient<IReportsClient>((http, sp) => new ReportsClient(http)));
 
-        builder(
-            services.AddHttpClient(nameof(IUsersClient), configureClient)
-            .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http)));
-            
         builder(
             services.AddHttpClient(nameof(IExpensesClient), configureClient)
             .AddTypedClient<IExpensesClient>((http, sp) => new ExpensesClient(http)));
