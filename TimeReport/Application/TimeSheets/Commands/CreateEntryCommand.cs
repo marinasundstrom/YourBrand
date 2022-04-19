@@ -68,6 +68,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
             }
 
             var project = await _context.Projects
+                .Include(x => x.Organization)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.ActivityType)
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);

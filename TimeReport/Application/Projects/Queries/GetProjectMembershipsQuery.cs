@@ -46,6 +46,8 @@ public record GetProjectMembershipsQuery(string ProjectId, int Page = 0, int Pag
 
             var memberships = await query
                     .Include(m => m.User)
+                    .Include(x => x.Project)
+                    .ThenInclude(x => x.Organization)
                     .Skip(request.PageSize * request.Page)
                     .Take(request.PageSize)
                     .ToArrayAsync();

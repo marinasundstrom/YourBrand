@@ -22,6 +22,7 @@ public record GetProjectsQuery(int Page = 0, int PageSize = 10, string? UserId =
         public async Task<ItemsResult<ProjectDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Projects
+                .Include(p => p.Organization)
                 .Include(p => p.Memberships)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

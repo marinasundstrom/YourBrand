@@ -32,9 +32,11 @@ public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
                 .ThenInclude(x => x.Activity)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Project)
+                .ThenInclude(x => x.Organization)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Activity)
                 .ThenInclude(x => x.Project)
+                .ThenInclude(x => x.Organization)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TimeSheetId, cancellationToken);

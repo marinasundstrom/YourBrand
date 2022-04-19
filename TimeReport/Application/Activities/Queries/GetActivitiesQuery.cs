@@ -25,6 +25,7 @@ public record GetActivitiesQuery(int Page = 0, int PageSize = 10, string? Projec
             var query = _context.Activities
                 .Include(x => x.ActivityType)
                 .Include(x => x.Project)
+                .ThenInclude(x => x.Organization)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()
                 .AsSplitQuery();

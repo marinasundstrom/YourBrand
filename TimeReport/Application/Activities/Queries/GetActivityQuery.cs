@@ -24,6 +24,7 @@ public record GetActivityQuery(string ActivityId) : IRequest<ActivityDto>
             var activity = await _context.Activities
                .Include(x => x.ActivityType)
                .Include(x => x.Project)
+               .ThenInclude(x => x.Organization)
                .AsNoTracking()
                .AsSplitQuery()
                .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);

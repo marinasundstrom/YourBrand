@@ -37,8 +37,10 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Activity)
                 .ThenInclude(x => x.Project)
+                .ThenInclude(x => x.Organization)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Project)
+                .ThenInclude(x => x.Organization)
                 .Include(x => x.Activities)
                 .AsSplitQuery();
 
