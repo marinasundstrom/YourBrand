@@ -51,6 +51,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<Project> Projects { get; set; } = null!;
 
+    public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
+
     public DbSet<ProjectMembership> ProjectMemberships { get; set; } = null!;
 
     public DbSet<Expense> Expenses { get; set; } = null!;

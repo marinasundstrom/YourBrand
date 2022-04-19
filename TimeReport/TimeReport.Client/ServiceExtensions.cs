@@ -17,6 +17,10 @@ public static class ServiceExtensions
             .AddTypedClient<IProjectsClient>((http, sp) => new ProjectsClient(http)));
 
         builder(
+            services.AddHttpClient(nameof(IProjectGroupsClient), configureClient)
+            .AddTypedClient<IProjectGroupsClient>((http, sp) => new ProjectGroupsClient(http)));
+
+        builder(
             services.AddHttpClient(nameof(IActivitiesClient), configureClient)
             .AddTypedClient<IActivitiesClient>((http, sp) => new ActivitiesClient(http)));
 

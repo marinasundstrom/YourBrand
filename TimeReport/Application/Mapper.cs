@@ -10,6 +10,7 @@ using YourBrand.TimeReport.Application.Users.Absence;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Application.Activities.ActivityTypes;
 using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
+using YourBrand.TimeReport.Application.Projects.ProjectGroups;
 
 namespace YourBrand.TimeReport.Application;
 
@@ -23,6 +24,11 @@ public static class Mapper
     public static ProjectDto ToDto(this Domain.Entities.Project project)
     {
         return new (project.Id, project.Name, project.Description);
+    }
+
+    public static ProjectGroupDto ToDto(this Domain.Entities.ProjectGroup projectGroup)
+    {
+        return new (projectGroup.Id, projectGroup.Name, projectGroup.Description, projectGroup.Project?.ToDto());
     }
 
     public static ActivityDto ToDto(this Domain.Entities.Activity activity)
