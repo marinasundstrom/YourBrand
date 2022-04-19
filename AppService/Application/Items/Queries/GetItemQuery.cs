@@ -7,15 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Items.Queries;
 
-public class GetItemQuery : IRequest<ItemDto?>
+public record GetItemQuery(string Id) : IRequest<ItemDto?>
 {
-    public string Id { get; set; }
-
-    public GetItemQuery(string id)
-    {
-        Id = id;
-    }
-
     public class GetItemQueryHandler : IRequestHandler<GetItemQuery, ItemDto?>
     {
         private readonly ICatalogContext context;

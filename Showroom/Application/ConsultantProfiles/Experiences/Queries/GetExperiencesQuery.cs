@@ -9,25 +9,8 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Experiences.Queries;
 
-public class GetExperiencesQuery : IRequest<Results<ExperienceDto>>
+public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? ConsultantProfileId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ExperienceDto>>
 {
-    public GetExperiencesQuery(int page = 0, int? pageSize = 10, string? consultantProfileId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        ConsultantProfileId = consultantProfileId;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string? ConsultantProfileId { get; }
-    public string? SearchString { get; }
-    public string? SortBy { get; }
-    public Common.Models.SortDirection? SortDirection { get; }
-    public int Page { get; }
-    public int? PageSize { get; }
-
     class GetExperiencesQueryHandler : IRequestHandler<GetExperiencesQuery, Results<ExperienceDto>>
     {
         private readonly IShowroomContext _context;

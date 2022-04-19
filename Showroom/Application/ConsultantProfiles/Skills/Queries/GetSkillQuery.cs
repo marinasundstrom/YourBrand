@@ -6,14 +6,8 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
-public class GetSkillQuery : IRequest<ConsultantProfileSkillDto?>
+public record GetSkillQuery(string Id) : IRequest<ConsultantProfileSkillDto?>
 {
-    public GetSkillQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
 
     class GetSkillQueryHandler : IRequestHandler<GetSkillQuery, ConsultantProfileSkillDto?>
     {

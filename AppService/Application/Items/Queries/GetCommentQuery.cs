@@ -7,15 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Items.Queries;
 
-public class GetCommentQuery : IRequest<CommentDto?>
+public record GetCommentQuery(string Id) : IRequest<CommentDto?>
 {
-    public string Id { get; set; }
-
-    public GetCommentQuery(string id)
-    {
-        Id = id;
-    }
-
     public class GetCommentQueryHandler : IRequestHandler<GetCommentQuery, CommentDto?>
     {
         private readonly ICatalogContext context;

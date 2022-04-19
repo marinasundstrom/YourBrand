@@ -7,15 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.ApiKeys.Application.Users.Queries;
 
-public class GetUserQuery : IRequest<UserDto>
+public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
-    public GetUserQuery(string userId)
-    {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
     { 
         readonly IApiKeysContext _context;

@@ -8,15 +8,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Users.Queries;
 
-public class GetUserQuery : IRequest<UserDto>
+public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
-    public GetUserQuery(string userId)
-    {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
     { 
         readonly IShowroomContext _context;

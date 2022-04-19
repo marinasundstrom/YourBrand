@@ -11,15 +11,8 @@ using Worker.Domain.Events;
 
 namespace Worker.Application.Notifications.Commands;
 
-public class MarkNotificationAsReadCommand : IRequest
+public record MarkNotificationAsReadCommand(string NotificationId) : IRequest
 {
-    public MarkNotificationAsReadCommand(string notificationId)
-    {
-        NotificationId = notificationId;
-    }
-
-    public string NotificationId { get; }
-
     public class MarkNotificationAsReadCommandHandler : IRequestHandler<MarkNotificationAsReadCommand>
     {
         private readonly IWorkerContext context;

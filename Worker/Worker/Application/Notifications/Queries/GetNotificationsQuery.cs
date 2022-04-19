@@ -9,30 +9,10 @@ using Worker.Domain;
 
 namespace Worker.Application.Notifications.Queries;
 
-public class GetNotificationsQuery : IRequest<NotificationsResults>
+public record GetNotificationsQuery(string? UserId, string? Tag,
+        bool IncludeUnreadNotificationsCount,
+        int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<NotificationsResults>
 {
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-    public string? SortBy { get; }
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-    public string? UserId { get; }
-    public string? Tag { get; }
-    public bool IncludeUnreadNotificationsCount { get; }
-
-    public GetNotificationsQuery(
-        string? userId, string? tag,
-        bool includeUnreadNotificationsCount,
-        int page, int pageSize, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        UserId = userId;
-        Tag = tag;
-        IncludeUnreadNotificationsCount = includeUnreadNotificationsCount;
-        Page = page;
-        PageSize = pageSize;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
     public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, NotificationsResults>
     {
         private readonly IWorkerContext context;

@@ -8,18 +8,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Commands;
 
-public class UpdateConsultantProfileCommand : IRequest<ConsultantProfileDto>
+public record UpdateConsultantProfileCommand(string Id, UpdateConsultantProfileDto ConsultantProfile) : IRequest<ConsultantProfileDto>
 {
-    public UpdateConsultantProfileCommand(string id, UpdateConsultantProfileDto consultantProfile)
-    {
-        Id = id;
-        ConsultantProfile = consultantProfile;
-    }
-
-    public string Id { get; set; }
-
-    public UpdateConsultantProfileDto ConsultantProfile { get; }
-
     class UpdateConsultantProfileCommandHandler : IRequestHandler<UpdateConsultantProfileCommand, ConsultantProfileDto>
     {
         private readonly IShowroomContext _context;

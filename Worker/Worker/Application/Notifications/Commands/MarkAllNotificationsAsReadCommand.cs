@@ -7,7 +7,7 @@ using Worker.Application.Common.Interfaces;
 
 namespace Worker.Application.Notifications.Commands;
 
-public class MarkAllNotificationsAsReadCommand : IRequest
+public record MarkAllNotificationsAsReadCommand : IRequest
 {
     public class MarkAllNotificationsAsReadCommandHandler : IRequestHandler<MarkAllNotificationsAsReadCommand>
     {

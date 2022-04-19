@@ -6,27 +6,8 @@ using MediatR;
 
 namespace YourBrand.ApiKeys.Application.Users.Commands;
 
-public class CreateUserCommand : IRequest<UserDto>
+public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Email) : IRequest<UserDto>
 {
-    public CreateUserCommand(string? id, string firstName, string lastName, string? displayName, string email)
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        DisplayName = displayName;
-        Email = email;
-    }
-
-    public string? Id { get; }
-
-    public string FirstName { get; }
-
-    public string LastName { get; }
-
-    public string? DisplayName { get; }
-
-    public string Email { get; }
-
     public class CreateUserCommand1Handler : IRequestHandler<CreateUserCommand, UserDto>
     { 
         readonly IApiKeysContext _context;

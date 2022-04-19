@@ -8,15 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.ApiKeys.Application.Users.Commands;
 
-public class DeleteUserCommand : IRequest
+public record DeleteUserCommand(string UserId) : IRequest
 {
-    public DeleteUserCommand(string userId)
-    {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
         private readonly IApiKeysContext _context;

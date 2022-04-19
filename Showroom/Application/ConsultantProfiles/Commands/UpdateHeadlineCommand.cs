@@ -8,18 +8,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Commands;
 
-public class UpdateHeadlineCommand : IRequest
+public record UpdateHeadlineCommand(string Id, string Text) : IRequest
 {
-    public UpdateHeadlineCommand(string id, string text)
-    {
-        Id = id;
-        Text = text;
-    }
-
-    public string Id { get; set; }
-
-    public string Text { get; }
-
     class UpdateHeadlineCommandHandler : IRequestHandler<UpdateHeadlineCommand>
     {
         private readonly IShowroomContext _context;

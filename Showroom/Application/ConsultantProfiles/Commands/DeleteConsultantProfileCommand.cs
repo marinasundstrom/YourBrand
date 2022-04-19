@@ -8,15 +8,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Commands;
 
-public class DeleteConsultantProfileCommand : IRequest
+public record DeleteConsultantProfileCommand(string Id) : IRequest
 {
-    public DeleteConsultantProfileCommand(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
-
     class DeleteConsultantProfileCommandHandler : IRequestHandler<DeleteConsultantProfileCommand>
     {
         private readonly IShowroomContext _context;

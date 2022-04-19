@@ -9,30 +9,8 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Application.Users.Queries;
 
-public class GetUserRolesQuery : IRequest<ItemsResult<RoleDto>>
+public record GetUserRolesQuery(string UserId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, IdentityService.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
-    public GetUserRolesQuery(string userId, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, IdentityService.Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        UserId = userId;
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string UserId { get; }
-
-    public int Page { get; }
-
-    public int PageSize { get; }
-
-    public string? SearchString { get; }
-
-    public string? SortBy { get; }
-
-    public IdentityService.Application.Common.Models.SortDirection? SortDirection { get; }
-
     public class GetUserRolesQueryHandler : IRequestHandler<GetUserRolesQuery, ItemsResult<RoleDto>>
     {
         private readonly IApplicationDbContext _context;

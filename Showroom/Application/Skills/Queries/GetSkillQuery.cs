@@ -6,15 +6,8 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Skills.Queries;
 
-public class GetSkillQuery : IRequest<SkillDto?>
+public record GetSkillQuery(string Id) : IRequest<SkillDto?>
 {
-    public GetSkillQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
-
     class GetSkillQueryHandler : IRequestHandler<GetSkillQuery, SkillDto?>
     {
         private readonly IShowroomContext _context;

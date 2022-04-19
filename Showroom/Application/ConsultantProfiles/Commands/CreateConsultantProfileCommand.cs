@@ -11,15 +11,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Commands;
 
-public class CreateConsultantProfileCommand : IRequest<ConsultantProfileDto>
+public record CreateConsultantProfileCommand(CreateConsultantProfileDto ConsultantProfile) : IRequest<ConsultantProfileDto>
 {
-    public CreateConsultantProfileCommand(CreateConsultantProfileDto consultantProfile)
-    {
-        ConsultantProfile = consultantProfile;
-    }
-
-    public CreateConsultantProfileDto ConsultantProfile { get; }
-
     class CreateConsultantProfileCommandHandler : IRequestHandler<CreateConsultantProfileCommand, ConsultantProfileDto>
     {
         private readonly IShowroomContext _context;

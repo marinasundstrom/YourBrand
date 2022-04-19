@@ -13,15 +13,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Cases.Queries;
 
-public class GetCaseQuery : IRequest<CaseDto?>
+public record GetCaseQuery(string Id) : IRequest<CaseDto?>
 {
-    public GetCaseQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
-
     class GetCaseQueryHandler : IRequestHandler<GetCaseQuery, CaseDto?>
     {
         private readonly IShowroomContext _context;

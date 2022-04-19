@@ -16,23 +16,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Cases.Queries;
 
-public class GetCasesQuery : IRequest<Results<CaseDto>>
+public record GetCasesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CaseDto>>
 {
-    public GetCasesQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string? SearchString { get; }
-    public string? SortBy { get; }
-    public Common.Models.SortDirection? SortDirection { get; }
-    public int Page { get; }
-    public int PageSize { get; }
-
     class GetCasesQueryHandler : IRequestHandler<GetCasesQuery, Results<CaseDto>>
     {
         private readonly IShowroomContext _context;

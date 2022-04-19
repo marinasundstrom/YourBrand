@@ -16,23 +16,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Organizations.Queries;
 
-public class GetOrganizationsQuery : IRequest<Results<OrganizationDto>>
+public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<OrganizationDto>>
 {
-    public GetOrganizationsQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public int Page { get; }
-    public int PageSize { get; }
-    public string? SearchString { get; }
-    public string? SortBy { get; }
-    public Common.Models.SortDirection? SortDirection { get; }
-
     class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, Results<OrganizationDto>>
     {
         private readonly IShowroomContext _context;

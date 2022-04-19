@@ -15,15 +15,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Organizations.Queries;
 
-public class GetOrganizationQuery : IRequest<OrganizationDto?>
+public record GetOrganizationQuery(string Id) : IRequest<OrganizationDto?>
 {
-    public GetOrganizationQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
-
     class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery, OrganizationDto?>
     {
         private readonly IShowroomContext _context;

@@ -9,27 +9,8 @@ using Worker.Domain.Events;
 
 namespace Worker.Application.Notifications.Commands;
 
-public class CreateNotificationCommand : IRequest
+public record CreateNotificationCommand(string Title, string? Text, string? Link, string? UserId, DateTime? ScheduledFor) : IRequest
 {
-    public string Title { get; set; } = null!;
-
-    public string? Text { get; set; } = null!;
-
-    public string? Link { get; set; }
-
-    public string? UserId { get; set; }
-
-    public DateTime? ScheduledFor { get; set; }
-
-    public CreateNotificationCommand(string title, string? text, string? link, string? userId, DateTime? scheduledFor)
-    {
-        Title = title;
-        Text = text;
-        Link = link;
-        UserId = userId;
-        ScheduledFor = scheduledFor;
-    }
-
     public class CreateNotificationCommandHandler : IRequestHandler<CreateNotificationCommand>
     {
         private readonly IWorkerContext context;

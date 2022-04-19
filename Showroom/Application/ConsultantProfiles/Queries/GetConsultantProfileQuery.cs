@@ -13,15 +13,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Queries;
 
-public class GetConsultantProfileQuery : IRequest<ConsultantProfileDto>
+public record GetConsultantProfileQuery(string Id) : IRequest<ConsultantProfileDto>
 {
-    public GetConsultantProfileQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
-
     class GetConsultantProfileQueryHandler : IRequestHandler<GetConsultantProfileQuery, ConsultantProfileDto?>
     {
         private readonly IShowroomContext _context;

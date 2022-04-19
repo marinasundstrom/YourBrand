@@ -8,30 +8,8 @@ using YourBrand.Domain.Exceptions;
 
 namespace YourBrand.Application.Users.Commands;
 
-public class UpdateUserCommand : IRequest<UserDto>
+public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
-    public UpdateUserCommand(string userId, string firstName, string lastName, string? displayName, string ssn, string email)
-    {
-        UserId = userId;
-        FirstName = firstName;
-        LastName = lastName;
-        DisplayName = displayName;
-        Ssn = ssn;
-        Email = email;
-    }
-
-    public string UserId { get; }
-
-    public string FirstName { get; }
-
-    public string LastName { get; }
-
-    public string? DisplayName { get; }
-
-    public string Ssn { get; }
-
-    public string Email { get; }
-
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
     { 
         readonly ICatalogContext _context;

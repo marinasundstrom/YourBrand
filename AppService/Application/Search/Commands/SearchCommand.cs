@@ -12,25 +12,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Search.Commands;
 
-public class SearchCommand : IRequest<Results<SearchResultItem>>
+public record SearchCommand(string SearchText,
+        int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SearchResultItem>>
 {
-    public string SearchText { get; set; } = null!;
-
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-    public string? SortBy { get; }
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-
-    public SearchCommand(string searchText,
-        int page, int pageSize, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        SearchText = searchText;
-        Page = page;
-        PageSize = pageSize;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
     public class SearchCommandHandler : IRequestHandler<SearchCommand, Results<SearchResultItem>>
     {
         private readonly ICatalogContext context;

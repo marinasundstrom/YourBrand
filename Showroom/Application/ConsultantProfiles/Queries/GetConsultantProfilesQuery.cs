@@ -9,29 +9,8 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Queries;
 
-public class GetConsultantProfilesQuery : IRequest<Results<ConsultantProfileDto>>
+public record GetConsultantProfilesQuery(int Page = 0, int PageSize = 10, string? OrganizationId = null, string? CompetenceAreaId = null, DateTime? AvailableFrom = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ConsultantProfileDto>>
 {
-    public GetConsultantProfilesQuery(int page = 0, int pageSize = 10, string? organizationId = null, string? competenceAreaId = null, DateTime? availableFrom = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        OrganizationId = organizationId;
-        CompetenceAreaId = competenceAreaId;
-        AvailableFrom = availableFrom;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string? OrganizationId { get; }
-    public string? CompetenceAreaId { get; }
-    public DateTime? AvailableFrom { get; private set; }
-    public string? SearchString { get; }
-    public string? SortBy { get; }
-    public Common.Models.SortDirection? SortDirection { get; }
-    public int Page { get; }
-    public int PageSize { get; }
-
     class GetConsultantProfilesQueryHandler : IRequestHandler<GetConsultantProfilesQuery, Results<ConsultantProfileDto>>
     {
         private readonly IShowroomContext _context;

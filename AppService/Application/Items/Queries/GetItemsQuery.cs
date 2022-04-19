@@ -9,21 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Items.Queries;
 
-public class GetItemsQuery : IRequest<Results<ItemDto>>
+public record GetItemsQuery(int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ItemDto>>
 {
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-    public string? SortBy { get; }
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-
-    public GetItemsQuery(int page, int pageSize, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
     public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, Results<ItemDto>>
     {
         private readonly ICatalogContext context;

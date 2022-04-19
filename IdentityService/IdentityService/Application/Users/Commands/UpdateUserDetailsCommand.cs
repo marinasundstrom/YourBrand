@@ -8,30 +8,8 @@ using YourBrand.IdentityService.Domain.Exceptions;
 
 namespace YourBrand.IdentityService.Application.Users.Commands;
 
-public class UpdateUserDetailsCommand : IRequest<UserDto>
+public record UpdateUserDetailsCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
-    public UpdateUserDetailsCommand(string userId, string firstName, string lastName, string? displayName, string ssn, string email)
-    {
-        UserId = userId;
-        FirstName = firstName;
-        LastName = lastName;
-        DisplayName = displayName;
-        Ssn = ssn;
-        Email = email;
-    }
-
-    public string UserId { get; }
-
-    public string FirstName { get; }
-
-    public string LastName { get; }
-
-    public string? DisplayName { get; }
-
-    public string Ssn { get; }
-
-    public string Email { get; }
-
     public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserDetailsCommand, UserDto>
     {
         private readonly IApplicationDbContext _context;

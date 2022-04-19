@@ -16,23 +16,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.CompetenceAreas.Queries;
 
-public class GetCompetenceAreasQuery : IRequest<Results<CompetenceAreaDto>>
+public record GetCompetenceAreasQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CompetenceAreaDto>>
 {
-    public GetCompetenceAreasQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string? SearchString { get; }
-    public string? SortBy { get; }
-    public Common.Models.SortDirection? SortDirection { get; }
-    public int Page { get; }
-    public int PageSize { get; }
-
     class GetCompetenceAreasQueryHandler : IRequestHandler<GetCompetenceAreasQuery, Results<CompetenceAreaDto>>
     {
         private readonly IShowroomContext _context;

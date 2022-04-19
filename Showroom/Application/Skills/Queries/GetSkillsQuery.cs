@@ -9,23 +9,8 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.Skills.Queries;
 
-public class GetSkillsQuery : IRequest<Results<SkillDto>>
+public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SkillDto>>
 {
-    public GetSkillsQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string? SearchString { get; }
-    public string? SortBy { get; }
-    public Common.Models.SortDirection? SortDirection { get; }
-    public int Page { get; }
-    public int PageSize { get; }
-
     class GetSkillsQueryHandler : IRequestHandler<GetSkillsQuery, Results<SkillDto>>
     {
         private readonly IShowroomContext _context;

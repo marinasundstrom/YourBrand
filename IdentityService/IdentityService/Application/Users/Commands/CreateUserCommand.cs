@@ -14,36 +14,8 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Application.Users.Commands;
 
-public class CreateUserCommand : IRequest<UserDto>
+public record CreateUserCommand(string FirstName, string LastName, string? DisplayName, string Role, string Ssn, string Email, string DepartmentId, string Password) : IRequest<UserDto>
 {
-    public CreateUserCommand(string firstName, string lastName, string? displayName, string role, string ssn, string email, string departmentId, string password)
-    {
-        FirstName = firstName;
-        LastName = lastName;
-        DisplayName = displayName;
-        Role = role;
-        SSN = ssn;
-        Email = email;
-        DepartmentId = departmentId;
-        Password = password;
-    }
-
-    public string FirstName { get; }
-
-    public string LastName { get; }
-
-    public string? DisplayName { get; }
-
-    public string Role { get; }
-
-    public string SSN { get; }
-
-    public string Email { get; }
-
-    public string DepartmentId { get; }
-
-    public string Password { get; }
-
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
         private readonly UserManager<User> _userManager;
@@ -66,7 +38,7 @@ public class CreateUserCommand : IRequest<UserDto>
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DisplayName = request.DisplayName,
-                SSN = request.SSN,
+                SSN = request.Ssn,
                 UserName = request.Email,
                 Email = request.Email,
                 EmailConfirmed = true

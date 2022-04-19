@@ -8,15 +8,8 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Application.Users.Queries;
 
-public class GetUserQuery : IRequest<UserDto>
+public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
-    public GetUserQuery(string userId)
-    {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
     {
         private readonly IApplicationDbContext _context;

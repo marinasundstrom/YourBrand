@@ -8,15 +8,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Users.Commands;
 
-public class DeleteUserCommand : IRequest
+public record DeleteUserCommand(string UserId) : IRequest
 {
-    public DeleteUserCommand(string userId)
-    {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
         private readonly IShowroomContext _context;

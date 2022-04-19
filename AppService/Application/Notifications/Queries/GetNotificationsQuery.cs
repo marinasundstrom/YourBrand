@@ -9,25 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Notifications.Queries;
 
-public class GetNotificationsQuery : IRequest<NotificationsResults>
+public record GetNotificationsQuery(bool IncludeUnreadNotificationsCount,
+        int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<NotificationsResults>
 {
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-    public string? SortBy { get; }
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-    public bool IncludeUnreadNotificationsCount { get; }
-
-    public GetNotificationsQuery(
-        bool includeUnreadNotificationsCount,
-        int page, int pageSize, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        IncludeUnreadNotificationsCount = includeUnreadNotificationsCount;
-        Page = page;
-        PageSize = pageSize;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
     public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, NotificationsResults>
     {
         private readonly Worker.Client.INotificationsClient _notificationsClient;

@@ -9,7 +9,7 @@ using Worker.Client;
 
 namespace YourBrand.Application.Notifications.Commands;
 
-public class MarkAllNotificationsAsReadCommand : IRequest
+public record MarkAllNotificationsAsReadCommand : IRequest
 {
     public class MarkAllNotificationsAsReadCommandHandler : IRequestHandler<MarkAllNotificationsAsReadCommand>
     {

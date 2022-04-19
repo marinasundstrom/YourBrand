@@ -7,15 +7,8 @@ using Worker.Application.Common.Interfaces;
 
 namespace Worker.Application.Notifications.Queries;
 
-public class GetUnreadNotificationsCountQuery : IRequest<int>
+public record GetUnreadNotificationsCountQuery(string? UserId) : IRequest<int>
 {
-    public GetUnreadNotificationsCountQuery(string? userId)
-    {
-        UserId = userId;
-    }
-
-    public string? UserId { get; }
-
     public class GetUnreadNotificationsCountQueryHandler : IRequestHandler<GetUnreadNotificationsCountQuery, int>
     {
         private readonly IWorkerContext context;

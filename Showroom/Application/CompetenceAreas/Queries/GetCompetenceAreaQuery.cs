@@ -13,15 +13,8 @@ using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.CompetenceAreas.Queries;
 
-public class GetCompetenceAreaQuery : IRequest<CompetenceAreaDto?>
+public record GetCompetenceAreaQuery(string Id) : IRequest<CompetenceAreaDto?>
 {
-    public GetCompetenceAreaQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
-
     class GetCompetenceAreaQueryHandler : IRequestHandler<GetCompetenceAreaQuery, CompetenceAreaDto?>
     {
         private readonly IShowroomContext _context;
