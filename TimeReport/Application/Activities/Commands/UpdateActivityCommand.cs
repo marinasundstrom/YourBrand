@@ -8,23 +8,8 @@ using YourBrand.TimeReport.Application.Projects;
 
 namespace YourBrand.TimeReport.Application.Activities.Commands;
 
-public class UpdateActivityCommand : IRequest<ActivityDto>
+public record UpdateActivityCommand(string ActivityId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
 {
-    public UpdateActivityCommand(string activityId, string name, string activityTypeId, string? description, decimal? hourlyRate)
-    {
-        ActivityId = activityId;
-        Name = name;
-        ActivityTypeId = activityTypeId;
-        Description = description;
-        HourlyRate = hourlyRate;
-    }
-
-    public string ActivityId { get; }
-    public string Name { get; }
-    public string ActivityTypeId { get; }
-    public string? Description { get; }
-    public decimal? HourlyRate { get; }
-
     public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityCommand, ActivityDto>
     {
         private readonly ITimeReportContext _context;

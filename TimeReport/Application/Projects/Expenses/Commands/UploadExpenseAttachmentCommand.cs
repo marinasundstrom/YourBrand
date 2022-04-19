@@ -9,21 +9,8 @@ using static YourBrand.TimeReport.Application.Projects.Expenses.ExpensesHelpers;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
-public class UploadExpenseAttachmentCommand : IRequest<string?>
+public record UploadExpenseAttachmentCommand(string ExpenseId, string Name, Stream Stream) : IRequest<string?>
 {
-    public UploadExpenseAttachmentCommand(string expenseId, string name, Stream stream)
-    {
-        ExpenseId = expenseId;
-        Name = name;
-        Stream = stream;
-    }
-
-    public string ExpenseId { get; }
-
-    public string Name { get; }
-
-    public Stream Stream { get; }
-
     public class UploadExpenseAttachmentCommandHandler : IRequestHandler<UploadExpenseAttachmentCommand, string?>
     {
         private readonly ITimeReportContext _context;

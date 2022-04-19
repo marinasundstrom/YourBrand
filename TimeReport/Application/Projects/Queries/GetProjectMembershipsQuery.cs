@@ -10,29 +10,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public class GetProjectMembershipsQuery : IRequest<ItemsResult<ProjectMembershipDto>>
+public record GetProjectMembershipsQuery(string ProjectId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectMembershipDto>>
 {
-    public GetProjectMembershipsQuery(string projectId, int page = 0, int pageSize = 10, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        ProjectId = projectId;
-        Page = page;
-        PageSize = pageSize;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public string ProjectId { get; }
-
-    public int Page { get; }
-
-    public int PageSize { get; }
-
-    public string? SearchString { get; }
-
-    public string? SortBy { get; }
-
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-
     public class GetProjectMembershipsQueryHandler : IRequestHandler<GetProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
     {
         private readonly ITimeReportContext _context;

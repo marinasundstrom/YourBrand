@@ -7,24 +7,8 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
-public class UpdateExpenseCommand : IRequest<ExpenseDto>
+public record UpdateExpenseCommand(string ExpenseId, DateTime Date, decimal Amount, string? Description) : IRequest<ExpenseDto>
 {
-    public UpdateExpenseCommand(string expenseId, DateTime date, decimal amount, string? description)
-    {
-        ExpenseId = expenseId;
-        Date = date;
-        Amount = amount;
-        Description = description;
-    }
-
-    public string ExpenseId { get; }
-
-    public DateTime Date { get; }
-
-    public decimal Amount { get; }
-
-    public string? Description { get; }
-
     public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, ExpenseDto>
     {
         private readonly ITimeReportContext _context;

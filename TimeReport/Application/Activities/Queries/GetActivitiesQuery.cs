@@ -9,33 +9,8 @@ using YourBrand.TimeReport.Application.Projects;
 
 namespace YourBrand.TimeReport.Application.Activities.Queries;
 
-public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
+public record GetActivitiesQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? UserId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ActivityDto>>
 {
-    public GetActivitiesQuery(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        ProjectId = projectId;
-        UserId = userId;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public int Page { get; }
-
-    public int PageSize { get; }
-
-    public string? ProjectId { get; }
-
-    public string? UserId { get; }
-
-    public string? SearchString { get; }
-
-    public string? SortBy { get; }
-
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-
     public class GetActivitiesQueryHandler : IRequestHandler<GetActivitiesQuery, ItemsResult<ActivityDto>>
     {
         private readonly ITimeReportContext _context;

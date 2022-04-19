@@ -9,15 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public class GetProjectStatisticsSummaryForProjectQuery : IRequest<StatisticsSummary>
+public record GetProjectStatisticsSummaryForProjectQuery(string ProjectId) : IRequest<StatisticsSummary>
 {
-    public GetProjectStatisticsSummaryForProjectQuery(string projectId)
-    {
-        ProjectId = projectId;
-    }
-
-    public string ProjectId { get; }
-
     public class GetProjectStatisticsSummaryForQueryHandler : IRequestHandler<GetProjectStatisticsSummaryForProjectQuery, StatisticsSummary>
     {
         private readonly ITimeReportContext _context;

@@ -7,15 +7,8 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Queries;
 
-public class GetExpenseQuery : IRequest<ExpenseDto>
+public record GetExpenseQuery(string ExpenseId) : IRequest<ExpenseDto>
 {
-    public GetExpenseQuery(string expenseId)
-    {
-        ExpenseId = expenseId;
-    }
-
-    public string ExpenseId { get; }
-
     public class GetExpenseQueryHandler : IRequestHandler<GetExpenseQuery, ExpenseDto>
     {
         private readonly ITimeReportContext _context;

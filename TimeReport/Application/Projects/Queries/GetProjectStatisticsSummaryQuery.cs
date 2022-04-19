@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public class GetProjectStatisticsSummaryQuery : IRequest<StatisticsSummary>
+public record GetProjectStatisticsSummaryQuery : IRequest<StatisticsSummary>
 {
     public class GetProjectStatisticsSummaryHandler : IRequestHandler<GetProjectStatisticsSummaryQuery, StatisticsSummary>
     {

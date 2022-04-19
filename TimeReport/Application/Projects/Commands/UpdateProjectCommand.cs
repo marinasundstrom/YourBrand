@@ -8,21 +8,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public class UpdateProjectCommand : IRequest<ProjectDto>
+public record UpdateProjectCommand(string ProjectId, string Name, string? Description) : IRequest<ProjectDto>
 {
-    public UpdateProjectCommand(string projectId, string name, string? description)
-    {
-        ProjectId = projectId;
-        Name = name;
-        Description = description;
-    }
-
-    public string ProjectId { get; }
-
-    public string Name { get; }
-
-    public string? Description { get; }
-
     public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, ProjectDto>
     {
         private readonly ITimeReportContext _context;

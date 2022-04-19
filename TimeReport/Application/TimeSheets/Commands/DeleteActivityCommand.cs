@@ -9,18 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public class DeleteActivityCommand : IRequest
+public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRequest
 {
-    public DeleteActivityCommand(string timeSheetId, string activityId)
-    {
-        TimeSheetId = timeSheetId;
-        ActivityId = activityId;
-    }
-
-    public string TimeSheetId { get; }
-
-    public string ActivityId { get; }
-
     public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityCommand>
     {
         private readonly ITimeReportContext _context;

@@ -10,15 +10,8 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
-public class GetTimeSheetQuery : IRequest<TimeSheetDto?>
+public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
 {
-    public GetTimeSheetQuery(string timeSheetId)
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
-
     public class GetTimeSheetQueryHandler : IRequestHandler<GetTimeSheetQuery, TimeSheetDto?>
     {
         private readonly ITimeReportContext _context;

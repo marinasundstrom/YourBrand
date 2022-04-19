@@ -12,21 +12,8 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
-public class GetTimeSheetForWeekQuery : IRequest<TimeSheetDto?>
+public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRequest<TimeSheetDto?>
 {
-    public GetTimeSheetForWeekQuery(int year, int week, string? userId)
-    {
-        Year = year;
-        Week = week;
-        UserId = userId;
-    }
-
-    public int Year { get; }
-
-    public int Week { get; }
-
-    public string? UserId { get; }
-
     public class GetTimeSheetForWeekQueryHandler : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
     {
         private readonly ITimeReportContext _context;

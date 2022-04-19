@@ -9,24 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public class UpdateProjectMembershipCommand : IRequest<ProjectMembershipDto>
+public record UpdateProjectMembershipCommand(string ProjectId, string MembershipId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
 {
-    public UpdateProjectMembershipCommand(string projectId, string membershipId, DateTime? from, DateTime? to)
-    {
-        ProjectId = projectId;
-        MembershipId = membershipId;
-        From = from;
-        Thru = to;
-    }
-
-    public string ProjectId { get; }
-
-    public string MembershipId { get; }
-
-    public DateTime? From { get; }
-
-    public DateTime? Thru { get; }
-
     public class UpdateProjectMembershipCommandHandler : IRequestHandler<UpdateProjectMembershipCommand, ProjectMembershipDto>
     {
         private readonly ITimeReportContext _context;
@@ -58,7 +42,7 @@ public class UpdateProjectMembershipCommand : IRequest<ProjectMembershipDto>
             }
 
             m.From = request.From;
-            m.To = request.Thru;
+            m.To = request.To;
 
             await _context.SaveChangesAsync(cancellationToken);
 

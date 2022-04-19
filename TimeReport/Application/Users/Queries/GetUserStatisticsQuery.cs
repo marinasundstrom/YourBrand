@@ -8,21 +8,8 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Users.Queries;
 
-public class GetUserStatisticsQuery : IRequest<Data>
+public record GetUserStatisticsQuery(string UserId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
 {
-    public GetUserStatisticsQuery(string userId, DateTime? from = null, DateTime? to = null)
-    {
-        UserId = userId;
-        From = from;
-        To = to;
-    }
-
-    public string UserId { get; }
-
-    public DateTime? From { get; }
-
-    public DateTime? To { get; }
-
     public class GetUserStatisticsQueryHandler : IRequestHandler<GetUserStatisticsQuery, Data>
     {
         private readonly ITimeReportContext _context;

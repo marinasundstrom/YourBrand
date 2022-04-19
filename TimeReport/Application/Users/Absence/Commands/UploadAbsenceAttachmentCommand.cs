@@ -10,21 +10,8 @@ using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public class UploadAbsenceAttachmentCommand : IRequest<string?>
+public record UploadAbsenceAttachmentCommand(string AbsenceId, string Name, Stream Stream) : IRequest<string?>
 {
-    public UploadAbsenceAttachmentCommand(string absenceId, string name, Stream stream)
-    {
-        AbsenceId = absenceId;
-        Name = name;
-        Stream = stream;
-    }
-
-    public string AbsenceId { get; }
-
-    public string Name { get; }
-
-    public Stream Stream { get; }
-
     public class UploadAbsenceAttachmentCommandHandler : IRequestHandler<UploadAbsenceAttachmentCommand, string?>
     {
         private readonly ITimeReportContext _context;

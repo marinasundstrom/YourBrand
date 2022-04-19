@@ -10,24 +10,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public partial class CreateProjectMembershipCommand : IRequest<ProjectMembershipDto>
+public record CreateProjectMembershipCommand(string ProjectId, string UserId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
 {
-    public CreateProjectMembershipCommand(string projectId, string userId, DateTime? from, DateTime? to)
-    {
-        ProjectId = projectId;
-        UserId = userId;
-        From = from;
-        To = to;
-    }
-
-    public string ProjectId { get; }
-
-    public string UserId { get; }
-
-    public DateTime? From { get; }
-
-    public DateTime? To { get; }
-
     public class CreateProjectMembershipCommandHandler : IRequestHandler<CreateProjectMembershipCommand, ProjectMembershipDto>
     {
         private readonly ITimeReportContext _context;

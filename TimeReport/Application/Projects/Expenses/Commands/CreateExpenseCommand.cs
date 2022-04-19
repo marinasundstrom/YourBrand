@@ -8,24 +8,8 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
-public class CreateExpenseCommand : IRequest<ExpenseDto>
+public record CreateExpenseCommand(string ProjectId, DateTime Date, decimal Amount, string? Description) : IRequest<ExpenseDto>
 {
-    public CreateExpenseCommand(string projectId, DateTime date, decimal amount, string? description)
-    {
-        ProjectId = projectId;
-        Date = date;
-        Amount = amount;
-        Description = description;
-    }
-
-    public string ProjectId { get; }
-
-    public DateTime Date { get; }
-
-    public decimal Amount { get; }
-
-    public string? Description { get; }
-
     public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseCommand, ExpenseDto>
     {
         private readonly ITimeReportContext _context;

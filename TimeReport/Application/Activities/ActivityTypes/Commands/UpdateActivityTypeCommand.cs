@@ -8,21 +8,8 @@ using YourBrand.TimeReport.Application.Projects;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
 
-public class UpdateActivityTypeCommand : IRequest<ActivityTypeDto>
+public record UpdateActivityTypeCommand(string ActivityId, string Name, string? Description, bool ExcludeHours) : IRequest<ActivityTypeDto>
 {
-    public UpdateActivityTypeCommand(string activityId, string name, string? description, bool excludeHours)
-    {
-        ActivityId = activityId;
-        Name = name;
-        Description = description;
-        ExcludeHours = excludeHours;
-    }
-
-    public string ActivityId { get; }
-    public string Name { get; }
-    public string? Description { get; }
-    public bool ExcludeHours { get; }
-
     public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityTypeCommand, ActivityTypeDto>
     {
         private readonly ITimeReportContext _context;

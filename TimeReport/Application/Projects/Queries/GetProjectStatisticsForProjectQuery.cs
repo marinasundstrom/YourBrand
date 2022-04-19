@@ -9,21 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public class GetProjectStatisticsForProjectQuery : IRequest<Data>
+public record GetProjectStatisticsForProjectQuery(string ProjectId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
 {
-    public GetProjectStatisticsForProjectQuery(string projectId, DateTime? from = null, DateTime? to = null)
-    {
-        ProjectId = projectId;
-        From = from;
-        To = to;
-    }
-
-    public string ProjectId { get; }
-
-    public DateTime? From { get; }
-
-    public DateTime? To { get; }
-
     public class GetProjectStatisticsForProjectQueryHandler : IRequestHandler<GetProjectStatisticsForProjectQuery, Data>
     {
         private readonly ITimeReportContext _context;

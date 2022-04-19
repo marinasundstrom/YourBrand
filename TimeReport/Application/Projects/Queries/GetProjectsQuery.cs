@@ -8,32 +8,8 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public class GetProjectsQuery : IRequest<ItemsResult<ProjectDto>>
+public record GetProjectsQuery(int Page = 0, int PageSize = 10, string? UserId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectDto>>
 {
-    public GetProjectsQuery(int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        UserId = userId;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public int Page { get; }
-
-    public int PageSize { get; }
-
-    public string? UserId { get; }
-
-    public string? ProjectId { get; }
-
-    public string? SearchString { get; }
-
-    public string? SortBy { get; }
-
-    public Application.Common.Models.SortDirection? SortDirection { get; }
-
     public class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, ItemsResult<ProjectDto>>
     {
         private readonly ITimeReportContext _context;

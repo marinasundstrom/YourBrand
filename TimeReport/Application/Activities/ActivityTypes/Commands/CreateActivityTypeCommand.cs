@@ -1,27 +1,13 @@
 ﻿
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
 
-public class CreateActivityTypeCommand : IRequest<ActivityTypeDto>
+public record CreateActivityTypeCommand(string Name, string? Description, bool ExcludeHours) : IRequest<ActivityTypeDto>
 {
-    public CreateActivityTypeCommand(string name, string? description, bool excludeHours)
-    {
-        Name = name;
-        Description = description;
-        ExcludeHours = excludeHours;
-    }
-
-    public string Name { get; }
-    public string? Description { get; }
-    public bool ExcludeHours { get; }
-
     public class CreateActivityCommandHandler : IRequestHandler<CreateActivityTypeCommand, ActivityTypeDto>
     {
         private readonly ITimeReportContext _context;

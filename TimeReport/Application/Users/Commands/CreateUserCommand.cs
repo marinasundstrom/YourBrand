@@ -6,30 +6,8 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Users.Commands;
 
-public class CreateUserCommand : IRequest<UserDto>
+public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
-    public CreateUserCommand(string? id, string firstName, string lastName, string? displayName, string ssn, string email)
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        DisplayName = displayName;
-        Ssn = ssn;
-        Email = email;
-    }
-
-    public string? Id { get; }
-
-    public string FirstName { get; }
-
-    public string LastName { get; }
-
-    public string? DisplayName { get; }
-
-    public string Ssn { get; }
-
-    public string Email { get; }
-
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
         private readonly ITimeReportContext _context;

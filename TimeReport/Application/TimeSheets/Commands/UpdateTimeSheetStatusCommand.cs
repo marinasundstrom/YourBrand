@@ -7,15 +7,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public class UpdateTimeSheetStatusCommand : IRequest
+public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
 {
-    public UpdateTimeSheetStatusCommand(string timeSheetId)
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
-
     public class UpdateTimeSheetStatusCommandHandler : IRequestHandler<UpdateTimeSheetStatusCommand>
     {
         private readonly ITimeReportContext _context;

@@ -13,24 +13,8 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public class UpdateEntryCommand : IRequest<EntryDto>
+public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<EntryDto>
 {
-    public UpdateEntryCommand(string timeSheetId, string entryId, double? hours, string? description)
-    {
-        TimeSheetId = timeSheetId;
-        EntryId = entryId;
-        Hours = hours;
-        Description = description;
-    }
-
-    public string TimeSheetId { get; }
-
-    public string EntryId { get; }
-
-    public double? Hours { get; }
-
-    public string? Description { get; }
-
     public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, EntryDto>
     {
         private readonly ITimeReportContext _context;

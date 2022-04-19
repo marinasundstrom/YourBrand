@@ -9,23 +9,8 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.Commands;
 
-public class CreateActivityCommand : IRequest<ActivityDto>
+public record CreateActivityCommand(string ProjectId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
 {
-    public CreateActivityCommand(string projectId, string name, string activityTypeId, string? description, decimal? hourlyRate)
-    {
-        ProjectId = projectId;
-        Name = name;
-        ActivityTypeId = activityTypeId;
-        Description = description;
-        HourlyRate = hourlyRate;
-    }
-
-    public string ProjectId { get; }
-    public string Name { get; }
-    public string ActivityTypeId { get; }
-    public string? Description { get; }
-    public decimal? HourlyRate { get; }
-
     public class CreateActivityCommandHandler : IRequestHandler<CreateActivityCommand, ActivityDto>
     {
         private readonly ITimeReportContext _context;

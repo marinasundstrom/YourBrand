@@ -9,15 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public class OpenWeekCommand : IRequest
+public record OpenWeekCommand(string TimeSheetId) : IRequest
 {
-    public OpenWeekCommand(string timeSheetId)
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
-
     public class OpenWeekCommandHandler : IRequestHandler<OpenWeekCommand>
     {
         private readonly ITimeReportContext _context;

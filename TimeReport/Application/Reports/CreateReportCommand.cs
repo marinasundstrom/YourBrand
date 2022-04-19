@@ -11,29 +11,8 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Reports.Queries;
 
-public class CreateReportCommand : IRequest<Stream?>
+public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime StartDate, DateTime EndDate, int[] Statuses, ReportMode Mode) : IRequest<Stream?>
 {
-    public CreateReportCommand(string[] projectIds, string? userId, DateTime startDate, DateTime endDate, int[] statuses, ReportMode mode)
-    {
-        ProjectIds = projectIds;
-        UserId = userId;
-        StartDate = startDate;
-        EndDate = endDate;
-        Statuses = statuses;
-        Mode = mode;
-    }
-
-    public string[] ProjectIds { get; }
-
-    public string? UserId { get; }
-
-    public DateTime StartDate { get; }
-
-    public DateTime EndDate { get; }
-
-    public int[] Statuses { get; }
-    public ReportMode Mode { get; }
-
     public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Stream?>
     {
         private readonly ITimeReportContext _context;

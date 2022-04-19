@@ -8,29 +8,8 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Users.Queries;
 
-public class GetUsersQuery : IRequest<ItemsResult<UserDto>>
+public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, TimeReport.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<UserDto>>
 {
-    public GetUsersQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
-
-    public int Page { get; }
-
-    public int PageSize { get; }
-
-    public string? UserId { get; }
-
-    public string? SearchString { get; }
-
-    public string? SortBy { get; }
-
-    public TimeReport.Application.Common.Models.SortDirection? SortDirection { get; }
-
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
     {
         private readonly ITimeReportContext _context;

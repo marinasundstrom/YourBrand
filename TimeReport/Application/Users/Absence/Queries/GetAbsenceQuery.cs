@@ -10,15 +10,8 @@ using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 
-public class GetAbsenceQuery : IRequest<AbsenceDto>
+public record GetAbsenceQuery(string AbsenceId) : IRequest<AbsenceDto>
 {
-    public GetAbsenceQuery(string absenceId)
-    {
-        AbsenceId = absenceId;
-    }
-
-    public string AbsenceId { get; }
-
     public class GetAbsenceQueryHandler : IRequestHandler<GetAbsenceQuery, AbsenceDto>
     {
         private readonly ITimeReportContext _context;

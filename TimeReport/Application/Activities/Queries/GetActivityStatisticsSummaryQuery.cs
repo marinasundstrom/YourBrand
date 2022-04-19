@@ -8,15 +8,8 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Activities.Queries;
 
-public class GetActivityStatisticsSummaryQuery : IRequest<StatisticsSummary>
+public record GetActivityStatisticsSummaryQuery(string ActivityId) : IRequest<StatisticsSummary>
 {
-    public GetActivityStatisticsSummaryQuery(string activityId)
-    {
-        ActivityId = activityId;
-    }
-
-    public string ActivityId { get; }
-
     public class GetStatisticsSummaryQueryHandler : IRequestHandler<GetActivityStatisticsSummaryQuery, StatisticsSummary>
     {
         private readonly ITimeReportContext _context;

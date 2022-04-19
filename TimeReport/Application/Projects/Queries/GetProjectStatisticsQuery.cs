@@ -8,18 +8,8 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public class GetProjectStatisticsQuery : IRequest<Data>
+public record GetProjectStatisticsQuery(DateTime? From = null, DateTime? To = null) : IRequest<Data>
 {
-    public GetProjectStatisticsQuery(DateTime? from = null, DateTime? to = null)
-    {
-        From = from;
-        To = to;
-    }
-
-    public DateTime? From { get; }
-
-    public DateTime? To { get; }
-
     public class GetProjectStatisticsQueryHandler : IRequestHandler<GetProjectStatisticsQuery, Data>
     {
         private readonly ITimeReportContext _context;

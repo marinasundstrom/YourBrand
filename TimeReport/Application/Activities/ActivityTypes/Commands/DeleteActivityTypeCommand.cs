@@ -7,15 +7,8 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
 
-public class DeleteActivityTypeCommand : IRequest
+public record DeleteActivityTypeCommand(string ActivityId) : IRequest
 {
-    public DeleteActivityTypeCommand(string activityId)
-    {
-        ActivityId = activityId;
-    }
-
-    public string ActivityId { get; }
-
     public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityTypeCommand>
     {
         private readonly ITimeReportContext _context;

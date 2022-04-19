@@ -11,24 +11,8 @@ using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public class ReportAbsenceCommand : IRequest<AbsenceDto>
+public record ReportAbsenceCommand(string ProjectId, DateTime Date, decimal Amount, string? Description) : IRequest<AbsenceDto>
 {
-    public ReportAbsenceCommand(string projectId, DateTime date, decimal amount, string? description)
-    {
-        ProjectId = projectId;
-        Date = date;
-        Amount = amount;
-        Description = description;
-    }
-
-    public string ProjectId { get; }
-
-    public DateTime Date { get; }
-
-    public decimal Amount { get; }
-
-    public string? Description { get; }
-
     public class ReportAbsenceCommandHandler : IRequestHandler<ReportAbsenceCommand, AbsenceDto>
     {
         private readonly ITimeReportContext _context;

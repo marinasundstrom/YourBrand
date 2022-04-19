@@ -9,15 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Users.Queries;
 
-public class GetUserStatisticsSummaryQuery : IRequest<StatisticsSummary>
+public record GetUserStatisticsSummaryQuery(string UserId) : IRequest<StatisticsSummary>
 {
-    public GetUserStatisticsSummaryQuery(string userId)
-    {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
     public class GetUserStatisticsSummaryQueryHandler : IRequestHandler<GetUserStatisticsSummaryQuery, StatisticsSummary>
     {
         private readonly ITimeReportContext _context;

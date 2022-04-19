@@ -14,30 +14,8 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public class CreateEntryCommand : IRequest<EntryDto>
+public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<EntryDto>
 {
-    public CreateEntryCommand(string timeSheetId, string projectId, string activityId, DateOnly date, double? hours, string? description)
-    {
-        TimeSheetId = timeSheetId;
-        ProjectId = projectId;
-        ActivityId = activityId;
-        Date = date;
-        Hours = hours;
-        Description = description;
-    }
-
-    public string ProjectId { get; }
-
-    public string ActivityId { get; }
-
-    public string TimeSheetId { get; }
-
-    public DateOnly Date { get; }
-
-    public double? Hours { get; }
-
-    public string? Description { get; }
-
     public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, EntryDto>
     {
         private readonly ITimeReportContext _context;

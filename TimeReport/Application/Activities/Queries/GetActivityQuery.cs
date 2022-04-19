@@ -8,15 +8,8 @@ using YourBrand.TimeReport.Application.Projects;
 
 namespace YourBrand.TimeReport.Application.Activities.Queries;
 
-public class GetActivityQuery : IRequest<ActivityDto>
+public record GetActivityQuery(string ActivityId) : IRequest<ActivityDto>
 {
-    public GetActivityQuery(string activityid)
-    {
-        ActivityId = activityid;
-    }
-
-    public string ActivityId { get; }
-
     public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, ActivityDto>
     {
         private readonly ITimeReportContext _context;

@@ -10,24 +10,8 @@ using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public class UpdateAbsenceCommand : IRequest<AbsenceDto>
+public record UpdateAbsenceCommand(string AbsenceId, DateTime Date, decimal Amount, string? Description) : IRequest<AbsenceDto>
 {
-    public UpdateAbsenceCommand(string absenceId, DateTime date, decimal amount, string? description)
-    {
-        AbsenceId = absenceId;
-        Date = date;
-        Amount = amount;
-        Description = description;
-    }
-
-    public string AbsenceId { get; }
-
-    public DateTime Date { get; }
-
-    public decimal Amount { get; }
-
-    public string? Description { get; }
-
     public class UpdateAbsenceCommandHandler : IRequestHandler<UpdateAbsenceCommand, AbsenceDto>
     {
         private readonly ITimeReportContext _context;

@@ -9,15 +9,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public class LockMonthCommand : IRequest
+public record LockMonthCommand(string TimeSheetId) : IRequest
 {
-    public LockMonthCommand(string timeSheetId)
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
-
     public class LockMonthCommandHandler : IRequestHandler<LockMonthCommand>
     {
         private readonly ITimeReportContext _context;
