@@ -13,9 +13,9 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<EntryDto>
+public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<ResultWithValue<EntryDto, DomainException>>
 {
-    public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, EntryDto>
+    public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, ResultWithValue<EntryDto, DomainException>>
     {
         private readonly ITimeReportContext _context;
 
@@ -24,30 +24,30 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
             _context = context;
         }
 
-        public async Task<EntryDto> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<ResultWithValue<EntryDto, DomainException>> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                throw new TimeSheetNotFoundException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetNotFoundException(request.TimeSheetId));
             }
 
             if (timeSheet.Status != TimeSheetStatus.Open)
             {
-                throw new TimeSheetClosedException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
             var entry = timeSheet.Entries.FirstOrDefault(e => e.Id == request.EntryId);
 
             if (entry is null)
             {
-                throw new EntryNotFoundException(request.EntryId);
+                return new ResultWithValue<EntryDto, DomainException>.Error(new EntryNotFoundException(request.EntryId));
             }
 
             if (entry.MonthGroup.Status == EntryStatus.Locked)
             {
-                throw new MonthLockedException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, DomainException>.Error(new MonthLockedException(request.TimeSheetId));
             }
 
             entry.UpdateHours(request.Hours);
@@ -56,20 +56,18 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
             double totalHoursDay = timeSheet.Entries.Where(e => e.Date == entry.Date).Sum(e => e.Hours.GetValueOrDefault());
             if (totalHoursDay > WorkingDayHours)
             {
-                throw new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, entry.Date);
+                return new ResultWithValue<EntryDto, DomainException>.Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, entry.Date));
             }
 
             double totalHoursWeek = timeSheet.Entries.Sum(x => x.Hours.GetValueOrDefault());
             if (totalHoursWeek > WorkingWeekHours)
             {
-                throw new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId);
+                return new ResultWithValue<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            var e = entry;
-
-            return new EntryDto(e.Id, new ProjectDto(e.Project.Id, e.Project.Name, e.Project.Description), new ActivityDto(e.Activity.Id, e.Activity.Name, e.Activity.ActivityType.ToDto(), e.Activity.Description, e.Activity.HourlyRate, new ProjectDto(e.Activity.Project.Id, e.Activity.Project.Name, e.Activity.Project.Description)), e.Date.ToDateTime(TimeOnly.Parse("01:00")), e.Hours, e.Description, (EntryStatusDto)e.MonthGroup.Status);
+            return new ResultWithValue<EntryDto, DomainException>.Ok(entry.ToDto());
         }
     }
 }

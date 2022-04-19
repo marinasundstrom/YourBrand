@@ -3,15 +3,27 @@ namespace YourBrand.TimeReport.Domain.Exceptions;
 
 public class DomainException : Exception
 {
+    private string stackTrace;
+
     public DomainException(string title, string details)
         : base(title)
     {
         Details = details;
+
+        stackTrace = Environment.StackTrace;
     }
 
     public string Title => Message;
 
     public string Details { get; set; }
+
+    public override string StackTrace
+    {
+        get
+        {
+            return this.stackTrace;
+        }
+    }
 }
 
 public class TimeSheetNotFoundException : DomainException

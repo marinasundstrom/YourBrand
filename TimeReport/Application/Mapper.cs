@@ -61,6 +61,11 @@ public static class Mapper
         return new (entry.Id, entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
     }
 
+    public static EntryDto ToDto(this Domain.Entities.Entry entry)
+    {
+        return new (entry.Id, new ProjectDto(entry.Project.Id, entry.Project.Name, entry.Project.Description), new ActivityDto(entry.Activity.Id, entry.Activity.Name, entry.Activity.ActivityType.ToDto(), entry.Activity.Description, entry.Activity.HourlyRate, new ProjectDto(entry.Activity.Project.Id, entry.Activity.Project.Name, entry.Activity.Project.Description)), entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
+    }
+
     public static AbsenceDto ToDto(this Domain.Entities.Absence absence)
     {
         return new (absence.Id, absence.Date.GetValueOrDefault().ToDateTime(TimeOnly.Parse("00:01")), absence.Note, new ProjectDto(absence.Project.Id, absence.Project.Name, absence.Project.Description));

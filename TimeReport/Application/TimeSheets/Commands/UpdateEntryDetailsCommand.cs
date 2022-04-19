@@ -55,9 +55,7 @@ public record UpdateEntryDetailsCommand(string TimeSheetId, string EntryId, stri
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            var e = entry;
-
-            return new EntryDto(e.Id, new ProjectDto(e.Project.Id, e.Project.Name, e.Project.Description), new ActivityDto(e.Activity.Id, e.Activity.Name, e.Activity.ActivityType.ToDto(), e.Activity.Description, e.Activity.HourlyRate, new ProjectDto(e.Activity.Project.Id, e.Activity.Project.Name, e.Activity.Project.Description)), e.Date.ToDateTime(TimeOnly.Parse("01:00")), e.Hours, e.Description, (EntryStatusDto)e.MonthGroup.Status);
+            return entry.ToDto();
         }
     }
 }

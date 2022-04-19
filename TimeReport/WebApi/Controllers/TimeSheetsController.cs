@@ -90,8 +90,14 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            var newDto = await _mediator.Send(new UpdateEntryCommand(timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
-            return Ok(newDto);
+            var result = await _mediator.Send(new UpdateEntryCommand(timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
+            
+            return result switch
+            {
+                ResultWithValue<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
+                ResultWithValue<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+                _ => BadRequest()
+            };
         }
         catch (TimeSheetNotFoundException exc)
         {
