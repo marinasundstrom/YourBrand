@@ -14,6 +14,7 @@ public interface ITimeReportContext
     DbSet<ProjectMembership> ProjectMemberships { get; set; }
     DbSet<Expense> Expenses { get; set; }
     DbSet<Activity> Activities { get; set; }
+    DbSet<ActivityType> ActivityTypes { get; set; }
     DbSet<Entry> Entries { get; set; }
     DbSet<TimeSheet> TimeSheets { get; set; }
     DbSet<MonthEntryGroup> MonthEntryGroups { get; set; }

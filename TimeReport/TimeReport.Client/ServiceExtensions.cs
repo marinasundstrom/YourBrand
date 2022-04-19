@@ -21,6 +21,10 @@ public static class ServiceExtensions
             .AddTypedClient<IActivitiesClient>((http, sp) => new ActivitiesClient(http)));
 
         builder(
+            services.AddHttpClient(nameof(IActivityTypesClient), configureClient)
+            .AddTypedClient<IActivityTypesClient>((http, sp) => new ActivityTypesClient(http)));
+
+        builder(
             services.AddHttpClient(nameof(IReportsClient), configureClient)
             .AddTypedClient<IReportsClient>((http, sp) => new ReportsClient(http)));
 

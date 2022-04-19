@@ -34,12 +34,14 @@ else
         <HeaderContent>
             <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="ActivityType">Type</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="HourlyRate">Hourly Rate</MudTableSortLabel></MudTh>
             <MudTh></MudTh>
         </HeaderContent>
         <RowTemplate Context="activity">
             <MudTd DataLabel="Name">@activity.Name</MudTd>
             <MudTd DataLabel="Description">@activity.Description</MudTd>
+            <MudTd DataLabel="Type">@activity.ActivityType.Name</MudTd>
             <MudTd DataLabel="Hourly Rate">@activity.HourlyRate?.ToString("c")</MudTd>
             <MudTd>
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditActivityClicked(activity)" />

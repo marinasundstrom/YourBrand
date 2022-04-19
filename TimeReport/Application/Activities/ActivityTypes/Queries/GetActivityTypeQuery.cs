@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Projects;
 
-namespace YourBrand.TimeReport.Application.Activities.Queries;
+namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Queries;
 
-public class GetActivityQuery : IRequest<ActivityDto>
+public class GetActivityTypeQuery : IRequest<ActivityTypeDto>
 {
-    public GetActivityQuery(string activityid)
+    public GetActivityTypeQuery(string activityid)
     {
         ActivityId = activityid;
     }
 
     public string ActivityId { get; }
 
-    public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, ActivityDto>
+    public class GetActivityQueryHandler : IRequestHandler<GetActivityTypeQuery, ActivityTypeDto>
     {
         private readonly ITimeReportContext _context;
 
@@ -26,21 +26,20 @@ public class GetActivityQuery : IRequest<ActivityDto>
             _context = context;
         }
 
-        public async Task<ActivityDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
+        public async Task<ActivityTypeDto> Handle(GetActivityTypeQuery request, CancellationToken cancellationToken)
         {
-            var activity = await _context.Activities
-               .Include(x => x.ActivityType)
+            var activityType = await _context.ActivityTypes
                .Include(x => x.Project)
                .AsNoTracking()
                .AsSplitQuery()
                .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 
-            if (activity is null)
+            if (activityType is null)
             {
                 throw new Exception();
             }
 
-            return activity.ToDto();
+            return activityType.ToDto();
         }
     }
 }

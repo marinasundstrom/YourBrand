@@ -57,6 +57,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<Activity> Activities { get; set; } = null!;
 
+    public DbSet<ActivityType> ActivityTypes { get; set; } = null!;
+
     public DbSet<Entry> Entries { get; set; } = null!;
 
     public DbSet<TimeSheet> TimeSheets { get; set; } = null!;

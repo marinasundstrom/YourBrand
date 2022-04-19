@@ -7,16 +7,15 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects;
 
-namespace YourBrand.TimeReport.Application.Activities.Queries;
+namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Queries;
 
-public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
+public class GetActivityTypesQuery : IRequest<ItemsResult<ActivityTypeDto>>
 {
-    public GetActivitiesQuery(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
+    public GetActivityTypesQuery(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
     {
         Page = page;
         PageSize = pageSize;
         ProjectId = projectId;
-        UserId = userId;
         SearchString = searchString;
         SortBy = sortBy;
         SortDirection = sortDirection;
@@ -28,15 +27,13 @@ public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
 
     public string? ProjectId { get; }
 
-    public string? UserId { get; }
-
     public string? SearchString { get; }
 
     public string? SortBy { get; }
 
     public Application.Common.Models.SortDirection? SortDirection { get; }
 
-    public class GetActivitiesQueryHandler : IRequestHandler<GetActivitiesQuery, ItemsResult<ActivityDto>>
+    public class GetActivitiesQueryHandler : IRequestHandler<GetActivityTypesQuery, ItemsResult<ActivityTypeDto>>
     {
         private readonly ITimeReportContext _context;
 
@@ -45,10 +42,9 @@ public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
             _context = context;
         }
 
-        public async Task<ItemsResult<ActivityDto>> Handle(GetActivitiesQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<ActivityTypeDto>> Handle(GetActivityTypesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Activities
-                .Include(x => x.ActivityType)
+            var query = _context.ActivityTypes
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()
@@ -56,13 +52,15 @@ public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
 
             if (request.ProjectId is not null)
             {
-                query = query.Where(activity => activity.Project.Id == request.ProjectId);
+                query = query.Where(activityType => activityType.Project.Id == request.ProjectId);
             }
 
+            /*
             if (request.UserId is not null)
             {
                 query = query.Where(a => a.Project.Memberships.Any(pm => pm.User.Id == request.UserId));
             }
+            */
 
             if (request.SearchString is not null)
             {
@@ -76,14 +74,14 @@ public class GetActivitiesQuery : IRequest<ItemsResult<ActivityDto>>
                 query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? TimeReport.Application.SortDirection.Descending : TimeReport.Application.SortDirection.Ascending);
             }
 
-            var activities = await query
+            var activityTypes = await query
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var dtos = activities.Select(activity => activity.ToDto());
+            var dtos = activityTypes.Select(activityType => activityType.ToDto());
 
-            return new ItemsResult<ActivityDto>(dtos, totalItems);
+            return new ItemsResult<ActivityTypeDto>(dtos, totalItems);
         }
     }
 }

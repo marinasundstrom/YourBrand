@@ -1,7 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IActivitiesClient ActivitiesClient
+@inject IActivityTypesClient ActivityTypesClient
 @inject IStringLocalizer<ActivityDialog> T
-
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -10,6 +10,13 @@
         <DialogContent>
 
             <MudTextField Label="@(T["Name"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudAutocomplete T="ActivityTypeDto" Label="Activity Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ActivityType" SearchFunc="@Search1"
+                                 For="() => ActivityType"
+                                 ToStringFunc="u => u?.Name"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true" CoerceValue="true"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
 
             <MudTextField Lines="3" Label="@(T["Description"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
@@ -35,6 +42,9 @@
     [Required]
     public string Name { get; set; }
 
+    [Required]
+    public ActivityTypeDto ActivityType { get; set; }
+
     public string? Description { get; set; }
 
     public decimal? HourlyRate { get; set; }
@@ -46,6 +56,7 @@
             var result = await ActivitiesClient.GetActivityAsync(ActivityId);
 
             Name = result.Name;
+            ActivityType = result.ActivityType;
             Description = result.Description;
             HourlyRate = result.HourlyRate;
         }
@@ -60,6 +71,7 @@
             result = await ActivitiesClient.CreateActivityAsync(ProjectId, new CreateActivityDto
             {
                 Name = Name,
+                ActivityTypeId = ActivityType.Id,
                 Description = Description,
                 HourlyRate = HourlyRate
             });
@@ -69,11 +81,19 @@
             result = await ActivitiesClient.UpdateActivityAsync(ActivityId, new UpdateActivityDto
             {
                 Name = Name,
+                ActivityTypeId = ActivityType.Id,
                 Description = Description,
                 HourlyRate = HourlyRate
             });
         }
 
         Modal.Close(DialogResult.Ok(result));
+    }
+
+    private async Task<IEnumerable<ActivityTypeDto>> Search1(string value)
+    {
+        var page = await ActivityTypesClient.GetActivityTypesAsync(0, 10, null!, value, null, null);
+
+        return page.Items;
     }
 }

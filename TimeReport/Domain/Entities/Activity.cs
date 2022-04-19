@@ -10,6 +10,8 @@ public class Activity : AuditableEntity, ISoftDelete
 
     public string Name { get; set; } = null!;
 
+    public ActivityType ActivityType { get; set; } = null!;
+
     public string? Description { get; set; }
 
     public Project Project { get; set; } = null!;

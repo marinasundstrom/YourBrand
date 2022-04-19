@@ -36,17 +36,30 @@ Console.WriteLine("Creating projects...");
 
 var projectsClient = services.GetRequiredService<YourBrand.TimeReport.Client.IProjectsClient>();
 var activitiesClient = services.GetRequiredService<YourBrand.TimeReport.Client.IActivitiesClient>();
+var activityTypesClient = services.GetRequiredService<YourBrand.TimeReport.Client.IActivityTypesClient>();
+
+var workActivityType= await activityTypesClient.CreateActivityTypeAsync(new YourBrand.TimeReport.Client.CreateActivityTypeDto() {
+    Name = "Chargeable",
+    ExcludeHours = false
+});
+
+var absenceActivityType= await activityTypesClient.CreateActivityTypeAsync(new YourBrand.TimeReport.Client.CreateActivityTypeDto() {
+    Name = "Absence",
+    ExcludeHours = true
+});
 
 var projectMyProject = await projectsClient.CreateProjectAsync(new YourBrand.TimeReport.Client.CreateProjectDto() {
     Name = "My project"
 });
 
 var activityWork = await activitiesClient.CreateActivityAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
-    Name = "Work"
+    Name = "Work",
+    ActivityTypeId = workActivityType.Id
 });
 
 var activityMisc = await activitiesClient.CreateActivityAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
-    Name = "Misc"
+    Name = "Misc",
+    ActivityTypeId = workActivityType.Id
 });
 
 await projectsClient.CreateProjectMembershipAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateProjectMembershipDto {
@@ -58,7 +71,8 @@ var projectInternal = await projectsClient.CreateProjectAsync(new YourBrand.Time
 });
 
 var activitySick = await activitiesClient.CreateActivityAsync(projectInternal.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
-    Name = "Sick"
+    Name = "Sick",
+    ActivityTypeId = absenceActivityType.Id
 });
 
 await projectsClient.CreateProjectMembershipAsync(projectInternal.Id, new YourBrand.TimeReport.Client.CreateProjectMembershipDto {
@@ -95,6 +109,13 @@ static IServiceProvider BuildServiceProvider()
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
     .AddTypedClient<YourBrand.TimeReport.Client.IActivitiesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivitiesClient(http));
+
+    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IActivityTypesClient), (sp, http) =>
+    {
+        http.BaseAddress = new Uri($"https://localhost/timereport/");
+        http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
+    })
+    .AddTypedClient<YourBrand.TimeReport.Client.IActivityTypesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivityTypesClient(http));
 
     return services.BuildServiceProvider();
 }
