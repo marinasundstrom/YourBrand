@@ -45,12 +45,14 @@ var organization = await organizationClient.CreateOrganizationAsync(new YourBran
 
 var workActivityType = await activityTypesClient.CreateActivityTypeAsync(new YourBrand.TimeReport.Client.CreateActivityTypeDto() {
     Name = "Chargeable",
-    ExcludeHours = false
+    ExcludeHours = false,
+    OrganizationId = organization.Id
 });
 
 var absenceActivityType = await activityTypesClient.CreateActivityTypeAsync(new YourBrand.TimeReport.Client.CreateActivityTypeDto() {
     Name = "Absence",
-    ExcludeHours = true
+    ExcludeHours = true,
+    OrganizationId = organization.Id
 });
 
 var projectMyProject = await projectsClient.CreateProjectAsync(new YourBrand.TimeReport.Client.CreateProjectDto() {

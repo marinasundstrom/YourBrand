@@ -3741,6 +3741,13 @@
             "type": "string",
             "nullable": true
           },
+          "organizationId": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string",
+            "nullable": true
+          },
           "excludeHours": {
             "type": "boolean"
           }
@@ -3754,6 +3761,13 @@
             "type": "string"
           },
           "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "projectId": {
             "type": "string",
             "nullable": true
           },

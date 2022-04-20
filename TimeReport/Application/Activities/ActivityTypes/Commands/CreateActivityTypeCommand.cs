@@ -1,12 +1,14 @@
 ﻿
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
 
-public record CreateActivityTypeCommand(string Name, string? Description, bool ExcludeHours) : IRequest<ActivityTypeDto>
+public record CreateActivityTypeCommand(string Name, string? Description, string OrganizationId, string? ProjectId, bool ExcludeHours) : IRequest<ActivityTypeDto>
 {
     public class CreateActivityCommandHandler : IRequestHandler<CreateActivityTypeCommand, ActivityTypeDto>
     {
@@ -19,23 +21,26 @@ public record CreateActivityTypeCommand(string Name, string? Description, bool E
 
         public async Task<ActivityTypeDto> Handle(CreateActivityTypeCommand request, CancellationToken cancellationToken)
         {
-            /*
-            var project = await _context.Projects
-               .AsSplitQuery()
-               .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
+            Project? project = null;
 
-            if (project is null)
+            Organization organization = await _context.Organizations
+                    .AsSplitQuery()
+                    .FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
+               
+            if (request.ProjectId is not null)
             {
-                throw new Exception();
+                project = await _context.Projects
+                        .AsSplitQuery()
+                        .FirstAsync(x => x.Organization.Id == request.OrganizationId && x.Id == request.ProjectId, cancellationToken);
             }
-            */
 
             var activityType = new ActivityType
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = request.Name,
                 Description = request.Description,
-                //Project = project,
+                Organization = organization,
+                Project = project,
                 ExcludeHours = request.ExcludeHours
             };
 

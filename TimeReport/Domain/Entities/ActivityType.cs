@@ -12,7 +12,9 @@ public class ActivityType: AuditableEntity, ISoftDelete
 
     public string? Description { get; set; } = null!;
 
-    public Project? Project { get; set; } = null!;
+    public Organization Organization { get; set; } = null!;
+
+    public Project? Project { get; set; }
 
     public bool ExcludeHours { get; set; }
 

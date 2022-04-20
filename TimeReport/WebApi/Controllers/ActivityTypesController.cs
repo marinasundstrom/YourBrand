@@ -53,7 +53,7 @@ public class ActivityTypesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new CreateActivityTypeCommand(createActivityTypeDto.Name, createActivityTypeDto.Description, createActivityTypeDto.ExcludeHours), cancellationToken);
+            var activity = await _mediator.Send(new CreateActivityTypeCommand(createActivityTypeDto.Name, createActivityTypeDto.Description, createActivityTypeDto.OrganizationId, createActivityTypeDto.ProjectId, createActivityTypeDto.ExcludeHours), cancellationToken);
 
             return Ok(activity);
         }
@@ -69,7 +69,7 @@ public class ActivityTypesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new UpdateActivityTypeCommand(id, updateActivityTypeDto.Name, updateActivityTypeDto.Description, updateActivityTypeDto.ExcludeHours), cancellationToken);
+            var activity = await _mediator.Send(new UpdateActivityTypeCommand(id, updateActivityTypeDto.Name, updateActivityTypeDto.Description, updateActivityTypeDto.OrganizationId, updateActivityTypeDto.ProjectId, updateActivityTypeDto.ExcludeHours), cancellationToken);
 
             return Ok(activity);
         }
@@ -97,6 +97,6 @@ public class ActivityTypesController : ControllerBase
     }
 }
 
-public record class CreateActivityTypeDto(string Name, string? Description, bool ExcludeHours);
+public record class CreateActivityTypeDto(string Name, string? Description, string OrganizationId, string? ProjectId, bool ExcludeHours);
 
-public record class UpdateActivityTypeDto(string Name, string? Description, bool ExcludeHours);
+public record class UpdateActivityTypeDto(string Name, string? Description, string OrganizationId, string? ProjectId, bool ExcludeHours);
