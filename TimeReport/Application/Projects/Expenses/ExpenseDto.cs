@@ -1,3 +1,5 @@
-﻿namespace YourBrand.TimeReport.Application.Projects.Expenses;
+﻿using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
 
-public record class ExpenseDto(string Id, DateTime Date, decimal Amount, string? Description, string? Attachment, ProjectDto Project);
+namespace YourBrand.TimeReport.Application.Projects.Expenses;
+
+public record class ExpenseDto(string Id, DateTime Date, ExpenseTypeDto ExpenseType, decimal Amount, string? Description, string? Attachment, ProjectDto Project);

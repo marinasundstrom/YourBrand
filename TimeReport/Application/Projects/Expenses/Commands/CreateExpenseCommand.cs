@@ -33,7 +33,7 @@ public record CreateExpenseCommand(string ProjectId, DateTime Date, string Expen
             var expense = new Expense
             {
                 Id = Guid.NewGuid().ToString(),
-                Type = await _context.ExpenseTypes.FirstAsync(et => et.Id == request.ExpenseTypeId),
+                ExpenseType = await _context.ExpenseTypes.FirstAsync(et => et.Id == request.ExpenseTypeId),
                 Date = DateOnly.FromDateTime(request.Date),
                 Amount = request.Amount,
                 Description = request.Description,

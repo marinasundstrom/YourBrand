@@ -10,7 +10,7 @@ public class Expense : AuditableEntity, ISoftDelete
 
     public Project Project { get; set; } = null!;
 
-    public ExpenseType Type { get; set; } = null!;
+    public ExpenseType ExpenseType { get; set; } = null!;
 
     public DateOnly Date { get; set; }
 

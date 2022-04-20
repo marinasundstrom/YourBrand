@@ -23,6 +23,7 @@ public record GetExpensesQuery(int Page = 0, int PageSize = 10, string? ProjectI
         {
             var query = _context.Expenses
                 .Include(x => x.Project)
+                .Include(x => x.ExpenseType)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()
                 .AsSplitQuery();

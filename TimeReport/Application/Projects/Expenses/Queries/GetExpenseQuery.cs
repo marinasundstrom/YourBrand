@@ -22,6 +22,7 @@ public record GetExpenseQuery(string ExpenseId) : IRequest<ExpenseDto>
         {
             var expense = await _context.Expenses
                .Include(x => x.Project)
+               .Include(x => x.ExpenseType)
                .AsNoTracking()
                .AsSplitQuery()
                .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);

@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IExpensesClient ExpensesClient
+@inject IExpenseTypesClient ExpenseTypesClient
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -8,6 +9,13 @@
         <DialogContent>
 
             <MudDatePicker Label="Date" Class="mb-6" Variant="Variant.Outlined" @bind-Date="Date" For="() => Date" />
+
+            <MudAutocomplete T="ExpenseTypeDto" Label="Expense Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ExpenseType" SearchFunc="@Search1"
+                                 For="() => ExpenseType"
+                                 ToStringFunc="u => u?.Name"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true" CoerceValue="true"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
 
             <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
@@ -45,6 +53,9 @@
     [Parameter] public string? ExpenseId { get; set; }
 
     [Required]
+    public ExpenseTypeDto ExpenseType { get; set; } = null!;
+
+    [Required]
     public DateTime? Date { get; set; } = DateTime.Now.Date;
 
     public string? Description { get; set; }
@@ -59,9 +70,17 @@
             var result = await ExpensesClient.GetExpenseAsync(ExpenseId);
 
             Date = result.Date.Date;
+            ExpenseType = result.ExpenseType;
             Description = result.Description;
             Amount = result.Amount;
         }
+    }
+
+    private async Task<IEnumerable<ExpenseTypeDto>> Search1(string value)
+    {
+        var page = await ExpenseTypesClient.GetExpenseTypesAsync(0, 10, null!, value, null, null);
+
+        return page.Items;
     }
 
     async Task OnSubmit()
@@ -73,6 +92,7 @@
             result = await ExpensesClient.CreateExpenseAsync(ProjectId, new CreateExpenseDto
             {
                 Date = Date.GetValueOrDefault().Date,
+                ExpenseTypeId = ExpenseType.Id,
                 Description = Description,
                 Amount = Amount
             });
@@ -82,6 +102,7 @@
             result = await ExpensesClient.UpdateExpenseAsync(ExpenseId, new UpdateExpenseDto
             {
                 Date = Date.GetValueOrDefault().Date,
+                //ExpenseTypeId = ExpenseType.Id,
                 Description = Description,
                 Amount = Amount
             });

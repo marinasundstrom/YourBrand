@@ -51,7 +51,7 @@ public static class Mapper
 
     public static ExpenseDto ToDto(this Domain.Entities.Expense expense)
     {
-        return new (expense.Id, expense.Date.ToDateTime(TimeOnly.Parse("01:00")), expense.Amount, expense.Description, expense.Attachment, expense.Project.ToDto());
+        return new (expense.Id, expense.Date.ToDateTime(TimeOnly.Parse("01:00")), expense.ExpenseType.ToDto(), expense.Amount, expense.Description, expense.Attachment, expense.Project.ToDto());
     }
 
     public static ExpenseTypeDto ToDto(this Domain.Entities.ExpenseType expenseType)

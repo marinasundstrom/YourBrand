@@ -3531,6 +3531,10 @@
         "properties": {
           "name": {
             "type": "string"
+          },
+          "parentOrganizationId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -3803,6 +3807,9 @@
             "type": "string",
             "format": "date-time"
           },
+          "expenseType": {
+            "$ref": "#/components/schemas/ExpenseTypeDto"
+          },
           "amount": {
             "type": "number",
             "format": "decimal"
@@ -3817,6 +3824,30 @@
           },
           "project": {
             "$ref": "#/components/schemas/ProjectDto"
+          }
+        }
+      },
+      "ExpenseTypeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "project": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ProjectDto"
+              }
+            ]
           }
         }
       },
@@ -3872,30 +3903,6 @@
           "totalItems": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "ExpenseTypeDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "project": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ProjectDto"
-              }
-            ]
           }
         }
       },
