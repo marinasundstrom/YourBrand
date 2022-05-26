@@ -1,0 +1,316 @@
+﻿@page "/verifications/sale"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+@inject IAccountsClient AccountsClient
+@inject IVerificationsClient VerificationsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<PageTitle>Register sale</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Register sale</MudText>
+
+<EditForm Model="@formModel" OnValidSubmit="OnValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
+
+    <MudTextField T="string" Label="Description" HelperText="@(formModel.Description is null ? null : $"{formModel.Description.Length}/240")" Variant="Variant.Outlined"
+                  @bind-Value="formModel.Description" Lines="3" Class="my-4" For="@(() => formModel.Description)" />
+
+    <MudSelect Label="Account" Variant="Variant.Outlined" Class="my-4" @bind-Value="formModel.TargetAccount" For="@(() => formModel.TargetAccount)">
+        @foreach (TargetAccount targetAccount in Enum.GetValues<TargetAccount>())
+        {
+            <MudSelectItem Value="@targetAccount">@(targetAccount.GetAttribute<DisplayAttribute>()!.Name)</MudSelectItem>
+        }
+    </MudSelect>
+
+    <MudTable @ref="table" Items="@formModel.Entries" Elevation="0" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By" RowEditCommit="ItemHasBeenCommitted">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Entries</MudText>
+            <MudSpacer />
+            <MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryModel, object>(x=>x.EntryType)">Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryModel, object?>(x=>x.SubTotal)">Sub Total</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryModel, object?>(x=>x.Vat)">VAT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryModel, object?>(x=>x.Total)">Total</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="entry">
+            <MudTd DataLabel="Type">@(entry.EntryType.GetAttribute<DisplayAttribute>()!.Name)</MudTd>
+            <MudTd DataLabel="Sub Total">@entry.SubTotal</MudTd>
+            <MudTd DataLabel="VAT">@entry.Vat</MudTd>
+            <MudTd DataLabel="Total">@entry.Total</MudTd>
+        </RowTemplate>
+        <RowEditingTemplate Context="entry">
+            <MudTd DataLabel="Type">
+                <MudSelect Variant="Variant.Outlined" @bind-Value="entry.EntryType" For="@(() => entry.EntryType)">
+                    @foreach (EntryType entryType in Enum.GetValues<EntryType>())
+                    {
+                        <MudSelectItem Value="@entryType">@(entryType.GetAttribute<DisplayAttribute>()!.Name)</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudTd>
+            <MudTd DataLabel="Sub Total">
+                <MudNumericField Variant="Variant.Outlined"
+                                 @bind-Value="entry.SubTotal" For="@(() => entry.SubTotal)" />
+            </MudTd>
+            <MudTd DataLabel="VAT">
+                <MudNumericField Variant="Variant.Outlined"
+                                 @bind-Value="entry.Vat" For="@(() => entry.Vat)" />
+            </MudTd>
+            <MudTd DataLabel="VAT">
+                @entry.Total
+            </MudTd>
+        </RowEditingTemplate>
+        <FooterContent>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"></MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"></MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"><MudText Typo="Typo.body1"><b>Total</b></MudText></MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"><MudText Typo="Typo.body1">@formModel.Total</MudText></MudTh>
+        </FooterContent>
+    </MudTable>
+
+    @*
+
+        <MudNumericField Label="Total" Variant="Variant.Outlined"
+                         @bind-Value="formModel.Total" Lines="3" Class="my-4" For="@(() => formModel.Total)" />
+
+        <MudNumericField Label="SubTotal (VAT 6%)" Variant="Variant.Outlined"
+                         @bind-Value="formModel.SubTotal6" Lines="3" Class="my-4" For="@(() => formModel.SubTotal6)" />
+
+        <MudNumericField Label="SubTotal (VAT 12%)" Variant="Variant.Outlined"
+                         @bind-Value="formModel.SubTotal12" Lines="3" Class="my-4" For="@(() => formModel.SubTotal12)" />
+
+        <MudNumericField Label="SubTotal (VAT 25%)" Variant="Variant.Outlined"
+                         @bind-Value="formModel.SubTotal25" Lines="3" Class="my-4" For="@(() => formModel.SubTotal25)" />
+
+        <MudNumericField Label="VAT 6%" Variant="Variant.Outlined"
+                         @bind-Value="formModel.Vat6" Lines="3" Class="my-4" For="@(() => formModel.Vat25)" />
+
+        <MudNumericField Label="VAT 12%" Variant="Variant.Outlined"
+                         @bind-Value="formModel.Vat12" Lines="3" Class="my-4" For="@(() => formModel.Vat25)" />
+
+        <MudNumericField Label="VAT 25%" Variant="Variant.Outlined"
+                         @bind-Value="formModel.Vat25" Lines="3" Class="my-4" For="@(() => formModel.Vat25)" />
+
+    *@
+
+    <MudPaper Class="mt-4 py-4 px-4">
+        <MudText Typo="Typo.h6" Class="mb-4">Document</MudText>
+
+        <InputFile id="fileInput112" OnChange="UploadFile" hidden multiple accept=".jpg, .jpeg, .png, .pdf, .docx, .doc" />
+
+        <MudButton HtmlTag="label"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Filled.CloudUpload"
+                   for="fileInput112">
+            Upload file
+        </MudButton>
+
+        <MudText Typo="Typo.body1">@file?.Name</MudText>
+    </MudPaper>
+
+    <MudButton ButtonType="ButtonType.Submit" Disabled="isEditingEntry" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Save" Class="mt-2">Save</MudButton>
+</EditForm>
+
+@code
+{
+    MudTable<EntryModel> table = null!;
+
+    FormModel formModel = new FormModel();
+
+    bool isEditingEntry = false;
+
+    void AddEntry()
+    {
+        var item = new EntryModel();
+        formModel.Entries.Add(item);
+
+        table.SetEditingItem(item);
+
+        isEditingEntry = true;
+
+        StateHasChanged();
+    }
+
+    private void ItemHasBeenCommitted(object element)
+    {
+        isEditingEntry = false;
+
+        StateHasChanged();
+    }
+
+    IBrowserFile? file;
+
+    private void UploadFile(InputFileChangeEventArgs e)
+    {
+        file = e.GetMultipleFiles().First();
+    }
+
+    private async Task OnValidSubmit()
+    {
+        if(file is null) 
+        {
+            var r = await DialogService.ShowMessageBox("Verification lacks attachment", "Are you sure that you want to continue?", "Yes", "No");
+
+            if(!r.GetValueOrDefault())
+            {
+                // Abort
+                return;
+            }
+        }
+
+        var verification = new CreateVerification
+        {
+            Description = formModel.Description ?? String.Empty
+        };
+
+        var entries = new List<CreateEntry>();
+
+        entries.Add(
+               new CreateEntry
+               {
+                   AccountNo = formModel.TargetAccount == TargetAccount.AccountReceivable ? 1510 : formModel.TargetAccount == TargetAccount.CorporateAccount ? 1930 : -1,
+                   Description = string.Empty,
+                   Debit = formModel.Total
+               });
+
+
+        var entryGroups = formModel.Entries.GroupBy(e => e.EntryType);
+
+        foreach (var entryGroup in entryGroups)
+        {
+            var entryType = entryGroup.Key;
+            var subTotal = entryGroup.Sum(e => e.SubTotal);
+            var vat = entryGroup.Sum(e => e.Vat);
+
+            switch (entryType)
+            {
+                case EntryType.SalesVat25Percent:
+                    entries.Add(
+                        new CreateEntry
+                        {
+                            AccountNo = 3001,
+                            Description = string.Empty,
+                            Credit = subTotal
+                        });
+
+                    entries.Add(
+                        new CreateEntry
+                        {
+                            AccountNo = 2611,
+                            Description = string.Empty,
+                            Credit = vat
+                        });
+                    break;
+
+                case EntryType.SalesVat12Percent:
+                    entries.Add(
+                            new CreateEntry
+                            {
+                                AccountNo = 3002,
+                                Description = string.Empty,
+                                Credit = subTotal
+                            });
+
+                    entries.Add(
+                        new CreateEntry
+                        {
+                            AccountNo = 2621,
+                            Description = string.Empty,
+                            Credit = vat
+                        });
+                    break;
+
+                case EntryType.SalesVat6Percent:
+                    entries.Add(
+                            new CreateEntry
+                            {
+                                AccountNo = 3003,
+                                Description = string.Empty,
+                                Credit = subTotal
+                            });
+
+                    entries.Add(
+                        new CreateEntry
+                        {
+                            AccountNo = 2631,
+                            Description = string.Empty,
+                            Credit = vat
+                        });
+                    break;
+
+                default:
+                    throw new Exception();
+
+            }
+        }
+
+        verification.Entries = entries;
+
+        var verificationId = await VerificationsClient.CreateVerificationAsync(verification);
+
+        if(file is not null) 
+        {
+            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, string.Empty, null, new FileParameter(file.OpenReadStream(10 * 10000), file.Name));
+        }
+
+        NavigationManager.NavigateTo("/verifications");
+    }
+
+    class FormModel
+    {
+        [Required]
+        [MaxLength(240, ErrorMessage = "Max 240 characters")]
+        public string Description { get; set; } = null!;
+
+        public TargetAccount TargetAccount { get; set; }
+
+        public List<EntryModel> Entries { get; set; } = new List<EntryModel>();
+
+        public decimal Total => Entries.Sum(e => e.Total);
+    }
+
+    class EntryModel
+    {
+        [MaxLength(240, ErrorMessage = "Max 240 characters")]
+        public string? Description { get; set; }
+
+        public decimal VatRate { get; set; }
+
+        public EntryType EntryType { get; set; }
+
+        [Required]
+        public decimal? SubTotal { get; set; }
+
+        [Required]
+        public decimal? Vat { get; set; }
+
+        public decimal Total => SubTotal.GetValueOrDefault() + Vat.GetValueOrDefault();
+    }
+
+    public enum EntryType
+    {
+        [Display(Name = "Försäljning 25% moms")]
+        SalesVat25Percent,
+
+        [Display(Name = "Försäljning 12% moms")]
+        SalesVat12Percent,
+
+        [Display(Name = "Försäljning 6% moms")]
+        SalesVat6Percent
+    }
+
+    public enum TargetAccount
+    {
+        [Display(Name = "Företagskonto")]
+        CorporateAccount,
+
+        //[Display(Name = "Kassa")]
+        //Cash,
+
+        [Display(Name = "Kundfordringar")]
+        AccountReceivable
+    }
+}

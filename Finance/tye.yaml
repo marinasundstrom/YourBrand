@@ -1,0 +1,51 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+
+name: yourbrand
+
+services:
+  - name: financeapp
+    project: Client/Client.csproj
+    bindings:
+      - protocol: https
+        port: 5091
+
+  - name: accounting
+    project: Accounting/Accounting/WebApi/WebApi.csproj
+    bindings:
+      - protocol: https
+        port: 5092
+
+  - name: accountant
+    project: Accounting/Accountant/Accountant.csproj
+    bindings:
+      - protocol: https
+        port: 5093
+
+  - name: transactions
+    project: Transactions/Transactions/Transactions.csproj
+    bindings:
+      - protocol: https
+        port: 5094
+
+  - name: invoices
+    project: Invoices/Invoices/Invoices.csproj
+    bindings:
+      - protocol: https
+        port: 5095
+
+  - name: documents
+    project: Documents/Documents/Documents.csproj
+    bindings:
+      - protocol: https
+        port: 5096
+
+  - name: email
+    project: EmailService/EmailService/EmailService.csproj
+    bindings:
+      - protocol: https
+        port: 5097

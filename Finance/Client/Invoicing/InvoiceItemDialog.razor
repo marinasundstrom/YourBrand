@@ -1,0 +1,80 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Accounting.Client.Invoicing
+@inject IInvoicesClient InvoicesClient
+
+<EditForm Model="@Model" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Description" @bind-Value="Model.Description" For="() => Model.Description"></MudTextField>
+
+            <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType">
+                @foreach(var status in Enum.GetValues<ProductType>())
+                {
+                    <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
+                }
+                
+            </MudSelect>
+
+            <MudNumericField Label="Unit Price" @bind-Value="Model.UnitPrice" For="() => Model.UnitPrice"></MudNumericField>
+
+            <MudTextField Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit"></MudTextField>
+
+            <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity"></MudNumericField>
+
+            <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate">
+                <MudSelectItem Value="@(0.06)">6%</MudSelectItem>
+                <MudSelectItem Value="@(0.12)">12%</MudSelectItem>
+                <MudSelectItem Value="@(0.25)">25%</MudSelectItem>
+            </MudSelect>
+
+            <MudField Label="VAT">@Model.Vat.ToString("c")</MudField>
+
+            <MudField Label="Line Total">@Model.LineTotal.ToString("c")</MudField>
+
+            @*
+            <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
+
+            <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
+                @foreach(var status in Enum.GetValues<InvoiceStatus>())
+                {
+                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+                }
+                
+            </MudSelect>
+
+            <MudNumericField Label="Sub Total" @bind-Value="SubTotal" For="() => SubTotal"></MudNumericField>
+
+            <MudNumericField Label="Vat" @bind-Value="Vat" For="() => Vat"></MudNumericField>
+
+            <MudNumericField Label="VAT Rate" @bind-Value="VatRate" For="() => VatRate"></MudNumericField>
+
+            <MudNumericField Label="Total" @bind-Value="Total" For="() => Total"></MudNumericField>
+
+            *@
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Required]
+    [Parameter] public int Id { get; set; }
+
+    [Required]
+    [Parameter] public InvoiceItemViewModel Model { get; set; } = null!;
+
+    async Task Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(Model));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

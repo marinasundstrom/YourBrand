@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
+  <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
+	  <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+	  <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+	  <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
+	  <PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
+	  <PackageReference Include="Hangfire" Version="1.7.28" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Accounting.Client\Accounting.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Invoices\Invoices.Contracts\Invoices.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Invoices\Invoices.Client\Invoices.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Transactions\Transactions.Client\Transactions.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Documents\Documents.Client\Documents.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+  </ItemGroup>
+
+</Project>

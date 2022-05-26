@@ -1,0 +1,105 @@
+﻿@page "/accounts/{accountNo:int}"
+@using System.ComponentModel.DataAnnotations
+@using Finance.Client
+@inject IAccountsClient AccountsClient
+@inject IEntriesClient EntriesClient
+
+@if (account is not null)
+{
+    <PageTitle>@account.AccountNo - @account.Name</PageTitle>
+
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@account.AccountNo - @account.Name</MudText>
+
+    <MudText Typo="Typo.body1" Class="mt-4 mb-8">@account.Description</MudText>
+
+    <MudGrid Class="mt-4 mb-8">
+        <MudItem xs="6">
+            <MudField Label="Balance" Variant="Variant.Text" Class="px-16">@account.Balance.ToString("c")</MudField>
+        </MudItem>
+        <MudItem xs="6">
+            
+        </MudItem>
+    </MudGrid>
+
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
+
+    <MudChart Class="mt-8 mb-16" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
+
+    <MudTable ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh>Date</MudTh>
+            <MudTh>Verification No</MudTh>
+            @*
+        <MudTh>Debit</MudTh>
+        <MudTh>Credit</MudTh>
+            *@
+            <MudTh>Sum</MudTh>
+        </HeaderContent>
+        <RowTemplate Context="entry">
+            <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
+            <MudTd DataLabel="Verification No">
+                <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
+            </MudTd>
+            @*
+        <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
+        <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
+            *@
+            <MudTd DataLabel="Amount">@((entry.Debit.GetValueOrDefault() - entry.Credit.GetValueOrDefault()).ToString("c"))</MudTd>
+        </RowTemplate>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+@code
+{
+    AccountDto? account;
+    bool loading;
+
+    ChartOptions options = new ChartOptions();
+    List<ChartSeries> Series = new List<ChartSeries>();
+    string[] XAxisLabels = new string[0];
+
+    [Parameter]
+    public int AccountNo { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        account = await AccountsClient.GetAccountAsync(AccountNo);
+
+        options.YAxisFormat = "c2";
+        options.YAxisTicks = 10_000;
+
+        var data = await AccountsClient.GetAccountHistoryAsync(new int[] { AccountNo });
+        XAxisLabels = data.Labels.ToArray();
+
+        foreach (var d in data.Series)
+        {
+            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task<TableData<EntryDto>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await EntriesClient.GetEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
+
+            return new TableData<EntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

@@ -1,0 +1,76 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject ITransactionsClient TransactionsClient
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            <MudTextField Label="Id" @bind-Value="Id" For="() => Id"></MudTextField>
+
+            <MudDatePicker Label="Date" @bind-Date="Date" For="() => Date"></MudDatePicker>
+
+            <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
+
+            <MudTextField Label="From" @bind-Value="From" For="() => From"></MudTextField>
+
+            <MudTextField Label="Reference" @bind-Value="Reference" For="() => Reference"></MudTextField>
+
+            <MudSelect Label="Currency" @bind-Value="Currency" For="() => Currency">
+                <MudSelectItem Value="@("SEK")">SEK</MudSelectItem>
+                <MudSelectItem Value="@("USD")">USD</MudSelectItem>
+            </MudSelect>
+
+            <MudNumericField Label="Amount" @bind-Value="Amount" For="() => Amount"></MudNumericField>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Required]
+    [Parameter] public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", string.Empty);
+
+    [Required]
+    [Parameter] public DateTime? Date { get; set; } = DateTime.Now;
+
+    [Required]
+    [Parameter] public TimeSpan? Time { get; set; } = DateTime.Now.TimeOfDay;
+
+    [Required]
+    [Parameter] public string From { get; set; } = "Test Testsson";
+
+    [Required]
+    [Parameter] public string Reference { get; set; } = null!;
+
+    [Required]
+    [Parameter] public string Currency { get; set; } = "SEK";
+
+    [Required]
+    [Parameter] public decimal Amount { get; set; } = 100;
+
+    async Task Submit()
+    {
+        await TransactionsClient.PostTransactionsAsync(new TransactionDto[] {
+            new ()
+            {
+                Id = Id,
+                Status = TransactionStatus.Unverified,
+                Date = Date,
+                From = From,
+                Reference = Reference,
+                Currency = Currency,
+                Amount = Amount
+            }
+        });
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

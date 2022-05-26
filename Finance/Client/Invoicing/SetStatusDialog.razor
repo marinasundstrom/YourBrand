@@ -1,0 +1,56 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IInvoicesClient InvoicesClient
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
+                @foreach(var status in statuses)
+                {
+                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+                }    
+            </MudSelect>
+            
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Ok</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Required]
+    [Parameter] public int InvoiceId { get; set; }
+
+    [Required]
+    [Parameter] public InvoiceStatus Status { get; set; }
+
+    InvoiceStatus currentStatus;
+    IEnumerable<InvoiceStatus> statuses = Array.Empty<InvoiceStatus>();
+
+    protected override void OnInitialized() 
+    {
+        statuses = Enum.GetValues<InvoiceStatus>().Skip(1);
+        currentStatus = Status;
+
+        if(currentStatus >= InvoiceStatus.Sent) 
+        {
+            statuses = statuses.Skip(1);
+        }
+    }
+
+    async Task Submit()
+    {
+        await InvoicesClient.SetInvoiceStatusAsync(InvoiceId, Status);
+
+        MudDialog.Close(DialogResult.Ok(Status));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

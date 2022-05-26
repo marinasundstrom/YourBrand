@@ -1,0 +1,60 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IInvoicesClient InvoicesClient
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            <MudDatePicker Label="Date" @bind-Date="Date" For="() => Date"></MudDatePicker>
+
+            @*
+            <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
+
+            <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
+                @foreach(var status in Enum.GetValues<InvoiceStatus>())
+                {
+                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+                }
+                
+            </MudSelect>
+
+            <MudNumericField Label="Sub Total" @bind-Value="SubTotal" For="() => SubTotal"></MudNumericField>
+
+            <MudNumericField Label="Vat" @bind-Value="Vat" For="() => Vat"></MudNumericField>
+
+            <MudNumericField Label="VAT Rate" @bind-Value="VatRate" For="() => VatRate"></MudNumericField>
+
+            <MudNumericField Label="Total" @bind-Value="Total" For="() => Total"></MudNumericField>
+
+            *@
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Required]
+    [Parameter] public DateTime? Date { get; set; } = DateTime.Now;
+
+    [Required]
+    [Parameter] public TimeSpan? Time { get; set; } = DateTime.Now.TimeOfDay;
+
+    async Task Submit()
+    {
+        await InvoicesClient.CreateInvoiceAsync(
+            new CreateInvoice ()
+            {
+                Date = Date.GetValueOrDefault()
+            });
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

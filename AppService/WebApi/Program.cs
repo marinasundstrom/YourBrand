@@ -41,6 +41,8 @@ static class Program
 
         builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
+        Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+
         services.AddApplication(Configuration);
         services.AddInfrastructure(Configuration);
         services.AddServices();

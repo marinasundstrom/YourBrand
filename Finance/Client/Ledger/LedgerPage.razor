@@ -1,0 +1,138 @@
+﻿@page "/ledger"
+@using Finance.Client
+@inject NavigationManager NavigationManager
+@inject IEntriesClient EntriesClient
+@inject IVerificationsClient VerificationsClient 
+
+<PageTitle>@title</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@title</MudText>
+
+@if(verification is not null)
+{
+    <MudCard Class="mb-4">
+        <MudCardContent>
+            <MudText Typo="@Typo.subtitle1">@verification.Date.Date.ToShortDateString()</MudText>
+            <MudText Typo="@Typo.body1">@verification.Description</MudText>
+
+            @if(verification.InvoiceId is not null) 
+            {
+                <div class="mt-4">
+                    <MudText Typo="@Typo.subtitle2">Invoice</MudText>
+                    <MudLink Typo="@Typo.body1" Href="@($"/invoices/{verification.InvoiceId}")" Class="mt-4">@verification.InvoiceId</MudLink>
+                </div>
+            }
+
+            <div class="mt-4">
+                @if(verification.Attachments.Any()) 
+                {
+                    <MudText Typo="@Typo.subtitle2">Attachment</MudText>
+                    @foreach (var attachment in verification.Attachments)
+                    {
+                        <MudLink Typo="@Typo.body1" Href="@attachment.Url">@attachment.Name</MudLink>
+                    }
+                }
+            </div>
+        </MudCardContent>
+    </MudCard>
+}
+
+<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Date</MudTh>
+        <MudTh>Verification No</MudTh>
+        <MudTh colspan="2">Account</MudTh>
+        @*
+        <MudTh>Debit</MudTh>
+        <MudTh>Credit</MudTh
+        *@
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="entry">
+        <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Verification No">
+            <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
+        </MudTd>
+        <MudTd DataLabel="Account No"><MudLink Href="@($"/accounts/{entry.Account.AccountNo}")">@entry.Account.AccountNo</MudLink></MudTd>
+        <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
+        @*
+        <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
+        <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
+        *@
+        <MudTd DataLabel="Amount">@((entry.Debit.GetValueOrDefault() - entry.Credit.GetValueOrDefault()).ToString("c"))</MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    MudTable<EntryDto>? table = null!;
+    VerificationDto? verification;
+
+    string title = "Ledger";
+    bool loading = false;
+
+    [SupplyParameterFromQuery]
+    [Parameter]
+    public int? VerificationId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        title = $"Ledger";
+
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs ea)
+    {
+        if (table is not null)
+        {
+            table.CurrentPage = 0;
+            await table.ReloadServerData();
+        }
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    private async Task<TableData<EntryDto>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await EntriesClient.GetEntriesAsync(null, VerificationId, state.Page, state.PageSize, ResultDirection.Desc);
+
+            Console.WriteLine($"VerificationId: {VerificationId}");
+
+            if (VerificationId is not null)
+            {
+                var description = result.Entries.First().Verification.Description;
+
+                title = (!string.IsNullOrEmpty(description) ? $"{VerificationId} - {description}" : VerificationId.ToString())!;
+
+                verification = await VerificationsClient.GetVerificationAsync(VerificationId.GetValueOrDefault());
+            }
+            else
+            {
+                title = $"Ledger";
+                verification = null;
+            }
+
+            StateHasChanged();
+
+            return new TableData<EntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

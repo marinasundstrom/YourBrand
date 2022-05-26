@@ -1,0 +1,118 @@
+﻿@page "/accounts"
+@using System.ComponentModel.DataAnnotations
+@using Accounting
+@inject NavigationManager NavigationManager
+@inject IAccountsClient AccountsClient
+
+<PageTitle>Accounts</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Accounts</MudText>
+
+<MudCheckBox Checked="includeBlankAccounts" CheckedChanged="new Func<bool, Task>(OnIncludeBlankAccountsChecked)" Label="Show blank accounts" Class="mb-4"></MudCheckBox>
+
+<MudCheckBox Checked="includeUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnIncludeUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
+
+<MudTable T="AccountDto" Items="accounts" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<AccountDto, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+    <ToolBarContent>
+        @if (accountClasses is not null)
+        {
+            <MudSelect T="int?" Label="Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mt-0">
+                <MudSelectItem Value="@((int?)null)">All</MudSelectItem>
+                @foreach (AccountClassDto accountClass in accountClasses)
+                {
+                    <MudSelectItem Value="@((int?)accountClass.Id)">@accountClass.Description</MudSelectItem>
+                }
+            </MudSelect>
+        }
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Immediate="true" DebounceInterval="200"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Account No</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="account">
+        <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
+        <MudTd DataLabel="Name">@account.Name</MudTd>
+        <MudTd DataLabel="Description">@account.Description</MudTd>
+        <MudTd DataLabel="Balance">@account.Balance.ToString("c")</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code
+{
+    IEnumerable<AccountClassDto>? accountClasses = null;
+    IEnumerable<AccountDto>? accounts = null;
+    bool includeBlankAccounts = false;
+    bool includeUnusedAccounts = false;
+    int? accountClass = null;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        accountClasses = await AccountsClient.GetAccountClassesAsync();
+
+        await LoadData();
+    }
+
+    async Task LoadData()
+    {
+        accounts = await AccountsClient.GetAccountsAsync(accountClass, includeBlankAccounts, includeUnusedAccounts);
+    }
+
+    async Task OnIncludeUnusedAccountsChecked(bool v)
+    {
+        includeUnusedAccounts = v;
+
+        await LoadData();
+
+        StateHasChanged();
+    }
+
+    async Task OnIncludeBlankAccountsChecked(bool v)
+    {
+        includeBlankAccounts = v;
+
+        await LoadData();
+
+        StateHasChanged();
+    }
+
+    async Task OnAccountClassChanged(int? v)
+    {
+        accountClass = v;
+
+        await LoadData();
+
+        StateHasChanged();
+    }
+
+    void ItemClicked(TableRowClickEventArgs<AccountDto> e)
+    {
+        NavigationManager.NavigateTo($"/accounts/{e.Item.AccountNo}");
+    }
+
+    private bool FilterFunc(AccountDto account) => FilterFunc2(account, searchString);
+
+    private bool FilterFunc2(AccountDto account, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        if(int.TryParse(searchString, out int v))
+        {
+            if (account.AccountNo.ToString().StartsWith(searchString))
+                return true;
+        }
+
+        if (account.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (account.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+}

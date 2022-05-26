@@ -1,0 +1,697 @@
+﻿{
+  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "Accounting API",
+    "version": "0.1"
+  },
+  "host": "localhost:5020",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "text/plain",
+    "application/json",
+    "text/json"
+  ],
+  "paths": {
+    "/Accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccounts",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "accountClass",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          },
+          {
+            "type": "boolean",
+            "name": "includeBlankAccounts",
+            "in": "query",
+            "default": true,
+            "x-nullable": false
+          },
+          {
+            "type": "boolean",
+            "name": "includeUnusedAccounts",
+            "in": "query",
+            "default": false,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Accounts/{accountNo}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccount",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "accountNo",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AccountDto"
+            }
+          }
+        }
+      }
+    },
+    "/Accounts/Classes": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccountClasses",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountClassDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Accounts/Classes/Summary": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccountClassSummary",
+        "parameters": [
+          {
+            "type": "array",
+            "name": "accountNo",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountClassSummary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Accounts/History": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccountHistory",
+        "parameters": [
+          {
+            "type": "array",
+            "name": "accountNo",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AccountBalanceHistory"
+            }
+          }
+        }
+      }
+    },
+    "/Entries": {
+      "get": {
+        "tags": [
+          "Entries"
+        ],
+        "operationId": "Entries_GetEntries",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "accountNo",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "verificationId",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "direction",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/ResultDirection"
+            },
+            "default": "Asc",
+            "x-nullable": false,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/EntriesResult"
+            }
+          }
+        }
+      }
+    },
+    "/Verifications": {
+      "get": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_GetVerifications",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/VerificationsResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_CreateVerification",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateVerification"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "/Verifications/{verificationId}": {
+      "get": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_GetVerification",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "verificationId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/VerificationDto"
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/{verificationId}/Attachment": {
+      "post": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_AddFileAttachmentToVerification",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "verificationId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AccountDto": {
+      "type": "object",
+      "required": [
+        "accountNo",
+        "class",
+        "name",
+        "description",
+        "balance"
+      ],
+      "properties": {
+        "accountNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "class": {
+          "$ref": "#/definitions/AccountClassDto"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "AccountClassDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "AccountClassSummary": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "balance"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "AccountBalanceHistory": {
+      "type": "object",
+      "required": [
+        "labels",
+        "series"
+      ],
+      "properties": {
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccountSeries"
+          }
+        }
+      }
+    },
+    "AccountSeries": {
+      "type": "object",
+      "required": [
+        "name",
+        "data"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      }
+    },
+    "EntriesResult": {
+      "type": "object",
+      "required": [
+        "entries",
+        "totalItems"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EntryDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "EntryDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "verification",
+        "account",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verification": {
+          "$ref": "#/definitions/VerificationShort"
+        },
+        "account": {
+          "$ref": "#/definitions/AccountShortDto"
+        },
+        "description": {
+          "type": "string"
+        },
+        "debit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "credit": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "VerificationShort": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "AccountShortDto": {
+      "type": "object",
+      "required": [
+        "accountNo",
+        "name"
+      ],
+      "properties": {
+        "accountNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ResultDirection": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Desc",
+        "Asc"
+      ],
+      "enum": [
+        "Desc",
+        "Asc"
+      ]
+    },
+    "VerificationsResult": {
+      "type": "object",
+      "required": [
+        "verifications",
+        "totalItems"
+      ],
+      "properties": {
+        "verifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VerificationDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "VerificationDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "description",
+        "debit",
+        "credit",
+        "attachments"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "debit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "credit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttachmentDto"
+          }
+        }
+      }
+    },
+    "AttachmentDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "url"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateVerification": {
+      "type": "object",
+      "required": [
+        "description",
+        "entries"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateEntry"
+          }
+        }
+      }
+    },
+    "CreateEntry": {
+      "type": "object",
+      "required": [
+        "accountNo"
+      ],
+      "properties": {
+        "accountNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "type": "string"
+        },
+        "debit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "credit": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    }
+  }
+}

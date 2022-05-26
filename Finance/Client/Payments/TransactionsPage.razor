@@ -1,0 +1,210 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client;
+
+@page "/transactions"
+@implements IAsyncDisposable
+
+@inject ITransactionsClient TransactionsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<PageTitle>Transactions</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Transactions</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="NewTransaction" Class="mb-2">New transaction</MudButton>
+
+<MudTable T="TransactionDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateTransactionReference(e.Item)" >
+     <ToolBarContent>
+        <MudSpacer />
+        <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+            @foreach (var status in Enum.GetValues<TransactionStatus>())
+            {
+                <MudSelectItem T="TransactionStatus?" Value="@status">@Enum.GetName(typeof(TransactionStatus), status)</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+    
+     <HeaderContent>
+         <MudTh>Id</MudTh>
+         <MudTh>Date</MudTh>
+         <MudTh>Status</MudTh>
+         <MudTh>From</MudTh>
+         <MudTh>Reference</MudTh>
+         <MudTh>Currency</MudTh>
+         <MudTh>Amount</MudTh>
+         <MudTh>Invoice Id</MudTh>
+     </HeaderContent>
+    <RowTemplate Context="transaction">
+        <MudTd DataLabel="Id">@transaction.Id</MudTd>
+        <MudTd DataLabel="Date">@transaction.Date?.ToString("g")</MudTd>
+        <MudTd DataLabel="Status">@transaction.Status</MudTd>
+        <MudTd DataLabel="From">@transaction.From</MudTd>
+        <MudTd DataLabel="Reference">@transaction.Reference</MudTd>
+        <MudTd DataLabel="Currency">@transaction.Currency</MudTd>
+        <MudTd DataLabel="Amount">@transaction.Amount.ToString("c")</MudTd>
+        <MudTd DataLabel="Invoice Id"><MudLink Href="@($"/invoices/{transaction.InvoiceId}")">@transaction.InvoiceId</MudLink></MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    MudTable<TransactionDto> table = null!;
+    bool loading = false;
+    HubConnection hubConnection = null!;
+    TransactionStatus? Status;
+    HashSet<TransactionStatus?> selectedStatuses = new HashSet<TransactionStatus?>();
+
+    private async Task<TableData<TransactionDto>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!), null);
+
+            return new TableData<TransactionDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    public async Task NewTransaction()
+    {
+        var dialogRef = DialogService.Show<NewTransactionDialog>("New transaction");
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+
+    public async Task UpdateTransactionReference(TransactionDto transaction)
+    {
+        DialogParameters dialogParameters = new ();
+        dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.TransactionId), transaction.Id);
+        dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.Reference), transaction.Reference);
+
+        var dialogRef = DialogService.Show<UpdateTransactionReferenceDialog>("Update reference", dialogParameters);
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{NavigationManager.BaseUri}transactions/hubs/transactions")
+            .WithAutomaticReconnect()
+            .Build();
+
+            hubConnection.On<string, TransactionStatus>("TransactionStatusUpdated", TransactionStatusUpdated);
+            hubConnection.On<string, int?>("TransactionInvoiceIdUpdated", TransactionInvoiceIdUpdated);
+
+            hubConnection.Closed += (error) =>
+            {
+                if (error is not null)
+                {
+                    Snackbar.Add($"{error.Message}", Severity.Error);
+                }
+
+                Snackbar.Add("Connection closed");
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnected += (error) =>
+            {
+                Snackbar.Add("Reconnected");
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnecting += (error) =>
+            {
+                Snackbar.Add("Reconnecting");
+                return Task.CompletedTask;
+            };
+
+            await hubConnection.StartAsync();
+
+            Snackbar.Add("Connected");
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+    }
+
+    Task TransactionStatusUpdated(string id, TransactionStatus status)
+    {
+        var result = GetTableData();
+
+        if(result is not null)
+        {
+            var transaction = result.Items.FirstOrDefault(t => t.Id == id);
+
+            if(transaction is not null) 
+            {
+                transaction.Status = status;
+                
+                StateHasChanged();
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    Task TransactionInvoiceIdUpdated(string id, int? invoiceId)
+    {
+        var result = GetTableData();
+
+        if(result is not null)
+        {
+            var transaction = result.Items.FirstOrDefault(t => t.Id == id);
+
+            if(transaction is not null) 
+            {
+                transaction.InvoiceId = invoiceId;
+                
+                StateHasChanged();
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await hubConnection.DisposeAsync();
+    }
+
+    private async Task OnSelectedValuesChanged(HashSet<TransactionStatus?> selectedValues) 
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+
+        StateHasChanged();
+    }
+
+    private TableData<TransactionDto>? GetTableData() 
+    {
+        return (TableData<TransactionDto>?)table?.GetType()?
+            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic | 
+                         System.Reflection.BindingFlags.Instance)?
+            .GetValue(table);
+    }
+}

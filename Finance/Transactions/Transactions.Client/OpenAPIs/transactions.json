@@ -1,0 +1,323 @@
+﻿{
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "Transactions API",
+    "version": "0.1"
+  },
+  "host": "localhost:5040",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "Get",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_PostTransactions",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "TransactionDto[]",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TransactionDto"
+              }
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}/status": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_SetTransactionStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/TransactionStatus"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Unverified",
+              "Verified",
+              "Payback",
+              "Unknown"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}/reference": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_SetTransactionReference",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}/invoiceId": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_SetTransactionInvoiceId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_GetTransactions",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/TransactionStatus"
+            }
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfTransactionDto"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Unit": {
+      "type": "object",
+      "description": "Represents a void type, since Void is not a valid return type in C#."
+    },
+    "TransactionDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "from",
+        "reference",
+        "currency",
+        "amount"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/TransactionStatus"
+        },
+        "from": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "TransactionStatus": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Unverified",
+        "Verified",
+        "Payback",
+        "Unknown"
+      ],
+      "enum": [
+        "Unverified",
+        "Verified",
+        "Payback",
+        "Unknown"
+      ]
+    },
+    "ItemsResultOfTransactionDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TransactionDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

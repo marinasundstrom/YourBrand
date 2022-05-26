@@ -1,0 +1,745 @@
+﻿{
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "Invoices API",
+    "version": "0.1"
+  },
+  "host": "localhost:5050",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "Get",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoice",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceDto"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/File": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoiceFile",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Items": {
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_AddItem",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "productType",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/ProductType"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Good",
+              "Service"
+            ]
+          },
+          {
+            "type": "string",
+            "name": "description",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "number",
+            "name": "unitPrice",
+            "in": "query",
+            "required": true,
+            "format": "decimal",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "unit",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "number",
+            "name": "vatRate",
+            "in": "query",
+            "required": true,
+            "format": "double",
+            "x-nullable": false
+          },
+          {
+            "type": "number",
+            "name": "quantity",
+            "in": "query",
+            "required": true,
+            "format": "double",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceItemDto"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices": {
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_CreateInvoice",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "CreateInvoice",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateInvoice"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceDto"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoices",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "array",
+            "name": "type",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/InvoiceType"
+            }
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/InvoiceStatus"
+            }
+          },
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "query",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfInvoiceDto"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Status": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetInvoiceStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/InvoiceStatus"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Draft",
+              "Sent",
+              "Paid",
+              "PartiallyPaid",
+              "Overpaid",
+              "Repaid",
+              "PartiallyRepaid",
+              "Reminder",
+              "Void"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/PaidAmount": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetPaidAmount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "number",
+            "name": "amount",
+            "in": "query",
+            "required": true,
+            "format": "decimal",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Date": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetDate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Type": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetType",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/InvoiceType"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Invoice",
+              "Credit"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/DueDate": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetDueDate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "dueDate",
+            "in": "query",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Reference": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetReference",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "query",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Note": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_SetNote",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "note",
+            "in": "query",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "InvoiceDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "status",
+        "items",
+        "subTotal",
+        "vat",
+        "total"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "$ref": "#/definitions/InvoiceType"
+        },
+        "status": {
+          "$ref": "#/definitions/InvoiceStatus"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InvoiceItemDto"
+          }
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "vat": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "total": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "paid": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "InvoiceType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Invoice",
+        "Credit"
+      ],
+      "enum": [
+        "Invoice",
+        "Credit"
+      ]
+    },
+    "InvoiceStatus": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Draft",
+        "Sent",
+        "Paid",
+        "PartiallyPaid",
+        "Overpaid",
+        "Repaid",
+        "PartiallyRepaid",
+        "Reminder",
+        "Void"
+      ],
+      "enum": [
+        "Draft",
+        "Sent",
+        "Paid",
+        "PartiallyPaid",
+        "Overpaid",
+        "Repaid",
+        "PartiallyRepaid",
+        "Reminder",
+        "Void"
+      ]
+    },
+    "InvoiceItemDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "productType",
+        "description",
+        "unitPrice",
+        "unit",
+        "vatRate",
+        "quantity",
+        "lineTotal"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "productType": {
+          "$ref": "#/definitions/ProductType"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "double"
+        },
+        "lineTotal": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "ProductType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Good",
+        "Service"
+      ],
+      "enum": [
+        "Good",
+        "Service"
+      ]
+    },
+    "CreateInvoice": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/InvoiceStatus"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "Unit": {
+      "type": "object",
+      "description": "Represents a void type, since Void is not a valid return type in C#."
+    },
+    "ItemsResultOfInvoiceDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InvoiceDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

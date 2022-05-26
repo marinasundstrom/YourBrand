@@ -1,0 +1,115 @@
+﻿@inject IInvoicesClient InvoicesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@page "/invoices"
+
+<PageTitle>Invoices</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoices</MudText>
+
+<MudButton Variant="Variant.Filled" Link="/invoices/new" Class="mb-2">New invoice</MudButton>
+
+<MudTable T="InvoiceDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+    <ToolBarContent>
+        <MudSelect T="InvoiceType?" Label="Type" MultiSelection="true" @bind-Value="Type" SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
+            @foreach (var type in Enum.GetValues<InvoiceType>())
+            {
+                <MudSelectItem T="InvoiceType?" Value="@type">@Enum.GetName(typeof(InvoiceType), type)</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSpacer />
+        <MudSelect T="InvoiceStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+            @foreach (var status in Enum.GetValues<InvoiceStatus>())
+            {
+                <MudSelectItem T="InvoiceStatus?" Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+    
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Status</MudTh>
+        <MudTh>Sub Total</MudTh>
+        <MudTh>VAT</MudTh>
+        <MudTh>Total</MudTh>
+        <MudTh>Paid</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="invoice">
+        <MudTd DataLabel="Id">@invoice.Id</MudTd>
+        <MudTd DataLabel="Type">@invoice.Type</MudTd>
+        <MudTd DataLabel="Date">@invoice.Date.GetValueOrDefault().ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="Status">@invoice.Status</MudTd>
+        <MudTd DataLabel="Sub Total">@invoice.SubTotal.ToString("c")</MudTd>
+        <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
+        <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
+        <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
+        </MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    MudTable<InvoiceDto> table;
+    bool loading = false;
+    InvoiceType? Type;
+    HashSet<InvoiceType?> selectedTypes = new HashSet<InvoiceType?>();
+    InvoiceStatus? Status;
+    HashSet<InvoiceStatus?> selectedStatuses = new HashSet<InvoiceStatus?>();
+
+    private async Task<TableData<InvoiceDto>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, selectedTypes.Select(s => (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus)s!), null);
+
+            return new TableData<InvoiceDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    public async Task NewInvoice()
+    {
+        var dialogRef = DialogService.Show<NewInvoiceDialog>("New invoice");
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+
+    public async Task GoTo(InvoiceDto invoice)
+    {
+        NavigationManager.NavigateTo($"/invoices/{invoice.Id}");
+    }
+
+    private async Task OnSelectedTypesChanged(HashSet<InvoiceType?> selectedTypes) 
+    {
+        this.selectedTypes = selectedTypes;
+        await table.ReloadServerData();
+    }
+
+    private async Task OnSelectedValuesChanged(HashSet<InvoiceStatus?> selectedValues) 
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+}

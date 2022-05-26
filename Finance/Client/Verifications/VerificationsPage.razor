@@ -1,0 +1,98 @@
+﻿@page "/verifications"
+@using Finance.Client
+@inject NavigationManager NavigationManager
+@inject IVerificationsClient VerificationsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<PageTitle>Verifications</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Verifications</MudText>
+
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/verifications/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+    Create verification
+</MudButton>
+
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/verifications/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+    Register sale
+</MudButton>
+
+<MudTable ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Verification No</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Description</MudTh>
+        @*
+        <MudTh>Debit</MudTh>
+        <MudTh>Credit</MudTh>
+        *@
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="verification">
+        <MudTd DataLabel="Verification No">
+            <MudLink Href="@($"/ledger?verificationId={verification.Id}")">@verification.Id</MudLink>
+        </MudTd>
+        <MudTd DataLabel="Date">@verification.Date.ToString("g")</MudTd>
+        <MudTd DataLabel="Description">@verification.Description</MudTd>
+        @*
+        <MudTd DataLabel="Debit">@verification.Debit.ToString("c")</MudTd>
+        <MudTd DataLabel="Credit">@verification.Credit.ToString("c")</MudTd>
+        *@
+        <MudTd DataLabel="Amount">@verification.Debit.ToString("c")</MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    bool loading = false;
+
+    private async Task<TableData<VerificationDto>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await VerificationsClient.GetVerificationsAsync(state.Page, state.PageSize);
+
+            return new TableData<VerificationDto>() { TotalItems = result.TotalItems, Items = result.Verifications };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task OpenNewVerificationDialog()
+    {
+        /*
+        var dialogReference = DialogService.Show<NewVerificationDialog>("New Verification");
+
+        var result = await dialogReference.Result;
+
+        if (result.Cancelled) return;
+
+        Snackbar.Add("The reactor is running at optimum temperature", Severity.Success);
+        */
+
+        NavigationManager.NavigateTo("/verifications/new");
+    }
+
+    class VerificationViewModel
+    {
+        public int VerificationId { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public string Description { get; set; } = null!;
+
+        public decimal Debit { get; set; }
+
+        public decimal Credit { get; set; }
+    }
+}

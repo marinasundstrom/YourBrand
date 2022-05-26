@@ -1,0 +1,343 @@
+﻿@page "/verifications/new"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+@inject IAccountsClient AccountsClient
+@inject IVerificationsClient VerificationsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<PageTitle>New Verification</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">New Verification</MudText>
+
+    <EditForm Model="@formModel" OnValidSubmit="OnValidSubmit">
+        <MudPaper Elevation="2" Class="pa-4">
+
+        <ObjectGraphDataAnnotationsValidator />
+
+        <MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Text"
+            StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
+
+        <MudTable @ref="table" Items="@formModel.Entries" Dense="false" Hover="@true" ReadOnly="@false"
+            CanCancelEdit="@true" SortLabel="Sort By" CommitEditTooltip="Commit Edit" Elevation="0"
+            OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem"
+            RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Entries</MudText>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<EntryDto, object>(x=>x.Account.AccountNo)">Account
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<EntryDto, object?>(x=>x.Debit)">Debit</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortBy="new Func<EntryDto, object?>(x=>x.Credit)">Credit</MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate Context="account">
+                <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
+                <MudTd DataLabel="Debit">@account.Debit</MudTd>
+                <MudTd DataLabel="Credit">@account.Credit</MudTd>
+            </RowTemplate>
+            <RowEditingTemplate Context="account">
+                <MudTd DataLabel="Account">
+                    <MudAutocomplete @bind-Value="account.Account" SearchFunc="@Search"
+                        ToStringFunc="@(e=> e==null?null : $"{e.AccountNo} {e.Name}")">
+                        <ItemTemplate Context="e">
+                            <MudText>
+                                @($"{e.AccountNo} {e.Name}")
+                            </MudText>
+                        </ItemTemplate>
+                        <ItemSelectedTemplate Context="e">
+                            <MudText>
+                                @($"{e.AccountNo} {e.Name}")
+                            </MudText>
+                        </ItemSelectedTemplate>
+                    </MudAutocomplete>
+                </MudTd>
+                <MudTd DataLabel="Debit">
+                    <MudNumericField @bind-Value="account.Debit" Step="0.1m" Variant="Variant.Text"
+                        For="@(() => account.Debit)" Adornment="Adornment.Start"
+                        AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
+                </MudTd>
+                <MudTd DataLabel="Credit">
+                    <MudNumericField @bind-Value="account.Credit" Step="0.1m" Variant="Variant.Text"
+                        For="@(() => account.Credit)" Adornment="Adornment.Start"
+                        AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
+                </MudTd>
+            </RowEditingTemplate>
+            <FooterContent>
+                <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer">
+                    <MudText Typo="Typo.body1"><b>Total</b></MudText>
+                </MudTh>
+                <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer">
+                    <MudText Typo="Typo.body1">@formModel.Debit</MudText>
+                </MudTh>
+                <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer">
+                    <MudText Typo="Typo.body1">@formModel.Credit</MudText>
+                </MudTh>
+            </FooterContent>
+        </MudTable>
+
+        <MudTextField T="string" Label="Description"
+            HelperText="@(formModel.Description is null ? "Optional" : $"{formModel.Description.Length}/240")"
+            Variant="Variant.Outlined" @bind-Value="formModel.Description" Lines="3" Class="my-4"
+            For="@(() => formModel.Description)" />
+
+    </MudPaper>
+
+    <MudPaper Elevation="2" Class="mt-4 py-4 px-4">
+        <MudText Typo="Typo.h6" Class="mb-4">Document</MudText>
+        <MudPaper @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="300px" Outlined="true" Class="@DragClass">
+            @if (!Clearing)
+            {
+                <InputFile OnChange="OnInputFileChanged" multiple class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity:0;" />
+            }
+            <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
+            @foreach (var file in files)
+            {
+                <MudChip Color="Color.Dark" Text="@file.Name" OnClose="() => RemoveFile(file)" />
+            }
+        </MudPaper>
+        <MudToolBar DisableGutters="true" Class="gap-4">
+            @if (files.Any())
+            {
+                <MudButton OnClick="Clear" Color="Color.Error" Variant="Variant.Filled">Clear</MudButton>
+            }
+        </MudToolBar>
+    </MudPaper>
+
+    <MudPaper Class="mt-4 py-4 px-4">
+        <MudText Color="@Color.Error">
+            <ValidationSummary />
+        </MudText>
+    </MudPaper>
+
+    <div class="d-flex justify-center flex-grow-1 gap-4">
+        @if (formModel.Entries.Any())
+        {
+            <MudButton ButtonType="ButtonType.Submit" Size="Size.Large" Disabled="isEditingEntry" Variant="Variant.Filled" Color="Color.Primary"
+            StartIcon="@Icons.Material.Outlined.Save" Class="mt-2">Save</MudButton>
+        }
+    </div>
+    </EditForm>
+
+    @code
+    {
+        MudTable<EntryFormModel> table = null!;
+
+        List<AccountDto> accounts = new List<AccountDto>();
+
+        VerificationFormModel formModel = new VerificationFormModel();
+
+        EntryFormModel? elementBeforeEdit;
+
+        bool isEditingEntry = false;
+
+        protected override async Task OnInitializedAsync()
+        {
+            accounts.AddRange(
+            await AccountsClient.GetAccountsAsync(null, true, true));
+        }
+
+        void AddEntry()
+        {
+            var item = new EntryFormModel() { Account = null };
+            formModel.Entries.Add(item);
+
+            table.SetEditingItem(item);
+
+            isEditingEntry = true;
+
+            StateHasChanged();
+        }
+
+        private void BackupItem(object element)
+        {
+            elementBeforeEdit = new()
+            {
+                Account = ((EntryFormModel)element).Account,
+                Debit = ((EntryFormModel)element).Debit,
+                Credit = ((EntryFormModel)element).Credit
+            };
+
+            isEditingEntry = true;
+
+            StateHasChanged();
+        }
+
+        private void ItemHasBeenCommitted(object element)
+        {
+            isEditingEntry = false;
+
+            StateHasChanged();
+        }
+
+        private void ResetItemToOriginalValues(object element)
+        {
+            if (elementBeforeEdit is not null)
+            {
+                ((EntryFormModel)element).Account = elementBeforeEdit.Account;
+                ((EntryFormModel)element).Debit = elementBeforeEdit.Debit;
+                ((EntryFormModel)element).Credit = elementBeforeEdit.Credit;
+            }
+
+            isEditingEntry = false;
+
+            StateHasChanged();
+        }
+
+        private async Task OnValidSubmit()
+        {
+            if (!files.Any())
+            {
+                var r = await DialogService.ShowMessageBox("Verification lacks attachment", "Are you sure that you want to continue?",
+                "Yes", "No");
+
+                if (!r.GetValueOrDefault())
+                {
+                    // Abort
+                    return;
+                }
+            }
+
+            var verification = new CreateVerification
+            {
+                Description = formModel.Description ?? String.Empty
+            };
+
+            var entries = new List<CreateEntry>();
+
+            entries.AddRange(formModel.Entries.Select(e => new CreateEntry
+            {
+                AccountNo = e.Account!.AccountNo,
+                Description = String.Empty,
+                Debit = e.Debit,
+                Credit = e.Credit
+            }));
+
+            verification.Entries = entries;
+
+            var verificationId = await VerificationsClient.CreateVerificationAsync(verification);
+
+            foreach (var file in files)
+            {
+                await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, string.Empty, null, new FileParameter(file.OpenReadStream(10
+                * 10000), file.Name));
+            }
+
+            NavigationManager.NavigateTo("/verifications");
+        }
+
+        private Task<IEnumerable<AccountDto>> Search(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return Task.FromResult<IEnumerable<AccountDto>>(accounts);
+            }
+
+            return Task.FromResult(accounts.Where(a => a.AccountNo.ToString().Contains(value) ||
+            a.Name.ToLower().Contains(value.ToLower())));
+        }
+
+        class VerificationFormModel
+        {
+            [MaxLength(240, ErrorMessage = "Max 240 characters")]
+            public string? Description { get; set; }
+
+            [ValidateComplexType]
+            public List<EntryFormModel> Entries { get; } = new List<EntryFormModel>();
+
+            public decimal Debit => Entries.Sum(e => e.Debit.GetValueOrDefault());
+
+            public decimal Credit => Entries.Sum(e => e.Credit.GetValueOrDefault());
+        }
+
+        [CustomValidator]
+        class EntryFormModel
+        {
+            [Required]
+            public AccountDto? Account { get; set; }
+
+            public decimal? Debit { get; set; }
+
+            public decimal? Credit { get; set; }
+        }
+
+        class AccountViewModel
+        {
+            public int AccountNo { get; set; }
+
+            public string Name { get; set; } = null!;
+        }
+
+        public class CustomValidator : ValidationAttribute
+        {
+            protected override ValidationResult IsValid(object? value,
+            ValidationContext validationContext)
+            {
+                var entryFormModel = (EntryFormModel)validationContext.ObjectInstance;
+
+                if (entryFormModel.Debit is null && entryFormModel.Credit is null)
+                {
+                    return new ValidationResult("Both cannot be null.",
+                    new[] { nameof(EntryFormModel.Debit), nameof(EntryFormModel.Credit) });
+                }
+                else if (entryFormModel.Debit is not null && entryFormModel.Credit is not null)
+                {
+                    return new ValidationResult("Both cannot be set.",
+                    new[] { nameof(EntryFormModel.Debit), nameof(EntryFormModel.Credit) });
+                }
+
+                return ValidationResult.Success!;
+            }
+        }
+
+        private bool Clearing = false;
+        private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
+        private string DragClass = DefaultDragClass;
+        private List<IBrowserFile> files = new List<IBrowserFile>();
+
+        private void OnInputFileChanged(InputFileChangeEventArgs e)
+        {
+            ClearDragClass();
+            var files = e.GetMultipleFiles();
+            foreach (var file in files)
+            {
+                this.files.Add(file);
+            }
+        }
+
+        private void RemoveFile(IBrowserFile file) 
+        {
+            files.Remove(file);
+        }
+
+        private async Task Clear()
+        {
+            Clearing = true;
+            files.Clear();
+            ClearDragClass();
+            await Task.Delay(100);
+            Clearing = false;
+        }
+        private void Upload()
+        {
+            //Upload the files here
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+            Snackbar.Add("TODO: Upload your files!", Severity.Normal);
+        }
+
+        private void SetDragClass()
+        {
+            DragClass = $"{DefaultDragClass} mud-border-primary";
+        }
+
+        private void ClearDragClass()
+        {
+            DragClass = DefaultDragClass;
+        }
+}

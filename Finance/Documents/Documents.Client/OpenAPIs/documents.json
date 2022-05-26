@@ -1,0 +1,275 @@
+﻿{
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "Documents API",
+    "version": "0.1"
+  },
+  "host": "localhost:5070",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/Documents": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GetDocuments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfDocumentDto"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/{id}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GetDocument",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DocumentDto"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/{id}/Rename": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_RenameDocument",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "newName",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/UploadDocument": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_UploadDocument",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DocumentDto"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/GenerateDocument": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GenerateDocument",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "templateId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "documentFormat",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/DocumentFormat"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Html",
+              "Pdf"
+            ]
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": true,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ItemsResultOfDocumentDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DocumentDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "DocumentDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "extension",
+        "contentType",
+        "url",
+        "created"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "extension": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Unit": {
+      "type": "object",
+      "description": "Represents a void type, since Void is not a valid return type in C#."
+    },
+    "DocumentFormat": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Html",
+        "Pdf"
+      ],
+      "enum": [
+        "Html",
+        "Pdf"
+      ]
+    }
+  }
+}

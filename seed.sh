@@ -28,6 +28,26 @@ echo "Seeding ApiKeys"
 dotnet run --project ./ApiKeys/ApiKeys/ApiKeys.csproj -- --seed --connection-string "$CS;Database=ApiKeys"
 echo "Done"
 
+# Finance
+
+echo "Seeding Accounting"
+dotnet run --project ./Finance/Accounting/Accounting/WebAPI/WebApi.csproj -- --seed --connection-string "$CS;Database=Accounting"
+echo "Done"
+
+echo "Seeding Documents"
+dotnet run --project ./Finance/Documents/Documents/Documents.csproj -- --seed --connection-string "$CS;Database=Documents"
+echo "Done"
+
+echo "Seeding Invoices"
+dotnet run --project ./Finance/Invoices/Invoices/Invoices.csproj -- --seed --connection-string "$CS;Database=Incoices"
+echo "Done"
+
+echo "Seeding Transactions"
+dotnet run --project ./Finance/Transactions/Transactions/Transactions.csproj -- --seed --connection-string "$CS;Database=Transactions"
+echo "Done"
+
+# End Finance
+
 dotnet run --project Seeder/Seeder.csproj
 
 echo "All done"

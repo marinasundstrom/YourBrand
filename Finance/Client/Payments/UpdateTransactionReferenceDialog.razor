@@ -1,0 +1,39 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject ITransactionsClient TransactionsClient
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Reference" @bind-Value="Reference" For="() => Reference"></MudTextField>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string TransactionId { get; set; } = null!;
+
+    [Required]
+    [Parameter] public string Reference { get; set; } = null!;
+
+    async Task Submit()
+    {
+        await TransactionsClient.SetTransactionReferenceAsync(
+            TransactionId,
+            Reference
+        );
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

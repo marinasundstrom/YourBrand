@@ -1,0 +1,109 @@
+﻿@page "/"
+@using System.ComponentModel.DataAnnotations
+@using Finance.Client
+@inject NavigationManager NavigationManager
+@inject IAccountsClient AccountsClient
+
+<PageTitle>Summary</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Summary</MudText>
+
+<MudText Class="mt-16" Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Accounts</MudText>
+
+<MudTable T="AccountClassSummaryItemViewModel" Class="mt-8 mb-16" Elevation="0" Items="accountClasses" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accountClasses is null)" LoadingProgressColor="Color.Info" OnRowClick="@(async (e) => await ToggleItem(e.Item.AccountClass.Id))">
+
+    <RowTemplate Context="context">
+        <MudTd><MudIconButton Icon="@(context.IsExpanded ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)" OnClick="@(async () => await ToggleItem(context.AccountClass.Id))" /></MudTd>
+        <MudTd DataLabel="Class">@context.AccountClass.Id</MudTd>
+        <MudTd DataLabel="Name">@context.AccountClass.Name</MudTd>
+        <MudTd DataLabel="Balance">@context.AccountClass.Balance.ToString("c")</MudTd>
+    </RowTemplate>
+
+    <ChildRowContent Context="context">
+        @if (context.IsExpanded)
+        {
+            <MudTr>
+
+                <td colspan="4">
+                    <MudTable T="AccountDto" Elevation="0" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+                        <HeaderContent>
+                            <MudTh></MudTh>
+                            <MudTh colspan="2">Account</MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
+                        </HeaderContent>
+
+                        <RowTemplate Context="account">
+                            <MudTh></MudTh>
+                            <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
+                            <MudTd DataLabel="Name">@account.Name</MudTd>
+                            <MudTd DataLabel="Balance">@account.Balance.ToString("c")</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </td>
+
+            </MudTr>
+        }
+    </ChildRowContent>
+</MudTable>
+
+<MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
+
+<MudChart Class="mt-8" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+@code {
+    private int[] accounts = new[] { 1510, 1930, 2013, 2018, 2440, 4000,
+        3000, 3001, 3002, 3003, 3040, 3041, 3042, 3043, 3050, 3051, 3052, 3053 };
+
+    private ChartOptions options = new ChartOptions();
+    public List<ChartSeries> Series = new List<ChartSeries>();
+    public string[] XAxisLabels = new string[0];
+
+    IEnumerable<AccountClassSummaryItemViewModel>? accountClasses = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var results = await AccountsClient.GetAccountClassSummaryAsync(default);
+
+        accountClasses = results.Select(x => new AccountClassSummaryItemViewModel { AccountClass = x }).ToList();
+
+        //options.InterpolationOption = InterpolationOption.NaturalSpline;
+        options.YAxisFormat = "c2";
+        options.YAxisTicks = 10_000;
+
+        var data = await AccountsClient.GetAccountHistoryAsync(accounts);
+        XAxisLabels = data.Labels.ToArray();
+
+        foreach (var d in data.Series)
+        {
+            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+
+        StateHasChanged();
+    }
+
+    async Task ToggleItem(int accountClassId)
+    {
+        AccountClassSummaryItemViewModel vm = accountClasses!.First(f => f.AccountClass.Id == accountClassId);
+
+        if (vm.Accounts is null)
+        {
+            vm.Accounts = await AccountsClient.GetAccountsAsync(vm.AccountClass.Id, false, false);
+        }
+
+        vm.IsExpanded = !vm.IsExpanded;
+
+        StateHasChanged();
+    }
+
+    void ItemClicked(TableRowClickEventArgs<AccountDto> e)
+    {
+        NavigationManager.NavigateTo($"/accounts/{e.Item.AccountNo}");
+    }
+
+    class AccountClassSummaryItemViewModel
+    {
+        public AccountClassSummary AccountClass { get; set; } = null!;
+        public IEnumerable<AccountDto> Accounts { get; set; } = null!;
+        public bool IsExpanded { get; set; } = false;
+    }
+}

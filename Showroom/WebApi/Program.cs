@@ -37,7 +37,7 @@ static class Program
 
         var Configuration = builder.Configuration;
 
-        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        builder.Configuration["ConnectionStrings:DefaultConnection"] =  connectionString;
 
         services.AddApplication(Configuration);
         services.AddInfrastructure(Configuration);

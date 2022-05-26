@@ -4,116 +4,188 @@
 # when you've given us a try, we'd love to know what you think:
 #    https://aka.ms/AA7q20u
 #
-name: webapi
+
+name: yourbrand
+
 services:
-- name: webapp
-  project: Portal/Portal/Portal.csproj
-  bindings:
-  - protocol: https
-    port: 5010
+  - name: azurite
+    image: mcr.microsoft.com/azure-storage/azurite
+    args: "azurite-blob --loose --blobHost 0.0.0.0 -l /data"
+    bindings:
+      - name: blob
+        port: 10000
+        containerPort: 10000
+        protocol: http
+      - name: queue
+        port: 10001
+        containerPort: 10001
+        protocol: http
+      - name: table
+        port: 10002
+        containerPort: 10002
+        protocol: http
+    volumes:
+      - source: .data/azurite
+        target: /data
 
-- name: webapi
-  project: AppService/WebApi/WebApi.csproj
-  bindings:
-  - protocol: https
-    port: 5020
+  - name: mssql
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    env:
+      - name: MSSQL_SA_PASSWORD
+        value: P@ssw0rd
+      - name: MSSQL_PID
+        value: Developer
+      - name: ACCEPT_EULA
+        value: "Y"
+    bindings:
+      - port: 1433
+        connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD}
+    volumes:
+      - source: .data/sql-edge
+        target: /var/opt/mssql/data
 
-- name: worker
-  project: Worker/Worker/Worker.csproj
-  bindings:
-  - protocol: https
-    port: 5030
+  - name: redis
+    image: redis
+    bindings:
+      - port: 6379
+        connectionString: "${host}:${port}"
 
-- name: identity
-  project: IdentityService/IdentityService/IdentityService.csproj
-  bindings:
-  - protocol: https
-    port: 5040
+  - name: redis-cli
+    image: redis
+    args: "redis-cli -h redis MONITOR"
 
-- name: timereport
-  project: TimeReport/WebApi/WebApi.csproj
-  bindings:
-  - protocol: https
-    port: 5050
+  - name: rabbitmq
+    image: rabbitmq:3-management
+    bindings:
+      - name: rabbit
+        port: 5672
+        protocol: rabbitmq
+      - name: management
+        port: 15672
 
-- name: showroom
-  project: Showroom/WebApi/WebApi.csproj
-  bindings:
-  - protocol: https
-    port: 5070
+  - name: nginx
+    image: nginx
+    bindings:
+      - name: http
+        protocol: http
+        port: 80
+      - name: https
+        protocol: https
+        port: 443
+    volumes:
+      - source: nginx.conf
+        target: /etc/nginx/templates/default.conf.template
+      - source: certs
+        target: /etc/nginx/certs
 
-- name: apikeys
-  project: ApiKeys/ApiKeys/ApiKeys.csproj
-  bindings:
-  - protocol: https
-    port: 5080
+  # - name: apikeys
+  #   include: ApiKeys/tye.yaml
 
-- name: azurite
-  image: mcr.microsoft.com/azure-storage/azurite
-  args: "azurite-blob --loose --blobHost 0.0.0.0 -l /data"
-  bindings:
-    - name: blob
-      port: 10000
-      containerPort: 10000
-      protocol: http
-    - name: queue
-      port: 10001
-      containerPort: 10001
-      protocol: http
-    - name: table
-      port: 10002
-      containerPort: 10002
-      protocol: http
-  volumes:
-    - source: .data/azurite
-      target: /data
+  # - name: appservice
+  #   include: AppService/tye.yaml
 
-- name: mssql
-  image: mcr.microsoft.com/azure-sql-edge:latest
-  env:
-  - name: MSSQL_SA_PASSWORD
-    value: P@ssw0rd
-  - name: MSSQL_PID
-    value: Developer
-  - name: ACCEPT_EULA
-    value: "Y"
-  bindings:
-    - port: 1433
-      connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD}
-  volumes:
-    - source: .data/sql-edge
-      target: /var/opt/mssql/data
+  # - name: finance
+  #   include: Finance/tye.yaml
 
-- name: redis
-  image: redis
-  bindings:
-  - port: 6379
-    connectionString: "${host}:${port}" 
-    
-- name: redis-cli
-  image: redis
-  args: "redis-cli -h redis MONITOR"
+  # - name: identityservice
+  #   include: IdentityService/tye.yaml
 
-- name: rabbitmq
-  image: rabbitmq:3-management
-  bindings:
-    - name: rabbit
-      port: 5672
-      protocol: rabbitmq
-    - name: management
-      port: 15672
+  # - name: portal
+  #   include: Portal/tye.yaml
 
-- name: nginx
-  image: nginx
-  bindings:
-    - name: http
-      protocol: http
-      port: 80
-    - name: https
-      protocol: https
-      port: 443
-  volumes:
-    - source: nginx.conf
-      target: /etc/nginx/templates/default.conf.template
-    - source: certs
-      target: /etc/nginx/certs
+  # - name: showroom
+  #   include: Showroom/tye.yaml
+
+  # - name: timereport
+  #   include: TimeReport/tye.yaml
+
+  # - name: worker
+  #   include: Worker/tye.yaml
+
+  - name: apikeys
+    project: ApiKeys/ApiKeys/ApiKeys.csproj
+    bindings:
+      - protocol: https
+        port: 5080
+
+  - name: appservice
+    project: AppService/WebApi/WebApi.csproj
+    bindings:
+      - protocol: https
+        port: 5020
+
+  # Start Finance
+
+  - name: financeapp
+    project: Finance/Client/Client.csproj
+    bindings:
+      - protocol: https
+        port: 5091
+
+  - name: accounting
+    project: Finance/Accounting/Accounting/WebApi/WebApi.csproj
+    bindings:
+      - protocol: https
+        port: 5092
+
+  - name: accountant
+    project: Finance/Accounting/Accountant/Accountant.csproj
+    bindings:
+      - protocol: https
+        port: 5093
+
+  - name: transactions
+    project: Finance/Transactions/Transactions/Transactions.csproj
+    bindings:
+      - protocol: https
+        port: 5094
+
+  - name: invoices
+    project: Finance/Invoices/Invoices/Invoices.csproj
+    bindings:
+      - protocol: https
+        port: 5095
+
+  - name: documents
+    project: Finance/Documents/Documents/Documents.csproj
+    bindings:
+      - protocol: https
+        port: 5096
+
+  - name: email
+    project: Finance/EmailService/EmailService/EmailService.csproj
+    bindings:
+      - protocol: https
+        port: 5097
+
+  # End Finance
+
+  - name: identity
+    project: IdentityService/IdentityService/IdentityService.csproj
+    bindings:
+      - protocol: https
+        port: 5040
+
+  - name: webapp
+    project: Portal/Portal/Portal.csproj
+    bindings:
+      - protocol: https
+        port: 5010
+
+  - name: showroom
+    project: Showroom/WebApi/WebApi.csproj
+    bindings:
+      - protocol: https
+        port: 5070
+
+  - name: timereport
+    project: TimeReport/WebApi/WebApi.csproj
+    bindings:
+      - protocol: https
+        port: 5050
+
+  - name: worker
+    project: Worker/Worker/Worker.csproj
+    bindings:
+      - protocol: https
+        port: 5030
