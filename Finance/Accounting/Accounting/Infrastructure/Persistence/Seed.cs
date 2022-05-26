@@ -1,10 +1,10 @@
-﻿using Accounting.Domain.Entities;
-using Accounting.Domain.Enums;
+﻿using YourBrand.Accounting.Domain.Entities;
+using YourBrand.Accounting.Domain.Enums;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounting.Infrastructure.Persistence;
+namespace YourBrand.Accounting.Infrastructure.Persistence;
 
 public static class Seed
 {

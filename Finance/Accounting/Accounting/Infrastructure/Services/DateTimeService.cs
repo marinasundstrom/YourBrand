@@ -1,6 +1,6 @@
-﻿using Accounting.Application.Common.Interfaces;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
 
-namespace Accounting.Infrastructure.Services;
+namespace YourBrand.Accounting.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

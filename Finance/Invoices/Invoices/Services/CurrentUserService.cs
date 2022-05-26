@@ -1,9 +1,9 @@
 ﻿
 using System.Security.Claims;
 
-using Invoices.Application.Common.Interfaces;
+using YourBrand.Invoices.Application.Common.Interfaces;
 
-namespace Invoices.Services;
+namespace YourBrand.Invoices.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

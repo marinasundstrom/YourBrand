@@ -1,7 +1,7 @@
 ﻿
-using Invoices.Contracts;
-using Invoices.Domain;
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Contracts;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Enums;
 
 using MassTransit;
 
@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Application.Commands;
+namespace YourBrand.Invoices.Application.Commands;
 
 public record SetInvoiceStatus(int InvoiceId, InvoiceStatus Status) : IRequest
 {

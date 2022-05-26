@@ -1,6 +1,6 @@
-﻿using Documents.Domain.Enums;
+﻿using YourBrand.Documents.Domain.Enums;
 
-namespace Documents.Domain.Entities;
+namespace YourBrand.Documents.Domain.Entities;
 
 public class DocumentTemplate
 {

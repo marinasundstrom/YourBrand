@@ -2,9 +2,9 @@
 
 using MediatR;
 
-using Transactions.Domain;
+using YourBrand.Transactions.Domain;
 
-namespace Transactions.Application.Commands;
+namespace YourBrand.Transactions.Application.Commands;
 
 public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequest
 {

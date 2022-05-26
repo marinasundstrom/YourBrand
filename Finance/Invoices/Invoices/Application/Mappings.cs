@@ -1,6 +1,6 @@
-using Invoices.Domain.Entities;
+using YourBrand.Invoices.Domain.Entities;
 
-namespace Invoices.Application;
+namespace YourBrand.Invoices.Application;
 
 public static class Mappings 
 {

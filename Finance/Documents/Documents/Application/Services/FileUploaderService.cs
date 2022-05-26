@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 
-using Documents.Application.Services;
+using YourBrand.Documents.Application.Services;
 
-namespace Documents.Application.Services;
+namespace YourBrand.Documents.Application.Services;
 
 public class FileUploaderService : IFileUploaderService
 {

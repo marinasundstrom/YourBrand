@@ -1,12 +1,12 @@
 ﻿
-using Accounting.Application.Common.Models;
-using Accounting.Domain.Events;
+using YourBrand.Accounting.Application.Common.Models;
+using YourBrand.Accounting.Domain.Events;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace Accounting.Application.EventHandlers;
+namespace YourBrand.Accounting.Application.EventHandlers;
 
 public class EntryCreatedEventHandler : INotificationHandler<DomainEventNotification<EntryCreatedEvent>>
 {

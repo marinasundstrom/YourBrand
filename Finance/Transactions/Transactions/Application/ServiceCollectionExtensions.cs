@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Transactions.Application;
+namespace YourBrand.Transactions.Application;
 
 public static class ServiceCollectionExtensions
 {

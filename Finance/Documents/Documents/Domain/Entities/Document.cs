@@ -1,7 +1,7 @@
-using Documents.Domain.Common;
-using Documents.Domain.Events;
+using YourBrand.Documents.Domain.Common;
+using YourBrand.Documents.Domain.Events;
 
-namespace Documents.Domain.Entities;
+namespace YourBrand.Documents.Domain.Entities;
 
 public class Document : AuditableEntity, IHasDomainEvents
 {

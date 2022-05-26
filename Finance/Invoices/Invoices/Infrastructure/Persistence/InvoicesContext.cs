@@ -1,11 +1,11 @@
-﻿using Invoices.Application.Common.Interfaces;
-using Invoices.Domain;
-using Invoices.Domain.Common;
-using Invoices.Domain.Entities;
+﻿using YourBrand.Invoices.Application.Common.Interfaces;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Common;
+using YourBrand.Invoices.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Infrastructure.Persistence;
+namespace YourBrand.Invoices.Infrastructure.Persistence;
 
 public class InvoicesContext : DbContext, IInvoicesContext
 {

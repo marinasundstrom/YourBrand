@@ -1,4 +1,4 @@
-﻿namespace Transactions.Contracts;
+﻿namespace YourBrand.Transactions.Contracts;
 
 public record TransactionBatch(IEnumerable<Transaction> Transactions);
 

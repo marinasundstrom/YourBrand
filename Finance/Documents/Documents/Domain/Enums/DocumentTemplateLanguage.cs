@@ -1,4 +1,4 @@
-﻿namespace Documents.Domain.Enums;
+﻿namespace YourBrand.Documents.Domain.Enums;
 
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum DocumentTemplateLanguage

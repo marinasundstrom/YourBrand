@@ -1,6 +1,6 @@
-﻿using Accounting.Domain.Common;
+﻿using YourBrand.Accounting.Domain.Common;
 
-namespace Accounting.Application.Common.Interfaces;
+namespace YourBrand.Accounting.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

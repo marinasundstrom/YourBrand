@@ -1,8 +1,8 @@
-﻿using Documents.Domain.Entities;
+﻿using YourBrand.Documents.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Domain;
+namespace YourBrand.Documents.Domain;
 
 public interface IDocumentsContext
 {

@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Documents.Application.Common.Interfaces;
-using Documents.Application.Common.Models;
-using Documents.Domain.Common;
+using YourBrand.Documents.Application.Common.Interfaces;
+using YourBrand.Documents.Application.Common.Models;
+using YourBrand.Documents.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace Documents.Infrastructure.Services;
+namespace YourBrand.Documents.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

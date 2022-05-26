@@ -1,9 +1,9 @@
-﻿using Accounting.Application.Common.Interfaces;
-using Accounting.Domain.Events;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain.Events;
 
 using MediatR;
 
-namespace Accounting.Application.Verifications.Commands;
+namespace YourBrand.Accounting.Application.Verifications.Commands;
 
 public record CreateVerificationCommand(string Description, int? InvoiceId, List<CreateEntry> Entries) : IRequest<int>
 {

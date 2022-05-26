@@ -5,9 +5,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Domain;
+using YourBrand.Transactions.Domain;
 
-namespace Transactions.Application.Commands;
+namespace YourBrand.Transactions.Application.Commands;
 
 public record UpdateTransactionReference(string TransactionId, string Reference) : IRequest
 {

@@ -1,6 +1,6 @@
-﻿using Transactions.Application.Common.Interfaces;
+﻿using YourBrand.Transactions.Application.Common.Interfaces;
 
-namespace Transactions.Infrastructure.Services;
+namespace YourBrand.Transactions.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

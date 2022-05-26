@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 
-using Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Application.Common.Interfaces;
 
-namespace Accounting.Services;
+namespace YourBrand.Accounting.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

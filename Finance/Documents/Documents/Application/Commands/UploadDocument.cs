@@ -1,9 +1,9 @@
-﻿using Documents.Application.Services;
-using Documents.Infrastructure.Persistence;
+﻿using YourBrand.Documents.Application.Services;
+using YourBrand.Documents.Infrastructure.Persistence;
 
 using MediatR;
 
-namespace Documents.Application.Commands;
+namespace YourBrand.Documents.Application.Commands;
 
 public record UploadDocument(string Title, string ContentType, Stream Stream) : IRequest<DocumentDto>
 {

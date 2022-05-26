@@ -1,9 +1,9 @@
-﻿using Documents.Domain.Entities;
-using Documents.Domain.Enums;
+﻿using YourBrand.Documents.Domain.Entities;
+using YourBrand.Documents.Domain.Enums;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Infrastructure.Persistence;
+namespace YourBrand.Documents.Infrastructure.Persistence;
 
 public class SeedData
 {

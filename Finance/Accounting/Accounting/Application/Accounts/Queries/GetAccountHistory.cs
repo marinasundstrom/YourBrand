@@ -1,11 +1,11 @@
 ﻿
-using Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Application.Accounts.Queries;
+namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceHistory>
 {

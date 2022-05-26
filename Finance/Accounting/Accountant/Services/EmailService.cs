@@ -1,8 +1,8 @@
-﻿namespace Accountant.Services;
+﻿namespace YourBrand.Accountant.Services;
 
 using MassTransit;
 
-using Worker.Contracts;
+using YourBrand.Worker.Contracts;
 
 public class EmailService : IEmailService
 {

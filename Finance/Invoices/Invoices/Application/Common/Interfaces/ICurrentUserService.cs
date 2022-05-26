@@ -1,4 +1,4 @@
-﻿namespace Invoices.Application.Common.Interfaces;
+﻿namespace YourBrand.Invoices.Application.Common.Interfaces;
 
 public interface ICurrentUserService
 {

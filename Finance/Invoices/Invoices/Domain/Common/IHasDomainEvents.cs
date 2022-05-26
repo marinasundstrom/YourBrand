@@ -1,4 +1,4 @@
-﻿namespace Invoices.Domain.Common;
+﻿namespace YourBrand.Invoices.Domain.Common;
 
 public interface IHasDomainEvents
 {

@@ -3,18 +3,18 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using Documents;
-using Documents.Application;
-using Documents.Application.Commands;
-using Documents.Application.Common.Interfaces;
-using Documents.Application.Common.Models;
-using Documents.Application.Queries;
-using Documents.Application.Services;
-using Documents.Consumers;
-using Documents.Contracts;
-using Documents.Infrastructure;
-using Documents.Infrastructure.Persistence;
-using Documents.Services;
+using YourBrand.Documents;
+using YourBrand.Documents.Application;
+using YourBrand.Documents.Application.Commands;
+using YourBrand.Documents.Application.Common.Interfaces;
+using YourBrand.Documents.Application.Common.Models;
+using YourBrand.Documents.Application.Queries;
+using YourBrand.Documents.Application.Services;
+using YourBrand.Documents.Consumers;
+using YourBrand.Documents.Contracts;
+using YourBrand.Documents.Infrastructure;
+using YourBrand.Documents.Infrastructure.Persistence;
+using YourBrand.Documents.Services;
 
 using MassTransit;
 using MassTransit.MessageData;

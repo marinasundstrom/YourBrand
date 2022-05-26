@@ -1,7 +1,7 @@
-﻿using Accounting.Domain.Common;
-using Accounting.Domain.Entities;
+﻿using YourBrand.Accounting.Domain.Common;
+using YourBrand.Accounting.Domain.Entities;
 
-namespace Accounting.Domain.Events;
+namespace YourBrand.Accounting.Domain.Events;
 
 public class EntryCreatedEvent : DomainEvent
 {

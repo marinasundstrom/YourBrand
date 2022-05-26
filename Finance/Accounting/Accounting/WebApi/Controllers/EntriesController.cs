@@ -1,11 +1,11 @@
-﻿using Accounting.Application.Entries;
-using Accounting.Application.Entries.Queries;
+﻿using YourBrand.Accounting.Application.Entries;
+using YourBrand.Accounting.Application.Entries.Queries;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Accounting.Controllers
+namespace YourBrand.Accounting.Controllers
 {
     [Route("[controller]")]
     public class EntriesController : Controller

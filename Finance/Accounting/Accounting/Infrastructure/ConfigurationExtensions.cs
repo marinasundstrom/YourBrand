@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Accounting.Infrastructure;
+namespace YourBrand.Accounting.Infrastructure;
 
 public static class ConfigurationExtensions
 {

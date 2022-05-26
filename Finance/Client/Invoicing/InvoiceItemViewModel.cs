@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-using Invoices.Client;
+using YourBrand.Invoices.Client;
 
-namespace Accounting.Client.Invoicing;
+namespace YourBrand.Accounting.Client.Invoicing;
 
 public class InvoiceItemViewModel
 {

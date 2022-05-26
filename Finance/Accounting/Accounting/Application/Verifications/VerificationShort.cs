@@ -1,4 +1,4 @@
-﻿namespace Accounting.Application.Verifications;
+﻿namespace YourBrand.Accounting.Application.Verifications;
 
 public class VerificationShort
 {

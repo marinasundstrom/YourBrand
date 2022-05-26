@@ -1,7 +1,7 @@
-using Invoices.Domain.Common;
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Domain.Common;
+using YourBrand.Invoices.Domain.Enums;
 
-namespace Invoices.Domain.Events;
+namespace YourBrand.Invoices.Domain.Events;
 
 public class InvoiceStatusChanged : DomainEvent
 {

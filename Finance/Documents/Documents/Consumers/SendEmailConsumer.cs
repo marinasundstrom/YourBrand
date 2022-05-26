@@ -1,9 +1,9 @@
-﻿using Documents.Application.Services;
-using Documents.Contracts;
+﻿using YourBrand.Documents.Application.Services;
+using YourBrand.Documents.Contracts;
 
 using MassTransit;
 
-namespace Documents.Consumers;
+namespace YourBrand.Documents.Consumers;
 
 public class SendEmailConsumer : IConsumer<SendEmail>
 {

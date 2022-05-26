@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Transactions.Client;
+namespace YourBrand.Transactions.Client;
 
 public static class ServiceExtensions
 {

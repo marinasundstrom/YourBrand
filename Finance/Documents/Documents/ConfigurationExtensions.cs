@@ -1,4 +1,4 @@
-﻿namespace Documents;
+﻿namespace YourBrand.Documents;
 
 public static class ConfigurationExtensions
 {

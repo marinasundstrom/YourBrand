@@ -1,6 +1,6 @@
 ﻿using RazorLight;
 
-namespace Documents.Application.Services;
+namespace YourBrand.Documents.Application.Services;
 
 public sealed class RazorTemplateCompiler : IRazorTemplateCompiler
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Accounting.Application;
+namespace YourBrand.Accounting.Application;
 
 public static class EnumExtensions
 {

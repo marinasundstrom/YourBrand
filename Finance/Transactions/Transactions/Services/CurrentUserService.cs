@@ -1,9 +1,9 @@
 ﻿
 using System.Security.Claims;
 
-using Transactions.Application.Common.Interfaces;
+using YourBrand.Transactions.Application.Common.Interfaces;
 
-namespace Transactions.Services;
+namespace YourBrand.Transactions.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

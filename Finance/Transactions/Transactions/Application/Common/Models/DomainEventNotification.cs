@@ -2,9 +2,9 @@
 
 using MediatR;
 
-using Transactions.Domain.Common;
+using YourBrand.Transactions.Domain.Common;
 
-namespace Transactions.Application.Common.Models;
+namespace YourBrand.Transactions.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

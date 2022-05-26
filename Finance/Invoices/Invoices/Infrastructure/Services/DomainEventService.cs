@@ -1,12 +1,12 @@
-﻿using Invoices.Application.Common.Interfaces;
-using Invoices.Application.Common.Models;
-using Invoices.Domain.Common;
+﻿using YourBrand.Invoices.Application.Common.Interfaces;
+using YourBrand.Invoices.Application.Common.Models;
+using YourBrand.Invoices.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace Invoices.Infrastructure.Services;
+namespace YourBrand.Invoices.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

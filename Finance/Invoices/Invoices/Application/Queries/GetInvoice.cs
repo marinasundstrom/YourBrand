@@ -1,11 +1,11 @@
-﻿using Invoices.Application.Queries;
-using Invoices.Domain;
+﻿using YourBrand.Invoices.Application.Queries;
+using YourBrand.Invoices.Domain;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Application.Queries;
+namespace YourBrand.Invoices.Application.Queries;
 
 public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>
 {

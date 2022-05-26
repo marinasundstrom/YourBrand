@@ -1,7 +1,7 @@
 ﻿
-using Invoices.Application;
-using Invoices.Domain;
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Application;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Enums;
 
 using MassTransit;
 
@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Application.Queries;
+namespace YourBrand.Invoices.Application.Queries;
 
 public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, InvoiceStatus[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
 {

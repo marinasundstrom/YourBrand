@@ -1,4 +1,4 @@
-namespace Accounting.Client;
+namespace YourBrand.Accounting.Client;
 
 public static class Calculations 
 {

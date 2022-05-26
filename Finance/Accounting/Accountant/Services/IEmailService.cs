@@ -1,4 +1,4 @@
-﻿namespace Accountant.Services;
+﻿namespace YourBrand.Accountant.Services;
 
 public interface IEmailService
 {

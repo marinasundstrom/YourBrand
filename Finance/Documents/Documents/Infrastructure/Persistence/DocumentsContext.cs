@@ -1,13 +1,13 @@
 ﻿using System;
 
-using Documents.Application.Common.Interfaces;
-using Documents.Domain;
-using Documents.Domain.Common;
-using Documents.Domain.Entities;
+using YourBrand.Documents.Application.Common.Interfaces;
+using YourBrand.Documents.Domain;
+using YourBrand.Documents.Domain.Common;
+using YourBrand.Documents.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Infrastructure.Persistence;
+namespace YourBrand.Documents.Infrastructure.Persistence;
 
 public class DocumentsContext : DbContext, IDocumentsContext
 {

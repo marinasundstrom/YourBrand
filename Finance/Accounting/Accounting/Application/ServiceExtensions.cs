@@ -1,11 +1,11 @@
-﻿using Accounting.Application.Accounts.Queries;
+﻿using YourBrand.Accounting.Application.Accounts.Queries;
 
 using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounting.Application;
+namespace YourBrand.Accounting.Application;
 
 public static class ServiceExtensions
 {

@@ -5,10 +5,11 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RootNamespace>YourBrand.Documents.Client</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/documents.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Documents.Client">
+		<OpenApiReference Include="OpenAPIs/documents.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourBrand.Documents.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>DocumentsClient.cs</OutputPath>

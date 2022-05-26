@@ -1,13 +1,13 @@
 ﻿
-using Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Accounts.Mappings;
+using static YourBrand.Accounting.Application.Accounts.Mappings;
 
-namespace Accounting.Application.Accounts.Queries;
+namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountsQuery(
     int? AccountClass = null,

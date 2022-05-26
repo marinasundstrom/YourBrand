@@ -2,9 +2,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Domain;
+using YourBrand.Transactions.Domain;
 
-namespace Transactions.Application.Commands;
+namespace YourBrand.Transactions.Application.Commands;
 
 public record SetTransactionInvoiceId(string TransactionId, int InvoiceId) : IRequest
 {

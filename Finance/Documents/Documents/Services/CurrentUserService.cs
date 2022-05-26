@@ -1,9 +1,9 @@
 ﻿
 using System.Security.Claims;
 
-using Documents.Application.Common.Interfaces;
+using YourBrand.Documents.Application.Common.Interfaces;
 
-namespace Documents.Services;
+namespace YourBrand.Documents.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

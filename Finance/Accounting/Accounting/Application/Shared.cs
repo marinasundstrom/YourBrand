@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Accounting.Application;
+namespace YourBrand.Accounting.Application;
 
 public static class Shared
 {

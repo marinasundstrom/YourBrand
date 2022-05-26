@@ -5,10 +5,11 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RootNamespace>YourBrand.Accounting.Client</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/accounting.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Accounting.Client">
+		<OpenApiReference Include="OpenAPIs/accounting.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourBrand.Accounting.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>AccountingClient.cs</OutputPath>

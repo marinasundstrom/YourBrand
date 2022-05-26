@@ -6,16 +6,16 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.Json;
 
-using Transactions.Application;
-using Transactions.Application.Commands;
-using Transactions.Application.Common.Interfaces;
-using Transactions.Application.Queries;
-using Transactions.Application.Services;
-using Transactions.Domain.Enums;
-using Transactions.Hubs;
-using Transactions.Infrastructure;
-using Transactions.Infrastructure.Persistence;
-using Transactions.Services;
+using YourBrand.Transactions.Application;
+using YourBrand.Transactions.Application.Commands;
+using YourBrand.Transactions.Application.Common.Interfaces;
+using YourBrand.Transactions.Application.Queries;
+using YourBrand.Transactions.Application.Services;
+using YourBrand.Transactions.Domain.Enums;
+using YourBrand.Transactions.Hubs;
+using YourBrand.Transactions.Infrastructure;
+using YourBrand.Transactions.Infrastructure.Persistence;
+using YourBrand.Transactions.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,7 +65,7 @@ builder.Services.AddMassTransit(x =>
 
     //x.AddConsumers(typeof(Program).Assembly);
 
-    x.AddRequestClient<Transactions.Contracts.TransactionBatch>();
+    x.AddRequestClient<YourBrand.Transactions.Contracts.TransactionBatch>();
 
     x.UsingRabbitMq((context, cfg) =>
     {

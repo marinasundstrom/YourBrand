@@ -1,7 +1,7 @@
-﻿using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Verifications;
-using Accounting.Application.Verifications.Commands;
-using Accounting.Application.Verifications.Queries;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Application.Verifications;
+using YourBrand.Accounting.Application.Verifications.Commands;
+using YourBrand.Accounting.Application.Verifications.Queries;
 
 using Azure.Storage.Blobs;
 
@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Accounting.Controllers
+namespace YourBrand.Accounting.Controllers
 {
     [Route("[controller]")]
     public class VerificationsController : Controller

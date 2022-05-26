@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
-using Documents.Application.Common.Models;
-using Documents.Infrastructure.Persistence;
+using YourBrand.Documents.Application.Common.Models;
+using YourBrand.Documents.Infrastructure.Persistence;
 
 using MassTransit;
 
@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Application.Queries;
+namespace YourBrand.Documents.Application.Queries;
 
 public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<DocumentDto>>
 {

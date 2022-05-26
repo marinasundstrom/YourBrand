@@ -1,4 +1,4 @@
-﻿namespace Transactions.Infrastructure.Persistence;
+﻿namespace YourBrand.Transactions.Infrastructure.Persistence;
 
 public class SeedData
 {

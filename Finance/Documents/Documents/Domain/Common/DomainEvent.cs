@@ -1,4 +1,4 @@
-﻿namespace Documents.Domain.Common;
+﻿namespace YourBrand.Documents.Domain.Common;
 
 public abstract class DomainEvent
 {

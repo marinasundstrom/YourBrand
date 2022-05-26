@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-    <RootNamespace>Finance.Client</RootNamespace>
+    <RootNamespace>YourBrand.Finance.Client</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -41,13 +41,5 @@
     <ProjectReference Include="..\Documents\Documents.Client\Documents.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Transactions\" />
-    <None Remove="Transactions %28copy%29\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Payments\" />
-    <Folder Include="Invoicing\" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,10 @@
 ﻿using System.Text;
 
-using Documents.Application.Services;
-using Documents.Contracts;
-using Documents.Domain.Entities;
-using Documents.Domain.Enums;
-using Documents.Infrastructure.Persistence;
+using YourBrand.Documents.Application.Services;
+using YourBrand.Documents.Contracts;
+using YourBrand.Documents.Domain.Entities;
+using YourBrand.Documents.Domain.Enums;
+using YourBrand.Documents.Infrastructure.Persistence;
 
 using MassTransit;
 using MassTransit.MessageData;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
-namespace Documents.Consumers;
+namespace YourBrand.Documents.Consumers;
 
 public class CreateDocumentFromTemplateConsumer : IConsumer<CreateDocumentFromTemplate>
 {

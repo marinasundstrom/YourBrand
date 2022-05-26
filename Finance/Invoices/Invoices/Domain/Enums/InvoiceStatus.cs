@@ -1,4 +1,4 @@
-﻿namespace Invoices.Domain.Enums;
+﻿namespace YourBrand.Invoices.Domain.Enums;
 
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum InvoiceStatus

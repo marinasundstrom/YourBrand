@@ -1,9 +1,9 @@
 ﻿using MassTransit;
 
-using Worker.Contracts;
-using Worker.Services;
+using YourBrand.Worker.Contracts;
+using YourBrand.Worker.Services;
 
-namespace Worker.Consumers;
+namespace YourBrand.Worker.Consumers;
 
 public class SendEmailConsumer : IConsumer<SendEmail>
 {

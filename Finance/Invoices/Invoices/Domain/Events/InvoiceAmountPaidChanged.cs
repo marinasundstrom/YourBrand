@@ -1,6 +1,6 @@
-using Invoices.Domain.Common;
+using YourBrand.Invoices.Domain.Common;
 
-namespace Invoices.Domain.Events;
+namespace YourBrand.Invoices.Domain.Events;
 
 public class InvoiceAmountPaidChanged : DomainEvent
 {

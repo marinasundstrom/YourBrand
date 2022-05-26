@@ -1,6 +1,6 @@
-using Transactions.Domain.Enums;
+using YourBrand.Transactions.Domain.Enums;
 
-namespace Transactions.Hubs;
+namespace YourBrand.Transactions.Hubs;
 
 public interface ITransactionsHubClient
 {

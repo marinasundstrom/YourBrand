@@ -1,8 +1,8 @@
-﻿using Transactions.Domain.Common;
-using Transactions.Domain.Enums;
-using Transactions.Domain.Events;
+﻿using YourBrand.Transactions.Domain.Common;
+using YourBrand.Transactions.Domain.Enums;
+using YourBrand.Transactions.Domain.Events;
 
-namespace Transactions.Domain.Entities;
+namespace YourBrand.Transactions.Domain.Entities;
 
 public class Transaction : IHasDomainEvents
 {

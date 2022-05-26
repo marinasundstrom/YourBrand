@@ -1,13 +1,13 @@
-﻿using Accounting.Client;
+﻿using YourBrand.Accounting.Client;
 
-using Invoices.Client;
+using YourBrand.Invoices.Client;
 
 using MassTransit;
 
-using Transactions.Client;
-using Transactions.Contracts;
+using YourBrand.Transactions.Client;
+using YourBrand.Transactions.Contracts;
 
-namespace Accountant.Consumers;
+namespace YourBrand.Accountant.Consumers;
 
 public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 {
@@ -46,7 +46,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
         if (!int.TryParse(transaction.Reference, out var invoiceId))
         {
             // Mark transaction as unknown
-            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Unknown);
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, YourBrand.Transactions.Client.TransactionStatus.Unknown);
             return;
         }
 
@@ -55,7 +55,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
         if (invoice is null)
         {
             // Mark transaction as unknown
-            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Unknown);
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, YourBrand.Transactions.Client.TransactionStatus.Unknown);
         }
         else
         {
@@ -64,7 +64,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
             switch (invoice.Status)
             {
                 case InvoiceStatus.Draft:
-                    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Unknown);
+                    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, YourBrand.Transactions.Client.TransactionStatus.Unknown);
                     return;
 
                 case InvoiceStatus.Sent:
@@ -105,7 +105,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
                 case InvoiceStatus.Void:
                     // Mark transaktion for re-pay
-                    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Payback);
+                    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, YourBrand.Transactions.Client.TransactionStatus.Payback);
 
                     // Create verification in a worker
                     return;
@@ -113,7 +113,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
             await _transactionsClient.SetTransactionInvoiceIdAsync(transaction.Id, invoiceId);
 
-            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, YourBrand.Transactions.Client.TransactionStatus.Verified);
 
             var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
             {

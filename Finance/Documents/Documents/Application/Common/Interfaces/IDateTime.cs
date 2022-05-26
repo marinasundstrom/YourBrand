@@ -1,4 +1,4 @@
-﻿namespace Documents.Application.Common.Interfaces;
+﻿namespace YourBrand.Documents.Application.Common.Interfaces;
 
 public interface IDateTime
 {

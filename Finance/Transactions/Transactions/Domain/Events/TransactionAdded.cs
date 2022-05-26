@@ -1,6 +1,6 @@
-using Transactions.Domain.Common;
+using YourBrand.Transactions.Domain.Common;
 
-namespace Transactions.Domain.Events;
+namespace YourBrand.Transactions.Domain.Events;
 
 public class TransactionRegistered : DomainEvent
 {

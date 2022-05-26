@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Accounting.Domain.Enums;
+namespace YourBrand.Accounting.Domain.Enums;
 
 public enum AccountClass
 {

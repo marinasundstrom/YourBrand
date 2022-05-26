@@ -1,14 +1,14 @@
 ﻿using System.Text;
 
-using Accounting.Client;
+using YourBrand.Accounting.Client;
 
-using Documents.Client;
+using YourBrand.Documents.Client;
 
-using Invoices.Client;
+using YourBrand.Invoices.Client;
 
 using Newtonsoft.Json;
 
-namespace Accountant.Services
+namespace YourBrand.Accountant.Services
 {
     public class ReminderService : IReminderService
     {

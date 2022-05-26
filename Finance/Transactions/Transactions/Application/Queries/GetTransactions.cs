@@ -4,10 +4,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Domain;
-using Transactions.Domain.Enums;
+using YourBrand.Transactions.Domain;
+using YourBrand.Transactions.Domain.Enums;
 
-namespace Transactions.Application.Queries;
+namespace YourBrand.Transactions.Application.Queries;
 
 public record GetPayments(int Page, int PageSize, TransactionStatus[]? Status = null, int? InvoiceId = null) : IRequest<ItemsResult<TransactionDto>>
 {

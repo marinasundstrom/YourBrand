@@ -1,7 +1,7 @@
-using Documents.Client;
+using YourBrand.Documents.Client;
 
-using Invoices.Application;
-using Invoices.Domain;
+using YourBrand.Invoices.Application;
+using YourBrand.Invoices.Domain;
 
 using MediatR;
 
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
-namespace Invoices.Application.Commands;
+namespace YourBrand.Invoices.Application.Commands;
 
 public record GenerateInvoiceFile(int InvoiceId) : IRequest<Stream>
 {

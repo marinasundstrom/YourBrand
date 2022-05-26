@@ -1,10 +1,10 @@
 ﻿using System;
 
-using Accounting.Domain.Common;
+using YourBrand.Accounting.Domain.Common;
 
 using MediatR;
 
-namespace Accounting.Application.Common.Models;
+namespace YourBrand.Accounting.Application.Common.Models;
 
 public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

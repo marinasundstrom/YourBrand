@@ -1,14 +1,14 @@
 ﻿using System;
 
-using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Common.Models;
-using Accounting.Domain.Common;
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Application.Common.Models;
+using YourBrand.Accounting.Domain.Common;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace Accounting.Infrastructure.Services;
+namespace YourBrand.Accounting.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Documents.Client;
+namespace YourBrand.Documents.Client;
 
 public static class ServiceExtensions
 {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace Transactions.Hubs;
+namespace YourBrand.Transactions.Hubs;
 
 public class TransactionsHub : Hub<ITransactionsHubClient>
 {

@@ -1,8 +1,8 @@
-﻿using Accounting.Application.Common.Interfaces;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
 
 using Azure.Storage.Blobs;
 
-namespace Accounting.Services;
+namespace YourBrand.Accounting.Services;
 
 class BlobService : IBlobService
 {

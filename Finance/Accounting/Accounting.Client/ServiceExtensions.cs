@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounting.Client;
+using YourBrand.Accounting.Client;
+
+namespace YourBrand.Accounting.Client;
 
 public static class ServiceExtensions
 {

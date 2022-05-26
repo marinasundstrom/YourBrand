@@ -1,4 +1,4 @@
-namespace Accounting.Domain.Enums;
+namespace YourBrand.Accounting.Domain.Enums;
 
 public enum AttachmentType
 {

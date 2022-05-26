@@ -1,6 +1,6 @@
-using Accounting.Domain.Enums;
+using YourBrand.Accounting.Domain.Enums;
 
-namespace Accounting.Domain.Entities;
+namespace YourBrand.Accounting.Domain.Entities;
 
 public static class Accounts
 {

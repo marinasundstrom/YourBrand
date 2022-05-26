@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Invoices.Client;
+using YourBrand.Invoices.Client;
+
+namespace YourBrand.Invoices.Client;
 
 public static class ServiceExtensions
 {

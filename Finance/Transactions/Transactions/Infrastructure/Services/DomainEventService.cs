@@ -2,11 +2,11 @@
 
 using Microsoft.Extensions.Logging;
 
-using Transactions.Application.Common.Interfaces;
-using Transactions.Application.Common.Models;
-using Transactions.Domain.Common;
+using YourBrand.Transactions.Application.Common.Interfaces;
+using YourBrand.Transactions.Application.Common.Models;
+using YourBrand.Transactions.Domain.Common;
 
-namespace Transactions.Infrastructure.Services;
+namespace YourBrand.Transactions.Infrastructure.Services;
 
 class DomainEventService : IDomainEventService
 {

@@ -1,9 +1,9 @@
-﻿using Transactions.Domain.Entities;
+﻿using YourBrand.Transactions.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Transactions.Infrastructure.Persistence.Configurations;
+namespace YourBrand.Transactions.Infrastructure.Persistence.Configurations;
 
 public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 {

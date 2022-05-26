@@ -1,6 +1,6 @@
-﻿using Documents.Domain.Common;
+﻿using YourBrand.Documents.Domain.Common;
 
-namespace Documents.Application.Common.Interfaces;
+namespace YourBrand.Documents.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

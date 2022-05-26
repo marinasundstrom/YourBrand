@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Accounting.Application.Accounts;
+namespace YourBrand.Accounting.Application.Accounts;
 
 public static class Mappings
 {

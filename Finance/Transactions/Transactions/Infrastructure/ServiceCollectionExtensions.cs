@@ -1,8 +1,8 @@
-using Transactions.Application.Common.Interfaces;
-using Transactions.Infrastructure.Persistence;
-using Transactions.Infrastructure.Services;
+using YourBrand.Transactions.Application.Common.Interfaces;
+using YourBrand.Transactions.Infrastructure.Persistence;
+using YourBrand.Transactions.Infrastructure.Services;
 
-namespace Transactions.Infrastructure;
+namespace YourBrand.Transactions.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {

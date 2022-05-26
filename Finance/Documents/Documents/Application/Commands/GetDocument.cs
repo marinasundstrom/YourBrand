@@ -1,10 +1,10 @@
-using Documents.Infrastructure.Persistence;
+using YourBrand.Documents.Infrastructure.Persistence;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Application.Commands;
+namespace YourBrand.Documents.Application.Commands;
 
 public record RenameDocument(string DocumentId, string NewName) : IRequest
 {

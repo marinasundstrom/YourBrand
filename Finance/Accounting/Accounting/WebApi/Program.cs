@@ -2,16 +2,16 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using Accounting.Application;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Infrastructure;
-using Accounting.Infrastructure.Persistence;
-using Accounting.Services;
+using YourBrand.Accounting.Application;
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Infrastructure;
+using YourBrand.Accounting.Infrastructure.Persistence;
+using YourBrand.Accounting.Services;
 
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using Documents.Client;
+using YourBrand.Documents.Client;
 
 using MassTransit;
 

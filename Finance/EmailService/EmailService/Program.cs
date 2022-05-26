@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 
-using Worker.Consumers;
-using Worker.Services;
+using YourBrand.Worker.Consumers;
+using YourBrand.Worker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
-using Documents.Domain.Entities;
+using YourBrand.Documents.Domain.Entities;
 
-namespace Documents.Application;
+namespace YourBrand.Documents.Application;
 
 public static class Mappings
 {

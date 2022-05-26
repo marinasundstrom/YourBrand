@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.SignalR;
 
-using Transactions.Domain.Enums;
-using Transactions.Hubs;
+using YourBrand.Transactions.Domain.Enums;
+using YourBrand.Transactions.Hubs;
 
-namespace Transactions.Application.Services;
+namespace YourBrand.Transactions.Application.Services;
 
 public class TransactionsHubClient : ITransactionsHubClient
 {

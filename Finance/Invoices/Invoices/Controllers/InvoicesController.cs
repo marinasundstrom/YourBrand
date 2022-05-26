@@ -1,12 +1,12 @@
-using Invoices.Application;
-using Invoices.Domain.Enums;
-using Invoices.Application.Queries;
+using YourBrand.Invoices.Application;
+using YourBrand.Invoices.Domain.Enums;
+using YourBrand.Invoices.Application.Queries;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Invoices.Controllers;
+namespace YourBrand.Invoices.Controllers;
 
 [Route("[controller]")]
 public class InvoicesController : ControllerBase 

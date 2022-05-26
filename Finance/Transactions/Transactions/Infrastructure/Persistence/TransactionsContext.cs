@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Transactions.Application.Common.Interfaces;
-using Transactions.Domain;
-using Transactions.Domain.Common;
-using Transactions.Domain.Entities;
+using YourBrand.Transactions.Application.Common.Interfaces;
+using YourBrand.Transactions.Domain;
+using YourBrand.Transactions.Domain.Common;
+using YourBrand.Transactions.Domain.Entities;
 
-namespace Transactions.Infrastructure.Persistence;
+namespace YourBrand.Transactions.Infrastructure.Persistence;
 
 public class TransactionsContext : DbContext, ITransactionsContext
 {

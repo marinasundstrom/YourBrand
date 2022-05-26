@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Domain;
+using YourBrand.Transactions.Domain;
 
-namespace Transactions.Infrastructure.Persistence;
+namespace YourBrand.Transactions.Infrastructure.Persistence;
 
 public static class ServiceCollectionExtensions
 {

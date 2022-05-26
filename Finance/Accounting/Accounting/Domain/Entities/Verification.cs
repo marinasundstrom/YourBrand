@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Accounting.Domain.Entities;
+namespace YourBrand.Accounting.Domain.Entities;
 
 public class Verification
 {

@@ -1,12 +1,12 @@
-using Transactions.Application;
-using Transactions.Domain.Enums;
-using Transactions.Application.Queries;
+using YourBrand.Transactions.Application;
+using YourBrand.Transactions.Domain.Enums;
+using YourBrand.Transactions.Application.Queries;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Invoices.Controllers;
+namespace YourBrand.Invoices.Controllers;
 
 [Route("[controller]")]
 public class TransactionsController : ControllerBase 

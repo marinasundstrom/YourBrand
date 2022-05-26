@@ -1,4 +1,4 @@
-﻿namespace Transactions.Domain.Common;
+﻿namespace YourBrand.Transactions.Domain.Common;
 
 public abstract class DomainEvent
 {

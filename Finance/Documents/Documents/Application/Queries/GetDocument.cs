@@ -1,10 +1,10 @@
-using Documents.Infrastructure.Persistence;
+using YourBrand.Documents.Infrastructure.Persistence;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Application.Queries;
+namespace YourBrand.Documents.Application.Queries;
 
 public record GetDocument(string DocumentId) : IRequest<DocumentDto?>
 {

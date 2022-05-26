@@ -15,37 +15,37 @@ services:
         port: 5091
 
   - name: accounting
-    project: Accounting/Accounting/WebApi/WebApi.csproj
+    project: YourBrand.Accounting/Accounting/WebApi/WebApi.csproj
     bindings:
       - protocol: https
         port: 5092
 
   - name: accountant
-    project: Accounting/Accountant/Accountant.csproj
+    project: YourBrand.Accounting/Accountant/Accountant.csproj
     bindings:
       - protocol: https
         port: 5093
 
   - name: transactions
-    project: Transactions/Transactions/Transactions.csproj
+    project: YourBrand.Transactions/Transactions/Transactions.csproj
     bindings:
       - protocol: https
         port: 5094
 
   - name: invoices
-    project: Invoices/Invoices/Invoices.csproj
+    project: YourBrand.Invoices/Invoices/Invoices.csproj
     bindings:
       - protocol: https
         port: 5095
 
   - name: documents
-    project: Documents/Documents/Documents.csproj
+    project: YourBrand.Documents/Documents/Documents.csproj
     bindings:
       - protocol: https
         port: 5096
 
   - name: email
-    project: EmailService/EmailService/EmailService.csproj
+    project: YourBrand.EmailService/EmailService/EmailService.csproj
     bindings:
       - protocol: https
         port: 5097

@@ -1,4 +1,4 @@
-﻿namespace Transactions.Application.Common.Interfaces;
+﻿namespace YourBrand.Transactions.Application.Common.Interfaces;
 
 public interface IDateTime
 {

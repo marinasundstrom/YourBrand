@@ -1,6 +1,6 @@
-﻿using Transactions.Domain.Common;
+﻿using YourBrand.Transactions.Domain.Common;
 
-namespace Transactions.Application.Common.Interfaces;
+namespace YourBrand.Transactions.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

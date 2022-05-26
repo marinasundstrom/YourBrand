@@ -37,6 +37,14 @@
     </AuthorizeView>
 
     <AuthorizeView Roles="Administrator,Manager">
+        <MudNavGroup Title="Finance" Expanded="true">
+            <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/Finance/Invoices">Invoices</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/Finance/Transactions">Transactions</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/Finance/Accounting">Accounting</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Administrator,Manager">
         <MudNavGroup Title="Administration" Expanded="true">
             <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/users">Users</MudNavLink>
         </MudNavGroup>

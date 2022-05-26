@@ -1,21 +1,21 @@
 ﻿using System.Data.SqlClient;
 
-using Accountant;
-using Accountant.Consumers;
-using Accountant.Services;
+using YourBrand.Accountant;
+using YourBrand.Accountant.Consumers;
+using YourBrand.Accountant.Services;
 
-using Accounting.Client;
+using YourBrand.Accounting.Client;
 
-using Documents.Client;
+using YourBrand.Documents.Client;
 
 using Hangfire;
 using Hangfire.SqlServer;
 
-using Invoices.Client;
+using YourBrand.Invoices.Client;
 
 using MassTransit;
 
-using Transactions.Client;
+using YourBrand.Transactions.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

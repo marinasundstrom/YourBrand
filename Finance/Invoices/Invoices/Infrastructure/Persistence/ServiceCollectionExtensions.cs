@@ -1,9 +1,9 @@
-using Invoices.Domain;
-using Invoices.Domain.Entities;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Infrastructure.Persistence;
+namespace YourBrand.Invoices.Infrastructure.Persistence;
 
 public static class ServiceCollectionExtensions
 {
@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
     {
         const string ConnectionStringKey = "mssql";
 
-        var connectionString = Invoices.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Invoices")
+        var connectionString = YourBrand.Invoices.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Invoices")
             ?? configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<InvoicesContext>((sp, options) =>

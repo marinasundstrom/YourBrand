@@ -1,10 +1,10 @@
-﻿using Accounting.Application.Common.Interfaces;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Application.Entries.Queries;
+namespace YourBrand.Accounting.Application.Entries.Queries;
 
 public record GetEntriesQuery(int? AccountNo = null, int? VerificationId = null, int Page = 0, int PageSize = 10, ResultDirection Direction = ResultDirection.Asc) : IRequest<EntriesResult>
 {

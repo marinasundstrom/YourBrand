@@ -1,6 +1,6 @@
 ﻿using IronPdf;
 
-namespace Documents.Application.Services;
+namespace YourBrand.Documents.Application.Services;
 
 public class PdfGenerator : IPdfGenerator
 {

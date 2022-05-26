@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Documents.Application;
+namespace YourBrand.Documents.Application;
 
 public static class ServiceCollectionExtensions
 {

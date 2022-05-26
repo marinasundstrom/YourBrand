@@ -1,7 +1,7 @@
-using Transactions.Domain.Common;
-using Transactions.Domain.Enums;
+using YourBrand.Transactions.Domain.Common;
+using YourBrand.Transactions.Domain.Enums;
 
-namespace Transactions.Domain.Events;
+namespace YourBrand.Transactions.Domain.Events;
 
 public class TransactionStatusChanged : DomainEvent
 {

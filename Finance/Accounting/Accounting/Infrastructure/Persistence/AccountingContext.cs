@@ -1,12 +1,12 @@
-﻿using Accounting.Application.Common.Interfaces;
-using Accounting.Domain.Common;
-using Accounting.Domain.Entities;
-using Accounting.Infrastructure.Persistence.Configurations;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain.Common;
+using YourBrand.Accounting.Domain.Entities;
+using YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Accounting.Infrastructure.Persistence;
+namespace YourBrand.Accounting.Infrastructure.Persistence;
 
 public class AccountingContext : DbContext, IAccountingContext
 {

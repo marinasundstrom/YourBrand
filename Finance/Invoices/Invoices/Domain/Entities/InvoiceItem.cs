@@ -1,6 +1,6 @@
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Domain.Enums;
 
-namespace Invoices.Domain.Entities;
+namespace YourBrand.Invoices.Domain.Entities;
 
 public class InvoiceItem 
 {

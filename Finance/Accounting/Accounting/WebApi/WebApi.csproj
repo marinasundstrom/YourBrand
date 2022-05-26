@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <WarningsAsErrors>nullable</WarningsAsErrors>
-    <RootNamespace>Accounting</RootNamespace>
+    <RootNamespace>YourBrand.Accounting</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>

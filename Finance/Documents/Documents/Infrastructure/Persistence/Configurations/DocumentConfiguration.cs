@@ -1,9 +1,9 @@
-﻿using Documents.Domain.Entities;
+﻿using YourBrand.Documents.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Documents.Infrastructure.Persistence.Configurations;
+namespace YourBrand.Documents.Infrastructure.Persistence.Configurations;
 
 public class DocumentConfiguration : IEntityTypeConfiguration<Document>
 {

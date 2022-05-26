@@ -1,13 +1,13 @@
-﻿using Accounting.Client;
+﻿using YourBrand.Accounting.Client;
 
-using Documents.Client;
+using YourBrand.Documents.Client;
 
-using Invoices.Client;
-using Invoices.Contracts;
+using YourBrand.Invoices.Client;
+using YourBrand.Invoices.Contracts;
 
 using MassTransit;
 
-namespace Accountant.Consumers;
+namespace YourBrand.Accountant.Consumers;
 
 public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 {
@@ -157,7 +157,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 
         await _verificationsClient.AddFileAttachmentToVerificationAsync(
             verificationId, null, invoice.Id,
-            new Accounting.Client.FileParameter(file.Stream, $"invoice-{invoice.Id}{fileExt}", contentType));
+            new YourBrand.Accounting.Client.FileParameter(file.Stream, $"invoice-{invoice.Id}{fileExt}", contentType));
     }
 
     private static string? GetContentType(Invoices.Client.FileResponse file)

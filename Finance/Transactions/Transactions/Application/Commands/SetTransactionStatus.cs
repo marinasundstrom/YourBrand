@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Domain;
-using Transactions.Domain.Enums;
+using YourBrand.Transactions.Domain;
+using YourBrand.Transactions.Domain.Enums;
 
-namespace Transactions.Application.Commands;
+namespace YourBrand.Transactions.Application.Commands;
 
 public record SetTransactionStatus(string TransactionId, TransactionStatus Status) : IRequest
 {

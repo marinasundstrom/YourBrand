@@ -1,11 +1,11 @@
 ﻿using System;
 
-using Accounting.Domain.Entities;
+using YourBrand.Accounting.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Accounting.Infrastructure.Persistence.Configurations;
+namespace YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 
 public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {

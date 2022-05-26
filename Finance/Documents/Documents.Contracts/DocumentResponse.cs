@@ -1,5 +1,5 @@
 ﻿using MassTransit;
 
-namespace Documents.Contracts;
+namespace YourBrand.Documents.Contracts;
 
 public record DocumentResponse(DocumentFormat DocumentFormat, MessageData<byte[]> Document);

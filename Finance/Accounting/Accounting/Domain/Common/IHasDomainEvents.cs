@@ -1,4 +1,4 @@
-﻿namespace Accounting.Domain.Common;
+﻿namespace YourBrand.Accounting.Domain.Common;
 
 public interface IHasDomainEvents
 {

@@ -1,12 +1,12 @@
-﻿using Documents.Client;
+﻿using YourBrand.Documents.Client;
 
-using Invoices.Application;
-using Invoices.Application.Common.Interfaces;
-using Invoices.Application.Queries;
-using Invoices.Application.Commands;
-using Invoices.Domain.Enums;
-using Invoices.Infrastructure;
-using Invoices.Services;
+using YourBrand.Invoices.Application;
+using YourBrand.Invoices.Application.Common.Interfaces;
+using YourBrand.Invoices.Application.Queries;
+using YourBrand.Invoices.Application.Commands;
+using YourBrand.Invoices.Domain.Enums;
+using YourBrand.Invoices.Infrastructure;
+using YourBrand.Invoices.Services;
 
 using MassTransit;
 
@@ -14,7 +14,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Json;
-using Invoices.Infrastructure.Persistence;
+using YourBrand.Invoices.Infrastructure.Persistence;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

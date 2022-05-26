@@ -1,13 +1,13 @@
 
-using Invoices.Application;
-using Invoices.Domain;
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Application;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Enums;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Application.Commands;
+namespace YourBrand.Invoices.Application.Commands;
 
 public record AddItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity) : IRequest<InvoiceItemDto>
 {

@@ -1,8 +1,8 @@
-using Invoices.Application.Common.Models;
-using Invoices.Contracts;
-using Invoices.Domain;
-using Invoices.Domain.Enums;
-using Invoices.Domain.Events;
+using YourBrand.Invoices.Application.Common.Models;
+using YourBrand.Invoices.Contracts;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Enums;
+using YourBrand.Invoices.Domain.Events;
 
 using MassTransit;
 
@@ -10,7 +10,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Application.Events;
+namespace YourBrand.Invoices.Application.Events;
 
 public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotification<InvoiceStatusChanged>>
 {

@@ -1,13 +1,13 @@
-﻿using Accounting.Application.Common.Interfaces;
-using Accounting.Domain.Entities;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain.Entities;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Shared;
+using static YourBrand.Accounting.Application.Shared;
 
-namespace Accounting.Application.Verifications.Commands;
+namespace YourBrand.Accounting.Application.Verifications.Commands;
 
 public record AddFileAttachmentToVerificationCommand(int VerificationId, string Name, string ContentType, string? Description, int? invoiceId, Stream Stream) : IRequest<string>
 {

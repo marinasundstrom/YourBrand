@@ -1,8 +1,8 @@
-using Documents.Application.Common.Interfaces;
-using Documents.Infrastructure.Persistence;
-using Documents.Infrastructure.Services;
+using YourBrand.Documents.Application.Common.Interfaces;
+using YourBrand.Documents.Infrastructure.Persistence;
+using YourBrand.Documents.Infrastructure.Services;
 
-namespace Documents.Infrastructure;
+namespace YourBrand.Documents.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,6 +1,6 @@
-using Documents.Domain.Common;
+using YourBrand.Documents.Domain.Common;
 
-namespace Documents.Domain.Events;
+namespace YourBrand.Documents.Domain.Events;
 
 public class DocumentRenamed : DomainEvent
 {

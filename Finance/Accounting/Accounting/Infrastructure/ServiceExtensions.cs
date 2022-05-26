@@ -1,11 +1,11 @@
-﻿using Accounting.Application.Common.Interfaces;
-using Accounting.Infrastructure.Persistence;
-using Accounting.Infrastructure.Services;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Infrastructure.Persistence;
+using YourBrand.Accounting.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounting.Infrastructure;
+namespace YourBrand.Accounting.Infrastructure;
 
 public static class ServiceExtensions
 {

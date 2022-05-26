@@ -1,9 +1,9 @@
 ﻿using System;
 
-using Accounting.Application.Accounts;
-using Accounting.Application.Verifications;
+using YourBrand.Accounting.Application.Accounts;
+using YourBrand.Accounting.Application.Verifications;
 
-namespace Accounting.Application.Entries;
+namespace YourBrand.Accounting.Application.Entries;
 
 public record EntryDto(int Id, DateTime Date, VerificationShort Verification, AccountShortDto Account,
     string Description, decimal? Debit, decimal? Credit);

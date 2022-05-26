@@ -1,11 +1,11 @@
-using Accounting.Application.Common.Interfaces;
-using Accounting.Domain;
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounting.Infrastructure.Persistence;
+namespace YourBrand.Accounting.Infrastructure.Persistence;
 
 public static class ServiceCollectionExtensions
 {

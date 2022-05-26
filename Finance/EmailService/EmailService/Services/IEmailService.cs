@@ -1,5 +1,5 @@
 ﻿
-namespace Worker.Services
+namespace YourBrand.Worker.Services
 {
     public interface IEmailService
     {

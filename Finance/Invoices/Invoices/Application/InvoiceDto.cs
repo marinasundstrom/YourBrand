@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Domain.Enums;
 
-namespace Invoices.Application;
+namespace YourBrand.Invoices.Application;
 
 public record InvoiceDto(int Id, DateTime? Date, Domain.Enums.InvoiceType Type, Domain.Enums.InvoiceStatus Status, DateTime? DueDate, string? Reference, string? Note, IEnumerable<InvoiceItemDto> Items, decimal SubTotal, decimal Vat, decimal Total, decimal? Paid);
 

@@ -2,7 +2,7 @@
 
 using MediatR;
 
-namespace Accounting.Application.Accounts.Queries;
+namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountClassesQuery : IRequest<IEnumerable<AccountClassDto>>
 {

@@ -1,4 +1,4 @@
-﻿namespace Invoices;
+﻿namespace YourBrand.Invoices;
 
 public static class ConfigurationExtensions
 {

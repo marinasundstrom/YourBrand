@@ -1,12 +1,12 @@
-using Transactions.Application.Common.Models;
-using Transactions.Domain;
-using Transactions.Domain.Events;
+using YourBrand.Transactions.Application.Common.Models;
+using YourBrand.Transactions.Domain;
+using YourBrand.Transactions.Domain.Events;
 
 using MediatR;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
-namespace Transactions.Application.Events;
+namespace YourBrand.Transactions.Application.Events;
 
 public class TransactionReferenceUpdatedHandler : INotificationHandler<DomainEventNotification<TransactionReferenceUpdated>>
 {

@@ -1,4 +1,4 @@
-﻿namespace Invoices.Contracts;
+﻿namespace YourBrand.Invoices.Contracts;
 
 public record InvoicesBatch(IEnumerable<Invoice> Invoices);
 

@@ -1,11 +1,11 @@
-﻿using Accounting.Application.Accounts;
-using Accounting.Application.Entries;
-using Accounting.Application.Verifications;
-using Accounting.Domain.Entities;
+﻿using YourBrand.Accounting.Application.Accounts;
+using YourBrand.Accounting.Application.Entries;
+using YourBrand.Accounting.Application.Verifications;
+using YourBrand.Accounting.Domain.Entities;
 
-using static Accounting.Application.Shared;
+using static YourBrand.Accounting.Application.Shared;
 
-namespace Accounting.Application;
+namespace YourBrand.Accounting.Application;
 
 public static class Mappings
 {

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Invoices.Application;
+namespace YourBrand.Invoices.Application;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 
-using Invoices.Domain.Common;
-using Invoices.Domain.Enums;
-using Invoices.Domain.Events;
+using YourBrand.Invoices.Domain.Common;
+using YourBrand.Invoices.Domain.Enums;
+using YourBrand.Invoices.Domain.Events;
 
-namespace Invoices.Domain.Entities;
+namespace YourBrand.Invoices.Domain.Entities;
 
 public class Invoice : IHasDomainEvents
 {

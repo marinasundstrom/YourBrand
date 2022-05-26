@@ -1,6 +1,6 @@
-﻿using Documents.Application.Common.Interfaces;
+﻿using YourBrand.Documents.Application.Common.Interfaces;
 
-namespace Documents.Infrastructure.Services;
+namespace YourBrand.Documents.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

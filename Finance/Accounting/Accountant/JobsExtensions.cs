@@ -1,10 +1,10 @@
 ﻿using System;
 
-using Accountant.Services;
+using YourBrand.Accountant.Services;
 
 using Hangfire;
 
-namespace Accountant;
+namespace YourBrand.Accountant;
 
 public static class JobsExtensions
 {

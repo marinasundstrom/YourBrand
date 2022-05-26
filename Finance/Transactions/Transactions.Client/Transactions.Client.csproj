@@ -5,10 +5,11 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RootNamespace>YourBrand.Transactions.Client</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/transactions.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Transactions.Client">
+		<OpenApiReference Include="OpenAPIs/transactions.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourBrand.Transactions.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>TransactionsClient.cs</OutputPath>

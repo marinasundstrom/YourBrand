@@ -1,6 +1,6 @@
-﻿using Invoices.Domain.Common;
+﻿using YourBrand.Invoices.Domain.Common;
 
-namespace Invoices.Application.Common.Interfaces;
+namespace YourBrand.Invoices.Application.Common.Interfaces;
 
 public interface IDomainEventService
 {

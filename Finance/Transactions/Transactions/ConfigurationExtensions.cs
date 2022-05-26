@@ -1,4 +1,4 @@
-﻿namespace Transactions;
+﻿namespace YourBrand.Transactions;
 
 public static class ConfigurationExtensions
 {

@@ -1,6 +1,6 @@
-﻿using Invoices.Application.Common.Interfaces;
+﻿using YourBrand.Invoices.Application.Common.Interfaces;
 
-namespace Invoices.Infrastructure.Services;
+namespace YourBrand.Invoices.Infrastructure.Services;
 
 class DateTimeService : IDateTime
 {

@@ -1,8 +1,8 @@
-using Invoices.Application.Common.Interfaces;
-using Invoices.Infrastructure.Persistence;
-using Invoices.Infrastructure.Services;
+using YourBrand.Invoices.Application.Common.Interfaces;
+using YourBrand.Invoices.Infrastructure.Persistence;
+using YourBrand.Invoices.Infrastructure.Services;
 
-namespace Invoices.Infrastructure;
+namespace YourBrand.Invoices.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {

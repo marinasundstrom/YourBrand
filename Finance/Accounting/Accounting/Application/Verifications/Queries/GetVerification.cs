@@ -1,10 +1,10 @@
-﻿using Accounting.Application.Common.Interfaces;
+﻿using YourBrand.Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Application.Verifications.Queries;
+namespace YourBrand.Accounting.Application.Verifications.Queries;
 
 public record GetVerificationQuery(int VerificationId) : IRequest<VerificationDto>
 {

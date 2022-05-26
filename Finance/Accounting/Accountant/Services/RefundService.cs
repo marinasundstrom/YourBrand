@@ -1,8 +1,8 @@
-﻿using Accounting.Client;
+﻿using YourBrand.Accounting.Client;
 
-using Invoices.Client;
+using YourBrand.Invoices.Client;
 
-namespace Accountant.Services
+namespace YourBrand.Accountant.Services
 {
     public class RefundService : IRefundService
     {

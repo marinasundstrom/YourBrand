@@ -1,4 +1,4 @@
-﻿namespace Documents.Contracts;
+﻿namespace YourBrand.Documents.Contracts;
 
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum DocumentFormat

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Documents.Application;
-using Documents.Application.Commands;
-using Documents.Contracts;
+using YourBrand.Documents.Application;
+using YourBrand.Documents.Application.Commands;
+using YourBrand.Documents.Contracts;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Documents.Controllers;
+namespace YourBrand.Documents.Controllers;
 
 [Route("[controller]")]
 public class DocumentsController : Controller

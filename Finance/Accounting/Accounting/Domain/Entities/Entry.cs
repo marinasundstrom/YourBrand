@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Accounting.Domain.Common;
+using YourBrand.Accounting.Domain.Common;
 
-namespace Accounting.Domain.Entities;
+namespace YourBrand.Accounting.Domain.Entities;
 
 public class Entry : IHasDomainEvents
 {

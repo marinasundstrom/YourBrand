@@ -1,11 +1,11 @@
 ﻿
-using Invoices.Application;
-using Invoices.Domain;
-using Invoices.Domain.Enums;
+using YourBrand.Invoices.Application;
+using YourBrand.Invoices.Domain;
+using YourBrand.Invoices.Domain.Enums;
 
 using MediatR;
 
-namespace Invoices.Application.Commands;
+namespace YourBrand.Invoices.Application.Commands;
 
 public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note) : IRequest<InvoiceDto>
 {
@@ -20,7 +20,7 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note)
 
         public async Task<InvoiceDto> Handle(CreateInvoice request, CancellationToken cancellationToken)
         {
-            var invoice = new Invoices.Domain.Entities.Invoice(request.Date, note: request.Note);
+            var invoice = new YourBrand.Invoices.Domain.Entities.Invoice(request.Date, note: request.Note);
 
             _context.Invoices.Add(invoice);
 

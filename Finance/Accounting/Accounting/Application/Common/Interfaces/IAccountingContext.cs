@@ -1,9 +1,9 @@
-﻿using Accounting.Domain.Entities;
+﻿using YourBrand.Accounting.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Accounting.Application.Common.Interfaces;
+namespace YourBrand.Accounting.Application.Common.Interfaces;
 
 public interface IAccountingContext
 {

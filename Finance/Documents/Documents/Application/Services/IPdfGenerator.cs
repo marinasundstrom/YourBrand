@@ -1,5 +1,5 @@
 ﻿
-namespace Documents.Application.Services
+namespace YourBrand.Documents.Application.Services
 {
     public interface IPdfGenerator
     {

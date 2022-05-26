@@ -1,7 +1,7 @@
 ﻿using System.Buffers.Text;
 using System.Runtime.InteropServices;
 
-namespace Transactions;
+namespace YourBrand.Transactions;
 
 // Nick Chapsas code
 public static class Guider
