@@ -89,7 +89,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx")}/api/documents/");
+    http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx", "https")}/api/documents/");
 });
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
