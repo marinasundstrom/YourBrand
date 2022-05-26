@@ -15,9 +15,9 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Accounting.Server' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.11.0-beta.2" />
-    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.1.1" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.16.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.2.0" />
     <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
 		<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />

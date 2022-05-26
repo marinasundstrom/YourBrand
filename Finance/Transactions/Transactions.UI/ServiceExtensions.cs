@@ -19,7 +19,7 @@ public static class ServiceExtensions
     {
         services.AddTransactionsClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}transactions/");
+            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/transactions/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

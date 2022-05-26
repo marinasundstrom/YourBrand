@@ -21,7 +21,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
 
-builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
+if(args.Contains("--connection-string")) 
+{
+    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
+}
 
 builder.Services
     .AddApplication()
@@ -66,7 +69,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/documents/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/documents/");
 });
 
 var app = builder.Build();

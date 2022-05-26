@@ -2,6 +2,7 @@
 @page "/invoices/{Id:int}"
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Accounting.Client.Invoicing
+@using YourBrand.Transactions.Client
 @inject NavigationManager NavigationManager
 @inject IInvoicesClient InvoicesClient
 @inject ITransactionsClient TransactionsClient
@@ -179,7 +180,7 @@
     bool loading = false;
     bool loading2 = false;
     TransactionStatus? Status2;
-    HashSet<TransactionStatus?> selectedStatuses = new HashSet<TransactionStatus?>();
+    IEnumerable<TransactionStatus?> selectedStatuses = new List<TransactionStatus?>();
 
     [Parameter]
     public int? Id { get; set; }
@@ -308,7 +309,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task OnSelectedValuesChanged(HashSet<TransactionStatus?> selectedValues)
+    private async Task OnSelectedValuesChanged(IEnumerable<TransactionStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table2.ReloadServerData();

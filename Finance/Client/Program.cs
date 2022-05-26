@@ -39,17 +39,17 @@ CultureInfo.DefaultThreadCurrentUICulture = culture;
 
 builder.Services.AddInvoicesClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}invoices/");
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/invoicing/");
 });
 
 builder.Services.AddTransactionsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}transactions/");
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/transactions/");
 });
 
 builder.Services.AddAccountingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}accounting/");
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/accounting/");
 });
 
 await builder.Build().RunAsync();

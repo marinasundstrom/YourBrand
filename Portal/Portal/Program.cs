@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
+using YourBrand.Accounting;
+using YourBrand.Invoices;
 using YourBrand.Portal;
 using YourBrand.Showroom;
 using YourBrand.TimeReport;
+using YourBrand.Transactions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,7 +25,10 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services
     .AddServices()
     .AddTimeReport()
-    .AddShowroom();
+    .AddShowroom()
+    .AddAccounting()
+    .AddInvoicing()
+    .AddTransactions();
 
 var app = builder.Build();
 

@@ -18,7 +18,7 @@
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateTransactionReference(e.Item)" >
      <ToolBarContent>
         <MudSpacer />
-        <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+        <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"  Class="mt-0">
             @foreach (var status in Enum.GetValues<TransactionStatus>())
             {
                 <MudSelectItem T="TransactionStatus?" Value="@status">@Enum.GetName(typeof(TransactionStatus), status)</MudSelectItem>
@@ -60,7 +60,7 @@
     bool loading = false;
     HubConnection hubConnection = null!;
     TransactionStatus? Status;
-    HashSet<TransactionStatus?> selectedStatuses = new HashSet<TransactionStatus?>();
+    IEnumerable<TransactionStatus?> selectedStatuses = new List<TransactionStatus?>();
 
     private async Task<TableData<TransactionDto>> ServerReload(TableState state)
     {
@@ -109,7 +109,7 @@
         try
         {
             hubConnection = new HubConnectionBuilder()
-            .WithUrl($"{NavigationManager.BaseUri}transactions/hubs/transactions")
+            .WithUrl($"{NavigationManager.BaseUri}api/transactions/hubs/transactions")
             .WithAutomaticReconnect()
             .Build();
 
@@ -157,10 +157,10 @@
         {
             var transaction = result.Items.FirstOrDefault(t => t.Id == id);
 
-            if(transaction is not null) 
+            if(transaction is not null)
             {
                 transaction.Status = status;
-                
+
                 StateHasChanged();
             }
         }
@@ -176,10 +176,10 @@
         {
             var transaction = result.Items.FirstOrDefault(t => t.Id == id);
 
-            if(transaction is not null) 
+            if(transaction is not null)
             {
                 transaction.InvoiceId = invoiceId;
-                
+
                 StateHasChanged();
             }
         }
@@ -192,7 +192,7 @@
         await hubConnection.DisposeAsync();
     }
 
-    private async Task OnSelectedValuesChanged(HashSet<TransactionStatus?> selectedValues) 
+    private async Task OnSelectedValuesChanged(IEnumerable<TransactionStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table.ReloadServerData();
@@ -200,10 +200,10 @@
         StateHasChanged();
     }
 
-    private TableData<TransactionDto>? GetTableData() 
+    private TableData<TransactionDto>? GetTableData()
     {
         return (TableData<TransactionDto>?)table?.GetType()?
-            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic | 
+            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);
     }

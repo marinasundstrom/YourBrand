@@ -19,7 +19,7 @@ public static class ServiceExtensions
     {
         services.AddShowroomClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}showroom/");
+            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/showroom/");
         }, builder => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

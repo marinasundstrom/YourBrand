@@ -65,9 +65,9 @@
     MudTable<InvoiceDto> table;
     bool loading = false;
     InvoiceType? Type;
-    HashSet<InvoiceType?> selectedTypes = new HashSet<InvoiceType?>();
+    IEnumerable<InvoiceType?> selectedTypes = new List<InvoiceType?>();
     InvoiceStatus? Status;
-    HashSet<InvoiceStatus?> selectedStatuses = new HashSet<InvoiceStatus?>();
+    IEnumerable<InvoiceStatus?> selectedStatuses = new List<InvoiceStatus?>();
 
     private async Task<TableData<InvoiceDto>> ServerReload(TableState state)
     {
@@ -101,13 +101,13 @@
         NavigationManager.NavigateTo($"/invoices/{invoice.Id}");
     }
 
-    private async Task OnSelectedTypesChanged(HashSet<InvoiceType?> selectedTypes) 
+    private async Task OnSelectedTypesChanged(IEnumerable<InvoiceType?> selectedTypes)
     {
         this.selectedTypes = selectedTypes;
         await table.ReloadServerData();
     }
 
-    private async Task OnSelectedValuesChanged(HashSet<InvoiceStatus?> selectedValues) 
+    private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table.ReloadServerData();

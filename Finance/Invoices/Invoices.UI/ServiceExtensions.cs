@@ -19,7 +19,7 @@ public static class ServiceExtensions
     {
         services.AddInvoicesClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}invoices/");
+            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/invoicing/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

@@ -18,7 +18,7 @@ public static class ServiceExtensions
     {
         services.AddTimeReportClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}timereport/");
+            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/timereport/");
         }, builder => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

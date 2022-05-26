@@ -19,7 +19,7 @@ public static class ServiceExtensions
     {
         services.AddAccountingClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}accounting/");
+            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/accounting/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

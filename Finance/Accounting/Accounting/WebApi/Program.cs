@@ -23,9 +23,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
-
-Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+if(args.Contains("--connection-string")) 
+{
+    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
+}
 
 builder.Services
     .AddApplication(configuration)
@@ -88,7 +89,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx")}/documents/");
+    http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx")}/api/documents/");
 });
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");

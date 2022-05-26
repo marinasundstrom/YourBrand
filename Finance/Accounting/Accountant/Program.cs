@@ -44,22 +44,22 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddAccountingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/accounting/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/accounting/");
 });
 
 builder.Services.AddInvoicesClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/invoices/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/invoicing/");
 });
 
 builder.Services.AddTransactionsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/transactions/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/transactions/");
 });
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/documents/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/documents/");
 });
 
 // Add Hangfire services.
