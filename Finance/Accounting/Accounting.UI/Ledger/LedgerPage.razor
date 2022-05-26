@@ -37,7 +37,7 @@
     </MudCard>
 }
 
-<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="1" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Date</MudTh>
         <MudTh>Verification No</MudTh>

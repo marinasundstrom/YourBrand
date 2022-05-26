@@ -15,77 +15,82 @@
 
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
 
-    <div class="mb-4">
-        <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">Download document</MudButton>
-    </div>
+    <MudPaper Elevation="1" Class="pa-4">
 
-    <MudGrid Class="mb-4">
-        <MudItem xs="12" sm="12" md="6" lg="3">
-            @if (Status >= InvoiceStatus.Sent)
-            {
-                <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
-            }
-            else
-            {
-                <MudDatePicker Label="Date" Date="Date" DateChanged="OnDateChanged" For="() => Date"></MudDatePicker>
-            }
-        </MudItem>
+        <div class="mb-4">
+            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">Download
+                document</MudButton>
+        </div>
 
-        <MudItem xs="12" sm="12" md="6" lg="3">
-            <div class="d-flex">
-                <MudField Label="Status">@Status</MudField>
-                <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
-                OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
-            </div>
-        </MudItem>
+        <MudGrid Class="mb-4">
+            <MudItem xs="12" sm="12" md="6" lg="3">
+                @if (Status >= InvoiceStatus.Sent)
+                {
+                    <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
+                }
+                else
+                {
+                    <MudDatePicker Label="Date" Date="Date" DateChanged="OnDateChanged" For="() => Date"></MudDatePicker>
+                }
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="6" lg="3">
-            @if (Status >= InvoiceStatus.Sent)
-            {
-                <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
-            }
-            else
-            {
-                <MudDatePicker Label="Due Date" Date="@DueDate" DateChanged="OnDueDateChanged" For="() => DueDate">
-                </MudDatePicker>
-            }
-        </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="3">
+                <div class="d-flex">
+                    <MudField Label="Status">@Status</MudField>
+                    <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
+                    OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+                </div>
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12">
-            @if (Status >= InvoiceStatus.Sent)
-            {
-                <MudField Label="Reference">@Reference</MudField>
-            }
-            else
-            {
-                <MudTextField Label="Reference" Text="@Reference" TextChanged="OnReferenceChanged" For="() => Reference"></MudTextField>
-            }
-        </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="3">
+                @if (Status >= InvoiceStatus.Sent)
+                {
+                    <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
+                }
+                else
+                {
+                    <MudDatePicker Label="Due Date" Date="@DueDate" DateChanged="OnDueDateChanged" For="() => DueDate">
+                    </MudDatePicker>
+                }
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12">
-            @if (Status >= InvoiceStatus.Sent)
-            {
-                <MudField Label="Note">@Note</MudField>
-            }
-            else
-            {
-                <MudTextField Label="Note" Text="@Note" TextChanged="OnNoteChanged" For="() => Note"></MudTextField>
-            }      
-        </MudItem>
+            <MudItem xs="12" sm="12" md="12">
+                @if (Status >= InvoiceStatus.Sent)
+                {
+                    <MudField Label="Reference">@Reference</MudField>
+                }
+                else
+                {
+                    <MudTextField Label="Reference" Text="@Reference" TextChanged="OnReferenceChanged" For="() => Reference">
+                    </MudTextField>
+                }
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12" lg="3">
-           <MudField Label="Sub Total">@SubTotal.ToString("c")</MudField>  
-        </MudItem>
+            <MudItem xs="12" sm="12" md="12">
+                @if (Status >= InvoiceStatus.Sent)
+                {
+                    <MudField Label="Note">@Note</MudField>
+                }
+                else
+                {
+                    <MudTextField Label="Note" Text="@Note" TextChanged="OnNoteChanged" For="() => Note"></MudTextField>
+                }
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12" lg="3">
-           <MudField Label="VAT">@Vat.ToString("c")</MudField>
-        </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="3">
+                <MudField Label="Sub Total">@SubTotal.ToString("c")</MudField>
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12" lg="3">
-          <MudField Label="Total">@Total.ToString("c")</MudField>
-        </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="3">
+                <MudField Label="VAT">@Vat.ToString("c")</MudField>
+            </MudItem>
 
-    </MudGrid>
+            <MudItem xs="12" sm="12" md="12" lg="3">
+                <MudField Label="Total">@Total.ToString("c")</MudField>
+            </MudItem>
+
+        </MudGrid>
+    </MudPaper>
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
 
@@ -94,8 +99,8 @@
         <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
     }
 
-    <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="0"
-        Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="1"
+    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Description</MudTh>
             <MudTh>Product Type</MudTh>
@@ -122,7 +127,7 @@
                 <MudTd>
                     <MudIconButton Icon="@Icons.Filled.Delete" />
                 </MudTd>
-            }       
+            }
         </RowTemplate>
         <LoadingContent>
             <MudText>Loading...</MudText>
@@ -131,8 +136,8 @@
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Transactions</MudText>
 
-    <MudTable T="TransactionDto" @ref="table2" ServerData="ServerReload" Hover="true" Elevation="0"
-        Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable T="TransactionDto" @ref="table2" Dense="true" ServerData="ServerReload" Hover="true" Elevation="1"
+    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <ToolBarContent>
             <MudSpacer />
             <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status2"
@@ -233,10 +238,10 @@
         else
         {
             invoice = await InvoicesClient.CreateInvoiceAsync(
-                new CreateInvoice()
-                {
-                    Status = InvoiceStatus.Draft
-                }
+            new CreateInvoice()
+            {
+                Status = InvoiceStatus.Draft
+            }
             );
 
             Set(invoice);
@@ -245,7 +250,7 @@
         }
     }
 
-    private void Set(InvoiceDto invoice) 
+    private void Set(InvoiceDto invoice)
     {
         Id = invoice.Id;
         Status = invoice.Status;
