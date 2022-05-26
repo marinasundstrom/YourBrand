@@ -38,14 +38,14 @@ else
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="12" md="4">
-                    <MudSelect Label="Projects" HelperText="Select projects" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options" ToStringFunc="x => x.Name">
+                    <MudSelect T="ProjectDto" Label="Projects" HelperText="Select projects" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options" ToStringFunc="x => x.Name">
                         @foreach (var project in projects)
                         {
                             <MudSelectItem Value="@project">@project.Name</MudSelectItem>
                         }
                     </MudSelect>
 
-                    <MudSelect Label="Statuses" Class="mt-8" HelperText="Select statuses of timesheets to include" MultiSelection="true" @bind-SelectedValues="selectedStatuses" ToStringFunc="x => x?.ToString()">
+                    <MudSelect T="TimeSheetStatusDto" Label="Statuses" Class="mt-8" HelperText="Select statuses of timesheets to include" MultiSelection="true" @bind-SelectedValues="selectedStatuses" ToStringFunc="x => x.ToString()">
                         @foreach (var status in statuses)
                         {
                             <MudSelectItem Value="@status">@status.ToString()</MudSelectItem>
@@ -78,11 +78,11 @@ else
 
     private IEnumerable<ProjectDto>? projects = null;
 
-    private TimeSheetStatusDto? status { get; set; }
+    private TimeSheetStatusDto status { get; set; }
 
-    private IEnumerable<TimeSheetStatusDto?>? statuses = null;
+    private IEnumerable<TimeSheetStatusDto>? statuses = null;
 
-    private IEnumerable<TimeSheetStatusDto?> selectedStatuses { get; set; } = new HashSet<TimeSheetStatusDto?>();
+    private IEnumerable<TimeSheetStatusDto> selectedStatuses { get; set; } = new HashSet<TimeSheetStatusDto>();
 
     private ReportModeDto mode = ReportModeDto.Project;
 
@@ -107,7 +107,7 @@ else
             var page2 = await ProjectsClient.GetProjectsAsync(0, 10, null, null, null, null);
             projects = page2.Items;
 
-            statuses = Enum.GetValues<TimeSheetStatusDto>().Select(x => (TimeSheetStatusDto?)x);
+            statuses = Enum.GetValues<TimeSheetStatusDto>().Select(x => (TimeSheetStatusDto)x);
             ((HashSet<TimeSheetStatusDto?>)selectedStatuses).Add(TimeSheetStatusDto.Approved);
         }
         catch (Exception e)
