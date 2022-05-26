@@ -16,7 +16,7 @@
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
 
     <div class="mb-4">
-        <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{Id}/file")">Download document</MudButton>
+        <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">Download document</MudButton>
     </div>
 
     <MudGrid Class="mb-4">

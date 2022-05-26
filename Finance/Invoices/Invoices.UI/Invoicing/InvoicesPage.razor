@@ -49,7 +49,7 @@
         <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
         <MudTd>
-            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
+            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
         </MudTd>
     </RowTemplate>
     <LoadingContent>
