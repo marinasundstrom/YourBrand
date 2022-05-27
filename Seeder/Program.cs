@@ -56,13 +56,14 @@ var absenceActivityType = await activityTypesClient.CreateActivityTypeAsync(new 
 });
 
 var projectMyProject = await projectsClient.CreateProjectAsync(new YourBrand.TimeReport.Client.CreateProjectDto() {
-    Name = "My project",
+    Name = "My mega project",
     OrganizationId = organization.Id
 });
 
 var activityWork = await activitiesClient.CreateActivityAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
-    Name = "Work",
-    ActivityTypeId = workActivityType.Id
+    Name = "Konsultarbete",
+    ActivityTypeId = workActivityType.Id,
+    HourlyRate = 890
 });
 
 var activityMisc = await activitiesClient.CreateActivityAsync(projectMyProject.Id, new YourBrand.TimeReport.Client.CreateActivityDto() {
