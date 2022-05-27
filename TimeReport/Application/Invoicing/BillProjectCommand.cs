@@ -45,7 +45,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
             var invoice = await _invoicesClient.CreateInvoiceAsync(new CreateInvoice()
             {
                  Date = DateTime.Now,
-                 Note = entriesByActivity.First().Key.Name
+                 Note = entriesByActivity.First().Key.Project.Name
             });
 
             foreach(var entryGroup in entriesByActivity)
