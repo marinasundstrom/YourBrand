@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoices.Application.Commands;
 
-public record AddItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity) : IRequest<InvoiceItemDto>
+public record AddItemItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity) : IRequest<InvoiceItemDto>
 {
-    public class Handler : IRequestHandler<AddItem, InvoiceItemDto>
+    public class Handler : IRequestHandler<AddItemItem, InvoiceItemDto>
     {
         private readonly IInvoicesContext _context;
 
@@ -20,7 +20,7 @@ public record AddItem(int InvoiceId, ProductType ProductType, string Description
             _context = context;
         }
 
-        public async Task<InvoiceItemDto> Handle(AddItem request, CancellationToken cancellationToken)
+        public async Task<InvoiceItemDto> Handle(AddItemItem request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)

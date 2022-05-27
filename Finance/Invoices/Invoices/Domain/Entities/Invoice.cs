@@ -28,7 +28,7 @@ public class Invoice : IHasDomainEvents
 
     public void SetDate(DateTime? date)
     {
-        if(Date != date) 
+        if (Date != date)
         {
             Date = date;
             DomainEvents.Add(new InvoiceDateChanged(Id, Date));
@@ -37,9 +37,19 @@ public class Invoice : IHasDomainEvents
 
     public InvoiceType Type { get; private set; }
 
+    public void DeleteItem(InvoiceItem item)
+    {
+        if (Status != InvoiceStatus.Draft)
+        {
+            throw new Exception();
+        }
+
+        _items.Remove(item);
+    }
+
     public void SetType(InvoiceType type)
     {
-        if(Type != type) 
+        if (Type != type)
         {
             Type = type;
             DomainEvents.Add(new InvoiceTypeChanged(Id, Type));
@@ -47,10 +57,10 @@ public class Invoice : IHasDomainEvents
     }
 
     public InvoiceStatus Status { get; private set; }
-    
+
     public void SetStatus(InvoiceStatus status)
     {
-        if(Status != status) 
+        if (Status != status)
         {
             Status = status;
             DomainEvents.Add(new InvoiceStatusChanged(Id, Status));
@@ -61,7 +71,7 @@ public class Invoice : IHasDomainEvents
 
     public void SetDueDate(DateTime dueDate)
     {
-        if(DueDate != dueDate) 
+        if (DueDate != dueDate)
         {
             DueDate = dueDate;
             DomainEvents.Add(new InvoiceDueDateChanged(Id, DueDate));
@@ -72,7 +82,7 @@ public class Invoice : IHasDomainEvents
 
     public void SetReference(string? reference)
     {
-        if(Reference != reference) 
+        if (Reference != reference)
         {
             Reference = reference;
             DomainEvents.Add(new InvoiceReferenceChanged(Id, Reference));
@@ -89,7 +99,7 @@ public class Invoice : IHasDomainEvents
 
     public void SetPaid(decimal amount)
     {
-        if(Paid != amount) 
+        if (Paid != amount)
         {
             Paid = amount;
             DomainEvents.Add(new InvoiceAmountPaidChanged(Id, Paid));
@@ -115,7 +125,7 @@ public class Invoice : IHasDomainEvents
 
     public void SetNote(string note)
     {
-        if(Note != note) 
+        if (Note != note)
         {
             Note = note;
             DomainEvents.Add(new InvoiceNoteChanged(Id, Note));
@@ -124,7 +134,7 @@ public class Invoice : IHasDomainEvents
 
     public IReadOnlyList<InvoiceItem> Items => _items;
 
-    public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity) 
+    public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
     {
         var invoiceItem = new InvoiceItem(productType, description, unitPrice, unit, vatRate, quantity);
         _items.Add(invoiceItem);

@@ -38,6 +38,14 @@ public record UpdateActivityCommand(string ActivityId, string Name, string Activ
 
             await _context.SaveChangesAsync(cancellationToken);
 
+            activity = await _context.Activities
+               .Include(x => x.ActivityType)
+               .Include(x => x.Project)
+               .ThenInclude(x => x.Organization)
+               .AsNoTracking()
+               .AsSplitQuery()
+               .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
+
             return activity.ToDto();
         }
     }

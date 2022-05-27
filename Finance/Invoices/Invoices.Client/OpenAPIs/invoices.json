@@ -574,6 +574,44 @@
           }
         }
       }
+    },
+    "/Invoices/{invoiceId}/Items/{invoiceItemId}": {
+      "delete": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_DeleteInvoiceItem",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "invoiceItemId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

@@ -35,6 +35,8 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
                 .Where(e => e.Date > from && e.Date < to)
                 .ToArrayAsync(cancellationToken);
 
+            // TODO: Only include timesheets that have been Approved
+
             var entriesByActivity = entries.GroupBy(x => x.Activity);
 
             if (!entries.Any())
@@ -64,6 +66,8 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
                     0.25,
                     hours);
             }
+
+            // TODO: Mark TimeSheets as billed.
 
             return MediatR.Unit.Value;
         }

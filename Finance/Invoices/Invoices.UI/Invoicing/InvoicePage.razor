@@ -133,7 +133,7 @@
             @if (Status == InvoiceStatus.Draft)
             {
                 <MudTd>
-                    <MudIconButton Icon="@Icons.Filled.Delete" />
+                    <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async () => await DeleteItem(invoiceItem)" />
                 </MudTd>
             }
         </RowTemplate>
@@ -233,6 +233,7 @@
             {
                 Items.Add(new InvoiceItemViewModel
                 {
+                    Id = item.Id,
                     ProductType = item.ProductType,
                     Description = item.Description,
                     UnitPrice = item.UnitPrice,
@@ -290,15 +291,17 @@
 
         var vm = (InvoiceItemViewModel)result.Data;
 
-        var invoice = await InvoicesClient.AddItemAsync(
-        Id.GetValueOrDefault(),
-        vm.ProductType,
-        vm.Description,
-        vm.UnitPrice,
-        vm.Unit,
-        vm.VatRate,
-        vm.Quantity
+        var invoiceItem = await InvoicesClient.AddItemAsync(
+            Id.GetValueOrDefault(),
+            vm.ProductType,
+            vm.Description,
+            vm.UnitPrice,
+            vm.Unit,
+            vm.VatRate,
+            vm.Quantity
         );
+
+        vm.Id = invoiceItem.Id;
 
         Items.Add(vm);
     }
@@ -413,5 +416,19 @@
             return;
 
         await InvoicesClient.DeleteInvoiceAsync(invoice.Id);
+
+        NavigationManager.NavigateTo("/invoices");
+    }
+
+    async Task DeleteItem(InvoiceItemViewModel invoiceItem)
+    {
+        var result = await DialogService.ShowMessageBox("Delete item", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await InvoicesClient.DeleteInvoiceItemAsync(Id.GetValueOrDefault(), invoiceItem.Id);
+
+        Items.Remove(invoiceItem);
     }
 }
