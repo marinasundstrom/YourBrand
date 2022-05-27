@@ -172,6 +172,12 @@ IMediator mediator, CancellationToken cancellationToken)
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
+app.MapDelete("/Invoices/{invoiceId}", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new DeleteInvoice(invoiceId), cancellationToken))
+    .WithName("Invoices_DeleteInvoice")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
 app.MapControllers();
 
 if(args.Contains("--seed")) 

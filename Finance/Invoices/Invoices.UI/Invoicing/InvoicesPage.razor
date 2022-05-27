@@ -50,6 +50,10 @@
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
         <MudTd>
             <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
+            @if(invoice.Status == InvoiceStatus.Draft) 
+            {
+                <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)" />
+            }
         </MudTd>
     </RowTemplate>
     <LoadingContent>
@@ -110,6 +114,17 @@
     private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+
+    private async Task DeleteInvoice(InvoiceDto invoice)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft invoice", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await InvoicesClient.DeleteInvoiceAsync(invoice.Id);
         await table.ReloadServerData();
     }
 }

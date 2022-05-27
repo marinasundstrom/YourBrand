@@ -18,8 +18,14 @@
     <MudPaper Elevation="1" Class="pa-4">
 
         <div class="mb-4">
-            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">Download
-                document</MudButton>
+            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">
+                Download
+            </MudButton>
+
+            @if (invoice.Status == InvoiceStatus.Draft)
+            {
+                <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">Delete</MudButton>
+            }
         </div>
 
         <MudGrid Class="mb-4">
@@ -38,7 +44,7 @@
                 <div class="d-flex">
                     <MudField Label="Status">@Status</MudField>
                     <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
-                    OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+                                   OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
                 </div>
             </MudItem>
 
@@ -397,5 +403,15 @@
             await InvoicesClient.SetNoteAsync(Id.GetValueOrDefault(), note);
             Note = note;
         }
+    }
+
+    private async Task DeleteInvoice(InvoiceDto invoice)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft invoice", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await InvoicesClient.DeleteInvoiceAsync(invoice.Id);
     }
 }

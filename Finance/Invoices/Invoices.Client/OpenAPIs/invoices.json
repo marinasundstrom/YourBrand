@@ -5,7 +5,7 @@
     "title": "Invoices API",
     "version": "0.1"
   },
-  "host": "localhost:5050",
+  "host": "localhost:5095",
   "schemes": [
     "https"
   ],
@@ -52,6 +52,34 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/InvoiceDto"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_DeleteInvoice",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
             }
           }
         }
