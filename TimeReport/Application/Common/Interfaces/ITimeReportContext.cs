@@ -5,7 +5,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Common.Interfaces;
 
-public interface ITimeReportContext
+public interface ITimeReportContext : IDisposable
 {
     DbSet<User> Users { get; set; }
     DbSet<Organization> Organizations { get; set; }

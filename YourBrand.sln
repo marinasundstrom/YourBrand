@@ -146,6 +146,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoices.UI", "Finance\Invo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.UI", "Finance\Transactions\Transactions.UI\Transactions.UI.csproj", "{06FD8E51-350A-475D-8D1E-499068AF4FE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "TimeReport\Application.Tests\Application.Tests.csproj", "{7A301C08-7AC6-4633-8DE8-1CAF4E2CFCD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -364,6 +366,10 @@ Global
 		{06FD8E51-350A-475D-8D1E-499068AF4FE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06FD8E51-350A-475D-8D1E-499068AF4FE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06FD8E51-350A-475D-8D1E-499068AF4FE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A301C08-7AC6-4633-8DE8-1CAF4E2CFCD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A301C08-7AC6-4633-8DE8-1CAF4E2CFCD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A301C08-7AC6-4633-8DE8-1CAF4E2CFCD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A301C08-7AC6-4633-8DE8-1CAF4E2CFCD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -429,5 +435,6 @@ Global
 		{5E733313-29EF-4493-8C01-AD04C3FBDA23} = {1C2101CB-191B-4104-B3C1-5DD5A20F4243}
 		{0B78BDC4-7B4C-4EA4-ACBD-D093077AFAFC} = {5F8FB6FC-EA99-4314-A6F7-5D57E31D0026}
 		{06FD8E51-350A-475D-8D1E-499068AF4FE6} = {0880D553-6ED7-4F06-A4F4-15E4EAD09786}
+		{7A301C08-7AC6-4633-8DE8-1CAF4E2CFCD5} = {01C4E010-A651-40F0-9BB1-4C873AF56278}
 	EndGlobalSection
 EndGlobal
