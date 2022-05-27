@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj" />
     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
     <ProjectReference Include="..\..\Utils\Utils.csproj" />
+    <ProjectReference Include="..\..\Finance\Invoices\Invoices.Client\Invoices.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,4 +24,10 @@
     <PackageReference Include="EPPlus" Version="6.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Invoicing\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Invoicing\" />
+  </ItemGroup>
 </Project>

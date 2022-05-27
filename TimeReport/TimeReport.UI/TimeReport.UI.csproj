@@ -21,18 +21,4 @@
 		<ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
 		<ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="Projects\" />
-	  <None Remove="Projects\Activities\" />
-	  <None Remove="Projects\Expenses\" />
-	  <None Remove="Reports\" />
-	  <None Remove="TimeSheets\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Projects\" />
-	  <Folder Include="Projects\Activities\" />
-	  <Folder Include="Projects\Expenses\" />
-	  <Folder Include="Reports\" />
-	  <Folder Include="TimeSheets\" />
-	</ItemGroup>
 </Project>

@@ -1,0 +1,52 @@
+@using System.ComponentModel.DataAnnotations
+@inject IProjectsClient ProjectsClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            <MudAutocomplete T="ProjectDto" Label="Project" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Project" SearchFunc="@Search"
+                             For="() => Project"
+                             ToStringFunc="p => p?.Name"
+                             ResetValueOnEmptyText="true"
+                             CoerceText="true" CoerceValue="true"
+                             AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+
+            <MudDateRangePicker Label="Time span" HelperText="Select a date range" @bind-DateRange="SelectedDateRange" />
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create invoice</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Required]
+    public ProjectDto Project { get; set; }
+
+    public DateRange SelectedDateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    async Task OnSubmit()
+    {
+        await ProjectsClient.BillProjectAsync(Project.Id, SelectedDateRange.Start, SelectedDateRange.End);
+
+        Modal.Close();
+    }
+
+    private async Task<IEnumerable<ProjectDto>> Search(string value)
+    {
+        var page = await ProjectsClient.GetProjectsAsync(0, 10, null, value, null, null);
+
+        return page.Items;
+    }
+}

@@ -42,7 +42,7 @@ static class Program
         services
             .AddApplication(Configuration)
             .AddInfrastructure(Configuration)
-            .AddClients();
+            .AddClients(Configuration);
 
         services
             .AddControllers()

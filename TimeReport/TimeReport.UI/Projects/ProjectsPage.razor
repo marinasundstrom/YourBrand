@@ -8,6 +8,8 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">Projects</MudText>
 
+<MudButton OnClick="BillProject">BillProject</MudButton>
+
 <div class="mb-8">
     @if (statisticsSummary is not null)
     {
@@ -134,5 +136,14 @@
 
         searchString = null;
         table.ReloadServerData();
+    }
+
+    private async Task BillProject() 
+    {
+        var dialogReference = DialogService.Show<BillProjectDialog>("Bill project");
+        var result = await dialogReference.Result;
+
+        if (result.Cancelled)
+            return;
     }
 }

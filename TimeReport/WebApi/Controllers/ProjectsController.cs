@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Common.Models;
+using YourBrand.TimeReport.Application.Invoicing;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Projects.Commands;
 using YourBrand.TimeReport.Application.Projects.Queries;
@@ -222,6 +223,27 @@ public class ProjectsController : ControllerBase
         try
         {
             await _mediator.Send(new DeleteProjectMembershipCommand(id, membershipId), cancellationToken);
+
+            return Ok();
+        }
+        catch (ProjectNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (ProjectMembershipNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost("{id}/Bill")]
+    [Authorize(Roles = Roles.AdministratorManager)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> BillProject(string id, DateTime from, DateTime to, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(new BillProjectCommand(id, from, to), cancellationToken);
 
             return Ok();
         }
