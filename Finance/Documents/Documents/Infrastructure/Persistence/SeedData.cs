@@ -82,6 +82,7 @@ Hello, @Model.Name!"
             <th>Description</th>
             <th>Unit Price</th>
             <th>Quantity</th>
+            <th>Unit</th>
             <th>VAT Rate (%)</th>
             <th>Total</th>
         </tr>
@@ -93,6 +94,7 @@ Hello, @Model.Name!"
             <td>@item.Description</td>
             <td>@item.UnitPrice.ToString(""c"")</td>
             <td>@item.Quantity</td>
+            <td>@item.Unit</td>
             <td>@(item.VatRate * 100)</td>
             <td>@item.LineTotal.ToString(""c"")</td>
         </tr>
