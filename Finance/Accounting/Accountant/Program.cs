@@ -14,8 +14,7 @@ using Hangfire.SqlServer;
 using YourBrand.Invoices.Client;
 
 using MassTransit;
-
-using YourBrand.Transactions.Client;
+using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +31,7 @@ builder.Services.AddMassTransit(x =>
     //x.AddConsumers(typeof(Program).Assembly);
 
     x.AddConsumer<InvoicesBatchConsumer>();
-    x.AddConsumer<TransactionBatchConsumer>();
+    x.AddConsumer<PaymentCapturedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -52,9 +51,9 @@ builder.Services.AddInvoicesClients((sp, http) =>
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/invoicing/");
 });
 
-builder.Services.AddTransactionsClients((sp, http) =>
+builder.Services.AddPaymentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/transactions/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/payments/");
 });
 
 builder.Services.AddDocumentsClients((sp, http) =>

@@ -52,8 +52,6 @@ public class Transaction : IHasDomainEvents
 
     public decimal Amount { get; set; }
 
-    public int? InvoiceId { get; private set; }
-
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 
     public void SetStatus(TransactionStatus status)
@@ -62,15 +60,6 @@ public class Transaction : IHasDomainEvents
         {
             Status = status;
             DomainEvents.Add(new TransactionStatusChanged(Id, status));
-        }
-    }
-
-    public void SetInvoiceId(int invoiceId)
-    {
-        if(InvoiceId != invoiceId) 
-        {
-            InvoiceId = invoiceId;
-            DomainEvents.Add(new TransactionInvoiceIdUpdated(Id, invoiceId));
         }
     }
 }

@@ -7,7 +7,7 @@ using YourBrand.Payments.Domain.Enums;
 
 namespace YourBrand.Payments.Application.Commands;
 
-public record CreatePayment(int InvoiceId, string Currency, decimal Amount, DateTime DueDate, PaymentMethod PaymentMethod, string? Message) : IRequest
+public record CreatePayment(int InvoiceId, string Currency, decimal Amount, DateTime DueDate, PaymentMethod PaymentMethod, string? Reference, string? Message) : IRequest
 {
     public class Handler : IRequestHandler<CreatePayment>
     {
@@ -29,6 +29,7 @@ public record CreatePayment(int InvoiceId, string Currency, decimal Amount, Date
                     request.Amount,
                     request.DueDate,
                     request.PaymentMethod,
+                    request.Reference,
                     request.Message
                 ));
 

@@ -13,19 +13,21 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
     }
 
-    public Payment(int invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? message = null)
+    public Payment(int invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
     {
         if(amount <= 0)
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }
 
+        Id = Guid.NewGuid().ToUrlFriendlyString();
         InvoiceId = invoiceId;
         Status = status;
         DueDate = dueDate;
         Currency = currency;
         Amount = amount;
         PaymentMethod = paymentMethod;
+        Reference = reference;
         Message = message;
 
         DomainEvents.Add(new PaymentCreated(Id));
@@ -54,6 +56,8 @@ public class Payment : AuditableEntity, IHasDomainEvents
     public decimal Amount { get; private set; }
 
     public PaymentMethod PaymentMethod { get; private set; }
+
+    public string? Reference { get; private set; }
 
     public string? Message { get; private set; }
 

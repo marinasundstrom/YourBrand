@@ -9,9 +9,9 @@ using YourBrand.Transactions.Domain.Enums;
 
 namespace YourBrand.Transactions.Application.Queries;
 
-public record GetPayments(int Page, int PageSize, TransactionStatus[]? Status = null, int? InvoiceId = null) : IRequest<ItemsResult<TransactionDto>>
+public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Status = null) : IRequest<ItemsResult<TransactionDto>>
 {
-    public class Handler : IRequestHandler<GetPayments, ItemsResult<TransactionDto>>
+    public class Handler : IRequestHandler<GetTransactions, ItemsResult<TransactionDto>>
     {
         private readonly ITransactionsContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
@@ -22,7 +22,7 @@ public record GetPayments(int Page, int PageSize, TransactionStatus[]? Status = 
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<ItemsResult<TransactionDto>> Handle(GetPayments request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<TransactionDto>> Handle(GetTransactions request, CancellationToken cancellationToken)
         {
             if(request.PageSize < 0) 
             {
@@ -45,14 +45,7 @@ public record GetPayments(int Page, int PageSize, TransactionStatus[]? Status = 
                 var statuses = request.Status.Select(x => (int)x);
                 query = query.Where(i => statuses.Any(s => s == (int)i.Status));
             }
-
-            if(request.InvoiceId is not null) 
-            {
-                int invoiceId = request.InvoiceId.GetValueOrDefault();
-                query = query.Where(i => i.InvoiceId == invoiceId);
-            }
-
-
+            
             int totalItems = await query.CountAsync(cancellationToken);
 
             query = query
@@ -62,7 +55,7 @@ public record GetPayments(int Page, int PageSize, TransactionStatus[]? Status = 
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<TransactionDto>(
-                items.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount, t.InvoiceId)),
+                items.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)),
                 totalItems);
         }
     }

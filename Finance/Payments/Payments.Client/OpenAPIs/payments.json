@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Payments API",
@@ -116,6 +116,33 @@
       }
     },
     "/Payments/{paymentId}": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_GetPaymentById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/PaymentDto"
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Payments"
@@ -139,6 +166,35 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Payments/GetPaymentByReference/{reference}": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_GetPaymentByReference",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/PaymentDto"
             }
           }
         }
@@ -225,6 +281,9 @@
         "paymentMethod": {
           "$ref": "#/definitions/PaymentMethod"
         },
+        "reference": {
+          "type": "string"
+        },
         "message": {
           "type": "string"
         }
@@ -239,6 +298,49 @@
       "enum": [
         "PlusGiro"
       ]
+    },
+    "PaymentDto": {
+      "type": "object",
+      "required": [
+        "invoiceId",
+        "status",
+        "currency",
+        "amount",
+        "dueDate",
+        "paymentMethod"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "status": {
+          "$ref": "#/definitions/PaymentStatus"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "paymentMethod": {
+          "$ref": "#/definitions/PaymentMethod"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
     },
     "PaymentStatus": {
       "type": "string",
@@ -276,46 +378,6 @@
         "totalItems": {
           "type": "integer",
           "format": "int32"
-        }
-      }
-    },
-    "PaymentDto": {
-      "type": "object",
-      "required": [
-        "invoiceId",
-        "status",
-        "currency",
-        "amount",
-        "dueDate",
-        "paymentMethod"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "invoiceId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "status": {
-          "$ref": "#/definitions/PaymentStatus"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "dueDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "paymentMethod": {
-          "$ref": "#/definitions/PaymentMethod"
-        },
-        "message": {
-          "type": "string"
         }
       }
     }

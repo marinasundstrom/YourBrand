@@ -14,12 +14,10 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
     public class Handler : IRequestHandler<GetPayments, ItemsResult<PaymentDto>>
     {
         private readonly IPaymentsContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
 
-        public Handler(IPaymentsContext context, IPublishEndpoint publishEndpoint)
+        public Handler(IPaymentsContext context)
         {
             _context = context;
-            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<ItemsResult<PaymentDto>> Handle(GetPayments request, CancellationToken cancellationToken)
@@ -62,7 +60,7 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<PaymentDto>(
-                items.Select(t => new PaymentDto(t.Id, t.InvoiceId, t.Status, t.Currency, t.Amount, t.DueDate, t.PaymentMethod, t.Message)),
+                items.Select(t => t.ToDto()),
                 totalItems);
         }
     }

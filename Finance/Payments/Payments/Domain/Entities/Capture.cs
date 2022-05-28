@@ -17,7 +17,7 @@ public class Capture : IHasDomainEvents
         Amount = amount;
         TransactionId = transactionId;
 
-        DomainEvents.Add(new PaymentCaptured(Id));
+        DomainEvents.Add(new PaymentCaptured(Id, Id));
     }
 
     public string Id { get; private set; } = null!;

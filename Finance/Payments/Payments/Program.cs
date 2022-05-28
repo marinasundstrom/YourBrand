@@ -16,6 +16,7 @@ using YourBrand.Payments.Hubs;
 using YourBrand.Payments.Infrastructure;
 using YourBrand.Payments.Infrastructure.Persistence;
 using YourBrand.Payments.Services;
+using YourBrand.Transactions.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,13 +65,18 @@ builder.Services.AddSwaggerDocument(c =>
     c.Version = "0.1";
 });
 
+builder.Services.AddTransactionsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/transactions/");
+});
+
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
 
     x.AddConsumers(typeof(Program).Assembly);
 
-    x.AddRequestClient<YourBrand.Payments.Contracts.PaymentBatch>();
+    //x.AddRequestClient<YourBrand.Payments.Contracts.PaymentBatch>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -111,6 +117,18 @@ app.MapPost("/Payments", async (CreatePayment payment, IMediator mediator, Cance
     .WithTags("Payments")
     //.RequireAuthorization()
     .Produces(StatusCodes.Status200OK);
+
+app.MapGet("/Payments/{paymentId}", async (string paymentId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetPaymentById(paymentId), cancellationToken))
+    .WithName("Payments_GetPaymentById")
+    .WithTags("Payments")
+    .Produces<PaymentDto>(StatusCodes.Status200OK);
+
+app.MapGet("/Payments/GetPaymentByReference/{reference}", async (string reference, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetPaymentByReference(reference), cancellationToken))
+    .WithName("Payments_GetPaymentByReference")
+    .WithTags("Payments")
+    .Produces<PaymentDto>(StatusCodes.Status200OK);
 
 app.MapDelete("/Payments/{paymentId}", async (string paymentId, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new CancelPayment(paymentId), cancellationToken))
