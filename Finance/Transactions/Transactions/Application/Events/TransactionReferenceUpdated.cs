@@ -28,7 +28,7 @@ public class TransactionReferenceUpdatedHandler : INotificationHandler<DomainEve
         if(t is not null) 
         {
             await _publishEndpoint.Publish(
-                new Contracts.TransactionBatch(new [] { new Contracts.Transaction(t.Id, t.Date, (Contracts.TransactionStatus)t.Status, t.From!, t.Reference!, t.Currency, t.Amount) }));
+                new Contracts.IncomingTransactionBatch(new [] { new Contracts.Transaction(t.Id, t.Date, (Contracts.TransactionStatus)t.Status, t.From!, t.Reference!, t.Currency, t.Amount) }));
         }
     }
 }

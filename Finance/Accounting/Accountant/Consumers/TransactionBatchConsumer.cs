@@ -9,7 +9,7 @@ using YourBrand.Transactions.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 
-public class TransactionBatchConsumer : IConsumer<TransactionBatch>
+public class TransactionBatchConsumer : IConsumer<IncomingTransactionBatch>
 {
     private readonly IVerificationsClient _verificationsClient;
     private readonly IInvoicesClient _invoicesClient;
@@ -22,7 +22,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
         _transactionsClient = transactionsClient;
     }
 
-    public async Task Consume(ConsumeContext<TransactionBatch> context)
+    public async Task Consume(ConsumeContext<IncomingTransactionBatch> context)
     {
         var batch = context.Message;
 

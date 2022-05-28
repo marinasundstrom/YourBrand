@@ -57,7 +57,7 @@ builder.Services.AddMassTransit(x =>
 
     //x.AddConsumers(typeof(Program).Assembly);
 
-    //x.AddRequestClient<TransactionBatch>();
+    //x.AddRequestClient<IncomingTransactionBatch>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
