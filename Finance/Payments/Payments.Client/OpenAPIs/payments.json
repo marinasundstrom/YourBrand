@@ -1,0 +1,323 @@
+﻿{
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "Payments API",
+    "version": "0.1"
+  },
+  "host": "localhost:5040",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "Get",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/payments": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_PostPayments",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "PaymentDto[]",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PaymentDto"
+              }
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/payments/{paymentId}/status": {
+      "put": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_SetPaymentStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/PaymentStatus"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Unverified",
+              "Verified",
+              "Payback",
+              "Unknown"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/payments/{paymentId}/reference": {
+      "put": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_SetPaymentReference",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/payments/{paymentId}/invoiceId": {
+      "put": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_SetPaymentInvoiceId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Payments": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Payments_GetPayments",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/PaymentStatus"
+            }
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfPaymentDto"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Unit": {
+      "type": "object",
+      "description": "Represents a void type, since Void is not a valid return type in C#."
+    },
+    "PaymentDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "from",
+        "reference",
+        "currency",
+        "amount"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/PaymentStatus"
+        },
+        "from": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "PaymentStatus": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Unverified",
+        "Verified",
+        "Payback",
+        "Unknown"
+      ],
+      "enum": [
+        "Unverified",
+        "Verified",
+        "Payback",
+        "Unknown"
+      ]
+    },
+    "ItemsResultOfPaymentDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PaymentDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

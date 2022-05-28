@@ -32,20 +32,26 @@ services:
       - protocol: https
         port: 5094
 
+  - name: payments
+    project: Payments/Payments/Payments.csproj
+    bindings:
+      - protocol: https
+        port: 5095
+
   - name: invoices
     project: Invoices/Invoices/Invoices.csproj
     bindings:
       - protocol: https
-        port: 5095
+        port: 5096
 
   - name: documents
     project: Documents/Documents/Documents.csproj
     bindings:
       - protocol: https
-        port: 5096
+        port: 5097
 
   - name: email
     project: EmailService/EmailService/EmailService.csproj
     bindings:
       - protocol: https
-        port: 5097
+        port: 5098
