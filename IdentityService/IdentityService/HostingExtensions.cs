@@ -126,7 +126,7 @@ internal static class HostingExtensions
                 options.ClientSecret = "copy client secret from Google here";
             });
 
-        builder.Services.AddApiKeyAuthentication("https://localhost/apikeys/");
+        builder.Services.AddApiKeyAuthentication("https://localhost/api/apikeys/");
 
         return builder.Build();
     }

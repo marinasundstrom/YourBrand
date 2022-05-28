@@ -94,7 +94,7 @@ static class Program
                         //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                     });
 
-        services.AddApiKeyAuthentication("https://localhost/apikeys/");
+        services.AddApiKeyAuthentication("https://localhost/api/apikeys/");
 
         services.AddAzureClients(builder =>
         {

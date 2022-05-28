@@ -108,28 +108,28 @@ static IServiceProvider BuildServiceProvider()
 
     services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IProjectsClient), (sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/timereport/");
+        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
     .AddTypedClient<YourBrand.TimeReport.Client.IProjectsClient>((http, sp) => new YourBrand.TimeReport.Client.ProjectsClient(http));
 
     services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IActivitiesClient), (sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/timereport/");
+        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
     .AddTypedClient<YourBrand.TimeReport.Client.IActivitiesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivitiesClient(http));
 
     services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IActivityTypesClient), (sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/timereport/");
+        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
     .AddTypedClient<YourBrand.TimeReport.Client.IActivityTypesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivityTypesClient(http));
 
     services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IOrganizationsClient), (sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/timereport/");
+        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     })
     .AddTypedClient<YourBrand.TimeReport.Client.IOrganizationsClient>((http, sp) => new YourBrand.TimeReport.Client.OrganizationsClient(http));

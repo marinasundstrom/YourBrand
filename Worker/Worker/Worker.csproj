@@ -16,8 +16,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.16.0" />
     <PackageReference Include="Hangfire.Core" Version="1.8.0-beta4" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.29" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.7.29" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.0-beta4" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.0-beta4" />
     <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="6.0.1" />
     <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22114.1" />
   </ItemGroup>
