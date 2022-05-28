@@ -39,7 +39,7 @@ dotnet run --project ./Finance/Documents/Documents/Documents.csproj -- --seed --
 echo "Done"
 
 echo "Seeding Invoices"
-dotnet run --project ./Finance/Invoices/Invoices/Invoices.csproj -- --seed --connection-string "$CS;Database=Incoices"
+dotnet run --project ./Finance/Invoices/Invoices/Invoices.csproj -- --seed --connection-string "$CS;Database=Invoices"
 echo "Done"
 
 echo "Seeding Payments"

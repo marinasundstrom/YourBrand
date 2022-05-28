@@ -14,14 +14,11 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddPaymentsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
-        /*
         var b = services
             .AddHttpClient(nameof(PaymentsClient), configureClient)
             .AddTypedClient<IPaymentsClient>((http, sp) => new PaymentsClient(http));
 
-        */
-
-        //builder?.Invoke(b);
+        builder?.Invoke(b);
 
         return services;
     }

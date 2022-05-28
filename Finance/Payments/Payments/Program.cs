@@ -68,9 +68,9 @@ builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
 
-    //x.AddConsumers(typeof(Program).Assembly);
+    x.AddConsumers(typeof(Program).Assembly);
 
-    //x.AddRequestClient<YourBrand.Payments.Contracts.PaymentBatch>();
+    x.AddRequestClient<YourBrand.Payments.Contracts.PaymentBatch>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -105,14 +105,20 @@ app.MapGet("/payments", async (int page, int pageSize, IMediator mediator) => aw
     .Produces<ItemsResult<PaymentDto>>(StatusCodes.Status200OK);
 */
 
-app.MapPost("/payments", async (PaymentDto[] payments, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new PostPayments(payments), cancellationToken))
-    .WithName("Payments_PostPayments")
+app.MapPost("/Payments", async (CreatePayment payment, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(payment, cancellationToken))
+    .WithName("Payments_CreatePayment")
     .WithTags("Payments")
     //.RequireAuthorization()
-    .Produces(StatusCodes.Status200OK); ;
+    .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/payments/{paymentId}/status", async (string paymentId, PaymentStatus status, IMediator mediator, CancellationToken cancellationToken)
+app.MapDelete("/Payments/{paymentId}", async (string paymentId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new CancelPayment(paymentId), cancellationToken))
+    .WithName("Payments_CancelPayment")
+    .WithTags("Payments")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Payments/{paymentId}/Status", async (string paymentId, PaymentStatus status, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetPaymentStatus(paymentId, status), cancellationToken))
     .WithName("Payments_SetPaymentStatus")
     .WithTags("Payments")

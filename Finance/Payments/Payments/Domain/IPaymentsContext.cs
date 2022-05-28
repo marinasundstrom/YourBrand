@@ -8,5 +8,7 @@ public interface IPaymentsContext
 {
     DbSet<Payment> Payments { get; set; }
 
+    DbSet<Capture> Captures { get; set; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

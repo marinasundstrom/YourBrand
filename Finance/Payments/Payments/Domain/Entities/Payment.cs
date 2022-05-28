@@ -6,27 +6,29 @@ namespace YourBrand.Payments.Domain.Entities;
 
 public class Payment : AuditableEntity, IHasDomainEvents
 {
+    readonly List<Capture> _captures = new List<Capture>();
+
     private Payment()
     {
 
     }
 
-    public Payment(string? id, int invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod)
+    public Payment(int invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? message = null)
     {
         if(amount <= 0)
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }
 
-        Id = id ?? Guid.NewGuid().ToUrlFriendlyString();
         InvoiceId = invoiceId;
         Status = status;
         DueDate = dueDate;
         Currency = currency;
         Amount = amount;
         PaymentMethod = paymentMethod;
+        Message = message;
 
-        DomainEvents.Add(new PaymentRegistered(Id));
+        DomainEvents.Add(new PaymentCreated(Id));
     }
 
     public void SetStatus(PaymentStatus status)
@@ -39,19 +41,28 @@ public class Payment : AuditableEntity, IHasDomainEvents
         }
     }
 
-    public string Id { get; set; } = null!;
+    public string Id { get; private set; } = null!;
 
-    public int InvoiceId { get; set; }
+    public int InvoiceId { get; private set; }
 
     public PaymentStatus Status { get; private set; } = PaymentStatus.Created;
 
-    public DateTime DueDate { get; set; }
+    public DateTime DueDate { get; private set; }
 
-    public string Currency { get; set; } = null!;
+    public string Currency { get; private set; } = null!;
 
-    public decimal Amount { get; set; }
+    public decimal Amount { get; private set; }
 
-    public PaymentMethod PaymentMethod { get; set; }
+    public PaymentMethod PaymentMethod { get; private set; }
+
+    public string? Message { get; private set; }
+
+    public IReadOnlyCollection<Capture> Captures => _captures.AsReadOnly();
+
+    public void RegisterCapture(DateTime date, decimal amount, string? transactionId) 
+    {
+        _captures.Add(new Capture(date, amount, transactionId));
+    }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

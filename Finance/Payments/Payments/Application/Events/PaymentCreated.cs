@@ -1,26 +1,26 @@
-using YourBrand.Payments.Application.Common.Models;
-using YourBrand.Payments.Domain;
-using YourBrand.Payments.Domain.Events;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Payments.Application.Common.Models;
+using YourBrand.Payments.Domain;
+using YourBrand.Payments.Domain.Events;
 using YourBrand.Payments.Hubs;
 
 namespace YourBrand.Payments.Application.Events;
 
-public class PaymentStatusChangedHandler : INotificationHandler<DomainEventNotification<PaymentStatusChanged>>
+public class PaymentCreatedHandler : INotificationHandler<DomainEventNotification<PaymentCreated>>
 {
     private readonly IPaymentsContext _context;
     private readonly IPaymentsHubClient _paymentsHubClient;
 
-    public PaymentStatusChangedHandler(IPaymentsContext context, IPaymentsHubClient paymentsHubClient)
+    public PaymentCreatedHandler(IPaymentsContext context, IPaymentsHubClient paymentsHubClient)
     {
         _context = context;
         _paymentsHubClient = paymentsHubClient;
     }
 
-    public async Task Handle(DomainEventNotification<PaymentStatusChanged> notification, CancellationToken cancellationToken)
+    public async Task Handle(DomainEventNotification<PaymentCreated> notification, CancellationToken cancellationToken)
     {
         var payment = await _context
             .Payments
@@ -28,7 +28,7 @@ public class PaymentStatusChangedHandler : INotificationHandler<DomainEventNotif
 
         if(payment is not null) 
         {
-            await _paymentsHubClient.PaymentStatusUpdated(payment.Id, payment.Status);
+
         }
     }
 }

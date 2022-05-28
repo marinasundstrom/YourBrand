@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/payments.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="Payments.Client">
+		<OpenApiReference Include="OpenAPIs/payments.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourBrand.Payments.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>PaymentsClient.cs</OutputPath>

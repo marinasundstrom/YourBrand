@@ -9,9 +9,9 @@ namespace YourBrand.Payments.Infrastructure.Persistence;
 
 public class PaymentsContext : DbContext, IPaymentsContext
 {
-    private IDomainEventService _domainEventService;
-    private ICurrentUserService _currentUserService;
-    private IDateTime _dateTime;
+    private readonly IDomainEventService _domainEventService;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IDateTime _dateTime;
 
     public PaymentsContext(
         DbContextOptions<PaymentsContext> options,
@@ -32,6 +32,8 @@ public class PaymentsContext : DbContext, IPaymentsContext
     }
 
     public DbSet<Payment> Payments { get; set; } = null!;
+
+    public DbSet<Capture> Captures { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

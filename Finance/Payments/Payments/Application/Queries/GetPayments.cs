@@ -62,7 +62,7 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<PaymentDto>(
-                items.Select(t => new PaymentDto(t.Id, t.InvoiceId, t.Status, t.Currency, t.Amount, t.DueDate, t.PaymentMethod)),
+                items.Select(t => new PaymentDto(t.Id, t.InvoiceId, t.Status, t.Currency, t.Amount, t.DueDate, t.PaymentMethod, t.Message)),
                 totalItems);
         }
     }
