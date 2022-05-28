@@ -3,8 +3,10 @@
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum PaymentStatus
 {
-    Unverified,
-    Verified,
-    Payback,
-    Unknown,
+    Created,
+    Captured,
+    PartiallyCaptured,
+    Refunded,
+    PartiallyRefunded,
+    Cancelled
 }

@@ -43,7 +43,7 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
     public int InvoiceId { get; set; }
 
-    public PaymentStatus Status { get; private set; } = PaymentStatus.Unverified;
+    public PaymentStatus Status { get; private set; } = PaymentStatus.Created;
 
     public DateTime DueDate { get; set; }
 
