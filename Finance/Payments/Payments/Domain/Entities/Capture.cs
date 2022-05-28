@@ -16,8 +16,6 @@ public class Capture : IHasDomainEvents
         Date = date;
         Amount = amount;
         TransactionId = transactionId;
-
-        DomainEvents.Add(new PaymentCaptured(Id, Id));
     }
 
     public string Id { get; private set; } = null!;

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Json;
 using YourBrand.Invoices.Infrastructure.Persistence;
 using System.Text.Json.Serialization;
+using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,11 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddDocumentsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/documents/");
+});
+
+builder.Services.AddPaymentsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/payments/");
 });
 
 var app = builder.Build();

@@ -65,7 +65,9 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
     public void RegisterCapture(DateTime date, decimal amount, string? transactionId) 
     {
-        _captures.Add(new Capture(date, amount, transactionId));
+        var capture = new Capture(date, amount, transactionId);
+        _captures.Add(capture);
+        capture.DomainEvents.Add(new PaymentCaptured(Id, capture.Id));
     }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();

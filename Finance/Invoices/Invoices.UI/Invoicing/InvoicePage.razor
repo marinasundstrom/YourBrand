@@ -1,8 +1,11 @@
 @page "/invoices/new"
 @page "/invoices/{Id:int}"
+@using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Accounting.Client.Invoicing
+@using YourBrand.Payments.Client
 @using YourBrand.Transactions.Client
+@implements IAsyncDisposable
 @inject NavigationManager NavigationManager
 @inject IInvoicesClient InvoicesClient
 @inject ITransactionsClient TransactionsClient
@@ -10,7 +13,7 @@
 @inject ISnackbar Snackbar
 
 @if (invoice is not null)
-{
+    {
     <PageTitle>Invoice #@Id</PageTitle>
 
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
@@ -25,19 +28,19 @@
             @if (invoice.Status == InvoiceStatus.Draft)
             {
                 <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">Delete</MudButton>
-            }
+                }
         </div>
 
         <MudGrid Class="mb-4">
             <MudItem xs="12" sm="12" md="6" lg="3">
                 @if (Status >= InvoiceStatus.Sent)
-                {
+                    {
                     <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     <MudDatePicker Label="Date" Date="Date" DateChanged="OnDateChanged" For="() => Date"></MudDatePicker>
-                }
+                    }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="6" lg="3">
@@ -50,37 +53,37 @@
 
             <MudItem xs="12" sm="12" md="6" lg="3">
                 @if (Status >= InvoiceStatus.Sent)
-                {
+                    {
                     <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     <MudDatePicker Label="Due Date" Date="@DueDate" DateChanged="OnDueDateChanged" For="() => DueDate">
                     </MudDatePicker>
-                }
+                    }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12">
                 @if (Status >= InvoiceStatus.Sent)
-                {
+                    {
                     <MudField Label="Reference">@Reference</MudField>
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     <MudTextField Label="Reference" Text="@Reference" TextChanged="OnReferenceChanged" For="() => Reference">
                     </MudTextField>
-                }
+                    }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12">
                 @if (Status >= InvoiceStatus.Sent)
-                {
+                    {
                     <MudField Label="Note">@Note</MudField>
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     <MudTextField Label="Note" Text="@Note" TextChanged="OnNoteChanged" For="() => Note"></MudTextField>
-                }
+                    }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12" lg="3">
@@ -101,12 +104,12 @@
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
 
     @if (Status == InvoiceStatus.Draft)
-    {
+        {
         <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
-    }
+        }
 
     <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="1"
-    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+              Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Description</MudTh>
             <MudTh>Product Type</MudTh>
@@ -119,7 +122,7 @@
             @if (Status == InvoiceStatus.Draft)
             {
                 <MudTh></MudTh>
-            }
+                }
         </HeaderContent>
         <RowTemplate Context="invoiceItem">
             <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
@@ -135,65 +138,22 @@
                 <MudTd>
                     <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async () => await DeleteItem(invoiceItem)" />
                 </MudTd>
-            }
-        </RowTemplate>
-        <LoadingContent>
-            <MudText>Loading...</MudText>
-        </LoadingContent>
-    </MudTable>
-
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Transactions</MudText>
-
-    <MudTable T="TransactionDto" @ref="table2" Dense="true" ServerData="ServerReload" Hover="true" Elevation="1"
-    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
-        <ToolBarContent>
-            <MudSpacer />
-            <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status2"
-            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
-                @foreach (var status in Enum.GetValues<TransactionStatus>())
-                {
-                    <MudSelectItem T="TransactionStatus?" Value="@status">@Enum.GetName(typeof(TransactionStatus), status)
-                    </MudSelectItem>
                 }
-            </MudSelect>
-        </ToolBarContent>
-
-        <HeaderContent>
-            <MudTh>Id</MudTh>
-            <MudTh>Date</MudTh>
-            <MudTh>Status</MudTh>
-            <MudTh>From</MudTh>
-            <MudTh>Reference</MudTh>
-            <MudTh>Currency</MudTh>
-            <MudTh>Amount</MudTh>
-        </HeaderContent>
-        <RowTemplate Context="transaction">
-            <MudTd DataLabel="Id">@transaction.Id</MudTd>
-            <MudTd DataLabel="Date">@transaction.Date?.ToString("g")</MudTd>
-            <MudTd DataLabel="Status">@transaction.Status</MudTd>
-            <MudTd DataLabel="From">@transaction.From</MudTd>
-            <MudTd DataLabel="Reference">@transaction.Reference</MudTd>
-            <MudTd DataLabel="Currency">@transaction.Currency</MudTd>
-            <MudTd DataLabel="Amount">@transaction.Amount.ToString("c")</MudTd>
         </RowTemplate>
         <LoadingContent>
             <MudText>Loading...</MudText>
         </LoadingContent>
-        <PagerContent>
-            <MudTablePager />
-        </PagerContent>
     </MudTable>
-}
+ }
 
 @code
 {
     InvoiceDto? invoice;
     MudTable<InvoiceItemViewModel> table;
-    MudTable<TransactionDto> table2;
     bool loading = false;
-    bool loading2 = false;
     TransactionStatus? Status2;
     IEnumerable<TransactionStatus?> selectedStatuses = new List<TransactionStatus?>();
+    HubConnection hubConnection = null!;
 
     [Parameter]
     public int? Id { get; set; }
@@ -257,6 +217,58 @@
 
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
+
+        await Init();
+    }
+
+    async Task Init()
+    {
+        try
+        {
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments")
+            .WithAutomaticReconnect()
+            .Build();
+
+            hubConnection.On<string, PaymentStatus>("PaymentStatusUpdated", PaymentStatusUpdated);
+
+            hubConnection.Closed += (error) =>
+            {
+                if (error is not null)
+                {
+                    Snackbar.Add($"{error.Message}", Severity.Error);
+                }
+
+                Snackbar.Add("Connection closed");
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnected += (error) =>
+            {
+                Snackbar.Add("Reconnected");
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnecting += (error) =>
+            {
+                Snackbar.Add("Reconnecting");
+                return Task.CompletedTask;
+            };
+
+            await hubConnection.StartAsync();
+
+            Snackbar.Add("Connected");
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+    }
+
+    Task PaymentStatusUpdated(string id, PaymentStatus status)
+    {
+        Console.WriteLine($"Payment status updated: {status}");
+        return Task.CompletedTask;
     }
 
     private void Set(InvoiceDto invoice)
@@ -328,26 +340,8 @@
     private async Task OnSelectedValuesChanged(IEnumerable<TransactionStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
-        await table2.ReloadServerData();
 
         StateHasChanged();
-    }
-
-    private async Task<TableData<TransactionDto>> ServerReload(TableState state)
-    {
-        loading2 = true;
-
-        try
-        {
-            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s =>
-            (TransactionStatus)s!), Id.GetValueOrDefault());
-
-            return new TableData<TransactionDto>() { TotalItems = result.TotalItems, Items = result.Items };
-        }
-        finally
-        {
-            loading2 = false;
-        }
     }
 
     public async Task OnDateChanged(DateTime? date)
@@ -430,5 +424,10 @@
         await InvoicesClient.DeleteInvoiceItemAsync(Id.GetValueOrDefault(), invoiceItem.Id);
 
         Items.Remove(invoiceItem);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await hubConnection.DisposeAsync();
     }
 }

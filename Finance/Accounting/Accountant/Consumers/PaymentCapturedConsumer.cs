@@ -38,15 +38,7 @@ public class PaymentCapturedConsumer : IConsumer<PaymentCaptured>
 
         // Create verification
 
-        // Not found set transaction status unknown
-
-        if (!int.TryParse(payment.Reference, out var invoiceId))
-        {
-            // TODO: This should never happen.
-            return;
-        }
-
-        var invoice = await _invoicesClient.GetInvoiceAsync(invoiceId, cancellationToken);
+        var invoice = await _invoicesClient.GetInvoiceAsync(payment.InvoiceId, cancellationToken);
 
         var capturedAmount = capture.Amount;
 

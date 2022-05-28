@@ -13,6 +13,7 @@ using MudBlazor;
 using MudBlazor.Services;
 
 using YourBrand.Transactions.Client;
+using YourBrand.Payments.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -45,6 +46,11 @@ builder.Services.AddInvoicesClients((sp, http) =>
 builder.Services.AddTransactionsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/transactions/");
+});
+
+builder.Services.AddPaymentsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/payments/");
 });
 
 builder.Services.AddAccountingClients((sp, http) =>

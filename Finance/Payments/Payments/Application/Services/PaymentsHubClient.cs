@@ -18,9 +18,4 @@ public class PaymentsHubClient : IPaymentsHubClient
     {
         await _hubContext.Clients.All.PaymentStatusUpdated(id, status);
     }
-
-    public async Task PaymentInvoiceIdUpdated(string id, int? invoiceId)
-    {
-        await _hubContext.Clients.All.PaymentInvoiceIdUpdated(id, invoiceId);
-    }
 }

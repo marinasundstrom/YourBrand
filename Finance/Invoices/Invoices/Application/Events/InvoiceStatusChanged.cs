@@ -9,17 +9,20 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Payments.Client;
 
 namespace YourBrand.Invoices.Application.Events;
 
 public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotification<InvoiceStatusChanged>>
 {
     private readonly IInvoicesContext _context;
+    private readonly IPaymentsClient _paymentsClient;
     private readonly IPublishEndpoint _publishEndpoint;
 
-    public InvoiceStatusChangedHandler(IInvoicesContext context, IPublishEndpoint publishEndpoint)
+    public InvoiceStatusChangedHandler(IInvoicesContext context, IPaymentsClient paymentsClient, IPublishEndpoint publishEndpoint)
     {
         _context = context;
+        _paymentsClient = paymentsClient;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -36,6 +39,19 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
                 {
                     new Contracts.Invoice(invoice.Id)
                 }));
+
+                var dueDate = TimeZoneInfo.ConvertTimeToUtc( DateTime.Now.AddDays(30), TimeZoneInfo.Local);
+
+                await _paymentsClient.CreatePaymentAsync(new CreatePayment()
+                {
+                    InvoiceId = invoice.Id,
+                    Currency = "SEK",
+                    Amount = invoice.Total,
+                    PaymentMethod = PaymentMethod.PlusGiro,
+                    DueDate = dueDate,
+                    Reference = Guid.NewGuid().ToUrlFriendlyString(),
+                    Message = $"Betala faktura #{invoice.Id}",
+                });
             }
         }
     }
