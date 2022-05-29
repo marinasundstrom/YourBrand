@@ -5,7 +5,7 @@
     "title": "Transactions API",
     "version": "0.1"
   },
-  "host": "localhost:5040",
+  "host": "localhost:5094",
   "schemes": [
     "https"
   ],
@@ -146,43 +146,6 @@
         }
       }
     },
-    "/transactions/{transactionId}/invoiceId": {
-      "put": {
-        "tags": [
-          "Transactions"
-        ],
-        "operationId": "Transactions_SetTransactionInvoiceId",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "transactionId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "integer",
-            "name": "invoiceId",
-            "in": "query",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
-          }
-        }
-      }
-    },
     "/Transactions": {
       "get": {
         "tags": [
@@ -218,13 +181,6 @@
             "items": {
               "$ref": "#/definitions/TransactionStatus"
             }
-          },
-          {
-            "type": "integer",
-            "name": "invoiceId",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": true
           }
         ],
         "responses": {
@@ -277,10 +233,6 @@
         "amount": {
           "type": "number",
           "format": "decimal"
-        },
-        "invoiceId": {
-          "type": "integer",
-          "format": "int32"
         }
       }
     },

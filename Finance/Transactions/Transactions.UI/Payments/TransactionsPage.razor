@@ -34,7 +34,6 @@
          <MudTh>Reference</MudTh>
          <MudTh>Currency</MudTh>
          <MudTh>Amount</MudTh>
-         <MudTh>Invoice Id</MudTh>
      </HeaderContent>
     <RowTemplate Context="transaction">
         <MudTd DataLabel="Id">@transaction.Id</MudTd>
@@ -44,7 +43,6 @@
         <MudTd DataLabel="Reference">@transaction.Reference</MudTd>
         <MudTd DataLabel="Currency">@transaction.Currency</MudTd>
         <MudTd DataLabel="Amount">@transaction.Amount.ToString("c")</MudTd>
-        <MudTd DataLabel="Invoice Id"><MudLink Href="@($"/invoices/{transaction.InvoiceId}")">@transaction.InvoiceId</MudLink></MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
@@ -68,7 +66,7 @@
 
         try
         {
-            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!), null);
+            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!));
 
             return new TableData<TransactionDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -114,7 +112,6 @@
             .Build();
 
             hubConnection.On<string, TransactionStatus>("TransactionStatusUpdated", TransactionStatusUpdated);
-            hubConnection.On<string, int?>("TransactionInvoiceIdUpdated", TransactionInvoiceIdUpdated);
 
             hubConnection.Closed += (error) =>
             {
@@ -160,25 +157,6 @@
             if(transaction is not null)
             {
                 transaction.Status = status;
-
-                StateHasChanged();
-            }
-        }
-
-        return Task.CompletedTask;
-    }
-
-    Task TransactionInvoiceIdUpdated(string id, int? invoiceId)
-    {
-        var result = GetTableData();
-
-        if(result is not null)
-        {
-            var transaction = result.Items.FirstOrDefault(t => t.Id == id);
-
-            if(transaction is not null)
-            {
-                transaction.InvoiceId = invoiceId;
 
                 StateHasChanged();
             }

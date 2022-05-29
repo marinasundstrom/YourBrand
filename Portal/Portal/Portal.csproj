@@ -48,6 +48,9 @@
     <ProjectReference Include="..\..\Finance\Invoices\Invoices.UI\Invoices.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Finance\Payments\Payments.UI\Payments.UI.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

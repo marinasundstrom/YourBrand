@@ -61,6 +61,13 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
     public string? Message { get; private set; }
 
+    public decimal? AmountCaptured { get; private set; }
+
+    public void SetAmountCaptured(decimal amount) 
+    {
+        AmountCaptured = amount;
+    }
+
     public IReadOnlyCollection<Capture> Captures => _captures.AsReadOnly();
 
     public void RegisterCapture(DateTime date, decimal amount, string? transactionId) 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using YourBrand.Accounting;
 using YourBrand.Invoices;
+using YourBrand.Payments;
 using YourBrand.Portal;
 using YourBrand.Showroom;
 using YourBrand.TimeReport;
@@ -28,6 +29,7 @@ builder.Services
     .AddShowroom()
     .AddAccounting()
     .AddInvoicing()
+    .AddPayments()
     .AddTransactions();
 
 var app = builder.Build();

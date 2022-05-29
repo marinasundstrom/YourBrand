@@ -16,6 +16,6 @@ public class PaymentsHubClient : IPaymentsHubClient
 
     public async Task PaymentStatusUpdated(string id, PaymentStatus status)
     {
-        await _hubContext.Clients.All.PaymentStatusUpdated(id, status);
+        await _hubContext.Clients.Group($"payment-{id}").PaymentStatusUpdated(id, status);
     }
 }

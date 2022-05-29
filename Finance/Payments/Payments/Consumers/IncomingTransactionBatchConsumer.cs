@@ -8,12 +8,12 @@ using YourBrand.Transactions.Contracts;
 
 namespace YourBrand.Payments.Consumers;
 
-public class TransactionBatchConsumer : IConsumer<IncomingTransactionBatch>
+public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBatch>
 {
     private readonly IPaymentsContext _context;
     private readonly ITransactionsClient _transactionsClient;
 
-    public TransactionBatchConsumer(IPaymentsContext context, ITransactionsClient transactionsClient) 
+    public IncomingTransactionBatchConsumer(IPaymentsContext context, ITransactionsClient transactionsClient) 
     {
         _context = context;
         _transactionsClient = transactionsClient;
@@ -53,10 +53,10 @@ public class TransactionBatchConsumer : IConsumer<IncomingTransactionBatch>
             }
             else if (amountCaptured > payment.Amount)
             {
-                // TODO: Overcaptured
-
-                //payment.SetStatus(Domain.Enums.PaymentStatus.O);
+                payment.SetStatus(Domain.Enums.PaymentStatus.PartiallyRefunded);
             }
+
+            payment.SetAmountCaptured(amountCaptured);
 
             await _context.SaveChangesAsync(cancellationToken);
 

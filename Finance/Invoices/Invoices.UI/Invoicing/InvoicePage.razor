@@ -9,11 +9,12 @@
 @inject NavigationManager NavigationManager
 @inject IInvoicesClient InvoicesClient
 @inject ITransactionsClient TransactionsClient
+@inject IPaymentsClient PaymentsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
 @if (invoice is not null)
-    {
+{
     <PageTitle>Invoice #@Id</PageTitle>
 
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
@@ -28,19 +29,19 @@
             @if (invoice.Status == InvoiceStatus.Draft)
             {
                 <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">Delete</MudButton>
-                }
+            }
         </div>
 
         <MudGrid Class="mb-4">
             <MudItem xs="12" sm="12" md="6" lg="3">
                 @if (Status >= InvoiceStatus.Sent)
-                    {
+                {
                     <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     <MudDatePicker Label="Date" Date="Date" DateChanged="OnDateChanged" For="() => Date"></MudDatePicker>
-                    }
+                }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="6" lg="3">
@@ -53,37 +54,37 @@
 
             <MudItem xs="12" sm="12" md="6" lg="3">
                 @if (Status >= InvoiceStatus.Sent)
-                    {
+                {
                     <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     <MudDatePicker Label="Due Date" Date="@DueDate" DateChanged="OnDueDateChanged" For="() => DueDate">
                     </MudDatePicker>
-                    }
+                }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12">
                 @if (Status >= InvoiceStatus.Sent)
-                    {
+                {
                     <MudField Label="Reference">@Reference</MudField>
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     <MudTextField Label="Reference" Text="@Reference" TextChanged="OnReferenceChanged" For="() => Reference">
                     </MudTextField>
-                    }
+                }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12">
                 @if (Status >= InvoiceStatus.Sent)
-                    {
+                {
                     <MudField Label="Note">@Note</MudField>
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     <MudTextField Label="Note" Text="@Note" TextChanged="OnNoteChanged" For="() => Note"></MudTextField>
-                    }
+                }
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12" lg="3">
@@ -104,9 +105,9 @@
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
 
     @if (Status == InvoiceStatus.Draft)
-        {
+    {
         <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
-        }
+    }
 
     <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="1"
               Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
@@ -122,7 +123,7 @@
             @if (Status == InvoiceStatus.Draft)
             {
                 <MudTh></MudTh>
-                }
+            }
         </HeaderContent>
         <RowTemplate Context="invoiceItem">
             <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
@@ -138,13 +139,13 @@
                 <MudTd>
                     <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async () => await DeleteItem(invoiceItem)" />
                 </MudTd>
-                }
+            }
         </RowTemplate>
         <LoadingContent>
             <MudText>Loading...</MudText>
         </LoadingContent>
     </MudTable>
- }
+}
 
 @code
 {
@@ -187,6 +188,8 @@
         {
             invoice = await InvoicesClient.GetInvoiceAsync(Id.GetValueOrDefault());
 
+            Id = invoice.Id;
+
             Set(invoice);
 
             foreach (var item in invoice.Items)
@@ -215,18 +218,27 @@
 
             Set(invoice);
 
+            NavigationManager.NavigateTo($"/invoices/{Id}", replace: true);
+
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
 
-        await Init();
+        var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, Id);
+        var payment = paymentsResults.Items.FirstOrDefault();
+
+        if (payment is not null)
+        {
+            string paymentId = payment.Id;
+            await InitPaymentHub(paymentId);
+        }
     }
 
-    async Task Init()
+    async Task InitPaymentHub(string paymentId)
     {
         try
         {
             hubConnection = new HubConnectionBuilder()
-            .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments")
+            .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments?paymentId={paymentId}")
             .WithAutomaticReconnect()
             .Build();
 
