@@ -140,6 +140,13 @@ public class UsersController : Controller
             return NotFound();
         }
     }
+
+    [HttpPost("Sync")]
+    public async Task<ActionResult> SyncUsers(CancellationToken cancellationToken) 
+    {
+        await _mediator.Send(new SyncUsersCommand(), cancellationToken);
+        return Ok();
+    }
 }
 
 public record class CreateUserDto(string FirstName, string LastName, string? DisplayName, string Role, string SSN, string Email, string Password);

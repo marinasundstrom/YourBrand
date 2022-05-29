@@ -3,6 +3,7 @@ using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Entities;
 
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.ApiKeys.Application.Users.Commands;
 
@@ -19,7 +20,14 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
+
+            if(user is not null) 
+            {
+                return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.LastModified);
+            }
+
+            user = new User
             {
                 Id = request.Id ?? Guid.NewGuid().ToString(),
                 FirstName = request.FirstName,

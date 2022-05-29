@@ -8,6 +8,12 @@ var services = BuildServiceProvider();
 
 var usersClient = services.GetRequiredService<IUsersClient>();
 
+if(args.ToArray().Contains("--sync-users")) 
+{
+    await usersClient.SyncUsersAsync();
+    return;
+}
+
 Console.WriteLine("Creating users...");
 
 var userAdmin = await usersClient.CreateUserAsync(new CreateUserDto
