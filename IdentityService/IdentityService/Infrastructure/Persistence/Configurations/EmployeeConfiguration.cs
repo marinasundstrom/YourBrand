@@ -1,7 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,10 +8,12 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
-public class ApplicationUserConfiguration : IEntityTypeConfiguration<User>
+public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Employee> builder)
     {
+        builder.ToTable(name: "Users");
+
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasMany(u => u.Roles)

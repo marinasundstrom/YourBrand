@@ -11,7 +11,7 @@ using YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<Employee, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
@@ -41,59 +41,16 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string, Identi
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationUserConfiguration).Assembly);
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.ToTable(name: "Users");
-        });
-
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.ToTable(name: "Roles");
-        });
-
-        modelBuilder.Entity<UserRole>(entity =>
-        {
-            entity.ToTable("UserRoles");
-            //in case you chagned the TKey type
-            //  entity.HasKey(key => new { key.UserId, key.RoleId });
-        });
-
-        modelBuilder.Entity<IdentityUserClaim<string>>(entity =>
-        {
-            entity.ToTable("UserClaims");
-        });
-
-        modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
-        {
-            entity.ToTable("UserLogins");
-            //in case you chagned the TKey type
-            //  entity.HasKey(key => new { key.ProviderKey, key.LoginProvider });       
-        });
-
-        modelBuilder.Entity<IdentityRoleClaim<string>>(entity =>
-        {
-            entity.ToTable("RoleClaims");
-
-        });
-
-        modelBuilder.Entity<IdentityUserToken<string>>(entity =>
-        {
-            entity.ToTable("UserTokens");
-            //in case you chagned the TKey type
-            // entity.HasKey(key => new { key.UserId, key.LoginProvider, key.Name });
-
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(EmployeeConfiguration).Assembly);
     }
 
-    public DbSet<Role> Roles { get; set; } = null!;
-
-    public DbSet<UserDependant> UserDependants { get; set; } = null!;
+    public DbSet<EmployeeDependant> EmployeeDependants { get; set; } = null!;
 
     public DbSet<Team> Teams { get; set; } = null!;
 
     public DbSet<Department> Departments { get; set; } = null!;
+
+    public DbSet<BankAccount> BankAccounts { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

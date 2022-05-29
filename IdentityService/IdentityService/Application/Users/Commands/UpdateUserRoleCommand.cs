@@ -10,9 +10,9 @@ public record UpdateUserRoleCommand(string UserId, string Role) : IRequest
 {
     public class UpdateUserRoleCommandHandler : IRequestHandler<UpdateUserRoleCommand>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<Employee> _userManager;
 
-        public UpdateUserRoleCommandHandler(UserManager<User> userManager)
+        public UpdateUserRoleCommandHandler(UserManager<Employee> userManager)
         {
             _userManager = userManager;
         }

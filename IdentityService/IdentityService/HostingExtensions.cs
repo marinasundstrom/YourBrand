@@ -88,7 +88,7 @@ internal static class HostingExtensions
 
         builder.Services.AddInfrastructure(builder.Configuration);
 
-        builder.Services.AddIdentity<User, Role>()
+        builder.Services.AddIdentity<Employee, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
@@ -107,7 +107,7 @@ internal static class HostingExtensions
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
-            .AddAspNetIdentity<User>();
+            .AddAspNetIdentity<Employee>();
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
