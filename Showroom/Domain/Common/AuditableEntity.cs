@@ -15,4 +15,6 @@ public abstract class AuditableEntity
     public string? LastModifiedById { get; set; }
 
     public User? LastModifiedBy { get; set; }
+
+    public string? ApplicationId { get; set; }
 }

@@ -7,6 +7,7 @@ using YourBrand.Showroom.Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using YourBrand.ApiKeys;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -15,17 +16,20 @@ class ShowroomContext : DbContext, IShowroomContext
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
     private readonly IDateTime _dateTime;
+    private readonly IApiApplicationContext _apiApplicationContext;
     private Transaction? _transaction;
 
     public ShowroomContext(
         DbContextOptions<ShowroomContext> options,
         ICurrentUserService currentUserService,
         IDomainEventService domainEventService,
-        IDateTime dateTime) : base(options)
+        IDateTime dateTime,
+        IApiApplicationContext apiApplicationContext) : base(options)
     {
         _currentUserService = currentUserService;
         _domainEventService = domainEventService;
         _dateTime = dateTime;
+        _apiApplicationContext = apiApplicationContext;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -78,6 +82,8 @@ class ShowroomContext : DbContext, IShowroomContext
     {
         foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
         {
+            entry.Entity.ApplicationId = _apiApplicationContext.AppId;
+
             switch (entry.State)
             {
                 case EntityState.Added:

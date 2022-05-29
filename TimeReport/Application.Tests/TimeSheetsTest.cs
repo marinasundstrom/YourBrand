@@ -18,7 +18,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace Tests;
 
-public class TimeSheetsTest
+public class TimeSheetsTest : TestBase
 {
     [Fact]
     public async Task CreateItem_ItemCreated()
@@ -27,15 +27,9 @@ public class TimeSheetsTest
 
         User user = CreateTestUser();
 
-        var fakeDomainEventService = Substitute.For<IDomainEventService>();
-
-        var fakeCurrentUserService = Substitute.For<ICurrentUserService>();
         fakeCurrentUserService.UserId.Returns(x => user.Id);
 
-        var fakeDateTimeService = Substitute.For<IDateTime>();
-        fakeDateTimeService.Now.Returns(x => DateTime.Now);
-
-        using ITimeReportContext context = CreateDbContext(fakeCurrentUserService, fakeDomainEventService, fakeDateTimeService);
+        using ITimeReportContext context = CreateDbContext();
 
         context.Users.Add(user);
 
@@ -82,14 +76,5 @@ public class TimeSheetsTest
             SSN = "dfsdf",
             Email = "test@email.com"
         };
-    }
-
-    private static ITimeReportContext CreateDbContext(ICurrentUserService fakeCurrentUserService, IDomainEventService fakeDomainEventService, IDateTime fakeDateTimeService)
-    {
-        var options = new DbContextOptionsBuilder<TimeReportContext>()
-           .UseInMemoryDatabase(databaseName: "Test")
-           .Options;
-
-        return new TimeReportContext(options, fakeCurrentUserService, fakeDomainEventService, fakeDateTimeService);
     }
 }

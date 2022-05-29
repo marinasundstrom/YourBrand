@@ -45,9 +45,18 @@ public class ApiKeyProvider : IApiKeyProvider
 
             return new ApiKey(key, "api", new List<Claim>
                 {
-                    new Claim(JwtClaimTypes.Subject, result.Application.Id),
-                    new Claim(ClaimTypes.NameIdentifier, result.Application.Name),
-                    new Claim(ClaimTypes.Role, "Administrator") // "App"
+                    // TODO: Fix
+
+                    new Claim(JwtClaimTypes.Subject, "api"), // AppId
+                    new Claim(ClaimTypes.NameIdentifier, "api"), // AppId
+                    new Claim(ClaimTypes.Name, result.Application.Name),
+                    new Claim(ClaimTypes.Role, "Administrator"), // Remove
+                    new Claim(ClaimTypes.Role, "API")
+
+                    // new Claim("AppId", result.Application.Id),
+                    // new Claim(ClaimTypes.NameIdentifier, result.Application.Id),
+                    // new Claim(ClaimTypes.Name, result.Application.Name),
+                    // new Claim(ClaimTypes.Role, "Administrator") // "App"
                 });
         }
         catch (System.Exception exception)

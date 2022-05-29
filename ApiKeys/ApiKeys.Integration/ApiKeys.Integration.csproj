@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ApiKeys.Client\ApiKeys.Client.csproj" />
+	  <ProjectReference Include="..\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

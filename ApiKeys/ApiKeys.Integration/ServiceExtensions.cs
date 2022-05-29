@@ -29,6 +29,15 @@ public static class ServiceExtensions
                 options.KeyName = "X-API-KEY";
             });
 
+        services.AddApiApplicationService();
+
+        return services;
+    }
+
+    private static IServiceCollection AddApiApplicationService(this IServiceCollection services) 
+    {
+        services.AddScoped<IApiApplicationContext, ApiApplicationContext>();
+
         return services;
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
+using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
@@ -20,7 +21,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
         DbContextOptions<TimeReportContext> options,
         ICurrentUserService currentUserService,
         IDomainEventService domainEventService,
-        IDateTime dateTime) : base(options)
+        IDateTime dateTime,
+        IApiApplicationContext apiApplicationContext) : base(options)
     {
         _currentUserService = currentUserService;
         _domainEventService = domainEventService;
