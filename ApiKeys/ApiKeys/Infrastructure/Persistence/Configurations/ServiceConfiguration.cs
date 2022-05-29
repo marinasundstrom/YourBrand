@@ -1,4 +1,4 @@
-﻿
+
 using YourBrand.ApiKeys.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
@@ -6,14 +6,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Configurations;
 
-class ItemConfiguration : IEntityTypeConfiguration<ApiKey>
+class ServiceConfiguration : IEntityTypeConfiguration<Service>
 {
-    public void Configure(EntityTypeBuilder<ApiKey> builder)
+    public void Configure(EntityTypeBuilder<Service> builder)
     {
-        builder.ToTable("ApiKeys");
+        builder.ToTable("Services");
         builder.HasQueryFilter(i => i.Deleted == null);
-
-        builder.HasIndex(nameof(ApiKey.Key));
 
         builder.Ignore(i => i.DomainEvents);
     }

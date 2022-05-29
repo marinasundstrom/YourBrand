@@ -5,6 +5,7 @@ using AspNetCore.Authentication.ApiKey;
 
 using IdentityModel;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace YourBrand.ApiKeys;
@@ -12,11 +13,13 @@ namespace YourBrand.ApiKeys;
 public class ApiKeyProvider : IApiKeyProvider
 {
     private readonly ILogger<IApiKeyProvider> _logger;
+    private readonly IConfiguration _configuration;
     private readonly Client.IApiKeysClient _apiKeysClient;
 
-    public ApiKeyProvider(ILogger<IApiKeyProvider> logger, Client.IApiKeysClient apiKeysClient)
+    public ApiKeyProvider(ILogger<IApiKeyProvider> logger, IConfiguration configuration, Client.IApiKeysClient apiKeysClient)
     {
         _logger = logger;
+        _configuration = configuration;
         _apiKeysClient = apiKeysClient;
     }
 
@@ -24,13 +27,18 @@ public class ApiKeyProvider : IApiKeyProvider
     {
         try
         {
-            var result = await _apiKeysClient.CheckApiKeyAsync(new Client.CheckApiKeyRequest()
+            string secret = _configuration["ApiKeyService:Secret"];
+            string[] requestedResources = _configuration.GetSection("ApiKeyService:RequestedResources").Get<string[]>();
+
+            var result = await _apiKeysClient.CheckApiKeyAsync(secret, new Client.CheckApiKeyRequest()
             {
                 ApiKey = key,
-                RequestedResources = new [] { "foo" }
-            });;
+                RequestedResources = requestedResources
+            });
 
-            if(result.Status == Client.ApiKeyStatus.Unauthorized)
+            //Console.WriteLine(result.Status);
+
+            if(result.Status != Client.ApiKeyAuthCode.Authorized)
             {
                 throw new Exception("Invalid token");
             }

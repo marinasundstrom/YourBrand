@@ -1,22 +1,21 @@
-﻿
+
 using YourBrand.ApiKeys.Domain.Common;
-using YourBrand.ApiKeys.Domain.Enums;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class ApiKey : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class Service : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    public string Key { get; set; } = null!;
+    public string Name { get; set; } = null!;
     public string? Description { get; set; } = null!;
 
-    public Entities.Application? Application { get; set; }
+    public string Url { get; set; } = null!;
 
-    public List<ApiKeyService> ApiKeyServices { get; set; } = new List<ApiKeyService>();
+    public string Secret { get; set; } = Guid.NewGuid().ToUrlFriendlyString();
 
-    public ApiKeyStatus Status { get; set; }
-
+    public List<Resource> Resources { get; set; } = new List<Resource>();
+    
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

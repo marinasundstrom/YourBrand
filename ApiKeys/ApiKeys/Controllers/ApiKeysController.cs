@@ -24,9 +24,10 @@ public class ApiKeysController : Controller
 
     [HttpPost("Check")]
     [ProducesResponseType(typeof(ApiKeyResult), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ApiKeyResult>> CheckApiKey(CheckApiKeyRequest request, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiKeyResult>> CheckApiKey(CheckApiKeyRequest request, [FromHeader(Name = "X-Secret")] string secret, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new CheckApiKeyCommand(request.ApiKey, request.RequestedResources), cancellationToken));
+        string origin = Request.Headers["origin"];
+        return Ok(await _mediator.Send(new CheckApiKeyCommand(request.ApiKey, origin, secret,  request.RequestedResources), cancellationToken));
     }
 }
 

@@ -1,14 +1,14 @@
 
 using YourBrand.ApiKeys.Application.Common.Interfaces;
-using YourBrand.ApiKeys.Application.Common.Models;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.ApiKeys.Domain.Enums;
 
 namespace YourBrand.ApiKeys.Application.Commands;
 
-public record CheckApiKeyCommand(string ApiKey, string[] RequestedResources) : IRequest<ApiKeyResult>
+public record CheckApiKeyCommand(string ApiKey, string Origin, string ServiceSecret, string[] RequestedResources) : IRequest<ApiKeyResult>
 {
     public class CheckApiKeyCommandHandler : IRequestHandler<CheckApiKeyCommand, ApiKeyResult>
     {
@@ -21,17 +21,33 @@ public record CheckApiKeyCommand(string ApiKey, string[] RequestedResources) : I
 
         public async Task<ApiKeyResult> Handle(CheckApiKeyCommand request, CancellationToken cancellationToken)
         {
-            var apiKey = await context.ApiKeys.FirstOrDefaultAsync(apiKey => apiKey.Key == request.ApiKey);
+            Console.WriteLine("Origin: " + request.Origin);
 
-            return apiKey is null ? new ApiKeyResult(ApiKeyStatus.Unauthorized) : new ApiKeyResult(ApiKeyStatus.Authorized);
+            var apiKey = await context.ApiKeys
+                .Include(a => a.ApiKeyServices)
+                .ThenInclude(a => a.Service)
+                .Where(a => a.ApiKeyServices.Any(s => s.Service.Secret == request.ServiceSecret /* && s.Service.Url == request.Origin */))
+                .FirstOrDefaultAsync(apiKey => apiKey.Key == request.ApiKey);
+
+            return apiKey is null
+                ? new ApiKeyResult(ApiKeyAuthCode.Unauthorized)
+                : new ApiKeyResult(apiKey.Status switch
+                {
+                    ApiKeyStatus.Active => ApiKeyAuthCode.Authorized,
+                    ApiKeyStatus.Expired => ApiKeyAuthCode.Expired,
+                    ApiKeyStatus.Revoked => ApiKeyAuthCode.Revoked,
+                    _ => throw new Exception()
+                });
         }
     }
 }
 
-public record ApiKeyResult(ApiKeyStatus Status);
+public record ApiKeyResult(ApiKeyAuthCode Status);
 
-public enum ApiKeyStatus
+public enum ApiKeyAuthCode
 {
+    Authorized,
     Unauthorized,
-    Authorized
+    Expired,
+    Revoked
 }

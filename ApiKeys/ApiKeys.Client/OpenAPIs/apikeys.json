@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "ApiKeys API",
@@ -34,6 +34,18 @@
           "ApiKeys"
         ],
         "operationId": "ApiKeys_CheckApiKey",
+        "parameters": [
+          {
+            "name": "X-Secret",
+            "x-originalName": "secret",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
         "requestBody": {
           "x-name": "request",
           "content": {
@@ -68,20 +80,24 @@
         "additionalProperties": false,
         "properties": {
           "status": {
-            "$ref": "#/components/schemas/ApiKeyStatus"
+            "$ref": "#/components/schemas/ApiKeyAuthCode"
           }
         }
       },
-      "ApiKeyStatus": {
+      "ApiKeyAuthCode": {
         "type": "integer",
         "description": "",
         "x-enumNames": [
+          "Authorized",
           "Unauthorized",
-          "Authorized"
+          "Expired",
+          "Revoked"
         ],
         "enum": [
           0,
-          1
+          1,
+          2,
+          3
         ]
       },
       "CheckApiKeyRequest": {

@@ -46,6 +46,14 @@ class ApiKeysContext : DbContext, IApiKeysContext
 
     public DbSet<ApiKey> ApiKeys { get; set; } = null!;
 
+    public DbSet<ApiKeyService> ApiKeyServices { get; set; } = null!;
+
+    public DbSet<Domain.Entities.Application> Applications { get; set; } = null!;
+
+    public DbSet<Resource> Resources { get; set; } = null!;
+
+    public DbSet<Service> Services { get; set; } = null!;
+
     public DbSet<User> Users { get; set; } = null!;
 
 #nullable restore
