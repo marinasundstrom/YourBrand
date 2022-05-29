@@ -21,7 +21,7 @@ public static class ServiceExtensions
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSqlServer<CatalogContext>(
-            configuration.GetConnectionString("mssql", "Catalog") ?? configuration.GetConnectionString("DefaultConnection"),
+            configuration.GetConnectionString("mssql", "AppService") ?? configuration.GetConnectionString("DefaultConnection"),
             options => options.EnableRetryOnFailure());
 
         services.AddScoped<ICatalogContext>(sp => sp.GetRequiredService<CatalogContext>());
