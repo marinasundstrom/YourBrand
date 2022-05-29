@@ -11,6 +11,8 @@ using Microsoft.Extensions.Http;
 using Microsoft.JSInterop;
 
 using MudBlazor.Services;
+using YourBrand.IdentityService.Client;
+using YourBrand.AppService.Client;
 
 namespace YourBrand.Portal;
 
@@ -38,59 +40,19 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddClients(this IServiceCollection services) 
     {
-        services.AddHttpClient(nameof(YourBrand.AppService.Client.IClient), (sp, http) =>
-        {
+        services.AddAppServiceClients((sp, http) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
-        })
-        .AddTypedClient<YourBrand.AppService.Client.IClient>((http, sp) => new YourBrand.AppService.Client.Client(http));
+        }, (builder) => {
+            builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+        });
 
-        services.AddHttpClient(nameof(YourBrand.AppService.Client.IItemsClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
-        })
-        .AddTypedClient<YourBrand.AppService.Client.IItemsClient>((http, sp) => new YourBrand.AppService.Client.ItemsClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(YourBrand.AppService.Client.IDoSomethingClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
-        })
-        .AddTypedClient<YourBrand.AppService.Client.IDoSomethingClient>((http, sp) => new YourBrand.AppService.Client.DoSomethingClient(http));
-
-        services.AddHttpClient(nameof(YourBrand.AppService.Client.ISearchClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
-        })
-        .AddTypedClient<YourBrand.AppService.Client.ISearchClient>((http, sp) => new YourBrand.AppService.Client.SearchClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(YourBrand.AppService.Client.INotificationsClient), (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
-        })
-        .AddTypedClient<YourBrand.AppService.Client.INotificationsClient>((http, sp) => new YourBrand.AppService.Client.NotificationsClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>
-        {
+        services.AddIdentityServiceClients((sp, http) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"https://identity.local/");
-        })
-        .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http))
-        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-        services.AddHttpClient(nameof(IdentityService.Client.IRolesClient) + "2", (sp, http) =>
-        {
-            var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"https://identity.local/");
-        })
-       .AddTypedClient<IdentityService.Client.IRolesClient>((http, sp) => new IdentityService.Client.RolesClient(http))
-       .AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+        }, (builder) => {
+               builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+        });
 
         return services;
     }

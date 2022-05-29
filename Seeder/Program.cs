@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using YourBrand.IdentityService.Client;
+using YourBrand.TimeReport;
 
 const string ApiKey = "asdsr34#34rswert35234aedae?2!";
 
@@ -99,40 +100,15 @@ static IServiceProvider BuildServiceProvider()
 {
     ServiceCollection services = new();
 
-    services.AddHttpClient(nameof(IUsersClient), (sp, http) =>
-    {
+    services.AddIdentityServiceClients((sp, http) => {
         http.BaseAddress = new Uri($"https://identity.local/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
-    })
-    .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http));
+    }, (builder) => {});
 
-    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IProjectsClient), (sp, http) =>
-    {
+    services.AddTimeReportClients((sp, http) => {
         http.BaseAddress = new Uri($"https://localhost/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
-    })
-    .AddTypedClient<YourBrand.TimeReport.Client.IProjectsClient>((http, sp) => new YourBrand.TimeReport.Client.ProjectsClient(http));
-
-    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IActivitiesClient), (sp, http) =>
-    {
-        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
-        http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
-    })
-    .AddTypedClient<YourBrand.TimeReport.Client.IActivitiesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivitiesClient(http));
-
-    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IActivityTypesClient), (sp, http) =>
-    {
-        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
-        http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
-    })
-    .AddTypedClient<YourBrand.TimeReport.Client.IActivityTypesClient>((http, sp) => new YourBrand.TimeReport.Client.ActivityTypesClient(http));
-
-    services.AddHttpClient(nameof(YourBrand.TimeReport.Client.IOrganizationsClient), (sp, http) =>
-    {
-        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
-        http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
-    })
-    .AddTypedClient<YourBrand.TimeReport.Client.IOrganizationsClient>((http, sp) => new YourBrand.TimeReport.Client.OrganizationsClient(http));
+    }, (builder) => {});
 
     return services.BuildServiceProvider();
 }
