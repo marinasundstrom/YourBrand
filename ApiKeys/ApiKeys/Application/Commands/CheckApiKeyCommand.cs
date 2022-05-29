@@ -24,8 +24,11 @@ public record CheckApiKeyCommand(string ApiKey, string Origin, string ServiceSec
             Console.WriteLine("Origin: " + request.Origin);
 
             var apiKey = await context.ApiKeys
+                .Include(a => a.Application)
                 .Include(a => a.ApiKeyServices)
                 .ThenInclude(a => a.Service)
+                .AsSplitQuery()
+                .AsNoTracking()
                 .Where(a => a.ApiKeyServices.Any(s => s.Service.Secret == request.ServiceSecret /* && s.Service.Url == request.Origin */))
                 .FirstOrDefaultAsync(apiKey => apiKey.Key == request.ApiKey);
 
@@ -37,12 +40,14 @@ public record CheckApiKeyCommand(string ApiKey, string Origin, string ServiceSec
                     ApiKeyStatus.Expired => ApiKeyAuthCode.Expired,
                     ApiKeyStatus.Revoked => ApiKeyAuthCode.Revoked,
                     _ => throw new Exception()
-                });
+                }, new ApplicationInfo(apiKey.Application!.Id, apiKey.Application.Name));
         }
     }
 }
 
-public record ApiKeyResult(ApiKeyAuthCode Status);
+public record ApiKeyResult(ApiKeyAuthCode Status, ApplicationInfo? Application = null);
+
+public record ApplicationInfo(string Id, string Name);
 
 public enum ApiKeyAuthCode
 {

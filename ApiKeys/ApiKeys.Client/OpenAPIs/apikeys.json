@@ -81,6 +81,14 @@
         "properties": {
           "status": {
             "$ref": "#/components/schemas/ApiKeyAuthCode"
+          },
+          "application": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationInfo"
+              }
+            ]
           }
         }
       },
@@ -99,6 +107,18 @@
           2,
           3
         ]
+      },
+      "ApplicationInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
       },
       "CheckApiKeyRequest": {
         "type": "object",

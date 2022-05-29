@@ -45,9 +45,9 @@ public class ApiKeyProvider : IApiKeyProvider
 
             return new ApiKey(key, "api", new List<Claim>
                 {
-                    new Claim(JwtClaimTypes.Subject, "api"),
-                    new Claim(ClaimTypes.NameIdentifier, "api"),
-                    new Claim(ClaimTypes.Role, "Administrator")
+                    new Claim(JwtClaimTypes.Subject, result.Application.Id),
+                    new Claim(ClaimTypes.NameIdentifier, result.Application.Name),
+                    new Claim(ClaimTypes.Role, "Administrator") // "App"
                 });
         }
         catch (System.Exception exception)
