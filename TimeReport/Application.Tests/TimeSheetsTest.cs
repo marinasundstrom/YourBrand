@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-using YourBrand.TimeReport.Application.Common;
 using YourBrand.TimeReport.Application.TimeSheets.Queries;
-using YourBrand.TimeReport.Domain;
-using YourBrand.TimeReport.Domain.Events;
-using YourBrand.TimeReport.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +28,11 @@ public class TimeSheetsTest : TestBase
 
         using ITimeReportContext context = CreateDbContext();
 
+        fakeCurrentUserService.UserId.Returns(x => user.Id);
+
         context.Users.Add(user);
+
+        await context.SaveChangesAsync();
 
         /*
 
@@ -47,7 +46,7 @@ public class TimeSheetsTest : TestBase
 
         var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(context, fakeCurrentUserService);
 
-        var initialItemsCount = await context.TimeSheetActivities.CountAsync();
+        var initialTimeSheetsCount = await context.TimeSheets.CountAsync();
 
         // Act
 
@@ -57,9 +56,9 @@ public class TimeSheetsTest : TestBase
 
         // Assert
 
-        var newItemsCount = await context.TimeSheetActivities.CountAsync();
+        var newTimeSheetsCount = await context.TimeSheets.CountAsync();
 
-        newItemsCount.ShouldBeGreaterThan(initialItemsCount);
+        newTimeSheetsCount.ShouldBeGreaterThan(initialTimeSheetsCount);
 
         // Has Domain Event been published ?
 
