@@ -41,21 +41,15 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
                 throw new ActivityNotFoundException(request.ActivityId);
             }
 
-            var entries = timeSheet.Entries.Where(e => e.Activity.Id == request.ActivityId);
-
-            foreach (var entry in entries.Where(e => e.Status == EntryStatus.Unlocked))
-            {
-                _context.Entries.Remove(entry);
-            }
+            var entries = timeSheet.GetEntriesByActivityId(activity.Id);
 
             if (entries.All(e => e.Status == EntryStatus.Unlocked))
             {
-                var timeSheetActivity = await _context.TimeSheetActivities
-                    .FirstOrDefaultAsync(x => x.TimeSheet.Id == timeSheet.Id && x.Activity.Id == activity.Id, cancellationToken);
+                var timeSheetActivity = timeSheet.GetActivity(activity.Id);
 
                 if (timeSheetActivity is not null)
                 {
-                    _context.TimeSheetActivities.Remove(timeSheetActivity);
+                    timeSheet.DeleteActivity(timeSheetActivity);
                 }
             }
 

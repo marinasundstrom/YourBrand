@@ -102,7 +102,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new ResultWithValue<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
-            var timeSheetActivity = timeSheet.GetActivity(activity);
+            var timeSheetActivity = timeSheet.GetActivity(activity.Id);
 
             if (timeSheetActivity is null)
             {

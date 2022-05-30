@@ -13,6 +13,8 @@ public class TimeSheetActivityConfiguration : IEntityTypeConfiguration<TimeSheet
         builder.ToTable("TimeSheetActivities");
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.Ignore(i => i.DomainEvents);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

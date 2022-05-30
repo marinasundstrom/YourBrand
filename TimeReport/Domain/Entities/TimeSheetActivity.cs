@@ -1,10 +1,11 @@
 ﻿
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
+using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheetActivity : AuditableEntity, ISoftDelete
+public class TimeSheetActivity : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
     private readonly List<Entry> _entries = new List<Entry>();
 
@@ -14,6 +15,8 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete
         TimeSheet = timeSheet;
         Project = project;
         Activity = activity;
+
+        DomainEvents.Add(new TimeSheetActivityAddedEvent(TimeSheet.Id, Id, Activity.Id));
     }
 
     internal TimeSheetActivity()
@@ -48,4 +51,6 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete
     {
         return _entries.FirstOrDefault(e => e.Date == date);
     }
+
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

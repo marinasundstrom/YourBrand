@@ -55,6 +55,12 @@ public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
+
+    public IEnumerable<Entry> GetEntriesByActivityId(string activityId)
+    {
+        return Entries.Where(x => x.Activity.Id == activityId);
+    }
+
     public User? DeletedBy { get; set; }
 
     public TimeSheetActivity AddActivity(Activity activity)
@@ -64,10 +70,22 @@ public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
         return tsActivity;
     }
 
-    public TimeSheetActivity? GetActivity(Activity activity)
+    public void DeleteActivity(TimeSheetActivity activity) 
+    {
+        foreach (var entry in _entries.ToArray().Where(e => e.Status == EntryStatus.Unlocked))
+        {
+            _entries.Remove(entry);
+        }
+
+        _activities.Remove(activity);
+
+        DomainEvents.Add(new TimeSheetActivityAddedEvent(Id, activity.Id, activity.Activity.Id));
+    }
+
+    public TimeSheetActivity? GetActivity(string activityId)
     {
         return _activities
-               .FirstOrDefault(x => x.TimeSheet.Id == this.Id && x.Activity.Id == activity.Id);
+               .FirstOrDefault(x => x.TimeSheet.Id == this.Id && x.Activity.Id == activityId);
     }
 
     public double GetTotalHours()
