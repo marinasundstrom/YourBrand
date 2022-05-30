@@ -126,6 +126,12 @@ services:
       - protocol: https
         port: 5020
 
+  - name: customers
+    project: Customers/Customers/Customers.csproj
+    bindings:
+      - protocol: https
+        port: 5090
+
   # Start Finance
 
   - name: financeapp
