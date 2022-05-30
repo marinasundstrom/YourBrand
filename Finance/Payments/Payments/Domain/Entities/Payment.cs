@@ -63,16 +63,14 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
     public decimal? AmountCaptured { get; private set; }
 
-    public void SetAmountCaptured(decimal amount) 
-    {
-        AmountCaptured = amount;
-    }
-
     public IReadOnlyCollection<Capture> Captures => _captures.AsReadOnly();
 
     public void RegisterCapture(DateTime date, decimal amount, string? transactionId) 
     {
         var capture = new Capture(date, amount, transactionId);
+
+        AmountCaptured = Captures.Sum(c => c.Amount);
+
         _captures.Add(capture);
         capture.DomainEvents.Add(new PaymentCaptured(Id, capture.Id));
     }

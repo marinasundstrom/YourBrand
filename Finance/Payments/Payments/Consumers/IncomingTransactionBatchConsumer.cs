@@ -41,7 +41,7 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
         {
             payment.RegisterCapture(transaction.Date, transaction.Amount, transaction.Id);
 
-            var amountCaptured = payment.Captures.Sum(c => c.Amount);
+            var amountCaptured = payment.AmountCaptured;
 
             if(amountCaptured == payment.Amount)
             {
@@ -55,8 +55,6 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
             {
                 payment.SetStatus(Domain.Enums.PaymentStatus.PartiallyRefunded);
             }
-
-            payment.SetAmountCaptured(amountCaptured);
 
             await _context.SaveChangesAsync(cancellationToken);
 
