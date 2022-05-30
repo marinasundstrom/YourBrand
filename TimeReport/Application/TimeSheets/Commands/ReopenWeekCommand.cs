@@ -9,18 +9,18 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record OpenWeekCommand(string TimeSheetId) : IRequest
+public record ReopenWeekCommand(string TimeSheetId) : IRequest
 {
-    public class OpenWeekCommandHandler : IRequestHandler<OpenWeekCommand>
+    public class ReopenWeekCommandHandler : IRequestHandler<ReopenWeekCommand>
     {
         private readonly ITimeReportContext _context;
 
-        public OpenWeekCommandHandler(ITimeReportContext context)
+        public ReopenWeekCommandHandler(ITimeReportContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(OpenWeekCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ReopenWeekCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
@@ -29,12 +29,7 @@ public record OpenWeekCommand(string TimeSheetId) : IRequest
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.UpdateStatus(TimeSheetStatus.Open);
-
-            foreach (var entry in timeSheet.Entries)
-            {
-                entry.UpdateStatus(EntryStatus.Unlocked);
-            }
+            timeSheet.Reopen();
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -29,12 +29,7 @@ public record CloseWeekCommand(string TimeSheetId) : IRequest
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.UpdateStatus(TimeSheetStatus.Closed);
-
-            foreach (var entry in timeSheet.Entries)
-            {
-                entry.UpdateStatus(EntryStatus.Locked);
-            }
+            timeSheet.Close();
 
             await _context.SaveChangesAsync(cancellationToken);
 

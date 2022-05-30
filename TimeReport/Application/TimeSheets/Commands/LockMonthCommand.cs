@@ -100,7 +100,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
 
                 foreach (var entry in group.Entries)
                 {
-                    entry.UpdateStatus(EntryStatus.Locked);
+                    entry.Lock();
                 }
 
                 await _context.SaveChangesAsync();

@@ -17,6 +17,7 @@ public static class Extensions
                 .Include(x => x.Entries)
                 .Include(x => x.Entries)
                 .ThenInclude(x => x.Project)
+                .ThenInclude(x => x.Organization)
                 .Include(x => x.Entries)
                 .ThenInclude(x => x.Activity)
                 .Include(x => x.Entries)

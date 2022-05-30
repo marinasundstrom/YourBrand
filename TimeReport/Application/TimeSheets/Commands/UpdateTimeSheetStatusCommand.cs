@@ -27,7 +27,8 @@ public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.UpdateStatus(TimeSheetStatus.Closed);
+            timeSheet.Close();
+
             await _context.SaveChangesAsync();
 
             return Unit.Value;

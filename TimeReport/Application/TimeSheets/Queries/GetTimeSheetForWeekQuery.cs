@@ -18,13 +18,11 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
     {
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IMediator _mediator;
 
-        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context, ICurrentUserService currentUserService, IMediator mediator)
+        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context, ICurrentUserService currentUserService)
         {
             _context = context;
             _currentUserService = currentUserService;
-            _mediator = mediator;
         }
 
         public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
@@ -55,20 +53,6 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
                 User? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
                 
                 userId = user?.Id;
-
-                if(user is null)
-                {
-                    var userDto = await _mediator.Send(new CreateUserCommand(
-                        _currentUserService.UserId,
-                        _currentUserService.FirstName,
-                         _currentUserService.LastName,
-                         string.Empty,
-                         string.Empty,
-                         _currentUserService.Email
-                    ));
-
-                    userId = userDto.Id;
-                }
 
                 var startDate = ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);
 

@@ -29,12 +29,7 @@ public record ApproveWeekCommand(string TimeSheetId) : IRequest
                 throw new TimeSheetNotFoundException(request.TimeSheetId);
             }
 
-            timeSheet.UpdateStatus(TimeSheetStatus.Approved);
-
-            foreach (var entry in timeSheet.Entries)
-            {
-                entry.UpdateStatus(EntryStatus.Locked);
-            }
+            timeSheet.Approve();
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -1,12 +1,10 @@
-﻿using System;
-
 using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public class EntryHoursUpdatedEvent : DomainEvent
+public class EntryCreatedEvent : DomainEvent
 {
-    public EntryHoursUpdatedEvent(string projectId, string timeSheetId, string activityId, string entryId, double? hours)
+    public EntryCreatedEvent(string projectId, string timeSheetId, string activityId, string entryId, double? hours)
     {
         ProjectId = projectId;
         TimeSheetId = timeSheetId;

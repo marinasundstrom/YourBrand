@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using YourBrand.TimeReport.Application.Common;
+using YourBrand.TimeReport.Application.TimeSheets.Queries;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Events;
 using YourBrand.TimeReport.Infrastructure.Persistence;
@@ -15,6 +16,7 @@ using Shouldly;
 using Xunit;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Application.TimeSheets;
 
 namespace Tests;
 
@@ -41,24 +43,27 @@ public class TimeSheetsTest : TestBase
             Name = "Created"
         });
 
-        var commandHandler = new CreateItemCommand.Handler(context, fakeUrlHelper);
+        */
 
-        var initialHandoverCount = await context.Items.CountAsync();
+        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(context, fakeCurrentUserService);
+
+        var initialItemsCount = await context.TimeSheetActivities.CountAsync();
 
         // Act
 
-        var createItemCommand = new CreateItemCommand("Test", "Blah", 1);
+        var getTimeSheetForWeekQuery = new GetTimeSheetForWeekQuery(2020, 31, null);
 
-        ItemDto item = await commandHandler.Handle(createItemCommand, default);
+        TimeSheetDto? item = await commandHandler.Handle(getTimeSheetForWeekQuery, default);
 
         // Assert
 
-        var newHandoverCount = await context.Items.CountAsync();
+        var newItemsCount = await context.TimeSheetActivities.CountAsync();
 
-        newHandoverCount.ShouldBeGreaterThan(initialHandoverCount);
+        newItemsCount.ShouldBeGreaterThan(initialItemsCount);
 
         // Has Domain Event been published ?
 
+        /*
         await fakeDomainEventService
             .Received(1)
             .Publish(Arg.Is<ItemCreatedEvent>(d => d.ItemId == item.Id));

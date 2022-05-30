@@ -19,6 +19,8 @@ public class Entry : AuditableEntity, IHasDomainEvent
         Date = date;
         Hours = hours;
         Description = description;
+
+        DomainEvents.Add(new EntryCreatedEvent(project.Id, timeSheet.Id, activity.Id, Id, hours));
     }
 
     internal Entry()
@@ -50,9 +52,19 @@ public class Entry : AuditableEntity, IHasDomainEvent
 
     public EntryStatus Status { get; private set; } = EntryStatus.Unlocked;
 
-    public void UpdateStatus(EntryStatus status)
+    private void UpdateStatus(EntryStatus status)
     {
         Status = status;
+    }
+
+    public void Lock()
+    {
+        UpdateStatus(EntryStatus.Locked);
+    }
+
+    public void Unlock()
+    {
+        UpdateStatus(EntryStatus.Unlocked);
     }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();

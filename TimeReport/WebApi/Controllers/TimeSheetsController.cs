@@ -209,7 +209,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new OpenWeekCommand(timeSheetId), cancellationToken);
+            await _mediator.Send(new ReopenWeekCommand(timeSheetId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)

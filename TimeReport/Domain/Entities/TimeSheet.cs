@@ -3,10 +3,11 @@ using System.Globalization;
 
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
+using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheet : AuditableEntity, ISoftDelete
+public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
 {
     private readonly List<TimeSheetActivity> _activities = new List<TimeSheetActivity>();
     private readonly List<Entry> _entries = new List<Entry>();
@@ -43,7 +44,7 @@ public class TimeSheet : AuditableEntity, ISoftDelete
 
     public TimeSheetStatus Status { get; private set; }
 
-    public void UpdateStatus(TimeSheetStatus status)
+    private void UpdateStatus(TimeSheetStatus status)
     {
         Status = status;
     }
@@ -80,4 +81,39 @@ public class TimeSheet : AuditableEntity, ISoftDelete
             .Where(e => e.Date == date)
             .Sum(e => e.Hours.GetValueOrDefault());
     }
+
+    public void Approve()
+    {
+        foreach (var entry in Entries)
+        {
+            entry.Lock();
+        }
+
+        UpdateStatus(TimeSheetStatus.Approved);
+        DomainEvents.Add(new TimeSheetApprovedEvent(Id));
+    }
+
+    public void Close()
+    {
+        foreach (var entry in Entries)
+        {
+            entry.Lock();
+        }
+
+        UpdateStatus(TimeSheetStatus.Closed);
+        DomainEvents.Add(new TimeSheetClosedEvent(Id));
+    }
+
+    public void Reopen()
+    {
+        foreach (var entry in Entries)
+        {
+            entry.Unlock();
+        }
+
+        UpdateStatus(TimeSheetStatus.Open);
+        DomainEvents.Add(new TimeSheetReoponedEvent(Id));
+    }
+
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }
