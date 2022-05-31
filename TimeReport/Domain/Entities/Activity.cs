@@ -6,6 +6,19 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Activity : AuditableEntity, ISoftDelete
 {
+    protected Activity()
+    {
+
+    }
+
+    public Activity(string name, ActivityType activityType, string? description)
+    {
+        Id = Guid.NewGuid().ToString();
+        Name = name;
+        ActivityType = activityType;
+        Description = description;
+    }
+
     public string Id { get; set; } = null!;
 
     public string Name { get; set; } = null!;

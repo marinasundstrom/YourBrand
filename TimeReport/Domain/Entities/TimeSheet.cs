@@ -23,7 +23,7 @@ public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
         To = From.AddDays(6);
     }
 
-    internal TimeSheet()
+    protected TimeSheet()
     {
 
     }
@@ -80,6 +80,11 @@ public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
         _activities.Remove(activity);
 
         DomainEvents.Add(new TimeSheetActivityAddedEvent(Id, activity.Id, activity.Activity.Id));
+    }
+
+    internal void AddEntry(Entry entry)
+    {
+        _entries.Add(entry);
     }
 
     public TimeSheetActivity? GetActivity(string activityId)

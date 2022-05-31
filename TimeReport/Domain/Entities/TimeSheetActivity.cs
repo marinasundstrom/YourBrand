@@ -1,4 +1,6 @@
 ﻿
+using System.Globalization;
+
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Events;
@@ -42,8 +44,36 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete, IHasDomainEvent
 
     public Entry AddEntry(DateOnly date, double? hours, string? description)
     {
+        // TODO: Validate
+
+        var week = ISOWeek.GetWeekOfYear(
+            date.ToDateTime(
+                TimeOnly.FromTimeSpan(
+                    TimeSpan.FromMinutes(10))));
+
+        if (TimeSheet.Year != date.Year || TimeSheet.Week != week)
+        {
+            throw new InvalidOperationException("Date is not in Week.");
+        }
+
+        if(TimeSheet.Entries.Any(e => e.Date == date))
+        {
+            throw new InvalidOperationException("Entry for this date already exists");
+        }
+
+        if(hours < 0)
+        {
+            throw new InvalidOperationException("Hours must not be negative,");
+        }
+
+        if (hours > 8)
+        {
+            throw new InvalidOperationException("Hours must not be greater than 8.");
+        }
+
         var entry = new Entry(TimeSheet.User, Project, Activity, TimeSheet, this, date, hours, description);
         _entries.Add(entry);
+        TimeSheet.AddEntry(entry);
         return entry;
     }
 

@@ -5,12 +5,56 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Organization : AuditableEntity, ISoftDelete
 {
+    readonly List<Organization> _subOrganizations = new List<Organization>();
+    readonly List<Project> _projects = new List<Project>();
+    readonly List<ActivityType> _activityTypes = new List<ActivityType>();
+
+    protected Organization()
+    {
+
+    }
+
+    public Organization(string name, string? description)
+    {
+        Id = Guid.NewGuid().ToString();
+        Name = name;
+        Description = description;
+    }
+
+    public ActivityType AddActivityType(string name, string? description)
+    {
+        ActivityType activityType = new(name, description);
+        activityType.Project = null;
+        activityType.Organization = this;
+        _activityTypes.Add(activityType);
+        return activityType;
+    }
+
+    public void AddSubOrganization(Organization organization)
+    {
+        _subOrganizations.Add(organization);
+        organization.ParentOrganization = this;
+    }
+
+    public void AddProject(Project project)
+    {
+        _projects.Add(project);
+        project.Organization = this;
+    }
+
     public string Id { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
-    public Organization? ParentOrganization { get; set; } = null!;
-    public List<Organization> SubOrganization { get; set; } =  new List<Organization>();
+    public string? Description { get; set; }
+
+    public Organization? ParentOrganization { get; private set; }
+
+    public IReadOnlyCollection<Organization> SubOrganizations => _subOrganizations.AsReadOnly();
+
+    public IReadOnlyCollection<Project> Project => _projects.AsReadOnly();
+
+    public IReadOnlyCollection<ActivityType> ActivityTypes => _activityTypes.AsReadOnly();
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

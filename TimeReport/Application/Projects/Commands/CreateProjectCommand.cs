@@ -21,11 +21,8 @@ public record CreateProjectCommand(string Name, string? Description, string Orga
 
         public async Task<ProjectDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = new Project
+            var project = new Project(request.Name, request.Description)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = request.Name,
-                Description = request.Description,
                 Organization = await _context.Organizations.FirstAsync(o => o.Id == request.OrganizationId)
             };
 

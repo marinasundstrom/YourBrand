@@ -171,6 +171,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.Contracts", "Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.UI", "Customers\Customers.UI\Customers.UI.csproj", "{8FD632DF-FF23-49B5-9FDC-AE01E6AB489B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "TimeReport\Domain.Tests\Domain.Tests.csproj", "{EABE8D57-1BA1-453B-B1E3-4107C46F8611}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -429,6 +431,10 @@ Global
 		{8FD632DF-FF23-49B5-9FDC-AE01E6AB489B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FD632DF-FF23-49B5-9FDC-AE01E6AB489B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FD632DF-FF23-49B5-9FDC-AE01E6AB489B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EABE8D57-1BA1-453B-B1E3-4107C46F8611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EABE8D57-1BA1-453B-B1E3-4107C46F8611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EABE8D57-1BA1-453B-B1E3-4107C46F8611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EABE8D57-1BA1-453B-B1E3-4107C46F8611}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -505,5 +511,6 @@ Global
 		{6DC33FCF-919D-4988-85D3-802CC55AADF8} = {7B9D07EB-A991-40F6-8F8A-C30E9776B663}
 		{10057AE8-2B15-492C-B3C7-C9BE85BB8841} = {7B9D07EB-A991-40F6-8F8A-C30E9776B663}
 		{8FD632DF-FF23-49B5-9FDC-AE01E6AB489B} = {7B9D07EB-A991-40F6-8F8A-C30E9776B663}
+		{EABE8D57-1BA1-453B-B1E3-4107C46F8611} = {01C4E010-A651-40F0-9BB1-4C873AF56278}
 	EndGlobalSection
 EndGlobal

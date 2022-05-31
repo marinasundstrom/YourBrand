@@ -6,7 +6,30 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Project : AuditableEntity, ISoftDelete
 {
+    readonly List<Expense> _expenses = new List<Expense>();
+    readonly List<Activity> _activities = new List<Activity>();
+    readonly List<Entry> _entries = new List<Entry>();
+    readonly List<ProjectMembership> _memberships = new List<ProjectMembership>();
+
+    protected Project()
+    {
+        
+    }
+
+    public Project(string name, string? description)
+    {
+        Id = Guid.NewGuid().ToString();
+        Name = name;
+        Description = description;
+    }
+
     public string Id { get; set; } = null!;
+
+    public void AddActivity(Activity activity)
+    {
+        activity.Project = this;
+        _activities.Add(activity);
+    }
 
     public string Name { get; set; } = null!;
 
@@ -24,13 +47,13 @@ public class Project : AuditableEntity, ISoftDelete
     /// </summary>
     public double? RequiredHoursWeekly { get; set; }
 
-    public List<Expense> Expenses { get; set; } = new List<Expense>();
+    public IReadOnlyCollection<Expense> Expenses => _expenses.AsReadOnly();
 
-    public List<Activity> Activities { get; set; } = new List<Activity>();
+    public IReadOnlyCollection<Activity> Activities => _activities.AsReadOnly();
 
-    public List<Entry> Entries { get; set; } = new List<Entry>();
+    public IReadOnlyCollection<Entry> Entries => _entries.AsReadOnly();
 
-    public List<ProjectMembership> Memberships { get; set; } = new List<ProjectMembership>();
+    public IReadOnlyCollection<ProjectMembership> Memberships => _memberships.AsReadOnly();
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

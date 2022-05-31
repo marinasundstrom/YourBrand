@@ -40,15 +40,13 @@ public record CreateActivityCommand(string ProjectId, string Name, string Activi
                 throw new Exception();
             }
 
-            var activity = new Activity
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = request.Name,
-                ActivityType = await _context.ActivityTypes
+            var activityType = await _context.ActivityTypes
                     .AsSingleQuery()
                     .IncludeAll()
-                    .FirstAsync(at => at.Id == request.ActivityTypeId),
-                Description = request.Description,
+                    .FirstAsync(at => at.Id == request.ActivityTypeId);
+
+            var activity = new Activity(request.Name, activityType, request.Description)
+            {
                 Project = project,
                 HourlyRate = request.HourlyRate
             };

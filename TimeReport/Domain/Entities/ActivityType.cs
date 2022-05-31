@@ -4,8 +4,21 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ActivityType: AuditableEntity, ISoftDelete
+public class ActivityType : AuditableEntity, ISoftDelete
 {
+
+    protected ActivityType()
+    {
+
+    }
+
+    public ActivityType(string name, string? description)
+    {
+        Id = Guid.NewGuid().ToString();
+        Name = name;
+        Description = description;
+    }
+
     public string Id { get; set; } = null!;
 
     public string Name { get; set; } = null!;

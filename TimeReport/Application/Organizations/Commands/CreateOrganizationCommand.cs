@@ -22,12 +22,11 @@ public record CreateOrganizationCommand(string Name, string? ParentOrganizationI
 
             if (organization is not null) throw new Exception();
 
-            organization = new Domain.Entities.Organization
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = request.Name,
-                ParentOrganization = request.ParentOrganizationId is null ? null : await context.Organizations.FirstAsync(o => o.Id == request.ParentOrganizationId)
-            };
+            organization = new Domain.Entities.Organization(request.Name, null);
+
+            var parentOrg = request.ParentOrganizationId is null ? null : await context.Organizations.FirstAsync(o => o.Id == request.ParentOrganizationId);
+
+            parentOrg?.AddSubOrganization(organization);
 
             context.Organizations.Add(organization);
 

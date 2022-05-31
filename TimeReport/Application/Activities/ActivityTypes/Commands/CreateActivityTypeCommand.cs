@@ -34,11 +34,8 @@ public record CreateActivityTypeCommand(string Name, string? Description, string
                         .FirstAsync(x => x.Organization.Id == request.OrganizationId && x.Id == request.ProjectId, cancellationToken);
             }
 
-            var activityType = new ActivityType
+            var activityType = new ActivityType(request.Name, request.Description)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = request.Name,
-                Description = request.Description,
                 Organization = organization,
                 Project = project,
                 ExcludeHours = request.ExcludeHours
