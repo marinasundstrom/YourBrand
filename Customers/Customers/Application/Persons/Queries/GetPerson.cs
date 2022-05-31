@@ -1,11 +1,11 @@
-﻿using YourBrand.Customers.Application.Queries;
-using YourBrand.Customers.Domain;
+﻿using YourBrand.Customers.Domain;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Customers.Application.Persons;
 
-namespace YourBrand.Customers.Application.Queries;
+namespace YourBrand.Customers.Application.Persons.Queries;
 
 public record GetPerson(string PersonId) : IRequest<PersonDto?>
 {

@@ -1,6 +1,10 @@
+using YourBrand.Customers.Domain.Common;
+using YourBrand.Customers.Domain.Enums;
+using YourBrand.Customers.Domain.Events;
+
 namespace YourBrand.Customers.Domain.Entities;
 
-public class Address
+public class Address : AuditableEntity, IHasDomainEvents
 {
     protected Address()
     {
@@ -11,11 +15,15 @@ public class Address
     {
         Id = Guid.NewGuid().ToString();
         Thoroughfare = thoroughfare;
+
+        DomainEvents.Add(new AddressCreated(Id));
     }
 
     public string Id { get; private set; }
 
     public Person Person { get; private set; } = null!;
+
+    public AddressType Type { get; set; }
 
     // Street
     public string Thoroughfare { get; set; } = null!;
@@ -39,4 +47,5 @@ public class Address
 
     public string Country { get; set; } = null!;
 
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

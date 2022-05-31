@@ -1,11 +1,10 @@
-﻿using YourBrand.Customers.Application.Queries;
-using YourBrand.Customers.Domain;
+﻿using YourBrand.Customers.Domain;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Customers.Application.Commands;
+namespace YourBrand.Customers.Application.Persons.Commands;
 
 public record DeletePerson(string PersonId) : IRequest
 {

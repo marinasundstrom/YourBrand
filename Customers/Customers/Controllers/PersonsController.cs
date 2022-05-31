@@ -1,9 +1,9 @@
 using YourBrand.Customers.Application;
-using YourBrand.Customers.Application.Queries;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using YourBrand.Customers.Application.Persons.Queries;
 
 namespace YourBrand.Customers.Controllers;
 
@@ -18,7 +18,7 @@ public class PersonsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ItemsResult<PersonDto>>> GetPersons(int page, int pageSize, CancellationToken cancellationToken = default) 
+    public async Task<ActionResult<ItemsResult<Application.Persons.PersonDto>>> GetPersons(int page, int pageSize, CancellationToken cancellationToken = default) 
     {
         var result = await _mediator.Send(new GetPersons(page, pageSize), cancellationToken);
         return Ok(result);

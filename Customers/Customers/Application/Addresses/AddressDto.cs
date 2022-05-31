@@ -1,7 +1,12 @@
-﻿namespace YourBrand.Customers.Application;
+﻿using YourBrand.Customers.Domain.Enums;
+
+namespace YourBrand.Customers.Application.Addresses;
 
 public record AddressDto(
     string Id,
+
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    AddressType Type,
 
     // Street
     string Thoroughfare,

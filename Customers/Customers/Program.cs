@@ -1,17 +1,21 @@
-﻿using YourBrand.Documents.Client;
-
-using YourBrand.Customers.Application;
-using YourBrand.Customers.Application.Common.Interfaces;
-using YourBrand.Customers.Application.Queries;
-using YourBrand.Customers.Application.Commands;
-using YourBrand.Customers.Infrastructure;
-using YourBrand.Customers.Services;
+﻿using System.Text.Json.Serialization;
 
 using MassTransit;
 
 using MediatR;
+
+using YourBrand.Customers.Application;
+using YourBrand.Customers.Application.Addresses;
+using YourBrand.Customers.Application.Addresses.Commands;
+using YourBrand.Customers.Application.Addresses.Queries;
+using YourBrand.Customers.Application.Common.Interfaces;
+using YourBrand.Customers.Application.Persons.Commands;
+using YourBrand.Customers.Application.Persons.Queries;
+using YourBrand.Customers.Infrastructure;
 using YourBrand.Customers.Infrastructure.Persistence;
-using System.Text.Json.Serialization;
+using YourBrand.Customers.Application.Persons;
+using YourBrand.Customers.Services;
+using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -101,6 +105,18 @@ app.MapDelete("/Persons/{personId}", async (string personId, IMediator mediator,
     => await mediator.Send(new DeletePerson(personId), cancellationToken))
     .WithName("Persons_DeletePerson")
     .WithTags("Persons")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapGet("/Persons/{personId}/Addresses", async (string personId, string foo, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetAddress(personId), cancellationToken))
+    .WithName("Addresses_GetAddress")
+    .WithTags("Addresses")
+    .Produces<AddressDto>(StatusCodes.Status200OK);
+
+app.MapDelete("/Persons/{personId}/Addresses/{addressId}", async (string personId, string addressId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new DeleteAddress(addressId), cancellationToken))
+    .WithName("Addresses_DeleteAddress")
+    .WithTags("Addresses")
     .Produces(StatusCodes.Status200OK);
 
 app.MapControllers();

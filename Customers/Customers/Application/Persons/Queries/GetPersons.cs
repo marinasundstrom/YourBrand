@@ -5,8 +5,9 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Customers.Application.Persons;
 
-namespace YourBrand.Customers.Application.Queries;
+namespace YourBrand.Customers.Application.Persons.Queries;
 
 public record GetPersons(int Page = 1, int PageSize = 10) : IRequest<ItemsResult<PersonDto>>
 {

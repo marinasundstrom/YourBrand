@@ -6,7 +6,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Customers.Application.Events;
+namespace YourBrand.Customers.Application.Persons.Events;
 
 public class PersonCreatedHandler : INotificationHandler<DomainEventNotification<PersonCreated>>
 {

@@ -5,7 +5,7 @@ using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public class Person : IHasDomainEvents
+public class Person : AuditableEntity, IHasDomainEvents
 {
     readonly List<Address> _addresses = new List<Address>();
 

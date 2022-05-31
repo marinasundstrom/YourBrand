@@ -1,10 +1,10 @@
 ﻿
-using YourBrand.Customers.Application;
 using YourBrand.Customers.Domain;
 
 using MediatR;
+using YourBrand.Customers.Application.Persons;
 
-namespace YourBrand.Customers.Application.Commands;
+namespace YourBrand.Customers.Application.Persons.Commands;
 
 public record CreatePerson(string FirstName, string LastName, string SSN) : IRequest<PersonDto>
 {
