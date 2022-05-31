@@ -50,11 +50,11 @@ public static class Seed
     private static void DoSeedAccounts(AccountingContext context)
     {
         context.Accounts.AddRange(Accounts.GetAll());
-
     }
 
     private static void DoSeedVerifications(AccountingContext context)
     {
+        /*
         InsertMoney(context);
 
         YouSendAnInvoiceToCustomer(context);
@@ -63,9 +63,12 @@ public static class Seed
         YouTransferFromPlusGiroToCorporateAccount(context);
         YouPayForTheInvoice(context);
         YouWithdrawMoneyAsSalary(context);
+        */
 
         //YouTransferFromTaxAccountToCorporateAccount(context);
     }
+
+    /*
 
     private static void InsertMoney(AccountingContext context)
     {
@@ -300,4 +303,6 @@ public static class Seed
             }
         });
     }
+
+    */
 }

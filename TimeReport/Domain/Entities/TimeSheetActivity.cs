@@ -44,24 +44,19 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete, IHasDomainEvent
 
     public Entry AddEntry(DateOnly date, double? hours, string? description)
     {
-        // TODO: Validate
-
-        var week = ISOWeek.GetWeekOfYear(
-            date.ToDateTime(
-                TimeOnly.FromTimeSpan(
-                    TimeSpan.FromMinutes(10))));
+        int week = GetWeekFromDate(date);
 
         if (TimeSheet.Year != date.Year || TimeSheet.Week != week)
         {
             throw new InvalidOperationException("Date is not in Week.");
         }
 
-        if(TimeSheet.Entries.Any(e => e.Date == date))
+        if (TimeSheet.Entries.Any(e => e.Date == date))
         {
             throw new InvalidOperationException("Entry for this date already exists");
         }
 
-        if(hours < 0)
+        if (hours < 0)
         {
             throw new InvalidOperationException("Hours must not be negative,");
         }
@@ -77,7 +72,15 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete, IHasDomainEvent
         return entry;
     }
 
-    public Entry? GetEntry(DateOnly date)
+    private static int GetWeekFromDate(DateOnly date)
+    {
+        return ISOWeek.GetWeekOfYear(
+            date.ToDateTime(
+                TimeOnly.FromTimeSpan(
+                    TimeSpan.FromMinutes(10))));
+    }
+
+    public Entry? GetEntryByDate(DateOnly date)
     {
         return _entries.FirstOrDefault(e => e.Date == date);
     }

@@ -7,7 +7,7 @@ using Xunit;
 
 using YourBrand.TimeReport.Domain.Entities;
 
-namespace Domain.Tests;
+namespace YourBrand.TimeReport.Domain.Tests;
 
 public class TimeSheetTest
 {

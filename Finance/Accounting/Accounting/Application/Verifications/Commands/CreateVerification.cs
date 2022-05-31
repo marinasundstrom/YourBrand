@@ -2,6 +2,8 @@
 using YourBrand.Accounting.Domain.Events;
 
 using MediatR;
+using YourBrand.Accounting.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Accounting.Application.Verifications.Commands;
 
@@ -24,11 +26,11 @@ public record CreateVerificationCommand(string Description, int? InvoiceId, List
             }
 
             var verification = new Domain.Entities.Verification
-            {
-                Description = request.Description,
-                Date = DateTime.Now,
-                InvoiceId = request.InvoiceId,
-            };
+            (
+                DateTime.Now,
+                request.Description,
+                invoiceId: request.InvoiceId
+            );
 
             foreach (var entryDto in request.Entries)
             {
@@ -38,16 +40,19 @@ public record CreateVerificationCommand(string Description, int? InvoiceId, List
                     throw new Exception("Cannot set both Debit and Credit.");
                 }
 
-                var entry = new Domain.Entities.Entry
-                {
-                    Date = verification.Date,
-                    AccountNo = entryDto.AccountNo,
-                    Description = entryDto.Description ?? String.Empty,
-                    Debit = entryDto.Debit,
-                    Credit = entryDto.Credit
-                };
+                var account = await context.Accounts
+                    .FirstAsync(a => a.AccountNo == entryDto.AccountNo, cancellationToken);
 
-                verification.Entries.Add(entry);
+                Entry entry = null!;
+
+                if(entryDto.Credit is not null)
+                {
+                    verification.AddCreditEntry(account, entryDto.Credit.GetValueOrDefault(), entryDto.Description);
+                }
+                else
+                {
+                    verification.AddDebitEntry(account, entryDto.Debit.GetValueOrDefault(), entryDto.Description);
+                }
 
                 entry.DomainEvents.Add(new EntryCreatedEvent(entry));
             }

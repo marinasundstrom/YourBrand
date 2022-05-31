@@ -45,7 +45,7 @@ public record AddFileAttachmentToVerificationCommand(int VerificationId, string 
             attachment.Description = request.Description;
             attachment.InvoiceId = request.invoiceId;
 
-            verification.Attachments.Add(attachment);
+            verification.AddAttachment(attachment);
 
             await context.SaveChangesAsync(cancellationToken);
 

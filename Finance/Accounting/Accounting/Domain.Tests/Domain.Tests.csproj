@@ -6,7 +6,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamepace>YourBrand.TimeReport.Domain.Tests</RootNamepace>
+    <RootNamepace>YourBrand.Accounting.Domain.Tests</RootNamepace>
   </PropertyGroup>
 
   <ItemGroup>
