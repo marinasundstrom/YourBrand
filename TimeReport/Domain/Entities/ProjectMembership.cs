@@ -10,6 +10,8 @@ public class ProjectMembership : AuditableEntity, ISoftDelete
 
     public Project Project { get; set; } = null!;
 
+    public Team? Team { get; set; }
+
     public User User { get; set; } = null!;
 
     public DateTime? From { get; set; }

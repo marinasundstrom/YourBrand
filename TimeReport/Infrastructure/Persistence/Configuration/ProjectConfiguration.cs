@@ -12,7 +12,24 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
     {
         builder.ToTable("Projects");
         builder.HasQueryFilter(i => i.Deleted == null);
-        
+
+       builder.HasMany(p => p.Teams)
+            .WithMany(p => p.Projects)
+            .UsingEntity<ProjectTeam>(
+                j => j
+                    .HasOne(pt => pt.Team)
+                    .WithMany(t => t.ProjectTeams)
+                    .HasForeignKey(pt => pt.TeamId),
+
+                j => j
+                    .HasOne(pt => pt.Project)
+                    .WithMany(p => p.ProjectTeams)
+                    .HasForeignKey(pt => pt.ProjectId));
+
+        builder.HasMany(x => x.ProjectTeams)
+            .WithOne(x => x.Project)
+            .OnDelete(DeleteBehavior.NoAction);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

@@ -1,16 +1,16 @@
+﻿
+using YourBrand.TimeReport.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using YourBrand.TimeReport.Domain.Entities;
-
 namespace YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 
-public class ProjectGroupConfiguration : IEntityTypeConfiguration<ProjectGroup>
+class OrganizationUserConfiguration : IEntityTypeConfiguration<OrganizationUser>
 {
-    public void Configure(EntityTypeBuilder<ProjectGroup> builder)
+    public void Configure(EntityTypeBuilder<OrganizationUser> builder)
     {
-        builder.ToTable("ProjectGroups");
+        builder.ToTable("OrganizationUsers");
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasOne(x => x.CreatedBy)

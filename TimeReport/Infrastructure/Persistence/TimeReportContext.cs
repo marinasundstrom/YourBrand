@@ -49,6 +49,12 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<Organization> Organizations { get; set; } = null!;
 
+    public DbSet<OrganizationUser> OrganizationUsers { get; set; } = null!;
+
+    public DbSet<Team> Teams { get; set; } = null!;
+
+    public DbSet<TeamMembership> TeamMemberships { get; set; } = null!;
+
     public DbSet<Absence> Absence { get; set; } = null!;
 
     public DbSet<AbsenceType> AbsenceTypes { get; set; } = null!;
@@ -58,6 +64,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
     public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
 
     public DbSet<ProjectMembership> ProjectMemberships { get; set; } = null!;
+
+    public DbSet<ProjectTeam> ProjectTeams{ get; set; } = null!;
 
     public DbSet<Expense> Expenses { get; set; } = null!;
 

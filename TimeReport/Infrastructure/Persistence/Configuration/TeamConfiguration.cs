@@ -1,31 +1,30 @@
 ﻿
-using YourBrand.TimeReport.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using YourBrand.TimeReport.Domain.Entities;
+
 namespace YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 
-class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
+public class TeamConfiguration : IEntityTypeConfiguration<Team>
 {
-    public void Configure(EntityTypeBuilder<Organization> builder)
+    public void Configure(EntityTypeBuilder<Team> builder)
     {
-        builder.ToTable("Organizations");
-        builder.Property(x => x.Id).ValueGeneratedNever();
+        builder.ToTable("Teams");
         builder.HasQueryFilter(i => i.Deleted == null);
 
-        builder.HasMany(p => p.Users)
-            .WithMany(p => p.Organizations)
-            .UsingEntity<OrganizationUser>(
+        builder.HasMany(p => p.Members)
+            .WithMany(p => p.Teams)
+            .UsingEntity<TeamMembership>(
                 j => j
                     .HasOne(pt => pt.User)
-                    .WithMany(t => t.OrganizationUsers)
+                    .WithMany(t => t.TeamMemberships)
                     .HasForeignKey(pt => pt.UserId),
 
                 j => j
-                    .HasOne(pt => pt.Organization)
-                    .WithMany(p => p.OrganizationUsers)
-                    .HasForeignKey(pt => pt.OrganizationId));
+                    .HasOne(pt => pt.Team)
+                    .WithMany(p => p.Memberships)
+                    .HasForeignKey(pt => pt.TeamId));
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

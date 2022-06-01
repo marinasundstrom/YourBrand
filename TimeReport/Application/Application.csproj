@@ -26,8 +26,10 @@
 
   <ItemGroup>
     <None Remove="Invoicing\" />
+    <None Remove="Organizations %28copy%29\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Invoicing\" />
+    <Folder Include="Organizations %28copy%29\" />
   </ItemGroup>
 </Project>

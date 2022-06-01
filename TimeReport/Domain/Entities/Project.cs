@@ -6,10 +6,12 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Project : AuditableEntity, ISoftDelete
 {
+    readonly List<Team> _teams = new List<Team>();
     readonly List<Expense> _expenses = new List<Expense>();
     readonly List<Activity> _activities = new List<Activity>();
     readonly List<Entry> _entries = new List<Entry>();
     readonly List<ProjectMembership> _memberships = new List<ProjectMembership>();
+    readonly List<ProjectTeam> _projectTeams = new List<ProjectTeam>();
 
     protected Project()
     {
@@ -47,6 +49,8 @@ public class Project : AuditableEntity, ISoftDelete
     /// </summary>
     public double? RequiredHoursWeekly { get; set; }
 
+    public IReadOnlyCollection<Team> Teams => _teams.AsReadOnly();
+
     public IReadOnlyCollection<Expense> Expenses => _expenses.AsReadOnly();
 
     public IReadOnlyCollection<Activity> Activities => _activities.AsReadOnly();
@@ -54,6 +58,8 @@ public class Project : AuditableEntity, ISoftDelete
     public IReadOnlyCollection<Entry> Entries => _entries.AsReadOnly();
 
     public IReadOnlyCollection<ProjectMembership> Memberships => _memberships.AsReadOnly();
+
+    public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams.AsReadOnly();
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

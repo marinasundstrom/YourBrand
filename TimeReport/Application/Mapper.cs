@@ -12,6 +12,7 @@ using YourBrand.TimeReport.Application.Activities.ActivityTypes;
 using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
 using YourBrand.TimeReport.Application.Projects.ProjectGroups;
 using YourBrand.TimeReport.Application.Organizations;
+using YourBrand.TimeReport.Application.Teams;
 
 namespace YourBrand.TimeReport.Application;
 
@@ -94,5 +95,10 @@ public static class Mapper
     public static OrganizationDto ToDto(this Domain.Entities.Organization organization)
     {
         return new (organization.Id, organization.Name);
+    }
+
+    public static TeamDto ToDto(this Domain.Entities.Team team)
+    {
+        return new (team.Id, team.Name);
     }
 }
