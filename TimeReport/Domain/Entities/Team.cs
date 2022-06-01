@@ -6,11 +6,11 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Team : AuditableEntity, ISoftDelete
 {
-    readonly List<User> _members = new List<User>();
-    readonly List<TeamMembership> _memberships = new List<TeamMembership>();
-    readonly List<Project> _projects = new List<Project>();
-    readonly List<ProjectTeam> _projectTeams = new List<ProjectTeam>();
-    readonly List<TeamMembership> _teamMemberships = new List<TeamMembership>();
+    readonly HashSet<User> _members = new HashSet<User>();
+    readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();
+    readonly HashSet<Project> _projects = new HashSet<Project>();
+    readonly HashSet<ProjectTeam> _projectTeams = new HashSet<ProjectTeam>();
+    readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
 
     protected Team()
     {
@@ -32,13 +32,13 @@ public class Team : AuditableEntity, ISoftDelete
 
     public Organization Organization { get; set; } = null!;
 
-    public IReadOnlyCollection<User> Members => _members.AsReadOnly();
+    public IReadOnlyCollection<User> Members => _members;
 
-    public IReadOnlyCollection<TeamMembership> Memberships => _memberships.AsReadOnly();
+    public IReadOnlyCollection<TeamMembership> Memberships => _memberships;
 
-    public IReadOnlyCollection<Project> Projects => _projects.AsReadOnly();
+    public IReadOnlyCollection<Project> Projects => _projects;
 
-    public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams.AsReadOnly();
+    public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

@@ -4,8 +4,8 @@ namespace YourBrand.Accounting.Domain.Entities;
 
 public class Verification
 {
-    private readonly List<Entry> _entries = new();
-    private readonly List<Attachment> _attachments = new List<Attachment>();
+    private readonly HashSet<Entry> _entries = new();
+    private readonly HashSet<Attachment> _attachments = new HashSet<Attachment>();
 
     protected Verification()
     {
@@ -31,7 +31,7 @@ public class Verification
 
     public int? ReceiptId { get; private set; }
 
-    public IReadOnlyCollection<Entry> Entries => _entries.AsReadOnly();
+    public IReadOnlyCollection<Entry> Entries => _entries;
 
     public Entry AddDebitEntry(Account account, decimal debit, string? description = null)
     {
@@ -47,7 +47,7 @@ public class Verification
         return entry;
     }
 
-    public IReadOnlyCollection<Attachment> Attachments => _attachments.AsReadOnly();
+    public IReadOnlyCollection<Attachment> Attachments => _attachments;
 
     public void AddAttachment(Attachment attachment)
     {

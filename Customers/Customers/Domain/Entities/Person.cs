@@ -7,7 +7,7 @@ namespace YourBrand.Customers.Domain.Entities;
 
 public class Person : AuditableEntity, IHasDomainEvents
 {
-    readonly List<Address> _addresses = new List<Address>();
+    readonly HashSet<Address> _addresses = new HashSet<Address>();
 
     protected Person() { }
 
@@ -35,7 +35,7 @@ public class Person : AuditableEntity, IHasDomainEvents
 
     public string PhoneMobile { get; set; }
 
-    public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
+    public IReadOnlyCollection<Address> Addresses => _addresses;
 
     public void AddAddress(Address address) => _addresses.Add(address);
 

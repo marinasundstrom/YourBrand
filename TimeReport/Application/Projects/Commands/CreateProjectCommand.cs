@@ -23,7 +23,7 @@ public record CreateProjectCommand(string Name, string? Description, string Orga
         {
             var project = new Project(request.Name, request.Description)
             {
-                Organization = await _context.Organizations.FirstAsync(o => o.Id == request.OrganizationId)
+                Organization = await _context.Organizations.FirstAsync() //.FirstAsync(o => o.Id == request.OrganizationId)
             };
 
             _context.Projects.Add(project);

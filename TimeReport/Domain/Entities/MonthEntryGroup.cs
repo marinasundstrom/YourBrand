@@ -5,7 +5,7 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class MonthEntryGroup : AuditableEntity
 {
-    private List<Entry> _entries = new List<Entry>();
+    private HashSet<Entry> _entries = new HashSet<Entry>();
 
     public MonthEntryGroup(User user, int year, int month)
     {
@@ -30,7 +30,7 @@ public class MonthEntryGroup : AuditableEntity
 
     public int Month { get; private set; }
 
-    public IReadOnlyList<Entry> Entries => _entries.AsReadOnly();
+    public IReadOnlyCollection<Entry> Entries => _entries;
 
     public EntryStatus Status { get; private set; } = EntryStatus.Unlocked;
 

@@ -9,7 +9,7 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class TimeSheetActivity : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
-    private readonly List<Entry> _entries = new List<Entry>();
+    private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
     public TimeSheetActivity(TimeSheet timeSheet, Project project, Activity activity)
     {
@@ -34,7 +34,7 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete, IHasDomainEvent
 
     public Activity Activity { get; private set; } = null!;
 
-    public IReadOnlyList<Entry> Entries => _entries.AsReadOnly();
+    public IReadOnlyCollection<Entry> Entries => _entries;
 
     // public decimal? HourlyRate { get; set; }
 

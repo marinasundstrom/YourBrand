@@ -6,12 +6,12 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Project : AuditableEntity, ISoftDelete
 {
-    readonly List<Team> _teams = new List<Team>();
-    readonly List<Expense> _expenses = new List<Expense>();
-    readonly List<Activity> _activities = new List<Activity>();
-    readonly List<Entry> _entries = new List<Entry>();
-    readonly List<ProjectMembership> _memberships = new List<ProjectMembership>();
-    readonly List<ProjectTeam> _projectTeams = new List<ProjectTeam>();
+    readonly HashSet<Team> _teams = new HashSet<Team>();
+    readonly HashSet<Expense> _expenses = new HashSet<Expense>();
+    readonly HashSet<Activity> _activities = new HashSet<Activity>();
+    readonly HashSet<Entry> _entries = new HashSet<Entry>();
+    readonly HashSet<ProjectMembership> _memberships = new HashSet<ProjectMembership>();
+    readonly HashSet<ProjectTeam> _projectTeams = new HashSet<ProjectTeam>();
 
     protected Project()
     {
@@ -49,17 +49,17 @@ public class Project : AuditableEntity, ISoftDelete
     /// </summary>
     public double? RequiredHoursWeekly { get; set; }
 
-    public IReadOnlyCollection<Team> Teams => _teams.AsReadOnly();
+    public IReadOnlyCollection<Team> Teams => _teams;
 
-    public IReadOnlyCollection<Expense> Expenses => _expenses.AsReadOnly();
+    public IReadOnlyCollection<Expense> Expenses => _expenses;
 
-    public IReadOnlyCollection<Activity> Activities => _activities.AsReadOnly();
+    public IReadOnlyCollection<Activity> Activities => _activities;
 
-    public IReadOnlyCollection<Entry> Entries => _entries.AsReadOnly();
+    public IReadOnlyCollection<Entry> Entries => _entries;
 
-    public IReadOnlyCollection<ProjectMembership> Memberships => _memberships.AsReadOnly();
+    public IReadOnlyCollection<ProjectMembership> Memberships => _memberships;
 
-    public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams.AsReadOnly();
+    public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

@@ -9,8 +9,8 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
 {
-    private readonly List<TimeSheetActivity> _activities = new List<TimeSheetActivity>();
-    private readonly List<Entry> _entries = new List<Entry>();
+    private readonly HashSet<TimeSheetActivity> _activities = new HashSet<TimeSheetActivity>();
+    private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
     public TimeSheet(User user, int year, int week)
     {
@@ -49,9 +49,9 @@ public class TimeSheet : AuditableEntity, IHasDomainEvent, ISoftDelete
         Status = status;
     }
 
-    public IReadOnlyList<TimeSheetActivity> Activities => _activities.AsReadOnly();
+    public IReadOnlyCollection<TimeSheetActivity> Activities => _activities;
 
-    public IReadOnlyList<Entry> Entries => _entries.AsReadOnly();
+    public IReadOnlyCollection<Entry> Entries => _entries;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

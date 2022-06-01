@@ -7,7 +7,7 @@ namespace YourBrand.Domain.Entities;
 
 public class Item : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
-    readonly List<Comment> _comments = new List<Comment>();
+    readonly HashSet<Comment> _comments = new HashSet<Comment>();
 
     protected Item()
     {
@@ -30,7 +30,7 @@ public class Item : AuditableEntity, ISoftDelete, IHasDomainEvent
 
     public int CommentCount { get; set; }
 
-    public IReadOnlyList<Comment> Comments => _comments.AsReadOnly();
+    public IReadOnlyCollection<Comment> Comments => _comments;
 
     public void AddComment(string text)
     {

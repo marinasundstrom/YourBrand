@@ -51,7 +51,8 @@
             result = await ProjectsClient.CreateProjectAsync(new CreateProjectDto
             {
                 Name = Name,
-                Description = Description
+                Description = Description,
+                OrganizationId = "test"
             });
         }
         else

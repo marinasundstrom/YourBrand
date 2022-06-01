@@ -6,8 +6,8 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class User : AuditableEntity, ISoftDelete
 {
-    readonly List<OrganizationUser> _organizationUsers = new List<OrganizationUser>();
-    readonly List<TeamMembership> _teamMemberships = new List<TeamMembership>();
+    readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
+    readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
 
     public string Id { get; set; } = null!;
 
@@ -23,9 +23,9 @@ public class User : AuditableEntity, ISoftDelete
 
     public List<Team> Teams { get; set; } = new List<Team>();
 
-    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers.AsReadOnly();
+    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 
-    public IReadOnlyCollection<TeamMembership> TeamMemberships => _teamMemberships.AsReadOnly();
+    public IReadOnlyCollection<TeamMembership> TeamMemberships => _teamMemberships;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

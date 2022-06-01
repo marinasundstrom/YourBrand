@@ -5,11 +5,11 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Organization : AuditableEntity, ISoftDelete
 {
-    readonly List<User> _users = new List<User>();
-    readonly List<Organization> _subOrganizations = new List<Organization>();
-    readonly List<Project> _projects = new List<Project>();
-    readonly List<ActivityType> _activityTypes = new List<ActivityType>();
-    readonly List<OrganizationUser> _organizationUsers = new List<OrganizationUser>();
+    readonly HashSet<User> _users = new HashSet<User>();
+    readonly HashSet<Organization> _subOrganizations = new HashSet<Organization>();
+    readonly HashSet<Project> _projects = new HashSet<Project>();
+    readonly HashSet<ActivityType> _activityTypes = new HashSet<ActivityType>();
+    readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
 
     protected Organization()
     {
@@ -52,15 +52,15 @@ public class Organization : AuditableEntity, ISoftDelete
 
     public Organization? ParentOrganization { get; private set; }
 
-    public IReadOnlyCollection<User> Users => _users.AsReadOnly();
+    public IReadOnlyCollection<User> Users => _users;
 
-    public IReadOnlyCollection<Organization> SubOrganizations => _subOrganizations.AsReadOnly();
+    public IReadOnlyCollection<Organization> SubOrganizations => _subOrganizations;
 
-    public IReadOnlyCollection<Project> Project => _projects.AsReadOnly();
+    public IReadOnlyCollection<Project> Project => _projects;
 
-    public IReadOnlyCollection<ActivityType> ActivityTypes => _activityTypes.AsReadOnly();
+    public IReadOnlyCollection<ActivityType> ActivityTypes => _activityTypes;
 
-    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers.AsReadOnly();
+    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

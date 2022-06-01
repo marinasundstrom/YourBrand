@@ -6,7 +6,7 @@ namespace YourBrand.Payments.Domain.Entities;
 
 public class Payment : AuditableEntity, IHasDomainEvents
 {
-    readonly List<Capture> _captures = new List<Capture>();
+    readonly HashSet<Capture> _captures = new HashSet<Capture>();
 
     private Payment()
     {
@@ -63,7 +63,7 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
     public decimal? AmountCaptured { get; private set; }
 
-    public IReadOnlyCollection<Capture> Captures => _captures.AsReadOnly();
+    public IReadOnlyCollection<Capture> Captures => _captures;
 
     public void RegisterCapture(DateTime date, decimal amount, string? transactionId) 
     {
