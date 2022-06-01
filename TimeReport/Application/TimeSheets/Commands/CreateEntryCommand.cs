@@ -41,13 +41,13 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
-            var group = await _context.MonthEntryGroups.GetMonthGroup(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
+            var group = await _context.TimeSheetMonths.GetMonth(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
 
             if (group is null)
             {
                 group = new MonthEntryGroup(timeSheet.User, request.Date.Year, request.Date.Month);
 
-                _context.MonthEntryGroups.Add(group);
+                _context.TimeSheetMonths.Add(group);
             }
             else
             {

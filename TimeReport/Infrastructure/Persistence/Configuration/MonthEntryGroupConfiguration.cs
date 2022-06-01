@@ -10,7 +10,7 @@ public class MonthEntryGroupConfiguration : IEntityTypeConfiguration<MonthEntryG
 {
     public void Configure(EntityTypeBuilder<MonthEntryGroup> builder)
     {
-        builder.ToTable("MonthEntryGroups");
+        builder.ToTable("TimeSheetMonths");
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

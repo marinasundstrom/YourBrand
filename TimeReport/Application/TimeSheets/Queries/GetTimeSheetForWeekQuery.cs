@@ -63,7 +63,7 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
                 await _context.SaveChangesAsync(cancellationToken);
             }
 
-            var monthInfo = await _context.MonthEntryGroups
+            var monthInfo = await _context.TimeSheetMonths
                 .Where(x => x.UserId == timeSheet.UserId)
                 .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
                 .ToArrayAsync(cancellationToken);

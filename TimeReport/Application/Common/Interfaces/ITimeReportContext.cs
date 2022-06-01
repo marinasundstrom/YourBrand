@@ -24,7 +24,7 @@ public interface ITimeReportContext : IDisposable
     DbSet<ActivityType> ActivityTypes { get; set; }
     DbSet<Entry> Entries { get; set; }
     DbSet<TimeSheet> TimeSheets { get; set; }
-    DbSet<MonthEntryGroup> MonthEntryGroups { get; set; }
+    DbSet<MonthEntryGroup> TimeSheetMonths { get; set; }
     DbSet<TimeSheetActivity> TimeSheetActivities { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

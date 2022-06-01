@@ -30,7 +30,7 @@ public static class Extensions
                 .FirstOrDefaultAsync(x => x.Id == timeSheetId, cancellationToken);
     }
 
-    public static async Task<MonthEntryGroup?> GetMonthGroup(this DbSet<MonthEntryGroup> dbSet, string userId, int year, int month, CancellationToken cancellationToken = default)
+    public static async Task<MonthEntryGroup?> GetMonth(this DbSet<MonthEntryGroup> dbSet, string userId, int year, int month, CancellationToken cancellationToken = default)
     {
         return await dbSet.Include(x => x.User)
                 .Include(meg => meg.Entries)

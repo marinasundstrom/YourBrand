@@ -46,7 +46,7 @@ public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
                 return null;
             }
 
-            var monthInfo = await _context.MonthEntryGroups
+            var monthInfo = await _context.TimeSheetMonths
                 .Where(x => x.UserId == timeSheet.UserId)
                 .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
                 .ToArrayAsync(cancellationToken);

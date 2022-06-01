@@ -75,7 +75,7 @@ public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? Projec
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var monthInfo = await _context.MonthEntryGroups
+            var monthInfo = await _context.TimeSheetMonths
                 .Where(x => x.Status == EntryStatus.Locked)
                 .ToArrayAsync(cancellationToken);
 

@@ -79,7 +79,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<TimeSheet> TimeSheets { get; set; } = null!;
 
-    public DbSet<MonthEntryGroup> MonthEntryGroups { get; set; } = null!;
+    public DbSet<MonthEntryGroup> TimeSheetMonths { get; set; } = null!;
 
     public DbSet<TimeSheetActivity> TimeSheetActivities { get; set; } = null!;
 

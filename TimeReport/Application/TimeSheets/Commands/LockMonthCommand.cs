@@ -68,7 +68,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
 
             var userId = timeSheet.User.Id;
 
-            var group = await _context.MonthEntryGroups.GetMonthGroup(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
+            var group = await _context.TimeSheetMonths.GetMonth(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
 
             if (group is not null)
             {
