@@ -3,7 +3,7 @@
 @inject NavigationManager NavigationManager
 @inject ISearchClient SearchClient
 
-<MudAutocomplete T="SearchResultItem" Dense="false" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" DebounceInterval="300" Placeholder="@T["Placeholder"]" Variant="Variant.Outlined" Class="search-box" Style="background-color: white; color: white !important; border-radius: 5px; margin-bottom: 5px;" Value="value1" ValueChanged="OnSearchItemChanged" SearchFunc="@Search1" ToStringFunc="@(e=> e is null ? null : e.Title)">
+<MudAutocomplete T="SearchResultItem" Dense="false" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" DebounceInterval="300" Placeholder="@T["Placeholder"]" Variant="Variant.Outlined" Class="search-box" Style="border-radius: 5px; margin-bottom: 5px;" Value="value1" ValueChanged="OnSearchItemChanged" SearchFunc="@Search1" ToStringFunc="@(e=> e is null ? null : e.Title)">
     <ItemTemplate Context="e">
         @if (e.ResultType == SearchResultItemType.Item)
         {
