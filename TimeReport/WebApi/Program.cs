@@ -61,7 +61,7 @@ static class Program
         // Register the Swagger services
         services.AddOpenApiDocument(config =>
         {
-            config.Title = "Web API";
+            config.Title = "TimeReport API";
             config.Version = "v1";
 
 

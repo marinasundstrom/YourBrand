@@ -37,6 +37,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
             }
 
             query = query
+                .Include(x => x.Teams)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize);
 
@@ -49,7 +50,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
 
             var users = await query.ToListAsync(cancellationToken);
 
-            var dtos = users.Select(user => new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.Deleted));
+            var dtos = users.Select(user => user.ToDto());
 
             return new ItemsResult<UserDto>(dtos, totalItems);
         }

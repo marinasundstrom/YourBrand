@@ -29,6 +29,7 @@
             <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">List</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.AccessTime" Href="/timesheet">@T["ReportTime"]</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/reports">Reports</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.People" Href="/teams">Teams</MudNavLink>
 
             <AuthorizeView Roles="Administrator,Manager" Context="context2">
                 <MudNavLink Icon="@Icons.Material.Filled.List" Href="/timesheets">Timesheets</MudNavLink>
@@ -38,9 +39,9 @@
 
     <AuthorizeView Roles="Administrator,Manager">
         <MudNavGroup Title="Finance" Expanded="true">
-            <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/invoices">Invoices</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/transactions">Transactions</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/verifications">Accounting</MudNavLink>
+            <MudNavLink Icon="@Icons.Filled.InsertDriveFile" Href="/invoices">Invoices</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/transactions">Transactions</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="/verifications">Accounting</MudNavLink>
         </MudNavGroup>
     </AuthorizeView>
 

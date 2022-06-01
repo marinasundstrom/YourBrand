@@ -21,11 +21,13 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
+            var user = await _context.Users
+                .Include(x => x.Teams)
+                .FirstOrDefaultAsync(u => u.Id == request.Id);
 
             if(user is not null) 
             {
-                return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.LastModified);
+                return user.ToDto();
             }
 
             user = new User
@@ -42,7 +44,7 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.Deleted);
+            return user.ToDto();
         }
     }
 }

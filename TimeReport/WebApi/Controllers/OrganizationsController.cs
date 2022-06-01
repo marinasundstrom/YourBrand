@@ -24,9 +24,9 @@ public class OrganizationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ItemsResult<OrganizationDto>> GetOrganizations(int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<OrganizationDto>> GetOrganizations(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetOrganizationsQuery(page - 1, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await _mediator.Send(new GetOrganizationsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]

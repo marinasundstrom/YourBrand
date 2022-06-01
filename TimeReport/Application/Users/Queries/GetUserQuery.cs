@@ -24,6 +24,7 @@ public record GetUserQuery(string UserId) : IRequest<UserDto>
             var user = await _context.Users
                 .AsNoTracking()
                 .AsSplitQuery()
+                .Include(x => x.Teams)
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -31,7 +32,7 @@ public record GetUserQuery(string UserId) : IRequest<UserDto>
                 return null!;
             }
 
-            return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.Deleted);
+            return user.ToDto();
         }
     }
 }

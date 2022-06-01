@@ -1,3 +1,5 @@
-﻿namespace YourBrand.TimeReport.Application.Users;
+﻿using YourBrand.TimeReport.Application.Teams;
 
-public record class UserDto(string Id, string FirstName, string LastName, string? DisplayName, string SSN, string Email, DateTime Created, DateTime? Deleted);
+namespace YourBrand.TimeReport.Application.Users;
+
+public record class UserDto(string Id, string FirstName, string LastName, string? DisplayName, string SSN, string Email, IEnumerable<TeamDto> Teams, DateTime Created, DateTime? Deleted);

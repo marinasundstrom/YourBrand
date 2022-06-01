@@ -20,12 +20,12 @@ public static class Mapper
 {
     public static UserDto ToDto(this Domain.Entities.User user)
     {
-        return new (user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.Deleted);
+        return new (user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Teams.Select(t => t.ToDto()), user.Created, user.Deleted);
     }
 
     public static ProjectDto ToDto(this Domain.Entities.Project project)
     {
-        return new (project.Id, project.Name, project.Description, project.Organization.ToDto());
+        return new (project.Id, project.Name, project.Description, project.Organization.ToDto(), project.Teams.Select(t => t.ToDto()));
     }
 
     public static ProjectGroupDto ToDto(this Domain.Entities.ProjectGroup projectGroup)

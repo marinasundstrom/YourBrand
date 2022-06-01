@@ -38,7 +38,7 @@ public record UpdateUserCommand(string UserId, string FirstName, string LastName
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.Deleted);
+            return user.ToDto();
         }
     }
 }

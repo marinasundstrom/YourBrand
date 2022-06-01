@@ -17,6 +17,10 @@ public static class ServiceExtensions
             .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http)));
 
         builder(
+            services.AddHttpClient(nameof(ITeamsClient) + "TR", configureClient)
+            .AddTypedClient<ITeamsClient>((http, sp) => new TeamsClient(http)));
+
+        builder(
             services.AddHttpClient(nameof(ITimeSheetsClient), configureClient)
             .AddTypedClient<ITimeSheetsClient>((http, sp) => new TimeSheetsClient(http)));
 
