@@ -10,9 +10,9 @@ public record UpdateUserPasswordCommand(string UserId, string CurrentPassword, s
 {
     public class UpdateUserPasswordCommandHandler : IRequestHandler<UpdateUserPasswordCommand>
     {
-        private readonly UserManager<Employee> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public UpdateUserPasswordCommandHandler(UserManager<Employee> userManager)
+        public UpdateUserPasswordCommandHandler(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

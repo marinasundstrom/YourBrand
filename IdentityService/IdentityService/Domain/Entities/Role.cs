@@ -13,7 +13,7 @@ public class Role : IdentityRole<string>
         Id = Guid.NewGuid().ToString();
     }
 
-    public List<Employee> Users { get; } = new List<Employee>();
+    public List<User> Users { get; } = new List<User>();
 
     public List<UserRole> UserRoles { get; } = new List<UserRole>();
 }

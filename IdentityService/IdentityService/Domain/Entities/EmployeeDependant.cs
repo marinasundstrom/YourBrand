@@ -3,7 +3,7 @@
 
 namespace YourBrand.IdentityService.Domain.Entities;
 
-public class EmployeeDependant 
+public class UserDependant 
 {
     public string Id { get; set; }
 

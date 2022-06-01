@@ -14,11 +14,11 @@ public record DeleteUserCommand(string UserId) : IRequest
 {
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
-        private readonly UserManager<Employee> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly ICurrentUserService _currentUserService;
         private readonly IEventPublisher _eventPublisher;
 
-        public DeleteUserCommandHandler(UserManager<Employee> userManager, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public DeleteUserCommandHandler(UserManager<User> userManager, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
         {
             _userManager = userManager;
             _currentUserService = currentUserService;

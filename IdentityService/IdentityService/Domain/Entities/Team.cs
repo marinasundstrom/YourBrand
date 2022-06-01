@@ -9,7 +9,9 @@ public class Team
 
     public string Name { get; set; }
 
-    public Department Department { get; set; }
+    public Organization Organization { get; set; }
 
-    public List<Employee> Persons { get; } = new List<Employee>();
+    public List<User> Members { get; } = new List<User>();
+
+    public List<TeamMembership> Memberships { get; set; } = new List<TeamMembership>();
 }

@@ -8,7 +8,7 @@ public class BankAccount
 {
     public string Id { get; private set; } = Guid.NewGuid().ToString();
 
-    public Employee Employee { get; set; } = null!;
+    public User User { get; set; } = null!;
 
     public string BIC { get; set; }
 

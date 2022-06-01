@@ -12,8 +12,8 @@ public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
         builder.ToTable(name: "BankAccounts");
 
         builder
-            .HasOne(p => p.Employee)
+            .HasOne(p => p.User)
             .WithOne()
-            .HasForeignKey(nameof(BankAccount), "EmployeeId");
+            .HasForeignKey(nameof(BankAccount), "UserId");
     }
 }

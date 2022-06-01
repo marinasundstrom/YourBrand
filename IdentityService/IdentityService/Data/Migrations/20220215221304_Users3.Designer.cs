@@ -26,13 +26,13 @@ namespace YourBrand.IdentityService.Data.Migrations
 
             modelBuilder.Entity("ApplicationUserTeam", b =>
                 {
-                    b.Property<string>("PersonsId")
+                    b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TeamsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PersonsId", "TeamsId");
+                    b.HasKey("UsersId", "TeamsId");
 
                     b.HasIndex("TeamsId");
 
@@ -307,7 +307,7 @@ namespace YourBrand.IdentityService.Data.Migrations
                 {
                     b.HasOne("YourBrand.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("PersonsId")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -372,7 +372,7 @@ namespace YourBrand.IdentityService.Data.Migrations
             modelBuilder.Entity("YourBrand.IdentityService.Domain.Entities.ApplicationUser", b =>
                 {
                     b.HasOne("YourBrand.IdentityService.Domain.Entities.Department", "Department")
-                        .WithMany("Persons")
+                        .WithMany("Users")
                         .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
@@ -389,7 +389,7 @@ namespace YourBrand.IdentityService.Data.Migrations
 
             modelBuilder.Entity("YourBrand.IdentityService.Domain.Entities.Department", b =>
                 {
-                    b.Navigation("Persons");
+                    b.Navigation("Users");
 
                     b.Navigation("Teams");
                 });

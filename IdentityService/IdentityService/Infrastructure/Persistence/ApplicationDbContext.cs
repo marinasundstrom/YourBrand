@@ -11,7 +11,7 @@ using YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<Employee, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
@@ -41,10 +41,12 @@ public class ApplicationDbContext : IdentityDbContext<Employee, Role, string, Id
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(EmployeeConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
     }
 
-    public DbSet<EmployeeDependant> EmployeeDependants { get; set; } = null!;
+    public DbSet<Organization> Organizations { get; set; } = null!;
+
+    public DbSet<UserDependant> UserDependants { get; set; } = null!;
 
     public DbSet<Team> Teams { get; set; } = null!;
 

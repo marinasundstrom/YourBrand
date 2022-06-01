@@ -8,7 +8,7 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class UserRole : IdentityUserRole<string>
 {
-    public Employee User { get; set; }
+    public User User { get; set; }
 
     public Role Role { get; set; }
 }

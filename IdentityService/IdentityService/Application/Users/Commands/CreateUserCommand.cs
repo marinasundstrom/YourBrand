@@ -18,12 +18,12 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
-        private readonly UserManager<Employee> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreateUserCommandHandler(UserManager<Employee> userManager, IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public CreateUserCommandHandler(UserManager<User> userManager, IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
         {
             _userManager = userManager;
             _context = context;
@@ -33,7 +33,7 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new Employee
+            var user = new User
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,

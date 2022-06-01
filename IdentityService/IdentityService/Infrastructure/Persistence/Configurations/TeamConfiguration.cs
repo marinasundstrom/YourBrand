@@ -10,5 +10,27 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
     public void Configure(EntityTypeBuilder<Team> builder)
     {
         builder.ToTable(name: "Teams");
+
+        builder.HasMany(p => p.Members)
+            .WithMany(p => p.Teams)
+            .UsingEntity<TeamMembership>(
+                j => j
+                    .HasOne(pt => pt.User)
+                    .WithMany(t => t.TeamMemberships)
+                    .HasForeignKey(pt => pt.UserId),
+
+                j => j
+                    .HasOne(pt => pt.Team)
+                    .WithMany(p => p.Memberships)
+                    .HasForeignKey(pt => pt.TeamId));
+
+    }
+}
+
+public class TeamMembershipConfiguration : IEntityTypeConfiguration<TeamMembership>
+{
+    public void Configure(EntityTypeBuilder<TeamMembership> builder)
+    {
+        builder.ToTable(name: "TeamMemberships");
     }
 }

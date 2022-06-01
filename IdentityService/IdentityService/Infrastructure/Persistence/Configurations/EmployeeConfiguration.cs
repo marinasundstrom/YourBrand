@@ -8,9 +8,9 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
-public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<Employee> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable(name: "Users");
 

@@ -9,7 +9,9 @@ public interface IApplicationDbContext
 {
     DbSet<Role> Roles { get; }
 
-    DbSet<Employee> Users { get; }
+    DbSet<Organization> Organizations { get; }
+
+    DbSet<User> Users { get; }
 
     DbSet<Team> Teams { get; }
 
