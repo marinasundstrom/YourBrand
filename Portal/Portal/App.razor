@@ -1,9 +1,5 @@
 ﻿@inject ISnackbar Snackbar
 
-<MudThemeProvider Theme="currentTheme" />
-<MudDialogProvider MaxWidth="MaxWidth.Medium" />
-<MudSnackbarProvider />
-
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(YourBrand.TimeReport.Projects.Activities.ActivityDialog).Assembly, typeof(YourBrand.Showroom.Consultants.ConsultantsPage).Assembly, typeof(YourBrand.Accounting.ServiceExtensions).Assembly,typeof(YourBrand.Invoices.ServiceExtensions).Assembly, typeof(YourBrand.Transactions.ServiceExtensions).Assembly  }">
         <Found Context="routeData">
@@ -31,23 +27,6 @@
 </CascadingAuthenticationState>
 
 @code {
-
-    MudTheme currentTheme = new MudTheme()
-    {
-        Typography = new Typography()
-        {
-            Default = new Default()
-            {
-                FontFamily = new[] { "Roboto", "sans-serif" }
-            }
-        },
-        Palette = new Palette
-        {
-            AppbarBackground = "#242222",
-            Primary = "#63a9cb",
-            //Secondary = "#00000000"
-        }
-    };
 
     protected override void OnInitialized()
     {
