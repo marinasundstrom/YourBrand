@@ -12,9 +12,11 @@
 {
     <PageTitle>@Team.Name - YourBrand</PageTitle>
 
+    <MudBreadcrumbs Items="_items" Separator=">"></MudBreadcrumbs>
+
     <MudText Typo="Typo.h3" GutterBottom="true">@Team.Name</MudText>
 
-    @* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New TimeSheet</MudButton> *@
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddMemberClicked">Add member</MudButton>
 
     <MudTable T="TeamMembershipDto" ServerData="@(new Func<TableState, Task<TableData<TeamMembershipDto>>>(ServerReload))"
               Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToMember(e.Item)">
@@ -45,127 +47,95 @@
             <MudTablePager />
         </PagerContent>
     </MudTable>
- }
+}
 
-    @code {
-        MudTable<TeamMembershipDto> table;
-        string searchString;
+@code {
+    MudTable<TeamMembershipDto> table;
+    string searchString;
 
-        [Parameter] public string Id { get; set; } = null!;
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
 
-        TeamDto? Team { get; set; }
+    [Parameter] public string Id { get; set; } = null!;
 
-        protected override async Task OnInitializedAsync()
-        {
-            Team = await TeamsClient.GetTeamAsync(Id);
-        }
+    TeamDto? Team { get; set; }
 
-        private async Task<TableData<TeamMembershipDto>> ServerReload(TableState state)
-        {
-            var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
-                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
-
-            return new TableData<TeamMembershipDto>() { TotalItems = page.TotalItems, Items = page.Items };
-        }
-
-        private void OnSearch(string text)
-        {
-            searchString = text;
-            table.ReloadServerData();
-        }
-
-        private async Task<IEnumerable<UserDto>> Search1(string value)
-        {
-            var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
-
-            return page.Items;
-        }
-
-        /*
-    private void GotToTeam(TeamMembershipDto team)
+    protected override async Task OnInitializedAsync()
     {
-        NavigationManager.NavigateTo($"/teams/{team.Id}");
+        Team = await TeamsClient.GetTeamAsync(Id);
+
+        _items.AddRange(new[] {
+            new BreadcrumbItem("Teams", href: "/teams"),
+            new BreadcrumbItem(Team.Name, href: "", disabled: true)
+        });
     }
-        */
 
-        private async Task OnNewTeamClicked()
-        {
-            /*
-            var dialogRef = DialogService.Show<TimeSheetDialog>("New TimeSheet");
+    private async Task<TableData<TeamMembershipDto>> ServerReload(TableState state)
+    {
+        var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
-            var dialogResult = await dialogRef.Result;
+        return new TableData<TeamMembershipDto>() { TotalItems = page.TotalItems, Items = page.Items };
+    }
 
-            if (dialogResult.Cancelled)
-                return;
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
 
-            searchString = null;
-            table.ReloadServerData();
-            */
-        }
+    private async Task<IEnumerable<UserDto>> Search1(string value)
+    {
+        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
 
-        private async Task OnEditTeamClicked(TeamMembershipDto timeSheet)
-        {
-            /*
+        return page.Items;
+    }
+
+    private async Task OnAddMemberClicked()
+    {
         DialogParameters parameters = new();
-        parameters.Add(nameof(TimeSheetDialog.TimeSheetId), timeSheet.Id);
+        parameters.Add(nameof(MembershipDialog.TeamId), Id);
 
-        var dialogRef = DialogService.Show<TimeSheetDialog>($"Edit {timeSheet.FirstName}", parameters);
+        var dialogRef = DialogService.Show<MembershipDialog>("New membership", parameters);
 
         var dialogResult = await dialogRef.Result;
 
         if (dialogResult.Cancelled)
             return;
 
-        table.ReloadServerData();
-            */
-        }
+        await table.ReloadServerData();
+    }
 
-        private async Task OnAddMembershipClicked()
+    private async Task OnEditMembershipClicked(ProjectMembershipDto membership)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(MembershipDialog.TeamId), Id);
+        //parameters.Add(nameof(MembershipDialog.MembershipId), membership.Id);
+
+        var dialogRef = DialogService.Show<MembershipDialog>($"Edit membership", parameters);
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        await table.ReloadServerData();
+    }
+
+    async Task DeleteMembership(ProjectMembershipDto membership)
+    {
+        var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Yes", noText: "No");
+        if (!modalResult.GetValueOrDefault())
         {
-            DialogParameters parameters = new();
-            parameters.Add(nameof(MembershipDialog.TeamId), Id);
-
-            var dialogRef = DialogService.Show<MembershipDialog>("New membership", parameters);
-
-            var dialogResult = await dialogRef.Result;
-
-            if (dialogResult.Cancelled)
-                return;
-
-            table.ReloadServerData();
+            return;
         }
 
-        private async Task OnEditMembershipClicked(ProjectMembershipDto membership)
-        {
-            DialogParameters parameters = new();
-            parameters.Add(nameof(MembershipDialog.TeamId), Id);
-            //parameters.Add(nameof(MembershipDialog.MembershipId), membership.Id);
+        await TeamsClient.RemoveMemberAsync(Id, membership.Id);
 
-            var dialogRef = DialogService.Show<MembershipDialog>($"Edit membership", parameters);
+        await table.ReloadServerData();
+    }
 
-            var dialogResult = await dialogRef.Result;
-
-            if (dialogResult.Cancelled)
-                return;
-
-            await table.ReloadServerData();
-        }
-
-        async Task DeleteMembership(ProjectMembershipDto membership)
-        {
-            var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Yes", noText: "No");
-            if (!modalResult.GetValueOrDefault())
-            {
-                return;
-            }
-
-            await TeamsClient.RemoveMemberAsync(Id, membership.Id);
-
-            await table.ReloadServerData();
-        }
-
-        private void GotToMember(TeamMembershipDto membership)
-        {
-            NavigationManager.NavigateTo($"/teams/{membership.Id}/{membership.User.Id}");
-        }
+    private void GotToMember(TeamMembershipDto membership)
+    {
+        NavigationManager.NavigateTo($"/teams/{membership.Id}/{membership.User.Id}");
+    }
 }

@@ -6,6 +6,7 @@ using NSubstitute;
 
 using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Infrastructure.Persistence;
 
 namespace Tests;
@@ -14,6 +15,7 @@ public class TestBase
 {
     protected readonly IDomainEventService fakeDomainEventService;
     protected readonly ICurrentUserService fakeCurrentUserService;
+    protected readonly ITenantService fakeTenantService;
     protected readonly IDateTime fakeDateTimeService;
     protected readonly IApiApplicationContext fakeApiApplicationContext;
 
@@ -22,6 +24,8 @@ public class TestBase
         fakeDomainEventService = Substitute.For<IDomainEventService>();
 
         fakeCurrentUserService = Substitute.For<ICurrentUserService>();
+
+        fakeTenantService = Substitute.For<ITenantService>();
 
         fakeDateTimeService = Substitute.For<IDateTime>();
         fakeDateTimeService.Now.Returns(x => DateTime.Now);
@@ -36,6 +40,6 @@ public class TestBase
            .UseInMemoryDatabase(databaseName: "Test")
            .Options;
 
-        return new TimeReportContext(options, fakeCurrentUserService, fakeDomainEventService, fakeDateTimeService, fakeApiApplicationContext);
+        return new TimeReportContext(options, fakeCurrentUserService, fakeTenantService, fakeDomainEventService, fakeDateTimeService, fakeApiApplicationContext);
     }
 }

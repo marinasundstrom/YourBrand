@@ -53,6 +53,7 @@ public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchStrin
 
             var items = await result
                 .Include(x => x.Memberships)
+                .ThenInclude(x => x.User)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);

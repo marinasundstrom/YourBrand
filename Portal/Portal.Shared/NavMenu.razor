@@ -19,7 +19,7 @@
     </MudNavGroup>
 
     <AuthorizeView>
-        <MudNavGroup Title="Showroom" Expanded="showroom" ExpandedChanged="(v) => Save(v, out showroom)">
+        <MudNavGroup Title="Sales" Expanded="showroom" ExpandedChanged="(v) => Save(v, out showroom)">
             <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/consultants">Consultants</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/cases">Cases</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/contracts">Contracts</MudNavLink>
@@ -27,8 +27,8 @@
     </AuthorizeView>
 
     <AuthorizeView>
-        <MudNavGroup Title="@T["Projects"]" Expanded="projects" ExpandedChanged="(v) => Save(v, out projects)">
-            <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">List</MudNavLink>
+        <MudNavGroup Title="Project Management" Expanded="projects" ExpandedChanged="(v) => Save(v, out projects)">
+            <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">Projects</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.AccessTime" Href="/timesheet">@T["ReportTime"]</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/reports">Reports</MudNavLink>
             <MudNavLink Icon="@Icons.Material.Filled.People" Href="/teams">Teams</MudNavLink>

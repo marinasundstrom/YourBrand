@@ -5,7 +5,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Teams.Commands;
 
-public record UpdateTeamCommand(string Id, string Name) : IRequest<TeamDto>
+public record UpdateTeamCommand(string Id, string Name, string? Description) : IRequest<TeamDto>
 {
     public class UpdateTeamCommandHandler : IRequestHandler<UpdateTeamCommand, TeamDto>
     {
@@ -23,6 +23,7 @@ public record UpdateTeamCommand(string Id, string Name) : IRequest<TeamDto>
             if (team is null) throw new Exception();
 
             team.Name = request.Name;
+            team.Description = request.Description;
 
             await context.SaveChangesAsync(cancellationToken);
 

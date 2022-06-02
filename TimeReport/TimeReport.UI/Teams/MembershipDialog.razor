@@ -41,6 +41,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(TeamId);
+
         /*
         if (MembershipId is not null)
         {
@@ -57,12 +59,16 @@
 
         /* if (MembershipId is null)
         { */
-            await TeamsClient.AddMemberAsync(TeamId, User.Id);
-       /* }
-        else
-        {
-            result = await TeamsClient.UpdateProjectMembershipAsync(TeamId, UserId, new UpdateProjectMembershipDto());
-        } */
+
+        await TeamsClient.AddMemberAsync(TeamId, new AddMemberDto {
+            UserId = User.Id
+        });
+
+        /* }
+         else
+         {
+             result = await TeamsClient.UpdateProjectMembershipAsync(TeamId, UserId, new UpdateProjectMembershipDto());
+         } */
 
         Modal.Close(DialogResult.Ok(result));
     }

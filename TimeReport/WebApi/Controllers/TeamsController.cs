@@ -38,13 +38,13 @@ public class TeamsController : ControllerBase
     [HttpPost]
     public async Task<TeamDto> CreateTeam(CreateTeamDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateTeamCommand(dto.Name), cancellationToken);
+        return await _mediator.Send(new CreateTeamCommand(dto.Name, dto.Description), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task<TeamDto> UpdateTeam(string id, UpdateTeamDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new UpdateTeamCommand(id, dto.Name), cancellationToken);
+        return await _mediator.Send(new UpdateTeamCommand(id, dto.Name, dto.Description), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -54,9 +54,9 @@ public class TeamsController : ControllerBase
     }
 
     [HttpPost("{id}/Members")]
-    public async Task AddMember(string id, string userId, CancellationToken cancellationToken)
+    public async Task AddMember(string id, AddMemberDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new AddTeamMemberCommand(id, userId), cancellationToken);
+        await _mediator.Send(new AddTeamMemberCommand(id, dto.UserId), cancellationToken);
     }
 
     [HttpDelete("{id}/Members/{userId}")]
@@ -72,7 +72,8 @@ public class TeamsController : ControllerBase
     }
 }
 
-public record CreateTeamDto(string Name);
+public record CreateTeamDto(string Name, string? Description);
 
-public record UpdateTeamDto(string Name);
+public record UpdateTeamDto(string Name, string? Description);
 
+public record AddMemberDto(string UserId);

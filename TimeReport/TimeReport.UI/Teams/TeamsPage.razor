@@ -8,6 +8,8 @@
 
 <PageTitle>Teams - YourBrand</PageTitle>
 
+<MudBreadcrumbs Items="_items" Separator=">"></MudBreadcrumbs>
+
 <MudText Typo="Typo.h3" GutterBottom="true">Teams</MudText>
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New Team</MudButton>
@@ -52,11 +54,15 @@
     MudTable<TeamDto> table;
     string searchString;
 
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
+
     UserDto? User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-
+        _items.AddRange(new[] {
+            new BreadcrumbItem("Teams", href: "/teams", disabled: true),
+        });
     }
 
     private async Task<TableData<TeamDto>> ServerReload(TableState state)
