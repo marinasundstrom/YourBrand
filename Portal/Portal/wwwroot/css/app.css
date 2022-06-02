@@ -8,12 +8,13 @@
     font-size: 12pt !important;
 }
 
-@media (prefers-color-scheme: light) {
-    .search-box {
-        background-color: white; 
-        color: white !important; 
+.search-box.light {
+        background-color: white !important;
     }
-}
+
+    .search-box .dark {
+
+    }
 
 body {
 }

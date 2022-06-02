@@ -1,9 +1,11 @@
 ﻿@using YourBrand.AppService.Client
+@implements IDisposable
 @inject IStringLocalizer<SearchBox> T
 @inject NavigationManager NavigationManager
 @inject ISearchClient SearchClient
+@inject Theming.ThemeManager ThemeManager
 
-<MudAutocomplete T="SearchResultItem" Dense="false" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" DebounceInterval="300" Placeholder="@T["Placeholder"]" Variant="Variant.Outlined" Class="search-box" Style="border-radius: 5px; margin-bottom: 5px;" Value="value1" ValueChanged="OnSearchItemChanged" SearchFunc="@Search1" ToStringFunc="@(e=> e is null ? null : e.Title)">
+<MudAutocomplete T="SearchResultItem" Dense="true" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" DebounceInterval="300" Placeholder="@T["Placeholder"]" Variant="Variant.Outlined" Class="@(isDark ? "search-box dark" : "search-box light")" Style="border-radius: 5px; margin-bottom: 5px;" Value="value1" ValueChanged="OnSearchItemChanged" SearchFunc="@Search1" ToStringFunc="@(e=> e is null ? null : e.Title)">
     <ItemTemplate Context="e">
         @if (e.ResultType == SearchResultItemType.Item)
         {
@@ -19,8 +21,23 @@
 </MudAutocomplete>
 
 @code {
+    private bool isDark;
 
     private SearchResultItem value1;
+
+    protected override void OnInitialized()
+    {
+        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+
+        isDark = ThemeManager.CurrentColorScheme == Theming.ColorScheme.Dark;
+    }
+
+    void OnColorSchemeChanged(object? sender, Theming.ColorSchemeChangedEventArgs e)
+    {
+        isDark = ThemeManager.CurrentColorScheme == Theming.ColorScheme.Dark;
+
+        StateHasChanged();
+    }
 
     private async Task<IEnumerable<SearchResultItem>> Search1(string searchText)
     {
@@ -55,6 +72,11 @@
         value1 = null;
 
         StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        ThemeManager.ColorSchemeChanged -= OnColorSchemeChanged;
     }
 }
 
