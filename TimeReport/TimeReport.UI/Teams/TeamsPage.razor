@@ -10,7 +10,7 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">Teams</MudText>
 
-@* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New TimeSheet</MudButton> *@
+<MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New Team</MudButton>
 
 <MudTable T="TeamDto" ServerData="@(new Func<TableState, Task<TableData<TeamDto>>>(ServerReload))"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)">
@@ -94,8 +94,7 @@
 
     private async Task OnNewTeamClicked()
     {
-        /*
-        var dialogRef = DialogService.Show<TimeSheetDialog>("New TimeSheet");
+        var dialogRef = DialogService.Show<TeamDialog>("New Team");
 
         var dialogResult = await dialogRef.Result;
 
@@ -104,7 +103,6 @@
 
         searchString = null;
         table.ReloadServerData();
-        */
     }
 
     private async Task OnEditTeamClicked(TeamDto timeSheet)
@@ -123,4 +121,4 @@
     table.ReloadServerData();
         */
     }
-    }
+}

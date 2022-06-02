@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
@@ -14,19 +15,25 @@ namespace YourBrand.TimeReport.Infrastructure.Persistence;
 public class TimeReportContext : DbContext, ITimeReportContext
 {
     private readonly ICurrentUserService _currentUserService;
+    private readonly ITenantService _tenantService;
     private readonly IDomainEventService _domainEventService;
     private readonly IDateTime _dateTime;
+    private readonly string _organizationId;
 
     public TimeReportContext(
         DbContextOptions<TimeReportContext> options,
         ICurrentUserService currentUserService,
+        ITenantService tenantService,
         IDomainEventService domainEventService,
         IDateTime dateTime,
         IApiApplicationContext apiApplicationContext) : base(options)
     {
         _currentUserService = currentUserService;
+        _tenantService = tenantService;
         _domainEventService = domainEventService;
         _dateTime = dateTime;
+
+        _organizationId = _tenantService.OrganizationId!;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -43,6 +50,12 @@ public class TimeReportContext : DbContext, ITimeReportContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
+
+        // Tenant filters
+
+        modelBuilder.Entity<Team>().HasQueryFilter(x => x.OrganizationId == _organizationId);
+
+        modelBuilder.Entity<Project>().HasQueryFilter(x => x.OrganizationId == _organizationId);
     }
 
     public DbSet<User> Users { get; set; } = null!;
@@ -90,6 +103,11 @@ public class TimeReportContext : DbContext, ITimeReportContext
             switch (entry.State)
             {
                 case EntityState.Added:
+                    if(entry.Entity is IHasTenant e)
+                    {
+                        e.OrganizationId = _tenantService.OrganizationId!;
+                    }
+
                     entry.Entity.CreatedById = _currentUserService.UserId;
                     entry.Entity.Created = _dateTime.Now;
                     break;

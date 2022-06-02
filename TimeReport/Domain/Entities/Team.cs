@@ -4,7 +4,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Team : AuditableEntity, ISoftDelete
+public class Team : AuditableEntity, ISoftDelete, IHasTenant
 {
     readonly HashSet<User> _members = new HashSet<User>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();
@@ -30,7 +30,19 @@ public class Team : AuditableEntity, ISoftDelete
 
     public string? Description { get; set; }
 
+    public void AddMember(User user)
+    {
+        _memberships.Add(new TeamMembership(user));
+    }
+
+    public void RemoveMember(User user)
+    {
+        _members.Remove(user);
+    }
+
     public Organization Organization { get; set; } = null!;
+
+    public string OrganizationId { get; set; } = null!;
 
     public IReadOnlyCollection<User> Members => _members;
 

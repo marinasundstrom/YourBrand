@@ -6,6 +6,16 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class TeamMembership : AuditableEntity, ISoftDelete
 {
+    protected TeamMembership()
+    {
+
+    }
+
+    internal TeamMembership(User user)
+    {
+        User = user;
+    }
+
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public Team Team { get; set; } = null!;

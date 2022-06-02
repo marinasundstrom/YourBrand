@@ -30,6 +30,10 @@ public record CreateProjectCommand(string Name, string? Description, string Orga
 
             await _context.SaveChangesAsync(cancellationToken);
 
+            project = await _context.Projects
+                .Include(x => x.Organization)
+                .FirstAsync(x => x.Id == project.Id);
+
             return project.ToDto();
         }
     }

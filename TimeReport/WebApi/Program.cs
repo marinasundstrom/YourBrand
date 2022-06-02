@@ -19,10 +19,12 @@ using YourBrand.ApiKeys;
 using YourBrand.TimeReport;
 using YourBrand.TimeReport.Application;
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Hubs;
 using YourBrand.TimeReport.Infrastructure;
 using YourBrand.TimeReport.Infrastructure.Persistence;
 using YourBrand.TimeReport.Services;
+using YourBrand.TimeReport.WebAPI.Services;
 
 static class Program
 {
@@ -51,6 +53,7 @@ static class Program
         services.AddHttpContextAccessor();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ITenantService, TenantService>();
         services.AddScoped<IBlobService, BlobService>();
 
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");

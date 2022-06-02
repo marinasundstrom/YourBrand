@@ -99,6 +99,16 @@ public static class Mapper
 
     public static TeamDto ToDto(this Domain.Entities.Team team)
     {
-        return new (team.Id, team.Name);
+        return new (team.Id, team.Name, team.Memberships.Select(x => x.ToDto()));
+    }
+
+    public static TeamMemberDto ToDto(this Domain.Entities.TeamMembership teamMember)
+    {
+        return new (teamMember.User.Id, teamMember.User.FirstName, teamMember.User.LastName);
+    }
+
+    public static TeamMembershipDto ToDto2(this Domain.Entities.TeamMembership teamMembership)
+    {
+        return new (teamMembership.Id, teamMembership.User.ToDto());
     }
 }

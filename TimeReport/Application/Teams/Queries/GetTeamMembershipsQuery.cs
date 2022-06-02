@@ -16,14 +16,14 @@ using YourBrand.TimeReport.Domain.Exceptions;
 namespace YourBrand.TimeReport.Application.Teams
 .Queries;
 
-public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TeamDto>>
+public record GetTeamMembershipsQuery(string Id, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TeamMembershipDto>>
 {
-    class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, ItemsResult<TeamDto>>
+    class GetTeamMembershipsQueryHandler : IRequestHandler<GetTeamMembershipsQuery, ItemsResult<TeamMembershipDto>>
     {
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService currentUserService;
 
-        public GetTeamsQueryHandler(
+        public GetTeamMembershipsQueryHandler(
             ITimeReportContext context,
             ICurrentUserService currentUserService)
         {
@@ -31,17 +31,21 @@ public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchStrin
             this.currentUserService = currentUserService;
         }
 
-        public async Task<ItemsResult<TeamDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<TeamMembershipDto>> Handle(GetTeamMembershipsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Team> result = _context
-                    .Teams
+            IQueryable<TeamMembership> result = _context
+                    .TeamMemberships
+                    //.Include(t => t.User)
                     .OrderBy(o => o.Created)
+                    .Where(t => t.TeamId == request.Id)
                     .AsNoTracking()
                     .AsQueryable();
 
             if (request.SearchString is not null)
             {
-                result = result.Where(o => o.Name.ToLower().Contains(request.SearchString.ToLower()));
+                result = result.Where(o => 
+                    o.User.FirstName.ToLower().Contains(request.SearchString.ToLower()) ||
+                    o.User.LastName.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalCount = await result.CountAsync(cancellationToken);
@@ -52,12 +56,12 @@ public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchStrin
             }
 
             var items = await result
-                .Include(x => x.Memberships)
+                .Include(x => x.User)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);
 
-            return new ItemsResult<TeamDto>(items.Select(cp => cp.ToDto()), totalCount);
+            return new ItemsResult<TeamMembershipDto>(items.Select(cp => cp.ToDto2()), totalCount);
         }
     }
 }

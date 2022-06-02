@@ -36,6 +36,8 @@ public record GetTeamQuery(string Id) : IRequest<TeamDto?>
         {
             var team = await _context
                .Teams
+               .Include(x => x.Memberships)
+               .ThenInclude(x => x.User)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

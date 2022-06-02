@@ -1,0 +1,171 @@
+@page "/teams/{Id}"
+
+@attribute [Authorize(Roles = "Administrator,Manager")]
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ITeamsClient TeamsClient
+@inject IUsersClient UsersClient
+
+<PageTitle>Teams - YourBrand</PageTitle>
+
+@if (Team is not null)
+{
+    <PageTitle>@Team.Name - YourBrand</PageTitle>
+
+    <MudText Typo="Typo.h3" GutterBottom="true">@Team.Name</MudText>
+
+    @* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New TimeSheet</MudButton> *@
+
+    <MudTable T="TeamMembershipDto" ServerData="@(new Func<TableState, Task<TableData<TeamMembershipDto>>>(ServerReload))"
+              Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToMember(e.Item)">
+        <ToolBarContent>
+            <MudSpacer />
+            <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
+                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="TeamMembershipDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+
+        <RowTemplate Context="membership">
+            <MudTd DataLabel="Name">@membership.User.FirstName @membership.User.LastName</MudTd>
+            <MudTd>
+                @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTeamClicked(timeSheet)" /> *@
+                @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+ }
+
+    @code {
+        MudTable<TeamMembershipDto> table;
+        string searchString;
+
+        [Parameter] public string Id { get; set; } = null!;
+
+        TeamDto? Team { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            Team = await TeamsClient.GetTeamAsync(Id);
+        }
+
+        private async Task<TableData<TeamMembershipDto>> ServerReload(TableState state)
+        {
+            var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
+                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+
+            return new TableData<TeamMembershipDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        }
+
+        private void OnSearch(string text)
+        {
+            searchString = text;
+            table.ReloadServerData();
+        }
+
+        private async Task<IEnumerable<UserDto>> Search1(string value)
+        {
+            var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
+
+            return page.Items;
+        }
+
+        /*
+    private void GotToTeam(TeamMembershipDto team)
+    {
+        NavigationManager.NavigateTo($"/teams/{team.Id}");
+    }
+        */
+
+        private async Task OnNewTeamClicked()
+        {
+            /*
+            var dialogRef = DialogService.Show<TimeSheetDialog>("New TimeSheet");
+
+            var dialogResult = await dialogRef.Result;
+
+            if (dialogResult.Cancelled)
+                return;
+
+            searchString = null;
+            table.ReloadServerData();
+            */
+        }
+
+        private async Task OnEditTeamClicked(TeamMembershipDto timeSheet)
+        {
+            /*
+        DialogParameters parameters = new();
+        parameters.Add(nameof(TimeSheetDialog.TimeSheetId), timeSheet.Id);
+
+        var dialogRef = DialogService.Show<TimeSheetDialog>($"Edit {timeSheet.FirstName}", parameters);
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult.Cancelled)
+            return;
+
+        table.ReloadServerData();
+            */
+        }
+
+        private async Task OnAddMembershipClicked()
+        {
+            DialogParameters parameters = new();
+            parameters.Add(nameof(MembershipDialog.TeamId), Id);
+
+            var dialogRef = DialogService.Show<MembershipDialog>("New membership", parameters);
+
+            var dialogResult = await dialogRef.Result;
+
+            if (dialogResult.Cancelled)
+                return;
+
+            table.ReloadServerData();
+        }
+
+        private async Task OnEditMembershipClicked(ProjectMembershipDto membership)
+        {
+            DialogParameters parameters = new();
+            parameters.Add(nameof(MembershipDialog.TeamId), Id);
+            //parameters.Add(nameof(MembershipDialog.MembershipId), membership.Id);
+
+            var dialogRef = DialogService.Show<MembershipDialog>($"Edit membership", parameters);
+
+            var dialogResult = await dialogRef.Result;
+
+            if (dialogResult.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        }
+
+        async Task DeleteMembership(ProjectMembershipDto membership)
+        {
+            var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Yes", noText: "No");
+            if (!modalResult.GetValueOrDefault())
+            {
+                return;
+            }
+
+            await TeamsClient.RemoveMemberAsync(Id, membership.Id);
+
+            await table.ReloadServerData();
+        }
+
+        private void GotToMember(TeamMembershipDto membership)
+        {
+            NavigationManager.NavigateTo($"/teams/{membership.Id}/{membership.User.Id}");
+        }
+}

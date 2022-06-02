@@ -24,12 +24,4 @@
     <PackageReference Include="EPPlus" Version="6.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Invoicing\" />
-    <None Remove="Organizations %28copy%29\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Invoicing\" />
-    <Folder Include="Organizations %28copy%29\" />
-  </ItemGroup>
 </Project>

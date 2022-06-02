@@ -23,6 +23,7 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
         {
             var user = await _context.Users
                 .Include(x => x.Teams)
+                .Include(x => x.Organizations)
                 .FirstOrDefaultAsync(u => u.Id == request.Id);
 
             if(user is not null) 
@@ -39,6 +40,10 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
                 SSN = request.Ssn,
                 Email = request.Email
             };
+
+            // TODO: Temporary
+            user.Organizations.Add(
+                await _context.Organizations.FirstAsync());
 
             _context.Users.Add(user);
 

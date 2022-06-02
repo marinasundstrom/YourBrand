@@ -24,7 +24,6 @@ public class SeedData
 
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
-
             var result = await roleManager.CreateAsync(new Role()
             {
                 Name = "Administrator"
