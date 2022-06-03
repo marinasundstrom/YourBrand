@@ -5,13 +5,21 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class Team 
 {
+    readonly HashSet<User> _members = new HashSet<User>();
+    readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();
+
     public string Id { get; set; }
 
     public string Name { get; set; }
 
     public Organization Organization { get; set; }
 
-    public List<User> Members { get; } = new List<User>();
+    public IReadOnlyCollection<User> Members => _members;
 
-    public List<TeamMembership> Memberships { get; set; } = new List<TeamMembership>();
+    public IReadOnlyCollection<TeamMembership> Memberships => _memberships;
+
+    public void AddMember(User user)
+    {
+
+    }
 }

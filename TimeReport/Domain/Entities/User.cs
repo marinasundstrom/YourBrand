@@ -8,6 +8,8 @@ public class User : AuditableEntity, ISoftDelete
 {
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
+    readonly HashSet<Organization> _organization = new HashSet<Organization>();
+    readonly HashSet<Team> _teams = new HashSet<Team>();
 
     public string Id { get; set; } = null!;
 
@@ -19,9 +21,9 @@ public class User : AuditableEntity, ISoftDelete
 
     public string Email { get; set; } = null!;
 
-    public List<Organization> Organizations { get; set; } = new List<Organization>();
+    public IReadOnlyCollection<Organization> Organization => _organization;
 
-    public List<Team> Teams { get; set; } = new List<Team>();
+    public IReadOnlyCollection<Team> Teams => _teams;
 
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 

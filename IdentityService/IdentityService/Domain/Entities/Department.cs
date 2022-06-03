@@ -5,11 +5,13 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class Department 
 {
+    readonly HashSet<User> _users = new HashSet<User>();
+
     public string Id { get; set; }
 
     public string Name { get; set; }
 
     public Organization Organization { get; set; }
 
-    public List<User> Users { get; } = new List<User>();
+    public IReadOnlyCollection<User> Users => _users;
 }
