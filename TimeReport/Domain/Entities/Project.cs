@@ -27,12 +27,6 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
 
     public string Id { get; set; } = null!;
 
-    public void AddActivity(Activity activity)
-    {
-        activity.Project = this;
-        _activities.Add(activity);
-    }
-
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
@@ -57,6 +51,12 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
 
     public IReadOnlyCollection<Activity> Activities => _activities;
 
+    public void AddActivity(Activity activity)
+    {
+        activity.Project = this;
+        _activities.Add(activity);
+    }
+
     public IReadOnlyCollection<Entry> Entries => _entries;
 
     public IReadOnlyCollection<ProjectMembership> Memberships => _memberships;
@@ -64,6 +64,8 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
     public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams;
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

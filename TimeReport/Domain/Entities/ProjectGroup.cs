@@ -17,6 +17,8 @@ public class ProjectGroup : AuditableEntity, ISoftDelete
     public List<Project> Projects { get; set; } = new List<Project>();
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

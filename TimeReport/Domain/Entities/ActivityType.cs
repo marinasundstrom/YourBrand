@@ -34,6 +34,8 @@ public class ActivityType : AuditableEntity, ISoftDelete
     public List<Activity> Activities { get; set; } = new List<Activity>();
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

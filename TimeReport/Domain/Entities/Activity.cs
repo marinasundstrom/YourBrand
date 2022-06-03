@@ -47,6 +47,8 @@ public class Activity : AuditableEntity, ISoftDelete
     public decimal? HourlyRate { get; set; }
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

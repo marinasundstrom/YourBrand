@@ -52,6 +52,8 @@ public class Organization : AuditableEntity, ISoftDelete
 
     public Organization? ParentOrganization { get; private set; }
 
+    public double NormalWorkingHours { get; set; }
+
     public IReadOnlyCollection<User> Users => _users;
 
     public IReadOnlyCollection<Organization> SubOrganizations => _subOrganizations;
@@ -63,6 +65,8 @@ public class Organization : AuditableEntity, ISoftDelete
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

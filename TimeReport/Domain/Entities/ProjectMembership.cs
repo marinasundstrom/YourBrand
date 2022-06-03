@@ -29,6 +29,8 @@ public class ProjectMembership : AuditableEntity, ISoftDelete
     public double? RequiredHoursWeekly { get; set; }
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

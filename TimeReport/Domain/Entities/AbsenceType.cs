@@ -15,6 +15,8 @@ public class AbsenceType: AuditableEntity, ISoftDelete
     public List<Absence> Absences { get; set; } = new List<Absence>();
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }

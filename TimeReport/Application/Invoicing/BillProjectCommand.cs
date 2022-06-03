@@ -33,9 +33,8 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
                 .AsSplitQuery()
                 .Where(e => e.Project.Id == request.ProjectId)
                 .Where(e => e.Date > from && e.Date < to)
+                .Where(e => e.TimeSheet.Status == Domain.Entities.TimeSheetStatus.Approved)
                 .ToArrayAsync(cancellationToken);
-
-            // TODO: Only include timesheets that have been Approved
 
             var entriesByActivity = entries.GroupBy(x => x.Activity);
 

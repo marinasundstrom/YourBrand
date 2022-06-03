@@ -30,6 +30,8 @@ public class Absence : AuditableEntity, ISoftDelete
     public string? Note { get; set; } 
 
     public DateTime? Deleted { get; set; }
+
     public string? DeletedById { get; set; }
+
     public User? DeletedBy { get; set; }
 }
