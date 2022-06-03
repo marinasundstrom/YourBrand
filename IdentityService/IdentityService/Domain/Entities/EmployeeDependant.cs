@@ -5,13 +5,27 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class UserDependant 
 {
-    public string Id { get; set; }
+    private UserDependant()
+    {
 
-    public string FirstName { get; set; }
+    }
 
-    public string LastName { get; set; }
+    public UserDependant(string firstName, string lastName, DependantRelationship relationship, string phoneNumber)
+    {
+        Id = Guid.NewGuid().ToString();
+        FirstName = firstName;
+        LastName = lastName;
+        Relationship = relationship;
+        PhoneNumber = phoneNumber;
+    }
 
-    public DependantRelationship Relationship { get; set; }
+    public string Id { get; private set; }
 
-    public string PhoneNumber { get; set; }
+    public string FirstName { get; private set; }
+
+    public string LastName { get; private set; }
+
+    public DependantRelationship Relationship { get; private set; }
+
+    public string PhoneNumber { get; private set; }
 }

@@ -6,7 +6,17 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class TeamMembership : AuditableEntity, ISoftDelete
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    private TeamMembership()
+    {
+    }
+
+    public TeamMembership(User user)
+    {
+        Id = Guid.NewGuid().ToString();
+        User = user;
+    }
+
+    public string Id { get; private set; }
 
     public Team Team { get; set; } = null!;
 

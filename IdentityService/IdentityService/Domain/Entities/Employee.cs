@@ -19,18 +19,49 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
     readonly HashSet<Role> _roles = new HashSet<Role>();
     readonly HashSet<UserRole> _useRoles = new HashSet<UserRole>();
 
+    /*
+    private User() { }
+
+    public User(string firstName, string lastName, string? displayName, string? ssn)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        DisplayName = displayName;
+        SSN = ssn;
+    }
+    */
+
     public string FirstName { get; set; }
+
     public string LastName { get; set; }
+
     public string? DisplayName { get; set; }
+
     public string? SSN { get; set; }
 
-    public User ReportsTo { get; set; }
+    public User Manager { get; private set; }
 
-    public Department Department { get; set; }
+    public Department Department { get; /* private */ set; }
 
     public IReadOnlyCollection<Team> Teams => _teams;
 
     public IReadOnlyCollection<TeamMembership> TeamMemberships => _teamMemberships;
+
+
+    public void SetDisplayName(string displayName)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetSSN(string ssn)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetLastName(string lastName)
+    {
+        throw new NotImplementedException();
+    }
 
     public IReadOnlyCollection<UserDependant> Dependants => _dependants;
 

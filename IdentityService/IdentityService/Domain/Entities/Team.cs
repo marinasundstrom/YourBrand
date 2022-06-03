@@ -8,11 +8,34 @@ public class Team
     readonly HashSet<User> _members = new HashSet<User>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();
 
-    public string Id { get; set; }
+    private Team()
+    {
+    }
 
-    public string Name { get; set; }
+    public Team(string name, string? description)
+    {
+        Id = Guid.NewGuid().ToString();
+        Name = name;
+        Description = description;
+    }
 
-    public Organization Organization { get; set; }
+    public string Id { get; private set; }
+
+    public string Name { get; private set; }
+
+    public void UpdateName(string value)
+    {
+        Name = value;
+    }
+
+    public string? Description { get; private set; }
+
+    public void UpdateDescription(string value)
+    {
+        Description = value;
+    }
+
+    public Organization Organization { get; private set; }
 
     public IReadOnlyCollection<User> Members => _members;
 
@@ -20,6 +43,11 @@ public class Team
 
     public void AddMember(User user)
     {
+        _members.Add(user);
+    }
 
+    public void RemoveMember(User user)
+    {
+        _members.Remove(user);
     }
 }
