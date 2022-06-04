@@ -3,14 +3,14 @@
 
 namespace YourBrand.IdentityService.Domain.Entities;
 
-public class UserDependant 
+public class PersonDependant 
 {
-    private UserDependant()
+    private PersonDependant()
     {
 
     }
 
-    public UserDependant(string firstName, string lastName, DependantRelationship relationship, string phoneNumber)
+    public PersonDependant(string firstName, string lastName, DependantRelationship relationship, string phoneNumber)
     {
         Id = Guid.NewGuid().ToString();
         FirstName = firstName;

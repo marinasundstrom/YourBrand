@@ -5,7 +5,7 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class Team 
 {
-    readonly HashSet<User> _members = new HashSet<User>();
+    readonly HashSet<Person> _members = new HashSet<Person>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();
 
     private Team()
@@ -37,16 +37,16 @@ public class Team
 
     public Organization Organization { get; private set; }
 
-    public IReadOnlyCollection<User> Members => _members;
+    public IReadOnlyCollection<Person> Members => _members;
 
     public IReadOnlyCollection<TeamMembership> Memberships => _memberships;
 
-    public void AddMember(User user)
+    public void AddMember(Person user)
     {
         _members.Add(user);
     }
 
-    public void RemoveMember(User user)
+    public void RemoveMember(Person user)
     {
         _members.Remove(user);
     }

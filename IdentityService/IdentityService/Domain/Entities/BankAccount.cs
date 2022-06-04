@@ -20,10 +20,11 @@ public class BankAccount
 
     public string Id { get; private set; }
 
-    public User User { get; set; } = null!;
+    public Person Person { get; set; } = null!;
 
     public string BIC { get; set; }
 
     public string ClearingNo { get; set; }
+
     public string Bic { get; }
 }

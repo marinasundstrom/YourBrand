@@ -12,7 +12,7 @@ public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
         builder.ToTable(name: "BankAccounts");
 
         builder
-            .HasOne(p => p.User)
+            .HasOne(p => p.Person)
             .WithOne()
             .HasForeignKey(nameof(BankAccount), "UserId");
     }

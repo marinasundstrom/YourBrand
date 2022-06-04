@@ -6,7 +6,7 @@ namespace YourBrand.IdentityService.Domain.Entities;
 public class Organization 
 {
     private readonly HashSet<Team> _teams = new HashSet<Team>();
-    private readonly HashSet<User> _users = new HashSet<User>();
+    private readonly HashSet<Person> _persons = new HashSet<Person>();
 
     private Organization() { }
 
@@ -22,5 +22,5 @@ public class Organization
 
     public IReadOnlyCollection<Team> Teams => _teams;
 
-    public IReadOnlyCollection<User> Users => _users;
+    public IReadOnlyCollection<Person> Persons => _persons;
 }

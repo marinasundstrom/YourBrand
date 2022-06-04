@@ -15,9 +15,9 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
             .WithMany(p => p.Teams)
             .UsingEntity<TeamMembership>(
                 j => j
-                    .HasOne(pt => pt.User)
+                    .HasOne(pt => pt.Person)
                     .WithMany(t => t.TeamMemberships)
-                    .HasForeignKey(pt => pt.UserId),
+                    .HasForeignKey(pt => pt.PersonId),
 
                 j => j
                     .HasOne(pt => pt.Team)

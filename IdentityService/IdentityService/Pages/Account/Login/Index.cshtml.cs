@@ -21,8 +21,8 @@ namespace IdentityServerHost.Pages.Login;
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<Person> _userManager;
+    private readonly SignInManager<Person> _signInManager;
     private readonly IIdentityServerInteractionService _interaction;
     private readonly IClientStore _clientStore;
     private readonly IEventService _events;
@@ -40,8 +40,8 @@ public class Index : PageModel
         IAuthenticationSchemeProvider schemeProvider,
         IIdentityProviderStore identityProviderStore,
         IEventService events,
-        UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        UserManager<Person> userManager,
+        SignInManager<Person> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;

@@ -5,7 +5,7 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class Department 
 {
-    readonly HashSet<User> _users = new HashSet<User>();
+    readonly HashSet<Person> _persons = new HashSet<Person>();
 
     public Department(string name, string description)
     {
@@ -22,5 +22,5 @@ public class Department
 
     public Organization Organization { get; private set; }
 
-    public IReadOnlyCollection<User> Users => _users;
+    public IReadOnlyCollection<Person> Persons => _persons;
 }

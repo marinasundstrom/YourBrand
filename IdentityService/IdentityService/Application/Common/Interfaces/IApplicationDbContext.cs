@@ -11,7 +11,7 @@ public interface IApplicationDbContext
 
     DbSet<Organization> Organizations { get; }
 
-    DbSet<User> Users { get; }
+    DbSet<Person> Users { get; }
 
     DbSet<Team> Teams { get; }
 

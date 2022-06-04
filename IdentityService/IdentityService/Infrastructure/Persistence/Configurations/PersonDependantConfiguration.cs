@@ -5,10 +5,10 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
-public class UserDependantConfiguration : IEntityTypeConfiguration<UserDependant>
+public class PersonDependantConfiguration : IEntityTypeConfiguration<PersonDependant>
 {
-    public void Configure(EntityTypeBuilder<UserDependant> builder)
+    public void Configure(EntityTypeBuilder<PersonDependant> builder)
     {
-        builder.ToTable(name: "UserDependants");
+        builder.ToTable(name: "PersonDependants");
     }
 }

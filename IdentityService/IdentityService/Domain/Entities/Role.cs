@@ -8,15 +8,15 @@ namespace YourBrand.IdentityService.Domain.Entities;
 
 public class Role : IdentityRole<string>
 {
-    readonly HashSet<User> _users = new HashSet<User>();
-    readonly HashSet<UserRole> _userRoles = new HashSet<UserRole>();
+    readonly HashSet<Person> _persons = new HashSet<Person>();
+    readonly HashSet<PersonRole> _personRoles = new HashSet<PersonRole>();
 
     public Role()
     {
         Id = Guid.NewGuid().ToString();
     }
 
-    public IReadOnlyCollection<User> Users => _users;
+    public IReadOnlyCollection<Person> Persons => _persons;
 
-    public IReadOnlyCollection<UserRole> UserRoles => _userRoles;
+    public IReadOnlyCollection<PersonRole> PersonRoles => _personRoles;
 }

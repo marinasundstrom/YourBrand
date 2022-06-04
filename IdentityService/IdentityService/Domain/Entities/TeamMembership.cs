@@ -10,10 +10,10 @@ public class TeamMembership : AuditableEntity, ISoftDelete
     {
     }
 
-    public TeamMembership(User user)
+    public TeamMembership(Person user)
     {
         Id = Guid.NewGuid().ToString();
-        User = user;
+        Person = user;
     }
 
     public string Id { get; private set; }
@@ -22,9 +22,9 @@ public class TeamMembership : AuditableEntity, ISoftDelete
 
     public string TeamId { get; set; } = null!;
 
-    public User User { get; set; } = null!;
+    public Person Person { get; set; } = null!;
 
-    public string UserId { get; set; } = null!;
+    public string PersonId { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
 

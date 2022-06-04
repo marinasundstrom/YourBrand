@@ -11,13 +11,13 @@ using YourBrand.IdentityService.Domain.Common.Interfaces;
 namespace YourBrand.IdentityService.Domain.Entities;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
-public class User : IdentityUser, IAuditableEntity, ISoftDelete
+public class Person : IdentityUser, IAuditableEntity, ISoftDelete
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
-    readonly HashSet<UserDependant> _dependants = new HashSet<UserDependant>();
+    readonly HashSet<PersonDependant> _dependants = new HashSet<PersonDependant>();
     readonly HashSet<Role> _roles = new HashSet<Role>();
-    readonly HashSet<UserRole> _useRoles = new HashSet<UserRole>();
+    readonly HashSet<PersonRole> _personRoles = new HashSet<PersonRole>();
 
     /*
     private User() { }
@@ -39,7 +39,7 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
 
     public string? SSN { get; set; }
 
-    public User Manager { get; private set; }
+    public Person Manager { get; private set; }
 
     public Department Department { get; /* private */ set; }
 
@@ -63,11 +63,11 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
         throw new NotImplementedException();
     }
 
-    public IReadOnlyCollection<UserDependant> Dependants => _dependants;
+    public IReadOnlyCollection<PersonDependant> Dependants => _dependants;
 
     public IReadOnlyCollection<Role> Roles => _roles;
 
-    public IReadOnlyCollection<UserRole> UserRoles => _useRoles;
+    public IReadOnlyCollection<PersonRole> PersonRoles => _personRoles;
 
     public BankAccount? BankAccount { get; set; }
 

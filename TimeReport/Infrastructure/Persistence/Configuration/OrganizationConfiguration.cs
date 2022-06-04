@@ -15,7 +15,7 @@ class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasMany(p => p.Users)
-            .WithMany(p => p.Organizations)
+            .WithMany(p => p.Organization)
             .UsingEntity<OrganizationUser>(
                 j => j
                     .HasOne(pt => pt.User)

@@ -50,6 +50,11 @@ public class Organization : AuditableEntity, ISoftDelete
 
     public string? Description { get; set; }
 
+    public void AddUser(User user)
+    {
+        _users.Add(user);
+    }
+
     public Organization? ParentOrganization { get; private set; }
 
     public double NormalWorkingHours { get; set; }

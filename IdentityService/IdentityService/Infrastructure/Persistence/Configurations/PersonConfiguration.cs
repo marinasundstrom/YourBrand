@@ -8,24 +8,24 @@ using YourBrand.IdentityService.Domain.Entities;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class PersonConfiguration : IEntityTypeConfiguration<Person>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Person> builder)
     {
-        builder.ToTable(name: "Users");
+        builder.ToTable(name: "Persons");
 
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasMany(u => u.Roles)
-            .WithMany(r => r.Users)
-            .UsingEntity<UserRole>(
+            .WithMany(r => r.Persons)
+            .UsingEntity<PersonRole>(
                 j => j
                     .HasOne(pt => pt.Role)
-                    .WithMany(p => p.UserRoles)
+                    .WithMany(p => p.PersonRoles)
                     .HasForeignKey(pt => pt.RoleId),
                 j => j
                     .HasOne(pt => pt.User)
-                    .WithMany(t => t.UserRoles)
+                    .WithMany(t => t.PersonRoles)
                     .HasForeignKey(pt => pt.UserId));
     }
 }

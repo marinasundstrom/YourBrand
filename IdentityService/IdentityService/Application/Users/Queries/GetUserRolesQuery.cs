@@ -31,7 +31,7 @@ public record GetUserRolesQuery(string UserId, int Page = 0, int PageSize = 10, 
             }
 
             var query = _context.Roles
-                .Where(x => x.Users.Any(x => x.Id == request.UserId))
+                .Where(x => x.Persons.Any(x => x.Id == request.UserId))
                 //.OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
