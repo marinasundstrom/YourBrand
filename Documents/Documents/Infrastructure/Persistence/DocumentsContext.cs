@@ -35,6 +35,8 @@ public class DocumentsContext : DbContext, IDocumentsContext
 
     public DbSet<Document> Documents { get; set; } = null!;
 
+    public DbSet<DocumentType> DocumentTypes { get; set; } = null!;
+
     public DbSet<DocumentTemplate> DocumentTemplates { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

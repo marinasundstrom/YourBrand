@@ -2,6 +2,7 @@
 using YourBrand.Documents.Infrastructure.Persistence;
 
 using MediatR;
+using YourBrand.Documents.Domain;
 
 namespace YourBrand.Documents.Application.Commands;
 
@@ -9,11 +10,11 @@ public record UploadDocument(string Title, string ContentType, Stream Stream) : 
 {
     public class Handler : IRequestHandler<UploadDocument, DocumentDto>
     {
-        private readonly DocumentsContext _context;
+        private readonly IDocumentsContext _context;
         private readonly IFileUploaderService _fileUploaderService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public Handler(DocumentsContext context, IFileUploaderService fileUploaderService, IHttpContextAccessor httpContextAccessor)
+        public Handler(IDocumentsContext context, IFileUploaderService fileUploaderService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _fileUploaderService = fileUploaderService;

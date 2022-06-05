@@ -23,19 +23,11 @@ public class Document : AuditableEntity, IHasDomainEvents, IDeletable
 
     public string Name { get; private set; } = null!;
 
-    public string Extension { get; private set; } = null!;
-
-    public string ContentType { get; private set; } = null!;
-
-    public string BlobId { get; set; } = null!;
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
-
     public bool Rename(string newName)
     {
         var oldName = Name;
 
-        if(newName != oldName) 
+        if (newName != oldName)
         {
             Name = newName;
 
@@ -46,5 +38,24 @@ public class Document : AuditableEntity, IHasDomainEvents, IDeletable
         return false;
     }
 
-    public DomainEvent GetDeleteEvent() => new DocumentDeleted(Id);
+    public string Extension { get; private set; } = null!;
+
+    public string ContentType { get; private set; } = null!;
+
+    //public DocumentType DocumentType { get; private set; }
+
+    public string BlobId { get; set; } = null!;
+
+    public string? Description { get; private set; } = null!;
+
+    public void UpdateDescription(string? description)
+    {
+        Description = description;
+    }
+
+    public DateTime? Expiration { get; private set; }
+
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+
+    public DomainEvent GetDeleteEvent() => new DocumentDeleted(Id, string.Empty);
 }

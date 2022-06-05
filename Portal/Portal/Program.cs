@@ -10,6 +10,7 @@ using YourBrand.TimeReport;
 using YourBrand.Transactions;
 using YourBrand.Portal.Theming;
 using Blazored.LocalStorage;
+using YourBrand.Documents;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -36,7 +37,8 @@ builder.Services
     .AddAccounting()
     .AddInvoicing()
     .AddPayments()
-    .AddTransactions();
+    .AddTransactions()
+    .AddDocuments();
 
 var app = builder.Build();
 

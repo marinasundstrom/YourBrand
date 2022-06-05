@@ -39,6 +39,9 @@
     <ProjectReference Include="..\..\Showroom\Showroom.UI\Showroom.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Documents\Documents.UI\Documents.UI.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
     <ProjectReference Include="..\..\Finance\Accounting\Accounting.UI\Accounting.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

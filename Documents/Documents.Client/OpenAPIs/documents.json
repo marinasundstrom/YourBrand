@@ -5,7 +5,7 @@
     "title": "Documents API",
     "version": "0.1"
   },
-  "host": "localhost:5070",
+  "host": "localhost:5097",
   "schemes": [
     "https"
   ],
@@ -75,10 +75,37 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_DeleteDocument",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
       }
     },
-    "/Documents/{id}/Rename": {
-      "post": {
+    "/Documents/{id}/Name": {
+      "put": {
         "tags": [
           "Documents"
         ],
@@ -97,6 +124,42 @@
           {
             "type": "string",
             "name": "newName",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/{id}/Description": {
+      "put": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_UpdateDescription",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "newDescription",
             "in": "query",
             "required": true,
             "x-nullable": true

@@ -27,4 +27,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Documents.Contracts\Documents.Contracts.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Application\Events\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Application\Events\" />
+	</ItemGroup>
 </Project>

@@ -152,9 +152,21 @@ app.MapGet("/Documents/{id}", async (string id, IMediator mediator, Cancellation
     .WithTags("Documents")
     .Produces<DocumentDto>(StatusCodes.Status200OK);
 
-app.MapPost("/Documents/{id}/Rename", async (string id, string newName, IMediator mediator, CancellationToken cancellationToken)
+app.MapDelete("/Documents/{id}", async (string id, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new DeleteDocument(id), cancellationToken))
+    .WithName("Documents_DeleteDocument")
+    .WithTags("Documents")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Documents/{id}/Name", async (string id, string newName, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new RenameDocument(id, newName), cancellationToken))
     .WithName("Documents_RenameDocument")
+    .WithTags("Documents")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Documents/{id}/Description", async (string id, string newDescription, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new UpdateDescription(id, newDescription), cancellationToken))
+    .WithName("Documents_UpdateDescription")
     .WithTags("Documents")
     .Produces(StatusCodes.Status200OK);
 

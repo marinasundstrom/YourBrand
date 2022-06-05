@@ -50,6 +50,7 @@
     <AuthorizeView Roles="Administrator,Manager">
         <MudNavGroup Title="Administration" Expanded="admin" ExpandedChanged="(v) => Save(v, out admin)">
             <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/users">Users</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/documents">Documents</MudNavLink>
         </MudNavGroup>
     </AuthorizeView>
     @*

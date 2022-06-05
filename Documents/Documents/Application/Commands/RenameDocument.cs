@@ -3,6 +3,7 @@ using YourBrand.Documents.Infrastructure.Persistence;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Domain;
 
 namespace YourBrand.Documents.Application.Commands;
 
@@ -10,13 +11,11 @@ public record RenameDocument(string DocumentId, string NewName) : IRequest
 {
     public class Handler : IRequestHandler<RenameDocument>
     {
-        private readonly DocumentsContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IDocumentsContext _context;
 
-        public Handler(DocumentsContext context, IHttpContextAccessor httpContextAccessor)
+        public Handler(IDocumentsContext context)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(RenameDocument request, CancellationToken cancellationToken)
@@ -33,19 +32,9 @@ public record RenameDocument(string DocumentId, string NewName) : IRequest
 
             document.Rename(request.NewName);
 
+            await _context.SaveChangesAsync(cancellationToken);
+
             return Unit.Value;
-
-            /*
-            return document is null
-                ? null
-                : document.ToDto(GetUrl(document.BlobId)); */
-        }
-
-        private string GetUrl(string blobId)
-        {
-            var request = _httpContextAccessor.HttpContext!.Request;
-
-            return $"{request.Scheme}://{request.Host}/documents/{blobId}";
         }
     }
 }
