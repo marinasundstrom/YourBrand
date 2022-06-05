@@ -3,7 +3,7 @@ using YourBrand.ApiKeys.Domain.Common;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class Service : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class Service : AuditableEntity, ISoftDelete, IHasDomainEvents
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 

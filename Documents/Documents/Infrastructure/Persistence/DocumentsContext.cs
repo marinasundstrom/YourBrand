@@ -51,13 +51,20 @@ public class DocumentsContext : DbContext, IDocumentsContext
                 entry.Entity.LastModified = _dateTime.Now;
                 entry.Entity.LastModifiedById = _currentUserService.UserId;
             }
-            else if (entry.State == EntityState.Deleted
-                && entry.Entity is ISoftDelete e)
+            else if (entry.State == EntityState.Deleted)
             {
-                e.Deleted = _dateTime.Now;
-                e.DeletedById = _currentUserService.UserId;
+                if (entry.Entity is ISoftDelete e)
+                {
+                    e.Deleted = _dateTime.Now;
+                    e.DeletedById = _currentUserService.UserId;
 
-                entry.State = EntityState.Modified;
+                    entry.State = EntityState.Modified;
+                }
+
+                if(entry.Entity is IDeletable e2)
+                {
+                    e2.DomainEvents.Add(e2.GetDeleteEvent());
+                }
             }
         }
 

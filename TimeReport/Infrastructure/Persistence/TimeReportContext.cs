@@ -129,7 +129,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
             }
         }
 
-        var events = ChangeTracker.Entries<IHasDomainEvent>()
+        var events = ChangeTracker.Entries<IHasDomainEvents>()
             .Select(x => x.Entity.DomainEvents)
             .SelectMany(x => x)
             .Where(domainEvent => !domainEvent.IsPublished)

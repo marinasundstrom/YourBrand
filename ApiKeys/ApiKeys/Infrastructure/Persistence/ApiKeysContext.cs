@@ -102,7 +102,7 @@ class ApiKeysContext : DbContext, IApiKeysContext
 
     private DomainEvent[] GetDomainEvents()
     {
-        return ChangeTracker.Entries<IHasDomainEvent>()
+        return ChangeTracker.Entries<IHasDomainEvents>()
             .Select(x => x.Entity.DomainEvents)
             .SelectMany(x => x)
             .Where(domainEvent => !domainEvent.IsPublished)

@@ -5,7 +5,7 @@ using YourBrand.Domain.Events;
 
 namespace YourBrand.Domain.Entities;
 
-public class Item : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class Item : AuditableEntity, ISoftDelete, IHasDomainEvents
 {
     readonly HashSet<Comment> _comments = new HashSet<Comment>();
 

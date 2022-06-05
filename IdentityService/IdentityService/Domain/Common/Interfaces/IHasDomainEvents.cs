@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.IdentityService.Domain.Common.Interfaces;
 
-public interface IHasDomainEvent
+public interface IHasDomainEvents
 {
     public List<DomainEvent> DomainEvents { get; set; }
 }

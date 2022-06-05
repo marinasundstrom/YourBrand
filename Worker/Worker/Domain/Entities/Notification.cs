@@ -4,7 +4,7 @@ using Worker.Domain.Common;
 
 namespace Worker.Domain.Entities;
 
-public class Notification : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class Notification : AuditableEntity, ISoftDelete, IHasDomainEvents
 {
     public Notification()
     {

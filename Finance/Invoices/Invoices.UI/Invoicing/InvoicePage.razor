@@ -440,6 +440,9 @@
 
     public async ValueTask DisposeAsync()
     {
+        if(hubConnection is null)
+            return;
+            
         await hubConnection.DisposeAsync();
     }
 }

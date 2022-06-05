@@ -3,7 +3,7 @@ using YourBrand.Domain.Common;
 
 namespace YourBrand.Domain.Entities;
 
-public class Comment : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class Comment : AuditableEntity, ISoftDelete, IHasDomainEvents
 {
     protected Comment()
     {

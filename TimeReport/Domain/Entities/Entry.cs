@@ -5,7 +5,7 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Entry : AuditableEntity, IHasDomainEvent
+public class Entry : AuditableEntity, IHasDomainEvents
 {
     public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
         DateOnly date, double? hours, string? description)

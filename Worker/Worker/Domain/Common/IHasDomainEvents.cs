@@ -1,6 +1,6 @@
 ﻿namespace Worker.Domain.Common;
 
-public interface IHasDomainEvent
+public interface IHasDomainEvents
 {
     public List<DomainEvent> DomainEvents { get; set; }
 }

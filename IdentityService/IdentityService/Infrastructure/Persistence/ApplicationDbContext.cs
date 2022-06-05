@@ -61,7 +61,7 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
             UpdateState(entry);
         }
 
-        var events = ChangeTracker.Entries<IHasDomainEvent>()
+        var events = ChangeTracker.Entries<IHasDomainEvents>()
             .Select(x => x.Entity.DomainEvents)
             .SelectMany(x => x)
             .Where(domainEvent => !domainEvent.IsPublished)

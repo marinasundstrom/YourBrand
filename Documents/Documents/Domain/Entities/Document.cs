@@ -3,7 +3,7 @@ using YourBrand.Documents.Domain.Events;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Document : AuditableEntity, IHasDomainEvents
+public class Document : AuditableEntity, IHasDomainEvents, IDeletable
 {
     private Document() 
     {
@@ -45,4 +45,6 @@ public class Document : AuditableEntity, IHasDomainEvents
 
         return false;
     }
+
+    public DomainEvent GetDeleteEvent() => new DocumentDeleted(Id);
 }
