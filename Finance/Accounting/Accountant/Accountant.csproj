@@ -27,10 +27,10 @@
     <ProjectReference Include="..\..\Invoices\Invoices.Client\Invoices.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
+    <ProjectReference Include="..\..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Documents\Documents.Client\Documents.Client.csproj">
+    <ProjectReference Include="..\..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
     <ProjectReference Include="..\..\Payments\Payments.Contracts\Payments.Contracts.csproj">

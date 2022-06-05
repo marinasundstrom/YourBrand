@@ -20,7 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Customers.Contracts\Customers.Contracts.csproj" />
-		<ProjectReference Include="..\..\Finance\Documents\Documents.Client\Documents.Client.csproj">
+		<ProjectReference Include="..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
 		<ProjectReference Include="..\..\Finance\Payments\Payments.Client\Payments.Client.csproj">

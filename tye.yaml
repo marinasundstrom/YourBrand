@@ -170,19 +170,19 @@ services:
       - protocol: https
         port: 5096
 
+  # End Finance
+
   - name: documents
-    project: Finance/Documents/Documents/Documents.csproj
+    project: Documents/Documents/Documents.csproj
     bindings:
       - protocol: https
         port: 5097
 
   - name: email
-    project: Finance/EmailService/EmailService/EmailService.csproj
+    project: EmailService/EmailService/EmailService.csproj
     bindings:
       - protocol: https
         port: 5098
-
-  # End Finance
 
   - name: identity
     project: IdentityService/IdentityService/IdentityService.csproj
