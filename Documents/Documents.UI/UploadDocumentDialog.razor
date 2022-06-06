@@ -25,9 +25,14 @@
             else
             {
                     <div class="d-flex gap-4">
-                        <MudTextField Label="Name" @bind-Value="_model.Name" For="() => _model.Name" />
+                        <MudTextField T="string" Label="Name" Value="_model.Name" ValueChanged="OnNameChanged" For="() => _model.Name" />
                         <div class="justify-end">.@_documentDto.Extension</div>
                     </div>
+
+                    @if(!_model.NameOk) 
+                    {
+                        <MudText Typo="Typo.body2" Class="mt-2" Color="Color.Error">Name is already taken.</MudText>
+                    }
 
                 <MudTextField Label="Description" @bind-Value="_model.Description" For="() => _model.Description" Lines="5" Class="mt-2" />
             }
@@ -57,6 +62,12 @@
     protected override Task OnInitializedAsync()
     {
         return Task.CompletedTask;
+    }
+
+    async Task OnNameChanged(string name)
+    {
+        _model.NameOk = await DocumentsClient.CanRenameDocumentAsync(_documentDto.Id, name);
+        _model.Name = name;
     }
 
     async Task OnSubmit()
@@ -122,5 +133,12 @@
         public string Name { get; set; } = null!;
 
         public string? Description { get; set; } = null!;
+
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Name is already taken.")]
+        public bool NameOk
+        {
+            get;
+            set;
+        } = true;
     }
 }

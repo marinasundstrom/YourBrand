@@ -3,6 +3,7 @@ using YourBrand.Documents.Infrastructure.Persistence;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Domain.Entities;
 
 namespace YourBrand.Documents.Application.Queries;
 
@@ -28,14 +29,16 @@ public record GetDocument(string DocumentId) : IRequest<DocumentDto?>
 
             return document is null
                 ? null
-                : document.ToDto(GetUrl(document.BlobId));
+                : document.ToDto(GetUrl(document));
         }
 
-        private string GetUrl(string blobId)
+        private string GetUrl(Document document)
         {
             var request = _httpContextAccessor.HttpContext!.Request;
 
-            return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
+            return $"{request.Scheme}://{request.Host}/Documents/{document.Id}/File";
+
+            //return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
         }
     }
 }

@@ -3,10 +3,12 @@ using YourBrand.Documents.Infrastructure.Persistence;
 
 using MediatR;
 using YourBrand.Documents.Domain;
+using YourBrand.Documents.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Documents.Application.Commands;
 
-public record UploadDocument(string Title, string ContentType, Stream Stream) : IRequest<DocumentDto>
+public record UploadDocument(string Name, string ContentType, Stream Stream) : IRequest<DocumentDto>
 {
     public class Handler : IRequestHandler<UploadDocument, DocumentDto>
     {
@@ -23,7 +25,23 @@ public record UploadDocument(string Title, string ContentType, Stream Stream) : 
 
         public async Task<DocumentDto> Handle(UploadDocument request, CancellationToken cancellationToken)
         {
-            var document = new Domain.Entities.Document(request.Title, request.ContentType);
+            var n = Path.GetFileNameWithoutExtension(request.Name);
+
+            var document = await _context.Documents
+             .AsSplitQuery()
+             .AsNoTracking()
+             .FirstOrDefaultAsync(x => x.Name == n, cancellationToken);
+
+            string name = request.Name;
+            string contentType = request.ContentType;
+
+            if (document is not null)
+            {
+                var e = Path.GetExtension(request.Name);
+                name = $"{n} (2){e}";
+            }
+
+            document = new Domain.Entities.Document(name, contentType);
 
             _context.Documents.Add(document);
 
@@ -33,14 +51,16 @@ public record UploadDocument(string Title, string ContentType, Stream Stream) : 
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return document.ToDto(GetUrl(document.BlobId));
+            return document.ToDto(GetUrl(document));
         }
 
-         private string GetUrl(string blobId)
+        private string GetUrl(Document document)
         {
             var request = _httpContextAccessor.HttpContext!.Request;
 
-            return $"{request.Scheme}://{request.Host}/documents/{blobId}";
+            return $"{request.Scheme}://{request.Host}/Documents/{document.Id}/File";
+
+            //return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
         }
     }
 }

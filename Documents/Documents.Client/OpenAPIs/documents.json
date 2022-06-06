@@ -104,6 +104,35 @@
         }
       }
     },
+    "/Documents/{id}/File": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GetFile",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    },
     "/Documents/{id}/Name": {
       "put": {
         "tags": [
@@ -135,6 +164,71 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/{id}/CanRename": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_CanRenameDocument",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "newName",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/IsNameTaken": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_IsNameTaken",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "boolean"
             }
           }
         }

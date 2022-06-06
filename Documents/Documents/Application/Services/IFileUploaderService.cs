@@ -6,4 +6,5 @@ public interface IFileUploaderService
 
     Task DeleteFileAsync(string id, CancellationToken cancellationToken = default);
 
+    Task<Stream> DownloadFileAsync(string blobId);
 }

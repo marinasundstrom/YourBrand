@@ -8,6 +8,7 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Domain.Entities;
 
 namespace YourBrand.Documents.Application.Queries;
 
@@ -51,15 +52,17 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<DocumentDto>(
-                items.Select(document => document.ToDto(GetUrl(document.BlobId))),
+                items.Select(document => document.ToDto(GetUrl(document))),
                 totalItems);
         }
 
-        private string GetUrl(string blobId)
+        private string GetUrl(Document document)
         {
             var request = _httpContextAccessor.HttpContext!.Request;
 
-            return $"{request.Scheme}://{request.Host}/documents/{blobId}";
+            return $"{request.Scheme}://{request.Host}/Documents/{document.Id}/File";
+
+            //return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
         }
     }
 }

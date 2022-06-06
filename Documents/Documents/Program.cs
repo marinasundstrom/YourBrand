@@ -158,9 +158,31 @@ app.MapDelete("/Documents/{id}", async (string id, IMediator mediator, Cancellat
     .WithTags("Documents")
     .Produces(StatusCodes.Status200OK);
 
+app.MapGet("/Documents/{id}/File", async (string id, IMediator mediator,  CancellationToken cancellationToken)
+    => {
+        DocumentFileResponse? response = await mediator.Send(new GetDocumentFile(id), cancellationToken);
+        if (response is null) return Results.NotFound();
+        return Results.File(response.Stream, response.ContentType, $"{response.FileName}");
+    })
+    .WithName("Documents_GetFile")
+    .WithTags("Documents")
+    .Produces<FileResult>(StatusCodes.Status200OK);
+
 app.MapPut("/Documents/{id}/Name", async (string id, string newName, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new RenameDocument(id, newName), cancellationToken))
     .WithName("Documents_RenameDocument")
+    .WithTags("Documents")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapGet("/Documents/{id}/CanRename", async (string id, string newName, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new CanRenameDocument(id, newName), cancellationToken))
+    .WithName("Documents_CanRenameDocument")
+    .WithTags("Documents")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapGet("/Documents/IsNameTaken", async (string name, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new CheckNameTaken(name), cancellationToken))
+    .WithName("Documents_IsNameTaken")
     .WithTags("Documents")
     .Produces(StatusCodes.Status200OK);
 
