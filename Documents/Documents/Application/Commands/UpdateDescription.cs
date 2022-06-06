@@ -22,7 +22,6 @@ public record UpdateDescription(string DocumentId, string Description) : IReques
         {
             var document = await _context.Documents
                 .AsSplitQuery()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
             if (document is null)

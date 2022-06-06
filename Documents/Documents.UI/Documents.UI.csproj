@@ -23,4 +23,12 @@
     <ProjectReference Include="..\Documents.Client\Documents.Client.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="UploadDocumentDialog %28copy%29.razor">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="EditDocumentDetailsDialog.razor">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

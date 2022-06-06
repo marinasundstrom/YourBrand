@@ -1,0 +1,88 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IDocumentsClient DocumentsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<EditForm Model="@_model" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            @if (_documentDto is not null)
+            {
+                    <div class="d-flex gap-4">
+                        <MudTextField Label="Name" @bind-Value="_model.Name" For="() => _model.Name" />
+                        <div class="justify-end">.@_documentDto.Extension</div>
+                    </div>
+
+                <MudTextField Label="Description" @bind-Value="_model.Description" For="() => _model.Description" Lines="5" Class="mt-2" />
+            }
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" StartIcon="@Icons.Filled.Save">Save</MudButton>
+            <MudButton ButtonType="ButtonType.Button" Color="Color.Primary" StartIcon="@Icons.Filled.Delete" OnClick="Delete">Delete</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    DocumentDto? _documentDto;
+    DocumentModel _model = new DocumentModel();
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public string Id { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _documentDto = await DocumentsClient.GetDocumentAsync(Id);
+
+        _model = new DocumentModel()
+        {
+            Name  = _documentDto.Name,
+            Description = _documentDto.Description
+        };
+    }
+
+    async Task OnSubmit()
+    {
+        if(_documentDto?.Name != _model.Name)
+        {
+            await DocumentsClient.RenameDocumentAsync(_documentDto!.Id, _model.Name);
+
+            Snackbar.Add($"Document was renamed", Severity.Info);
+        }
+
+        if(_documentDto?.Description != _model.Description)
+        {
+            await DocumentsClient.UpdateDescriptionAsync(_documentDto!.Id, _model.Description);
+
+            Snackbar.Add($"Description was updated", Severity.Info);
+        }
+
+        Modal.Close();
+    }
+
+    async Task Delete()
+    {
+        var result = await DialogService.ShowMessageBox($"Delete {_documentDto.Name}", " Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault()) return;
+
+        await DocumentsClient.DeleteDocumentAsync(_documentDto!.Id);
+        Modal.Close();
+
+        Snackbar.Add($"Document was deleted", Severity.Info);
+    }
+
+    class DocumentModel
+    {
+        [Required]
+        public string Name { get; set; } = null!;
+
+        public string? Description { get; set; } = null!;
+    }
+}

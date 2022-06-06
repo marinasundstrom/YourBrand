@@ -1,0 +1,126 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IDocumentsClient DocumentsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<EditForm Model="@_model" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            @if (_documentDto is null)
+            {
+                <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple accept=".pdf, .docx, .docx" />
+
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Filled.CloudUpload"
+                           for="fileInput112">
+                    Upload document
+                </MudButton>
+
+                <MudText Typo="Typo.body2" Class="mt-2">Max 15 MB</MudText>
+            }
+            else
+            {
+                    <div class="d-flex gap-4">
+                        <MudTextField Label="Name" @bind-Value="_model.Name" For="() => _model.Name" />
+                        <div class="justify-end">.@_documentDto.Extension</div>
+                    </div>
+
+                <MudTextField Label="Description" @bind-Value="_model.Description" For="() => _model.Description" Lines="5" Class="mt-2" />
+            }
+        </DialogContent>
+
+        <DialogActions>
+            @if (_documentDto is null)
+            {
+                <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            }
+            @if (_documentDto is not null)
+            {
+                <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" StartIcon="@Icons.Filled.Save">Save</MudButton>
+                <MudButton ButtonType="ButtonType.Button" Color="Color.Primary" StartIcon="@Icons.Filled.Delete" OnClick="Delete">Delete</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    DocumentDto? _documentDto;
+    DocumentModel _model = new DocumentModel();
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    async Task OnSubmit()
+    {
+        if(_documentDto?.Name != _model.Name)
+        {
+            await DocumentsClient.RenameDocumentAsync(_documentDto!.Id, _model.Name);
+
+            Snackbar.Add($"Document was renamed", Severity.Info);
+        }
+
+        if(_documentDto?.Description != _model.Description)
+        {
+            await DocumentsClient.UpdateDescriptionAsync(_documentDto!.Id, _model.Description);
+
+            Snackbar.Add($"Description was updated", Severity.Info);
+        }
+
+        Modal.Close();
+    }
+
+    async Task Delete()
+    {
+        var result = await DialogService.ShowMessageBox($"Delete {_documentDto.Name}", " Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault()) return;
+
+        await DocumentsClient.DeleteDocumentAsync(_documentDto!.Id);
+        Modal.Close();
+
+        Snackbar.Add($"Document was deleted", Severity.Info);
+    }
+
+    private async void UploadFiles(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        try
+        {
+            _documentDto = await DocumentsClient.UploadDocumentAsync(new FileParameter(file.OpenReadStream(15_000_000), file.Name, file.ContentType));
+
+            _model = new DocumentModel
+            {
+                Name = _documentDto.Name,
+                Description = _documentDto.Description
+            };
+
+            Snackbar.Add("Document was uploaded", Severity.Info);
+
+            Modal.SetTitle($"Edit {_documentDto.Name}");
+
+            StateHasChanged();
+        }
+        catch(Exception exc)
+        {
+            Snackbar.Add(exc.Message, Severity.Error);
+        }
+    }
+
+    class DocumentModel
+    {
+        [Required]
+        public string Name { get; set; } = null!;
+
+        public string? Description { get; set; } = null!;
+    }
+}

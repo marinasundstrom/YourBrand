@@ -286,7 +286,7 @@
       "type": "object",
       "required": [
         "id",
-        "title",
+        "name",
         "extension",
         "contentType",
         "url",
@@ -296,13 +296,16 @@
         "id": {
           "type": "string"
         },
-        "title": {
+        "name": {
           "type": "string"
         },
         "extension": {
           "type": "string"
         },
         "contentType": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "url": {

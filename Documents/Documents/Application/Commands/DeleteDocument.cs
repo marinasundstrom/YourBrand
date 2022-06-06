@@ -22,7 +22,6 @@ public record DeleteDocument(string DocumentId) : IRequest
         {
             var document = await _context.Documents
                 .AsSplitQuery()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
             if (document is null)

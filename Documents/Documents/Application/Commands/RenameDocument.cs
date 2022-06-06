@@ -22,7 +22,6 @@ public record RenameDocument(string DocumentId, string NewName) : IRequest
         {
             var document = await _context.Documents
                 .AsSplitQuery()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
             if(document is null) 

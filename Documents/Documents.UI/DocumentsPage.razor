@@ -8,7 +8,7 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Documents</MudText>
 
-@* <MudButton Variant="Variant.Filled" OnClick="NewDocument" Class="mb-2">New document</MudButton> *@
+<MudButton Variant="Variant.Filled" OnClick="UploadDocument" Class="mb-2">Upload document</MudButton>
 
 <MudTable T="DocumentDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info">
@@ -20,14 +20,14 @@
         <MudTh></MudTh>
      </HeaderContent>
     <RowTemplate Context="document">
-        <MudTd DataLabel="Name">@($"{document.Title}.{document.Extension}")</MudTd>
+        <MudTd DataLabel="Name">@($"{document.Name}.{document.Extension}")</MudTd>
         <MudTd DataLabel="Date">@document.Created.ToString("g")</MudTd>
         <MudTd DataLabel="Content Type">@document.ContentType</MudTd>
-        <MudTh>
+        <MudTd>
             <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@document.Url" Target="_blank" @onclick:stopPropagation />
-            @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditProjectClicked(project)" /> *@
-            @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
-        </MudTh>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await EditDocumentDetails(document)" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteDocument(document)" />
+        </MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
@@ -58,16 +58,41 @@
         }
     }
 
-    /*
-    public async Task NewDocument()
+    public async Task UploadDocument()
     {
-        var dialogRef = DialogService.Show<NewDocumentDialog>("New document");
+        var dialogRef = DialogService.Show<UploadDocumentDialog>("Upload document");
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        //if (result.Cancelled) return;
 
         await table.ReloadServerData();
     }
-    */
+
+    public async Task EditDocumentDetails(DocumentDto document)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(EditDocumentDetailsDialog.Id), document.Id);
+
+        var dialogRef = DialogService.Show<EditDocumentDetailsDialog>($"Edit {document.Name}", parameters);
+
+        var result = await dialogRef.Result;
+
+        //if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+
+    public async Task DeleteDocument(DocumentDto document)
+    {
+        var result = await DialogService.ShowMessageBox($"Delete {document.Name}", " Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault()) return;
+
+        await DocumentsClient.DeleteDocumentAsync(document.Id);
+
+        Snackbar.Add($"{document.Name} was deleted", Severity.Info);
+
+        await table.ReloadServerData();
+    }
 }
