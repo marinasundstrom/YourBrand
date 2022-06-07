@@ -18,6 +18,8 @@ public class SeedData
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
 
+            context.Directories.Add(new Domain.Entities.Directory(string.Empty));
+
             var documentTemplate = await context.DocumentTemplates.FirstOrDefaultAsync(dt => dt.Id == "greeting");
 
             if (documentTemplate is null)

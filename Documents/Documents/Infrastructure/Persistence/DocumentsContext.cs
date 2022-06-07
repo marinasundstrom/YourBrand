@@ -33,6 +33,8 @@ public class DocumentsContext : DbContext, IDocumentsContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DocumentsContext).Assembly);
     }
 
+    public DbSet<Domain.Entities.Directory> Directories { get; set; } = null!;
+
     public DbSet<Document> Documents { get; set; } = null!;
 
     public DbSet<DocumentType> DocumentTypes { get; set; } = null!;

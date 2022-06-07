@@ -10,6 +10,35 @@
     "https"
   ],
   "paths": {
+    "/{path}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GetDirectory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DirectoryDto"
+            }
+          }
+        }
+      }
+    },
     "/Documents": {
       "get": {
         "tags": [
@@ -286,6 +315,12 @@
         ],
         "parameters": [
           {
+            "type": "string",
+            "name": "directoryId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
             "type": "file",
             "name": "file",
             "in": "formData",
@@ -357,22 +392,44 @@
     }
   },
   "definitions": {
-    "ItemsResultOfDocumentDto": {
+    "DirectoryDto": {
       "type": "object",
       "required": [
-        "items",
-        "totalItems"
+        "id",
+        "name",
+        "directories",
+        "documents",
+        "created"
       ],
       "properties": {
-        "items": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "directories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DirectoryDto"
+          }
+        },
+        "documents": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/DocumentDto"
           }
         },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -412,6 +469,25 @@
         "lastModified": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "ItemsResultOfDocumentDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DocumentDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

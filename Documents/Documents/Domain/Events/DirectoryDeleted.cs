@@ -1,10 +1,10 @@
-using YourBrand.Documents.Domain.Common;
+﻿using YourBrand.Documents.Domain.Common;
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DocumentDeleted : DomainEvent
+public class DirectoryDeleted : DomainEvent
 {
-    public DocumentDeleted(string documentId, string? cause)
+    public DirectoryDeleted(string documentId, string? cause)
     {
         DocumentId = documentId;
         Cause = cause;

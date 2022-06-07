@@ -1,10 +1,10 @@
-using YourBrand.Documents.Domain.Common;
+﻿using YourBrand.Documents.Domain.Common;
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DocumentRenamed : DomainEvent
+public class DirectoryRenamed : DomainEvent
 {
-    public DocumentRenamed(string documentId, string newName, string oldName)
+    public DirectoryRenamed(string documentId, string newName, string oldName)
     {
         DocumentId = documentId;
         NewName = newName;
@@ -12,7 +12,7 @@ public class DocumentRenamed : DomainEvent
     }
 
     public string DocumentId { get; }
-    
+
     public string NewName { get; }
 
     public string OldName { get; }

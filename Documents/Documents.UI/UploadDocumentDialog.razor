@@ -86,7 +86,7 @@
             Snackbar.Add($"Description was updated", Severity.Info);
         }
 
-        Modal.Close();
+        Modal.Close(DialogResult.Ok(_documentDto.Id));
     }
 
     async Task Delete()
@@ -107,7 +107,7 @@
 
         try
         {
-            _documentDto = await DocumentsClient.UploadDocumentAsync(new FileParameter(file.OpenReadStream(15_000_000), file.Name, file.ContentType));
+            _documentDto = await DocumentsClient.UploadDocumentAsync(string.Empty, new FileParameter(file.OpenReadStream(15_000_000), file.Name, file.ContentType));
 
             _model = new DocumentModel
             {

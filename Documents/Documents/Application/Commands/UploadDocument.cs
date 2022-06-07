@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Documents.Application.Commands;
 
-public record UploadDocument(string Name, string ContentType, Stream Stream) : IRequest<DocumentDto>
+public record UploadDocument(string Name, string ContentType, Stream Stream, string DirectoryId) : IRequest<DocumentDto>
 {
     public class Handler : IRequestHandler<UploadDocument, DocumentDto>
     {
@@ -30,6 +30,7 @@ public record UploadDocument(string Name, string ContentType, Stream Stream) : I
             var document = await _context.Documents
              .AsSplitQuery()
              .AsNoTracking()
+             .Where(x => x.DirectoryId == request.DirectoryId)
              .FirstOrDefaultAsync(x => x.Name == n, cancellationToken);
 
             string name = request.Name;
@@ -40,10 +41,15 @@ public record UploadDocument(string Name, string ContentType, Stream Stream) : I
                 var e = Path.GetExtension(request.Name);
                 name = $"{n} (2){e}";
             }
+            
+            var directory = await _context.Directories
+             .Include(x => x.Documents)
+             .AsSplitQuery()
+             .FirstAsync(/* x => x.Id == request.DirectoryId, */ cancellationToken);
 
             document = new Domain.Entities.Document(name, contentType);
 
-            _context.Documents.Add(document);
+            directory.AddDocument(document);
 
             document.BlobId = $"{document.Id.Replace("-", string.Empty)}";
 

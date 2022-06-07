@@ -1,0 +1,170 @@
+@page "/documents/{id?}"
+@inject IDocumentsClient DocumentsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<PageTitle>Documents</PageTitle>
+
+@if(directoryDto is not null) 
+{
+    <PageTitle>@directoryDto.Name - Documents</PageTitle>
+
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@directoryDto.Name</MudText>
+
+    <MudButton Variant="Variant.Filled" OnClick="UploadDocument" Class="mb-2">Upload document</MudButton>
+
+    <MudTable T="Item" @ref="table" Items="Items" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
+        Loading="@loading" LoadingProgressColor="Color.Info">
+        
+        <HeaderContent>
+            <MudTh></MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Date</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="item">
+            <MudTd>
+                @if (item.Type == ItemType.Directory)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Folder" />
+                }
+                else if (item.Type == ItemType.Document)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.InsertDriveFile" />
+                }
+            </MudTd>
+            <MudTd DataLabel="Name">@($"{item.Name}")</MudTd>
+            <MudTd DataLabel="Date">@item.Created.ToString("g")</MudTd>
+            <MudTd>
+                @if (item.Type == ItemType.Directory)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Folder" />
+                }
+                else if (item.Type == ItemType.Document)
+                {
+                    <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@item.Document.Url" Target="_blank" @onclick:stopPropagation />
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await EditDocumentDetails(item.Document)" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteDocument(item.Document)" />
+                }
+            </MudTd>
+        </RowTemplate>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+@code
+{
+    DirectoryDto? directoryDto;
+    MudTable<Item> table = null!;
+    bool loading = false;
+
+    List<Item> Items { get; } = new List<Item>();
+
+    [Parameter] public string? Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(Id is null)
+        {
+            Id = string.Empty;
+        }
+
+        directoryDto = await DocumentsClient.GetDirectoryAsync(Id!);
+
+        foreach(var dir in directoryDto.Directories)
+        {
+            Items.Add(new Item(dir, null));
+        }
+
+        foreach(var doc in directoryDto.Documents)
+        {
+            Items.Add(new Item(null, doc));
+        }
+    }
+
+    public async Task UploadDocument()
+    {
+        var dialogRef = DialogService.Show<UploadDocumentDialog>("Upload document");
+
+        var result = await dialogRef.Result;
+
+        //if (result.Cancelled) return;
+
+        var i = await DocumentsClient.GetDocumentAsync((string)result.Data);
+
+        Items.Add(new Item(null, i));
+
+        StateHasChanged();
+    }
+
+    public async Task EditDocumentDetails(DocumentDto document)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(EditDocumentDetailsDialog.Id), document.Id);
+
+        var dialogRef = DialogService.Show<EditDocumentDetailsDialog>($"Edit {document.Name}", parameters);
+
+        var result = await dialogRef.Result;
+
+        //if (result.Cancelled) return;
+
+        //await table.ReloadServerData();
+
+        var f = Items.First(x => x.Document.Id == document.Id);
+
+        var i = await DocumentsClient.GetDocumentAsync(document.Id);
+
+        Items[Items.IndexOf(f)] = new Item(null, i);
+
+        StateHasChanged();
+    }
+
+    public async Task DeleteDocument(DocumentDto document)
+    {
+        var result = await DialogService.ShowMessageBox($"Delete {document.Name}", " Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault()) return;
+
+        await DocumentsClient.DeleteDocumentAsync(document.Id);
+
+        Snackbar.Add($"{document.Name} was deleted", Severity.Info);
+
+        //await table.ReloadServerData();
+
+        Items.Remove(Items.First(x => x.Document.Id == document.Id));
+
+        StateHasChanged();
+    }
+
+    public record Item(DirectoryDto? Directory, DocumentDto? Document)
+    {
+        public string Id => Directory?.Id ?? Document?.Id;
+
+        public string Name => Directory?.Name ?? $"{Document?.Name}.{Document?.Extension}";
+
+        public ItemType Type
+        {
+            get
+            {
+                if(Directory is not null) return ItemType.Directory;
+                if(Document is not null) return ItemType.Document;
+
+                throw new Exception();
+            }
+        }
+
+        public DateTimeOffset Created => (Directory?.Created ?? Document?.Created).GetValueOrDefault();
+    }
+
+    public enum ItemType
+    {
+        Directory,
+        Document
+    }
+}

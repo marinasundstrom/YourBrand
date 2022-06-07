@@ -3,23 +3,27 @@ using YourBrand.Documents.Domain.Events;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Document : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletable
+public class Document : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletable, IItem
 {
-    private Document() 
+    private Document()
     {
     }
 
-    public Document(string name, string contentType) 
+    public Document(string name, string contentType)
     {
         Id = Guid.NewGuid().ToString();
         Name = Path.GetFileNameWithoutExtension(name);
         Extension = Path.GetExtension(name).Trim('.');
         ContentType = contentType;
-        
+
         DomainEvents.Add(new DocumentCreated(Id));
     }
 
     public string Id { get; private set; } = null!;
+
+    public Directory? Directory { get; private set; }
+
+    public string? DirectoryId { get; private set; }
 
     public string Name { get; private set; } = null!;
 

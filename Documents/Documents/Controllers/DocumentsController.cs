@@ -24,9 +24,9 @@ public class DocumentsController : Controller
     }
 
     [HttpPost("UploadDocument")]
-    public async Task<DocumentDto> UploadDocument(IFormFile file, CancellationToken cancellationToken = default)
+    public async Task<DocumentDto> UploadDocument(string directoryId, IFormFile file, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new UploadDocument(file.FileName, file.ContentType, file.OpenReadStream()), cancellationToken);
+        return await _mediator.Send(new UploadDocument(file.FileName, file.ContentType, file.OpenReadStream(), directoryId), cancellationToken);
     }
 
     [HttpPost("GenerateDocument")]
