@@ -1,0 +1,77 @@
+<div class="message message-@(Position == MessagePosition.Right ? "right" : "left") @Class" style="@Style" @attributes="AdditionalAttributes">
+    @if(Header is not null) 
+    {
+        <div class="message-header d-flex flex-row flex-grow-1">
+            <div>
+                
+            </div>
+            <div>
+                @Header
+            </div>
+        </div>
+    }
+
+    <div class="message-inner d-flex flex-row flex-grow-1 gap-4">
+        @if(SideContent is not null && IsSideContentVisible) 
+        {
+            <div class="flex-none message-side">
+                @SideContent
+            </div>
+        }
+        <div class="message-content">
+            @Content
+        </div>
+        <div class="flex-none message-side message-actions">
+            <div class="d-flex message-actions-container">
+                @Actions
+            </div>
+        </div>
+    </div>
+
+    @if(Footer is not null && IsFooterVisible) 
+    {
+        <div class="message-footer d-flex flex-row flex-grow-1">
+            <div>
+
+            </div>
+            <div>
+                @Footer
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public bool IsSideContentVisible { get; set; }
+
+    [Parameter]
+    public bool IsFooterVisible { get; set; }
+
+    [Parameter]
+    public RenderFragment SideContent { get; set; }
+
+    [Parameter]
+    public RenderFragment Header { get; set; }
+
+    [Parameter]
+    public RenderFragment Footer { get; set; }
+
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    [Parameter]
+    public RenderFragment Actions { get; set; }
+
+    [Parameter]
+    public MessagePosition Position { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; } = null!;
+}

@@ -184,6 +184,12 @@ services:
       - protocol: https
         port: 5098
 
+  - name: messenger
+    project: Messenger/Messenger/Messenger.csproj
+    bindings:
+      - protocol: https
+        port: 5099
+
   - name: identity
     project: IdentityService/IdentityService/IdentityService.csproj
     bindings:

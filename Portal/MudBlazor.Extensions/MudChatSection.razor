@@ -1,0 +1,20 @@
+<div class="bubble-section">
+    @if (Header is not null)
+    {
+        <div class="bubble-section-header">
+            @Header
+        </div>
+    }
+    <div class="bubble-section-content">
+        @ChildContent
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+}

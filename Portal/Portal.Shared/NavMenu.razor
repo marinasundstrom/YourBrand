@@ -1,6 +1,6 @@
 ﻿@using System.Runtime.CompilerServices
 @inject IStringLocalizer<NavMenu> T
-@inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorageService 
+@inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorageService
 
 <MudNavMenu>
     <MudSpacer />
@@ -16,6 +16,11 @@
         </AuthorizeView>
 
         <MudNavLink Icon="@Icons.Material.Filled.List" Href="/worker">@T["Worker"]</MudNavLink>
+
+        <AuthorizeView>
+            <MudNavLink Icon="@Icons.Material.Filled.Chat" Href="/conversations">@T["Chat"]</MudNavLink>
+        </AuthorizeView>
+
     </MudNavGroup>
 
     <AuthorizeView>
@@ -76,7 +81,7 @@
         admin = LocalStorageService.GetItem<bool>("navmenu.admin");
     }
 
-    bool Save(bool newValue, out bool target, [CallerArgumentExpression("target")] string name = null) 
+    bool Save(bool newValue, out bool target, [CallerArgumentExpression("target")] string name = null)
     {
         LocalStorageService.SetItem($"navmenu.{name}", newValue);
         target = newValue;

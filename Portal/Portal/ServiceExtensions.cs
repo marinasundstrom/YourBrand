@@ -13,6 +13,8 @@ using Microsoft.JSInterop;
 using MudBlazor.Services;
 using YourBrand.IdentityService.Client;
 using YourBrand.AppService.Client;
+using YourBrand.Portal.Shared.Services;
+using Catalog.Shared.Services;
 
 namespace YourBrand.Portal;
 
@@ -34,6 +36,10 @@ public static class ServiceExtensions
         services.AddScoped<CustomAuthorizationMessageHandler>();
 
         services.AddClients();
+
+        // Shared
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<Services.IAccessTokenProvider, AccessTokenProvider>();
 
         return services;
     }

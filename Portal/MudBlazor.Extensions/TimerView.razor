@@ -1,0 +1,60 @@
+﻿@implements IDisposable
+
+@ChildContent(dateTime)
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public TimeSpan Interval { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment<DateTime> ChildContent { get; set; } = null!;
+
+    Task task;
+    PeriodicTimer? timer;
+    CancellationTokenSource? cts;
+    DateTime dateTime;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cts = new CancellationTokenSource();
+        task = Task.Run(async () => await Do(cts.Token), cts.Token);
+    }
+
+    async Task Do(CancellationToken token)
+    {
+        timer = new PeriodicTimer(Interval);
+        try
+        {
+            if(await timer.WaitForNextTickAsync(token))
+            {
+                dateTime = DateTime.Now;
+                StateHasChanged();
+            }
+        }
+        catch(TaskCanceledException)
+        {
+
+        }
+        finally
+        {
+            timer = null;
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        dateTime = DateTime.Now;
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+        timer = null;
+
+        cts.Cancel();
+        cts.Dispose();
+        cts = null;
+    }
+}

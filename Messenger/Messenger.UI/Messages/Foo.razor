@@ -1,0 +1,56 @@
+@page "/foo"
+
+<style>
+    body {
+        background-color: #fff !important;
+    }
+</style>
+
+<div class="message-container">
+    @foreach (var message in messages)
+    {
+       <MudMessage Position="@(message.Me ? MessagePosition.Right : MessagePosition.Left)">
+           <SideContent>
+            @if (!message.Me)
+            {
+                <div class="message-avatar">
+                    <MudAvatar>@message.Sender</MudAvatar>
+                </div>
+            }
+           </SideContent>
+
+           <Content>
+               @message.Text
+           </Content>
+
+           <Actions>
+                <MudMenu AnchorOrigin="Origin.BottomLeft">
+                    <ActivatorContent>
+                        <MudIconButton Style="margin-top: -5px; padding: 10px;" Icon="@Icons.Filled.MoreVert"
+                            Variant="Variant.Text" Color="Color.Secondary" />
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem>Delete</MudMenuItem>
+                        <MudMenuItem>Report</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+           </Actions>
+       </MudMessage>
+    }
+</div>
+
+@code {
+    Message[]  messages = new Message[] {
+        new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis iaculis sapien, quis commodo erat. Donec non massa iaculis, cursus dolor vel, accumsan felis. Praesent a leo ut turpis efficitur accumsan. Donec id ligula sed nibh facilisis consequat eget ac nisl. Maecenas fringilla a magna eu aliquet.", "BS", false),
+        new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "BS", false), // dd
+        new Message("Hej! :)", "AS", true),
+        new Message("Hur är läget?", "AS", true),
+        new Message("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis iaculis sapien, quis commodo erat. Donec non massa iaculis, cursus dolor vel, accumsan felis. Praesent a leo ut turpis efficitur accumsan. Donec id ligula sed nibh facilisis consequat eget ac nisl. Maecenas fringilla a magna eu aliquet.", "BS", false),
+        new Message("Tack!", "BS", false),
+        new Message("Det var så lite!", "BS", false), //
+        new Message("Tack!", "AS", true),
+        new Message("Tack!", "AS", true), // d
+    };
+
+    record Message(string Text, string Sender, bool Me);
+}

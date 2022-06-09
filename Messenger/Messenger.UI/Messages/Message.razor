@@ -1,0 +1,132 @@
+<MudMessage @key="@Message.Id"
+    Class="@($"{(isFirst || !sameMinutesAsLast ? "first" : String.Empty)} {(isLast ? "last" : string.Empty)}")"
+    IsFooterVisible="@isLast" IsSideContentVisible="@(!IsFromCurrentUser(Message))"
+    Position="@(IsFromCurrentUser(Message) ? MessagePosition.Right : MessagePosition.Left)">
+
+    <Footer>
+        @if (isLast)
+        {
+            if (IsFromCurrentUser(Message))
+            {
+                if (Message.Receipts.Any(x => x.User.Id != userId))
+                {
+                    <MudTooltip Text="@(string.Join("\n", Message.Receipts.Select(x => x.User.GetDisplayName())))">
+                        @foreach (var receipt in Message.Receipts)
+                        {
+                            <MudAvatar Size="Size.Small"
+                Style="height: 1.2em; width: 1.2em; margin-top: 2px; margin-left: 2px; margin-right: 2px">
+                                @receipt.User.GetDisplayName().GetInitials()</MudAvatar>
+                        }
+                    </MudTooltip>
+                }
+                else
+                {
+                    <MudIcon Icon="@Icons.Filled.CheckCircle" Size="Size.Small" Style="height: 0.8em; margin-top: 2px;" />
+                }
+            }
+
+            var Sent = Message.Sent.GetValueOrDefault();
+            var timeSince = DateTime.Now - Sent;
+
+            if (timeSince.TotalMinutes < 30)
+            {
+                <TimerView Interval="TimeSpan.FromSeconds(1)">
+                    <small class="time">
+                        @if (timeSince.TotalMinutes >= 1)
+                        {
+                            <text>@timeSince.Humanize(minUnit: TimeUnit.Minute) ago</text>
+                        }
+                        else
+                        {
+                            <text>Now</text>
+                        }
+                    </small>
+                </TimerView>
+            }
+            else
+            {
+                <small>@Sent.ToString("HH:mm")</small>
+            }
+        }
+    </Footer>
+
+    <SideContent>
+        @if (!IsFromCurrentUser(Message))
+        {
+            if (isFirst || !sameMinutesAsLast)
+            {
+                <div class="Message-avatar">
+                    <MudAvatar Size="Size.Small">@Message.SentBy.GetDisplayName().GetInitials()</MudAvatar>
+                </div>
+            }
+        }
+    </SideContent>
+
+    <Content>
+        <MudBubble Class="@(Message.Deleted is not null ? "deleted" : string.Empty)">
+            @if (Message.Deleted is not null)
+            {
+                <p>MessageModel was deleted.</p>
+            }
+            else
+            {
+                @((MarkupString)Message.Text.Replace("\n", "<br />"))
+
+            }
+        </MudBubble>
+
+    </Content>
+
+    <Actions>
+        @if (Message.Deleted is null)
+        {
+            <MudMenu AnchorOrigin="Origin.BottomLeft">
+                <ActivatorContent>
+                    <MudIconButton Style="margin-top: -5px; padding: 10px;" Icon="@Icons.Filled.MoreVert"
+                    Variant="Variant.Text" Color="Color.Secondary" />
+                </ActivatorContent>
+                <ChildContent>
+                    <MudMenuItem OnClick="() => ReplyToMessage(Message)">
+                        <div class="d-flex flex-row flex-grow-1 gap-2">
+                            <MudIcon Icon="@Icons.Filled.Reply" Size="Size.Medium" />
+                            Reply to
+                        </div>
+                    </MudMenuItem>
+                    @if (isAuthorizedToEdit)
+                    {
+                        <MudMenuItem OnClick="() => EditMessage(Message)">
+                            <div class="d-flex flex-row flex-grow-1 gap-2">
+                                <MudIcon Icon="@Icons.Filled.Edit" Size="Size.Medium" />
+                                Edit
+                            </div>
+                        </MudMenuItem>
+                    }
+                    @if (isAuthorizedToDelete)
+                    {
+                        <MudMenuItem OnClick="async () => await DeleteMessage(Message)">
+                            <div class="d-flex flex-row flex-grow-1 gap-2">
+                                <MudIcon Icon="@Icons.Filled.Delete" Size="Size.Medium" />
+                                Delete
+                            </div>
+                        </MudMenuItem>
+                    }
+                    <MudMenuItem>
+                        <div class="d-flex flex-row flex-grow-1 gap-2">
+                            <MudIcon Icon="@Icons.Filled.Report" Size="Size.Medium" />
+                            Report
+                        </div>
+                    </MudMenuItem>
+                </ChildContent>
+            </MudMenu>
+        }
+    </Actions>
+</MudMessage>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public MessageModel Message { get; set; } = null!;
+
+    [Parameter]
+    public string Class { get; set; } = null!;
+}
