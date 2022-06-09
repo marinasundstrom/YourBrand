@@ -48,7 +48,7 @@ public record GetUserRolesQuery(string UserId, int Page = 0, int PageSize = 10, 
 
             if (request.SortBy is not null)
             {
-                query = query.OrderBy(request.SortBy, request.SortDirection == IdentityService.Application.Common.Models.SortDirection.Desc ? IdentityService.SortDirection.Descending : IdentityService.SortDirection.Ascending);
+                query = query.OrderBy(request.SortBy, request.SortDirection == IdentityService.Application.Common.Models.SortDirection.Desc ? IdentityService.Application.SortDirection.Descending : IdentityService.Application.SortDirection.Ascending);
             }
 
             var roles = await query

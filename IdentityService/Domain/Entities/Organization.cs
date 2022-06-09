@@ -20,6 +20,8 @@ public class Organization
 
     public string Name { get; private set; }
 
+    public string Currency { get; private set; } 
+
     public IReadOnlyCollection<Team> Teams => _teams;
 
     public IReadOnlyCollection<Person> Persons => _persons;

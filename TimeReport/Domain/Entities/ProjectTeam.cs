@@ -6,6 +6,15 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class ProjectTeam : AuditableEntity, ISoftDelete
 {
+    private ProjectTeam()
+    {
+    }
+
+    public ProjectTeam(Team team)
+    {
+        Team = team;
+    }
+
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public Project Project { get; set; } = null!;

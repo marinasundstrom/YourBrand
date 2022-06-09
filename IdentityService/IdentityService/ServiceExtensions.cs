@@ -1,8 +1,6 @@
 ﻿using System;
 
-using YourBrand.IdentityService.Application;
 using YourBrand.IdentityService.Application.Common.Interfaces;
-using YourBrand.IdentityService.Infrastructure;
 using YourBrand.IdentityService.Services;
 
 namespace YourBrand.IdentityService;

@@ -26,11 +26,3 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
 
     }
 }
-
-public class TeamMembershipConfiguration : IEntityTypeConfiguration<TeamMembership>
-{
-    public void Configure(EntityTypeBuilder<TeamMembership> builder)
-    {
-        builder.ToTable(name: "TeamMemberships");
-    }
-}

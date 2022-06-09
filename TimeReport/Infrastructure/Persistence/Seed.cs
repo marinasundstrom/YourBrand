@@ -42,6 +42,15 @@ public static class Seed
             await context.SaveChangesAsync();
         }
         
+        if (!context.ActivityTypes.Any())
+        {
+            context.ActivityTypes.Add(new ActivityType("Chargeable", null));
+
+            context.ActivityTypes.Add(new ActivityType("Sick", null));
+
+            await context.SaveChangesAsync();
+        }
+
         if (!context.AbsenceTypes.Any())
         {
             context.AbsenceTypes.Add(new AbsenceType

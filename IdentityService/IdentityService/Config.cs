@@ -43,10 +43,10 @@ public static class Config
                     new ApiScope("myapi", "Access the api")
         };
 
-    public static IEnumerable<Client> Clients =>
-        new Client[]
+    public static IEnumerable<Duende.IdentityServer.Models.Client> Clients =>
+        new Duende.IdentityServer.Models.Client[]
         {
-            new Client
+            new Duende.IdentityServer.Models.Client
             {
                 ClientId = "blazor",
                 AllowedGrantTypes = GrantTypes.Code,

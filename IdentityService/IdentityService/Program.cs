@@ -38,7 +38,7 @@ static class Program
             if (seed)
             {
                 Log.Information("Seeding database...");
-                await SeedData.EnsureSeedData(app);
+                await SeedData.EnsureSeedData(app.Services);
                 Log.Information("Done seeding database. Exiting.");
 
                 return;

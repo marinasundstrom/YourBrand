@@ -8,7 +8,7 @@ using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Infrastructure.Persistence;
 using YourBrand.IdentityService.Infrastructure.Services;
 
-namespace YourBrand.IdentityService.Infrastructure.Infrastructure;
+namespace YourBrand.IdentityService.Infrastructure;
 
 public static class ServiceExtensions
 {

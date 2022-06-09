@@ -5,18 +5,17 @@ using IdentityModel;
 using YourBrand.IdentityService.Domain.Entities;
 
 using Microsoft.AspNetCore.Identity;
-
-using Serilog;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence;
 
 public class SeedData
 {
-    public static async Task EnsureSeedData(WebApplication app)
+    public static async Task EnsureSeedData(IServiceProvider serviceProvider)
     {
-        using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+        using (var scope = serviceProvider.CreateScope())
         {
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 

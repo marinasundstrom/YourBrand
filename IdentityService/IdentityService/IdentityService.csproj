@@ -34,6 +34,12 @@
     <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
     <ProjectReference Include="..\IdentityService.Contracts\IdentityService.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
@@ -42,27 +48,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Application\Users\Queries\" />
-    <None Remove="Application\Common\Models\" />
-    <None Remove="Domain\Common\" />
-    <None Remove="Infrastructure\Persistence\Configuration\" />
-    <None Remove="Infrastructure\Services\" />
-    <None Remove="Domain\Common\Interfaces\" />
-    <None Remove="Services\" />
-    <None Remove="Domain\Exceptions\" />
-    <None Remove="AspNetCore.Authentication.ApiKey" />
-    <None Remove="System.CommandLine.DragonFruit" />
-    <None Remove="Consumers\" />
+    <None Remove="Data\Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Application\Users\Queries\" />
-    <Folder Include="Application\Common\Models\" />
-    <Folder Include="Domain\Common\" />
-    <Folder Include="Infrastructure\Persistence\Configurations\" />
-    <Folder Include="Infrastructure\Services\" />
-    <Folder Include="Domain\Common\Interfaces\" />
-    <Folder Include="Services\" />
-    <Folder Include="Domain\Exceptions\" />
-    <Folder Include="Consumers\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 </Project>

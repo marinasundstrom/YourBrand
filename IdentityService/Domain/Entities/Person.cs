@@ -18,6 +18,7 @@ public class Person : IdentityUser, IAuditableEntity, ISoftDelete
     readonly HashSet<PersonDependant> _dependants = new HashSet<PersonDependant>();
     readonly HashSet<Role> _roles = new HashSet<Role>();
     readonly HashSet<PersonRole> _personRoles = new HashSet<PersonRole>();
+    readonly HashSet<Contract> _contracts = new HashSet<Contract>();
 
     /*
     private User() { }
@@ -39,9 +40,9 @@ public class Person : IdentityUser, IAuditableEntity, ISoftDelete
 
     public string? SSN { get; set; }
 
-    public Person Manager { get; private set; }
+    public Person? Manager { get; private set; }
 
-    public Department Department { get; /* private */ set; }
+    public Department? Department { get; /* private */ set; }
 
     public IReadOnlyCollection<Team> Teams => _teams;
 
@@ -65,9 +66,15 @@ public class Person : IdentityUser, IAuditableEntity, ISoftDelete
 
     public IReadOnlyCollection<PersonDependant> Dependants => _dependants;
 
+    public void AddDependant(PersonDependant dependant) => _dependants.Add(dependant);
+
     public IReadOnlyCollection<Role> Roles => _roles;
 
     public IReadOnlyCollection<PersonRole> PersonRoles => _personRoles;
+
+    public IReadOnlyCollection<Contract> Contracts => _contracts;
+
+    public void AddContract(Contract contract) => _contracts.Add(contract);
 
     public BankAccount? BankAccount { get; set; }
 
@@ -81,5 +88,5 @@ public class Person : IdentityUser, IAuditableEntity, ISoftDelete
 
     public DateTime? Deleted { get; set; }
 
-    public string DeletedBy { get; set; }
+    public string? DeletedBy { get; set; }
 }

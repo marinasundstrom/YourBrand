@@ -63,6 +63,10 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
 
     public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams;
 
+    public void AddTeam(Team team) => _projectTeams.Add(new ProjectTeam(team));
+
+    public void RemoveTeam(Team team) => _teams.Remove(team);
+ 
     public DateTime? Deleted { get; set; }
 
     public string? DeletedById { get; set; }

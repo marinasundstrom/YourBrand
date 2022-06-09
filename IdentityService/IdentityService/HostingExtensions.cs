@@ -10,13 +10,13 @@ using NSwag.Generation.Processors.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MassTransit;
 using YourBrand.IdentityService.Application;
-using YourBrand.IdentityService.Infrastructure.Persistence;
 using YourBrand.IdentityService.Domain.Entities;
-using YourBrand.IdentityService.Infrastructure.Infrastructure;
 using AspNetCore.Authentication.ApiKey;
 using System.Security.Claims;
 using IdentityModel;
 using YourBrand.ApiKeys;
+using YourBrand.IdentityService.Infrastructure;
+using YourBrand.IdentityService.Infrastructure.Persistence;
 
 namespace YourBrand.IdentityService;
 
