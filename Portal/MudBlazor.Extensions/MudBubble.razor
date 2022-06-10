@@ -1,4 +1,4 @@
-﻿<div class="bubble @Class" style="@Style">
+﻿<div class="bubble @Class @ThemeClass" style="@Style">
     @ChildContent
 </div>
 
@@ -11,4 +11,9 @@
 
     [Parameter]
     public string Style { get; set; }
+
+    [Parameter]
+    public bool IsDark { get; set; }
+
+    public string ThemeClass => IsDark ? "dark" : string.Empty;
 }

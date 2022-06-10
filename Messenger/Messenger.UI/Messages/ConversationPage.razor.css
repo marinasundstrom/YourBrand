@@ -6,20 +6,11 @@
     position: fixed;
     padding: 10px;
     z-index: 999;
-    /* background-color: white;
-    border-top: solid #ececec 1px; */
+    background-color: white;
+    border-top: solid #ececec 1px;
 }
 
-@media (prefers-color-scheme: light) {
-    .bottom {
-        background-color: white;
-        border-top: solid #ececec 1px;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    .bottom {
+    .bottom.dark {
         background-color: #2f2f35;
         border-top: solid #454653 1px;
     }
-}

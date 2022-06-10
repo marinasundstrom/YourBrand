@@ -94,12 +94,17 @@
 }
 
 .message.message-left .bubble {
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
+    background-color: #fff;
     border-radius: 20px;
 }
 
+    .message.message-left .bubble.dark {
+        background-color: #3f3f4e;
+    }
+
 .message .bubble.deleted {
-    background-color: #fff;
+    background-color: #fff !important;
     color: #000;
     border: 1px solid #dddddd;
 }
