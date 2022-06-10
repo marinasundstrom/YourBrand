@@ -36,11 +36,14 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
                 throw new Exception();
             }
 
-            conversation.Participants.Add(new ConversationParticipant()
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
+            if (user is null)
             {
-                Id = Guid.NewGuid().ToString(),
-                UserId = userId!
-            });
+                throw new Exception();
+            }
+
+            conversation.AddParticipant(user);
 
             await context.SaveChangesAsync(cancellationToken);
 

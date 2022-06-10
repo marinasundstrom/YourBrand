@@ -50,7 +50,7 @@ public record SendMessageReceiptCommand(string MessageId) : IRequest<ReceiptDto>
                 Id = Guid.NewGuid().ToString()
             };
 
-            message.Receipts.Add(receipt);
+            message.AddReceipt(receipt);
 
             await context.SaveChangesAsync(cancellationToken);
 

@@ -28,6 +28,7 @@ public record DeleteMessageCommand(string MessageId) : IRequest
         public async Task<Unit> Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
         {
             var message = await context.Messages
+                .Include(m => m.Conversation)
                 .FirstOrDefaultAsync(i => i.Id == request.MessageId, cancellationToken);
 
             if (message is null) throw new Exception();
@@ -37,7 +38,8 @@ public record DeleteMessageCommand(string MessageId) : IRequest
                 throw new UnauthorizedAccessException("Unauthorized");
             }
 
-            message.Text = string.Empty;
+            message.Conversation.DeleteMessage(message);
+
             context.Messages.Remove(message);
 
             await context.SaveChangesAsync(cancellationToken);

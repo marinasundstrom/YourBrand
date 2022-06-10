@@ -45,7 +45,7 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
 
             var message = new Message(request.Text, request.ReplyToId);
 
-            conversation.Messages.Add(message);
+            conversation.AddMessage(message);
 
             await context.SaveChangesAsync(cancellationToken);
 

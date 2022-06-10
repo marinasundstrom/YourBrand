@@ -310,7 +310,7 @@
 
         userId = await CurrentUserService.GetUserId();
         isCurrentUserAdmin = await CurrentUserService.IsUserInRole(YourBrand.Portal.Shared.Roles.Administrator);
- 
+
         try
         {
             hubConnection = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/messenger/hubs/messages", options =>

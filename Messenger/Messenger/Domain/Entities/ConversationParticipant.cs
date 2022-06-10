@@ -5,7 +5,7 @@ namespace YourBrand.Messenger.Domain.Entities;
 
 public class ConversationParticipant : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
-    public string Id { get; set; } = null!;
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public Conversation Conversation { get; set; } = null!;
 

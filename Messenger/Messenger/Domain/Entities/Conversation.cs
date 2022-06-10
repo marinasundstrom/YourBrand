@@ -5,13 +5,29 @@ namespace YourBrand.Messenger.Domain.Entities;
 
 public class Conversation : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
+    readonly HashSet<ConversationParticipant> _participants = new HashSet<ConversationParticipant>();
+    readonly HashSet<Message> _messages = new HashSet<Message>();
+
     public string Id { get; set; } = null!;
 
     public string? Title { get; set; }
 
-    public List<ConversationParticipant> Participants { get; set; } = new List<ConversationParticipant>();
+    public IReadOnlyCollection<ConversationParticipant> Participants => _participants;
 
-    public List<Message> Messages { get; set; } = new List<Message>();
+    public void AddParticipant(User user) => _participants.Add(new ConversationParticipant()
+    {
+        User = user
+    });
+
+    public IReadOnlyCollection<Message> Messages => _messages;
+
+    public void AddMessage(Message message) => _messages.Add(message);
+
+    public void DeleteMessage(Message message)
+    {
+        message.Text = String.Empty;
+        _messages.Remove(message);
+    }
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

@@ -5,6 +5,9 @@ namespace YourBrand.Messenger.Domain.Entities;
 
 public class Message : AuditableEntity, ISoftDelete, IHasDomainEvent
 {
+    private readonly HashSet<MessageReceipt> _receipts = new HashSet<MessageReceipt>();
+    private readonly HashSet<Message> _replies = new HashSet<Message>();
+
     protected Message()
     {
 
@@ -25,15 +28,23 @@ public class Message : AuditableEntity, ISoftDelete, IHasDomainEvent
 
     public string Text { get; set; } = null!;
 
-    public List<MessageReceipt> Receipts { get; set; } = new List<MessageReceipt>();
+    public IReadOnlyCollection<MessageReceipt> Receipts => _receipts;
+
+    public void AddReceipt(MessageReceipt receipt)
+    {
+        _receipts.Add(receipt);
+    }
 
     public Message? ReplyTo { get; set; }
     public string? ReplyToId { get; set; }
-    public List<Message> Replies = new List<Message>();
+
+    public IReadOnlyCollection<Message> Replies => _replies;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+
+
 }
