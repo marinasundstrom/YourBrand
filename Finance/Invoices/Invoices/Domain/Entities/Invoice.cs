@@ -105,6 +105,8 @@ public class Invoice : IHasDomainEvents
 
     public decimal Vat { get; private set; }
 
+    public decimal? RutRotDeduction { get; private set; }
+
     public decimal Total { get; private set; }
 
     public decimal? Paid { get; private set; }
@@ -156,11 +158,33 @@ public class Invoice : IHasDomainEvents
         return invoiceItem;
     }
 
-    internal void UpdateTotals()
+    public void UpdateTotals()
     {
+        if(DomesticService is not null)
+        {
+            var itemsWithoutHouseholdServices = Items.Where(x => x.ProductType == ProductType.Good);
+            var itemsWithHouseholdServices = Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
+
+            var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
+            var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
+            var materialCost = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
+
+            decimal requestedAmount = 0;
+            if (DomesticService.Kind == Domain.Entities.DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
+            {
+                requestedAmount = laborCost * (decimal)0.30; //invoice.DomesticServiceDeductibleAmount
+            }
+            else if (DomesticService.Kind == Domain.Entities.DomesticServiceKind.HouseholdService)
+            {
+                requestedAmount = laborCost * (decimal)0.50;
+            }
+
+            RutRotDeduction = -(requestedAmount);
+        }
+
         Vat = Items.Sum(i => i.Vat());
         SubTotal = Items.Sum(i => i.SubTotal());
-        Total = Items.Sum(i => i.LineTotal);
+        Total = Items.Sum(i => i.LineTotal) + RutRotDeduction.GetValueOrDefault();
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }

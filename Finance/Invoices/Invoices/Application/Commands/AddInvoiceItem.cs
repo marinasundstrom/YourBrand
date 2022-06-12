@@ -26,36 +26,26 @@ public record AddItemItem(int InvoiceId, ProductType ProductType, string Descrip
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            if(invoice is null) 
+            if (invoice is null)
             {
                 throw new Exception("Not found");
             }
 
-            if(invoice.Status != InvoiceStatus.Draft) 
+            if (invoice.Status != InvoiceStatus.Draft)
             {
                 throw new Exception();
             }
 
             var item = invoice.AddItem(request.ProductType, request.Description, request.UnitPrice, request.Unit, request.VatRate, request.Quantity);
 
-            if(request.DomesticService is not null)
+            if (request.DomesticService is not null)
             {
                 item.DomesticService = new Domain.Entities.InvoiceItemDomesticService(
-                    (Domain.Entities.DomesticServiceKind)request.DomesticService.Kind,
-                    (Domain.Entities.HomeRepairAndMaintenanceServiceType?)request.DomesticService.HomeRepairAndMaintenanceServiceType,
-                    (Domain.Entities.HouseholdServiceType?)request.DomesticService.HouseholdServiceType
+                    request.DomesticService.Kind,
+                    request.DomesticService.HomeRepairAndMaintenanceServiceType,
+                    request.DomesticService.HouseholdServiceType
                 );
             }
-
-            /*
-                item.DomesticService.PropertyDetails = request.DomesticService.PropertyDetails is not null 
-                        ? new Domain.Entities.PropertyDetails(
-                            (Domain.Entities.PropertyType)request.DomesticService.PropertyDetails.Type,
-                            request.DomesticService.PropertyDetails.PropertyDesignation,
-                            request.DomesticService.PropertyDetails.ApartmentNo,
-                            request.DomesticService.PropertyDetails.OrganizationNo
-                        ) : null;
-                        */
 
             await _context.SaveChangesAsync(cancellationToken);
 

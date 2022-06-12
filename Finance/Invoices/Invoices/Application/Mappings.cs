@@ -6,7 +6,7 @@ public static class Mappings
 {
     public static InvoiceDto ToDto(this Invoice invoice) 
     {
-        return new InvoiceDto(invoice.Id, invoice.Date, invoice.Type, invoice.Status, invoice.DueDate, invoice.Currency, invoice.Reference, invoice.Note, invoice.Items.Select(i => i.ToDto()),   invoice.SubTotal, invoice.Vat, invoice.Total, invoice.Paid, invoice.DomesticService?.ToDto());
+        return new InvoiceDto(invoice.Id, invoice.Date, invoice.Type, invoice.Status, invoice.DueDate, invoice.Currency, invoice.Reference, invoice.Note, invoice.Items.Select(i => i.ToDto()),   invoice.SubTotal, invoice.Vat, invoice.RutRotDeduction, invoice.Total, invoice.Paid, invoice.DomesticService?.ToDto());
     }
 
     public static InvoiceDomesticServiceDto ToDto(this Domain.Entities.InvoiceDomesticService domesticService) 

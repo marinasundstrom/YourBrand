@@ -5,10 +5,25 @@ using YourBrand.Invoices.Domain.Enums;
 
 namespace YourBrand.Invoices.Application;
 
-public record InvoiceDto(int Id, DateTime? Date, Domain.Enums.InvoiceType Type, Domain.Enums.InvoiceStatus Status, DateTime? DueDate, string Currency, string? Reference, string? Note, IEnumerable<InvoiceItemDto> Items, decimal SubTotal, decimal Vat, decimal Total, decimal? Paid, InvoiceDomesticServiceDto? DomesticService);
+public record InvoiceDto(
+    int Id, 
+    DateTime? Date, 
+    Domain.Enums.InvoiceType Type, 
+    Domain.Enums.InvoiceStatus Status, 
+    DateTime? DueDate, 
+    string Currency, 
+    string? Reference, 
+    string? Note, 
+    IEnumerable<InvoiceItemDto> Items, 
+    decimal SubTotal, 
+    decimal Vat, 
+    decimal? RotRutReduction,
+    decimal Total, 
+    decimal? Paid, 
+    InvoiceDomesticServiceDto? DomesticService);
 
 public record InvoiceDomesticServiceDto(
-    Domain.Entities.DomesticServiceKind Type, 
+    Domain.Entities.DomesticServiceKind Kind, 
     string Description,
     PropertyDetailsDto? PropertyDetails);
 

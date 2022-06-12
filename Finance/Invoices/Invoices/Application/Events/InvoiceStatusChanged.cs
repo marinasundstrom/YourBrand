@@ -56,64 +56,77 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
             }
             else if(invoice.Status == InvoiceStatus.Sent)
             {
-                // If as ROT/RUT
-                // Create
-
-                var domesticService = invoice.DomesticService!;
-
-                var domesticServices = invoice.DomesticService;
-                if(domesticServices is not null)
-                {
-
-                    var itemsWithoutHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Good);
-                    var itemsWithHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
-
-                    var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
-                    var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
-                    var materialCost = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
-
-                    decimal requestedAmount = 0;
-                    if(domesticService.Kind == Domain.Entities.DomesticServiceKind.HomeRepairAndMaintenanceServiceType) 
-                    {
-                        requestedAmount = laborCost * (decimal)0.30; //invoice.DomesticServiceDeductibleAmount
-                    }
-                    else if(domesticService.Kind == Domain.Entities.DomesticServiceKind.HouseholdService) 
-                    {
-                         requestedAmount = laborCost * (decimal)0.50; 
-                    }
-
-                    var rotRutCase =
-                        new Domain.Entities.RotRutCase(domesticService.Kind, invoice.Id, "Buyer Name", invoice.Total, hours, laborCost, materialCost, 0, requestedAmount, null);
-
-                    _context.RotRutCases.Add(rotRutCase);
-
-                    await _context.SaveChangesAsync(cancellationToken);
-                }
+                await CreateRotRutCase(invoice, cancellationToken);
             }
             else if(invoice.Status == InvoiceStatus.Paid)
             {
-                var domesticServices = invoice.DomesticService;
-                if(domesticServices is not null)
-                {
-                    var rotRutCase = await _context.RotRutCases.FirstAsync(x => x.InvoiceId == invoice.Id, cancellationToken);
-                    rotRutCase.Status = Domain.Entities.RotRutCaseStatus.InvoicePaid;
-                    
-                    await _context.SaveChangesAsync(cancellationToken);          
-                }
-            }  
+                await MarkRotRutCaseAsPaid(invoice, cancellationToken);
+            }
             else if(invoice.Status == InvoiceStatus.Void)
             {
-                var domesticServices = invoice.DomesticService;
-                if(domesticServices is not null)
-                {
-                    var rotRutCase = await _context.RotRutCases.FirstAsync(x => x.InvoiceId == invoice.Id, cancellationToken);
-                   
-                    _context.RotRutCases.Remove(rotRutCase);
-                    
-                    await _context.SaveChangesAsync(cancellationToken);          
-                }
-            }   
+                await DeleteRotRutCase(invoice, cancellationToken);
+            }
 
+        }
+    }
+
+    private async Task DeleteRotRutCase(Domain.Entities.Invoice? invoice, CancellationToken cancellationToken)
+    {
+        var domesticServices = invoice?.DomesticService;
+        if (domesticServices is not null)
+        {
+            var rotRutCase = await _context.RotRutCases.FirstAsync(x => x.InvoiceId == invoice.Id, cancellationToken);
+
+            _context.RotRutCases.Remove(rotRutCase);
+
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    private async Task MarkRotRutCaseAsPaid(Domain.Entities.Invoice? invoice, CancellationToken cancellationToken)
+    {
+        var domesticServices = invoice?.DomesticService;
+        if (domesticServices is not null)
+        {
+            var rotRutCase = await _context.RotRutCases.FirstAsync(x => x.InvoiceId == invoice!.Id, cancellationToken);
+            rotRutCase.Status = Domain.Entities.RotRutCaseStatus.InvoicePaid;
+
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    private async Task CreateRotRutCase(Domain.Entities.Invoice? invoice, CancellationToken cancellationToken)
+    {
+        // If as ROT/RUT
+        // Create
+
+        var domesticServices = invoice?.DomesticService;
+        if (domesticServices is not null)
+        {
+
+            var itemsWithoutHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Good);
+            var itemsWithHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
+
+            var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
+            var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
+            var materialCost = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
+
+            decimal requestedAmount = 0;
+            if (domesticServices.Kind == Domain.Entities.DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
+            {
+                requestedAmount = laborCost * (decimal)0.30; //invoice.DomesticServiceDeductibleAmount
+            }
+            else if (domesticServices.Kind == Domain.Entities.DomesticServiceKind.HouseholdService)
+            {
+                requestedAmount = laborCost * (decimal)0.50;
+            }
+
+            var rotRutCase =
+                new Domain.Entities.RotRutCase(domesticServices.Kind, invoice.Id, "Buyer Name", invoice.Total, hours, laborCost, materialCost, 0, requestedAmount, null);
+
+            _context.RotRutCases.Add(rotRutCase);
+
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
