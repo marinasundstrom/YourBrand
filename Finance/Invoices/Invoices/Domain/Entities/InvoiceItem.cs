@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 using YourBrand.Invoices.Domain.Enums;
 
 namespace YourBrand.Invoices.Domain.Entities;
@@ -68,4 +70,88 @@ public class InvoiceItem
     {
         return LineTotal / (1m + (decimal)VatRate);
     }
+    
+    public bool IsTaxDeductablService { get; set; }
+
+    public InvoiceItemDomesticService? DomesticService { get; set; }
+}
+
+public record InvoiceItemDomesticService(DomesticServiceKind Kind, HomeRepairAndMaintenanceServiceType? HomeRepairAndMaintenanceServiceType, HouseholdServiceType? HouseholdServiceType);
+
+/* , double Hours, decimal LaborCost, decimal MaterialCost, decimal OtherCosts, decimal RequestedAmount */
+
+[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+public enum PropertyType 
+{
+    [Display(Name = "Villa")]
+    HousingUnit = 1,
+
+    [Display(Name = "Bostadsrätt")]
+    CooperativeFlat = 2
+}
+
+[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+public enum DomesticServiceKind 
+{
+    [Display(Name = "ROT")]
+    HomeRepairAndMaintenanceServiceType = 1,
+
+    [Display(Name = "RUT")]
+    HouseholdService = 2
+}
+
+[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+public enum HomeRepairAndMaintenanceServiceType
+{
+    [Display(Name = "Bygg")]    
+    Carpentry,
+
+    [Display(Name = "El")]
+    ElectricityWork,
+
+    [Display(Name = "Glas och metalarbete")]
+    GlassMetalWork,
+
+    [Display(Name = "Tapetsering")]
+    Wallpapering,
+
+    [Display(Name = "Dränering")]
+    DrainageWork,
+
+    [Display(Name = "Murning")]
+    Masonry,
+
+    [Display(Name = "Vvs")]
+    WaterAndHeating
+}
+
+[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+public enum HouseholdServiceType
+{
+    [Display(Name = "Barnpassning")]
+    Childcare,
+
+    [Display(Name = "Flyttjänst")]
+    MovingService,
+    
+    [Display(Name = "It-tjänster")]
+    ItServices,
+
+    [Display(Name = "Kläd och textilvård")]
+    ClothingAndTextileCare,
+
+    [Display(Name = "Personlig omsorg")]
+    PersonalCare,
+
+    [Display(Name = "Reparation av vitvaror")]
+    RepairOfHoushouldAppliances,
+
+    [Display(Name = "Snöskottning")]
+    SnowShoveling,
+
+    [Display(Name = "Städning")]
+    Cleaning,
+
+    [Display(Name = "Trädgårdsarbete")]
+    Gardening
 }

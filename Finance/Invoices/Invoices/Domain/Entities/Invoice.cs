@@ -12,11 +12,12 @@ public class Invoice : IHasDomainEvents
 
     private Invoice() { }
 
-    public Invoice(DateTime? date, InvoiceType type = InvoiceType.Invoice, InvoiceStatus status = InvoiceStatus.Draft, string? note = null)
+    public Invoice(DateTime? date, InvoiceType type = InvoiceType.Invoice, InvoiceStatus status = InvoiceStatus.Draft, string currency = "SEK", string? note = null)
     {
         Date = date ?? DateTime.Now;
         Type = type;
         Status = status;
+        Currency = currency;
         Note = note;
 
         DomainEvents.Add(new InvoiceCreated(Id));
@@ -75,6 +76,17 @@ public class Invoice : IHasDomainEvents
         {
             DueDate = dueDate;
             DomainEvents.Add(new InvoiceDueDateChanged(Id, DueDate));
+        }
+    }
+
+    public string Currency { get; private set; }
+
+    public void SetCurrency(string currency)
+    {
+        if (Currency != currency)
+        {
+            Currency = currency;
+            //DomainEvents.Add(new InvoiceDueDateChanged(Id, DueDate));
         }
     }
 
@@ -151,5 +163,15 @@ public class Invoice : IHasDomainEvents
         Total = Items.Sum(i => i.LineTotal);
     }
 
+    public InvoiceDomesticService? DomesticService { get; set; }
+
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }
+
+public record InvoiceDomesticService(
+    Domain.Entities.DomesticServiceKind Kind, 
+    string Description) {
+    public PropertyDetails? PropertyDetails { get; set; }
+};
+
+public record PropertyDetails(PropertyType Type, string? PropertyDesignation, string? ApartmentNo, string? OrganizationNo);

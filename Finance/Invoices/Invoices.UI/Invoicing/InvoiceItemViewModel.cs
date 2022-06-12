@@ -32,4 +32,22 @@ public class InvoiceItemViewModel
     public decimal Vat => LineTotal.Vat(VatRate);
 
     public decimal LineTotal => UnitPrice * (decimal)Quantity;
+
+    public bool IsTaxDeductablService { get; set; }
+
+    public DomesticServiceKind Kind { get; set; }
+
+    public HomeRepairAndMaintenanceServiceType? HomeRepairAndMaintenanceServiceType { get; set; }
+
+    public HouseholdServiceType? HouseholdServiceType { get; set; }
+
+    // public double? Hours { get; set; }
+
+    // public decimal? LaborCost { get; set; }
+
+    // public decimal? MaterialCost { get; set; }
+
+    // public decimal? OtherCosts { get; set; }
+
+    // public decimal? RequestedAmount { get; set; }
 }

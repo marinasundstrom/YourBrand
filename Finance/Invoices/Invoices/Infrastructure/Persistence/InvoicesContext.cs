@@ -33,7 +33,11 @@ public class InvoicesContext : DbContext, IInvoicesContext
 
     public DbSet<Invoice> Invoices { get; set; } = null!;
 
-    public DbSet<InvoiceItem> InvoiceItems { get; set; }  = null!;
+    public DbSet<InvoiceItem> InvoiceItems { get; set; } = null!;
+
+    public DbSet<RotRutRequest> RotRutRequests { get; set; } = null!;
+
+    public DbSet<RotRutCase> RotRutCases { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

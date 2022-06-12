@@ -3,6 +3,6 @@ namespace YourBrand.Invoices.Domain.Enums;
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum InvoiceType 
 {
-    Invoice,
-    Credit
+    Invoice = 1,
+    Credit = 2
 }

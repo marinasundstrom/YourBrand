@@ -5,7 +5,7 @@
     "title": "Invoices API",
     "version": "0.1"
   },
-  "host": "localhost:5095",
+  "host": "localhost:5096",
   "schemes": [
     "https"
   ],
@@ -15,6 +15,26 @@
         "operationId": "Get",
         "produces": [
           "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/invoices/rut": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_CreateRutFile",
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
@@ -121,6 +141,9 @@
           "Invoices"
         ],
         "operationId": "Invoices_AddItem",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
@@ -134,55 +157,13 @@
             "x-nullable": false
           },
           {
-            "type": "string",
-            "name": "productType",
-            "in": "query",
+            "name": "AddItemItem",
+            "in": "body",
             "required": true,
-            "x-schema": {
-              "$ref": "#/definitions/ProductType"
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AddItemItem"
             },
-            "x-nullable": false,
-            "enum": [
-              "Good",
-              "Service"
-            ]
-          },
-          {
-            "type": "string",
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "number",
-            "name": "unitPrice",
-            "in": "query",
-            "required": true,
-            "format": "decimal",
-            "x-nullable": false
-          },
-          {
-            "type": "string",
-            "name": "unit",
-            "in": "query",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "number",
-            "name": "vatRate",
-            "in": "query",
-            "required": true,
-            "format": "double",
-            "x-nullable": false
-          },
-          {
-            "type": "number",
-            "name": "quantity",
-            "in": "query",
-            "required": true,
-            "format": "double",
             "x-nullable": false
           }
         ],
@@ -621,6 +602,7 @@
         "id",
         "type",
         "status",
+        "currency",
         "items",
         "subTotal",
         "vat",
@@ -644,6 +626,9 @@
         "dueDate": {
           "type": "string",
           "format": "date-time"
+        },
+        "currency": {
+          "type": "string"
         },
         "reference": {
           "type": "string"
@@ -672,6 +657,9 @@
         "paid": {
           "type": "number",
           "format": "decimal"
+        },
+        "domesticService": {
+          "$ref": "#/definitions/InvoiceDomesticServiceDto"
         }
       }
     },
@@ -723,7 +711,8 @@
         "unit",
         "vatRate",
         "quantity",
-        "lineTotal"
+        "lineTotal",
+        "isTaxDeductablService"
       ],
       "properties": {
         "id": {
@@ -754,6 +743,12 @@
         "lineTotal": {
           "type": "number",
           "format": "decimal"
+        },
+        "isTaxDeductablService": {
+          "type": "boolean"
+        },
+        "domesticService": {
+          "$ref": "#/definitions/InvoiceItemDomesticServiceDto"
         }
       }
     },
@@ -768,6 +763,170 @@
         "Good",
         "Service"
       ]
+    },
+    "InvoiceItemDomesticServiceDto": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/DomesticServiceKind"
+        },
+        "homeRepairAndMaintenanceServiceType": {
+          "$ref": "#/definitions/HomeRepairAndMaintenanceServiceType"
+        },
+        "householdServiceType": {
+          "$ref": "#/definitions/HouseholdServiceType"
+        }
+      }
+    },
+    "DomesticServiceKind": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "HomeRepairAndMaintenanceServiceType",
+        "HouseholdService"
+      ],
+      "enum": [
+        "HomeRepairAndMaintenanceServiceType",
+        "HouseholdService"
+      ]
+    },
+    "HomeRepairAndMaintenanceServiceType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Carpentry",
+        "ElectricityWork",
+        "GlassMetalWork",
+        "Wallpapering",
+        "DrainageWork",
+        "Masonry",
+        "WaterAndHeating"
+      ],
+      "enum": [
+        "Carpentry",
+        "ElectricityWork",
+        "GlassMetalWork",
+        "Wallpapering",
+        "DrainageWork",
+        "Masonry",
+        "WaterAndHeating"
+      ]
+    },
+    "HouseholdServiceType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Childcare",
+        "MovingService",
+        "ItServices",
+        "ClothingAndTextileCare",
+        "PersonalCare",
+        "RepairOfHoushouldAppliances",
+        "SnowShoveling",
+        "Cleaning",
+        "Gardening"
+      ],
+      "enum": [
+        "Childcare",
+        "MovingService",
+        "ItServices",
+        "ClothingAndTextileCare",
+        "PersonalCare",
+        "RepairOfHoushouldAppliances",
+        "SnowShoveling",
+        "Cleaning",
+        "Gardening"
+      ]
+    },
+    "InvoiceDomesticServiceDto": {
+      "type": "object",
+      "required": [
+        "type",
+        "description"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/DomesticServiceKind"
+        },
+        "description": {
+          "type": "string"
+        },
+        "propertyDetails": {
+          "$ref": "#/definitions/PropertyDetailsDto"
+        }
+      }
+    },
+    "PropertyDetailsDto": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/PropertyType"
+        },
+        "propertyDesignation": {
+          "type": "string"
+        },
+        "apartmentNo": {
+          "type": "string"
+        },
+        "organizationNo": {
+          "type": "string"
+        }
+      }
+    },
+    "PropertyType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "HousingUnit",
+        "CooperativeFlat"
+      ],
+      "enum": [
+        "HousingUnit",
+        "CooperativeFlat"
+      ]
+    },
+    "AddItemItem": {
+      "type": "object",
+      "required": [
+        "productType",
+        "description",
+        "unitPrice",
+        "unit",
+        "vatRate",
+        "quantity"
+      ],
+      "properties": {
+        "productType": {
+          "$ref": "#/definitions/ProductType"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "double"
+        },
+        "domesticService": {
+          "$ref": "#/definitions/InvoiceItemDomesticServiceDto"
+        }
+      }
     },
     "CreateInvoice": {
       "type": "object",

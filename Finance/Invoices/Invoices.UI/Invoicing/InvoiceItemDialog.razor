@@ -8,50 +8,135 @@
     <MudDialog>
         <DialogContent>
 
-            <MudTextField Label="Description" @bind-Value="Model.Description" For="() => Model.Description"></MudTextField>
+            <MudTextField Label="Description" @bind-Value="Model.Description" For="() => Model.Description" Class="mt-4">
+            </MudTextField>
 
-            <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType">
-                @foreach(var status in Enum.GetValues<ProductType>())
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity" Class="mt-4">
+                    </MudNumericField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit" Class="mt-4">
+                        <MudSelectItem Value="@("pcs")">Pieces</MudSelectItem>
+                        <MudSelectItem Value="@("hours")">Hours</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+            </MudGrid>
+
+            <MudNumericField Label="Unit Price" @bind-Value="Model.UnitPrice" For="() => Model.UnitPrice" Class="mt-4">
+            </MudNumericField>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate" Class="mt-4">
+                        <MudSelectItem Value="@(0.0)">Ingen</MudSelectItem>
+                        <MudSelectItem Value="@(0.06)">6%</MudSelectItem>
+                        <MudSelectItem Value="@(0.12)">12%</MudSelectItem>
+                        <MudSelectItem Value="@(0.25)">25%</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType" Class="mt-4">
+                        @foreach (var status in Enum.GetValues<ProductType>())
+                        {
+                            <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+            </MudGrid>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudField Label="VAT" Class="mt-4">@Model.Vat.ToString("c")</MudField>
+
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudField Label="Line Total" Class="mt-4">@Model.LineTotal.ToString("c")</MudField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            @if (Model.ProductType == ProductType.Service)
+            {
+                <MudCheckBox T="bool" Label="Is eligible for tax deduction (ROT/RUT)"
+                @bind-Checked="Model.IsTaxDeductablService" Class="mt-4"></MudCheckBox>
+
+                @if (Model.IsTaxDeductablService)
                 {
-                    <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
+                    <MudRadioGroup @bind-SelectedOption="Model.Kind" Class="mt-4">
+                        <MudRadio Option="DomesticServiceKind.HomeRepairAndMaintenanceServiceType" Dense="true">ROT</MudRadio>
+                        <MudRadio Option="DomesticServiceKind.HouseholdService" Dense="false">RUT</MudRadio>
+                    </MudRadioGroup>
+
+                    @if (Model.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
+                    {
+                        <MudSelect T="HomeRepairAndMaintenanceServiceType?" Label="Service Type"
+                @bind-Value="Model.HomeRepairAndMaintenanceServiceType"
+                For="() => Model.HomeRepairAndMaintenanceServiceType"  Class="mt-4">
+                            @foreach (HomeRepairAndMaintenanceServiceType a in Enum.GetValues<HomeRepairAndMaintenanceServiceType>())
+                            {
+                                <MudSelectItem T="HomeRepairAndMaintenanceServiceType?" Value="@a">@a.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
+                    }
+                    else if (Model.Kind == DomesticServiceKind.HouseholdService)
+                    {
+                        <MudSelect T="HouseholdServiceType?" Label="Service Type" @bind-Value="Model.HouseholdServiceType"
+                For="() => Model.HouseholdServiceType"  Class="mt-4">
+                            @foreach (HouseholdServiceType a in Enum.GetValues<HouseholdServiceType>())
+                            {
+                                <MudSelectItem T="HouseholdServiceType?" Value="@a">@a.ToString()</MudSelectItem>
+                            }
+                        </MudSelect>
+                    }
                 }
-                
-            </MudSelect>
 
-            <MudNumericField Label="Unit Price" @bind-Value="Model.UnitPrice" For="() => Model.UnitPrice"></MudNumericField>
+                @* <MudSelect T="HouseholdServiceType?" Label="Hushållsarbete" @bind-Value="Model.Hushallsarbete" For="() =>
+                    Model.Hushallsarbete">
+                    @foreach(HouseholdServiceType a in Enum.GetValues<HouseholdServiceType>())
+                    {
+                    <MudSelectItem T="HouseholdServiceType?" Value="@a">@a.ToString()</MudSelectItem>
+                    }
+                    </MudSelect>
 
-            <MudTextField Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit"></MudTextField>
+                    <MudNumericField Label="Hours" @bind-Value="Model.Hours" For="() => Model.Hours"></MudNumericField>
 
-            <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity"></MudNumericField>
+                    <MudNumericField Label="Material Cost" @bind-Value="Model.MaterialCost" For="() =>
+                    Model.MaterialCost"></MudNumericField>
 
-            <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate">
-                <MudSelectItem Value="@(0.06)">6%</MudSelectItem>
-                <MudSelectItem Value="@(0.12)">12%</MudSelectItem>
-                <MudSelectItem Value="@(0.25)">25%</MudSelectItem>
-            </MudSelect>
-
-            <MudField Label="VAT">@Model.Vat.ToString("c")</MudField>
-
-            <MudField Label="Line Total">@Model.LineTotal.ToString("c")</MudField>
+                    <MudNumericField Label="Other Costs" @bind-Value="Model.OtherCosts" For="() =>
+                    Model.OtherCosts"></MudNumericField> *@
+            }
 
             @*
-            <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
+                <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
 
-            <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
+                <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
                 @foreach(var status in Enum.GetValues<InvoiceStatus>())
                 {
-                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+                <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
                 }
-                
-            </MudSelect>
 
-            <MudNumericField Label="Sub Total" @bind-Value="SubTotal" For="() => SubTotal"></MudNumericField>
+                </MudSelect>
 
-            <MudNumericField Label="Vat" @bind-Value="Vat" For="() => Vat"></MudNumericField>
+                <MudNumericField Label="Sub Total" @bind-Value="SubTotal" For="() => SubTotal"></MudNumericField>
 
-            <MudNumericField Label="VAT Rate" @bind-Value="VatRate" For="() => VatRate"></MudNumericField>
+                <MudNumericField Label="Vat" @bind-Value="Vat" For="() => Vat"></MudNumericField>
 
-            <MudNumericField Label="Total" @bind-Value="Total" For="() => Total"></MudNumericField>
+                <MudNumericField Label="VAT Rate" @bind-Value="VatRate" For="() => VatRate"></MudNumericField>
+
+                <MudNumericField Label="Total" @bind-Value="Total" For="() => Total"></MudNumericField>
 
             *@
         </DialogContent>

@@ -103,6 +103,12 @@ app.MapGet("/invoices", async (int page, int pageSize, [FromQuery] InvoiceStatus
     .Produces<ItemsResult<InvoiceDto>>(StatusCodes.Status200OK);
 */
 
+app.MapGet("/invoices/rut", async (IMediator mediator)
+    => await mediator.Send(new CreateRutFile()))
+    .WithName("Invoices_CreateRutFile")
+    .WithTags("Invoices")
+    .Produces<string>(StatusCodes.Status200OK);
+
 app.MapGet("/Invoices/{invoiceId}", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetInvoice(invoiceId), cancellationToken))
     .WithName("Invoices_GetInvoice")
@@ -116,9 +122,9 @@ app.MapGet("/Invoices/{invoiceId}/File", async (int invoiceId, IMediator mediato
     .Produces<FileResult>(StatusCodes.Status200OK);
 
 app.MapPost("/Invoices/{invoiceId}/Items", async (int invoiceId, 
-    ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity, 
+    AddItemItem dto, 
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new AddItemItem(invoiceId, productType, description, unitPrice, unit, vatRate, quantity), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoices.Application.Commands.AddItemItem(invoiceId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
@@ -199,3 +205,5 @@ if(args.Contains("--seed"))
 }
 
 app.Run();
+
+public record AddItemItem(ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, InvoiceItemDomesticServiceDto? DomesticService);

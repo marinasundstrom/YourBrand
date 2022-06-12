@@ -29,6 +29,7 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
     public async Task Handle(DomainEventNotification<InvoiceStatusChanged> notification, CancellationToken cancellationToken)
     {
         var invoice = await _context.Invoices
+            .Include(i => i.Items)
             .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.InvoiceId);
 
         if(invoice is not null) 
@@ -53,6 +54,66 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
                     Message = $"Betala faktura #{invoice.Id}",
                 });
             }
+            else if(invoice.Status == InvoiceStatus.Sent)
+            {
+                // If as ROT/RUT
+                // Create
+
+                var domesticService = invoice.DomesticService!;
+
+                var domesticServices = invoice.DomesticService;
+                if(domesticServices is not null)
+                {
+
+                    var itemsWithoutHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Good);
+                    var itemsWithHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
+
+                    var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
+                    var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
+                    var materialCost = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
+
+                    decimal requestedAmount = 0;
+                    if(domesticService.Kind == Domain.Entities.DomesticServiceKind.HomeRepairAndMaintenanceServiceType) 
+                    {
+                        requestedAmount = laborCost * (decimal)0.30; //invoice.DomesticServiceDeductibleAmount
+                    }
+                    else if(domesticService.Kind == Domain.Entities.DomesticServiceKind.HouseholdService) 
+                    {
+                         requestedAmount = laborCost * (decimal)0.50; 
+                    }
+
+                    var rotRutCase =
+                        new Domain.Entities.RotRutCase(domesticService.Kind, invoice.Id, "Buyer Name", invoice.Total, hours, laborCost, materialCost, 0, requestedAmount, null);
+
+                    _context.RotRutCases.Add(rotRutCase);
+
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
+            else if(invoice.Status == InvoiceStatus.Paid)
+            {
+                var domesticServices = invoice.DomesticService;
+                if(domesticServices is not null)
+                {
+                    var rotRutCase = await _context.RotRutCases.FirstAsync(x => x.InvoiceId == invoice.Id, cancellationToken);
+                    rotRutCase.Status = Domain.Entities.RotRutCaseStatus.InvoicePaid;
+                    
+                    await _context.SaveChangesAsync(cancellationToken);          
+                }
+            }  
+            else if(invoice.Status == InvoiceStatus.Void)
+            {
+                var domesticServices = invoice.DomesticService;
+                if(domesticServices is not null)
+                {
+                    var rotRutCase = await _context.RotRutCases.FirstAsync(x => x.InvoiceId == invoice.Id, cancellationToken);
+                   
+                    _context.RotRutCases.Remove(rotRutCase);
+                    
+                    await _context.SaveChangesAsync(cancellationToken);          
+                }
+            }   
+
         }
     }
 }

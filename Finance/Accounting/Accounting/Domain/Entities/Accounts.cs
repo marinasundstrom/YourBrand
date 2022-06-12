@@ -19,6 +19,13 @@ public static class Accounts
             },
             new Account
             {
+                AccountNo = 1513,
+                Class = AccountClass.Assets,
+                Name = "Kundfordringar - delad faktura",
+                Description = "För ROT/RUT-avdrag"
+            },
+            new Account
+            {
                 AccountNo = 1930,
                 Class = AccountClass.Assets,
                 Name = "Företagskonto",

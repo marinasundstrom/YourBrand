@@ -8,6 +8,7 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace YourBrand.Invoices.Application.Commands;
 

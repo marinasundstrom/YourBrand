@@ -58,12 +58,14 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
                 await _invoicesClient.AddItemAsync(
                     invoice.Id,
-                    ProductType.Service,
-                    description,
-                    hourlyRate,
-                    "hours",
-                    0.25,
-                    hours);
+                    new AddItemItem {
+                        ProductType = ProductType.Service,
+                        Description = description,
+                        UnitPrice = hourlyRate,
+                        Unit = "hours",
+                        VatRate = 0.25,
+                        Quantity = hours
+                    });
             }
 
             // TODO: Mark TimeSheets as billed.

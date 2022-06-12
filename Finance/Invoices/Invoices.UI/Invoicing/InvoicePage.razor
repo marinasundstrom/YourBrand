@@ -317,12 +317,21 @@
 
         var invoiceItem = await InvoicesClient.AddItemAsync(
             Id.GetValueOrDefault(),
-            vm.ProductType,
-            vm.Description,
-            vm.UnitPrice,
-            vm.Unit,
-            vm.VatRate,
-            vm.Quantity
+            new AddItemItem
+            {
+                ProductType = vm.ProductType,
+                Description = vm.Description,
+                UnitPrice = vm.UnitPrice,
+                Unit = vm.Unit,
+                VatRate = vm.VatRate,
+                Quantity = vm.Quantity,
+                DomesticService = vm.IsTaxDeductablService ? new InvoiceItemDomesticServiceDto
+                {
+                    Kind = vm.Kind,
+                    HomeRepairAndMaintenanceServiceType = vm.HomeRepairAndMaintenanceServiceType,
+                    HouseholdServiceType = vm.HouseholdServiceType
+                } : null
+            }
         );
 
         vm.Id = invoiceItem.Id;

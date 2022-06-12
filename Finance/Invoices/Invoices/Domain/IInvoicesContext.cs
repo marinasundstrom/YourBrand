@@ -10,5 +10,9 @@ public interface IInvoicesContext
 
     DbSet<InvoiceItem> InvoiceItems { get; }
 
+    DbSet<RotRutRequest> RotRutRequests { get; set; }
+
+    DbSet<RotRutCase> RotRutCases { get; set; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
