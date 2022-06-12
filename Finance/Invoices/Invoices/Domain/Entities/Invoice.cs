@@ -194,6 +194,7 @@ public class Invoice : IHasDomainEvents
 
 public record InvoiceDomesticService(
     Domain.Entities.DomesticServiceKind Kind, 
+    string Buyer,
     string Description) {
     public PropertyDetails? PropertyDetails { get; set; }
 };

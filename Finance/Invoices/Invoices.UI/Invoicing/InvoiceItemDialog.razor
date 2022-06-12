@@ -70,9 +70,9 @@
             @if (Model.ProductType == ProductType.Service)
             {
                 <MudCheckBox T="bool" Label="Is eligible for tax deduction (ROT/RUT)"
-                @bind-Checked="Model.IsTaxDeductablService" Class="mt-4"></MudCheckBox>
+                @bind-Checked="Model.IsTaxDeductableService" Class="mt-4"></MudCheckBox>
 
-                @if (Model.IsTaxDeductablService)
+                @if (Model.IsTaxDeductableService)
                 {
                     <MudRadioGroup @bind-SelectedOption="Model.Kind" Class="mt-4">
                         <MudRadio Option="DomesticServiceKind.HomeRepairAndMaintenanceServiceType" Dense="true">ROT</MudRadio>

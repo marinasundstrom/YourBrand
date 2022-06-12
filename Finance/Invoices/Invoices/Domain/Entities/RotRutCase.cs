@@ -10,18 +10,19 @@ public class RotRutCase : AuditableEntity
     {
     }
 
-    public RotRutCase(DomesticServiceKind kind, int invoiceId, string buyer, decimal total, double hours, decimal laborCost, decimal materialCost, decimal otherCosts, decimal requestedAmount, decimal? receivedAmount)
+    public RotRutCase(DomesticServiceKind kind, string buyer, DateTime paymentDate, decimal laborCost, decimal paidAmount, decimal requestedAmount, int invoiceId, decimal otherCosts, double hours, decimal materialCost, decimal? receivedAmount)
     {
         Kind = kind;
         Status = RotRutCaseStatus.Created;
-        InvoiceId = invoiceId;
         Buyer = buyer;
-        Total = total;
-        Hours = hours;
+        PaymentDate = paymentDate;
         LaborCost = laborCost;
-        MaterialCost = materialCost;
-        OtherCosts = otherCosts;
+        PaidAmount = paidAmount;
         RequestedAmount = requestedAmount;
+        InvoiceId = invoiceId;
+        OtherCosts = otherCosts;
+        Hours = hours;
+        MaterialCost = materialCost; 
         ReceivedAmount = receivedAmount;
     }
 
@@ -32,24 +33,24 @@ public class RotRutCase : AuditableEntity
     public DomesticServiceKind Kind { get; private set; }
 
     public RotRutCaseStatus Status { get; set; }
-
-    public int InvoiceId { get; private set; }
-
+    
     public string Buyer { get; private set; }
 
-    public decimal Total { get; private set; }
+    public DateTime PaymentDate { get; private set; }
+    
+    public decimal LaborCost { get; private set; }
+
+    public decimal PaidAmount { get; private set; }
+
+    public decimal RequestedAmount { get; private set; }
+    
+    public int InvoiceId { get; private set; }
+    
+    public decimal OtherCosts { get; private set; }
 
     public double Hours { get; private set; }
 
-    public decimal LaborCost { get; private set; }
-
     public decimal MaterialCost { get; private set; }
-
-    public decimal MaterialCosts { get; private set; }
-
-    public decimal OtherCosts { get; private set; }
-
-    public decimal RequestedAmount { get; private set; }
 
     public decimal? ReceivedAmount { get; private set; }
 

@@ -105,6 +105,49 @@
         }
       }
     },
+    "/invoices/activateRotAndRut": {
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_ActivateRotAndRut",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "name": "InvoiceDomesticServiceDto",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceDomesticServiceDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/Invoices/{invoiceId}/File": {
       "get": {
         "tags": [
@@ -650,6 +693,10 @@
           "type": "number",
           "format": "decimal"
         },
+        "rotRutDeduction": {
+          "type": "number",
+          "format": "decimal"
+        },
         "total": {
           "type": "number",
           "format": "decimal"
@@ -712,7 +759,7 @@
         "vatRate",
         "quantity",
         "lineTotal",
-        "isTaxDeductablService"
+        "isTaxDeductableService"
       ],
       "properties": {
         "id": {
@@ -744,7 +791,7 @@
           "type": "number",
           "format": "decimal"
         },
-        "isTaxDeductablService": {
+        "isTaxDeductableService": {
           "type": "boolean"
         },
         "domesticService": {
@@ -844,12 +891,16 @@
     "InvoiceDomesticServiceDto": {
       "type": "object",
       "required": [
-        "type",
+        "kind",
+        "buyer",
         "description"
       ],
       "properties": {
-        "type": {
+        "kind": {
           "$ref": "#/definitions/DomesticServiceKind"
+        },
+        "buyer": {
+          "type": "string"
         },
         "description": {
           "type": "string"

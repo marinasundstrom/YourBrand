@@ -11,12 +11,12 @@ public static class Mappings
 
     public static InvoiceDomesticServiceDto ToDto(this Domain.Entities.InvoiceDomesticService domesticService) 
     {
-        return new InvoiceDomesticServiceDto(domesticService.Kind, domesticService.Description, domesticService.PropertyDetails?.ToDto());
+        return new InvoiceDomesticServiceDto(domesticService.Kind, domesticService.Buyer, domesticService.Description, domesticService.PropertyDetails?.ToDto());
     }
 
     public static InvoiceItemDto ToDto(this InvoiceItem item) 
     {
-        return new InvoiceItemDto(item.Id, item.ProductType, item.Description, item.UnitPrice, item.Unit, item.VatRate, item.Quantity, item.LineTotal, item.IsTaxDeductablService, item.DomesticService?.ToDto());
+        return new InvoiceItemDto(item.Id, item.ProductType, item.Description, item.UnitPrice, item.Unit, item.VatRate, item.Quantity, item.LineTotal, item.IsTaxDeductableService, item.DomesticService?.ToDto());
     }
 
     public static InvoiceItemDomesticServiceDto ToDto(this Domain.Entities.InvoiceItemDomesticService domesticService) 

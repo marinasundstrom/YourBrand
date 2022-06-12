@@ -28,7 +28,8 @@
 
             @if (invoice.Status == InvoiceStatus.Draft)
             {
-                <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">Delete</MudButton>
+                <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">Delete
+                </MudButton>
             }
         </div>
 
@@ -48,7 +49,7 @@
                 <div class="d-flex">
                     <MudField Label="Status">@Status</MudField>
                     <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
-                                   OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+                    OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
                 </div>
             </MudItem>
 
@@ -99,6 +100,13 @@
                 <MudField Label="Total">@Total.ToString("c")</MudField>
             </MudItem>
 
+            @if (invoice.RotRutDeduction is not null)
+            {
+                <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudField Label="Rot/Rut">@invoice.RotRutDeduction?.ToString("c")</MudField>
+                </MudItem>
+            }
+
         </MudGrid>
     </MudPaper>
 
@@ -110,7 +118,7 @@
     }
 
     <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="1"
-              Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Description</MudTh>
             <MudTh>Product Type</MudTh>
@@ -145,6 +153,24 @@
             <MudText>Loading...</MudText>
         </LoadingContent>
     </MudTable>
+
+    @if (invoice.DomesticService is null)
+    { 
+        @if (Status == InvoiceStatus.Draft)
+        {
+            <MudButton Variant="Variant.Filled" OnClick="ActivateRotRut" Class="mt-4">Activate Rot & Rut</MudButton>
+        }
+    }
+    else
+    {
+        <MudPaper Elevation="1" Class="pa-4 mt-4">
+            <MudText Typo="Typo.h6" GutterBottom="true" Class="mb-4">Rot & Rut</MudText>
+
+            <MudField Label="Kind">@invoice.DomesticService.Kind</MudField>
+            <MudField Label="Description" Class="mt-4">@invoice.DomesticService.Description</MudField>
+            <MudField Label="Buyer" Class="mt-4">@invoice.DomesticService.Buyer</MudField>
+        </MudPaper>
+    }
 }
 
 @code
@@ -233,6 +259,23 @@
         }
     }
 
+    async Task ActivateRotRut()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(ActivateRotOrRutDialog.InvoiceId), Id);
+        parameters.Add(nameof(ActivateRotOrRutDialog.InvoiceDomesticService), invoice.DomesticService);
+
+        var dialogRef = DialogService.Show<ActivateRotOrRutDialog>("Activate deduction for domestic services", parameters);
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+
+        invoice.DomesticService = (InvoiceDomesticServiceDto)result.Data;
+    }
+
     async Task InitPaymentHub(string paymentId)
     {
         try
@@ -316,22 +359,22 @@
         var vm = (InvoiceItemViewModel)result.Data;
 
         var invoiceItem = await InvoicesClient.AddItemAsync(
-            Id.GetValueOrDefault(),
-            new AddItemItem
+        Id.GetValueOrDefault(),
+        new AddItemItem
+        {
+            ProductType = vm.ProductType,
+            Description = vm.Description,
+            UnitPrice = vm.UnitPrice,
+            Unit = vm.Unit,
+            VatRate = vm.VatRate,
+            Quantity = vm.Quantity,
+            DomesticService = vm.IsTaxDeductableService ? new InvoiceItemDomesticServiceDto
             {
-                ProductType = vm.ProductType,
-                Description = vm.Description,
-                UnitPrice = vm.UnitPrice,
-                Unit = vm.Unit,
-                VatRate = vm.VatRate,
-                Quantity = vm.Quantity,
-                DomesticService = vm.IsTaxDeductablService ? new InvoiceItemDomesticServiceDto
-                {
-                    Kind = vm.Kind,
-                    HomeRepairAndMaintenanceServiceType = vm.HomeRepairAndMaintenanceServiceType,
-                    HouseholdServiceType = vm.HouseholdServiceType
-                } : null
-            }
+                Kind = vm.Kind,
+                HomeRepairAndMaintenanceServiceType = vm.HomeRepairAndMaintenanceServiceType,
+                HouseholdServiceType = vm.HouseholdServiceType
+            } : null
+        }
         );
 
         vm.Id = invoiceItem.Id;
@@ -449,9 +492,9 @@
 
     public async ValueTask DisposeAsync()
     {
-        if(hubConnection is null)
+        if (hubConnection is null)
             return;
-            
+
         await hubConnection.DisposeAsync();
     }
 }

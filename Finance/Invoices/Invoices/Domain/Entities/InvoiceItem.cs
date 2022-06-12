@@ -71,7 +71,7 @@ public class InvoiceItem
         return LineTotal / (1m + (decimal)VatRate);
     }
     
-    public bool IsTaxDeductablService { get; set; }
+    public bool IsTaxDeductableService { get; set; }
 
     public InvoiceItemDomesticService? DomesticService { get; set; }
 }

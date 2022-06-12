@@ -53,9 +53,7 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
                     Reference = Guid.NewGuid().ToUrlFriendlyString(),
                     Message = $"Betala faktura #{invoice.Id}",
                 });
-            }
-            else if(invoice.Status == InvoiceStatus.Sent)
-            {
+
                 await CreateRotRutCase(invoice, cancellationToken);
             }
             else if(invoice.Status == InvoiceStatus.Paid)
@@ -121,8 +119,32 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
                 requestedAmount = laborCost * (decimal)0.50;
             }
 
+            DateTime paymentDate = DateTime.Now;
+            decimal paidAmount = 0m;
+            decimal otherCosts = 0m;
+
             var rotRutCase =
-                new Domain.Entities.RotRutCase(domesticServices.Kind, invoice.Id, "Buyer Name", invoice.Total, hours, laborCost, materialCost, 0, requestedAmount, null);
+                new Domain.Entities.RotRutCase(domesticServices.Kind, invoice.DomesticService!.Buyer, paymentDate, laborCost, paidAmount, requestedAmount, invoice.Id, otherCosts, hours, materialCost, null);
+
+            if (domesticServices.Kind == Domain.Entities.DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
+            {
+                var first = itemsWithHouseholdServices.First();
+
+                rotRutCase.Rot = new Domain.Entities.Rot() {
+                    ServiceType = first.DomesticService!.HomeRepairAndMaintenanceServiceType,
+                    PropertyDesignation =  invoice.DomesticService!.PropertyDetails!.PropertyDesignation,
+                    ApartmentNo =  invoice.DomesticService!.PropertyDetails!.ApartmentNo,
+                    OrganizationNo =  invoice.DomesticService!.PropertyDetails!.OrganizationNo
+                };
+            }
+            else if (domesticServices.Kind == Domain.Entities.DomesticServiceKind.HouseholdService)
+            {
+                var first = itemsWithHouseholdServices.First();
+
+                rotRutCase.Rut = new Domain.Entities.Rut() {
+                    ServiceType = first.DomesticService!.HouseholdServiceType
+                };
+            }
 
             _context.RotRutCases.Add(rotRutCase);
 

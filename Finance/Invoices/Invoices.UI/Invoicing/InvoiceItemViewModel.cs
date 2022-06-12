@@ -33,7 +33,7 @@ public class InvoiceItemViewModel
 
     public decimal LineTotal => UnitPrice * (decimal)Quantity;
 
-    public bool IsTaxDeductablService { get; set; }
+    public bool IsTaxDeductableService { get; set; }
 
     public DomesticServiceKind Kind { get; set; }
 
