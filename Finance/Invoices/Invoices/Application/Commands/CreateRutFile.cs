@@ -24,9 +24,8 @@ public record CreateRutFile() : IRequest<string>
 
         public async Task<string> Handle(CreateRutFile request, CancellationToken cancellationToken)
         {
-            var invoices = await _context.Invoices
-                .Include(x => x.Items)
-                .Where(x => x.Status == InvoiceStatus.Paid)
+            var rotRutCases = await _context.RotRutCases
+                .Where(x => x.Status == Domain.Entities.RotRutCaseStatus.InvoicePaid)
                 .ToArrayAsync(cancellationToken);
 
             BegaranFil begaranFil = new BegaranFil()
@@ -38,48 +37,36 @@ public record CreateRutFile() : IRequest<string>
 
             List<HushallBegaranArenden> arenden = new List<HushallBegaranArenden>();
 
-            foreach (var invoice in invoices)
+            foreach (var rotRutCase in rotRutCases)
             {
-                var itemsByType = invoice.Items
-                    .Where(i => i.ProductType == ProductType.Service && i.DomesticService is not null)
-                    .GroupBy(x => x.DomesticService!.Kind);
-
-                if (itemsByType.Any())
+                var arende = new RotRut.Begaran.Rut.HushallBegaranArenden()
                 {
-                    var arende = new RotRut.Begaran.Rut.HushallBegaranArenden();
-                    arende.FakturaNr = invoice.Id.ToString();
-                    arende.BetalningsDatum = DateTime.Now;
-                    arende.Kopare = "Test";
+                    FakturaNr = rotRutCase.InvoiceId.ToString(),
+                    BetalningsDatum = rotRutCase.PaymentDate,
+                    Kopare = rotRutCase.Buyer,
+                    PrisForArbete = (int)Math.Round(rotRutCase.LaborCost),
+                    BetaltBelopp = (int)Math.Round(rotRutCase.PaidAmount),
+                    BegartBelopp = (int)Math.Round(rotRutCase.RequestedAmount),
+                    OvrigKostnad = (int)Math.Round(rotRutCase.OtherCosts),
+                };
 
-                    arende.UtfortArbete = new RotRut.Begaran.Rut.HushallBegaranArendenUtfortArbete();
+                arende.UtfortArbete = new RotRut.Begaran.Rut.HushallBegaranArendenUtfortArbete();
 
-                    foreach (var itemGroup in itemsByType)
+                if (rotRutCase.Kind == Domain.Entities.DomesticServiceKind.HouseholdService)
+                {
+                    switch (rotRutCase.Rut!.ServiceType)
                     {
-                        var item = itemGroup.First();
-
-                        /*
-                        switch(item.DomesticService!.Hushallsarbete) 
-                        {
-                            case Domain.Entities.HouseholdServiceType.Cleaning:
-                                arende.UtfortArbete.Stadning = new RotRut.Begaran.Rut.HushallBegaranArendenUtfortArbeteStadning
-                                {
-                                    AntalTimmar = item.DomesticService!.Hours,
-                                    Materialkostnad = item.DomesticService.MaterialCost,
-                                };
-                                break;
-                        }
-                        */
-
-                        /*
-                        arende.PrisForArbete = (int)Math.Round(invoice.Total - item.DomesticService.MaterialCost - item.DomesticService.OtherCosts);
-                        arende.OvrigKostnad = (int)Math.Round(itemGroup.Sum(item => item.DomesticService.OtherCosts));
-                        arende.BetaltBelopp = (int)Math.Round(invoice.Paid.GetValueOrDefault());
-                        arende.BegartBelopp = (int)Math.Round(arende.PrisForArbete * 0.5);
-                        */
-                        //arenden.Add(arende);
+                        case Domain.Entities.HouseholdServiceType.Cleaning:
+                            arende.UtfortArbete.Stadning = new RotRut.Begaran.Rut.HushallBegaranArendenUtfortArbeteStadning
+                            {
+                                AntalTimmar = rotRutCase.Hours,
+                                Materialkostnad = rotRutCase.MaterialCost,
+                            };
+                            break;
                     }
-
                 }
+
+                arenden.Add(arende);
             }
 
             begaranFil.HushallBegaran.Arenden = arenden.ToArray();
@@ -90,6 +77,4 @@ public record CreateRutFile() : IRequest<string>
             return Encoding.UTF8.GetString(ms.GetBuffer());
         }
     }
-
-    //public record Foo(Hushallsarbete Hushallsarbete, double AntalTimmar, decimal Materialkostnad, );
 }

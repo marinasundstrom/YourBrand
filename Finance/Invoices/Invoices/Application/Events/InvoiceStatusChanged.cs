@@ -120,7 +120,7 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
             }
 
             DateTime paymentDate = DateTime.Now;
-            decimal paidAmount = 0m;
+            decimal paidAmount = invoice.Total;
             decimal otherCosts = 0m;
 
             var rotRutCase =
