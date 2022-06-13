@@ -1,20 +1,20 @@
-﻿using YourBrand.Invoices.Application.Common.Interfaces;
-using YourBrand.Invoices.Domain;
-using YourBrand.Invoices.Domain.Common;
-using YourBrand.Invoices.Domain.Entities;
+﻿using YourBrand.RotRutService.Application.Common.Interfaces;
+using YourBrand.RotRutService.Domain;
+using YourBrand.RotRutService.Domain.Common;
+using YourBrand.RotRutService.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Invoices.Infrastructure.Persistence;
+namespace YourBrand.RotRutService.Infrastructure.Persistence;
 
-public class InvoicesContext : DbContext, IInvoicesContext
+public class RotRutContext : DbContext, IRotRutContext
 {
     private IDomainEventService _domainEventService;
     private ICurrentUserService _currentUserService;
     private IDateTime _dateTime;
 
-    public InvoicesContext(
-        DbContextOptions<InvoicesContext> options,
+    public RotRutContext(
+        DbContextOptions<RotRutContext> options,
         IDomainEventService domainEventService,
         ICurrentUserService currentUserService,
         IDateTime dateTime) : base(options)
@@ -28,12 +28,12 @@ public class InvoicesContext : DbContext, IInvoicesContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(InvoicesContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(RotRutContext).Assembly);
     }
 
-    public DbSet<Invoice> Invoices { get; set; } = null!;
+    public DbSet<RotRutRequest> RotRutRequests { get; set; } = null!;
 
-    public DbSet<InvoiceItem> InvoiceItems { get; set; } = null!;
+    public DbSet<RotRutCase> RotRutCases { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

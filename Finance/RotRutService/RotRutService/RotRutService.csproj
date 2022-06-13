@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PreserveCompilationContext>true</PreserveCompilationContext>
-        <RootNamespace>YourBrand.Invoices</RootNamespace>
+        <RootNamespace>YourBrand.RotRutService</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Documents' " />
@@ -19,11 +19,14 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Invoices.Contracts\Invoices.Contracts.csproj" />
+		<ProjectReference Include="..\RotRutService.Contracts\RotRutService.Contracts.csproj" />
 		<ProjectReference Include="..\..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
 		<ProjectReference Include="..\..\Payments\Payments.Client\Payments.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\RotRut\RotRut.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
 	</ItemGroup>

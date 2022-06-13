@@ -1,9 +1,9 @@
-﻿using YourBrand.Invoices.Domain.Entities;
+﻿using YourBrand.RotRutService.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace YourBrand.Invoices.Infrastructure.Persistence.Configurations;
+namespace YourBrand.RotRutService.Infrastructure.Persistence.Configurations;
 
 public class RotRutCaseConfiguration : IEntityTypeConfiguration<RotRutCase>
 {

@@ -1,8 +1,9 @@
 ﻿using System;
 
-using YourBrand.Invoices.Domain.Common;
+using YourBrand.RotRutService.Domain.Common;
+using YourBrand.RotRutService.Domain.Enums;
 
-namespace YourBrand.Invoices.Domain.Entities;
+namespace YourBrand.RotRutService.Domain.Entities;
 
 public class RotRutCase : AuditableEntity
 {

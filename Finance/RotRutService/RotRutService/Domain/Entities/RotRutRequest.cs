@@ -1,7 +1,7 @@
 ﻿
-using YourBrand.Invoices.Domain.Common;
+using YourBrand.RotRutService.Domain.Common;
 
-namespace YourBrand.Invoices.Domain.Entities;
+namespace YourBrand.RotRutService.Domain.Entities;
 
 public class RotRutRequest : AuditableEntity
 {

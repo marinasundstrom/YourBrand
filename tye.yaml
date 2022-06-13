@@ -190,6 +190,12 @@ services:
       - protocol: https
         port: 5099
 
+  - name: rotrutservice
+    project: Finance/RotRutService/RotRutService/RotRutService.csproj
+    bindings:
+      - protocol: https
+        port: 5031
+
   - name: identity
     project: IdentityService/IdentityService/IdentityService.csproj
     bindings:

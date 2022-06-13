@@ -3,6 +3,7 @@ using YourBrand.Invoices.Domain.Enums;
 
 using MediatR;
 
+/*
 using Microsoft.EntityFrameworkCore;
 using RotRut.Begaran;
 using RotRut.Begaran.Rut;
@@ -78,3 +79,5 @@ public record CreateRutFile() : IRequest<string>
         }
     }
 }
+
+*/

@@ -15,7 +15,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
     private readonly IInvoicesClient _invoicesClient;
     private readonly IDocumentsClient _documentsClient;
 
-    public InvoicesBatchConsumer(IVerificationsClient verificationsClient, 
+    public InvoicesBatchConsumer(IVerificationsClient verificationsClient,
         IInvoicesClient invoicesClient, IDocumentsClient documentsClient)
     {
         _verificationsClient = verificationsClient;
@@ -140,6 +140,16 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             }
         }
 
+        if (invoice.RotRutDeduction is not null)
+        {
+            entries.Insert(0, new CreateEntry
+            {
+                AccountNo = 1513,
+                Description = "ROT-avdrag",
+                Debit = invoice.RotRutDeduction
+            });
+        }
+
         var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
             Description = $"Skickade ut faktura #{i.Id}",
@@ -165,7 +175,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         var contentType = file.Headers
             .FirstOrDefault(x => x.Key.ToLowerInvariant() == "content-type").Value;
 
-        if(contentType is null)
+        if (contentType is null)
             return null;
 
         return contentType.FirstOrDefault();
@@ -176,17 +186,17 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         var contentDisposition = file.Headers
             .FirstOrDefault(x => x.Key.ToLowerInvariant() == "content-disposition").Value;
 
-        if(contentDisposition is null)
+        if (contentDisposition is null)
             return null;
 
         var value = contentDisposition.FirstOrDefault();
 
-         if(value is null)
+        if (value is null)
             return null;
 
         var filenamePart = value.Split(';').FirstOrDefault(x => x.Contains("filename="));
 
-        if(filenamePart is null)
+        if (filenamePart is null)
             return null;
 
         var fileName = filenamePart.Substring(filenamePart.IndexOf("=") + 1);
