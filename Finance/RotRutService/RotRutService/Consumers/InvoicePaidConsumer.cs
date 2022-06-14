@@ -15,7 +15,7 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
     private readonly IRotRutContext _context;
     private readonly IVerificationsClient _verificationsClient;
     private readonly IInvoicesClient _invoicesClient;
-    
+
     public InvoicePaidConsumer(IRotRutContext context, IVerificationsClient verificationsClient,
         IInvoicesClient invoicesClient)
     {
@@ -43,7 +43,7 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 
             var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
             var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
-            var materialCost = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
+            var materialCost = 0; // itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
 
             decimal requestedAmount = 0;
             if (domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
@@ -57,7 +57,7 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 
             DateTime paymentDate = DateTime.Now;
             decimal paidAmount = invoice.Total;
-            decimal otherCosts = 0m;
+            decimal otherCosts = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
 
             var rotRutCase =
                 new RotRutService.Domain.Entities.RotRutCase(
