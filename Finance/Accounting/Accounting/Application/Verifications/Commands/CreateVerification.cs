@@ -47,11 +47,11 @@ public record CreateVerificationCommand(string Description, int? InvoiceId, List
 
                 if(entryDto.Credit is not null)
                 {
-                    verification.AddCreditEntry(account, entryDto.Credit.GetValueOrDefault(), entryDto.Description);
+                    entry = verification.AddCreditEntry(account, entryDto.Credit.GetValueOrDefault(), entryDto.Description);
                 }
                 else
                 {
-                    verification.AddDebitEntry(account, entryDto.Debit.GetValueOrDefault(), entryDto.Description);
+                    entry = verification.AddDebitEntry(account, entryDto.Debit.GetValueOrDefault(), entryDto.Description);
                 }
 
                 entry.DomainEvents.Add(new EntryCreatedEvent(entry));
