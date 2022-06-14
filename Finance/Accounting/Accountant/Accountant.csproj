@@ -39,6 +39,9 @@
     <ProjectReference Include="..\..\Payments\Payments.Client\Payments.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

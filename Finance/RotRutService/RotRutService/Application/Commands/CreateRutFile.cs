@@ -1,24 +1,23 @@
-using YourBrand.Invoices.Domain;
-using YourBrand.Invoices.Domain.Enums;
+using YourBrand.RotRutService.Domain;
+using YourBrand.RotRutService.Domain.Enums;
 
 using MediatR;
 
-/*
 using Microsoft.EntityFrameworkCore;
 using RotRut.Begaran;
 using RotRut.Begaran.Rut;
 using RotRut;
 using System.Text;
 
-namespace YourBrand.Invoices.Application.Commands;
+namespace YourBrand.RotRutService.Application.Commands;
 
-public record CreateRutFile() : IRequest<string>
+public record CreateRutFile(string? NamnPaBegaran) : IRequest<string>
 {
     public class Handler : IRequestHandler<CreateRutFile, string>
     {
-        private readonly IInvoicesContext _context;
+        private readonly IRotRutContext _context;
 
-        public Handler(IInvoicesContext context)
+        public Handler(IRotRutContext context)
         {
             _context = context;
         }
@@ -31,7 +30,7 @@ public record CreateRutFile() : IRequest<string>
 
             BegaranFil begaranFil = new BegaranFil()
             {
-                NamnPaBegaran = "dsfsd"
+                NamnPaBegaran = request.NamnPaBegaran ?? "dsfsd"
             };
 
             begaranFil.HushallBegaran = new RotRut.Begaran.Rut.HushallBegaran();
@@ -53,11 +52,11 @@ public record CreateRutFile() : IRequest<string>
 
                 arende.UtfortArbete = new RotRut.Begaran.Rut.HushallBegaranArendenUtfortArbete();
 
-                if (rotRutCase.Kind == Domain.Entities.DomesticServiceKind.HouseholdService)
+                if (rotRutCase.Kind == DomesticServiceKind.HouseholdService)
                 {
                     switch (rotRutCase.Rut!.ServiceType)
                     {
-                        case Domain.Entities.HouseholdServiceType.Cleaning:
+                        case HouseholdServiceType.Cleaning:
                             arende.UtfortArbete.Stadning = new RotRut.Begaran.Rut.HushallBegaranArendenUtfortArbeteStadning
                             {
                                 AntalTimmar = rotRutCase.Hours,
@@ -79,5 +78,3 @@ public record CreateRutFile() : IRequest<string>
         }
     }
 }
-
-*/

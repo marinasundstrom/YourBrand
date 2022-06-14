@@ -96,16 +96,16 @@
                 <MudField Label="VAT">@Vat.ToString("c")</MudField>
             </MudItem>
 
-            <MudItem xs="12" sm="12" md="12" lg="3">
-                <MudField Label="Total">@Total.ToString("c")</MudField>
-            </MudItem>
-
             @if (invoice.RotRutDeduction is not null)
             {
                 <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudField Label="Rot/Rut">@invoice.RotRutDeduction?.ToString("c")</MudField>
+                    <MudField Label="@(invoice.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">@invoice.RotRutDeduction?.ToString("c")</MudField>
                 </MudItem>
             }
+
+            <MudItem xs="12" sm="12" md="12" lg="3">
+                <MudField Label="Total">@((Total + invoice.RotRutDeduction.GetValueOrDefault()).ToString("c"))</MudField>
+            </MudItem>
 
         </MudGrid>
     </MudPaper>

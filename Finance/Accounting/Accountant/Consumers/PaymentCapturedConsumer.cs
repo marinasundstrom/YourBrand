@@ -96,11 +96,7 @@ public class PaymentCapturedConsumer : IConsumer<PaymentCaptured>
 
         //await _transactionsClient.SetTransactionStatusAsync(payment.Id, YourBrand.Transactions.Client.TransactionStatus.Verified);
 
-        var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
-        {
-            Description = $"Betalade faktura #{invoice.Id}",
-            InvoiceId = invoice.Id,
-            Entries = new[]
+        var entries = new List<CreateEntry>
             {
                     new CreateEntry
                     {
@@ -114,7 +110,13 @@ public class PaymentCapturedConsumer : IConsumer<PaymentCaptured>
                         Description = string.Empty,
                         Credit = capturedAmount
                     }
-                }
+                };
+
+        var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+        {
+            Description = $"Betalade faktura #{invoice.Id}",
+            InvoiceId = invoice.Id,
+            Entries = entries
         }, cancellationToken);
 
         //await _verificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());

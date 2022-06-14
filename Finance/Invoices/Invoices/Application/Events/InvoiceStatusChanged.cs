@@ -28,11 +28,17 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
 
     public async Task Handle(DomainEventNotification<InvoiceStatusChanged> notification, CancellationToken cancellationToken)
     {
+        if (notification.DomainEvent.Status == InvoiceStatus.Paid)
+        {
+            await _publishEndpoint.Publish(new InvoicePaid(notification.DomainEvent.InvoiceId));
+            return;
+        }
+
         var invoice = await _context.Invoices
             .Include(i => i.Items)
             .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.InvoiceId);
 
-        if(invoice is not null) 
+        if (invoice is not null)
         {
             if (invoice.Status == InvoiceStatus.Sent)
             {
@@ -41,7 +47,9 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
                     new Contracts.Invoice(invoice.Id)
                 }));
 
-                var dueDate = TimeZoneInfo.ConvertTimeToUtc( DateTime.Now.AddDays(30), TimeZoneInfo.Local);
+                var dueDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddDays(30), TimeZoneInfo.Local);
+
+                invoice.UpdateTotals();
 
                 await _paymentsClient.CreatePaymentAsync(new CreatePayment()
                 {

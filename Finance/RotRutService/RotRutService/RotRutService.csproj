@@ -29,5 +29,20 @@
 		<ProjectReference Include="..\RotRut\RotRut.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
+		<ProjectReference Include="..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Transactions\Transactions.Client\Transactions.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Accounting\Accounting.Client\Accounting.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Invoices\Invoices.Contracts\Invoices.Contracts.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Invoices\Invoices.Client\Invoices.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
 	</ItemGroup>
 </Project>

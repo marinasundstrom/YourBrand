@@ -69,9 +69,10 @@ public class Payment : AuditableEntity, IHasDomainEvents
     {
         var capture = new Capture(date, amount, transactionId);
 
+        _captures.Add(capture);
+
         AmountCaptured = Captures.Sum(c => c.Amount);
 
-        _captures.Add(capture);
         capture.DomainEvents.Add(new PaymentCaptured(Id, capture.Id));
     }
 

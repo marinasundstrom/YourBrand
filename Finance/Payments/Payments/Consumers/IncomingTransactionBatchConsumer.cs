@@ -31,6 +31,12 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
 
     private async Task HandleTransaction(Transaction transaction, CancellationToken cancellationToken)
     {
+        if(transaction.Reference == "Skatteverket") 
+        {
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
+            return;
+        }
+
         var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Reference == transaction.Reference);
 
         if(payment is null)

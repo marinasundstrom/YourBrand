@@ -53,7 +53,7 @@ public class RotRutCase : AuditableEntity
 
     public decimal MaterialCost { get; private set; }
 
-    public decimal? ReceivedAmount { get; private set; }
+    public decimal? ReceivedAmount { get; set; }
 
     public Rot? Rot { get; set; }
 
