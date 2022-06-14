@@ -107,6 +107,20 @@
                 <MudField Label="Total">@((Total + invoice.RotRutDeduction.GetValueOrDefault()).ToString("c"))</MudField>
             </MudItem>
 
+            @if (invoice.Paid is not null)
+            {
+                <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudField Label="Paid">@invoice.Paid?.ToString("c")</MudField>
+                </MudItem>
+
+                if (invoice.Paid.GetValueOrDefault() != invoice.Total)
+                {
+                    <MudItem xs="12" sm="12" md="12" lg="3">
+                        <MudField Label="Remaining">@((invoice.Total - invoice.Paid.GetValueOrDefault()).ToString("c"))</MudField>
+                    </MudItem>
+                }
+            }
+
         </MudGrid>
     </MudPaper>
 

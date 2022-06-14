@@ -106,6 +106,10 @@ Hello, @Model.Name!"
 
 <p>Sub Total: @Model.SubTotal.ToString(""c"")</p>
 <p>VAT: @Model.Vat.ToString(""c"")</p>
+@if(Model.RotRutDeduction != null) 
+{{
+ <p>RUT/ROT: @Model.RotRutDeduction?.ToString(""c"")</p>
+}}
 <p>Total: @Model.Total.ToString(""c"")</p>"
                 };
 
