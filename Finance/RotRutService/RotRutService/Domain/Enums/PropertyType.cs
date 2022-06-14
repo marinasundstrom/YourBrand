@@ -6,7 +6,7 @@ namespace YourBrand.RotRutService.Domain.Enums;
 public enum PropertyType
 {
     [Display(Name = "Villa")]
-    HousingUnit = 1,
+    HousingUnit = 0,
 
     [Display(Name = "Bostadsrätt")]
     CooperativeFlat = 2

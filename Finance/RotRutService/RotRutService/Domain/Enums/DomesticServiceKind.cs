@@ -6,8 +6,8 @@ namespace YourBrand.RotRutService.Domain.Enums;
 public enum DomesticServiceKind
 {
     [Display(Name = "ROT")]
-    HomeRepairAndMaintenanceServiceType = 1,
+    HomeRepairAndMaintenanceServiceType = 0,
 
     [Display(Name = "RUT")]
-    HouseholdService = 2
+    HouseholdService = 1
 }

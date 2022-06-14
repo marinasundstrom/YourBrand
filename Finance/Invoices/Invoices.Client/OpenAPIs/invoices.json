@@ -27,26 +27,6 @@
         }
       }
     },
-    "/invoices/rut": {
-      "get": {
-        "tags": [
-          "Invoices"
-        ],
-        "operationId": "Invoices_CreateRutFile",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
     "/Invoices/{invoiceId}": {
       "get": {
         "tags": [

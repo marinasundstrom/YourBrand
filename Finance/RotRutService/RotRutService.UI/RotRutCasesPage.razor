@@ -15,7 +15,7 @@
             <MudSelectItem T="DomesticServiceKind?" Value="@(null)">All kinds</MudSelectItem>
             @foreach (var type in Enum.GetValues<DomesticServiceKind>())
             {
-                <MudSelectItem T="DomesticServiceKind?" Value="@type">@Enum.GetName(typeof(DomesticServiceKind), type)</MudSelectItem>
+                <MudSelectItem T="DomesticServiceKind?" Value="@type">@((int)type == 0 ? "ROT" : "RUT")</MudSelectItem>
             }
         </MudSelect>
         <MudSpacer />
@@ -29,6 +29,7 @@
 
     <HeaderContent>
         <MudTh>Kind</MudTh>
+        <MudTh>Service</MudTh>
         <MudTh>Status</MudTh>
         <MudTh>Payment Date</MudTh>
         <MudTh>Labor Cost</MudTh>
@@ -42,13 +43,14 @@
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate Context="c">
-        <MudTd DataLabel="Kind">@c.Kind</MudTd>
+        <MudTd DataLabel="Kind">@((int)c.Kind == 0 ? "ROT" : "RUT")</MudTd>
+        <MudTd DataLabel="Service">@(c.Rot is not null ? c.Rot?.ServiceType.ToString() : c.Rut?.ServiceType.ToString())</MudTd>
         <MudTd DataLabel="Status">@c.Status</MudTd>
         <MudTd DataLabel="Payment Date">@c.PaymentDate.ToString("yyyy-MM-dd")</MudTd>
         <MudTd DataLabel="Labor Cost">@c.LaborCost.ToString("c")</MudTd>
         <MudTd DataLabel="Paid Amount">@c.PaidAmount.ToString("c")</MudTd>
         <MudTd DataLabel="Requested Amount">@c.RequestedAmount.ToString("c")</MudTd>
-        <MudTd DataLabel="Invoice Id">@c.InvoiceId</MudTd>
+        <MudTd DataLabel="Invoice Id"><a href="/invoices/@c.InvoiceId">@c.InvoiceId</a></MudTd>
         <MudTd DataLabel="Other Costs">@c.OtherCosts.ToString("c")</MudTd>
         <MudTd DataLabel="Hours">@TimeSpan.FromHours(c.Hours)</MudTd>
         <MudTd DataLabel="Material Cost">@c.MaterialCost.ToString("c")</MudTd>
