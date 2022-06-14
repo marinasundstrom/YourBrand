@@ -12,6 +12,7 @@ using YourBrand.Portal.Theming;
 using Blazored.LocalStorage;
 using YourBrand.Documents;
 using YourBrand.Messenger;
+using YourBrand.RotRutService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -40,7 +41,8 @@ builder.Services
     .AddPayments()
     .AddTransactions()
     .AddDocuments()
-    .AddMessenger();
+    .AddMessenger()
+    .AddRotAndRut();
 
 var app = builder.Build();
 

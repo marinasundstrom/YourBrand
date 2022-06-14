@@ -1,33 +1,21 @@
 using YourBrand.RotRutService.Domain.Entities;
+using YourBrand.RotRutService.Domain.Enums;
 
 namespace YourBrand.RotRutService.Application;
 
 public static class Mappings 
 {
-    /*
-    public static InvoiceDto ToDto(this Invoice invoice) 
+    public static RotRutCaseDto ToDto(this RotRutCase invoice) 
     {
-        return new InvoiceDto(invoice.Id, invoice.Date, invoice.Type, invoice.Status, invoice.DueDate, invoice.Currency, invoice.Reference, invoice.Note, invoice.Items.Select(i => i.ToDto()),   invoice.SubTotal, invoice.Vat, invoice.RutRotDeduction, invoice.Total, invoice.Paid, invoice.DomesticService?.ToDto());
+        return new RotRutCaseDto((DomesticServiceKind)invoice.Kind, invoice.Status, invoice.Buyer,
+            invoice.PaymentDate, invoice.LaborCost, invoice.PaidAmount,
+            invoice.RequestedAmount, invoice.InvoiceId, invoice.OtherCosts,
+            invoice.Hours, invoice.MaterialCost, invoice.ReceivedAmount);
     }
-
-    public static InvoiceDomesticServiceDto ToDto(this Domain.Entities.InvoiceDomesticService domesticService) 
-    {
-        return new InvoiceDomesticServiceDto(domesticService.Kind, domesticService.Buyer, domesticService.Description, domesticService.PropertyDetails?.ToDto());
-    }
-
-    public static InvoiceItemDto ToDto(this InvoiceItem item) 
-    {
-        return new InvoiceItemDto(item.Id, item.ProductType, item.Description, item.UnitPrice, item.Unit, item.VatRate, item.Quantity, item.LineTotal, item.IsTaxDeductableService, item.DomesticService?.ToDto());
-    }
-
-    public static InvoiceItemDomesticServiceDto ToDto(this Domain.Entities.InvoiceItemDomesticService domesticService) 
-    {
-        return new InvoiceItemDomesticServiceDto(domesticService.Kind, domesticService.HomeRepairAndMaintenanceServiceType, domesticService.HouseholdServiceType);
-    }
-
-    public static PropertyDetailsDto ToDto(this Domain.Entities.PropertyDetails propertyDetails) 
-    {
-        return new PropertyDetailsDto(propertyDetails.Type, propertyDetails.PropertyDesignation, propertyDetails.ApartmentNo, propertyDetails.OrganizationNo);
-    }
-    */
 }
+
+public record RotRutCaseDto(
+    DomesticServiceKind Kind, RotRutCaseStatus Status, string Buyer, DateTime PaymentDate,
+    decimal LaborCost, decimal PaidAmount, decimal RequestedAmount,
+    int InvoiceId, decimal OtherCosts, double Hours, decimal MaterialCost,
+    decimal? ReceivedAmount);

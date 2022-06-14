@@ -21,6 +21,7 @@ using YourBrand.Transactions.Client;
 using YourBrand.Accounting.Client;
 using YourBrand.Invoices.Client;
 using YourBrand.Accountant.Consumers;
+using YourBrand.RotRutService.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

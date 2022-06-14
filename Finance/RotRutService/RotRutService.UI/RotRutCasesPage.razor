@@ -1,0 +1,103 @@
+﻿@inject ICasesClient CasesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@page "/rotrut"
+
+<PageTitle>ROT &amp; RUT</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">ROT &amp; RUT</MudText>
+
+<MudTable T="RotRutCaseDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
+          Loading="@loading" LoadingProgressColor="Color.Info">
+    <ToolBarContent>
+        <MudSelect T="DomesticServiceKind?" Label="Kind" Value="kind" ValueChanged="OnSelectedKindChanged" Class="mt-0">
+            <MudSelectItem T="DomesticServiceKind?" Value="@(null)">All kinds</MudSelectItem>
+            @foreach (var type in Enum.GetValues<DomesticServiceKind>())
+            {
+                <MudSelectItem T="DomesticServiceKind?" Value="@type">@Enum.GetName(typeof(DomesticServiceKind), type)</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSpacer />
+        <MudSelect T="RotRutCaseStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+            @foreach (var status in Enum.GetValues<RotRutCaseStatus>())
+            {
+                <MudSelectItem T="RotRutCaseStatus?" Value="@status">@Enum.GetName(typeof(RotRutCaseStatus), status)</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>Kind</MudTh>
+        <MudTh>Status</MudTh>
+        <MudTh>Payment Date</MudTh>
+        <MudTh>Labor Cost</MudTh>
+        <MudTh>Paid Amount</MudTh>
+        <MudTh>Requested Amount</MudTh>
+        <MudTh>Invoice Id</MudTh>
+        <MudTh>Other Costs</MudTh>
+        <MudTh>Hours</MudTh>
+        <MudTh>Material Cost</MudTh>
+        <MudTh>Received Amount</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="c">
+        <MudTd DataLabel="Kind">@c.Kind</MudTd>
+        <MudTd DataLabel="Status">@c.Status</MudTd>
+        <MudTd DataLabel="Payment Date">@c.PaymentDate.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="Labor Cost">@c.LaborCost.ToString("c")</MudTd>
+        <MudTd DataLabel="Paid Amount">@c.PaidAmount.ToString("c")</MudTd>
+        <MudTd DataLabel="Requested Amount">@c.RequestedAmount.ToString("c")</MudTd>
+        <MudTd DataLabel="Invoice Id">@c.InvoiceId</MudTd>
+        <MudTd DataLabel="Other Costs">@c.OtherCosts.ToString("c")</MudTd>
+        <MudTd DataLabel="Hours">@TimeSpan.FromHours(c.Hours)</MudTd>
+        <MudTd DataLabel="Material Cost">@c.MaterialCost.ToString("c")</MudTd>
+        <MudTd DataLabel="Received Amount">@c.ReceivedAmount?.ToString("c")</MudTd>
+        <MudTd>
+
+        </MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    MudTable<RotRutCaseDto> table;
+    bool loading = false;
+    DomesticServiceKind? kind;
+    RotRutCaseStatus? Status;
+    IEnumerable<RotRutCaseStatus?> selectedStatuses = new List<RotRutCaseStatus?>();
+
+    private async Task<TableData<RotRutCaseDto>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await CasesClient.GetCasesAsync(state.Page, state.PageSize, kind, selectedStatuses.Select(s => (RotRutCaseStatus)s!));
+
+            return new TableData<RotRutCaseDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task OnSelectedKindChanged(DomesticServiceKind? selectedKind)
+    {
+        this.kind = selectedKind;
+        await table.ReloadServerData();
+    }
+
+    private async Task OnSelectedValuesChanged(IEnumerable<RotRutCaseStatus?> selectedValues)
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+}

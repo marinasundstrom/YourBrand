@@ -5,17 +5,17 @@
     "title": "RotRutService API",
     "version": "0.1"
   },
-  "host": "localhost:5100",
+  "host": "localhost:5031",
   "schemes": [
     "https"
-  ],
-  "produces": [
-    "text/plain"
   ],
   "paths": {
     "/": {
       "get": {
         "operationId": "Get",
+        "produces": [
+          "text/plain"
+        ],
         "responses": {
           "200": {
             "x-nullable": false,
@@ -26,6 +26,299 @@
           }
         }
       }
+    },
+    "/BeslutFile": {
+      "post": {
+        "tags": [
+          "RotRutService"
+        ],
+        "operationId": "RotRutService_BeslutFile",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "BeslutFil",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/BeslutFil"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/RutFile": {
+      "get": {
+        "tags": [
+          "RotRutService"
+        ],
+        "operationId": "RotRutService_CreateRutFile",
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "name",
+            "in": "query",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/Cases": {
+      "get": {
+        "tags": [
+          "Cases"
+        ],
+        "operationId": "Cases_GetCases",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "kind",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/DomesticServiceKind"
+            },
+            "x-nullable": true,
+            "enum": [
+              "HomeRepairAndMaintenanceServiceType",
+              "HouseholdService"
+            ]
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/RotRutCaseStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfRotRutCaseDto"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BeslutFil": {
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "utforare": {
+          "type": "string"
+        },
+        "beslut": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Beslut"
+          }
+        }
+      }
+    },
+    "Beslut": {
+      "type": "object",
+      "properties": {
+        "namn": {
+          "type": "string"
+        },
+        "referensnummer": {
+          "type": "string"
+        },
+        "arenden": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Arenden"
+          }
+        }
+      }
+    },
+    "Arenden": {
+      "type": "object",
+      "required": [
+        "godkantBelopp"
+      ],
+      "properties": {
+        "personnummer": {
+          "type": "string"
+        },
+        "fakturanummer": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "godkantBelopp": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "ItemsResultOfRotRutCaseDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RotRutCaseDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "RotRutCaseDto": {
+      "type": "object",
+      "required": [
+        "kind",
+        "status",
+        "buyer",
+        "paymentDate",
+        "laborCost",
+        "paidAmount",
+        "requestedAmount",
+        "invoiceId",
+        "otherCosts",
+        "hours",
+        "materialCost"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/DomesticServiceKind"
+        },
+        "status": {
+          "$ref": "#/definitions/RotRutCaseStatus"
+        },
+        "buyer": {
+          "type": "string"
+        },
+        "paymentDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "laborCost": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "paidAmount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "requestedAmount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "otherCosts": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "hours": {
+          "type": "number",
+          "format": "double"
+        },
+        "materialCost": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "receivedAmount": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "DomesticServiceKind": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "HomeRepairAndMaintenanceServiceType",
+        "HouseholdService"
+      ],
+      "enum": [
+        "HomeRepairAndMaintenanceServiceType",
+        "HouseholdService"
+      ]
+    },
+    "RotRutCaseStatus": {
+      "type": "integer",
+      "description": "",
+      "x-enumNames": [
+        "Created",
+        "InvoicePaid",
+        "RequestSent",
+        "RequestConfirmed"
+      ],
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ]
     }
   }
 }

@@ -1,7 +1,7 @@
 ﻿@inject ISnackbar Snackbar
 
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(YourBrand.TimeReport.Projects.Activities.ActivityDialog).Assembly, typeof(YourBrand.Showroom.Consultants.ConsultantsPage).Assembly, typeof(YourBrand.Accounting.ServiceExtensions).Assembly,typeof(YourBrand.Invoices.ServiceExtensions).Assembly, typeof(YourBrand.Transactions.ServiceExtensions).Assembly, typeof(YourBrand.Documents.ServiceExtensions).Assembly, typeof(YourBrand.Messenger.ServiceExtensions).Assembly }">
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(YourBrand.TimeReport.Projects.Activities.ActivityDialog).Assembly, typeof(YourBrand.Showroom.Consultants.ConsultantsPage).Assembly, typeof(YourBrand.Accounting.ServiceExtensions).Assembly,typeof(YourBrand.Invoices.ServiceExtensions).Assembly, typeof(YourBrand.Transactions.ServiceExtensions).Assembly, typeof(YourBrand.Documents.ServiceExtensions).Assembly, typeof(YourBrand.Messenger.ServiceExtensions).Assembly, typeof(YourBrand.RotRutService.ServiceExtensions).Assembly }">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>

@@ -8,7 +8,7 @@ namespace YourBrand.RotRutService;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddInvoicing(this IServiceCollection services)
+    public static IServiceCollection AddRotAndRut(this IServiceCollection services)
     {
         services.AddClients();
         

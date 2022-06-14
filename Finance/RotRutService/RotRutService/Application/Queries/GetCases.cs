@@ -8,13 +8,13 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.RotRutService.Domain.Entities;
 
 namespace YourBrand.RotRutService.Application.Queries;
 
-/*
-public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, InvoiceStatus[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
+public record GetCases(int Page = 0, int PageSize = 10, DomesticServiceKind? Kind = null, RotRutCaseStatus[]? Status = null) : IRequest<ItemsResult<RotRutCaseDto>>
 {
-    public class Handler : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
+    public class Handler : IRequestHandler<GetCases, ItemsResult<RotRutCaseDto>>
     {
         private readonly IRotRutContext _context;
 
@@ -23,7 +23,7 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
             _context = context;
         }
 
-        public async Task<ItemsResult<InvoiceDto>> Handle(GetInvoices request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<RotRutCaseDto>> Handle(GetCases request, CancellationToken cancellationToken)
         {
             if(request.PageSize < 0) 
             {
@@ -35,21 +35,15 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.RotRutService
+            var query = _context.RotRutCases
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
 
-            if(request.Reference is not null) 
+            if(request.Kind is not null) 
             {
-                query = query.Where(i => i.Reference!.ToLower().Contains(request.Reference.ToLower()));
-            }
-
-            if(request.Types?.Any() ?? false) 
-            {
-                var types = request.Types.Select(x => (int)x);
-                query = query.Where(i => types.Any(s => s == (int)i.Type));
+                query = query.Where(i => i.Kind == request.Kind);
             }
 
             if(request.Status?.Any() ?? false) 
@@ -61,16 +55,14 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
             int totalItems = await query.CountAsync(cancellationToken);
 
             query = query         
-                .Include(i => i.Items)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);
 
             var items = await query.ToArrayAsync(cancellationToken);
 
-            return new ItemsResult<InvoiceDto>(
-                items.Select(invoice => invoice.ToDto()),
+            return new ItemsResult<RotRutCaseDto>(
+                items.Select(rotRutCase => rotRutCase.ToDto()),
                 totalItems);
         }
     }
 }
-*/
