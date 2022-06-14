@@ -49,7 +49,7 @@
                 <div class="d-flex">
                     <MudField Label="Status">@Status</MudField>
                     <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
-                    OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+                                   OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
                 </div>
             </MudItem>
 
@@ -107,16 +107,36 @@
                 <MudField Label="Total">@((Total + invoice.RotRutDeduction.GetValueOrDefault()).ToString("c"))</MudField>
             </MudItem>
 
+            @if (payment is not null)
+            {
+                <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudField Label="Payment Status">@payment.Status</MudField>
+                    <MudField Label="Reference" Class="mt-4">@payment.Reference</MudField>
+                </MudItem>
+            }
+
             @if (invoice.Paid is not null)
             {
                 <MudItem xs="12" sm="12" md="12" lg="3">
                     <MudField Label="Paid">@invoice.Paid?.ToString("c")</MudField>
                 </MudItem>
 
-                if (invoice.Paid.GetValueOrDefault() != invoice.Total)
+                if (payment?.AmountCaptured.GetValueOrDefault() != invoice.Total)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="3">
-                        <MudField Label="Remaining">@((invoice.Total - invoice.Paid.GetValueOrDefault()).ToString("c"))</MudField>
+                        @{
+                            bool remaining = false;
+                            var diff = (invoice.Total - payment!.AmountCaptured.GetValueOrDefault());
+                            if(diff < 0)
+                            {
+                                diff = diff * - 1;
+                            }
+                            else
+                            {
+                                remaining = true;
+                            }
+                        }
+                        <MudField Label="@(remaining ? "Remaining" : "Repaid")">@(diff.ToString("c"))</MudField>
                     </MudItem>
                 }
             }
@@ -263,14 +283,24 @@
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
 
-        var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, Id);
-        var payment = paymentsResults.Items.FirstOrDefault();
+        await Foo();
+    }
 
-        if (payment is not null)
+    PaymentDto? payment;
+
+    public async Task Foo()
+    {
+        var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, Id);
+        payment = paymentsResults.Items.FirstOrDefault();
+
+        if(payment is null)
         {
-            string paymentId = payment.Id;
-            await InitPaymentHub(paymentId);
+            return;
         }
+
+        StateHasChanged();
+
+        await InitPaymentHub(payment.Id);
     }
 
     async Task ActivateRotRut()
@@ -292,12 +322,17 @@
 
     async Task InitPaymentHub(string paymentId)
     {
+        if(hubConnection is not null)
+        {
+            return;
+        }
+
         try
         {
             hubConnection = new HubConnectionBuilder()
-            .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments?paymentId={paymentId}")
-            .WithAutomaticReconnect()
-            .Build();
+                .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments?paymentId={paymentId}")
+                .WithAutomaticReconnect()
+                .Build();
 
             hubConnection.On<string, PaymentStatus>("PaymentStatusUpdated", PaymentStatusUpdated);
 
@@ -334,10 +369,11 @@
         }
     }
 
-    Task PaymentStatusUpdated(string id, PaymentStatus status)
+    async Task PaymentStatusUpdated(string id, PaymentStatus status)
     {
         Console.WriteLine($"Payment status updated: {status}");
-        return Task.CompletedTask;
+
+        await Foo();
     }
 
     private void Set(InvoiceDto invoice)
@@ -412,7 +448,7 @@
 
         Status = (InvoiceStatus)result.Data;
 
-        await table.ReloadServerData();
+        await Foo();
     }
 
     private async Task OnSelectedValuesChanged(IEnumerable<TransactionStatus?> selectedValues)

@@ -14,7 +14,7 @@ public class PaymentsHub : Hub<IPaymentsHubClient>
         {
             if (httpContext.Request.Query.TryGetValue("paymentId", out var paymentId))
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, $"paymentId-{paymentId}");
+                await Groups.AddToGroupAsync(Context.ConnectionId, $"payment-{paymentId}");
             }
         }
     }

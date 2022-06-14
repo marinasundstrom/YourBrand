@@ -339,6 +339,10 @@
         },
         "message": {
           "type": "string"
+        },
+        "amountCaptured": {
+          "type": "number",
+          "format": "decimal"
         }
       }
     },

@@ -37,7 +37,9 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
             return;
         }
 
-        var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Reference == transaction.Reference);
+        var payment = await _context.Payments
+            .Include(p => p.Captures)
+            .FirstOrDefaultAsync(p => p.Reference == transaction.Reference);
 
         if(payment is null)
         {
