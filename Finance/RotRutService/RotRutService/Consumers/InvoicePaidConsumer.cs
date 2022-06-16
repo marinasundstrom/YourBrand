@@ -37,37 +37,41 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 
         if (domesticServices is not null)
         {
-            var itemsWithoutHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Good);
-            var itemsWithHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
-            var itemsWithHouseholdServices2 = invoice.Items.Where(x => x.ProductType == ProductType.Good && x.DomesticService is not null);
+            var itemsWithoutService = invoice.Items.Where(x => x.ProductType == ProductType.Good && !x.IsTaxDeductibleService);
+            var services = invoice.Items.Where(x => x.ProductType == ProductType.Service && x.IsTaxDeductibleService);
+            var goodsForService = invoice.Items.Where(x => x.ProductType == ProductType.Good && x.IsTaxDeductibleService);
 
-            var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
-            var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal.AddVat(x.VatRate));
-            var materialCost = itemsWithHouseholdServices2.Sum(x => x.LineTotal.AddVat(x.VatRate));
+            var hours = services.Sum(x => x.Quantity);
+            var laborCost = services.Sum(x => x.LineTotal.AddVat(x.VatRate));
+            var materialCost = goodsForService.Sum(x => x.LineTotal.AddVat(x.VatRate));
 
             decimal maxDeductibleAmount = 0;
 
-            if(domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
+            switch (domesticServices.Kind)
             {
-                maxDeductibleAmount = laborCost.GetRot();
-            }
-            else if(domesticServices.Kind == DomesticServiceKind.HouseholdService)
-            {
-                maxDeductibleAmount = laborCost.GetRut();
+                case DomesticServiceKind.HomeRepairAndMaintenanceServiceType:
+                    maxDeductibleAmount = -laborCost.GetRot();
+                    break;
+
+                case DomesticServiceKind.HouseholdService:
+                    maxDeductibleAmount = -laborCost.GetRut();
+                    break;
             }
 
             decimal requestedAmount = domesticServices.RequestedAmount;
 
-            DateTime paymentDate = DateTime.Now;
+            DateTime paymentDate = DateTime.Now; // TODO: Add payment date to invoice
             decimal paidAmount = invoice.Total;
-            decimal otherCosts = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
+            decimal otherCosts = itemsWithoutService.Sum(x => x.LineTotal);
 
-            if (requestedAmount <= 0)
+            Console.WriteLine(requestedAmount);
+
+            if (requestedAmount >= 0)
             {
                 throw new Exception("No deductible");
             }
 
-            if (requestedAmount > maxDeductibleAmount)
+            if (requestedAmount < maxDeductibleAmount)
             {
                 throw new Exception("Exceeds maximum deductible amount");
             }
@@ -80,7 +84,7 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 
             if (domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
             {
-                var first = itemsWithHouseholdServices.First();
+                var first = services.First();
 
                 rotRutCase.Rot = new Domain.Entities.Rot() {
                     ServiceType = (Domain.Enums.HomeRepairAndMaintenanceServiceType?)first.DomesticService!.HomeRepairAndMaintenanceServiceType,
@@ -91,7 +95,7 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
             }
             else if (domesticServices.Kind == DomesticServiceKind.HouseholdService)
             {
-                var first = itemsWithHouseholdServices.First();
+                var first = services.First();
 
                 rotRutCase.Rut = new Domain.Entities.Rut() {
                     ServiceType = (Domain.Enums.HouseholdServiceType?)first.DomesticService!.HouseholdServiceType
