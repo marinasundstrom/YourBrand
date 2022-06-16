@@ -6,12 +6,17 @@ namespace YourBrand.Invoices.Domain.Entities;
 
 public class InvoiceItem 
 {
+    private InvoiceItem()
+    {
+
+    }
+
     public InvoiceItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
     {
         ProductType = productType;
         Description = description;
         Unit = unit;
-        UpdateUnitPrice(unitPrice, vatRate);
+        UpdateVatRate(unitPrice, vatRate);
         UpdateQuantity(quantity);
     }
 
@@ -25,6 +30,14 @@ public class InvoiceItem
 
     public ProductType ProductType  { get; private set; }
 
+    public void UpdateProductType(ProductType productType)
+    {
+        if (productType != ProductType)
+        {
+            ProductType = productType;
+        }
+    }
+
     public string Description { get; private set; } = null!;
 
     public void UpdateDescription(string description) 
@@ -32,7 +45,15 @@ public class InvoiceItem
         Description = description;
     }
 
-    public string Unit { get; set; }
+    public string Unit { get; private set; } = null!;
+
+    public void UpdateUnit(string unit)
+    {
+        if (unit != Unit)
+        {
+            Unit = unit;
+        }
+    }
 
     public double Quantity { get; private set; }
 
@@ -47,9 +68,17 @@ public class InvoiceItem
     
     public decimal UnitPrice { get; private set; }
 
+    public void UpdateUnitPrice(decimal unitPrice)
+    {
+        if (unitPrice != UnitPrice)
+        {
+            UnitPrice = unitPrice;
+        }
+    }
+
     public double VatRate { get; private set; }
 
-    public void UpdateUnitPrice(decimal unitPrice, double vatRate) 
+    public void UpdateVatRate(decimal unitPrice, double vatRate) 
     {
         UnitPrice = unitPrice;
         VatRate = vatRate;
@@ -59,19 +88,9 @@ public class InvoiceItem
         Invoice?.UpdateTotals();
     }
 
-    public decimal LineTotal { get; set; }
+    public decimal LineTotal { get; private set; }
 
-    public decimal Vat()
-    {
-         return LineTotal - SubTotal();
-    }
-
-    public decimal SubTotal()
-    {
-        return LineTotal / (1m + (decimal)VatRate);
-    }
-    
-    public bool IsTaxDeductableService { get; set; }
+    public bool IsTaxDeductibleService { get; set; }
 
     public InvoiceItemDomesticService? DomesticService { get; set; }
 }

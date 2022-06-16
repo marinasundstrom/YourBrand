@@ -2,7 +2,7 @@
 @page "/invoices/{Id:int}"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
-@using YourBrand.Accounting.Client.Invoicing
+@using YourBrand.Invoices.Invoicing
 @using YourBrand.Payments.Client
 @using YourBrand.Transactions.Client
 @implements IAsyncDisposable
@@ -12,198 +12,200 @@
 @inject IPaymentsClient PaymentsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@using YourBrand.Invoices.Client
 
 @if (invoice is not null)
 {
-    <PageTitle>Invoice #@Id</PageTitle>
+        <PageTitle>Invoice #@Id</PageTitle>
 
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
+        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
 
-    <MudPaper Elevation="1" Class="pa-4">
+        <MudPaper Elevation="1" Class="pa-4">
 
-        <div class="mb-4">
-            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">
-                Download
-            </MudButton>
+            <div class="mb-4">
+                <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">
+                    Download
+                </MudButton>
 
             @if (invoice.Status == InvoiceStatus.Draft)
             {
-                <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">Delete
-                </MudButton>
+                        <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">
+                            Delete
+                        </MudButton>
             }
-        </div>
+            </div>
 
-        <MudGrid Class="mb-4">
-            <MudItem xs="12" sm="12" md="6" lg="3">
-                @if (Status >= InvoiceStatus.Sent)
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="12" md="6" lg="3">
+                @if (Model.Status >= InvoiceStatus.Sent)
                 {
-                    <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
+                            <MudField Label="Date">@Model.Date?.ToString("yyyy-MM-dd")</MudField>
+                            <MudField Label="Date">@Model.Date?.ToString("yyyy-MM-dd")</MudField>
                 }
                 else
                 {
-                    <MudDatePicker Label="Date" Date="Date" DateChanged="OnDateChanged" For="() => Date"></MudDatePicker>
+                            <MudDatePicker Label="Date" Date="Model.Date" DateChanged="OnDateChanged" For="() => Model.Date"></MudDatePicker>
                 }
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="6" lg="3">
-                <div class="d-flex">
-                    <MudField Label="Status">@Status</MudField>
-                    <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
-                                   OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
-                </div>
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="6" lg="3">
-                @if (Status >= InvoiceStatus.Sent)
-                {
-                    <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
-                }
-                else
-                {
-                    <MudDatePicker Label="Due Date" Date="@DueDate" DateChanged="OnDueDateChanged" For="() => DueDate">
-                    </MudDatePicker>
-                }
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="12">
-                @if (Status >= InvoiceStatus.Sent)
-                {
-                    <MudField Label="Reference">@Reference</MudField>
-                }
-                else
-                {
-                    <MudTextField Label="Reference" Text="@Reference" TextChanged="OnReferenceChanged" For="() => Reference">
-                    </MudTextField>
-                }
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="12">
-                @if (Status >= InvoiceStatus.Sent)
-                {
-                    <MudField Label="Note">@Note</MudField>
-                }
-                else
-                {
-                    <MudTextField Label="Note" Text="@Note" TextChanged="OnNoteChanged" For="() => Note"></MudTextField>
-                }
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="12" lg="3">
-                <MudField Label="Sub Total">@SubTotal.ToString("c")</MudField>
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="12" lg="3">
-                <MudField Label="VAT">@Vat.ToString("c")</MudField>
-            </MudItem>
-
-            @if (invoice.RotRutDeduction is not null)
-            {
-                <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudField Label="@(invoice.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">@invoice.RotRutDeduction?.ToString("c")</MudField>
                 </MudItem>
-            }
 
-            <MudItem xs="12" sm="12" md="12" lg="3">
-                <MudField Label="Total">@((Total + invoice.RotRutDeduction.GetValueOrDefault()).ToString("c"))</MudField>
-            </MudItem>
+                <MudItem xs="12" sm="12" md="6" lg="3">
+                    <div class="d-flex">
+                        <MudField Label="Status">@Model.Status</MudField>
+                        <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
+                                   OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+                    </div>
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="6" lg="3">
+                @if (Model.Status >= InvoiceStatus.Sent)
+                {
+                            <MudField Label="Due Date">@Model.DueDate?.ToString("yyyy-MM-dd")</MudField>
+                }
+                else
+                {
+                            <MudDatePicker Label="Due Date" Date="@Model.DueDate" DateChanged="OnDueDateChanged" For="() => Model.DueDate">
+                            </MudDatePicker>
+                }
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="12">
+                @if (Model.Status >= InvoiceStatus.Sent)
+                {
+                            <MudField Label="Reference">@Model.Reference</MudField>
+                }
+                else
+                {
+                            <MudTextField Label="Reference" Text="@Model.Reference" TextChanged="OnReferenceChanged" For="() =>Model.Reference">
+                            </MudTextField>
+                }
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="12">
+                @if (Model.Status >= InvoiceStatus.Sent)
+                {
+                            <MudField Label="Note">@Model.Note</MudField>
+                }
+                else
+                {
+                            <MudTextField Label="Note" Text="@Model.Note" TextChanged="OnNoteChanged" For="() => Model.Note"></MudTextField>
+                }
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudField Label="Total">@Model.Total.ToString("c")</MudField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="12" lg="3">
+                        <MudField Label="Sub Total">@Model.SubTotal.ToString("c")</MudField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="12" lg="3">
+                        <MudField Label="VAT">@Model.Vat.ToString("c")</MudField>
+                    </MudItem>
+
+            @if (Model.DomesticService?.RequestedAmount is not null)
+            {
+                        <MudItem xs="12" sm="12" md="12" lg="3">
+                            <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">@invoice.DomesticService?.RequestedAmount.ToString("c")</MudField>
+                        </MudItem>
+            }
 
             @if (payment is not null)
             {
-                <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudField Label="Payment Status">@payment.Status</MudField>
-                    <MudField Label="Reference" Class="mt-4">@payment.Reference</MudField>
-                </MudItem>
+                        <MudItem xs="12" sm="12" md="12" lg="3">
+                            <MudField Label="Payment Status">@payment.Status</MudField>
+                            <MudField Label="Reference" Class="mt-4">@payment.Reference</MudField>
+                        </MudItem>
             }
 
-            @if (invoice.Paid is not null)
+            @if (Model.Paid is not null)
             {
-                <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudField Label="Paid">@invoice.Paid?.ToString("c")</MudField>
-                </MudItem>
+                        <MudItem xs="12" sm="12" md="12" lg="3">
+                            <MudField Label="Paid">@invoice.Paid?.ToString("c")</MudField>
+                        </MudItem>
 
                 if (payment?.AmountCaptured.GetValueOrDefault() != invoice.Total)
                 {
-                    <MudItem xs="12" sm="12" md="12" lg="3">
+                                <MudItem xs="12" sm="12" md="12" lg="3">
                         @{
                             bool remaining = false;
                             var diff = (invoice.Total - payment!.AmountCaptured.GetValueOrDefault());
-                            if(diff < 0)
+                            if (diff < 0)
                             {
-                                diff = diff * - 1;
+                                diff = diff * -1;
                             }
                             else
                             {
                                 remaining = true;
                             }
                         }
-                        <MudField Label="@(remaining ? "Remaining" : "Repaid")">@(diff.ToString("c"))</MudField>
-                    </MudItem>
+                                    <MudField Label="@(remaining ? "Remaining" : "Repaid")">@(diff.ToString("c"))</MudField>
+                                    </MudItem>
                 }
             }
 
-        </MudGrid>
-    </MudPaper>
+            </MudGrid>
+        </MudPaper>
 
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
+        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
 
-    @if (Status == InvoiceStatus.Draft)
+    @if (Model.Status == InvoiceStatus.Draft)
     {
-        <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
+                <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
     }
 
-    <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="1"
-    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
-        <HeaderContent>
-            <MudTh>Description</MudTh>
-            <MudTh>Product Type</MudTh>
-            <MudTh>Unit Price</MudTh>
-            <MudTh>Quantity</MudTh>
-            <MudTh>Unit</MudTh>
-            <MudTh>VAT Rate</MudTh>
-            <MudTh>VAT</MudTh>
-            <MudTh>Total</MudTh>
-            @if (Status == InvoiceStatus.Draft)
+        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Model.Items" Hover="true" Elevation="1"
+              Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateInvoiceItem(e.Item)">
+            <HeaderContent>
+                <MudTh>Description</MudTh>
+                <MudTh>Product Type</MudTh>
+                <MudTh>Unit Price (excl. VAT)</MudTh>
+                <MudTh>Quantity</MudTh>
+                <MudTh>Unit</MudTh>
+                <MudTh>VAT</MudTh>
+                <MudTh>Total (excl. VAT)</MudTh>
+            @if (Model.Status == InvoiceStatus.Draft)
             {
-                <MudTh></MudTh>
+                        <MudTh></MudTh>
             }
-        </HeaderContent>
-        <RowTemplate Context="invoiceItem">
-            <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
-            <MudTd DataLabel="Product Type">@invoiceItem.ProductType</MudTd>
-            <MudTd DataLabel="Unit Price">@invoiceItem.UnitPrice</MudTd>
-            <MudTd DataLabel="Quantity">@invoiceItem.Quantity</MudTd>
-            <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
-            <MudTd DataLabel="VAT Rate">@(invoiceItem.VatRate * 100)%</MudTd>
-            <MudTd DataLabel="VAT">@* *@</MudTd>
-            <MudTd DataLabel="Line Total">@invoiceItem.LineTotal.ToString("c")</MudTd>
-            @if (Status == InvoiceStatus.Draft)
+            </HeaderContent>
+            <RowTemplate Context="invoiceItem">
+                <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
+                <MudTd DataLabel="Product Type">@invoiceItem.ProductType</MudTd>
+                <MudTd DataLabel="Unit Price (excl. VAT)">@invoiceItem.UnitPrice</MudTd>
+                <MudTd DataLabel="Quantity">@invoiceItem.Quantity</MudTd>
+                <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
+                <MudTd DataLabel="VAT">@(invoiceItem.VatRate * 100)%</MudTd>
+                <MudTd DataLabel="Line Total (excl. VAT)">@invoiceItem.LineTotal.ToString("c")</MudTd>
+            @if (Model.Status == InvoiceStatus.Draft)
             {
-                <MudTd>
-                    <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async () => await DeleteItem(invoiceItem)" />
-                </MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async () => await DeleteItem(invoiceItem)" />
+                        </MudTd>
             }
-        </RowTemplate>
-        <LoadingContent>
-            <MudText>Loading...</MudText>
-        </LoadingContent>
-    </MudTable>
+            </RowTemplate>
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
+        </MudTable>
 
     @if (invoice.DomesticService is null)
-    { 
-        @if (Status == InvoiceStatus.Draft)
+    {
+        @if (Model.Status == InvoiceStatus.Draft)
         {
-            <MudButton Variant="Variant.Filled" OnClick="ActivateRotRut" Class="mt-4">Activate Rot & Rut</MudButton>
+                        <MudButton Variant="Variant.Filled" OnClick="ActivateRotRut" Class="mt-4">Activate Rot & Rut</MudButton>
         }
     }
     else
     {
-        <MudPaper Elevation="1" Class="pa-4 mt-4">
-            <MudText Typo="Typo.h6" GutterBottom="true" Class="mb-4">Rot & Rut</MudText>
+                <MudPaper Elevation="1" Class="pa-4 mt-4">
+                    <MudText Typo="Typo.h6" GutterBottom="true" Class="mb-4">Rot & Rut</MudText>
 
-            <MudField Label="Kind">@invoice.DomesticService.Kind</MudField>
-            <MudField Label="Description" Class="mt-4">@invoice.DomesticService.Description</MudField>
-            <MudField Label="Buyer" Class="mt-4">@invoice.DomesticService.Buyer</MudField>
-        </MudPaper>
+                    <MudField Label="Kind">@invoice.DomesticService.Kind</MudField>
+                    <MudField Label="Description" Class="mt-4">@invoice.DomesticService.Description</MudField>
+                    <MudField Label="Buyer" Class="mt-4">@invoice.DomesticService.Buyer</MudField>
+                    <MudField Label="Requested Amount" Class="mt-4">@invoice.DomesticService.RequestedAmount.ToString("c")</MudField>
+                </MudPaper>
     }
 }
 
@@ -220,27 +222,7 @@
     public int? Id { get; set; }
 
     [Required]
-    public DateTime? Date { get; set; }
-
-    [Required]
-    public TimeSpan? Time { get; set; }
-
-    [Required]
-    public InvoiceStatus Status { get; set; }
-
-    public string? Reference { get; set; }
-
-    public string? Note { get; set; }
-
-    public DateTime? DueDate { get; set; }
-
-    public List<InvoiceItemViewModel> Items { get; set; } = new List<InvoiceItemViewModel>();
-
-    public decimal SubTotal => Items.Sum(i => i.SubTotal);
-
-    public decimal Vat => Items.Sum(i => i.Vat);
-
-    public decimal Total => Items.Sum(i => i.LineTotal);
+    public InvoiceViewModel Model { get; set;  }
 
     protected override async Task OnInitializedAsync()
     {
@@ -248,35 +230,18 @@
         {
             invoice = await InvoicesClient.GetInvoiceAsync(Id.GetValueOrDefault());
 
-            Id = invoice.Id;
-
-            Set(invoice);
-
-            foreach (var item in invoice.Items)
-            {
-                Items.Add(new InvoiceItemViewModel
-                {
-                    Id = item.Id,
-                    ProductType = item.ProductType,
-                    Description = item.Description,
-                    UnitPrice = item.UnitPrice,
-                    Unit = item.Unit,
-                    Quantity = item.Quantity,
-                    VatRate = item.VatRate,
-                    // LineTotal = item.LineTotal
-                });
-            }
+            Model = invoice.ToModel();
         }
         else
         {
             invoice = await InvoicesClient.CreateInvoiceAsync(
-            new CreateInvoice()
-            {
-                Status = InvoiceStatus.Draft
-            }
+                new CreateInvoice()
+                {
+                    Status = InvoiceStatus.Draft
+                }
             );
 
-            Set(invoice);
+            Model = invoice.ToModel();
 
             NavigationManager.NavigateTo($"/invoices/{Id}", replace: true);
 
@@ -293,7 +258,7 @@
         var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, Id);
         payment = paymentsResults.Items.FirstOrDefault();
 
-        if(payment is null)
+        if (payment is null)
         {
             return;
         }
@@ -306,7 +271,7 @@
     async Task ActivateRotRut()
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(ActivateRotOrRutDialog.InvoiceId), Id);
+        parameters.Add(nameof(ActivateRotOrRutDialog.Invoice), Model);
         parameters.Add(nameof(ActivateRotOrRutDialog.InvoiceDomesticService), invoice.DomesticService);
 
         var dialogRef = DialogService.Show<ActivateRotOrRutDialog>("Activate deduction for domestic services", parameters);
@@ -317,12 +282,12 @@
             return;
         }
 
-        invoice.DomesticService = (InvoiceDomesticServiceDto)result.Data;
+        Model.DomesticService = (InvoiceDomesticServiceViewModel)result.Data;
     }
 
     async Task InitPaymentHub(string paymentId)
     {
-        if(hubConnection is not null)
+        if (hubConnection is not null)
         {
             return;
         }
@@ -376,16 +341,6 @@
         await Foo();
     }
 
-    private void Set(InvoiceDto invoice)
-    {
-        Id = invoice.Id;
-        Status = invoice.Status;
-        Date = invoice.Date.GetValueOrDefault().Date.Date;
-        DueDate = invoice.DueDate.GetValueOrDefault().Date.Date;
-        Reference = invoice.Reference;
-        Note = invoice.Note;
-    }
-
     private async Task Submit()
     {
         await Task.CompletedTask;
@@ -396,10 +351,9 @@
         var model = new InvoiceItemViewModel();
 
         var dialogParameters = new DialogParameters();
-        dialogParameters.Add(nameof(InvoiceItemDialog.Id), Id);
-        dialogParameters.Add(nameof(InvoiceItemDialog.Model), model);
+        dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), Id);
 
-        var dialogRef = DialogService.Show<InvoiceItemDialog>("Item", dialogParameters);
+        var dialogRef = DialogService.Show<InvoiceItemDialog>("New Item", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -408,28 +362,21 @@
 
         var vm = (InvoiceItemViewModel)result.Data;
 
-        var invoiceItem = await InvoicesClient.AddItemAsync(
-        Id.GetValueOrDefault(),
-        new AddItemItem
-        {
-            ProductType = vm.ProductType,
-            Description = vm.Description,
-            UnitPrice = vm.UnitPrice,
-            Unit = vm.Unit,
-            VatRate = vm.VatRate,
-            Quantity = vm.Quantity,
-            DomesticService = vm.IsTaxDeductableService ? new InvoiceItemDomesticServiceDto
-            {
-                Kind = vm.Kind,
-                HomeRepairAndMaintenanceServiceType = vm.HomeRepairAndMaintenanceServiceType,
-                HouseholdServiceType = vm.HouseholdServiceType
-            } : null
-        }
-        );
+        Model.Items.Add(vm);
+    }
 
-        vm.Id = invoiceItem.Id;
+    private async Task UpdateInvoiceItem(InvoiceItemViewModel model)
+    {
+        var dialogParameters = new DialogParameters();
+        dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), Id);
+        dialogParameters.Add(nameof(InvoiceItemDialog.Model), model);
 
-        Items.Add(vm);
+        var dialogRef = DialogService.Show<InvoiceItemDialog>("Update Item", dialogParameters);
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled)
+            return;
     }
 
     public async Task UpdateInvoiceStatus()
@@ -438,7 +385,7 @@
 
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoiceId);
-        dialogParameters.Add(nameof(SetStatusDialog.Status), Status);
+        dialogParameters.Add(nameof(SetStatusDialog.Status), Model.Status);
 
         var dialogRef = DialogService.Show<SetStatusDialog>("Update status", dialogParameters);
 
@@ -446,12 +393,12 @@
 
         if (result.Cancelled) return;
 
-        Status = (InvoiceStatus)result.Data;
+        Model.Status = (InvoiceStatus)result.Data;
 
         await Foo();
     }
 
-    private async Task OnSelectedValuesChanged(IEnumerable<TransactionStatus?> selectedValues)
+    private void OnSelectedValuesChanged(IEnumerable<TransactionStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
 
@@ -462,19 +409,19 @@
     {
         try
         {
-            if (date != Date)
+            if (date != Model.Date)
             {
                 date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
                 await InvoicesClient.SetDateAsync(Id.GetValueOrDefault(),
                 date.GetValueOrDefault().ToUniversalTime());
 
-                Date = date;
+                Model.Date = date;
             }
         }
         catch (Exception)
         {
-            Date = date;
+            Model.Date = date;
         }
     }
 
@@ -482,14 +429,14 @@
     {
         try
         {
-            if (date != DueDate)
+            if (date !=Model. DueDate)
             {
                 date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
                 await InvoicesClient.SetDueDateAsync(Id.GetValueOrDefault(),
                 date.GetValueOrDefault().ToUniversalTime());
 
-                DueDate = date;
+                Model.DueDate = date;
             }
         }
         catch (Exception)
@@ -500,19 +447,19 @@
 
     public async Task OnReferenceChanged(string? reference)
     {
-        if (reference != Reference)
+        if (reference != Model.Reference)
         {
             await InvoicesClient.SetReferenceAsync(Id.GetValueOrDefault(), reference);
-            Reference = reference;
+            Model.Reference = reference;
         }
     }
 
     public async Task OnNoteChanged(string? note)
     {
-        if (note != Note)
+        if (note != Model.Note)
         {
             await InvoicesClient.SetNoteAsync(Id.GetValueOrDefault(), note);
-            Note = note;
+            Model.Note = note;
         }
     }
 
@@ -537,7 +484,7 @@
 
         await InvoicesClient.DeleteInvoiceItemAsync(Id.GetValueOrDefault(), invoiceItem.Id);
 
-        Items.Remove(invoiceItem);
+        Model.Items.Remove(invoiceItem);
     }
 
     public async ValueTask DisposeAsync()
@@ -547,4 +494,4 @@
 
         await hubConnection.DisposeAsync();
     }
-}
+    }

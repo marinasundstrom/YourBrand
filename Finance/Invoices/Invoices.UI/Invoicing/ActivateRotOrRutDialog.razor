@@ -16,6 +16,10 @@
 
             <MudTextField Label="Buyer" @bind-Value="Buyer" For="() => Buyer"></MudTextField>
 
+            <MudNumericField Label="Requested Amount" @bind-Value="RequestedAmount" For="() => RequestedAmount"></MudNumericField>
+
+            <MudField Label="Max amount to be requested">@MaxAmount</MudField>
+
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
@@ -27,7 +31,7 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public int InvoiceId { get; set; }
+    [Parameter] public YourBrand.Invoices.Invoicing.InvoiceViewModel Invoice { get; set; }
 
     public DomesticServiceKind Kind { get; set; }
 
@@ -37,11 +41,30 @@
     [Required]
     public string Buyer { get; set; } = null!;
 
+    [Required]
+    [Range(int.MinValue, int.MaxValue)]
+    public decimal RequestedAmount { get; set; }
+
+    public decimal TotalServiceAmount => Invoice
+                 .Items
+                 .Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null)
+                 .Sum(x => x.LineTotal.AddVat(x.VatRate));
+
+    public decimal MaxAmount 
+    {
+        get
+        {
+            return Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType
+                ? TotalServiceAmount.ApplyRot()
+                : TotalServiceAmount.ApplyRut();         
+        }        
+    }
+
     [Parameter] public InvoiceDomesticServiceDto? InvoiceDomesticService { get; set; }
 
     protected override void OnInitialized()
     {
-        if(InvoiceDomesticService is not null) 
+        if(InvoiceDomesticService is not null)
         {
             Kind = InvoiceDomesticService.Kind;
             Description = InvoiceDomesticService.Description;
@@ -53,10 +76,13 @@
         var dto = new InvoiceDomesticServiceDto {
             Kind = Kind,
             Description = Description,
-            Buyer = Buyer
+            Buyer = Buyer,
+            RequestedAmount = RequestedAmount
         };
 
-        await InvoicesClient.ActivateRotAndRutAsync(InvoiceId, dto);
+        await InvoicesClient.ActivateRotAndRutAsync(Invoice.Id, dto);
+
+        dto.RequestedAmount = -dto.RequestedAmount; // TODO: Fix
 
         MudDialog.Close(DialogResult.Ok(dto));
     }

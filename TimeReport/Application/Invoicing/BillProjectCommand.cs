@@ -58,7 +58,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
                 await _invoicesClient.AddItemAsync(
                     invoice.Id,
-                    new AddItemItem {
+                    new AddInvoiceItem {
                         ProductType = ProductType.Service,
                         Description = description,
                         UnitPrice = hourlyRate,

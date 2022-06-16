@@ -105,8 +105,6 @@ public class Invoice : IHasDomainEvents
 
     public decimal Vat { get; private set; }
 
-    public decimal? RutRotDeduction { get; private set; }
-
     public decimal Total { get; private set; }
 
     public decimal? Paid { get; private set; }
@@ -160,31 +158,15 @@ public class Invoice : IHasDomainEvents
 
     public void UpdateTotals()
     {
-        if(DomesticService is not null)
+        SubTotal = Items.Sum(item => item.LineTotal);
+        Vat = 0;
+
+        foreach(var item in Items)
         {
-            var itemsWithoutHouseholdServices = Items.Where(x => x.ProductType == ProductType.Good);
-            var itemsWithHouseholdServices = Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
-
-            var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
-            var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
-            var materialCost = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
-
-            decimal requestedAmount = 0;
-            if (DomesticService.Kind == Domain.Entities.DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
-            {
-                requestedAmount = laborCost * (decimal)0.30; //invoice.DomesticServiceDeductibleAmount
-            }
-            else if (DomesticService.Kind == Domain.Entities.DomesticServiceKind.HouseholdService)
-            {
-                requestedAmount = laborCost * (decimal)0.50;
-            }
-
-            RutRotDeduction = -(requestedAmount);
+            Vat += item.LineTotal.GetVatFromSubTotal(item.VatRate);
         }
 
-        Vat = Items.Sum(i => i.Vat());
-        SubTotal = Items.Sum(i => i.SubTotal());
-        Total = Items.Sum(i => i.LineTotal) + RutRotDeduction.GetValueOrDefault();
+        Total = Items.Sum(item => item.LineTotal.AddVat(item.VatRate)) + DomesticService?.RequestedAmount ?? 0;
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }
@@ -195,7 +177,8 @@ public class Invoice : IHasDomainEvents
 public record InvoiceDomesticService(
     Domain.Entities.DomesticServiceKind Kind, 
     string Buyer,
-    string Description) {
+    string Description,
+    decimal RequestedAmount) {
     public PropertyDetails? PropertyDetails { get; set; }
 };
 

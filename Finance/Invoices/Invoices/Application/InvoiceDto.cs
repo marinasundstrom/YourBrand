@@ -17,7 +17,6 @@ public record InvoiceDto(
     IEnumerable<InvoiceItemDto> Items, 
     decimal SubTotal, 
     decimal Vat, 
-    decimal? RotRutDeduction,
     decimal Total, 
     decimal? Paid, 
     InvoiceDomesticServiceDto? DomesticService);
@@ -26,6 +25,7 @@ public record InvoiceDomesticServiceDto(
     Domain.Entities.DomesticServiceKind Kind, 
     string Buyer,
     string Description,
+    decimal RequestedAmount,
     PropertyDetailsDto? PropertyDetails);
 
 public record InvoiceItemDto(
@@ -36,8 +36,8 @@ public record InvoiceItemDto(
     string Unit, 
     double VatRate, 
     double Quantity, 
-    decimal LineTotal, 
-    bool IsTaxDeductableService, 
+    decimal LineTotal,
+    bool IsTaxDeductibleService,
     InvoiceItemDomesticServiceDto? DomesticService);
 
 public record InvoiceItemDomesticServiceDto(

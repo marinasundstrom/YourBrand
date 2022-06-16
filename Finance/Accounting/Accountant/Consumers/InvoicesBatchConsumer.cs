@@ -54,8 +54,8 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             var productType = group.Key.ProductType;
             var vatRate = group.Key.VatRate;
 
-            var vat = group.Sum(i => i.LineTotal).Vat(vatRate);
-            var subTotal = group.Sum(i => i.LineTotal).SubTotal(vatRate);
+            var vat = group.Sum(i => i.LineTotal.GetVatFromSubTotal(i.VatRate));
+            var subTotal = group.Sum(i => i.LineTotal);
 
             entries.Add(new CreateEntry
             {
@@ -140,13 +140,13 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             }
         }
 
-        if (invoice.RotRutDeduction is not null)
+        if (invoice.DomesticService?.RequestedAmount is not null)
         {
             entries.Insert(0, new CreateEntry
             {
                 AccountNo = 1513,
                 Description = "ROT-avdrag",
-                Debit = invoice.RotRutDeduction
+                Debit = invoice.DomesticService?.RequestedAmount
             });
         }
 

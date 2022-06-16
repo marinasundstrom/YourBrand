@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoices.Application.Commands;
 
-public record AddItemItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
+public record AddItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
 {
-    public class Handler : IRequestHandler<AddItemItem, InvoiceItemDto>
+    public class Handler : IRequestHandler<AddItem, InvoiceItemDto>
     {
         private readonly IInvoicesContext _context;
 
@@ -20,7 +20,7 @@ public record AddItemItem(int InvoiceId, ProductType ProductType, string Descrip
             _context = context;
         }
 
-        public async Task<InvoiceItemDto> Handle(AddItemItem request, CancellationToken cancellationToken)
+        public async Task<InvoiceItemDto> Handle(AddItem request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
@@ -37,6 +37,8 @@ public record AddItemItem(int InvoiceId, ProductType ProductType, string Descrip
             }
 
             var item = invoice.AddItem(request.ProductType, request.Description, request.UnitPrice, request.Unit, request.VatRate, request.Quantity);
+
+            item.IsTaxDeductibleService = request.IsTaxDeductibleService.GetValueOrDefault();
 
             if (request.DomesticService is not null)
             {

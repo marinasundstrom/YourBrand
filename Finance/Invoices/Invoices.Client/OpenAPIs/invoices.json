@@ -122,7 +122,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/InvoiceDto"
             }
           }
         }
@@ -180,12 +180,12 @@
             "x-nullable": false
           },
           {
-            "name": "AddItemItem",
+            "name": "AddInvoiceItem",
             "in": "body",
             "required": true,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/AddItemItem"
+              "$ref": "#/definitions/AddInvoiceItem"
             },
             "x-nullable": false
           }
@@ -196,6 +196,93 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/InvoiceItemDto"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices/{invoiceId}/Items/{invoiceItemId}": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_UpdateItem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "invoiceItemId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "name": "UpdateInvoiceItem",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateInvoiceItem"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceItemDto"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_DeleteInvoiceItem",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "invoiceItemId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
             }
           }
         }
@@ -578,44 +665,6 @@
           }
         }
       }
-    },
-    "/Invoices/{invoiceId}/Items/{invoiceItemId}": {
-      "delete": {
-        "tags": [
-          "Invoices"
-        ],
-        "operationId": "Invoices_DeleteInvoiceItem",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "invoiceId",
-            "in": "path",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "invoiceItemId",
-            "in": "path",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -670,10 +719,6 @@
           "format": "decimal"
         },
         "vat": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "rotRutDeduction": {
           "type": "number",
           "format": "decimal"
         },
@@ -739,7 +784,7 @@
         "vatRate",
         "quantity",
         "lineTotal",
-        "isTaxDeductableService"
+        "isTaxDeductibleService"
       ],
       "properties": {
         "id": {
@@ -771,7 +816,7 @@
           "type": "number",
           "format": "decimal"
         },
-        "isTaxDeductableService": {
+        "isTaxDeductibleService": {
           "type": "boolean"
         },
         "domesticService": {
@@ -873,7 +918,8 @@
       "required": [
         "kind",
         "buyer",
-        "description"
+        "description",
+        "requestedAmount"
       ],
       "properties": {
         "kind": {
@@ -884,6 +930,10 @@
         },
         "description": {
           "type": "string"
+        },
+        "requestedAmount": {
+          "type": "number",
+          "format": "decimal"
         },
         "propertyDetails": {
           "$ref": "#/definitions/PropertyDetailsDto"
@@ -922,7 +972,7 @@
         "CooperativeFlat"
       ]
     },
-    "AddItemItem": {
+    "AddInvoiceItem": {
       "type": "object",
       "required": [
         "productType",
@@ -954,8 +1004,49 @@
           "type": "number",
           "format": "double"
         },
+        "isTaxDeductibleService": {
+          "type": "boolean"
+        },
         "domesticService": {
           "$ref": "#/definitions/InvoiceItemDomesticServiceDto"
+        }
+      }
+    },
+    "UpdateInvoiceItem": {
+      "type": "object",
+      "required": [
+        "productType",
+        "description",
+        "unitPrice",
+        "unit",
+        "vatRate",
+        "quantity",
+        "isTaxDeductibleService"
+      ],
+      "properties": {
+        "productType": {
+          "$ref": "#/definitions/ProductType"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "double"
+        },
+        "isTaxDeductibleService": {
+          "type": "boolean"
         }
       }
     },

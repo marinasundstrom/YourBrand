@@ -211,6 +211,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotRutService.Contracts", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotRutService.UI", "Finance\RotRutService\RotRutService.UI\RotRutService.UI.csproj", "{E5822888-A200-4EC8-B1C2-04FA6CE6954C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formulas", "Finance\Formulas\Formulas.csproj", "{FC47A7D5-835C-4B70-AEE2-46D54C3261E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -541,6 +543,10 @@ Global
 		{E5822888-A200-4EC8-B1C2-04FA6CE6954C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5822888-A200-4EC8-B1C2-04FA6CE6954C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5822888-A200-4EC8-B1C2-04FA6CE6954C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC47A7D5-835C-4B70-AEE2-46D54C3261E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC47A7D5-835C-4B70-AEE2-46D54C3261E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC47A7D5-835C-4B70-AEE2-46D54C3261E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC47A7D5-835C-4B70-AEE2-46D54C3261E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -634,5 +640,6 @@ Global
 		{75FE329A-A344-4FF6-ADDA-CE4F4B0D77BF} = {7BA5DE64-85E5-4377-B2C8-F5133AA507DA}
 		{E8FA0B32-5574-4F60-BC95-BFDEB1973694} = {7BA5DE64-85E5-4377-B2C8-F5133AA507DA}
 		{E5822888-A200-4EC8-B1C2-04FA6CE6954C} = {7BA5DE64-85E5-4377-B2C8-F5133AA507DA}
+		{FC47A7D5-835C-4B70-AEE2-46D54C3261E8} = {BEB8098A-5DF0-4231-97A3-8887821DE0E1}
 	EndGlobalSection
 EndGlobal

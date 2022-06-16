@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 using YourBrand.Invoices.Client;
 
-namespace YourBrand.Accounting.Client.Invoicing;
+namespace YourBrand.Invoices.Invoicing;
 
 public class InvoiceItemViewModel
 {
@@ -25,29 +25,9 @@ public class InvoiceItemViewModel
 
     public double VatRate { get; set; } = 0.25;
 
-    [Required]
-    public decimal SubTotal => LineTotal.SubTotal(VatRate);
-
-    [Required]
-    public decimal Vat => LineTotal.Vat(VatRate);
-
     public decimal LineTotal => UnitPrice * (decimal)Quantity;
 
-    public bool IsTaxDeductableService { get; set; }
+    public bool IsTaxDeductibleService { get; set; }
 
-    public DomesticServiceKind Kind { get; set; }
-
-    public HomeRepairAndMaintenanceServiceType? HomeRepairAndMaintenanceServiceType { get; set; }
-
-    public HouseholdServiceType? HouseholdServiceType { get; set; }
-
-    // public double? Hours { get; set; }
-
-    // public decimal? LaborCost { get; set; }
-
-    // public decimal? MaterialCost { get; set; }
-
-    // public decimal? OtherCosts { get; set; }
-
-    // public decimal? RequestedAmount { get; set; }
+    public InvoiceItemDomesticServiceViewModel? DomesticService { get; set; }
 }

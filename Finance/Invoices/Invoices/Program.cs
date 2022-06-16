@@ -121,7 +121,7 @@ app.MapPost("/invoices/activateRotAndRut", async (int invoiceId, InvoiceDomestic
     => await mediator.Send(new ActivateRotAndRut(invoiceId, dto)))
     .WithName("Invoices_ActivateRotAndRut")
     .WithTags("Invoices")
-    .Produces<string>(StatusCodes.Status200OK);
+    .Produces(StatusCodes.Status200OK);
 
 app.MapGet("/Invoices/{invoiceId}/File", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
@@ -130,10 +130,18 @@ app.MapGet("/Invoices/{invoiceId}/File", async (int invoiceId, IMediator mediato
     .Produces<FileResult>(StatusCodes.Status200OK);
 
 app.MapPost("/Invoices/{invoiceId}/Items", async (int invoiceId, 
-    AddItemItem dto, 
+    AddInvoiceItem dto, 
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoices.Application.Commands.AddItemItem(invoiceId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.DomesticService), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoices.Application.Commands.AddItem(invoiceId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
+    .WithTags("Invoices")
+    .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
+
+app.MapPut("/Invoices/{invoiceId}/Items/{invoiceItemId}", async (int invoiceId, int invoiceItemId,
+    UpdateInvoiceItem dto,
+    IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new YourBrand.Invoices.Application.Commands.UpdateInvoiceItem(invoiceId, invoiceItemId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService), cancellationToken))
+    .WithName("Invoices_UpdateItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
@@ -214,4 +222,6 @@ if(args.Contains("--seed"))
 
 app.Run();
 
-public record AddItemItem(ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, InvoiceItemDomesticServiceDto? DomesticService);
+public record AddInvoiceItem(ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService);
+
+public record UpdateInvoiceItem(ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool IsTaxDeductibleService);

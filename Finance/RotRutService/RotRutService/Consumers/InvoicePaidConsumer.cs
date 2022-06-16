@@ -8,7 +8,7 @@ using YourBrand.Invoices.Contracts;
 using MassTransit;
 using YourBrand.RotRutService.Domain;
 
-namespace YourBrand.Accountant.Consumers;
+namespace YourBrand.RotRutService.Consumers;
 
 public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 {
@@ -37,31 +37,44 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 
         if (domesticServices is not null)
         {
-
             var itemsWithoutHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Good);
             var itemsWithHouseholdServices = invoice.Items.Where(x => x.ProductType == ProductType.Service && x.DomesticService is not null);
+            var itemsWithHouseholdServices2 = invoice.Items.Where(x => x.ProductType == ProductType.Good && x.DomesticService is not null);
 
             var hours = itemsWithHouseholdServices.Sum(x => x.Quantity);
-            var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal);
-            var materialCost = 0; // itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
+            var laborCost = itemsWithHouseholdServices.Sum(x => x.LineTotal.AddVat(x.VatRate));
+            var materialCost = itemsWithHouseholdServices2.Sum(x => x.LineTotal.AddVat(x.VatRate));
 
-            decimal requestedAmount = 0;
-            if (domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
+            decimal maxDeductibleAmount = 0;
+
+            if(domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
             {
-                requestedAmount = laborCost * (decimal)0.30; //invoice.DomesticServiceDeductibleAmount
+                maxDeductibleAmount = laborCost.GetRot();
             }
-            else if (domesticServices.Kind == DomesticServiceKind.HouseholdService)
+            else if(domesticServices.Kind == DomesticServiceKind.HouseholdService)
             {
-                requestedAmount = laborCost * (decimal)0.50;
+                maxDeductibleAmount = laborCost.GetRut();
             }
+
+            decimal requestedAmount = domesticServices.RequestedAmount;
 
             DateTime paymentDate = DateTime.Now;
             decimal paidAmount = invoice.Total;
             decimal otherCosts = itemsWithoutHouseholdServices.Sum(x => x.LineTotal);
 
+            if (requestedAmount <= 0)
+            {
+                throw new Exception("No deductible");
+            }
+
+            if (requestedAmount > maxDeductibleAmount)
+            {
+                throw new Exception("Exceeds maximum deductible amount");
+            }
+
             var rotRutCase =
-                new RotRutService.Domain.Entities.RotRutCase(
-                    (RotRutService.Domain.Enums.DomesticServiceKind)domesticServices.Kind, 
+                new Domain.Entities.RotRutCase(
+                    (Domain.Enums.DomesticServiceKind)domesticServices.Kind, 
                     invoice.DomesticService!.Buyer, paymentDate, laborCost, 
                     paidAmount, requestedAmount, invoice.Id, otherCosts, hours, materialCost, null);
 
@@ -69,8 +82,8 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
             {
                 var first = itemsWithHouseholdServices.First();
 
-                rotRutCase.Rot = new RotRutService.Domain.Entities.Rot() {
-                    ServiceType = (RotRutService.Domain.Enums.HomeRepairAndMaintenanceServiceType?)first.DomesticService!.HomeRepairAndMaintenanceServiceType,
+                rotRutCase.Rot = new Domain.Entities.Rot() {
+                    ServiceType = (Domain.Enums.HomeRepairAndMaintenanceServiceType?)first.DomesticService!.HomeRepairAndMaintenanceServiceType,
                     PropertyDesignation =  invoice.DomesticService!.PropertyDetails!.PropertyDesignation,
                     ApartmentNo =  invoice.DomesticService!.PropertyDetails!.ApartmentNo,
                     OrganizationNo =  invoice.DomesticService!.PropertyDetails!.OrganizationNo
@@ -80,8 +93,8 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
             {
                 var first = itemsWithHouseholdServices.First();
 
-                rotRutCase.Rut = new RotRutService.Domain.Entities.Rut() {
-                    ServiceType = (RotRutService.Domain.Enums.HouseholdServiceType?)first.DomesticService!.HouseholdServiceType
+                rotRutCase.Rut = new Domain.Entities.Rut() {
+                    ServiceType = (Domain.Enums.HouseholdServiceType?)first.DomesticService!.HouseholdServiceType
                 };
             }
 

@@ -40,8 +40,9 @@ public record ActivateRotAndRut(int InvoiceId, InvoiceDomesticServiceDto? Domest
                 invoice.DomesticService = new Domain.Entities.InvoiceDomesticService(
                   request.DomesticService.Kind,
                   request.DomesticService.Buyer,
-                  request.DomesticService.Description
-              );
+                  request.DomesticService.Description,
+                  -(request.DomesticService.RequestedAmount)
+                );
 
                 invoice.DomesticService.PropertyDetails = request.DomesticService.PropertyDetails is not null
                         ? new Domain.Entities.PropertyDetails(
