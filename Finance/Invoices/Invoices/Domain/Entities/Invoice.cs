@@ -148,7 +148,7 @@ public class Invoice : IHasDomainEvents
 
     public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
     {
-        var invoiceItem = new InvoiceItem(productType, description, unitPrice, unit, vatRate, quantity);
+        var invoiceItem = new InvoiceItem(this, productType, description, unitPrice, unit, vatRate, quantity);
         _items.Add(invoiceItem);
 
         UpdateTotals();
@@ -166,7 +166,8 @@ public class Invoice : IHasDomainEvents
             Vat += item.LineTotal.GetVatFromSubTotal(item.VatRate);
         }
 
-        Total = Items.Sum(item => item.LineTotal.AddVat(item.VatRate)) + DomesticService?.RequestedAmount ?? 0;
+        Total = Items.Sum(item => item.LineTotal.AddVat(item.VatRate));
+        Total += DomesticService?.RequestedAmount ?? 0;
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }

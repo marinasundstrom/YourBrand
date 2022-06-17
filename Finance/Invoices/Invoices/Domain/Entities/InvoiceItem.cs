@@ -11,8 +11,9 @@ public class InvoiceItem
 
     }
 
-    public InvoiceItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
+    public InvoiceItem(Invoice invoice, ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
     {
+        Invoice = invoice;
         ProductType = productType;
         Description = description;
         Unit = unit;
@@ -22,7 +23,7 @@ public class InvoiceItem
 
     public int Id { get; private set; }
 
-    public Invoice Invoice { get; set; } = null!;
+    public Invoice Invoice { get; private set; }
 
     public int InvoiceId { get; private set; }
 

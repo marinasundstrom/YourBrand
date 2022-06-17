@@ -61,7 +61,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
                     new AddInvoiceItem {
                         ProductType = ProductType.Service,
                         Description = description,
-                        UnitPrice = hourlyRate,
+                        UnitPrice = hourlyRate.GetVatFromTotal(0.25),
                         Unit = "hours",
                         VatRate = 0.25,
                         Quantity = hours

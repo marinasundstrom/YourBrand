@@ -29,7 +29,15 @@ public class InvoiceViewModel
 
     public decimal Vat => Items.Sum(i => i.LineTotal.GetVatFromSubTotal(i.VatRate));
 
-    public decimal Total => Items.Sum(i => i.LineTotal.AddVat(i.VatRate)) + DomesticService?.RequestedAmount.GetValueOrDefault() ?? 0;
+    public decimal Total 
+    {
+        get 
+        {
+            var total = Items.Sum(i => i.LineTotal.AddVat(i.VatRate));
+            total += DomesticService?.RequestedAmount.GetValueOrDefault() ?? 0;
+            return total;
+        }
+    }
 
     public decimal? Paid { get; set; }
 

@@ -91,28 +91,28 @@
                 }
                 </MudItem>
 
-                <MudItem xs="12" sm="12" md="12" lg="3">
+                <MudItem xs="6" sm="6" md="3" lg="3">
                     <MudField Label="Total">@Model.Total.ToString("c")</MudField>
                     </MudItem>
 
-                    <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudItem xs="6" sm="6" md="3" lg="3">
                         <MudField Label="Sub Total">@Model.SubTotal.ToString("c")</MudField>
                     </MudItem>
 
-                    <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudItem xs="6" sm="6" md="3" lg="3">
                         <MudField Label="VAT">@Model.Vat.ToString("c")</MudField>
                     </MudItem>
 
             @if (Model.DomesticService?.RequestedAmount is not null)
             {
-                        <MudItem xs="12" sm="12" md="12" lg="3">
+                        <MudItem xs="6" sm="6" md="3" lg="3">
                             <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">@invoice.DomesticService?.RequestedAmount.ToString("c")</MudField>
                         </MudItem>
             }
 
             @if (payment is not null)
             {
-                        <MudItem xs="12" sm="12" md="12" lg="3">
+                        <MudItem xs="6" sm="6" md="3" lg="3">
                             <MudField Label="Payment Status">@payment.Status</MudField>
                             <MudField Label="Reference" Class="mt-4">@payment.Reference</MudField>
                         </MudItem>
@@ -120,16 +120,16 @@
 
             @if (Model.Paid is not null)
             {
-                        <MudItem xs="12" sm="12" md="12" lg="3">
+                        <MudItem xs="6" sm="6" md="3" lg="3">
                             <MudField Label="Paid">@invoice.Paid?.ToString("c")</MudField>
                         </MudItem>
 
                 if (payment?.AmountCaptured.GetValueOrDefault() != invoice.Total)
                 {
-                                <MudItem xs="12" sm="12" md="12" lg="3">
+                                <MudItem xs="6" sm="6" md="3" lg="3">
                         @{
                             bool remaining = false;
-                            var diff = (invoice.Total - payment!.AmountCaptured.GetValueOrDefault());
+                            var diff = (invoice.Total - payment?.AmountCaptured ?? 0);
                             if (diff < 0)
                             {
                                 diff = diff * -1;
@@ -243,7 +243,7 @@
 
             Model = invoice.ToModel();
 
-            NavigationManager.NavigateTo($"/invoices/{Id}", replace: true);
+            NavigationManager.NavigateTo($"/invoices/{Model.Id}", replace: true);
 
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
@@ -367,6 +367,11 @@
 
     private async Task UpdateInvoiceItem(InvoiceItemViewModel model)
     {
+        if(Model.Status != InvoiceStatus.Draft) 
+        {
+            return;
+        }
+
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), Id);
         dialogParameters.Add(nameof(InvoiceItemDialog.Model), model);

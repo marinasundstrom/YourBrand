@@ -58,13 +58,11 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
                     break;
             }
 
-            decimal requestedAmount = domesticServices.RequestedAmount;
+            decimal requestedAmount = -(domesticServices.RequestedAmount);
 
             DateTime paymentDate = DateTime.Now; // TODO: Add payment date to invoice
             decimal paidAmount = invoice.Total;
             decimal otherCosts = itemsWithoutService.Sum(x => x.LineTotal);
-
-            Console.WriteLine(requestedAmount);
 
             if (requestedAmount >= 0)
             {
