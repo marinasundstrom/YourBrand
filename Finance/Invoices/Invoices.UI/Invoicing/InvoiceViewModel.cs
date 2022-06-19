@@ -34,7 +34,7 @@ public class InvoiceViewModel
         get 
         {
             var total = Items.Sum(i => i.LineTotal.AddVat(i.VatRate));
-            total += DomesticService?.RequestedAmount.GetValueOrDefault() ?? 0;
+            total -= DomesticService?.RequestedAmount.GetValueOrDefault() ?? 0;
             return total;
         }
     }

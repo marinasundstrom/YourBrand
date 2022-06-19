@@ -2,7 +2,7 @@ using YourBrand.RotRutService.Application.Common.Models;
 //using YourBrand.RotRutService.Contracts;
 using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Enums;
-using YourBrand.RotRutService.Domain.Events;
+//using YourBrand.RotRutService.Domain.Events;
 
 using MassTransit;
 

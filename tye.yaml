@@ -147,7 +147,7 @@ services:
         port: 5092
 
   - name: accountant
-    project: Finance/Accounting/Accountant/Accountant.csproj
+    project: Finance/Accounting/Accountant/Accountant/Accountant.csproj
     bindings:
       - protocol: https
         port: 5093

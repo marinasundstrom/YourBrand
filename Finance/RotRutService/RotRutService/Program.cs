@@ -21,6 +21,7 @@ using YourBrand.Transactions.Client;
 using YourBrand.Accounting.Client;
 using YourBrand.Invoices.Client;
 using YourBrand.RotRutService.Domain.Entities;
+using YourBrand.RotRutService.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ if(args.Contains("--connection-string"))
 
 builder.Services
     .AddApplication()
+    .AddDomain()
     .AddInfrastructure(Configuration);
 
 builder.Services.AddControllers();

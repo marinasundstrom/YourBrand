@@ -8,6 +8,13 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">ROT &amp; RUT</MudText>
 
+
+            <div class="mb-4">
+                <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/rotrut/rutfile")">
+                    Download
+                </MudButton>
+                </div>
+
 <MudTable T="RotRutCaseDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
           Loading="@loading" LoadingProgressColor="Color.Info">
     <ToolBarContent>

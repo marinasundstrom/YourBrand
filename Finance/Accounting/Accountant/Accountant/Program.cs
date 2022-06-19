@@ -15,10 +15,13 @@ using YourBrand.Invoices.Client;
 
 using MassTransit;
 using YourBrand.Payments.Client;
+using YourBrand.Accountant.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
+
+builder.Services.AddDomain();
 
 builder.Services.AddSingleton<IRefundService, RefundService>();
 builder.Services.AddSingleton<IReminderService, ReminderService>();

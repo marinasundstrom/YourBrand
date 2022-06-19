@@ -106,7 +106,7 @@
             @if (Model.DomesticService?.RequestedAmount is not null)
             {
                         <MudItem xs="6" sm="6" md="3" lg="3">
-                            <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">@invoice.DomesticService?.RequestedAmount.ToString("c")</MudField>
+                            <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">-@invoice.DomesticService?.RequestedAmount.ToString("c")</MudField>
                         </MudItem>
             }
 

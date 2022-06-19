@@ -18,31 +18,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Accounting.Client\Accounting.Client.csproj">
+    <ProjectReference Include="..\..\Accounting.Client\Accounting.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Invoices\Invoices.Contracts\Invoices.Contracts.csproj">
+    <ProjectReference Include="..\..\..\Invoices\Invoices.Contracts\Invoices.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Invoices\Invoices.Client\Invoices.Client.csproj">
+    <ProjectReference Include="..\..\..\Invoices\Invoices.Client\Invoices.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
+    <ProjectReference Include="..\..\..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Documents\Documents.Client\Documents.Client.csproj">
+    <ProjectReference Include="..\..\..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
-    <ProjectReference Include="..\..\Payments\Payments.Contracts\Payments.Contracts.csproj">
+    <ProjectReference Include="..\..\..\Payments\Payments.Contracts\Payments.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Payments\Payments.Client\Payments.Client.csproj">
+    <ProjectReference Include="..\..\..\Payments\Payments.Client\Payments.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
+    <ProjectReference Include="..\..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Formulas\Formulas.csproj">
+    <ProjectReference Include="..\..\..\Formulas\Formulas.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Accountant.Domain\Accountant.Domain.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

@@ -167,7 +167,7 @@ public class Invoice : IHasDomainEvents
         }
 
         Total = Items.Sum(item => item.LineTotal.AddVat(item.VatRate));
-        Total += DomesticService?.RequestedAmount ?? 0;
+        Total -= DomesticService?.RequestedAmount ?? 0;
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }
