@@ -3,7 +3,7 @@ using YourBrand.RotRutService.Domain;
 
 namespace YourBrand.RotRutService.Tests;
 
-public class UnitTest1
+public class RotRutCaseFactoryTest
 {
     [Fact]
     public void CreateRotRutCase()

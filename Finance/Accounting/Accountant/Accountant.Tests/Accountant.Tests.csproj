@@ -19,9 +19,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Shouldly" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Accountant.Domain\Accountant.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Shouldly" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,13 @@ public class EntriesFactory
 
         List<CreateEntry> entries = new();
 
+        entries.Add(new CreateEntry
+        {
+            AccountNo = 1510,
+            Description = string.Empty,
+            Debit = invoice.Total
+        });
+
         foreach (var group in itemsGroupedByTypeAndVatRate)
         {
             var productType = group.Key.ProductType;
@@ -18,88 +25,21 @@ public class EntriesFactory
 
             var vat = group.Sum(i => i.LineTotal.GetVatFromSubTotal(i.VatRate));
             var subTotal = group.Sum(i => i.LineTotal);
-
-            entries.Add(new CreateEntry
-            {
-                AccountNo = 1510,
-                Description = string.Empty,
-                Debit = invoice.Total
-            });
-
-            if (productType == ProductType.Good)
-            {
-                if (vatRate == 0.25)
-                {
-                    entries.AddRange(new[] {
+             
+            entries.AddRange(new[] {
                         new CreateEntry
                         {
-                            AccountNo = 2610,
+                            AccountNo = GetVatAccount(productType, vatRate),
                             Description = string.Empty,
                             Credit = vat
                         },
                         new CreateEntry
                         {
-                            AccountNo = 3001,
+                            AccountNo = GetIncomeAccount(productType, vatRate),
                             Description = string.Empty,
                             Credit = subTotal
                         }
                     });
-                }
-                else if (vatRate == 0.12)
-                {
-                    entries.AddRange(new[] {
-                        new CreateEntry
-                        {
-                            AccountNo = 2610,
-                            Description = string.Empty,
-                            Credit = vat
-                        },
-                        new CreateEntry
-                        {
-                            AccountNo = 3002,
-                            Description = string.Empty,
-                            Credit = subTotal
-                        }
-                    });
-                }
-                else if (vatRate == 0.06)
-                {
-                    entries.AddRange(new[] {
-                        new CreateEntry
-                        {
-                            AccountNo = 2610,
-                            Description = string.Empty,
-                            Credit = vat
-                        },
-                        new CreateEntry
-                        {
-                            AccountNo = 3003,
-                            Description = string.Empty,
-                            Credit = subTotal
-                        }
-                    });
-                }
-            }
-            else if (productType == ProductType.Service)
-            {
-                if (vatRate == 0.25)
-                {
-                    entries.AddRange(new[] {
-                        new CreateEntry
-                        {
-                            AccountNo = 2610,
-                            Description = string.Empty,
-                            Credit = vat
-                        },
-                        new CreateEntry
-                        {
-                            AccountNo = 3041,
-                            Description = string.Empty,
-                            Credit = subTotal
-                        }
-                    });
-                }
-            }
         }
 
         if (invoice.DomesticService?.RequestedAmount is not null)
@@ -113,6 +53,101 @@ public class EntriesFactory
         }
 
         return entries;
+    }
+
+    public static int GetIncomeAccount(ProductType productType, double vatRate)
+    {
+        switch (productType)
+        {
+            case ProductType.Good:
+                if (vatRate == 0.25)
+                {
+                    return 3001;
+                }
+                else if (vatRate == 0.12)
+                {
+                    return 3002;
+                }
+                else if (vatRate == 0.06)
+                {
+                    return 3003;
+                }
+                break;
+
+            case ProductType.Service:
+                return 3040;
+
+                /*
+                if (vatRate == 0.25)
+                {
+                    return 3041;
+                }
+                else if (vatRate == 0.12)
+                {
+                    return 3042;
+                }
+                else if (vatRate == 0.06)
+                {
+                    return 3043;
+                }
+                break;
+                */
+        }
+
+        throw new Exception();
+    }
+
+    public static int GetVatAccount(ProductType productType, double vatRate)
+    {
+        if (vatRate == 0.25)
+        {
+            return 2610; //2611
+        }
+        else if (vatRate == 0.12)
+        {
+            return 2620;//2621
+        }
+        else if (vatRate == 0.06)
+        {
+            return 2630;//2631
+        }
+
+        /*
+        switch (productType)
+        {
+            case ProductType.Good:
+                if (vatRate == 0.25)
+                {
+                    return 2610; //2611
+                }
+                else if (vatRate == 0.12)
+                {
+                    return 2620;//2621
+                }
+                else if (vatRate == 0.06)
+                {
+                    return 2630;//2631
+                }
+                break;
+
+            case ProductType.Service:
+                if (vatRate == 0.25)
+                {
+                    return 2610; //2611
+                }
+                else if (vatRate == 0.12)
+                {
+
+                }
+                else if (vatRate == 0.06)
+                {
+
+                }
+                break;
+        }
+        */
+
+        throw new Exception();
     }
 }
 
