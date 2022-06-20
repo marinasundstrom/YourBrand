@@ -14,9 +14,7 @@ namespace YourBrand.Showroom.Infrastructure.Persistence;
 
 class ShowroomContext : DbContext, IShowroomContext
 {
-    private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
-    private readonly IDateTime _dateTime;
     private readonly IApiApplicationContext _apiApplicationContext;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
