@@ -1,7 +1,8 @@
 ﻿@inject ISnackbar Snackbar
+@using System.Reflection
 
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new [] { typeof(YourBrand.TimeReport.Projects.Activities.ActivityDialog).Assembly, typeof(YourBrand.Showroom.Consultants.ConsultantsPage).Assembly, typeof(YourBrand.Accounting.ServiceExtensions).Assembly,typeof(YourBrand.Invoices.ServiceExtensions).Assembly, typeof(YourBrand.Transactions.ServiceExtensions).Assembly, typeof(YourBrand.Documents.ServiceExtensions).Assembly, typeof(YourBrand.Messenger.ServiceExtensions).Assembly, typeof(YourBrand.RotRutService.ServiceExtensions).Assembly }">
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="_assemblies">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
@@ -27,6 +28,17 @@
 </CascadingAuthenticationState>
 
 @code {
+    Assembly[] _assemblies = new[] {
+            typeof(YourBrand.TimeReport.Projects.Activities.ActivityDialog).Assembly,
+            typeof(YourBrand.Showroom.Consultants.ConsultantsPage).Assembly,
+            typeof(YourBrand.Accounting.ServiceExtensions).Assembly,
+            typeof(YourBrand.Invoices.ServiceExtensions).Assembly,
+            typeof(YourBrand.Transactions.ServiceExtensions).Assembly,
+            typeof(YourBrand.Documents.ServiceExtensions).Assembly,
+            typeof(YourBrand.Messenger.ServiceExtensions).Assembly,
+            typeof(YourBrand.RotRutService.ServiceExtensions).Assembly,
+            typeof(YourBrand.Customers.ServiceExtensions).Assembly
+    };
 
     protected override void OnInitialized()
     {

@@ -107,9 +107,21 @@ app.MapDelete("/Persons/{personId}", async (string personId, IMediator mediator,
     .WithTags("Persons")
     .Produces(StatusCodes.Status200OK);
 
+app.MapPost("/Persons", async (CreatePerson createPerson, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(createPerson, cancellationToken))
+    .WithName("Persons_CreatePersons")
+    .WithTags("Persons")
+    .Produces<PersonDto>(StatusCodes.Status200OK);
+
 app.MapGet("/Persons/{personId}/Addresses", async (string personId, string foo, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetAddress(personId), cancellationToken))
     .WithName("Addresses_GetAddress")
+    .WithTags("Addresses")
+    .Produces<AddressDto>(StatusCodes.Status200OK);
+
+app.MapPost("/Persons/{personId}/Addresses", async (CreateAddress createAddress, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(createAddress, cancellationToken))
+    .WithName("Addresses_CreateAddress")
     .WithTags("Addresses")
     .Produces<AddressDto>(StatusCodes.Status200OK);
 

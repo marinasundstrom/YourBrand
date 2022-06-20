@@ -8,7 +8,7 @@ namespace YourBrand.Customers;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddInvoicing(this IServiceCollection services)
+    public static IServiceCollection AddCustomers(this IServiceCollection services)
     {
         services.AddClients();
         

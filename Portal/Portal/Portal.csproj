@@ -60,6 +60,9 @@
     <ProjectReference Include="..\..\Finance\RotRutService\RotRutService.UI\RotRutService.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Customers\Customers.UI\Customers.UI.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
