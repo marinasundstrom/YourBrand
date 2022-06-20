@@ -13,12 +13,4 @@ public interface IAccountingContext
     DbSet<Attachment> Attachments { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-
-    Task<ITransaction> BeginTransactionAsync();
-}
-
-public interface ITransaction : IDisposable
-{
-    Task CommitAsync();
-    Task RollbackAsync();
 }

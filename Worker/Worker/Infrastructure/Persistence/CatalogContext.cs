@@ -15,7 +15,6 @@ class WorkerContext : DbContext, IWorkerContext
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
     private readonly IDateTime _dateTime;
-    private Transaction? _transaction;
 
     public WorkerContext(
         DbContextOptions<WorkerContext> options,
@@ -78,11 +77,6 @@ class WorkerContext : DbContext, IWorkerContext
             }
         }
 
-        if (_transaction is not null)
-        {
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
         DomainEvent[] events = GetDomainEvents();
 
         var result = await base.SaveChangesAsync(cancellationToken);
@@ -107,57 +101,6 @@ class WorkerContext : DbContext, IWorkerContext
         {
             @event.IsPublished = true;
             await _domainEventService.Publish(@event);
-        }
-    }
-
-    public async Task<ITransaction> BeginTransactionAsync()
-    {
-        var transaction = await Database.BeginTransactionAsync();
-
-        _transaction = new Transaction(
-            this,
-            transaction);
-
-        return _transaction;
-    }
-
-    class Transaction : ITransaction
-    {
-        private readonly WorkerContext _context;
-        private readonly IDbContextTransaction _transaction;
-
-        public Transaction(WorkerContext context, IDbContextTransaction transaction)
-        {
-            _context = context;
-            _transaction = transaction;
-        }
-
-        public async Task CommitAsync()
-        {
-            DomainEvent[] events = _context.GetDomainEvents();
-
-            await _transaction.CommitAsync();
-
-            await _context.DispatchEvents(events);
-            _context._transaction = null;
-        }
-
-        public void Dispose()
-        {
-            _transaction.Dispose();
-            _context._transaction = null;
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await _transaction.DisposeAsync();
-            _context._transaction = null;
-        }
-
-        public async Task RollbackAsync()
-        {
-            await _transaction.RollbackAsync();
-            _context._transaction = null;
         }
     }
 }

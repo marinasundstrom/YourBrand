@@ -26,25 +26,13 @@ public record AddItemCommand(string Name, string Description) : IRequest
 
         public async Task<Unit> Handle(AddItemCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                using (var transaction = await context.BeginTransactionAsync())
-                {
-                    var item = new Item(request.Name, request.Description);
+            var item = new Item(request.Name, request.Description);
 
-                    item.DomainEvents.Add(new ItemCreatedEvent(item.Id));
+            item.DomainEvents.Add(new ItemCreatedEvent(item.Id));
 
-                    context.Items.Add(item);
+            context.Items.Add(item);
 
-                    await context.SaveChangesAsync(cancellationToken);
-
-                    await transaction.CommitAsync();
-                }
-            }
-            catch (DbException)
-            {
-
-            }
+            await context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

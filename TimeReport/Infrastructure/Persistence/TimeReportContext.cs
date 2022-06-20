@@ -150,27 +150,4 @@ public class TimeReportContext : DbContext, ITimeReportContext
             await _domainEventService.Publish(@event);
         }
     }
-
-    public async Task<ITransaction> BeginTransactionAsync()
-    {
-        return new UoWTransaction(
-            await Database.BeginTransactionAsync());
-    }
-
-    class UoWTransaction : ITransaction
-    {
-        private readonly IDbContextTransaction _transaction;
-
-        public UoWTransaction(IDbContextTransaction transaction)
-        {
-            _transaction = transaction;
-        }
-
-        public Task CommitAsync() => _transaction.CommitAsync();
-
-
-        public void Dispose() => _transaction.Dispose();
-
-        public Task RollbackAsync() => _transaction.RollbackAsync();
-    }
 }
