@@ -39,7 +39,7 @@ services:
         value: "Y"
     bindings:
       - port: 1433
-        connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD}
+        connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD};Encrypt=false
     volumes:
       - source: .data/sql-edge
         target: /var/opt/mssql/data
