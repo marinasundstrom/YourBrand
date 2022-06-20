@@ -16,4 +16,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Persistence\Interceptors\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Persistence\Interceptors\" />
+  </ItemGroup>
 </Project>

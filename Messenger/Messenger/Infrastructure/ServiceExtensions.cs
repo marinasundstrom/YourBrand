@@ -1,6 +1,7 @@
 ﻿
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Infrastructure.Persistence;
+using YourBrand.Messenger.Infrastructure.Persistence.Interceptors;
 using YourBrand.Messenger.Infrastructure.Services;
 
 namespace YourBrand.Messenger.Infrastructure;
@@ -21,6 +22,8 @@ public static class ServiceExtensions
             options => options.EnableRetryOnFailure());
 
         services.AddScoped<IMessengerContext>(sp => sp.GetRequiredService<MessengerContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

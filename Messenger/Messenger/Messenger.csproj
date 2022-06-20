@@ -39,9 +39,11 @@
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="Application\Conversations\Queries\" />
+    <None Remove="Infrastructure\Persistence\Interceptors\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Application\Conversations\Queries\" />
+    <Folder Include="Infrastructure\Persistence\Interceptors\" />
   </ItemGroup>
 </Project>

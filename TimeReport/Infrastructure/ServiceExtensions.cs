@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Infrastructure.Persistence;
+using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
 using YourBrand.TimeReport.Infrastructure.Services;
 
 namespace YourBrand.TimeReport.Infrastructure;
@@ -25,6 +26,8 @@ public static class ServiceExtensions
             options => options.EnableRetryOnFailure());
 
         services.AddScoped<ITimeReportContext>(sp => sp.GetRequiredService<TimeReportContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

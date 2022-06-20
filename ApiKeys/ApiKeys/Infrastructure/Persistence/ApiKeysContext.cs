@@ -5,33 +5,33 @@ using YourBrand.ApiKeys.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence;
 
 class ApiKeysContext : DbContext, IApiKeysContext
 {
-    private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
-    private readonly IDateTime _dateTime;
+    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public ApiKeysContext(
         DbContextOptions<ApiKeysContext> options,
-        ICurrentUserService currentUserService,
         IDomainEventService domainEventService,
-        IDateTime dateTime) : base(options)
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _currentUserService = currentUserService;
         _domainEventService = domainEventService;
-        _dateTime = dateTime;
+        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); //.LogTo(Console.WriteLine);
-#endif
-
         base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+
+#if DEBUG
+        optionsBuilder.EnableSensitiveDataLogging(); 
+#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,36 +55,10 @@ class ApiKeysContext : DbContext, IApiKeysContext
 
     public DbSet<User> Users { get; set; } = null!;
 
-#nullable restore
+#nullable restore 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedById = _currentUserService.UserId;
-                    entry.Entity.Created = _dateTime.Now;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.LastModifiedById = _currentUserService.UserId;
-                    entry.Entity.LastModified = _dateTime.Now;
-                    break;
-
-                case EntityState.Deleted:
-                    if (entry.Entity is ISoftDelete softDelete)
-                    {
-                        softDelete.DeletedById = _currentUserService.UserId;
-                        softDelete.Deleted = _dateTime.Now;
-
-                        entry.State = EntityState.Modified;
-                    }
-                    break;
-            }
-        }
-
         await DispatchEvents();
 
         return await base.SaveChangesAsync(cancellationToken);

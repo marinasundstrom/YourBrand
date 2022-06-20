@@ -5,23 +5,32 @@ using YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
 
 public class AccountingContext : DbContext, IAccountingContext
 {
-    private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
-    private readonly IDateTime _dateTime;
+    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public AccountingContext(DbContextOptions<AccountingContext> options,
-        ICurrentUserService currentUserService,
         IDomainEventService domainEventService,
-        IDateTime dateTime) : base(options)
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _currentUserService = currentUserService;
         _domainEventService = domainEventService;
-        _dateTime = dateTime;
+        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+
+#if DEBUG
+        optionsBuilder.EnableSensitiveDataLogging(); 
+#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,32 +54,6 @@ public class AccountingContext : DbContext, IAccountingContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedBy = _currentUserService.UserId;
-                    entry.Entity.Created = _dateTime.Now;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                    entry.Entity.LastModified = _dateTime.Now;
-                    break;
-
-                case EntityState.Deleted:
-                    if (entry.Entity is ISoftDelete softDelete)
-                    {
-                        softDelete.DeletedBy = _currentUserService.UserId;
-                        softDelete.Deleted = _dateTime.Now;
-
-                        entry.State = EntityState.Modified;
-                    }
-                    break;
-            }
-        }
-
         await DispatchEvents();
 
         return await base.SaveChangesAsync(cancellationToken);

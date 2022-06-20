@@ -40,6 +40,7 @@ public class TestBase
            .UseInMemoryDatabase(databaseName: "Test")
            .Options;
 
-        return new TimeReportContext(options, fakeCurrentUserService, fakeTenantService, fakeDomainEventService, fakeDateTimeService, fakeApiApplicationContext);
+        return new TimeReportContext(options, fakeTenantService, fakeDomainEventService, fakeApiApplicationContext,
+            new YourBrand.TimeReport.Infrastructure.Persistence.Interceptors.AuditableEntitySaveChangesInterceptor(fakeCurrentUserService, fakeDateTimeService));
     }
 }

@@ -6,6 +6,7 @@ using YourBrand.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using YourBrand.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Infrastructure;
 
@@ -25,6 +26,8 @@ public static class ServiceExtensions
             options => options.EnableRetryOnFailure());
 
         services.AddScoped<ICatalogContext>(sp => sp.GetRequiredService<CatalogContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

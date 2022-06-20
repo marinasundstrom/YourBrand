@@ -2,6 +2,7 @@ using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Customers.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Customers.Infrastructure.Persistence;
 
@@ -23,6 +24,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<ICustomersContext>(sp => sp.GetRequiredService<CustomersContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

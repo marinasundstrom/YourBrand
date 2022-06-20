@@ -4,6 +4,7 @@ using YourBrand.Accounting.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
 
@@ -20,6 +21,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<IAccountingContext>(sp => sp.GetRequiredService<AccountingContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

@@ -1,4 +1,6 @@
 ﻿
+using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
+
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Infrastructure.Persistence;
 using YourBrand.ApiKeys.Infrastructure.Services;
@@ -21,6 +23,8 @@ public static class ServiceExtensions
             options => options.EnableRetryOnFailure());
 
         services.AddScoped<IApiKeysContext>(sp => sp.GetRequiredService<ApiKeysContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

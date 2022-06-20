@@ -2,6 +2,7 @@ using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.RotRutService.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.RotRutService.Infrastructure.Persistence;
 
@@ -23,6 +24,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<IRotRutContext>(sp => sp.GetRequiredService<RotRutContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

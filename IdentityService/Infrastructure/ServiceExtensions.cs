@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Infrastructure.Persistence;
+using YourBrand.IdentityService.Infrastructure.Persistence.Interceptors;
 using YourBrand.IdentityService.Infrastructure.Services;
 
 namespace YourBrand.IdentityService.Infrastructure;
@@ -25,6 +26,8 @@ public static class ServiceExtensions
             options.UseSqlServer(configuration.GetConnectionString("mssql", "IdentityServer") ?? configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

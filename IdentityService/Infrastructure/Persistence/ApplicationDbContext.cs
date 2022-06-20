@@ -56,11 +56,6 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
-        {
-            UpdateState(entry);
-        }
-
         await DispatchEvents();
 
         return await base.SaveChangesAsync(cancellationToken);
@@ -81,31 +76,5 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 
         foreach (var domainEvent in domainEvents)
             await _domainEventService.Publish(domainEvent);
-    }
-
-    private void UpdateState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<IAuditableEntity> entry)
-    {
-        switch (entry.State)
-        {
-            case EntityState.Added:
-                entry.Entity.CreatedBy = _currentUserService.UserId;
-                entry.Entity.Created = _dateTime.Now;
-                break;
-
-            case EntityState.Modified:
-                entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                entry.Entity.LastModified = _dateTime.Now;
-                break;
-
-            case EntityState.Deleted:
-                if (entry.Entity is ISoftDelete softDelete)
-                {
-                    softDelete.DeletedBy = _currentUserService.UserId;
-                    softDelete.Deleted = _dateTime.Now;
-
-                    entry.State = EntityState.Modified;
-                }
-                break;
-        }
     }
 }

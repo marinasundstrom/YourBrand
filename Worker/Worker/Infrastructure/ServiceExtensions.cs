@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Worker.Application.Common.Interfaces;
 using Worker.Infrastructure.Persistence;
+using Worker.Infrastructure.Persistence.Interceptors;
 using Worker.Infrastructure.Services;
 
 namespace Worker.Infrastructure;
@@ -25,6 +26,8 @@ public static class ServiceExtensions
         options => options.EnableRetryOnFailure());
 
         services.AddScoped<IWorkerContext>(sp => sp.GetRequiredService<WorkerContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

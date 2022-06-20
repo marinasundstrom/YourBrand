@@ -1,6 +1,7 @@
 using YourBrand.Documents.Domain;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
@@ -24,6 +25,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<IDocumentsContext>(sp => sp.GetRequiredService<DocumentsContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

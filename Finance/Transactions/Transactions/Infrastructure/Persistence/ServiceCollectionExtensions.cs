@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Transactions.Domain;
+using YourBrand.Transactions.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Transactions.Infrastructure.Persistence;
 
@@ -22,6 +23,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<ITransactionsContext>(sp => sp.GetRequiredService<TransactionsContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

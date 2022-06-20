@@ -4,24 +4,33 @@ using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain;
 using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Domain.Entities;
+using YourBrand.Payments.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Payments.Infrastructure.Persistence;
 
 public class PaymentsContext : DbContext, IPaymentsContext
 {
     private readonly IDomainEventService _domainEventService;
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IDateTime _dateTime;
+    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public PaymentsContext(
         DbContextOptions<PaymentsContext> options,
         IDomainEventService domainEventService,
-        ICurrentUserService currentUserService,
-        IDateTime dateTime) : base(options)
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _domainEventService = domainEventService;
-        _currentUserService = currentUserService;
-        _dateTime = dateTime;
+        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+
+#if DEBUG
+        optionsBuilder.EnableSensitiveDataLogging(); 
+#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,28 +46,6 @@ public class PaymentsContext : DbContext, IPaymentsContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
-        {
-            if (entry.State == EntityState.Added)
-            {
-                entry.Entity.Created = _dateTime.Now;
-                entry.Entity.CreatedById = _currentUserService.UserId!;
-            }
-            else if (entry.State == EntityState.Modified)
-            {
-                entry.Entity.LastModified = _dateTime.Now;
-                entry.Entity.LastModifiedById = _currentUserService.UserId;
-            }
-            else if (entry.State == EntityState.Deleted
-                && entry.Entity is ISoftDelete e)
-            {
-                e.Deleted = _dateTime.Now;
-                e.DeletedById = _currentUserService.UserId;
-
-                entry.State = EntityState.Modified;
-            }
-        }
-
         await DispatchEvents();
 
         return await base.SaveChangesAsync(cancellationToken);

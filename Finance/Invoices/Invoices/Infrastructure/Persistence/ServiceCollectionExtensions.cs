@@ -2,6 +2,7 @@ using YourBrand.Invoices.Domain;
 using YourBrand.Invoices.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Invoices.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Invoices.Infrastructure.Persistence;
 
@@ -23,6 +24,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<IInvoicesContext>(sp => sp.GetRequiredService<InvoicesContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

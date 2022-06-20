@@ -29,8 +29,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Application\Events\" />
+	  <None Remove="Infrastructure\Persistence\Interceptors\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Application\Events\" />
+	  <Folder Include="Infrastructure\Persistence\Interceptors\" />
 	</ItemGroup>
 </Project>

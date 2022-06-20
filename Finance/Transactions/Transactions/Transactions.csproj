@@ -21,8 +21,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Controllers\" />
+	  <None Remove="Infrastructure\Persistence\Interceptors\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Controllers\" />
+	  <Folder Include="Infrastructure\Persistence\Interceptors\" />
 	</ItemGroup>
 </Project>

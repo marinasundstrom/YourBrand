@@ -6,6 +6,7 @@ using YourBrand.Showroom.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Showroom.Infrastructure;
 
@@ -25,6 +26,8 @@ public static class ServiceExtensions
             options => options.EnableRetryOnFailure());
 
         services.AddScoped<IShowroomContext>(sp => sp.GetRequiredService<ShowroomContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddScoped<IDomainEventService, DomainEventService>();
 

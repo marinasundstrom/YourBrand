@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Payments.Domain;
+using YourBrand.Payments.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Payments.Infrastructure.Persistence;
 
@@ -22,6 +23,8 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<IPaymentsContext>(sp => sp.GetRequiredService<PaymentsContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         return services;
     }

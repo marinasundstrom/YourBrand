@@ -37,4 +37,10 @@
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 	  </Compile>
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Infrastructure\Persistence\Interceptors\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Infrastructure\Persistence\Interceptors\" />
+	</ItemGroup>
 </Project>

@@ -27,4 +27,10 @@
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Infrastructure\Persistence\Interceptors\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Infrastructure\Persistence\Interceptors\" />
+	</ItemGroup>
 </Project>

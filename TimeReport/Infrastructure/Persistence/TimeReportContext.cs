@@ -9,40 +9,39 @@ using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
+using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
 public class TimeReportContext : DbContext, ITimeReportContext
 {
-    private readonly ICurrentUserService _currentUserService;
     private readonly ITenantService _tenantService;
     private readonly IDomainEventService _domainEventService;
-    private readonly IDateTime _dateTime;
+    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
     private readonly string _organizationId;
 
     public TimeReportContext(
         DbContextOptions<TimeReportContext> options,
-        ICurrentUserService currentUserService,
         ITenantService tenantService,
         IDomainEventService domainEventService,
-        IDateTime dateTime,
-        IApiApplicationContext apiApplicationContext) : base(options)
+        IApiApplicationContext apiApplicationContext,
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _currentUserService = currentUserService;
         _tenantService = tenantService;
         _domainEventService = domainEventService;
-        _dateTime = dateTime;
-
+        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         _organizationId = _tenantService.OrganizationId!;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); //.LogTo(Console.WriteLine);
-#endif
-
         base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+
+#if DEBUG
+        optionsBuilder.EnableSensitiveDataLogging(); 
+#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -98,37 +97,6 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    if(entry.Entity is IHasTenant e)
-                    {
-                        e.OrganizationId = _tenantService.OrganizationId!;
-                    }
-
-                    entry.Entity.CreatedById = _currentUserService.UserId;
-                    entry.Entity.Created = _dateTime.Now;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.LastModifiedById = _currentUserService.UserId;
-                    entry.Entity.LastModified = _dateTime.Now;
-                    break;
-
-                case EntityState.Deleted:
-                    if (entry.Entity is ISoftDelete softDelete)
-                    {
-                        softDelete.DeletedById = _currentUserService.UserId;
-                        softDelete.Deleted = _dateTime.Now;
-
-                        entry.State = EntityState.Modified;
-                    }
-                    break;
-            }
-        }
-
         await DispatchEvents();
 
         return await base.SaveChangesAsync(cancellationToken);
