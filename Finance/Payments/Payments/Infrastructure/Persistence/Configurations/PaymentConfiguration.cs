@@ -10,7 +10,5 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder.ToTable("Payments");
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }

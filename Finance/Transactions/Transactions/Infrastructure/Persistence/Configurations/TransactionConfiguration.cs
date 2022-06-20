@@ -10,7 +10,5 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
     public void Configure(EntityTypeBuilder<Transaction> builder)
     {
         builder.ToTable("Transactions");
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }

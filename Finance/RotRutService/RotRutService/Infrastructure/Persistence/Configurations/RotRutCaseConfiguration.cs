@@ -13,7 +13,5 @@ public class RotRutCaseConfiguration : IEntityTypeConfiguration<RotRutCase>
 
         builder.OwnsOne(x => x.Rot);
         builder.OwnsOne(x => x.Rut);
-
-        //builder.Ignore(e => e.DomainEvents);
     }
 }

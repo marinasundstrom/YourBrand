@@ -10,7 +10,5 @@ public class CaptureConfiguration : IEntityTypeConfiguration<Capture>
     public void Configure(EntityTypeBuilder<Capture> builder)
     {
         builder.ToTable("Captures");
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }

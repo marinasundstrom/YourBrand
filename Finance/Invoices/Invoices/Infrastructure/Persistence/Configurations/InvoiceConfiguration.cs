@@ -12,7 +12,5 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder.ToTable("Invoices");
 
         builder.OwnsOne(x => x.DomesticService, e => e.OwnsOne(z => z.PropertyDetails));
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }

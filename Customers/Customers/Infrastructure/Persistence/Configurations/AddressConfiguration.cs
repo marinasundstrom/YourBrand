@@ -10,7 +10,5 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
     public void Configure(EntityTypeBuilder<Address> builder)
     {
         builder.ToTable("Addresses");
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }

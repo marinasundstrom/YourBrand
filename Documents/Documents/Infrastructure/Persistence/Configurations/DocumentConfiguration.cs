@@ -12,7 +12,5 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
         builder.ToTable("Documents");
 
         builder.HasQueryFilter(x => x.Deleted == null);
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }

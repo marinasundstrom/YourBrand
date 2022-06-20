@@ -25,7 +25,5 @@ public class DirectoryConfiguration : IEntityTypeConfiguration<Directory>
             .HasForeignKey(x => x.DirectoryId);
 
         builder.HasQueryFilter(x => x.Deleted == null);
-
-        builder.Ignore(e => e.DomainEvents);
     }
 }
