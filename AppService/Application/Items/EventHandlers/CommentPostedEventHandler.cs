@@ -27,7 +27,5 @@ public class CommentPostedEventHandler : INotificationHandler<DomainEventNotific
         if (item is null) return;
 
         item.CommentCount = await context.Comments.CountAsync(c => c.Item.Id == domainEvent.ItemId);
-
-        await context.SaveChangesAsync(cancellationToken);
     }
 }

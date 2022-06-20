@@ -3,7 +3,7 @@ using YourBrand.Messenger.Domain.Common;
 
 namespace YourBrand.Messenger.Domain.Entities;
 
-public class ConversationParticipant : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class ConversationParticipant : AuditableEntity, ISoftDelete, IHasDomainEvents
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 

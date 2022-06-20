@@ -3,7 +3,7 @@ using YourBrand.Messenger.Domain.Common;
 
 namespace YourBrand.Messenger.Domain.Entities;
 
-public class MessageReceipt : AuditableEntity, IHasDomainEvent
+public class MessageReceipt : AuditableEntity, IHasDomainEvents
 {
     public string Id { get; set; } = null!;
 

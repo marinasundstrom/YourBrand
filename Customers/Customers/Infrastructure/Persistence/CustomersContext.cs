@@ -59,26 +59,19 @@ public class CustomersContext : DbContext, ICustomersContext
             }
         }
 
-        DomainEvent[] events = GetDomainEvents();
+        DispatchEvents();
 
-        var result = await base.SaveChangesAsync(cancellationToken);
-
-        await DispatchEvents(events);
-
-        return result;
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
-    private DomainEvent[] GetDomainEvents()
+    private async Task DispatchEvents()
     {
-        return ChangeTracker.Entries<IHasDomainEvents>()
+        var events = ChangeTracker.Entries<IHasDomainEvents>()
             .Select(x => x.Entity.DomainEvents)
             .SelectMany(x => x)
             .Where(domainEvent => !domainEvent.IsPublished)
             .ToArray();
-    }
 
-    private async Task DispatchEvents(DomainEvent[] events)
-    {
         foreach (var @event in events)
         {
             @event.IsPublished = true;

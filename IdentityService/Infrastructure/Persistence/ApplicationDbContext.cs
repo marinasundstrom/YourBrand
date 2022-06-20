@@ -61,17 +61,24 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
             UpdateState(entry);
         }
 
+        DispatchEvents();
+
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task DispatchEvents()
+    {
         var events = ChangeTracker.Entries<IHasDomainEvents>()
             .Select(x => x.Entity.DomainEvents)
             .SelectMany(x => x)
             .Where(domainEvent => !domainEvent.IsPublished)
             .ToArray();
 
-        var result = await base.SaveChangesAsync(cancellationToken);
-
-        await DispatchEvents(events);
-
-        return result;
+        foreach (var @event in events)
+        {
+            @event.IsPublished = true;
+            await _domainEventService.Publish(@event);
+        }
     }
 
     private void UpdateState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<IAuditableEntity> entry)
@@ -99,14 +106,4 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
                 break;
         }
     }
-
-    private async Task DispatchEvents(DomainEvent[] events)
-    {
-        foreach (var @event in events)
-        {
-            @event.IsPublished = true;
-            await _domainEventService.Publish(@event);
-        }
-    }
-
 }

@@ -3,7 +3,7 @@ using YourBrand.Messenger.Domain.Common;
 
 namespace YourBrand.Messenger.Domain.Entities;
 
-public class Message : AuditableEntity, ISoftDelete, IHasDomainEvent
+public class Message : AuditableEntity, ISoftDelete, IHasDomainEvents
 {
     private readonly HashSet<MessageReceipt> _receipts = new HashSet<MessageReceipt>();
     private readonly HashSet<Message> _replies = new HashSet<Message>();
