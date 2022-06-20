@@ -4,7 +4,7 @@ using YourBrand.Payments.Domain.Events;
 
 namespace YourBrand.Payments.Domain.Entities;
 
-public class Payment : AuditableEntity, IHasDomainEvents
+public class Payment : AuditableEntity
 {
     readonly HashSet<Capture> _captures = new HashSet<Capture>();
 
@@ -30,7 +30,7 @@ public class Payment : AuditableEntity, IHasDomainEvents
         Reference = reference;
         Message = message;
 
-        DomainEvents.Add(new PaymentCreated(Id));
+        AddDomainEvent(new PaymentCreated(Id));
     }
 
     public void SetStatus(PaymentStatus status)
@@ -39,7 +39,7 @@ public class Payment : AuditableEntity, IHasDomainEvents
         {
             Status = status;
 
-            DomainEvents.Add(new PaymentStatusChanged(Id, status));
+            AddDomainEvent(new PaymentStatusChanged(Id, status));
         }
     }
 
@@ -73,8 +73,6 @@ public class Payment : AuditableEntity, IHasDomainEvents
 
         AmountCaptured = Captures.Sum(c => c.Amount);
 
-        capture.DomainEvents.Add(new PaymentCaptured(Id, capture.Id));
+        capture.AddDomainEvent(new PaymentCaptured(Id, capture.Id));
     }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

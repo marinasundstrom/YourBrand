@@ -4,7 +4,7 @@ using YourBrand.ApiKeys.Domain.Enums;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class ApiKey : AuditableEntity, ISoftDelete, IHasDomainEvents
+public class ApiKey : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
@@ -20,6 +20,4 @@ public class ApiKey : AuditableEntity, ISoftDelete, IHasDomainEvents
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

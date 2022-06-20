@@ -64,5 +64,7 @@ public class NotificationCreatedEventHandler : INotificationHandler<DomainEventN
                 delay);
 
         notification.ScheduledJobId = jobId;
+
+        await context.SaveChangesAsync();
     }
 }

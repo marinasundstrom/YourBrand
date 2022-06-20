@@ -7,7 +7,7 @@ using YourBrand.Accounting.Domain.Common;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Entry : IHasDomainEvents
+public class Entry : BaseEntity
 {
     protected Entry()
     {
@@ -43,6 +43,4 @@ public class Entry : IHasDomainEvents
     public decimal? Debit { get; set; }
 
     public decimal? Credit { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

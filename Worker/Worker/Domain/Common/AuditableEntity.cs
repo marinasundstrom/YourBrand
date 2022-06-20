@@ -1,6 +1,6 @@
 ﻿namespace Worker.Domain.Common;
 
-public abstract class AuditableEntity
+public abstract class AuditableEntity: BaseEntity
 {
     public DateTime Created { get; set; }
 

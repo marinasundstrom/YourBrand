@@ -2,7 +2,7 @@ using YourBrand.ApiKeys.Domain.Common;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class Resource : AuditableEntity, ISoftDelete, IHasDomainEvents
+public class Resource : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
@@ -14,6 +14,4 @@ public class Resource : AuditableEntity, ISoftDelete, IHasDomainEvents
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

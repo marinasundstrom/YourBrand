@@ -6,7 +6,7 @@ using YourBrand.Invoices.Domain.Events;
 
 namespace YourBrand.Invoices.Domain.Entities;
 
-public class Invoice : IHasDomainEvents
+public class Invoice : BaseEntity
 {
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 
@@ -20,7 +20,7 @@ public class Invoice : IHasDomainEvents
         Currency = currency;
         Note = note;
 
-        DomainEvents.Add(new InvoiceCreated(Id));
+        AddDomainEvent(new InvoiceCreated(Id));
     }
 
     public int Id { get; set; }
@@ -32,7 +32,7 @@ public class Invoice : IHasDomainEvents
         if (Date != date)
         {
             Date = date;
-            DomainEvents.Add(new InvoiceDateChanged(Id, Date));
+            AddDomainEvent(new InvoiceDateChanged(Id, Date));
         }
     }
 
@@ -53,7 +53,7 @@ public class Invoice : IHasDomainEvents
         if (Type != type)
         {
             Type = type;
-            DomainEvents.Add(new InvoiceTypeChanged(Id, Type));
+            AddDomainEvent(new InvoiceTypeChanged(Id, Type));
         }
     }
 
@@ -64,7 +64,7 @@ public class Invoice : IHasDomainEvents
         if (Status != status)
         {
             Status = status;
-            DomainEvents.Add(new InvoiceStatusChanged(Id, Status));
+            AddDomainEvent(new InvoiceStatusChanged(Id, Status));
         }
     }
 
@@ -75,7 +75,7 @@ public class Invoice : IHasDomainEvents
         if (DueDate != dueDate)
         {
             DueDate = dueDate;
-            DomainEvents.Add(new InvoiceDueDateChanged(Id, DueDate));
+            AddDomainEvent(new InvoiceDueDateChanged(Id, DueDate));
         }
     }
 
@@ -86,7 +86,7 @@ public class Invoice : IHasDomainEvents
         if (Currency != currency)
         {
             Currency = currency;
-            //DomainEvents.Add(new InvoiceDueDateChanged(Id, DueDate));
+            //AddDomainEvent(new InvoiceDueDateChanged(Id, DueDate));
         }
     }
 
@@ -97,7 +97,7 @@ public class Invoice : IHasDomainEvents
         if (Reference != reference)
         {
             Reference = reference;
-            DomainEvents.Add(new InvoiceReferenceChanged(Id, Reference));
+            AddDomainEvent(new InvoiceReferenceChanged(Id, Reference));
         }
     }
 
@@ -114,7 +114,7 @@ public class Invoice : IHasDomainEvents
         if (Paid != amount)
         {
             Paid = amount;
-            DomainEvents.Add(new InvoiceAmountPaidChanged(Id, Paid));
+            AddDomainEvent(new InvoiceAmountPaidChanged(Id, Paid));
         }
 
         /*
@@ -140,7 +140,7 @@ public class Invoice : IHasDomainEvents
         if (Note != note)
         {
             Note = note;
-            DomainEvents.Add(new InvoiceNoteChanged(Id, Note));
+            AddDomainEvent(new InvoiceNoteChanged(Id, Note));
         }
     }
 
@@ -171,8 +171,6 @@ public class Invoice : IHasDomainEvents
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }
 
 public record InvoiceDomesticService(

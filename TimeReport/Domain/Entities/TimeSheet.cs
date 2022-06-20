@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheet : AuditableEntity, IHasDomainEvents, ISoftDelete
+public class TimeSheet : AuditableEntity, ISoftDelete
 {
     private readonly HashSet<TimeSheetActivity> _activities = new HashSet<TimeSheetActivity>();
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
@@ -79,7 +79,7 @@ public class TimeSheet : AuditableEntity, IHasDomainEvents, ISoftDelete
 
         _activities.Remove(activity);
 
-        DomainEvents.Add(new TimeSheetActivityAddedEvent(Id, activity.Id, activity.Activity.Id));
+        AddDomainEvent(new TimeSheetActivityAddedEvent(Id, activity.Id, activity.Activity.Id));
     }
 
     internal void AddEntry(Entry entry)
@@ -113,7 +113,7 @@ public class TimeSheet : AuditableEntity, IHasDomainEvents, ISoftDelete
         }
 
         UpdateStatus(TimeSheetStatus.Approved);
-        DomainEvents.Add(new TimeSheetApprovedEvent(Id));
+        AddDomainEvent(new TimeSheetApprovedEvent(Id));
     }
 
     public void Close()
@@ -124,7 +124,7 @@ public class TimeSheet : AuditableEntity, IHasDomainEvents, ISoftDelete
         }
 
         UpdateStatus(TimeSheetStatus.Closed);
-        DomainEvents.Add(new TimeSheetClosedEvent(Id));
+        AddDomainEvent(new TimeSheetClosedEvent(Id));
     }
 
     public void Reopen()
@@ -135,8 +135,6 @@ public class TimeSheet : AuditableEntity, IHasDomainEvents, ISoftDelete
         }
 
         UpdateStatus(TimeSheetStatus.Open);
-        DomainEvents.Add(new TimeSheetReoponedEvent(Id));
+        AddDomainEvent(new TimeSheetReoponedEvent(Id));
     }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

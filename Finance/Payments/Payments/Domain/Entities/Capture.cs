@@ -3,7 +3,7 @@ using YourBrand.Payments.Domain.Events;
 
 namespace YourBrand.Payments.Domain.Entities;
 
-public class Capture : IHasDomainEvents
+public class Capture : BaseEntity
 {
     private Capture()
     {
@@ -27,6 +27,4 @@ public class Capture : IHasDomainEvents
     public decimal Amount { get; set; }
 
     public string? TransactionId { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

@@ -83,23 +83,25 @@ class MessengerContext : DbContext, IMessengerContext
             }
         }
 
-        DispatchEvents();
+        await DispatchEvents();
 
         return await base.SaveChangesAsync(cancellationToken);
     }
 
     private async Task DispatchEvents()
     {
-        var events = ChangeTracker.Entries<IHasDomainEvents>()
-            .Select(x => x.Entity.DomainEvents)
-            .SelectMany(x => x)
-            .Where(domainEvent => !domainEvent.IsPublished)
-            .ToArray();
+        var entities = ChangeTracker
+            .Entries<BaseEntity>()
+            .Where(e => e.Entity.DomainEvents.Any())
+            .Select(e => e.Entity);
 
-        foreach (var @event in events)
-        {
-            @event.IsPublished = true;
-            await _domainEventService.Publish(@event);
-        }
+        var domainEvents = entities
+            .SelectMany(e => e.DomainEvents)
+            .ToList();
+
+        entities.ToList().ForEach(e => e.ClearDomainEvents());
+
+        foreach (var domainEvent in domainEvents)
+            await _domainEventService.Publish(domainEvent);
     }
 }

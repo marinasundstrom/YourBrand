@@ -5,7 +5,7 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Entry : AuditableEntity, IHasDomainEvents
+public class Entry : AuditableEntity
 {
     public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
         DateOnly date, double? hours, string? description)
@@ -20,7 +20,7 @@ public class Entry : AuditableEntity, IHasDomainEvents
         Hours = hours;
         Description = description;
 
-        DomainEvents.Add(new EntryCreatedEvent(project.Id, timeSheet.Id, activity.Id, Id, hours));
+        AddDomainEvent(new EntryCreatedEvent(project.Id, timeSheet.Id, activity.Id, Id, hours));
     }
 
     internal Entry()
@@ -67,14 +67,12 @@ public class Entry : AuditableEntity, IHasDomainEvents
         UpdateStatus(EntryStatus.Unlocked);
     }
 
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
-
     public void UpdateHours(double? value)
     {
         if (Hours == value) return;
 
         Hours = value;
 
-        DomainEvents.Add(new EntryHoursUpdatedEvent(Project.Id, TimeSheet.Id, Activity.Id, Id, value));
+        AddDomainEvent(new EntryHoursUpdatedEvent(Project.Id, TimeSheet.Id, Activity.Id, Id, value));
     }
 }

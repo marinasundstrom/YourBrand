@@ -3,7 +3,7 @@ using YourBrand.Domain.Common;
 
 namespace YourBrand.Domain.Entities;
 
-public class Comment : AuditableEntity, ISoftDelete, IHasDomainEvents
+public class Comment : AuditableEntity, ISoftDelete
 {
     protected Comment()
     {
@@ -25,6 +25,4 @@ public class Comment : AuditableEntity, ISoftDelete, IHasDomainEvents
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

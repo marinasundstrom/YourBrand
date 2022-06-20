@@ -4,7 +4,7 @@ using Worker.Domain.Common;
 
 namespace Worker.Domain.Entities;
 
-public class Notification : AuditableEntity, ISoftDelete, IHasDomainEvents
+public class Notification : AuditableEntity, ISoftDelete
 {
     public Notification()
     {
@@ -44,6 +44,4 @@ public class Notification : AuditableEntity, ISoftDelete, IHasDomainEvents
 
     public DateTime? Deleted { get; set; }
     public string? DeletedBy { get; set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

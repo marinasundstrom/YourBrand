@@ -4,7 +4,7 @@ using YourBrand.Transactions.Domain.Events;
 
 namespace YourBrand.Transactions.Domain.Entities;
 
-public class Transaction : IHasDomainEvents
+public class Transaction : BaseEntity
 {
     private Transaction()
     {
@@ -26,7 +26,7 @@ public class Transaction : IHasDomainEvents
         Currency = currency;
         Amount = amount;
 
-        DomainEvents.Add(new TransactionRegistered(Id));
+        AddDomainEvent(new TransactionRegistered(Id));
     }
 
     public string Id { get; set; } = null!;
@@ -40,7 +40,7 @@ public class Transaction : IHasDomainEvents
         if(Reference != reference) 
         {
             Reference = reference;
-            DomainEvents.Add(new TransactionReferenceUpdated(Id, reference));
+            AddDomainEvent(new TransactionReferenceUpdated(Id, reference));
         }
     }
 
@@ -52,14 +52,12 @@ public class Transaction : IHasDomainEvents
 
     public decimal Amount { get; set; }
 
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
-
     public void SetStatus(TransactionStatus status)
     {
         if(Status != status) 
         {
             Status = status;
-            DomainEvents.Add(new TransactionStatusChanged(Id, status));
+            AddDomainEvent(new TransactionStatusChanged(Id, status));
         }
     }
 }

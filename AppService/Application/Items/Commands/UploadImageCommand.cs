@@ -36,7 +36,7 @@ public record UploadImageCommand(string Id, Stream Stream) : IRequest<UploadImag
 
             await _fileUploaderService.UploadFileAsync(imageId, request.Stream, cancellationToken);
 
-            item.DomainEvents.Add(new ItemImageUploadedEvent(item.Id));
+            item.AddDomainEvent(new ItemImageUploadedEvent(item.Id));
 
             item.Image = imageId;
             await context.SaveChangesAsync(cancellationToken);

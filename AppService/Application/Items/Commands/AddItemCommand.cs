@@ -28,7 +28,7 @@ public record AddItemCommand(string Name, string Description) : IRequest
         {
             var item = new Item(request.Name, request.Description);
 
-            item.DomainEvents.Add(new ItemCreatedEvent(item.Id));
+            item.AddDomainEvent(new ItemCreatedEvent(item.Id));
 
             context.Items.Add(item);
 

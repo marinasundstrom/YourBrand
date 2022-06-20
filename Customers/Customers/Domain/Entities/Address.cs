@@ -4,7 +4,7 @@ using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public class Address : AuditableEntity, IHasDomainEvents
+public class Address : AuditableEntity
 {
     protected Address()
     {
@@ -16,7 +16,7 @@ public class Address : AuditableEntity, IHasDomainEvents
         Id = Guid.NewGuid().ToString();
         Thoroughfare = thoroughfare;
 
-        DomainEvents.Add(new AddressCreated(Id));
+        AddDomainEvent(new AddressCreated(Id));
     }
 
     public string Id { get; private set; }
@@ -46,6 +46,4 @@ public class Address : AuditableEntity, IHasDomainEvents
     public string AdministrativeArea { get; set; } = null!;
 
     public string Country { get; set; } = null!;
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

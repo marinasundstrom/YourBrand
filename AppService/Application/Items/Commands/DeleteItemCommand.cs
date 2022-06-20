@@ -30,7 +30,7 @@ public record DeleteItemCommand(string Id) : IRequest<DeletionResult>
                 return DeletionResult.NotFound;
             }
 
-            item.DomainEvents.Add(new ItemDeletedEvent(item.Id, item.Name));
+            item.AddDomainEvent(new ItemDeletedEvent(item.Id, item.Name));
 
             context.Items.Remove(item);
 

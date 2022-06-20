@@ -3,7 +3,7 @@ using YourBrand.Documents.Domain.Events;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Directory : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletable, IItem
+public class Directory : AuditableEntity, ISoftDelete, IDeletable, IItem
 {
     private readonly HashSet<Document> _documents = new HashSet<Document>();
     private readonly HashSet<Directory> _directories = new HashSet<Directory>();
@@ -17,7 +17,7 @@ public class Directory : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeleta
         Id = Guid.NewGuid().ToString();
         Name = name;
 
-        DomainEvents.Add(new DirectoryCreated(Id));
+        AddDomainEvent(new DirectoryCreated(Id));
     }
 
     public string Id { get; private set; } = null!;
@@ -38,7 +38,7 @@ public class Directory : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeleta
         {
             Name = newName;
 
-            DomainEvents.Add(new DirectoryRenamed(Id, newName, oldName));
+            AddDomainEvent(new DirectoryRenamed(Id, newName, oldName));
             return true;
         }
 
@@ -67,8 +67,6 @@ public class Directory : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeleta
         _directories.Add(directory);
         return directory;
     }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 
     public DomainEvent GetDeleteEvent() => new DirectoryDeleted(Id, string.Empty);
 

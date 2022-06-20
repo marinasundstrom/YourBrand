@@ -3,7 +3,7 @@ using YourBrand.Documents.Domain.Events;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Document : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletable, IItem
+public class Document : AuditableEntity, ISoftDelete, IDeletable, IItem
 {
     private Document()
     {
@@ -16,7 +16,7 @@ public class Document : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletab
         Extension = Path.GetExtension(name).Trim('.');
         ContentType = contentType;
 
-        DomainEvents.Add(new DocumentCreated(Id));
+        AddDomainEvent(new DocumentCreated(Id));
     }
 
     public string Id { get; private set; } = null!;
@@ -35,7 +35,7 @@ public class Document : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletab
         {
             Name = newName;
 
-            DomainEvents.Add(new DocumentRenamed(Id, newName, oldName));
+            AddDomainEvent(new DocumentRenamed(Id, newName, oldName));
             return true;
         }
 
@@ -58,8 +58,6 @@ public class Document : AuditableEntity, ISoftDelete, IHasDomainEvents, IDeletab
     }
 
     public DateTime? Expiration { get; private set; }
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 
     public DomainEvent GetDeleteEvent() => new DocumentDeleted(Id, string.Empty);
 

@@ -72,7 +72,7 @@ public record CreateNotificationCommand(string Title, string? Text, string? Link
             notification.UserId = userId ?? request.UserId;
             notification.ScheduledFor = request.ScheduledFor;
 
-            notification.DomainEvents.Add(new NotificationCreatedEvent(notification.Id));
+            notification.AddDomainEvent(new NotificationCreatedEvent(notification.Id));
             return notification;
         }
     }

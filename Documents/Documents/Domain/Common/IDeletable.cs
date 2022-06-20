@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Documents.Domain.Common;
 
-public interface IDeletable : IHasDomainEvents
+public interface IDeletable
 {
     DomainEvent GetDeleteEvent();
 }
