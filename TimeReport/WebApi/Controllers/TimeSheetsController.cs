@@ -65,18 +65,18 @@ public class TimeSheetsController : ControllerBase
 
         return result switch
         {
-            ResultWithValue<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
+            Result<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
             _ => BadRequest()
 
             /*
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is TimeSheetClosedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is MonthLockedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is EntryAlreadyExistsException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is ProjectMembershipNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is ActivityNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is DayHoursExceedPermittedDailyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            ResultWithValue<EntryDto, DomainException>.Error(DomainException exception) when exception is WeekHoursExceedPermittedWeeklyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is TimeSheetClosedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is MonthLockedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is EntryAlreadyExistsException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is ProjectMembershipNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is ActivityNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is DayHoursExceedPermittedDailyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is WeekHoursExceedPermittedWeeklyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
             */
         };
     }
@@ -93,8 +93,8 @@ public class TimeSheetsController : ControllerBase
             
             return result switch
             {
-                ResultWithValue<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
-                ResultWithValue<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+                Result<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
+                Result<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
                 _ => BadRequest()
             };
         }

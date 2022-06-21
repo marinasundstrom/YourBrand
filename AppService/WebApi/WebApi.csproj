@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0-preview.5.22301.12" />
     <PackageReference Include="MiniValidation" Version="0.4.1-pre.20220107.41" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0-preview.5.22303.8" />
-    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22114.1" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.22272.1" />
   </ItemGroup>
 
   <ItemGroup>

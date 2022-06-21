@@ -13,9 +13,9 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<ResultWithValue<EntryDto, DomainException>>
+public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
 {
-    public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, ResultWithValue<EntryDto, DomainException>>
+    public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Result<EntryDto, DomainException>>
     {
         private readonly ITimeReportContext _context;
 
@@ -24,30 +24,30 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
             _context = context;
         }
 
-        public async Task<ResultWithValue<EntryDto, DomainException>> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<EntryDto, DomainException>> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetNotFoundException(request.TimeSheetId));
+                return new Result<EntryDto, DomainException>.Error(new TimeSheetNotFoundException(request.TimeSheetId));
             }
 
             if (timeSheet.Status != TimeSheetStatus.Open)
             {
-                return new ResultWithValue<EntryDto, DomainException>.Error(new TimeSheetClosedException(request.TimeSheetId));
+                return new Result<EntryDto, DomainException>.Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
             var entry = timeSheet.Entries.FirstOrDefault(e => e.Id == request.EntryId);
 
             if (entry is null)
             {
-                return new ResultWithValue<EntryDto, DomainException>.Error(new EntryNotFoundException(request.EntryId));
+                return new Result<EntryDto, DomainException>.Error(new EntryNotFoundException(request.EntryId));
             }
 
             if (entry.MonthGroup.Status == EntryStatus.Locked)
             {
-                return new ResultWithValue<EntryDto, DomainException>.Error(new MonthLockedException(request.TimeSheetId));
+                return new Result<EntryDto, DomainException>.Error(new MonthLockedException(request.TimeSheetId));
             }
 
             entry.UpdateHours(request.Hours);
@@ -56,18 +56,18 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
             double totalHoursDay = timeSheet.Entries.Where(e => e.Date == entry.Date).Sum(e => e.Hours.GetValueOrDefault());
             if (totalHoursDay > WorkingDayHours)
             {
-                return new ResultWithValue<EntryDto, DomainException>.Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, entry.Date));
+                return new Result<EntryDto, DomainException>.Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, entry.Date));
             }
 
             double totalHoursWeek = timeSheet.Entries.Sum(x => x.Hours.GetValueOrDefault());
             if (totalHoursWeek > WorkingWeekHours)
             {
-                return new ResultWithValue<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
+                return new Result<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new ResultWithValue<EntryDto, DomainException>.Ok(entry.ToDto());
+            return new Result<EntryDto, DomainException>.Ok(entry.ToDto());
         }
     }
 }
