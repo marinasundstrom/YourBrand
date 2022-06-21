@@ -33,9 +33,7 @@ public record GetUserQuery(string UserId) : IRequest<UserDto>
                 return null!;
             }
 
-            return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Roles.First().Name, user.SSN, user.Email,
-                user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),
-                    user.Created, user.LastModified);
+            return user.ToDto();
         }
     }
 }

@@ -28,7 +28,4 @@
      <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="IdentityModel" />
-  </ItemGroup>
 </Project>

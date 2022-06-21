@@ -15,6 +15,8 @@ public interface IApplicationDbContext
 
     DbSet<Team> Teams { get; }
 
+    DbSet<TeamMembership> TeamMemberships { get; }
+
     DbSet<Department> Departments { get; }
 
     DbSet<BankAccount> BankAccounts { get; }

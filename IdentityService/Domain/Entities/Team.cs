@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using YourBrand.IdentityService.Domain.Common;
+
 namespace YourBrand.IdentityService.Domain.Entities;
 
-public class Team 
+public class Team : AuditableEntity
 {
     readonly HashSet<Person> _members = new HashSet<Person>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();

@@ -50,6 +50,8 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 
     public DbSet<Team> Teams { get; set; } = null!;
 
+    public DbSet<TeamMembership> TeamMemberships { get; set; } = null!;
+
     public DbSet<Department> Departments { get; set; } = null!;
 
     public DbSet<BankAccount> BankAccounts { get; set; } = null!;

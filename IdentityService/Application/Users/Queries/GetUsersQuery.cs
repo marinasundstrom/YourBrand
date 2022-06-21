@@ -51,9 +51,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
                 .Include(u => u.Department)
                 .ToListAsync(cancellationToken);
 
-            var dtos = users.Select(user => new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Roles.First().Name, user.SSN, user.Email,
-                user.Department == null ? null : new DepartmentDto(user.Department.Id, user.Department.Name),
-                    user.Created, user.LastModified));
+            var dtos = users.Select(user => user.ToDto());
 
             return new ItemsResult<UserDto>(dtos, totalItems);
         }
