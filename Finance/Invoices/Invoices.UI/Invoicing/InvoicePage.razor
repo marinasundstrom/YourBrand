@@ -92,21 +92,21 @@
                 </MudItem>
 
                 <MudItem xs="6" sm="6" md="3" lg="3">
-                    <MudField Label="Total">@Model.Total.ToString("c")</MudField>
+                    <MudField Label="Total">@Model.Total.FormatCurrency(invoice.Currency)</MudField>
                     </MudItem>
 
                     <MudItem xs="6" sm="6" md="3" lg="3">
-                        <MudField Label="Sub Total">@Model.SubTotal.ToString("c")</MudField>
+                        <MudField Label="Sub Total">@Model.SubTotal.FormatCurrency(invoice.Currency)</MudField>
                     </MudItem>
 
                     <MudItem xs="6" sm="6" md="3" lg="3">
-                        <MudField Label="VAT">@Model.Vat.ToString("c")</MudField>
+                        <MudField Label="VAT">@Model.Vat.FormatCurrency(invoice.Currency)</MudField>
                     </MudItem>
 
             @if (Model.DomesticService?.RequestedAmount is not null)
             {
                         <MudItem xs="6" sm="6" md="3" lg="3">
-                            <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">-@invoice.DomesticService?.RequestedAmount.ToString("c")</MudField>
+                            <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">-@invoice.DomesticService?.RequestedAmount.FormatCurrency(invoice.Currency)</MudField>
                         </MudItem>
             }
 
@@ -121,7 +121,7 @@
             @if (Model.Paid is not null)
             {
                         <MudItem xs="6" sm="6" md="3" lg="3">
-                            <MudField Label="Paid">@invoice.Paid?.ToString("c")</MudField>
+                            <MudField Label="Paid">@invoice.Paid?.FormatCurrency(invoice.Currency)</MudField>
                         </MudItem>
 
                 if (payment?.AmountCaptured.GetValueOrDefault() != invoice.Total)
@@ -139,7 +139,7 @@
                                 remaining = true;
                             }
                         }
-                                    <MudField Label="@(remaining ? "Remaining" : "Repaid")">@(diff.ToString("c"))</MudField>
+                                    <MudField Label="@(remaining ? "Remaining" : "Repaid")">@(diff.FormatCurrency(invoice.Currency))</MudField>
                                     </MudItem>
                 }
             }
@@ -176,7 +176,7 @@
                 <MudTd DataLabel="Quantity">@invoiceItem.Quantity</MudTd>
                 <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
                 <MudTd DataLabel="VAT">@(invoiceItem.VatRate * 100)%</MudTd>
-                <MudTd DataLabel="Line Total (excl. VAT)">@invoiceItem.LineTotal.ToString("c")</MudTd>
+                <MudTd DataLabel="Line Total (excl. VAT)">@invoiceItem.LineTotal.FormatCurrency(invoice.Currency)</MudTd>
             @if (Model.Status == InvoiceStatus.Draft)
             {
                         <MudTd>
@@ -204,7 +204,7 @@
                     <MudField Label="Kind">@invoice.DomesticService.Kind</MudField>
                     <MudField Label="Description" Class="mt-4">@invoice.DomesticService.Description</MudField>
                     <MudField Label="Buyer" Class="mt-4">@invoice.DomesticService.Buyer</MudField>
-                    <MudField Label="Requested Amount" Class="mt-4">@invoice.DomesticService.RequestedAmount.ToString("c")</MudField>
+                    <MudField Label="Requested Amount" Class="mt-4">@invoice.DomesticService.RequestedAmount.FormatCurrency(invoice.Currency)</MudField>
                 </MudPaper>
     }
 }

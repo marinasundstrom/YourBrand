@@ -54,14 +54,14 @@
         <MudTd DataLabel="Service">@(c.Rot is not null ? c.Rot?.ServiceType.ToString() : c.Rut?.ServiceType.ToString())</MudTd>
         <MudTd DataLabel="Status">@c.Status</MudTd>
         <MudTd DataLabel="Payment Date">@c.PaymentDate.ToString("yyyy-MM-dd")</MudTd>
-        <MudTd DataLabel="Labor Cost">@c.LaborCost.ToString("c")</MudTd>
-        <MudTd DataLabel="Paid Amount">@c.PaidAmount.ToString("c")</MudTd>
-        <MudTd DataLabel="Requested Amount">@c.RequestedAmount.ToString("c")</MudTd>
+        <MudTd DataLabel="Labor Cost">@c.LaborCost.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Paid Amount">@c.PaidAmount.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Requested Amount">@c.RequestedAmount.FormatCurrency(currency)</MudTd>
         <MudTd DataLabel="Invoice Id"><a href="/invoices/@c.InvoiceId">@c.InvoiceId</a></MudTd>
-        <MudTd DataLabel="Other Costs">@c.OtherCosts.ToString("c")</MudTd>
+        <MudTd DataLabel="Other Costs">@c.OtherCosts.FormatCurrency(currency)</MudTd>
         <MudTd DataLabel="Hours">@TimeSpan.FromHours(c.Hours)</MudTd>
-        <MudTd DataLabel="Material Cost">@c.MaterialCost.ToString("c")</MudTd>
-        <MudTd DataLabel="Received Amount">@c.ReceivedAmount?.ToString("c")</MudTd>
+        <MudTd DataLabel="Material Cost">@c.MaterialCost.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Received Amount">@c.ReceivedAmount?.FormatCurrency(currency)</MudTd>
         <MudTd>
 
         </MudTd>
@@ -76,6 +76,8 @@
 
 @code
 {
+    string currency = "SEK";
+
     MudTable<RotRutCaseDto> table;
     bool loading = false;
     DomesticServiceKind? kind;

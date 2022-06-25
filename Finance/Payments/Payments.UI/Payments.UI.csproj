@@ -21,5 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
     <ProjectReference Include="..\Payments.Client\Payments.Client.csproj" />
+    <ProjectReference Include="..\..\..\Utils\Utils.csproj" />
   </ItemGroup>
 </Project>

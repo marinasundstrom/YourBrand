@@ -42,7 +42,7 @@
         <MudTd DataLabel="From">@transaction.From</MudTd>
         <MudTd DataLabel="Reference">@transaction.Reference</MudTd>
         <MudTd DataLabel="Currency">@transaction.Currency</MudTd>
-        <MudTd DataLabel="Amount">@transaction.Amount.ToString("c")</MudTd>
+        <MudTd DataLabel="Amount">@transaction.Amount.FormatCurrency(transaction.Currency)</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
