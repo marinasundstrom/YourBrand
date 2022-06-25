@@ -11,7 +11,9 @@ public class RotRutCaseConfiguration : IEntityTypeConfiguration<RotRutCase>
     {
         builder.ToTable("RotRutCases");
 
-        builder.Ignore(x => x.Rot);
-        builder.Ignore(x => x.Rut);
+        builder.OwnsOne(x => x.Rot);
+        builder.Navigation(x => x.Rot).IsRequired();
+        builder.OwnsOne(x => x.Rut);
+        builder.Navigation(x => x.Rut).IsRequired();
     }
 }
