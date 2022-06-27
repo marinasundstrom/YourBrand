@@ -15,12 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\TestData\TestData.csproj" />
     <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Persistence\Interceptors\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persistence\Interceptors\" />
-  </ItemGroup>
+
 </Project>

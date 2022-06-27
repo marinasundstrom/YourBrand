@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Web API",
@@ -2457,9 +2457,20 @@
           "companyName": {
             "type": "string"
           },
+          "companyLogo": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
           "location": {
             "type": "string",
             "nullable": true
+          },
+          "employmentType": {
+            "type": "string"
           },
           "startDate": {
             "type": "string",
@@ -2469,6 +2480,12 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "highlight": {
+            "type": "boolean"
           },
           "description": {
             "type": "string",
@@ -2486,9 +2503,20 @@
           "companyName": {
             "type": "string"
           },
+          "companyLogo": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
           "location": {
             "type": "string",
             "nullable": true
+          },
+          "employmentType": {
+            "type": "string"
           },
           "startDate": {
             "type": "string",
@@ -2498,6 +2526,12 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "highlight": {
+            "type": "boolean"
           },
           "description": {
             "type": "string",
@@ -2515,9 +2549,20 @@
           "companyName": {
             "type": "string"
           },
+          "companyLogo": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
           "location": {
             "type": "string",
             "nullable": true
+          },
+          "employmentType": {
+            "type": "string"
           },
           "startDate": {
             "type": "string",
@@ -2527,6 +2572,12 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "highlight": {
+            "type": "boolean"
           },
           "description": {
             "type": "string",

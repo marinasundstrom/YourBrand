@@ -61,7 +61,7 @@ public static class Mapper
 
     public static ExperienceDto ToDto(this Domain.Entities.ConsultantProfileExperience experience)
     {
-        return new ExperienceDto(experience.Id, experience.Title, experience.CompanyName, experience.Location, experience.StartDate, experience.EndDate, experience.Description);
+        return new ExperienceDto(experience.Id, experience.Title, experience.CompanyName, experience.CompanyLogo, experience.Link, experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description);
     }
 
     public static SkillDto ToDto(this Domain.Entities.Skill skill)

@@ -4,37 +4,26 @@
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 
-<MudCard>
-    <MudCardContent>
-        <div class="d-flex justify-space-between align-center mb-4">
-            <MudText Typo="Typo.h5">
+<MudCard Class="pa-md-8 mb-4">
+    <MudCardHeader>
+        <div class="d-flex justify-space-between align-center">
+            <MudText Typo="Typo.h4">
                 Experience
             </MudText>
 
             <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="async () => await AddOrEditExperience(null)" />
         </div>
+    </MudCardHeader>
 
-        @foreach (var experience in experiences)
-        {
-            <div class="d-flex justify-space-between align-center">
-                <MudText Typo="Typo.h6">
-                    @experience.Title
-                </MudText>
-
-                <div>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await AddOrEditExperience(experience)" />
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await RemoveExperience(experience)" />
-                </div>
-            </div>
-
-            <MudText Typo="Typo.body2">@experience.CompanyName</MudText>
-            <MudText Typo="Typo.body2">@experience.StartDate.ToString("MMMM yyyy") - @(experience.EndDate?.ToString("MMMM yyyy") ?? "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit: Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))</MudText>
-            <MudText Typo="Typo.body2">@experience.Location</MudText>
-
-            <MudText Class="mt-4 mb-4">
-                @((MarkupString)experience.Description.Replace("\n", "<br />"))
-            </MudText>
+    <MudCardContent>
+        @{
+            var groups = experiences
+                   .OrderByDescending(x => x.Highlight)
+                   .ThenByDescending(x => Default(x.EndDate))
+                   .GroupBy(e => e.CompanyName);
         }
+
+        <ExperienceList Groups="groups" />
 
         @if (experiences.Count() < total)
         {
@@ -96,9 +85,9 @@
 
         isLoading = true;
 
-        #if DEBUG
+#if DEBUG
         await Task.Delay(2000);
-        #endif
+#endif
 
         var experiencesResult = await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, page++, 3, null, null, null);
         experiences.AddRange(experiencesResult.Items);
@@ -147,5 +136,10 @@
         {
             exception.Redirect();
         }
+    }
+
+    DateTimeOffset Default(DateTimeOffset? date)
+    {
+        return date ?? DateTimeOffset.Now;
     }
 }

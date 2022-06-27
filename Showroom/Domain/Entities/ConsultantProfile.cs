@@ -1,6 +1,7 @@
 using System;
 
 using YourBrand.Showroom.Domain.Common;
+using YourBrand.Showroom.Domain.Enums;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
@@ -29,6 +30,8 @@ public class ConsultantProfile : AuditableEntity, ISoftDelete
     public CompetenceArea CompetenceArea { get; set; }  = null!;
 
     public string CompetenceAreaId { get; set; } = null!;
+    
+    public Availability Availability { get; set; } = Availability.Available;
 
     public string? ProfileImage { get; set; }
 

@@ -60,6 +60,10 @@ else
 
         <MudItem xs="12" sm="12" md="8">
             <AboutSection ConsultantProfile="consultant" />
+
+            <ExperienceSection ConsultantProfileId="@Id" />
+
+            <SkillsSection ConsultantProfileId="@consultant.Id" />
         </MudItem>
 
         <MudItem xs="12" sm="12" md="4">
@@ -131,14 +135,6 @@ else
                     </dl>
                 </MudCardContent>
             </MudCard>
-        </MudItem>
-
-        <MudItem xs="12" sm="12" md="12">
-            <ExperienceSection ConsultantProfileId="@Id" />
-        </MudItem>
-
-        <MudItem xs="12" sm="12" md="12">
-            <SkillsSection ConsultantProfileId="@consultant.Id" />
         </MudItem>
     </MudGrid>
 }

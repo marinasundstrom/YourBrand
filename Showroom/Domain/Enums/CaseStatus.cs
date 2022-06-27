@@ -7,3 +7,9 @@ public enum CaseStatus
     Sent,
     Closed
 }
+
+public enum Availability 
+{
+    Unavailable,
+    Available
+}

@@ -3,6 +3,8 @@ using YourBrand.Showroom.Domain.ValueObjects;
 using YourBrand.Showroom.Infrastructure.Persistence;
 
 using Microsoft.Extensions.DependencyInjection;
+using YourBrand.Showroom.TestData;
+using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -147,5 +149,54 @@ public static class Seed
 
             await context.SaveChangesAsync();
         }
+
+        ConsultantProfile consultantProfile = new ConsultantProfile() {
+            Id = Guid.NewGuid().ToString(),
+            FirstName = "Marina",
+            LastName = "Sundström",
+            DisplayName = null,
+            BirthDate = new DateTime(1990, 1, 5),
+            Organization = await context.Organizations.FirstAsync(),
+            CompetenceArea = await context.CompetenceAreas.FirstAsync(),
+            Headline = "Senior Software Developer",
+            ShortPresentation = "I'm as Software developer who is based in Malmö, Sweden.",
+            Presentation = @"
+I'm as Software developer who is based in Malmö, Sweden.
+
+I have been programming since 2007. My interest back then was to figure out how it all works. Since then I have been learning a lot about software engineering, both professionally and in my free time.
+
+My career began back in 2014, when I was working as a software developer for a local company that provided Internet and IT services. After that I went into consulting, where I got to experience software development at various companies and in many fields. I have maninly been working with technologies such as .NET and Web.",
+        };
+
+        context.ConsultantProfiles.Add(consultantProfile);
+
+        var resume = Resume.FromJson(await File.ReadAllTextAsync("../TestData/resume.json"));
+        foreach(var experience in resume.Experience)
+        {
+            consultantProfile.Experience.Add(new Domain.Entities.ConsultantProfileExperience() {
+                Id = Guid.NewGuid().ToString(),
+                ConsultantProfile = consultantProfile,
+                Current = experience.Current,
+                Highlight = experience.Highlight,
+                CompanyName = experience.Company,
+                CompanyLogo = experience.CompanyLogo,
+                Link = experience.Link,
+                Location = experience.Location,
+                Title = experience.Title,
+                EmploymentType = experience.EmploymentType,
+                StartDate = experience.StartDate,
+                EndDate = experience.EndDate,
+                Description = experience.Description
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        /*
+        consultantProfile.Languages.Add(new LanguageSkill {
+            Language = context.Languages.FirstOrDefault(l => l.ISO639 == "sv"),
+            SkillLevel = SkillLevel.Native
+        });
+        */
     }
 }

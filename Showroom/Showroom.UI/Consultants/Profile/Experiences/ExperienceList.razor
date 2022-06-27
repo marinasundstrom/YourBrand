@@ -1,0 +1,90 @@
+@using YourBrand.Showroom.Client
+
+@foreach (var group in Groups)
+{
+    var (company, experiences) = group;
+
+    if (experiences.Count() == 1)
+    {
+        var experience = experiences.First();
+
+        <div class="d-flex mt-3" style="page-break-inside: avoid;">
+            <div class="col-logo">
+                <Logo Src="@experience.CompanyLogo" Alt="@($"{experience.CompanyName} logo")" Class="me-4"
+                    Href="@experience.Link" />
+            </div>
+
+            <div class="flex-grow-1">
+                <div class="mb-4">
+                    <MudText Typo="Typo.h5" Class="mb-2">
+                        @experience.Title
+                    </MudText>
+
+                    <ExperienceView Model="@Foo(experience, false)" />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        var lastExperience = experiences.First();
+        var firstExperience = experiences.Last();
+
+        <div style="page-break-inside: avoid;">
+            <div class="d-flex">
+                <div class="col-logo">
+                        <Logo Src="@firstExperience.CompanyLogo" Alt="@($"{firstExperience.CompanyName} logo")" Class="me-4"
+                        Href="@firstExperience.Link" />
+                </div>
+
+                <div class="flex-grow-1">
+                    <MudText Typo="Typo.h5" Class="mb-2">
+                        @firstExperience.CompanyName
+                    </MudText>
+
+                    <p class="text-muted meta mb-5">
+                        @firstExperience.GetStartDate().Humanize2(lastExperience.GetEndDate())
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <div class="mt-5 mb-4">
+                    <MudTimeline TimelinePosition="TimelinePosition.Start" TimelineAlign="TimelineAlign.Start" Class="pb-0">
+
+                        @foreach (var experience in experiences
+                            .OrderByDescending(x => x.StartDate)
+                            .ThenByDescending(x => x.EndDate))
+                                {
+                                    <MudTimelineItem Size="Size.Small" Color="Color.Info">
+                                        <MudPaper Elevation="0" Class="mt-n1">
+                                            <MudText Typo="Typo.h5" Class="mb-2 mt-1">
+                                                @experience.Title
+                                            </MudText>
+
+                                            <ExperienceView Model="@Foo(experience, true)" />
+                                        </MudPaper>
+                                    </MudTimelineItem>
+                                }
+                    </MudTimeline>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Groups.LastOrDefault() != group)
+    {
+        <hr />
+    }
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IEnumerable<IGrouping<string, ExperienceDto>> Groups { get; set; } = null!;
+
+    public Obj Foo(ExperienceDto experience, bool isSub)
+    {
+        return new Obj(experience, isSub);
+    }
+}
