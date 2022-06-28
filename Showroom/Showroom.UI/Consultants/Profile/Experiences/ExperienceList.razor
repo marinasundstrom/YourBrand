@@ -8,7 +8,7 @@
     {
         var experience = experiences.First();
 
-        <div class="d-flex mt-3" style="page-break-inside: avoid;">
+        <div class="d-flex mt-4" style="page-break-inside: avoid;">
             <div class="col-logo">
                 <Logo Src="@experience.CompanyLogo" Alt="@($"{experience.CompanyName} logo")" Class="me-4"
                     Href="@experience.Link" />
@@ -31,10 +31,19 @@
         var firstExperience = experiences.Last();
 
         <div style="page-break-inside: avoid;">
-            <div class="d-flex">
+            <div class="d-flex mt-4">
                 <div class="col-logo">
                         <Logo Src="@firstExperience.CompanyLogo" Alt="@($"{firstExperience.CompanyName} logo")" Class="me-4"
                         Href="@firstExperience.Link" />
+
+                        @*
+                                        <a href="@experience.Link">
+                        <MudImage Src="@(experience.CompanyLogo ??  "placeholder.jpg")" 
+                            Alt="@($"{experience.CompanyName} logo")" 
+                            Class="me-4"
+                            Style="    height: 60px;
+    width: 60px;" />
+                    </a>*@
                 </div>
 
                 <div class="flex-grow-1">
@@ -49,7 +58,7 @@
             </div>
 
             <div>
-                <div class="mt-5 mb-4">
+                <div class="mb-4">
                     <MudTimeline TimelinePosition="TimelinePosition.Start" TimelineAlign="TimelineAlign.Start" Class="pb-0">
 
                         @foreach (var experience in experiences

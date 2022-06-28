@@ -5,3 +5,8 @@
 .mud-timeline-vertical.mud-timeline-position-start::before {
     left: 27px;
 }
+
+hr {
+    border-bottom: 1px solid #7474741c;
+    box-shadow: 0 20px 20px -20px #333;
+}
