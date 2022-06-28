@@ -32,9 +32,11 @@
 </MudText>
 <MudText Typo="Typo.body2">@experience.Location</MudText>
 
-<MudText Class="mt-4 mb-2">
+@*
+<MudText Typo="Typo.body1" Class="mt-4 mb-2">
     @((MarkupString)experience.Description.Replace("\n", "<br />"))
 </MudText>
+*@
 
 
 @code {

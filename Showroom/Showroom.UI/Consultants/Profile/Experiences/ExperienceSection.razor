@@ -85,10 +85,6 @@
 
         isLoading = true;
 
-#if DEBUG
-        await Task.Delay(2000);
-#endif
-
         var experiencesResult = await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, page++, 3, null, null, null);
         experiences.AddRange(experiencesResult.Items);
 

@@ -1,0 +1,7 @@
+.mud-timeline-item {
+    margin-left: -20px;
+}
+
+.mud-timeline-vertical.mud-timeline-position-start::before {
+    left: 27px;
+}
