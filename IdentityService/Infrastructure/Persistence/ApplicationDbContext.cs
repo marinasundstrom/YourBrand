@@ -60,7 +60,7 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
     private async Task DispatchEvents()
     {
         var entities = ChangeTracker
-            .Entries<BaseEntity>()
+            .Entries<IHasDomainEvents>()
             .Where(e => e.Entity.DomainEvents.Any())
             .Select(e => e.Entity);
 
