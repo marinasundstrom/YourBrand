@@ -8,6 +8,7 @@ echo "WARNING: Both services and databases must have been started in order for t
 
 echo "Seeding databases"
 
+cd ./HumanResources; sh seed.sh; cd ..;
 cd ./Customers; sh seed.sh; cd ..;
 cd ./IdentityService; sh seed.sh; cd ..;
 cd ./AppService; sh seed.sh; cd ..;

@@ -132,6 +132,12 @@ services:
       - protocol: https
         port: 5090
 
+  - name: humanresources
+    project: HumanResources/HumanResources/HumanResources.csproj
+    bindings:
+      - protocol: https
+        port: 5120
+
   # Start Finance
 
   - name: financeapp

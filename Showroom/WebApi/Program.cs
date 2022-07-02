@@ -54,7 +54,7 @@ static class Program
         // Register the Swagger services
         services.AddOpenApiDocument(document =>
         {
-            document.Title = "Web API";
+            document.Title = "Showroom API";
             document.Version = "v1";
 
             document.AddSecurity("JWT", new OpenApiSecurityScheme

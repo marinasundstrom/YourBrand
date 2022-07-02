@@ -23,7 +23,6 @@ public record GetUserQuery(string UserId) : IRequest<UserDto>
         {
             var user = await _context.Users
                 .Include(u => u.Roles)
-                .Include(u => u.Department)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);

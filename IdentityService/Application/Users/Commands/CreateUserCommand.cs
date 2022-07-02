@@ -51,11 +51,6 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
                 throw new Exception("Role not found");
             }
 
-            if (request.DepartmentId is not null)
-            {
-                user.Department = await _context.Departments.FirstAsync(x => x.Id == request.DepartmentId);
-            }
-
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
@@ -83,7 +78,6 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
 
             user = await _context.Users
                .Include(u => u.Roles)
-               .Include(u => u.Department)
                .AsNoTracking()
                .AsSplitQuery()
                .FirstOrDefaultAsync(x => x.Id == user.Id, cancellationToken);

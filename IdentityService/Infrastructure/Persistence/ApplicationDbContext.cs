@@ -8,6 +8,7 @@ using YourBrand.IdentityService.Domain.Common;
 using YourBrand.IdentityService.Domain.Common.Interfaces;
 using YourBrand.IdentityService.Domain.Entities;
 using YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
+using YourBrand.IdentityService.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence;
 
@@ -16,16 +17,19 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
     private readonly ICurrentUserService _currentUserService;
     private readonly IDomainEventService _domainEventService;
     private readonly IDateTime _dateTime;
+    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService currentUserService,
         IDomainEventService domainEventService,
-        IDateTime dateTime) : base(options)
+        IDateTime dateTime,
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _currentUserService = currentUserService;
         _domainEventService = domainEventService;
         _dateTime = dateTime;
+        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,6 +39,8 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 #endif
 
         base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,18 +49,6 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonConfiguration).Assembly);
     }
-
-    public DbSet<Organization> Organizations { get; set; } = null!;
-
-    public DbSet<PersonDependant> UserDependants { get; set; } = null!;
-
-    public DbSet<Team> Teams { get; set; } = null!;
-
-    public DbSet<TeamMembership> TeamMemberships { get; set; } = null!;
-
-    public DbSet<Department> Departments { get; set; } = null!;
-
-    public DbSet<BankAccount> BankAccounts { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

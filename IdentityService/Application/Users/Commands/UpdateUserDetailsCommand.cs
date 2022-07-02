@@ -27,7 +27,6 @@ public record UpdateUserDetailsCommand(string UserId, string FirstName, string L
         {
             var user = await _context.Users
                 .Include(u => u.Roles)
-                .Include(u => u.Department)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 

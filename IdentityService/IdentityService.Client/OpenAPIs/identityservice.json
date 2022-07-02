@@ -565,7 +565,6 @@
         "properties": {
           "items": {
             "type": "array",
-            "nullable": true,
             "items": {
               "$ref": "#/components/schemas/RoleDto"
             }
@@ -581,12 +580,10 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         }
       },
@@ -608,7 +605,6 @@
         "properties": {
           "items": {
             "type": "array",
-            "nullable": true,
             "items": {
               "$ref": "#/components/schemas/UserDto"
             }
@@ -624,40 +620,26 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "firstName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "displayName": {
             "type": "string",
             "nullable": true
           },
           "role": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "ssn": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "department": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/DepartmentDto"
-              }
-            ]
+            "type": "string"
           },
           "created": {
             "type": "string",
@@ -666,20 +648,6 @@
           "lastModified": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "DepartmentDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
             "nullable": true
           }
         }
