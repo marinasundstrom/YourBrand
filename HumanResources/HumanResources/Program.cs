@@ -172,6 +172,8 @@ static class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.MapControllers();
+
         if(seed)
         {
             await app.Services.SeedAsync();

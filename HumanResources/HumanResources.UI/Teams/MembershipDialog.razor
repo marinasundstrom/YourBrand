@@ -1,0 +1,82 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject ITeamsClient TeamsClient
+@inject IUsersClient UsersClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            @*@if (MembershipId is null)
+            {*@
+
+                <MudAutocomplete T="UserDto" Label="User" Class="mb-6" Variant="Variant.Outlined" @bind-Value="User" SearchFunc="@Search1"
+                                 For="() => User"
+                                 ToStringFunc="u => u?.GetDisplayName()"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true" CoerceValue="true"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+            @*}*@
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save</MudButton>
+
+            @* @(MembershipId is null ? "Create" : "Save changes") *@
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public string? TeamId { get; set; }
+
+    //[Parameter] public string? MembershipId { get; set; }
+
+    [Required]
+    public UserDto User { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(TeamId);
+
+        /*
+        if (MembershipId is not null)
+        {
+            var result = await TeamsClient.GetMemberAsync(TeamId, UserId);
+
+            User = result.User;
+        }
+        */
+    }
+
+    async Task OnSubmit()
+    {
+        TeamMembershipDto? result = null;
+
+        /* if (MembershipId is null)
+        { */
+
+        await TeamsClient.AddMemberAsync(TeamId, new AddMemberDto {
+            UserId = User.Id
+        });
+
+        /* }
+         else
+         {
+             result = await TeamsClient.UpdateProjectMembershipAsync(TeamId, UserId, new UpdateProjectMembershipDto());
+         } */
+
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+    private async Task<IEnumerable<UserDto>> Search1(string value)
+    {
+        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
+
+        return page.Items;
+    }
+}

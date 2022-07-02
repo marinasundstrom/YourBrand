@@ -99,8 +99,29 @@ public class TeamsController : Controller
             return NotFound();
         }
     }
+
+
+    [HttpPost("{id}/Members")]
+    public async Task AddMember(string id, AddMemberDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new AddTeamMemberCommand(id, dto.UserId), cancellationToken);
+    }
+
+    [HttpDelete("{id}/Members/{userId}")]
+    public async Task RemoveMember(string id, string userId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new RemoveTeamMemberCommand(id, userId), cancellationToken);
+    }
+
+    [HttpGet("{id}/Memberships")]
+    public async Task<ItemsResult<TeamMembershipDto>> GetMemberships(string id, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    {
+        return await _mediator.Send(new GetTeamMembershipsQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+    }
 }
 
 public record class CreateTeamDto(string Name, string Description);
 
 public record class UpdateTeamDto(string Name, string Description);
+
+public record AddMemberDto(string UserId);

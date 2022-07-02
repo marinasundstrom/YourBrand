@@ -9,6 +9,10 @@ public static class ServiceExtensions
         services
             .AddUsersClient(configureClient, builder);
 
+        builder(
+           services.AddHttpClient(nameof(ITeamsClient) + "TR", configureClient)
+           .AddTypedClient<ITeamsClient>((http, sp) => new TeamsClient(http)));
+
         return services;
     }
 

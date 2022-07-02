@@ -29,6 +29,10 @@ public record CreateTeamCommand(string Name, string Description) : IRequest<Team
         {
             var team = new Team(request.Name, request.Description);
 
+            _context.Teams.Add(team);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
             team = await _context.Teams
                .AsNoTracking()
                .AsSplitQuery()

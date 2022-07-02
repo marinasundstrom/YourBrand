@@ -237,6 +237,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "HumanReso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanResources.Client", "HumanResources\HumanResources.Client\HumanResources.Client.csproj", "{66974EDE-4537-4115-A944-2CEB1DDF2382}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanResources.UI", "HumanResources\HumanResources.UI\HumanResources.UI.csproj", "{CF941E12-A538-4548-BBD6-2B3B65847633}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -607,6 +609,10 @@ Global
 		{66974EDE-4537-4115-A944-2CEB1DDF2382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66974EDE-4537-4115-A944-2CEB1DDF2382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66974EDE-4537-4115-A944-2CEB1DDF2382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF941E12-A538-4548-BBD6-2B3B65847633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF941E12-A538-4548-BBD6-2B3B65847633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF941E12-A538-4548-BBD6-2B3B65847633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF941E12-A538-4548-BBD6-2B3B65847633}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -709,6 +715,7 @@ Global
 		{772E0F3A-BEB9-450F-96C1-5AB1D0EB3C7C} = {AC199142-146C-4D2D-9031-D9A472C4A251}
 		{70BA0960-B236-4123-9781-0582ADD3893D} = {AC199142-146C-4D2D-9031-D9A472C4A251}
 		{66974EDE-4537-4115-A944-2CEB1DDF2382} = {AC199142-146C-4D2D-9031-D9A472C4A251}
+		{CF941E12-A538-4548-BBD6-2B3B65847633} = {AC199142-146C-4D2D-9031-D9A472C4A251}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F844EC9E-6AEE-4238-921B-05A9DCE3EE16}

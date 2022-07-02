@@ -1,4 +1,4 @@
-@* @page "/teams/{Id}" *@
+@page "/teams/{Id}"
 
 @attribute [Authorize(Roles = "Administrator,Manager")]
 @inject NavigationManager NavigationManager
@@ -72,7 +72,7 @@
     private async Task<TableData<TeamMembershipDto>> ServerReload(TableState state)
     {
         var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
 
         return new TableData<TeamMembershipDto>() { TotalItems = page.TotalItems, Items = page.Items };
     }
@@ -105,7 +105,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task OnEditMembershipClicked(ProjectMembershipDto membership)
+    private async Task OnEditMembershipClicked(TeamMembershipDto membership)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(MembershipDialog.TeamId), Id);
@@ -121,7 +121,7 @@
         await table.ReloadServerData();
     }
 
-    async Task DeleteMembership(ProjectMembershipDto membership)
+    async Task DeleteMembership(TeamMembershipDto membership)
     {
         var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())

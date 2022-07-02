@@ -85,15 +85,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     },
     "/Teams": {
@@ -170,15 +162,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [
@@ -208,15 +192,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     },
     "/Teams/{id}": {
@@ -248,15 +224,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
@@ -298,15 +266,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       },
       "delete": {
         "tags": [
@@ -329,15 +289,166 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
+        }
+      }
+    },
+    "/Teams/{id}/Members": {
+      "post": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "Teams_AddMember",
+        "parameters": [
           {
-            "JWT": []
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "dto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMemberDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Teams/{id}/Members/{userId}": {
+      "delete": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "Teams_RemoveMember",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
           },
           {
-            "ApiKey": []
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Teams/{id}/Memberships": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "Teams_GetMemberships",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            },
+            "x-position": 2
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 3
+          },
+          {
+            "name": "searchString",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 5
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SortDirection"
+                    }
+                  ]
+                }
+              ]
+            },
+            "x-position": 6
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsResultOfTeamMembershipDto"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/Users": {
@@ -414,15 +525,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [
@@ -452,15 +555,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     },
     "/Users/{id}": {
@@ -492,15 +587,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       },
       "delete": {
         "tags": [
@@ -523,15 +610,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     },
     "/Users/{id}/Roles": {
@@ -618,15 +697,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     },
     "/Users/{id}/Details": {
@@ -670,60 +741,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
-      }
-    },
-    "/Users/{id}/ChangePassword": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "Users_ChangePassword",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "changePasswordDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePasswordDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     },
     "/Users/{id}/Role": {
@@ -760,44 +778,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
-      }
-    },
-    "/Users/Sync": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "Users_SyncUsers",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          },
-          {
-            "ApiKey": []
-          }
-        ]
+        }
       }
     }
   },
@@ -912,19 +893,44 @@
           }
         }
       },
-      "ItemsResultOfUserDto": {
+      "AddMemberDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ItemsResultOfTeamMembershipDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UserDto"
+              "$ref": "#/components/schemas/TeamMembershipDto"
             }
           },
           "totalItems": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "TeamMembershipDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "team": {
+            "$ref": "#/components/schemas/TeamDto"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserDto"
           }
         }
       },
@@ -985,6 +991,22 @@
           }
         }
       },
+      "ItemsResultOfUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "CreateUserDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1040,20 +1062,6 @@
             "nullable": true
           },
           "email": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "ChangePasswordDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "currentPassword": {
-            "type": "string",
-            "nullable": true
-          },
-          "newPassword": {
             "type": "string",
             "nullable": true
           }

@@ -14,6 +14,7 @@ using YourBrand.Documents;
 using YourBrand.Messenger;
 using YourBrand.RotRutService;
 using YourBrand.Customers;
+using YourBrand.HumanResources;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -44,7 +45,8 @@ builder.Services
     .AddDocuments()
     .AddMessenger()
     .AddRotAndRut()
-    .AddCustomers();
+    .AddCustomers()
+    .AddHumanResources();
 
 var app = builder.Build();
 
