@@ -32,11 +32,11 @@ public record GetPersonsQuery(int Page = 0, int PageSize = 10, string? SearchStr
             if (request.SearchString is not null)
             {
                 query = query.Where(p =>
-                p.FirstName.ToLower().Contains(request.SearchString.ToLower())
-                || p.LastName.ToLower().Contains(request.SearchString.ToLower())
-                || ((p.DisplayName ?? "").ToLower().Contains(request.SearchString.ToLower()))
-                || p.SSN.ToLower().Contains(request.SearchString.ToLower())
-                || p.Email.ToLower().Contains(request.SearchString.ToLower()));
+                    p.FirstName.ToLower().Contains(request.SearchString.ToLower())
+                    || p.LastName.ToLower().Contains(request.SearchString.ToLower())
+                    || ((p.DisplayName ?? "").ToLower().Contains(request.SearchString.ToLower()))
+                    || p.SSN.ToLower().Contains(request.SearchString.ToLower())
+                    || p.Email.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalItems = await query.CountAsync(cancellationToken);

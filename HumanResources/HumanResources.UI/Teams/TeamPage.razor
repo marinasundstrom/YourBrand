@@ -26,12 +26,12 @@
                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="TeamMembershipDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="TeamMembershipDto" SortLabel="Person.FirstName">Name</MudTableSortLabel></MudTh>
             <MudTh></MudTh>
         </HeaderContent>
 
         <RowTemplate Context="membership">
-            <MudTd DataLabel="Name">@membership.Person.FirstName @membership.Person.LastName</MudTd>
+            <MudTd DataLabel="Name">@membership.Person.GetDisplayName()</MudTd>
             <MudTd>
                 @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTeamClicked(timeSheet)" /> *@
                 @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@

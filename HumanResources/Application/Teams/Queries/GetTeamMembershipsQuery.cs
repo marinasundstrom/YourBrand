@@ -38,13 +38,15 @@ public record GetTeamMembershipsQuery(string TeamId, int Page = 0, int PageSize 
                 .AsNoTracking()
                 .AsSplitQuery();
 
-            /*
             if (request.SearchString is not null)
             {
                 query = query.Where(p =>
-                    p.Name.ToLower().Contains(request.SearchString.ToLower()));
+                    p.Person.FirstName.ToLower().Contains(request.SearchString.ToLower())
+                    || p.Person.LastName.ToLower().Contains(request.SearchString.ToLower())
+                    || ((p.Person.DisplayName ?? "").ToLower().Contains(request.SearchString.ToLower()))
+                    || p.Person.SSN.ToLower().Contains(request.SearchString.ToLower())
+                    || p.Person.Email.ToLower().Contains(request.SearchString.ToLower()));
             }
-            */
 
             var totalItems = await query.CountAsync(cancellationToken);
 
