@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Portal.Shared;
 using YourBrand.HumanResources.Client;
+using YourBrand.Portal.Navigation;
 
 namespace YourBrand.HumanResources;
 
@@ -24,6 +25,18 @@ public static class ServiceExtensions
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
 
+        return services;
+    }
+
+    public static IServiceProvider UseHumanResources(this IServiceProvider services)
+    {
+        var navManager = services
+            .GetRequiredService<NavManager>();
+
+        var group = navManager.AddGroup("human-resources", "Human Resources");
+        group.AddItem("persons", "Persons", MudBlazor.Icons.Material.Filled.Person, "/users");
+        group.AddItem("teams", "Teams", MudBlazor.Icons.Material.Filled.People, "/teams");
+        
         return services;
     }
 }

@@ -16,6 +16,8 @@ using YourBrand.RotRutService;
 using YourBrand.Customers;
 using YourBrand.HumanResources;
 
+using YourBrand.Portal.Navigation;
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -32,7 +34,9 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddThemeServices();
+builder.Services
+    .AddThemeServices()
+    .AddNavigationServices();
 
 builder.Services
     .AddServices()
@@ -49,6 +53,10 @@ builder.Services
     .AddHumanResources();
 
 var app = builder.Build();
+
+app.Services
+    .UseHumanResources()
+    .UseTimeReport();
 
 await app.Services.Localize();
 

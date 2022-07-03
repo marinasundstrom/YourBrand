@@ -1,70 +1,30 @@
 ﻿@using System.Runtime.CompilerServices
+@using Navigation
+@inject NavManager NavManager
 @inject IStringLocalizer<NavMenu> T
 @inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorageService
 
 <MudNavMenu>
     <MudSpacer />
 
-    <MudNavGroup Title="@T["General"]" Expanded="general" ExpandedChanged="(v) => Save(v, out general)">
-
-        <MudNavLink Icon="@Icons.Material.Filled.Dashboard" Href="/" Match="NavLinkMatch.All">
-            @T["Dashboard"]
-        </MudNavLink>
-
-        <AuthorizeView>
-            <MudNavLink Icon="@Icons.Material.Filled.List" Href="/items">@T["Items"]</MudNavLink>
-        </AuthorizeView>
-
-        <MudNavLink Icon="@Icons.Material.Filled.List" Href="/worker">@T["Worker"]</MudNavLink>
-
-        <AuthorizeView>
-            <MudNavLink Icon="@Icons.Material.Filled.Chat" Href="/conversations">@T["Chat"]</MudNavLink>
-        </AuthorizeView>
-
-    </MudNavGroup>
-
-    <AuthorizeView>
-        <MudNavGroup Title="Sales" Expanded="showroom" ExpandedChanged="(v) => Save(v, out showroom)">
-            <MudNavLink Icon="@Icons.Material.Filled.People" Href="/persons">@T["Customers"]</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/consultants">Consultants</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Cases" Href="/cases">Cases</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/contracts">Contracts</MudNavLink>
+    @foreach (var navGroup in NavManager.Groups)
+    {
+        <MudNavGroup Title="@navGroup.Name" Expanded="navGroup.Expanded" ExpandedChanged="(v) => Save(v, navGroup)">
+            @foreach (var navItem in navGroup.Items)
+            {
+                @if (navItem.RequireAuthorization)
+                {
+                    <AuthorizeView Roles="@navItem.Roles">
+                        <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                    </AuthorizeView>
+                }
+                else
+                {
+                    <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                }
+            }
         </MudNavGroup>
-    </AuthorizeView>
-
-    <AuthorizeView>
-        <MudNavGroup Title="Project Management" Expanded="projects" ExpandedChanged="(v) => Save(v, out projects)">
-            <MudNavLink Icon="@Icons.Material.Filled.List" Href="/projects">Projects</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.AccessTime" Href="/timesheet">@T["ReportTime"]</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/reports">Reports</MudNavLink>
-
-            <AuthorizeView Roles="Administrator,Manager" Context="context2">
-                <MudNavLink Icon="@Icons.Material.Filled.List" Href="/timesheets">Timesheets</MudNavLink>
-            </AuthorizeView>
-        </MudNavGroup>
-    </AuthorizeView>
-
-    <AuthorizeView Roles="Administrator,Manager">
-        <MudNavGroup Title="Finance" Expanded="finance" ExpandedChanged="(v) => Save(v, out finance)">
-            <MudNavLink Icon="@Icons.Filled.InsertDriveFile" Href="/invoices">Invoices</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.ListAlt" Href="/transactions">Transactions</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="/verifications">Accounting</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.Checklist" Href="/rotrut">ROT & RUT</MudNavLink>
-        </MudNavGroup>
-    </AuthorizeView>
-
-    <AuthorizeView Roles="Administrator,Manager">
-        <MudNavGroup Title="Administration" Expanded="admin" ExpandedChanged="(v) => Save(v, out admin)">
-            <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/users">Users</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.People" Href="/teams">Teams</MudNavLink>
-            <MudNavLink Icon="@Icons.Material.Filled.InsertDriveFile" Href="/documents">Documents</MudNavLink>
-        </MudNavGroup>
-    </AuthorizeView>
-    @*
-        <MudNavGroup Title="Settings" Expanded="true">
-        <MudNavLink Href="/users">Users</MudNavLink>
-        <MudNavLink Href="/security">Security</MudNavLink>
-        </MudNavGroup> *@
+    }
 </MudNavMenu>
 
 @code {
@@ -76,17 +36,16 @@
 
     protected override void OnInitialized()
     {
-        general = LocalStorageService.GetItem<bool>("navmenu.general");
-        showroom = LocalStorageService.GetItem<bool>("navmenu.showroom");
-        projects = LocalStorageService.GetItem<bool>("navmenu.projects");
-        finance = LocalStorageService.GetItem<bool>("navmenu.finance");
-        admin = LocalStorageService.GetItem<bool>("navmenu.admin");
+        foreach(var navGroup in NavManager.Groups) 
+        {
+            navGroup.Expanded = LocalStorageService.GetItem<bool>($"navmenu.{navGroup.Id.ToLower()}");
+        }
     }
 
-    bool Save(bool newValue, out bool target, [CallerArgumentExpression("target")] string name = null)
+    bool Save(bool newValue, NavGroup navGroup)
     {
-        LocalStorageService.SetItem($"navmenu.{name}", newValue);
-        target = newValue;
+        LocalStorageService.SetItem($"navmenu.{navGroup.Id}", newValue);
+        navGroup.Expanded = newValue;
         return newValue;
     }
 }
