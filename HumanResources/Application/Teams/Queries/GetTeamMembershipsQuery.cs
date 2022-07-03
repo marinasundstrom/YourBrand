@@ -56,6 +56,7 @@ public record GetTeamMembershipsQuery(string TeamId, int Page = 0, int PageSize 
             var teamMemberships = await query
                 .Include(x => x.Team)
                 .Include(x => x.Person)
+                .ThenInclude(x => x.Roles)
                 .ToListAsync(cancellationToken);
 
             return new ItemsResult<TeamMembershipDto>(

@@ -84,17 +84,17 @@
 
     private void GotToPerson(PersonDto person)
     {
-        NavigationManager.NavigateTo($"/Persons/{person.Id}"); ;
+        NavigationManager.NavigateTo($"/hr/persons/{person.Id}"); ;
     }
 
     private async Task OnNewPersonClicked()
     {
-        NavigationManager.NavigateTo($"/hr/persons/New");
+        NavigationManager.NavigateTo($"/hr/persons/new");
     }
 
     private async Task OnEditPersonClicked(PersonDto person)
     {
-        NavigationManager.NavigateTo($"/hr/persons/{person.Id}/Edit");
+        NavigationManager.NavigateTo($"/hr/persons/{person.Id}/edit");
     }
 
     private async Task DeletePerson(PersonDto person)

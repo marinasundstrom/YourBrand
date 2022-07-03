@@ -34,15 +34,17 @@ public class Team : AuditableEntity
         Description = value;
     }
 
-    public Organization Organization { get; private set; }
+    public Organization Organization { get; set; }
 
     public IReadOnlyCollection<Person> Members => _members;
 
     public IReadOnlyCollection<TeamMembership> Memberships => _memberships;
 
-    public void AddMember(Person person)
+    public TeamMembership AddMember(Person person)
     {
-        _members.Add(person);
+        var membership = new TeamMembership(person);
+        _memberships.Add(membership);
+        return membership;
     }
 
     public void RemoveMember(Person person)

@@ -87,7 +87,7 @@
                 Email = Email
             });
 
-            NavigationManager.NavigateTo($"/Persons/{result.Id}");
+            NavigationManager.NavigateTo($"/hr/persons/{result.Id}");
         }
         catch (AccessTokenNotAvailableException exception)
         {

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Common.Interfaces;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationPerson class
-public class Person : IAuditableEntity, ISoftDelete
+public class Person : AuditableEntity, ISoftDelete
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
@@ -14,29 +15,29 @@ public class Person : IAuditableEntity, ISoftDelete
     readonly HashSet<PersonRole> _personRoles = new HashSet<PersonRole>();
     readonly HashSet<Contract> _contracts = new HashSet<Contract>();
 
-    /*
-    private Person() { }
+    internal Person() { }
 
-    public Person(string firstName, string lastName, string? displayName, string? ssn)
+    public Person(string firstName, string lastName, string? displayName, string? ssn, string email)
     {
+        Id = Guid.NewGuid().ToString();
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;
         SSN = ssn;
+        Email = email;
     }
-    */
 
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
 
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     public string? DisplayName { get; set; }
 
     public string? SSN { get; set; }
 
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     public Person? Manager { get; private set; }
 
@@ -77,14 +78,6 @@ public class Person : IAuditableEntity, ISoftDelete
     public void AddContract(Contract contract) => _contracts.Add(contract);
 
     public BankAccount? BankAccount { get; set; }
-
-    public DateTime Created { get; set; }
-
-    public string? CreatedBy { get; set; }
-
-    public DateTime? LastModified { get; set; }
-
-    public string? LastModifiedBy { get; set; }
 
     public DateTime? Deleted { get; set; }
 

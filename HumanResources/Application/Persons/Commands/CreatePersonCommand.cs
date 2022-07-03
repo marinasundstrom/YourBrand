@@ -31,14 +31,11 @@ public record CreatePersonCommand(string FirstName, string LastName, string? Dis
 
         public async Task<PersonDto> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
-            var person = new Person
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                DisplayName = request.DisplayName,
-                SSN = request.Ssn,
-                Email = request.Email
-            };
+            var person = new Person(request.FirstName, request.LastName, request.DisplayName, request.Ssn, request.Email);
+
+            var role = await _context.Roles.FirstAsync(x => x.Name == request.Role);
+
+            person.AddToRole(role);
 
             _context.Persons.Add(person);
 

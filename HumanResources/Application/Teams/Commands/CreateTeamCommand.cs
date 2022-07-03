@@ -29,6 +29,8 @@ public record CreateTeamCommand(string Name, string Description) : IRequest<Team
         {
             var team = new Team(request.Name, request.Description);
 
+            team.Organization = await _context.Organizations.FirstAsync();
+
             _context.Teams.Add(team);
 
             await _context.SaveChangesAsync(cancellationToken);
