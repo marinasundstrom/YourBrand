@@ -14,19 +14,19 @@ namespace YourBrand.HumanResources.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentPersonService _currentPersonService;
     private readonly IDomainEventService _domainEventService;
     private readonly IDateTime _dateTime;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        ICurrentUserService currentUserService,
+        ICurrentPersonService currentPersonService,
         IDomainEventService domainEventService,
         IDateTime dateTime,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _currentUserService = currentUserService;
+        _currentPersonService = currentPersonService;
         _domainEventService = domainEventService;
         _dateTime = dateTime;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
@@ -52,7 +52,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<Organization> Organizations { get; set; } = null!;
 
-    public DbSet<PersonDependant> UserDependants { get; set; } = null!;
+    public DbSet<PersonDependant> PersonDependants { get; set; } = null!;
 
     public DbSet<Team> Teams { get; set; } = null!;
 
@@ -64,7 +64,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<Role> Roles { get; set; } = null!;
 
-    public DbSet<Person> Users { get; set; } = null!;
+    public DbSet<Person> Persons { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

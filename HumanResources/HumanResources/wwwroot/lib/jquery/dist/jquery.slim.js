@@ -1752,7 +1752,7 @@ getText = Sizzle.getText = function( elem ) {
 
 Expr = Sizzle.selectors = {
 
-	// Can be adjusted by the user
+	// Can be adjusted by the person
 	cacheLength: 50,
 
 	createPseudo: markFunction,
@@ -2053,7 +2053,7 @@ Expr = Sizzle.selectors = {
 				fn = Expr.pseudos[ pseudo ] || Expr.setFilters[ pseudo.toLowerCase() ] ||
 					Sizzle.error( "unsupported pseudo: " + pseudo );
 
-			// The user may use createPseudo to indicate that
+			// The person may use createPseudo to indicate that
 			// arguments are needed to create the filter function
 			// just as Sizzle does
 			if ( fn[ expando ] ) {
@@ -4381,7 +4381,7 @@ Data.prototype = {
 };
 var dataPriv = new Data();
 
-var dataUser = new Data();
+var dataPerson = new Data();
 
 
 
@@ -4390,9 +4390,9 @@ var dataUser = new Data();
 //	1. Enforce API surface and semantic compatibility with 1.9.x branch
 //	2. Improve the module's maintainability by reducing the storage
 //		paths to a single mechanism.
-//	3. Use the same single mechanism to support "private" and "user" data.
-//	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
-//	5. Avoid exposing implementation details on user objects (eg. expando properties)
+//	3. Use the same single mechanism to support "private" and "person" data.
+//	4. _Never_ expose "private" data to person code (TODO: Drop _data, _removeData)
+//	5. Avoid exposing implementation details on person objects (eg. expando properties)
 //	6. Provide a clear path for implementation upgrade to WeakMap in 2014
 
 var rbrace = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
@@ -4438,7 +4438,7 @@ function dataAttr( elem, key, data ) {
 			} catch ( e ) {}
 
 			// Make sure we set the data so it isn't changed later
-			dataUser.set( elem, key, data );
+			dataPerson.set( elem, key, data );
 		} else {
 			data = undefined;
 		}
@@ -4448,15 +4448,15 @@ function dataAttr( elem, key, data ) {
 
 jQuery.extend( {
 	hasData: function( elem ) {
-		return dataUser.hasData( elem ) || dataPriv.hasData( elem );
+		return dataPerson.hasData( elem ) || dataPriv.hasData( elem );
 	},
 
 	data: function( elem, name, data ) {
-		return dataUser.access( elem, name, data );
+		return dataPerson.access( elem, name, data );
 	},
 
 	removeData: function( elem, name ) {
-		dataUser.remove( elem, name );
+		dataPerson.remove( elem, name );
 	},
 
 	// TODO: Now that all calls to _data and _removeData have been replaced
@@ -4479,7 +4479,7 @@ jQuery.fn.extend( {
 		// Gets all values
 		if ( key === undefined ) {
 			if ( this.length ) {
-				data = dataUser.get( elem );
+				data = dataPerson.get( elem );
 
 				if ( elem.nodeType === 1 && !dataPriv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
@@ -4505,7 +4505,7 @@ jQuery.fn.extend( {
 		// Sets multiple values
 		if ( typeof key === "object" ) {
 			return this.each( function() {
-				dataUser.set( this, key );
+				dataPerson.set( this, key );
 			} );
 		}
 
@@ -4521,7 +4521,7 @@ jQuery.fn.extend( {
 
 				// Attempt to get data from the cache
 				// The key will always be camelCased in Data
-				data = dataUser.get( elem, key );
+				data = dataPerson.get( elem, key );
 				if ( data !== undefined ) {
 					return data;
 				}
@@ -4541,14 +4541,14 @@ jQuery.fn.extend( {
 			this.each( function() {
 
 				// We always store the camelCased key
-				dataUser.set( this, key, value );
+				dataPerson.set( this, key, value );
 			} );
 		}, null, value, arguments.length > 1, null, true );
 	},
 
 	removeData: function( key ) {
 		return this.each( function() {
-			dataUser.remove( this, key );
+			dataPerson.remove( this, key );
 		} );
 	}
 } );
@@ -6021,12 +6021,12 @@ function cloneCopyEvent( src, dest ) {
 		}
 	}
 
-	// 2. Copy user data
-	if ( dataUser.hasData( src ) ) {
-		udataOld = dataUser.access( src );
+	// 2. Copy person data
+	if ( dataPerson.hasData( src ) ) {
+		udataOld = dataPerson.access( src );
 		udataCur = jQuery.extend( {}, udataOld );
 
-		dataUser.set( dest, udataCur );
+		dataPerson.set( dest, udataCur );
 	}
 }
 
@@ -6228,11 +6228,11 @@ jQuery.extend( {
 					// Assign undefined instead of using delete, see Data#remove
 					elem[ dataPriv.expando ] = undefined;
 				}
-				if ( elem[ dataUser.expando ] ) {
+				if ( elem[ dataPerson.expando ] ) {
 
 					// Support: Chrome <=35 - 45+
 					// Assign undefined instead of using delete, see Data#remove
-					elem[ dataUser.expando ] = undefined;
+					elem[ dataPerson.expando ] = undefined;
 				}
 			}
 		}
@@ -6904,7 +6904,7 @@ jQuery.extend( {
 
 		// Make sure that we're working with the right name. We don't
 		// want to query the value if it is a CSS custom property
-		// since they are user-defined.
+		// since they are person-defined.
 		if ( !isCustomProp ) {
 			name = finalPropName( origName );
 		}
@@ -6973,7 +6973,7 @@ jQuery.extend( {
 
 		// Make sure that we're working with the right name. We don't
 		// want to modify the value if it is a CSS custom property
-		// since they are user-defined.
+		// since they are person-defined.
 		if ( !isCustomProp ) {
 			name = finalPropName( origName );
 		}

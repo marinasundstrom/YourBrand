@@ -8,7 +8,7 @@ public class NavManager
 
     public NavGroup? GetGroup(string id) => Groups.FirstOrDefault(g => g.Id == id);
 
-    public NavGroup AddGroup(string id, string name)
+    public NavGroup CreateGroup(string id, string name)
     {
         var navGroup = new NavGroup()
         {
@@ -43,7 +43,7 @@ public class NavGroup
 
     public string? Roles { get; set; }
 
-    public NavItem AddItem(string id, string name, string icon, string href)
+    public NavItem CreateItem(string id, string name, string icon, string href)
     {
         var navItem = new NavItem()
         {

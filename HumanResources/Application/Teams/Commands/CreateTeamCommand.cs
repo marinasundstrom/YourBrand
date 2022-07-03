@@ -20,7 +20,7 @@ public record CreateTeamCommand(string Name, string Description) : IRequest<Team
     {
         private readonly IApplicationDbContext _context;
 
-        public Handler(IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public Handler(IApplicationDbContext context, ICurrentPersonService currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
         }

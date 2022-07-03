@@ -1,10 +1,10 @@
-@page "/teams/{Id}"
+@page "/hr/teams/{Id}"
 
 @attribute [Authorize(Roles = "Administrator,Manager")]
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject ITeamsClient TeamsClient
-@inject IUsersClient UsersClient
+@inject IPersonsClient PersonsClient
 
 <PageTitle>Teams - YourBrand</PageTitle>
 
@@ -31,7 +31,7 @@
         </HeaderContent>
 
         <RowTemplate Context="membership">
-            <MudTd DataLabel="Name">@membership.User.FirstName @membership.User.LastName</MudTd>
+            <MudTd DataLabel="Name">@membership.Person.FirstName @membership.Person.LastName</MudTd>
             <MudTd>
                 @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTeamClicked(timeSheet)" /> *@
                 @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
@@ -71,7 +71,7 @@
 
     private async Task<TableData<TeamMembershipDto>> ServerReload(TableState state)
     {
-        var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
+        var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  Person?.Id, */ searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
 
         return new TableData<TeamMembershipDto>() { TotalItems = page.TotalItems, Items = page.Items };
@@ -83,9 +83,9 @@
         table.ReloadServerData();
     }
 
-    private async Task<IEnumerable<UserDto>> Search1(string value)
+    private async Task<IEnumerable<PersonDto>> Search1(string value)
     {
-        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
+        var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null);
 
         return page.Items;
     }
@@ -123,7 +123,7 @@
 
     async Task DeleteMembership(TeamMembershipDto membership)
     {
-        var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.Person.FirstName}?", "If you regret it, you can just add the person back later.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -136,6 +136,6 @@
 
     private void GotToMember(TeamMembershipDto membership)
     {
-        NavigationManager.NavigateTo($"/teams/{membership.Id}/{membership.User.Id}");
+        NavigationManager.NavigateTo($"/teams/{membership.Id}/{membership.Person.Id}");
     }
 }

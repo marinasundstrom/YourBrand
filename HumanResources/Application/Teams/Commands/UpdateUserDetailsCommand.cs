@@ -27,7 +27,7 @@ public record UpdateTeamCommand(string TeamId, string Name, string Description) 
 
             if (team is null)
             {
-                throw new UserNotFoundException(request.TeamId);
+                throw new PersonNotFoundException(request.TeamId);
             }
 
             team.UpdateName(request.Name);

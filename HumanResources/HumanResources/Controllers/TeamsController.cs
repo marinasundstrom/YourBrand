@@ -42,14 +42,14 @@ public class TeamsController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<TeamDto>> GetTeam(string id, CancellationToken cancellationToken)
     {
-        var user = await _mediator.Send(new GetTeamQuery(id), cancellationToken);
+        var person = await _mediator.Send(new GetTeamQuery(id), cancellationToken);
 
-        if (user is null)
+        if (person is null)
         {
             return NotFound();
         }
 
-        return Ok(user);
+        return Ok(person);
     }
 
     [HttpPost]
@@ -78,7 +78,7 @@ public class TeamsController : Controller
 
             return Ok(team);
         }
-        catch (UserNotFoundException)
+        catch (PersonNotFoundException)
         {
             return NotFound();
         }
@@ -94,7 +94,7 @@ public class TeamsController : Controller
 
             return Ok();
         }
-        catch (UserNotFoundException)
+        catch (PersonNotFoundException)
         {
             return NotFound();
         }
@@ -104,13 +104,13 @@ public class TeamsController : Controller
     [HttpPost("{id}/Members")]
     public async Task AddMember(string id, AddMemberDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new AddTeamMemberCommand(id, dto.UserId), cancellationToken);
+        await _mediator.Send(new AddTeamMemberCommand(id, dto.PersonId), cancellationToken);
     }
 
-    [HttpDelete("{id}/Members/{userId}")]
-    public async Task RemoveMember(string id, string userId, CancellationToken cancellationToken)
+    [HttpDelete("{id}/Members/{personId}")]
+    public async Task RemoveMember(string id, string personId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new RemoveTeamMemberCommand(id, userId), cancellationToken);
+        await _mediator.Send(new RemoveTeamMemberCommand(id, personId), cancellationToken);
     }
 
     [HttpGet("{id}/Memberships")]
@@ -124,4 +124,4 @@ public record class CreateTeamDto(string Name, string Description);
 
 public record class UpdateTeamDto(string Name, string Description);
 
-public record AddMemberDto(string UserId);
+public record AddMemberDto(string PersonId);

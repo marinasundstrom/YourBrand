@@ -1,0 +1,97 @@
+﻿@page "/hr/persons/{PersonId}/edit"
+@using System.ComponentModel.DataAnnotations
+@inject IPersonsClient PersonsClient
+@inject NavigationManager NavigationManager
+
+@if (person is not null)
+{
+    <PageTitle>Edit @person?.GetDisplayName() - YourBrand</PageTitle>
+
+    <MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Edit @person?.GetDisplayName()</MudText>
+
+    <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+
+        <MudPaper Elevation="1" Class="pa-8">
+
+            <EditForm Model="@this" OnValidSubmit="OnSubmit">
+                <DataAnnotationsValidator />
+
+                <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
+
+                <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
+
+                <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
+
+                <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
+
+                <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+
+                <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save changes</MudButton>
+
+            </EditForm>
+        </MudPaper>
+
+    </MudContainer>
+}
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; } = null!;
+
+    [Parameter] public string? PersonId { get; set; }
+
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+
+    public string? DisplayName { get; set; }
+
+    [Required]
+    public string SSN { get; set; } = null!;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+
+    public string Role { get; set; } = null!;
+
+    PersonDto? person;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await PersonsClient.GetPersonAsync(PersonId);
+
+        person = result;
+
+        FirstName = result.FirstName;
+        LastName = result.LastName;
+        DisplayName = result.DisplayName;
+        SSN = result.Ssn;
+        Email = result.Email;
+        Role = result.Role;
+    }
+
+    async Task OnSubmit()
+    {
+        try
+        {
+            PersonDto result = await PersonsClient.UpdatePersonAsync(PersonId, new UpdatePersonDetailsDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName,
+                Ssn = SSN,
+                Email = Email
+            });
+
+            NavigationManager.NavigateTo($"/Persons/{result.Id}");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

@@ -20,14 +20,14 @@ public class ModuleLoader
 {
     static readonly Module[] _modules = new Module[] {
                 new Module(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly),
-                new Module(typeof(YourBrand.Showroom.ExampleJsInterop).Assembly),
-                new Module(typeof(YourBrand.Accounting.ServiceExtensions).Assembly),
-                new Module(typeof(YourBrand.Invoices.ServiceExtensions).Assembly),
-                new Module(typeof(YourBrand.Transactions.ServiceExtensions).Assembly),
-                new Module(typeof(YourBrand.Documents.ServiceExtensions).Assembly),
-                new Module(typeof(YourBrand.Messenger.ServiceExtensions).Assembly),
-                new Module(typeof(YourBrand.RotRutService.ServiceExtensions).Assembly),
-                new Module(typeof(YourBrand.Customers.ServiceExtensions).Assembly),
+                new Module(typeof(YourBrand.Showroom.ExampleJsInterop).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.Accounting.ServiceExtensions).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.Invoices.ServiceExtensions).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.Transactions.ServiceExtensions).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.Documents.ServiceExtensions).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.Messenger.ServiceExtensions).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.RotRutService.ServiceExtensions).Assembly) { Enabled = false },
+                new Module(typeof(YourBrand.Customers.ServiceExtensions).Assembly) { Enabled = false },
                 new Module(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly)
         };
 

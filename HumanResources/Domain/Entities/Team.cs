@@ -40,13 +40,13 @@ public class Team : AuditableEntity
 
     public IReadOnlyCollection<TeamMembership> Memberships => _memberships;
 
-    public void AddMember(Person user)
+    public void AddMember(Person person)
     {
-        _members.Add(user);
+        _members.Add(person);
     }
 
-    public void RemoveMember(Person user)
+    public void RemoveMember(Person person)
     {
-        _members.Remove(user);
+        _members.Remove(person);
     }
 }

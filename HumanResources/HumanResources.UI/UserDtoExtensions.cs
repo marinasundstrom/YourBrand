@@ -4,9 +4,9 @@ using YourBrand.HumanResources.Client;
 
 namespace YourBrand.HumanResources;
 
-public static class UserDtoExtensions
+public static class PersonDtoExtensions
 {
-    public static string? GetDisplayName(this YourBrand.AppService.Client.UserDto user) => !String.IsNullOrEmpty(user.DisplayName) ? user?.DisplayName : $"{user.FirstName} {user?.LastName}";
+    public static string? GetDisplayName(this YourBrand.AppService.Client.UserDto person) => !String.IsNullOrEmpty(person.DisplayName) ? person?.DisplayName : $"{person.FirstName} {person?.LastName}";
 
-    public static string? GetDisplayName(this UserDto user) => !String.IsNullOrEmpty(user.DisplayName) ? user?.DisplayName : $"{user.FirstName} {user?.LastName}";
+    public static string? GetDisplayName(this PersonDto person) => !String.IsNullOrEmpty(person.DisplayName) ? person?.DisplayName : $"{person.FirstName} {person?.LastName}";
 }

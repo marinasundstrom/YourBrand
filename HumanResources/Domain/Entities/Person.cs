@@ -4,7 +4,7 @@ using YourBrand.HumanResources.Domain.Common.Interfaces;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
-// Add profile data for application users by adding properties to the ApplicationUser class
+// Add profile data for application persons by adding properties to the ApplicationPerson class
 public class Person : IAuditableEntity, ISoftDelete
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
@@ -15,9 +15,9 @@ public class Person : IAuditableEntity, ISoftDelete
     readonly HashSet<Contract> _contracts = new HashSet<Contract>();
 
     /*
-    private User() { }
+    private Person() { }
 
-    public User(string firstName, string lastName, string? displayName, string? ssn)
+    public Person(string firstName, string lastName, string? displayName, string? ssn)
     {
         FirstName = firstName;
         LastName = lastName;

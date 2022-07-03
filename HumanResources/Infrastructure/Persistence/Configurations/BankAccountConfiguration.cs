@@ -14,6 +14,6 @@ public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
         builder
             .HasOne(p => p.Person)
             .WithOne()
-            .HasForeignKey(nameof(BankAccount), "UserId");
+            .HasForeignKey(nameof(BankAccount), "PersonId");
     }
 }

@@ -858,7 +858,7 @@
         if (_this3._config.pause === 'hover') {
           // If it's a touch-enabled device, mouseenter/leave are fired as
           // part of the mouse compatibility events on first tap - the carousel
-          // would stop cycling until user tapped out of it;
+          // would stop cycling until person tapped out of it;
           // here, we listen for touchend, explicitly pause the carousel
           // (as if it's the second time we tap on it, mouseenter compat event
           // is NOT fired) and after a timeout (to allow for mouse compatibility
@@ -1548,7 +1548,7 @@
   var timeoutDuration = function () {
     var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
     for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
-      if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
+      if (isBrowser && navigator.personAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
         return 1;
       }
     }
@@ -1685,7 +1685,7 @@
   }
 
   var isIE11 = isBrowser && !!(window.MSInputMethodContext && document.documentMode);
-  var isIE10 = isBrowser && /MSIE 10/.test(navigator.userAgent);
+  var isIE10 = isBrowser && /MSIE 10/.test(navigator.personAgent);
 
   /**
    * Determines if the browser is Internet Explorer
@@ -2535,7 +2535,7 @@
 
     this.disableEventListeners();
 
-    // remove the popper if user explicitly asked for the deletion on destroy
+    // remove the popper if person explicitly asked for the deletion on destroy
     // do not use `remove` because IE11 doesn't support it
     if (this.options.removeOnDestroy) {
       this.popper.parentNode.removeChild(this.popper);
@@ -2787,7 +2787,7 @@
     };
   }
 
-  var isFirefox = isBrowser && /Firefox/i.test(navigator.userAgent);
+  var isFirefox = isBrowser && /Firefox/i.test(navigator.personAgent);
 
   /**
    * @function

@@ -12,14 +12,14 @@ namespace YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentPersonService _currentPersonService;
     private readonly IDateTime _dateTime;
 
     public AuditableEntitySaveChangesInterceptor(
-        ICurrentUserService currentUserService,
+        ICurrentPersonService currentPersonService,
         IDateTime dateTime)
     {
-        _currentUserService = currentUserService;
+        _currentPersonService = currentPersonService;
         _dateTime = dateTime;
     }
 
@@ -45,19 +45,19 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = _currentUserService.UserId;
+                entry.Entity.CreatedBy = _currentPersonService.PersonId;
                 entry.Entity.Created = _dateTime.Now;
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                entry.Entity.LastModifiedBy = _currentPersonService.PersonId;
                 entry.Entity.LastModified = _dateTime.Now;
             }
             else if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDelete softDelete)
                 {
-                    softDelete.DeletedBy = _currentUserService.UserId;
+                    softDelete.DeletedBy = _currentPersonService.PersonId;
                     softDelete.Deleted = _dateTime.Now;
 
                     entry.State = EntityState.Modified;

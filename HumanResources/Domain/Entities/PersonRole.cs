@@ -2,9 +2,9 @@
 
 public class PersonRole
 {
-    public Person User { get; set; }
+    public Person Person { get; set; }
 
-    public string UserId { get; set; }
+    public string PersonId { get; set; }
 
     public Role Role { get; set; }
 

@@ -6,14 +6,14 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 
 namespace YourBrand.HumanResources.Services;
 
-public class CurrentUserService : ICurrentUserService
+public class CurrentPersonService : ICurrentPersonService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+    public CurrentPersonService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? PersonId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 }

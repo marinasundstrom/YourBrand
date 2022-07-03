@@ -7,31 +7,31 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Application.Common.Models;
 using YourBrand.HumanResources.Domain.Entities;
 
-namespace YourBrand.HumanResources.Application.Users.Queries;
+namespace YourBrand.HumanResources.Application.Persons.Queries;
 
-public record GetUserRolesQuery(string UserId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, HumanResources.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
+public record GetPersonRolesQuery(string PersonId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, HumanResources.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
-    public class GetUserRolesQueryHandler : IRequestHandler<GetUserRolesQuery, ItemsResult<RoleDto>>
+    public class GetPersonRolesQueryHandler : IRequestHandler<GetPersonRolesQuery, ItemsResult<RoleDto>>
     {
         private readonly IApplicationDbContext _context;
 
-        public GetUserRolesQueryHandler(IApplicationDbContext context)
+        public GetPersonRolesQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ItemsResult<RoleDto>> Handle(GetUserRolesQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<RoleDto>> Handle(GetPersonRolesQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
-                  .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+            var person = await _context.Persons
+                  .FirstOrDefaultAsync(x => x.Id == request.PersonId, cancellationToken);
 
-            if (user is null)
+            if (person is null)
             {
-                throw new Exception("User not found");
+                throw new Exception("Person not found");
             }
 
             var query = _context.Roles
-                .Where(x => x.Persons.Any(x => x.Id == request.UserId))
+                .Where(x => x.Persons.Any(x => x.Id == request.PersonId))
                 //.OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)

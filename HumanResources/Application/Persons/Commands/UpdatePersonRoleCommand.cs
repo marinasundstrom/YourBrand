@@ -7,24 +7,24 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Entities;
 using YourBrand.HumanResources.Domain.Exceptions;
 
-namespace YourBrand.HumanResources.Application.Users.Commands;
+namespace YourBrand.HumanResources.Application.Persons.Commands;
 
-public record UpdateUserRoleCommand(string UserId, string Role) : IRequest
+public record UpdatePersonRoleCommand(string PersonId, string Role) : IRequest
 {
-    public class UpdateUserRoleCommandHandler : IRequestHandler<UpdateUserRoleCommand>
+    public class UpdatePersonRoleCommandHandler : IRequestHandler<UpdatePersonRoleCommand>
     {
         private readonly IApplicationDbContext _context;
 
-        public UpdateUserRoleCommandHandler(IApplicationDbContext context)
+        public UpdatePersonRoleCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdatePersonRoleCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var person = await _context.Persons
                 .Include(p => p.Roles)
-                .FirstOrDefaultAsync(p => p.Id == request.UserId);
+                .FirstOrDefaultAsync(p => p.Id == request.PersonId);
 
             var role = await _context.Roles
                 .FirstOrDefaultAsync(p => p.Name == request.Role);
@@ -34,7 +34,7 @@ public record UpdateUserRoleCommand(string UserId, string Role) : IRequest
                 throw new Exception();
             }
 
-            user.AddToRole(role);
+            person.AddToRole(role);
 
             await _context.SaveChangesAsync(cancellationToken);
 

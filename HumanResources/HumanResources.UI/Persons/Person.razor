@@ -1,0 +1,45 @@
+﻿@page "/hr/persons/{personId}"
+@attribute [Authorize(Roles = "Administrator,Manager")]
+@using YourBrand.Portal.Shared
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject YourBrand.HumanResources.Client.IPersonsClient PersonsClient
+
+@if (person is null)
+{
+    <LoadingIndicator />
+}
+else 
+{
+    <PageTitle>@person.GetDisplayName() - YourBrand</PageTitle>
+
+    <MudText Typo="Typo.h3" GutterBottom="true">@person.GetDisplayName()</MudText>
+
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" IconColor="Color.Default" Class="me-2" OnClick="ChangePersonDetails">Edit details</MudButton>
+    @* <MudButton Variant="Variant.Filled" OnClick="ChangePassword">Change password</MudButton> *@
+}
+
+@code {
+    bool isLoading = false;
+    HumanResources.Client.PersonDto person;
+
+    [Parameter] public string PersonId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            person = await PersonsClient.GetPersonAsync(PersonId);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task ChangePersonDetails()
+    {
+        NavigationManager.NavigateTo($"/Persons/{person.Id}/Edit");
+    }
+}
+

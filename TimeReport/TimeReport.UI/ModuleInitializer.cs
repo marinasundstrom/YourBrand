@@ -24,9 +24,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.AddGroup("project-management", "Project Management");
-        group.AddItem("projects", "Projects", MudBlazor.Icons.Material.Filled.List, "/projects");
-        group.AddItem("report-time", "Report time", MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
-        group.AddItem("reports", "Reports", MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
+        var group = navManager.CreateGroup("project-management", "Project Management");
+        group.CreateItem("projects", "Projects", MudBlazor.Icons.Material.Filled.List, "/projects");
+        group.CreateItem("report-time", "Report time", MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
+        group.CreateItem("reports", "Reports", MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
     }
 }

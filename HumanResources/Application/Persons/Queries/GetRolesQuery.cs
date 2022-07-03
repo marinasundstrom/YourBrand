@@ -7,7 +7,7 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Application.Common.Models;
 using YourBrand.HumanResources.Domain.Entities;
 
-namespace YourBrand.HumanResources.Application.Users.Queries;
+namespace YourBrand.HumanResources.Application.Persons.Queries;
 
 public record GetRolesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
@@ -44,9 +44,9 @@ public record GetRolesQuery(int Page = 0, int PageSize = 10, string? SearchStrin
                 query = query.OrderBy(request.SortBy, request.SortDirection == HumanResources.Application.Common.Models.SortDirection.Desc ? HumanResources.Application.SortDirection.Descending : HumanResources.Application.SortDirection.Ascending);
             }
 
-            var users = await query.ToListAsync(cancellationToken);
+            var persons = await query.ToListAsync(cancellationToken);
 
-            var dtos = users.Select(user => new RoleDto(user.Id, user.Name));
+            var dtos = persons.Select(person => new RoleDto(person.Id, person.Name));
 
             return new ItemsResult<RoleDto>(dtos, totalItems);
         }

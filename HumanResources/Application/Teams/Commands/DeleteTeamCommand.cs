@@ -10,32 +10,32 @@ using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources.Application.Teams.Commands;
 
-public record DeleteTeamCommand(string UserId) : IRequest
+public record DeleteTeamCommand(string PersonId) : IRequest
 {
     public class Handler : IRequestHandler<DeleteTeamCommand>
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentPersonService _currentPersonService;
         private readonly IEventPublisher _eventPublisher;
 
-        public Handler(ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public Handler(ICurrentPersonService currentPersonService, IEventPublisher eventPublisher)
         {
-            _currentUserService = currentUserService;
+            _currentPersonService = currentPersonService;
             _eventPublisher = eventPublisher;
         }
 
         public async Task<Unit> Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
             /*
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var person = await _personManager.FindByIdAsync(request.PersonId);
 
-            if (user is null)
+            if (person is null)
             {
-                throw new UserNotFoundException(request.UserId);
+                throw new PersonNotFoundException(request.PersonId);
             }
 
-            await _userManager.DeleteAsync(user);
+            await _personManager.DeleteAsync(person);
 
-            await _eventPublisher.PublishEvent(new UserDeleted(user.Id, _currentUserService.UserId));
+            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id, _currentPersonService.PersonId));
             */
 
             return Unit.Value;

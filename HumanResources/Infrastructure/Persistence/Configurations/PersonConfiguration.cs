@@ -24,8 +24,8 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
                     .WithMany(p => p.PersonRoles)
                     .HasForeignKey(pt => pt.RoleId),
                 j => j
-                    .HasOne(pt => pt.User)
+                    .HasOne(pt => pt.Person)
                     .WithMany(t => t.PersonRoles)
-                    .HasForeignKey(pt => pt.UserId));
+                    .HasForeignKey(pt => pt.PersonId));
     }
 }

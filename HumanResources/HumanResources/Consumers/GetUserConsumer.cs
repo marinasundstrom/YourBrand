@@ -7,23 +7,23 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 
 namespace YourBrand.HumanResources.Consumers;
 
-public class GetUserConsumer : IConsumer<GetUser>
+public class GetPersonConsumer : IConsumer<GetPerson>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentPersonService _currentPersonService;
 
-    public GetUserConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public GetPersonConsumer(IMediator mediator, ICurrentPersonService currentPersonService)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _currentPersonService = currentPersonService;
     }
 
-    public async Task Consume(ConsumeContext<GetUser> context)
+    public async Task Consume(ConsumeContext<GetPerson> context)
     {
         var message = context.Message;
 
-        var user = await _mediator.Send(new YourBrand.HumanResources.Application.Users.Queries.GetUserQuery(message.UserId));
+        var person = await _mediator.Send(new YourBrand.HumanResources.Application.Persons.Queries.GetPersonQuery(message.PersonId));
 
-        await context.RespondAsync(new GetUserResponse(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email));
+        await context.RespondAsync(new GetPersonResponse(person.Id, person.FirstName, person.LastName, person.DisplayName, person.SSN, person.Email));
     }
 }

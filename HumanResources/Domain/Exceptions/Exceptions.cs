@@ -59,27 +59,27 @@ public class ProjectMembershipNotFoundException : DomainException
     public string ProjectMembershipId { get; }
 }
 
-public class UserNotFoundException : DomainException
+public class PersonNotFoundException : DomainException
 {
-    public UserNotFoundException(string userName)
-         : base("User not found", $"User {userName} was not found.")
+    public PersonNotFoundException(string personName)
+         : base("Person not found", $"Person {personName} was not found.")
     {
-        UserName = userName;
+        PersonName = personName;
     }
 
-    public string UserName { get; }
+    public string PersonName { get; }
 }
 
-public class UserAlreadyProjectMemberException : DomainException
+public class PersonAlreadyProjectMemberException : DomainException
 {
-    public UserAlreadyProjectMemberException(string userName, string projectId)
-         : base("User is already a member", $"User {userName} is already a member of {projectId}.")
+    public PersonAlreadyProjectMemberException(string personName, string projectId)
+         : base("Person is already a member", $"Person {personName} is already a member of {projectId}.")
     {
-        UserName = userName;
+        PersonName = personName;
         ProjectId = projectId;
     }
 
-    public string UserName { get; }
+    public string PersonName { get; }
 
     public string ProjectId { get; }
 }

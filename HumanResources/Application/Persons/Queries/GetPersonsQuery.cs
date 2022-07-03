@@ -7,22 +7,22 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Application.Common.Models;
 using YourBrand.HumanResources.Domain.Entities;
 
-namespace YourBrand.HumanResources.Application.Users.Queries;
+namespace YourBrand.HumanResources.Application.Persons.Queries;
 
-public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, HumanResources.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<UserDto>>
+public record GetPersonsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, HumanResources.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<PersonDto>>
 {
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
+    public class GetPersonsQueryHandler : IRequestHandler<GetPersonsQuery, ItemsResult<PersonDto>>
     {
         private readonly IApplicationDbContext _context;
 
-        public GetUsersQueryHandler(IApplicationDbContext context)
+        public GetPersonsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ItemsResult<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<PersonDto>> Handle(GetPersonsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Users
+            var query = _context.Persons
                 .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
@@ -46,14 +46,14 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
                 query = query.OrderBy(request.SortBy, request.SortDirection == HumanResources.Application.Common.Models.SortDirection.Desc ? HumanResources.Application.SortDirection.Descending : HumanResources.Application.SortDirection.Ascending);
             }
 
-            var users = await query
+            var persons = await query
                 .Include(u => u.Roles)
                 .Include(u => u.Department)
                 .ToListAsync(cancellationToken);
 
-            var dtos = users.Select(user => user.ToDto());
+            var dtos = persons.Select(person => person.ToDto());
 
-            return new ItemsResult<UserDto>(dtos, totalItems);
+            return new ItemsResult<PersonDto>(dtos, totalItems);
         }
     }
 }

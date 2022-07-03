@@ -57,7 +57,7 @@
 .glyphicon.glyphicon-star-empty::before {
   content: "\f006";
 }
-.glyphicon.glyphicon-user::before {
+.glyphicon.glyphicon-person::before {
   content: "\f007";
 }
 .glyphicon.glyphicon-film::before {
@@ -830,7 +830,7 @@
 .fa-star-o::before {
   content: "\f006";
 }
-.fa-user::before {
+.fa-person::before {
   content: "\f007";
 }
 .fa-film::before {
@@ -1328,7 +1328,7 @@
   content: "\f0b2";
 }
 .fa-group::before,
-.fa-users::before {
+.fa-persons::before {
   content: "\f0c0";
 }
 .fa-chain::before,
@@ -1477,7 +1477,7 @@
 .fa-cloud-upload::before {
   content: "\f0ee";
 }
-.fa-user-md::before {
+.fa-person-md::before {
   content: "\f0f0";
 }
 .fa-stethoscope::before {
@@ -2361,7 +2361,7 @@
 .fa-ship::before {
   content: "\f21a";
 }
-.fa-user-secret::before {
+.fa-person-secret::before {
   content: "\f21b";
 }
 .fa-motorcycle::before {
@@ -2425,10 +2425,10 @@
 .fa-server::before {
   content: "\f233";
 }
-.fa-user-plus::before {
+.fa-person-plus::before {
   content: "\f234";
 }
-.fa-user-times::before {
+.fa-person-times::before {
   content: "\f235";
 }
 .fa-hotel::before,
@@ -2834,13 +2834,13 @@
 .fa-address-card-o::before {
   content: "\f2bc";
 }
-.fa-user-circle::before {
+.fa-person-circle::before {
   content: "\f2bd";
 }
-.fa-user-circle-o::before {
+.fa-person-circle-o::before {
   content: "\f2be";
 }
-.fa-user-o::before {
+.fa-person-o::before {
   content: "\f2c0";
 }
 .fa-id-badge::before {

@@ -1,0 +1,118 @@
+﻿@page "/hr/persons"
+@attribute [Authorize(Roles = "Administrator,Manager")]
+@using HumanResources.Client
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IPersonsClient PersonsClient
+
+<PageTitle>Persons - YourBrand</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Persons</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewPersonClicked">New Person</MudButton>
+
+<MudTable T="PersonDto" ServerData="@(new Func<TableState, Task<TableData<PersonDto>>>(ServerReload))"
+          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToPerson(e.Item)">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Ssn">SSN</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Email">Email</MudTableSortLabel></MudTh>
+        <MudTh>Role</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="person">
+        <MudTd DataLabel="First Name">@person.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@person.LastName</MudTd>
+        <MudTd DataLabel="Display Name">@person.DisplayName</MudTd>
+        <MudTd DataLabel="SSN">@person.Ssn</MudTd>
+        <MudTd DataLabel="Email">@person.Email</MudTd>
+        <MudTd DataLabel="Role">@person.Role</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditPersonClicked(person)" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeletePerson(person)" />
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    MudTable<PersonDto> table;
+    string searchString;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private async Task<TableData<PersonDto>> ServerReload(TableState state)
+    {
+        try
+        {
+            var page = await PersonsClient.GetPersonsAsync(state.Page, state.PageSize, searchString,
+                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
+
+            return new TableData<PersonDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null!;
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private void GotToPerson(PersonDto person)
+    {
+        NavigationManager.NavigateTo($"/Persons/{person.Id}"); ;
+    }
+
+    private async Task OnNewPersonClicked()
+    {
+        NavigationManager.NavigateTo($"/hr/persons/New");
+    }
+
+    private async Task OnEditPersonClicked(PersonDto person)
+    {
+        NavigationManager.NavigateTo($"/hr/persons/{person.Id}/Edit");
+    }
+
+    private async Task DeletePerson(PersonDto person)
+    {
+        try
+        {
+            var dialogResult = await DialogService.ShowMessageBox($"Delete {person.FirstName}?", "Are you sure?", "Yes", "No");
+
+            if (!dialogResult.GetValueOrDefault())
+                return;
+
+            await PersonsClient.DeletePersonAsync(person.Id);
+
+            table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

@@ -9,7 +9,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ICurrentPersonService, CurrentPersonService>();
 
         services.AddScoped<IEventPublisher, EventPublisher>();
 
