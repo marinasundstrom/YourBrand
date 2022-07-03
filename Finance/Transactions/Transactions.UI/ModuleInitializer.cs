@@ -1,21 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 
+using YourBrand.Portal.Modules;
+using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Shared;
 using YourBrand.Transactions.Client;
 
 namespace YourBrand.Transactions;
 
-public static class ServiceExtensions
+public class ModuleInitializer : IModuleInitializer
 {
-    public static IServiceCollection AddTransactions(this IServiceCollection services)
-    {
-        services.AddClients();
-        
-        return services;
-    }
-
-    public static IServiceCollection AddClients(this IServiceCollection services)
+    public static void Initialize(IServiceCollection services)
     {
         services.AddTransactionsClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
@@ -23,7 +18,14 @@ public static class ServiceExtensions
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
+    }
 
-        return services;
+    public static void ConfigureServices(IServiceProvider services)
+    {
+        var navManager = services
+            .GetRequiredService<NavManager>();
+
+        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
+        group.CreateItem("transactions", "Transactions", MudBlazor.Icons.Material.Filled.InsertDriveFile, "/transactions");
     }
 }

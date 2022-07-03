@@ -3,19 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Portal.Shared;
 using YourBrand.Payments.Client;
+using YourBrand.Portal.Modules;
+using YourBrand.Portal.Navigation;
 
 namespace YourBrand.Payments;
 
-public static class ServiceExtensions
+public class ModuleInitializer : IModuleInitializer
 {
-    public static IServiceCollection AddPayments(this IServiceCollection services)
-    {
-        services.AddClients();
-        
-        return services;
-    }
-
-    public static IServiceCollection AddClients(this IServiceCollection services)
+    public static void Initialize(IServiceCollection services)
     {
         services.AddPaymentsClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
@@ -23,7 +18,14 @@ public static class ServiceExtensions
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
+    }
 
-        return services;
+    public static void ConfigureServices(IServiceProvider services)
+    {
+        var navManager = services
+            .GetRequiredService<NavManager>();
+
+        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
+        group.CreateItem("payments", "Payments", MudBlazor.Icons.Material.Filled.List, "/payments");
     }
 }

@@ -19,7 +19,11 @@ public static class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-        
+            context.Add(new Organization("YourBrand") {
+                Currency = "SEK"
+            });
+
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -19,20 +19,20 @@ namespace YourBrand.Portal;
 public class ModuleLoader
 {
     static readonly Module[] _modules = new Module[] {
-                new Module(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly),
-                new Module(typeof(YourBrand.Showroom.ExampleJsInterop).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.Accounting.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.Invoices.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.Transactions.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.Documents.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.Messenger.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.RotRutService.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.Customers.ServiceExtensions).Assembly) { Enabled = false },
-                new Module(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly)
+                new Module(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Showroom.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Accounting.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Invoices.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Transactions.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Documents.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Messenger.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.Customers.ModuleInitializer).Assembly) { Enabled = true },
+                new Module(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly) { Enabled = true }
         };
 
     private readonly IServiceProvider _serviceProvider;
-    private static Type _moduleInitializerInterface;
+    private static readonly Type _moduleInitializerInterface;
 
     public IReadOnlyList<Module> Modules => _modules;
 
@@ -66,19 +66,6 @@ public class ModuleLoader
                 Console.WriteLine($"Module \"{module.Assembly.GetName().Name}\" was initialized.");
             }
         }
-
-        services
-            //.AddTimeReport()
-            .AddShowroom()
-            .AddAccounting()
-            .AddInvoicing()
-            .AddPayments()
-            .AddTransactions()
-            .AddDocuments()
-            .AddMessenger()
-            .AddRotAndRut()
-            .AddCustomers();
-            //.AddHumanResources();
     }
 
     public void ConfigureServices()
