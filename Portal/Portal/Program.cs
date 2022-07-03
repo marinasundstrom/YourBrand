@@ -17,6 +17,8 @@ using YourBrand.Customers;
 using YourBrand.HumanResources;
 
 using YourBrand.Portal.Navigation;
+using YourBrand.Portal.Modules;
+using System.Reflection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -40,6 +42,22 @@ builder.Services
     .AddNavigationServices()
     .AddScoped<ModuleLoader>();
 
+var moduleAssemblies = new List<ModuleEntry>
+{
+    new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Invoices.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Documents.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Customers.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, true)
+};
+
+moduleAssemblies.ForEach(x => ModuleLoader.LoadModule(x.Assembly, x.Enabled));
+
 ModuleLoader.AddServices(builder.Services);
 
 var app = builder.Build();
@@ -50,3 +68,5 @@ moduleBuilder.ConfigureServices();
 await app.Services.Localize();
 
 await app.RunAsync();
+
+record ModuleEntry(Assembly Assembly, bool Enabled);

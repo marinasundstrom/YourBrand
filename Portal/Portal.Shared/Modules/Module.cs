@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace YourBrand.Portal;
+namespace YourBrand.Portal.Modules;
 
 public class Module
 {
@@ -11,5 +11,5 @@ public class Module
 
     public Assembly Assembly { get; }
 
-    public bool Enabled { get; init; } = true;
+    public bool Enabled { get; set; } = true;
 }
