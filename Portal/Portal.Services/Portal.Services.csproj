@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Portal.Services</RootNamespace>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
 </Project>

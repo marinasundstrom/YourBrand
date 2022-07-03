@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>YourBrand.ApiKeys</RootNamespace>
+        <LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

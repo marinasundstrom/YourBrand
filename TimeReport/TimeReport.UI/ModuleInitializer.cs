@@ -1,21 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 
+using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Shared;
 
 namespace YourBrand.TimeReport;
 
-public static class ServiceExtensions
+public class ModuleInitializer : IModuleInitializer
 {
-    public static IServiceCollection AddTimeReport(this IServiceCollection services)
-    {
-        services.AddClients();
-        
-        return services;
-    }
-
-    public static IServiceCollection AddClients(this IServiceCollection services)
+    public static void Initialize(IServiceCollection services)
     {
         services.AddTimeReportClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
@@ -23,11 +17,9 @@ public static class ServiceExtensions
         }, builder => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
-
-        return services;
     }
 
-    public static IServiceProvider UseTimeReport(this IServiceProvider services)
+    public static void ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -36,7 +28,5 @@ public static class ServiceExtensions
         group.AddItem("projects", "Projects", MudBlazor.Icons.Material.Filled.List, "/projects");
         group.AddItem("report-time", "Report time", MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
         group.AddItem("reports", "Reports", MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
-
-        return services;
     }
 }

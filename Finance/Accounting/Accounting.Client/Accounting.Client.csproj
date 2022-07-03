@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>YourBrand.Accounting.Client</RootNamespace>
+        <LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -7,6 +7,8 @@
 
     <IsPackable>false</IsPackable>
     <RootNamespace>YourBrand.RotRutService.Tests</RootNamespace>
+
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

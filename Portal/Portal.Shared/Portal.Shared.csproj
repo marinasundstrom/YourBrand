@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>YourBrand.Portal.Shared</RootNamespace>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
 
@@ -27,5 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Blazored.LocalStorage" />
+    <None Remove="Modules\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\" />
   </ItemGroup>
 </Project>

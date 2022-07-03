@@ -7,6 +7,8 @@
     <IsPackable>false</IsPackable>
 
     <RootNamepace>YourBrand.Accounting.Domain.Tests</RootNamepace>
+
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

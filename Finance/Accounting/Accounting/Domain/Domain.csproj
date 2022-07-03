@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Accounting.Domain</RootNamespace>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
 </Project>

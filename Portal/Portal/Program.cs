@@ -35,28 +35,17 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services
-    .AddThemeServices()
-    .AddNavigationServices();
-
-builder.Services
     .AddServices()
-    .AddTimeReport()
-    .AddShowroom()
-    .AddAccounting()
-    .AddInvoicing()
-    .AddPayments()
-    .AddTransactions()
-    .AddDocuments()
-    .AddMessenger()
-    .AddRotAndRut()
-    .AddCustomers()
-    .AddHumanResources();
+    .AddThemeServices()
+    .AddNavigationServices()
+    .AddScoped<ModuleLoader>();
+
+ModuleLoader.AddServices(builder.Services);
 
 var app = builder.Build();
 
-app.Services
-    .UseHumanResources()
-    .UseTimeReport();
+var moduleBuilder = app.Services.GetRequiredService<ModuleLoader>();
+moduleBuilder.ConfigureServices();
 
 await app.Services.Localize();
 

@@ -3,27 +3,37 @@
 @inject NavManager NavManager
 @inject IStringLocalizer<NavMenu> T
 @inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorageService
+@implements IDisposable
 
 <MudNavMenu>
     <MudSpacer />
 
     @foreach (var navGroup in NavManager.Groups)
     {
-        <MudNavGroup Title="@navGroup.Name" Expanded="navGroup.Expanded" ExpandedChanged="(v) => Save(v, navGroup)">
-            @foreach (var navItem in navGroup.Items)
-            {
-                @if (navItem.RequireAuthorization)
+        @if (navGroup.Visible)
+        {
+            <MudNavGroup Title="@navGroup.Name" Expanded="navGroup.Expanded" ExpandedChanged="(v) => Save(v, navGroup)">
+                @foreach (var navItem in navGroup.Items)
                 {
-                    <AuthorizeView Roles="@navItem.Roles">
-                        <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
-                    </AuthorizeView>
+                    @if (navItem.RequireAuthorization)
+                    {
+                        if (navItem.Visible)
+                        {
+                            <AuthorizeView Roles="@navItem.Roles">
+                                <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                            </AuthorizeView>
+                        }
+                    }
+                    else
+                    {
+                        if (navItem.Visible)
+                        {
+                            <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                        }
+                    }
                 }
-                else
-                {
-                    <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
-                }
-            }
-        </MudNavGroup>
+            </MudNavGroup>
+        }
     }
 </MudNavMenu>
 
@@ -36,10 +46,22 @@
 
     protected override void OnInitialized()
     {
-        foreach(var navGroup in NavManager.Groups) 
+        foreach (var navGroup in NavManager.Groups)
         {
             navGroup.Expanded = LocalStorageService.GetItem<bool>($"navmenu.{navGroup.Id.ToLower()}");
         }
+
+        NavManager.Updated += NavManagerUpdate;
+    }
+
+    public void NavManagerUpdate(object? sender, EventArgs eventArgs)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavManager.Updated -= NavManagerUpdate;
     }
 
     bool Save(bool newValue, NavGroup navGroup)
