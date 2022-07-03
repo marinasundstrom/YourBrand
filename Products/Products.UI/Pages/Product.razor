@@ -1,0 +1,318 @@
+﻿@page "/products/{productId}"
+@inject IProductsClient ProductsClient
+
+<PageTitle>Product</PageTitle>
+
+@if (vm is null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <PageTitle>@vm.Name (@vm.Sku)</PageTitle>
+
+    <MudGrid Spacing="6">
+        <MudItem xs="12" sm="12" md="6" lg="6">
+            <div class="card shadow-sm">
+                @if ((variant?.Image ?? vm.Image) is not null)
+                {
+                    <img class="bd-placeholder-img card-img-top" style="width: 100%; height: 100%; object-fit: cover;" src="@(variant?.Image ?? vm.Image )" />
+                }
+                else
+                {
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                }
+            </div>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="6" lg="6">
+            <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@vm.Name</MudText>
+
+            <MudCard class="mb-4">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h5" Align="Align.Center">Details</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+
+                    <p>@vm.Description</p>
+
+                    <p>@product.Group?.Name</p>
+
+                    @if (vm.Sku is not null)
+                    {
+                        <p class="mb-4">SKU: @vm.Sku</p>
+                    }
+
+                    @if (vm.Price is not null)
+                    {
+                        <p class="mb-4"> @vm.Price?.ToString("c")</p>
+                    }
+
+                    @if (vm.Total > 0)
+                    {
+                        <p class="mb-4"> @vm.Total.ToString("c")</p>
+                    }
+
+                    @if (variant is not null)
+                    {
+                        <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">@variant.Description</MudText>
+
+                        @if (variant.Sku is not null)
+                        {
+                            <p class="mb-4">SKU: @variant.Sku</p>
+                        }
+
+                        <p class="mb-4"> @variant.Price.GetValueOrDefault().ToString("c")</p>
+                    }
+
+                    <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" Link="@($"/products/{ProductId}/edit")" Class="my-2">Edit</MudButton>
+
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard class="mb-2">
+                <MudCardContent>
+
+                    <EditForm Model="@vm">
+
+                        @foreach (var optionGroup in vm.OptionGroups)
+                        {
+                            if (optionGroup.Name is not null)
+                            {
+                                <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">@optionGroup.Name</MudText>
+
+                                @if (optionGroup.Max is not null)
+                                {<small class="mb-2">Max @optionGroup.Max</small>}
+                            }
+
+                            if (optionGroup.Name is null && vm.OptionGroups.Count() == 1)
+                            {
+                                <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">Options</MudText>
+                            }
+
+                            <div class="form-group mb-6">
+
+                                @foreach (var option in optionGroup.Options)
+                                {
+                                    var optionValues = option.Values;
+
+                                    <div>
+
+                                        @if (optionValues.Any())
+                                        {
+                                            <MudSelect T="OptionValueVM" Class="mb-6" Label="@option.Name" Variant="Variant.Outlined" Value="option.SelectedValue" ValueChanged="async (e) => { option.SelectedValue = e; if (product.HasVariants) { await Update(vm, option); }; }" ToStringFunc="x => x.Name">
+                                                @foreach (var item in optionValues)
+                                                {
+                                                    <MudSelectItem Value="@item" />
+                                                }
+                                            </MudSelect>
+                                        }
+                                        else
+                                        {
+                                            <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
+                                            @if (option.Price is not null)
+                                            {
+                                                <text> (+ @option.Price?.ToString("c"))</text>
+                                            }
+                                        }
+
+                                    </div>
+                                }
+
+                            </div>
+                        }
+
+                    </EditForm>
+
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+
+@code
+{
+    async Task Update(ProductVM product, OptionVM option)
+    {
+        var selectedOptions = product.OptionGroups
+           .SelectMany(x => x.Options)
+           .Where(x => x.SelectedValue is not null)
+           .ToDictionary(x => x.Id, x => x.SelectedValue!.Id);
+
+        variant = await ProductsClient.FindVariantByOptionValuesAsync(product.Id, selectedOptions);
+    }
+
+    string Selector(OptionValueVM optionValue)
+    {
+        return $"{optionValue.Name}{(optionValue.Price is null ? null : $" + {optionValue.Price?.ToString("c")}")}";
+    }
+
+    ProductVM? vm = null;
+
+    ApiProduct? product;
+    IEnumerable<IGrouping<string?, ApiOption>>? optionGroups;
+    IEnumerable<ApiProductVariant>? variants;
+
+    ApiProductVariant? variant;
+
+    Dictionary<string, IEnumerable<ApiOptionValue>> optionsValues = new Dictionary<string, IEnumerable<ApiOptionValue>>();
+
+    [Parameter]
+    public string? ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductsClient.GetProductAsync(ProductId);
+
+        var options2 = await ProductsClient.GetProductOptionsAsync(ProductId);
+        optionGroups = options2
+            .OrderBy(x => x.Group?.Seq)
+            .GroupBy(x => x.Group?.Name);
+
+        vm = new ProductVM()
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Sku = product.Sku,
+            Image = product.Image,
+            Price = product.Price,
+            Description = product.Description
+        };
+
+        if (optionGroups is not null)
+        {
+            foreach (var optionGroup in optionGroups)
+            {
+                OptionGroupVM groupVm = new()
+                {
+                    Id = null!,
+                    Name = optionGroup.Key,
+                    Min = optionGroup.ElementAt(0)?.Group?.Min,
+                    Max = optionGroup.ElementAt(0)?.Group?.Max
+                };
+
+                if (optionGroup is null) continue;
+
+                foreach (var option in optionGroup)
+                {
+                    OptionVM optionVm = new()
+                    {
+                        Id = option.Id,
+                        Name = option.Name,
+                        Price = option.Price
+                    };
+
+                    groupVm.Options.Add(optionVm);
+
+                    var values = option.Values;
+
+                    optionsValues[option.Id] = values;
+
+                    foreach (var value in values.OrderBy(x => x.Seq))
+                    {
+                        OptionValueVM optionValueVm = new()
+                        {
+                            Id = value.Id,
+                            Name = value.Name,
+                            Price = value.Price
+                        };
+
+                        optionVm.Values.Add(optionValueVm);
+                    }
+
+                    if (option.IsSelected)
+                    {
+                        optionVm.IsSelected = option.IsSelected;
+                    }
+
+                    if (option.DefaultValue is not null)
+                    {
+                        optionVm.SelectedValue = optionVm.Values.FirstOrDefault(x => x.Id == option.DefaultValue.Id);
+                    }
+                    else
+                    {
+                        optionVm.SelectedValue = optionVm.Values.FirstOrDefault();
+                    }
+                }
+
+                vm.OptionGroups.Add(groupVm);
+            }
+        }
+
+        if (product.HasVariants)
+        {
+            variants = await ProductsClient.GetVariantsAsync(ProductId);
+
+            await Update(vm, null!);
+        }
+    }
+
+    class ProductVM
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string? Description { get; set; }
+
+        public string? Sku { get; set; }
+
+        public string? Image { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public List<OptionGroupVM> OptionGroups { get; set; } = new List<OptionGroupVM>();
+
+        public decimal Total => Price.GetValueOrDefault()
+                + OptionGroups.SelectMany(x => x.Options)
+                .Where(x => x.IsSelected || x.SelectedValue is not null)
+                .Select(x => x.Price.GetValueOrDefault() + (x?.SelectedValue?.Price ?? 0))
+                .Sum();
+    }
+
+    class OptionVM
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string? Sku { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public bool IsSelected { get; set; }
+
+        public List<OptionValueVM> Values { get; set; } = new List<OptionValueVM>();
+
+        public OptionValueVM? SelectedValue { get; set; }
+    }
+
+    class OptionGroupVM
+    {
+        public string Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public int? Min { get; set; }
+
+        public int? Max { get; set; }
+
+        public List<OptionVM> Options { get; set; } = new List<OptionVM>();
+    }
+
+    class OptionValueVM
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public decimal? Price { get; set; }
+    }
+
+    void Update()
+    {
+        //vm.Update();
+        StateHasChanged();
+    }
+}
+

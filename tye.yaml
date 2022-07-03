@@ -136,6 +136,12 @@ services:
     project: HumanResources/HumanResources/HumanResources.csproj
     bindings:
       - protocol: https
+        port: 5110
+
+  - name: products
+    project: Products/Products/Products.csproj
+    bindings:
+      - protocol: https
         port: 5120
 
   # Start Finance

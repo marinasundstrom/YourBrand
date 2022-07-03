@@ -18,6 +18,7 @@ cd ./Worker; sh seed.sh; cd ..;
 cd ./ApiKeys; sh seed.sh; cd ..;
 cd ./Documents; sh seed.sh; cd ..;
 cd ./Messenger; sh seed.sh; cd ..;
+cd ./Products; sh seed.sh; cd ..;
 
 # Finance
 

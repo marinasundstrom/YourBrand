@@ -1,0 +1,177 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject ISnackbar Snackbar
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <ObjectGraphDataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudTextField Lines="3" Class="mb-6" Label="Description" Variant="Variant.Outlined"
+                @bind-Value="Description" For="() => Description" />
+
+            <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
+
+            <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price"
+                For="() => Price" />
+
+            <InputFile id="fileInput" OnChange="UploadFiles" hidden accept="*.jpg, *.jpeg, *.png" />
+
+            <div class="mb-4">
+
+                <MudButton HtmlTag="label" Color="Color.Secondary" StartIcon="@Icons.Filled.CloudUpload"
+                    for="fileInput">
+                    Upload image
+                </MudButton>
+
+                <MudText Typo="Typo.body1">@file?.Name</MudText>
+
+            </div>
+
+            <div class="form-group">
+                @if (Options is not null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Options is not null)
+                            {
+                                @foreach (var option in Options)
+                                {
+                                    <tr>
+                                        <td>@option.Name</td>
+
+                                        @if (option.Values is not null)
+                                        {
+                                            <td>
+                                                <MudSelect T="ApiOptionValue" Class="mb-6" Variant="MudBlazor.Variant.Outlined"
+                                    @bind-Value="option.SelectedValue" ToStringFunc="x => x?.Name"
+                                    For="() => option.SelectedValue">
+                                                    @foreach (var item in option.Values)
+                                                    {
+                                                        <MudSelectItem Value="@item" />
+                                                    }
+                                                </MudSelect>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public string ProductId { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+
+    [Required]
+    public string SKU { get; set; }
+
+    [Required]
+    public decimal Price { get; set; }
+
+    public List<OptionVM> Options = new List<OptionVM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var options = await ProductsClient.GetProductOptionsAsync(ProductId);
+        foreach (var option in options)
+        {
+            var vm = new OptionVM()
+            {
+                Id = option.Id,
+                Name = option.Name,
+            };
+
+            Options.Add(vm);
+
+            vm.Values.AddRange(
+            await ProductsClient.GetProductOptionValuesAsync(ProductId, option.Id));
+
+            vm.SelectedValue = vm.Values.FirstOrDefault();
+        }
+    }
+
+    IBrowserFile? file;
+
+    private void UploadFiles(InputFileChangeEventArgs e)
+    {
+        file = e.GetMultipleFiles().First();
+    }
+
+    async Task OnSubmit()
+    {
+        var data = new ApiCreateProductVariant
+        {
+            Name = Name,
+            Description = Description,
+            Sku = SKU,
+            Price = Price,
+            Values = new List<ApiCreateProductVariantOption>()
+        };
+
+        foreach (var option in Options)
+        {
+            var optionData = new ApiCreateProductVariantOption
+            {
+                OptionId = option.Id,
+                ValueId = option.SelectedValue.Id,
+            };
+
+            data.Values.Add(optionData);
+        }
+
+        try
+        {
+            var result = await ProductsClient.CreateVariantAsync(ProductId, data);
+
+            if (file is not null)
+            {
+                result.Image = await ProductsClient.UploadVariantImageAsync(ProductId, result.Id, new
+                FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
+            }
+
+            Modal.Close(DialogResult.Ok(result));
+        }
+        catch (ApiException<ProblemDetails> exc)
+        {
+            Snackbar.Add(exc.Result.Detail, Severity.Error);
+        }
+    }
+
+    public class OptionVM
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public ApiOptionValue SelectedValue { get; set; }
+
+        public List<ApiOptionValue> Values { get; set; } = new List<ApiOptionValue>();
+    }
+}

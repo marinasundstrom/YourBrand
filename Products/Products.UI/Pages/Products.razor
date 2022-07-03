@@ -1,0 +1,105 @@
+﻿@page "/products"
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Products</PageTitle>
+
+<section>
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Products</MudText>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateProduct" StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create product</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="/products/list">View all products</MudButton>
+</section>
+
+<div class="py-5">
+        <div class="mb-4">
+            <MudChipSet SelectedChip="chip" SelectedChipChanged="async (MudChip e) => await SetGroup(e)">
+                @if (productGroups is not null)
+                {
+                    <MudChip Color="Color.Primary" Text="All"></MudChip>
+
+                    foreach (var pg in productGroups)
+                    {
+                        <MudChip Color="Color.Secondary" Text="@pg.Name"></MudChip>
+                    }
+                }
+            </MudChipSet>
+        </div>
+
+        @if (products == null)
+        {
+            <span>Loading...</span>
+        }
+        else
+        {
+            <MudGrid Spacing="6">
+                @foreach (var product in products)
+                {
+                    <MudItem xs="12" sm="6" md="4" lg="4">
+                        <a href="/products/@product.Id">
+
+                            <div class="d-flex justify-center">
+                                @if (product.Image is not null)
+                                {
+                                    <img class="bd-placeholder-img card-img-top" style="width: 100%; height: 225px; object-fit: cover;" src="@product.Image" />
+                                }
+                                else
+                                {
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                }
+                            </div>
+                            <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
+                                @product.Name
+                            </MudText>
+                            <small class="text-muted">@product.Price?.ToString("c")</small>
+                        </a>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+</div>
+
+@code
+{
+    MudChip chip;
+    IEnumerable<ApiProductGroup>? productGroups = null;
+    IEnumerable<ApiProduct>? products = null;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? GroupId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        productGroups = await ProductsClient.GetProductGroupsAsync(false);
+        var result = await ProductsClient.GetProductsAsync(false, GroupId, 0, 100);
+        products = result.Items;
+    }
+
+    async Task CreateProduct()
+    {
+        var modalRef = DialogService.Show<CreateProductModal>("New Product");
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        var product = (ApiProduct)result.Data;
+
+        NavigationManager.NavigateTo($"/products/{product.Id}/edit");
+    }
+
+    async Task SetGroup(MudChip chip)
+    {
+        var group = productGroups.FirstOrDefault(g => g.Name == chip.Text);
+
+        var result = await ProductsClient.GetProductsAsync(false, group?.Id, 0, 100);
+        products = result.Items;
+
+        this.chip = chip;
+
+        NavigationManager.NavigateTo($"/products?groupId={group?.Id}", replace: true);
+    }
+}
+
