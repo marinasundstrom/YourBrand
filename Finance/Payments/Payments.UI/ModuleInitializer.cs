@@ -22,10 +22,12 @@ public class ModuleInitializer : IModuleInitializer
 
     public static void ConfigureServices(IServiceProvider services)
     {
+        /*
         var navManager = services
             .GetRequiredService<NavManager>();
 
         var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
         group.CreateItem("payments", "Payments", MudBlazor.Icons.Material.Filled.List, "/payments");
+        */
     }
 }

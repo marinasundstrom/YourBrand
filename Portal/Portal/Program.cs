@@ -49,6 +49,7 @@ var moduleAssemblies = new List<ModuleEntry>
     new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, true),
     new ModuleEntry(typeof(YourBrand.Invoices.ModuleInitializer).Assembly, true),
     new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, true),
+    new ModuleEntry(typeof(YourBrand.Payments.ModuleInitializer).Assembly, true),
     new ModuleEntry(typeof(YourBrand.Documents.ModuleInitializer).Assembly, true),
     new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, true),
     new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, true),
