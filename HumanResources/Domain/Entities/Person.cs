@@ -17,12 +17,13 @@ public class Person : AuditableEntity, ISoftDelete
 
     internal Person() { }
 
-    public Person(string firstName, string lastName, string? displayName, string? ssn, string email)
+    public Person(string firstName, string lastName, string? displayName, string title, string? ssn, string email)
     {
         Id = Guid.NewGuid().ToString();
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;
+        Title = title;
         SSN = ssn;
         Email = email;
     }
@@ -35,11 +36,13 @@ public class Person : AuditableEntity, ISoftDelete
 
     public string? DisplayName { get; set; }
 
+    public string Title { get; set; }
+
     public string? SSN { get; set; }
 
     public string Email { get; set; } = null!;
 
-    public Person? Manager { get; private set; }
+    public Person? ReportsTo { get; set; }
 
     public Department? Department { get; /* private */ set; }
 

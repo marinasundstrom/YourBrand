@@ -16,7 +16,9 @@ public class BankAccount
 
     public string Id { get; private set; }
 
-    public Person Person { get; set; } = null!;
+    public Person? Person { get; set; }
+
+    public string? PersonId { get; set; }
 
     public string BIC { get; set; }
 

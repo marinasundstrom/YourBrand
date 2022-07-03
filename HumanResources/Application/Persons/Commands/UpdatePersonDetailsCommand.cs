@@ -8,7 +8,7 @@ using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources.Application.Persons.Commands;
 
-public record UpdatePersonDetailsCommand(string PersonId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<PersonDto>
+public record UpdatePersonDetailsCommand(string PersonId, string FirstName, string LastName, string? DisplayName, string Title, string Ssn, string Email, string ReportsTo) : IRequest<PersonDto>
 {
     public class UpdatePersonDetailsCommandHandler : IRequestHandler<UpdatePersonDetailsCommand, PersonDto>
     {
@@ -39,8 +39,11 @@ public record UpdatePersonDetailsCommand(string PersonId, string FirstName, stri
             person.FirstName = request.FirstName;
             person.LastName = request.LastName;
             person.DisplayName = request.DisplayName;
+            person.Title = request.Title;
             person.SSN = request.Ssn;
             person.Email = request.Email;
+
+            person.ReportsTo = await _context.Persons.FirstAsync(x => x.Id == request.ReportsTo);
 
             await _context.SaveChangesAsync(cancellationToken);
 

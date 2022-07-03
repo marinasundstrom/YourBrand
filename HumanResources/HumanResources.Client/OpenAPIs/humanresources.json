@@ -817,6 +817,9 @@
             "type": "string",
             "nullable": true
           },
+          "title": {
+            "type": "string"
+          },
           "role": {
             "type": "string"
           },
@@ -831,6 +834,14 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/DepartmentDto"
+              }
+            ]
+          },
+          "reportsTo": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Person2Dto"
               }
             ]
           },
@@ -854,6 +865,36 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "Person2Dto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "department": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DepartmentDto"
+              }
+            ]
           }
         }
       },
@@ -913,6 +954,10 @@
             "type": "string",
             "nullable": true
           },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
           "role": {
             "type": "string",
             "nullable": true
@@ -922,6 +967,10 @@
             "nullable": true
           },
           "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportsTo": {
             "type": "string",
             "nullable": true
           },
@@ -947,11 +996,19 @@
             "type": "string",
             "nullable": true
           },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
           "ssn": {
             "type": "string",
             "nullable": true
           },
           "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportsTo": {
             "type": "string",
             "nullable": true
           }

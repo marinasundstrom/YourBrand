@@ -62,7 +62,7 @@ public class PersonsController : Controller
     {
         try
         {
-            var person = await _mediator.Send(new CreatePersonCommand(createPersonDto.FirstName, createPersonDto.LastName, createPersonDto.DisplayName, createPersonDto.Role, createPersonDto.SSN, createPersonDto.Email, null, createPersonDto.Password), cancellationToken);
+            var person = await _mediator.Send(new CreatePersonCommand(createPersonDto.FirstName, createPersonDto.LastName, createPersonDto.DisplayName, createPersonDto.Title, createPersonDto.Role, createPersonDto.SSN, createPersonDto.Email, null, createPersonDto.ReportsTo, createPersonDto.Password), cancellationToken);
 
             return Ok(person);
         }
@@ -78,7 +78,7 @@ public class PersonsController : Controller
     {
         try
         {
-            var person = await _mediator.Send(new UpdatePersonDetailsCommand(id, updatePersonDetailsDto.FirstName, updatePersonDetailsDto.LastName, updatePersonDetailsDto.DisplayName, updatePersonDetailsDto.SSN, updatePersonDetailsDto.Email), cancellationToken);
+            var person = await _mediator.Send(new UpdatePersonDetailsCommand(id, updatePersonDetailsDto.FirstName, updatePersonDetailsDto.LastName, updatePersonDetailsDto.DisplayName, updatePersonDetailsDto.Title, updatePersonDetailsDto.SSN, updatePersonDetailsDto.Email, updatePersonDetailsDto.ReportsTo), cancellationToken);
 
             return Ok(person);
         }
@@ -121,9 +121,9 @@ public class PersonsController : Controller
     }
 }
 
-public record class CreatePersonDto(string FirstName, string LastName, string? DisplayName, string Role, string SSN, string Email, string Password);
+public record class CreatePersonDto(string FirstName, string LastName, string? DisplayName, string Title, string Role, string SSN, string Email, string? ReportsTo, string Password);
 
-public record class UpdatePersonDetailsDto(string FirstName, string LastName, string? DisplayName, string SSN, string Email);
+public record class UpdatePersonDetailsDto(string FirstName, string LastName, string? DisplayName, string Title, string SSN, string Email, string? ReportsTo);
 
 public record class ChangePasswordDto(string CurrentPassword, string NewPassword);
 

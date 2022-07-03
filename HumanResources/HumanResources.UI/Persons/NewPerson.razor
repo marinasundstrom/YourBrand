@@ -22,6 +22,8 @@
 
             <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
 
+            <MudTextField Label="Title" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Title" For="() => Title" />
+
             <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
 
             <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
@@ -36,11 +38,23 @@
                 </ItemSelectedTemplate>
             </MudAutocomplete>
 
+            <MudAutocomplete Label="Reports to" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ReportsTo" For="() => ReportsTo" SearchFunc="SearchPerson" ToStringFunc="(x) => x.GetDisplayName()">
+                <ItemTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.GetDisplayName()</MudText>
+                </ItemTemplate>
+
+                <ItemSelectedTemplate Context="context2">
+                    <MudText Typo="Typo.body1">@context2.GetDisplayName()</MudText>
+                </ItemSelectedTemplate>
+            </MudAutocomplete>
+
+            @*
             <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Password</MudText>
 
             <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
 
             <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
+            *@
 
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
 
@@ -58,14 +72,21 @@
     public string? DisplayName { get; set; }
 
     [Required]
+    public string Title { get; set; } = null!;
+
+    [Required]
     public string SSN { get; set; } = null!;
 
     [Required]
     public RoleDto Role { get; set; } = null!;
+    
+    public PersonDto? ReportsTo { get; set; } = null!;
 
     [Required]
     [EmailAddress]
     public string Email { get; set; } = null!;
+
+    /*
 
     [Required]
     public string Password { get; set; } = null!;
@@ -73,6 +94,8 @@
     [Required]
     [Compare(nameof(Password))]
     public string RepeatPassword { get; set; } = null!;
+
+    */
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -90,13 +113,15 @@
                 FirstName = FirstName,
                 LastName = LastName,
                 DisplayName = DisplayName,
+                Title = Title,
                 Ssn = SSN,
                 Email = Email,
                 Role = Role.Name,
+                ReportsTo = ReportsTo?.Id,
                 //Password = Password
             });
 
-            NavigationManager.NavigateTo($"/hr/ersons/{result.Id}");
+            NavigationManager.NavigateTo($"/hr/Persons/{result.Id}");
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -109,6 +134,22 @@
         try
         {
             var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task<IEnumerable<PersonDto>> SearchPerson(string text)
+    {
+        try
+        {
+            var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null);
+
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

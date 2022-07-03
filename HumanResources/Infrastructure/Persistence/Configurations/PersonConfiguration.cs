@@ -27,5 +27,10 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
                     .HasOne(pt => pt.Person)
                     .WithMany(t => t.PersonRoles)
                     .HasForeignKey(pt => pt.PersonId));
+
+        builder
+            .HasOne(p => p.BankAccount)
+            .WithOne(ba => ba.Person)
+            .HasForeignKey<BankAccount>(ba => ba.PersonId);
     }
 }

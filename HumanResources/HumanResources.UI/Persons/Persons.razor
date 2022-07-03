@@ -22,6 +22,8 @@
         <MudTh><MudTableSortLabel T="PersonDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="PersonDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="PersonDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Title">Title</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="ReportsTo">Reports to</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Ssn">SSN</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Email">Email</MudTableSortLabel></MudTh>
         <MudTh>Role</MudTh>
@@ -31,6 +33,8 @@
         <MudTd DataLabel="First Name">@person.FirstName</MudTd>
         <MudTd DataLabel="Last Name">@person.LastName</MudTd>
         <MudTd DataLabel="Display Name">@person.DisplayName</MudTd>
+        <MudTd DataLabel="Title">@person.Title</MudTd>
+        <MudTd DataLabel="Reports to">@person.ReportsTo?.GetDisplayName()</MudTd>
         <MudTd DataLabel="SSN">@person.Ssn</MudTd>
         <MudTd DataLabel="Email">@person.Email</MudTd>
         <MudTd DataLabel="Role">@person.Role</MudTd>

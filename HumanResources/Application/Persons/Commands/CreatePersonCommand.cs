@@ -14,7 +14,7 @@ using YourBrand.HumanResources.Domain.Entities;
 
 namespace YourBrand.HumanResources.Application.Persons.Commands;
 
-public record CreatePersonCommand(string FirstName, string LastName, string? DisplayName, string Role, string Ssn, string Email, string DepartmentId, string Password) : IRequest<PersonDto>
+public record CreatePersonCommand(string FirstName, string LastName, string? DisplayName, string Title, string Role, string Ssn, string Email, string DepartmentId, string? ReportsTo, string Password) : IRequest<PersonDto>
 {
     public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, PersonDto>
     {
@@ -31,11 +31,17 @@ public record CreatePersonCommand(string FirstName, string LastName, string? Dis
 
         public async Task<PersonDto> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
-            var person = new Person(request.FirstName, request.LastName, request.DisplayName, request.Ssn, request.Email);
+            var person = new Person(request.FirstName, request.LastName, request.DisplayName, request.Title, request.Ssn, request.Email);
 
             var role = await _context.Roles.FirstAsync(x => x.Name == request.Role);
 
             person.AddToRole(role);
+
+            if(request.ReportsTo != null)
+            {
+                var manager = await _context.Persons.FirstAsync(x => x.Id == request.ReportsTo);
+                person.ReportsTo = manager;
+            }
 
             _context.Persons.Add(person);
 

@@ -28,6 +28,16 @@
 
                 <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
 
+                <MudAutocomplete Label="Reports to" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ReportsTo" For="() => ReportsTo" SearchFunc="SearchPerson" ToStringFunc="(x) => x.GetDisplayName()">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.GetDisplayName()</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.GetDisplayName()</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save changes</MudButton>
 
             </EditForm>
@@ -50,6 +60,9 @@
     public string? DisplayName { get; set; }
 
     [Required]
+    public string Title { get; set; }
+
+    [Required]
     public string SSN { get; set; } = null!;
 
     [Required]
@@ -57,6 +70,8 @@
     public string Email { get; set; } = null!;
 
     public string Role { get; set; } = null!;
+
+    public Person2Dto? ReportsTo { get; set; }
 
     PersonDto? person;
 
@@ -69,9 +84,11 @@
         FirstName = result.FirstName;
         LastName = result.LastName;
         DisplayName = result.DisplayName;
+        Title = result.Title;
         SSN = result.Ssn;
         Email = result.Email;
         Role = result.Role;
+        ReportsTo = result.ReportsTo;
     }
 
     async Task OnSubmit()
@@ -83,8 +100,10 @@
                 FirstName = FirstName,
                 LastName = LastName,
                 DisplayName = DisplayName,
+                Title = Title,
                 Ssn = SSN,
-                Email = Email
+                Email = Email,
+                ReportsTo = ReportsTo?.Id,
             });
 
             NavigationManager.NavigateTo($"/hr/persons/{result.Id}");
@@ -93,5 +112,31 @@
         {
             exception.Redirect();
         }
+    }
+
+
+    async Task<IEnumerable<Person2Dto>> SearchPerson(string text)
+    {
+        try
+        {
+            var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null);
+
+            return results.Items.Where(x => x.Id != PersonId).Select(
+                p => new Person2Dto()  
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    DisplayName = p.DisplayName,
+                    Title = p.Title
+                }
+            );
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
     }
 }
