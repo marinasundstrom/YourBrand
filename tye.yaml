@@ -144,6 +144,12 @@ services:
       - protocol: https
         port: 5120
 
+  - name: orders
+    project: Orders/Orders/Orders.csproj
+    bindings:
+      - protocol: https
+        port: 5130
+
   # Start Finance
 
   - name: financeapp

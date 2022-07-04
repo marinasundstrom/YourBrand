@@ -1,0 +1,102 @@
+﻿@page "/Orders"
+@using YourBrand.Products.Client
+@inject IOrdersClient OrdersClient
+@inject IOrderStatusesClient OrderStatusesClient
+@inject NavigationManager NavigationManager
+
+<PageTitle>Orders</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Orders</MudText>
+
+<MudButton OnClick="NewOrder" Variant="Variant.Filled" Color="Color.Primary" Class="mb-8">New Order</MudButton>
+
+<MudTable T="Order" ServerData="@(new Func<TableState, Task<TableData<Order>>>(ServerReload))" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="@(arg => OnOrderClick(arg))">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6"></MudText>
+        <MudSpacer />
+        <MudSelect T="OrderStatusDto" Label="Status" @bind-Value="orderStatus" ToStringFunc="(ci) => ci?.Name">
+            <MudSelectItem Value="@((OrderStatusDto?)null)">All</MudSelectItem>
+            @foreach (var status in (orderStatuses ?? Array.Empty<OrderStatusDto>()))
+            {
+<MudSelectItem Value="@status" />}
+        </MudSelect>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Order No</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Status</MudTh>
+        <MudTh>Sub Total</MudTh>
+        <MudTh>VAT</MudTh>
+        <MudTh>Discount</MudTh>
+        <MudTh>Charges</MudTh>
+        <MudTh>Total</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Order No">@context.OrderNo</MudTd>
+        <MudTd DataLabel="Date">@context.Date.Date.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Status">@context.Status</MudTd>
+        <MudTd DataLabel="Sub Total">@context.SubTotal?.ToString("c")</MudTd>
+        <MudTd DataLabel="VAT">@context.Vat?.ToString("c")</MudTd>
+        <MudTd DataLabel="Discount">@context.Discount?.ToString("c")</MudTd>
+        <MudTd DataLabel="Charges">@context.Charge?.ToString("c")</MudTd>
+        <MudTd DataLabel="Total">@context.Total.ToString("c")</MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private bool loading;
+    private Orders? items;
+
+    OrderStatusDto? orderStatus = null;
+    IEnumerable<OrderStatusDto>? orderStatuses = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        orderStatuses = await OrderStatusesClient.GetStatusesAsync();
+    }
+
+    public async Task NewOrder()
+    {
+        var orderNo = await OrdersClient.CreateOrderAsync(new CreateOrderDto() {
+            Items = new List<CreateOrderItemDto>()
+        });
+
+        NavigationManager.NavigateTo($"Orders/{orderNo}");
+    }
+
+    public void OnOrderClick(TableRowClickEventArgs<Order> e)
+    {
+        NavigationManager.NavigateTo($"Orders/{e.Item.OrderNo}");
+    }
+
+    private async Task<TableData<Order>> ServerReload(TableState state)
+    {
+        Orders result;
+
+        try
+        {
+            loading = true;
+
+            var skip = state.Page * state.PageSize;
+
+            result = await OrdersClient.GetOrdersAsync(skip, state.PageSize, null);
+        }
+        finally
+        {
+            loading = false;
+        }
+
+        var items = result!.Embedded.Orders;
+
+        return new TableData<Order>() { TotalItems = result.Total, Items = items };
+    }
+}

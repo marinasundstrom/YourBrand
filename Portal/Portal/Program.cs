@@ -59,7 +59,8 @@ void LoadModules(IServiceCollection services)
     {
         new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Products.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, true),
+        new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, true),
+        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Invoices.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, false),
@@ -68,7 +69,7 @@ void LoadModules(IServiceCollection services)
         new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Customers.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, true)
+        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, false)
     };
 
     moduleAssemblies.ForEach(x => ModuleLoader.LoadModule(x.Assembly, x.Enabled));
