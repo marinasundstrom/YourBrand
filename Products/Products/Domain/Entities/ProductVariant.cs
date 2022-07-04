@@ -19,4 +19,6 @@ public class ProductVariant
     public decimal? Price { get; set; }
 
     public List<VariantValue> Values { get; } = new List<VariantValue>();
+
+    public List<ProductOption> ProductOptions { get; } = new List<ProductOption>();
 }

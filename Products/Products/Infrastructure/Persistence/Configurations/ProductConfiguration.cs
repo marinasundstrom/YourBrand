@@ -15,5 +15,10 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMany(p => p.Options)
             .WithMany(p => p.Products)
             .UsingEntity<ProductOption>();
+
+        builder
+            .HasMany(p => p.Attributes)
+            .WithMany(p => p.Products)
+            .UsingEntity<ProductAttribute>();
     }
 }

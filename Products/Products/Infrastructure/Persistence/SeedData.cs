@@ -68,15 +68,15 @@ public class SeedData
 
         context.Products.Add(product);
 
-        var option = new Option()
+        var option = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Size"
         };
 
-        product.Options.Add(option);
+        product.Attributes.Add(option);
 
-        var valueSmall = new OptionValue
+        var valueSmall = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Small"
@@ -84,7 +84,7 @@ public class SeedData
 
         option.Values.Add(valueSmall);
 
-        var valueMedium = new OptionValue
+        var valueMedium = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Medium"
@@ -92,7 +92,7 @@ public class SeedData
 
         option.Values.Add(valueMedium);
 
-        var valueLarge = new OptionValue
+        var valueLarge = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Large"
@@ -100,7 +100,7 @@ public class SeedData
 
         option.Values.Add(valueLarge);
 
-        product.Options.Add(option);
+        product.Attributes.Add(option);
 
         var variantSmall = new ProductVariant()
         {
@@ -112,7 +112,7 @@ public class SeedData
 
         variantSmall.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueSmall
         });
 
@@ -128,7 +128,7 @@ public class SeedData
 
         variantMedium.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueMedium
         });
 
@@ -144,7 +144,7 @@ public class SeedData
 
         variantLarge.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueLarge
         });
 
@@ -165,15 +165,15 @@ public class SeedData
 
         context.Products.Add(product);
 
-        var option = new Option()
+        var option = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Size"
         };
 
-        product.Options.Add(option);
+        product.Attributes.Add(option);
 
-        var valueSmall = new OptionValue
+        var valueSmall = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Small"
@@ -181,7 +181,7 @@ public class SeedData
 
         option.Values.Add(valueSmall);
 
-        var valueMedium = new OptionValue
+        var valueMedium = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Medium"
@@ -189,7 +189,7 @@ public class SeedData
 
         option.Values.Add(valueMedium);
 
-        var valueLarge = new OptionValue
+        var valueLarge = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Large"
@@ -197,17 +197,17 @@ public class SeedData
 
         option.Values.Add(valueLarge);
 
-        product.Options.Add(option);
+        product.Attributes.Add(option);
 
-        var option2 = new Option()
+        var option2 = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Color"
         };
 
-        product.Options.Add(option2);
+        product.Attributes.Add(option2);
 
-        var valueBlue = new OptionValue
+        var valueBlue = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Blue"
@@ -215,7 +215,7 @@ public class SeedData
 
         option2.Values.Add(valueBlue);
 
-        var valueRed = new OptionValue
+        var valueRed = new AttributeValue
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Red"
@@ -236,13 +236,13 @@ public class SeedData
 
         variantBlueSmall.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueSmall
         });
 
         variantBlueSmall.Values.Add(new VariantValue()
         {
-            Option = option2,
+            Attribute = option2,
             Value = valueBlue
         });
 
@@ -261,13 +261,13 @@ public class SeedData
 
         variantBlueMedium.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueMedium
         });
 
         variantBlueMedium.Values.Add(new VariantValue()
         {
-            Option = option2,
+            Attribute = option2,
             Value = valueBlue
         });
 
@@ -284,13 +284,13 @@ public class SeedData
 
         variantBlueLarge.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueLarge
         });
 
         variantBlueLarge.Values.Add(new VariantValue()
         {
-            Option = option2,
+            Attribute = option2,
             Value = valueBlue
         });
 
@@ -309,13 +309,13 @@ public class SeedData
 
         variantRedSmall.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueSmall
         });
 
         variantRedSmall.Values.Add(new VariantValue()
         {
-            Option = option2,
+            Attribute = option2,
             Value = valueRed
         });
 
@@ -332,13 +332,13 @@ public class SeedData
 
         variantRedMedium.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueMedium
         });
 
         variantRedMedium.Values.Add(new VariantValue()
         {
-            Option = option2,
+            Attribute = option2,
             Value = valueRed
         });
 
@@ -355,13 +355,13 @@ public class SeedData
 
         variantRedLarge.Values.Add(new VariantValue()
         {
-            Option = option,
+            Attribute = option,
             Value = valueLarge
         });
 
         variantRedLarge.Values.Add(new VariantValue()
         {
-            Option = option2,
+            Attribute = option2,
             Value = valueRed
         });
 

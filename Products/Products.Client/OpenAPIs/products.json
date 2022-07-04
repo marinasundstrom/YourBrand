@@ -27,6 +27,59 @@
         }
       }
     },
+    "/api/Attributes": {
+      "get": {
+        "tags": [
+          "Attributes"
+        ],
+        "operationId": "Attributes_GetAttributes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiAttribute"
+            }
+          }
+        }
+      }
+    },
+    "/api/Attributes/{attributeId}/Values": {
+      "get": {
+        "tags": [
+          "Attributes"
+        ],
+        "operationId": "Attributes_GetAttributesValues",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "attributeId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ApiOptionValue"
+            }
+          }
+        }
+      }
+    },
     "/api/Options": {
       "get": {
         "tags": [
@@ -780,6 +833,40 @@
         }
       }
     },
+    "/api/Products/{productId}/Attributes": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "Products_GetProductAttributes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ApiAttribute"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Products/{productId}/Options/{optionId}": {
       "put": {
         "tags": [
@@ -1350,6 +1437,97 @@
     }
   },
   "definitions": {
+    "ApiAttribute": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "values"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "group": {
+          "$ref": "#/definitions/ApiAttributeGroup"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributeValue"
+          }
+        }
+      }
+    },
+    "ApiAttributeGroup": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiAttributeValue": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "seq": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ApiOptionValue": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "seq": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "ApiOption": {
       "type": "object",
       "required": [
@@ -1433,32 +1611,6 @@
           "format": "int32"
         },
         "max": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "ApiOptionValue": {
-      "type": "object",
-      "required": [
-        "id",
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "sku": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "seq": {
           "type": "integer",
           "format": "int32"
         }

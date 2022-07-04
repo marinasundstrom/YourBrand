@@ -126,6 +126,11 @@ public class ProductsController : Controller
         return Ok(await api.GetProductOptions(productId));
     }
 
+    [HttpGet("{productId}/Attributes")]
+    public async Task<ActionResult<IEnumerable<ApiAttribute>>> GetProductAttributes(string productId)
+    {
+        return Ok(await api.GetProductAttributes(productId));
+    }
 
     [HttpPost("{productId}/Options")]
     public async Task<ActionResult<ApiOption>> CreateProductOption(string productId, ApiCreateProductOption data)

@@ -1,12 +1,13 @@
 ﻿namespace YourBrand.Products.Application;
 
-using Azure.Storage.Blobs;
-
 using System;
 
+using Azure.Storage.Blobs;
+
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Products.Domain.Entities;
+
 using YourBrand.Products.Domain;
+using YourBrand.Products.Domain.Entities;
 
 public class Api
 {
@@ -337,6 +338,22 @@ public class Api
             x.DefaultValue == null ? null : new ApiOptionValue(x.DefaultValue.Id, x.DefaultValue.Name, x.DefaultValue.SKU, x.DefaultValue.Price, x.DefaultValue.Seq)));
     }
 
+    public async Task<IEnumerable<ApiAttribute>> GetProductAttributes(string productId)
+    {
+        var attributes = await context.Attributes
+            .AsSplitQuery()
+            .AsNoTracking()
+            .Include(pv => pv.Group)
+            .Include(pv => pv.Values)
+            .Where(p => p.Products.Any(x => x.Id == productId))
+            .ToArrayAsync();
+
+
+        return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
+             x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
+    }
+
+
     public async Task DeleteProductOptionValue(string productId, string optionId, string valueId)
     {
         var product = await context.Products
@@ -379,6 +396,21 @@ public class Api
             x.DefaultValue == null ? null : new ApiOptionValue(x.DefaultValue.Id, x.DefaultValue.Name, x.DefaultValue.SKU, x.DefaultValue.Price, x.DefaultValue.Seq)));
     }
 
+    public async Task<IEnumerable<ApiAttribute>> GetAttributes()
+    {
+        var query = context.Attributes
+            .AsSplitQuery()
+            .AsNoTracking()
+            .Include(o => o.Group)
+            .Include(o => o.Values)
+            .AsQueryable();
+
+        var attributes = await query.ToArrayAsync();
+
+        return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
+             x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
+    }
+
     public async Task<IEnumerable<ApiOption>> GetOption(string optionId)
     {
         var options = await context.Options
@@ -392,6 +424,20 @@ public class Api
         return options.Select(x => new ApiOption(x.Id, x.Name, x.Description, x.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, x.Group == null ? null : new ApiOptionGroup(x.Group.Id, x.Group.Name, x.Group.Description, x.Group.Seq, x.Group.Min, x.Group.Max), x.SKU, x.Price, x.IsSelected,
             x.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
             x.DefaultValue == null ? null : new ApiOptionValue(x.DefaultValue.Id, x.DefaultValue.Name, x.DefaultValue.SKU, x.DefaultValue.Price, x.DefaultValue.Seq)));
+    }
+
+    public async Task<IEnumerable<ApiAttribute>> GetAttribute(string attributeId)
+    {
+        var attributes = await context.Attributes
+            .AsSplitQuery()
+            .AsNoTracking()
+            .Include(pv => pv.Group)
+            .Include(pv => pv.Values)
+            .Where(o => o.Id == attributeId)
+            .ToArrayAsync();
+
+        return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
+             x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
     }
 
     public async Task<IEnumerable<ApiProductGroup>> GetProductGroups(bool includeWithUnlistedProducts = false)
@@ -544,7 +590,7 @@ public class Api
             .AsSplitQuery()
             .Include(pv => pv.Variants)
                 .ThenInclude(o => o.Values)
-                .ThenInclude(o => o.Option)
+                .ThenInclude(o => o.Attribute)
             .Include(pv => pv.Variants)
                 .ThenInclude(o => o.Values)
                 .ThenInclude(o => o.Value)
@@ -563,13 +609,13 @@ public class Api
 
         foreach (var value in data.Values)
         {
-            var option = product.Options.First(x => x.Id == value.OptionId);
+            var option = product.Attributes.First(x => x.Id == value.OptionId);
 
             var value2 = option.Values.First(x => x.Id == value.ValueId);
 
             variant.Values.Add(new VariantValue()
             {
-                Option = option,
+                Attribute = option,
                 Value = value2
             });
         }
@@ -579,7 +625,7 @@ public class Api
         await context.SaveChangesAsync();
 
         return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-            variant.Values.Select(x => new ApiProductVariantOption(x.Option.Id, x.Option.Name, x.Value.Name)));
+            variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
     }
 
     private static string? GetImageUrl(string? name)
@@ -615,7 +661,7 @@ public class Api
             .AsSplitQuery()
             .Include(pv => pv.Variants)
                 .ThenInclude(o => o.Values)
-                .ThenInclude(o => o.Option)
+                .ThenInclude(o => o.Attribute)
             .Include(pv => pv.Variants)
                 .ThenInclude(o => o.Values)
                 .ThenInclude(o => o.Value)
@@ -634,25 +680,25 @@ public class Api
         {
             if (v.Id == null)
             {
-                var option = product.Options.First(x => x.Id == v.OptionId);
+                var option = product.Attributes.First(x => x.Id == v.OptionId);
 
                 var value2 = option.Values.First(x => x.Id == v.ValueId);
 
                 variant.Values.Add(new VariantValue()
                 {
-                    Option = option,
+                    Attribute = option,
                     Value = value2
                 });
             }
             else
             {
-                var option = product.Options.First(x => x.Id == v.OptionId);
+                var option = product.Attributes.First(x => x.Id == v.OptionId);
 
                 var value2 = option.Values.First(x => x.Id == v.ValueId);
 
                 var value = variant.Values.First(x => x.Id == v.Id);
 
-                value.Option = option;
+                value.Attribute = option;
                 value.Value = value2;
             }
         }
@@ -673,7 +719,7 @@ public class Api
         await context.SaveChangesAsync();
 
         return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-            variant.Values.Select(x => new ApiProductVariantOption(x.Option.Id, x.Option.Name, x.Value.Name)));
+            variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
     }
 
     public async Task<IEnumerable<ApiOptionValue>> GetOptionValues(string optionId)
@@ -689,6 +735,19 @@ public class Api
         return options.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq));
     }
 
+    public async Task<IEnumerable<ApiAttributeValue>> GetAttributeValues(string attributeId)
+    {
+        var options = await context.AttributeValues
+            .AsSplitQuery()
+            .AsNoTracking()
+            .Include(pv => pv.Attribute)
+            .ThenInclude(pv => pv.Group)
+            .Where(p => p.Attribute.Id == attributeId)
+            .ToArrayAsync();
+
+        return options.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq));
+    }
+
     public async Task<IEnumerable<ApiProductVariant>> GetProductVariants(string productId)
     {
         var variants = await context.ProductVariants
@@ -696,14 +755,14 @@ public class Api
             .AsNoTracking()
             .Include(pv => pv.Product)
             .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Option)
+            .ThenInclude(pv => pv.Attribute)
             .Include(pv => pv.Values)
             .ThenInclude(pv => pv.Value)
             .Where(pv => pv.Product.Id == productId)
             .ToArrayAsync();
 
         return variants.Select(x => new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-            x.Values.Select(x => new ApiProductVariantOption(x.Option.Id, x.Option.Name, x.Value.Name))));
+            x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name))));
     }
 
     public async Task<ApiProductVariant> GetProductVariant(string productId, string productVariantId)
@@ -713,14 +772,14 @@ public class Api
             .AsNoTracking()
             .Include(pv => pv.Product)
             .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Option)
-            .ThenInclude(o => o.DefaultValue)
+            .ThenInclude(pv => pv.Attribute)
+            //.ThenInclude(o => o.DefaultValue)
             .Include(pv => pv.Values)
             .ThenInclude(pv => pv.Value)
             .FirstOrDefaultAsync(pv => pv.Product.Id == productId && pv.Id == productVariantId);
 
         return new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-            x.Values.Select(x => new ApiProductVariantOption(x.Option.Id, x.Option.Name, x.Value.Name)));
+            x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
 
     }
 
@@ -754,7 +813,7 @@ public class Api
         if (x is null) return null;
 
         return new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-            x.Values.Select(x => new ApiProductVariantOption(x.Option.Id, x.Option.Name, x.Value.Name)));
+            x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
     }
 
     public async Task<IEnumerable<ApiProductVariantOption>> GetProductVariantOptions(string productId, string productVariantId)
@@ -763,14 +822,14 @@ public class Api
             .AsSplitQuery()
             .AsNoTracking()
             .Include(pv => pv.Value)
-            .Include(pv => pv.Option)
-            .ThenInclude(o => o.DefaultValue)
+            .Include(pv => pv.Attribute)
+            //.ThenInclude(o => o.DefaultValue)
             .Include(pv => pv.Variant)
             .ThenInclude(p => p.Product)
             .Where(pv => pv.Variant.Product.Id == productId && pv.Variant.Id == productVariantId)
             .ToArrayAsync();
 
-        return variantOptionValues.Select(x => new ApiProductVariantOption(x.Option.Id, x.Option.Name, x.Value.Name));
+        return variantOptionValues.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name));
     }
 
     public async Task<IEnumerable<ApiOptionValue>> GetAvailableOptionValues(string productId, string optionId, IDictionary<string, string?> selectedOptions)
@@ -780,7 +839,7 @@ public class Api
           .AsNoTracking()
           .Include(pv => pv.Product)
           .Include(pv => pv.Values)
-          .ThenInclude(pv => pv.Option)
+          .ThenInclude(pv => pv.Attribute)
           .Include(pv => pv.Values)
           .ThenInclude(pv => pv.Value)
           .Where(pv => pv.Product.Id == productId)
@@ -791,13 +850,13 @@ public class Api
             if (selectedOption.Value is null)
                 continue;
 
-            variants = variants.Where(x => x.Values.Any(vv => vv.Option.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
+            variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
         }
 
         var values = variants
             .SelectMany(x => x.Values)
-            .DistinctBy(x => x.Option)
-            .Where(x => x.Option.Id == optionId)
+            .DistinctBy(x => x.Attribute)
+            .Where(x => x.Attribute.Id == optionId)
             .Select(x => x.Value);
 
         return values.Select(x => new ApiOptionValue(x.Id, x.Name, x.Name, x.Price, x.Seq));
@@ -810,7 +869,7 @@ public class Api
             .AsNoTracking()
             .Include(pv => pv.Product)
             .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Option)
+            .ThenInclude(pv => pv.Attribute)
             .Include(pv => pv.Values)
             .ThenInclude(pv => pv.Value)
             .Where(pv => pv.Product.Id == productId)
@@ -829,7 +888,7 @@ public class Api
             if (selectedOption.Value is null)
                 continue;
 
-            variants = variants.Where(x => x.Values.Any(vv => vv.Option.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
+            variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
         }
 
         return variants.SingleOrDefault((ProductVariant?)null);
@@ -854,7 +913,11 @@ public record class ApiUpdateProductGroup(string Name, string? Description, stri
 
 public record class ApiOption(string Id, string Name, string? Description, OptionType OptionType, ApiOptionGroup? Group, string? SKU, decimal? Price, bool IsSelected, IEnumerable<ApiOptionValue> Values, ApiOptionValue? DefaultValue);
 
+public record class ApiAttribute(string Id, string Name, string? Description, ApiAttributeGroup? Group, IEnumerable<ApiAttributeValue> Values);
+
 public record class ApiOptionValue(string Id, string Name, string? SKU, decimal? Price, int? Seq);
+
+public record class ApiAttributeValue(string Id, string Name, int? Seq);
 
 public record class ApiCreateProductOption(string Name, string? Description, OptionType OptionType, ApiOptionGroup? Group, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiCreateProductOptionValue> Values);
 
@@ -866,6 +929,8 @@ public record class ApiUpdateProductOptionValue(string? Id, string Name, string?
 
 
 public record class ApiOptionGroup(string Id, string Name, string? Description, int? Seq, int? Min, int? Max);
+
+public record class ApiAttributeGroup(string Id, string Name, string? Description);
 
 public record class ApiCreateProductOptionGroup(string Name, string? Description, int? Min, int? Max);
 

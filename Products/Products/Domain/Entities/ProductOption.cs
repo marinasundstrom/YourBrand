@@ -8,6 +8,12 @@ public class ProductOption
 
     public Product Product { get; set; } = null!;
 
+    // This option is set for the product variant.
+
+    public string? VariantId { get; set; } = null!;
+
+    public ProductVariant? Variant { get; set; } = null!;
+
     public string OptionId { get; set; } = null!;
 
     public Option Option { get; set; } = null!;

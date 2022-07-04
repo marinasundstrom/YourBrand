@@ -11,17 +11,25 @@ public interface IProductsContext
 
     DbSet<Product> Products { get; }
 
-    DbSet<ProductOption> ProductOptions { get; }
+    DbSet<ProductAttribute> ProductAttributes { get; }
 
-    DbSet<OptionGroup> OptionGroups { get; }
+    DbSet<AttributeGroup> AttributeGroups { get; }
 
-    DbSet<Option> Options { get; } 
+    DbSet<Entities.Attribute> Attributes { get; } 
 
-    DbSet<OptionValue> OptionValues { get; }
+    DbSet<AttributeValue> AttributeValues { get; }
 
     DbSet<ProductVariant> ProductVariants { get; }
 
     DbSet<VariantValue> VariantValues { get; }
+
+    DbSet<ProductOption> ProductOptions { get; }
+
+    DbSet<OptionGroup> OptionGroups { get; }
+
+    DbSet<Option> Options { get; }
+
+    DbSet<OptionValue> OptionValues { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

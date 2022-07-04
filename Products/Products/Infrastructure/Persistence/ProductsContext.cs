@@ -44,6 +44,18 @@ public class ProductsContext : DbContext, IProductsContext
 
     public DbSet<Product> Products { get; set; } = null!;
 
+    public DbSet<ProductAttribute> ProductAttributes { get; set; } = null!;
+
+    public DbSet<AttributeGroup> AttributeGroups { get; set; } = null!;
+
+    public DbSet<Domain.Entities.Attribute> Attributes { get; set; } = null!;
+
+    public DbSet<AttributeValue> AttributeValues { get; set; } = null!;
+
+    public DbSet<ProductVariant> ProductVariants { get; set; } = null!;
+
+    public DbSet<VariantValue> VariantValues { get; set; } = null!;
+
     public DbSet<ProductOption> ProductOptions { get; set; } = null!;
 
     public DbSet<OptionGroup> OptionGroups { get; set; } = null!;
@@ -51,10 +63,6 @@ public class ProductsContext : DbContext, IProductsContext
     public DbSet<Option> Options { get; set; } = null!;
 
     public DbSet<OptionValue> OptionValues { get; set; } = null!;
-
-    public DbSet<ProductVariant> ProductVariants { get; set; } = null!;
-
-    public DbSet<VariantValue> VariantValues { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

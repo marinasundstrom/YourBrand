@@ -8,7 +8,7 @@ public class VariantValue
 
     public ProductVariant Variant { get; set; } = null!;
 
-    public Option Option { get; set; } = null!;
+    public Entities.Attribute Attribute { get; set; } = null!;
 
-    public OptionValue Value { get; set; } = null!;
+    public AttributeValue Value { get; set; } = null!;
 }

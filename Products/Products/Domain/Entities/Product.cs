@@ -24,6 +24,10 @@ public class Product
 
     public bool? AllCustom { get; set; }
 
+    public List<Entities.Attribute> Attributes { get; } = new List<Entities.Attribute>();
+
+    public List<ProductAttribute> ProductAttributes { get; } = new List<ProductAttribute>();
+
     public List<ProductVariant> Variants { get; } = new List<ProductVariant>();
 
     public List<Option> Options { get; } = new List<Option>();

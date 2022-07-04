@@ -70,76 +70,133 @@ else
                 </MudCardContent>
             </MudCard>
 
-            <MudCard class="mb-2">
-                <MudCardContent>
+            @if (vm.AttributeGroups.Any())
+            {
 
-                    <EditForm Model="@vm">
+                <MudCard class="mb-2">
+                    <MudCardContent>
 
-                        @foreach (var optionGroup in vm.OptionGroups)
-                        {
-                            if (optionGroup.Name is not null)
+                        <EditForm Model="@vm">
+
+                            @foreach (var attributeGroup in vm.AttributeGroups)
                             {
-                                <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">@optionGroup.Name</MudText>
-
-                                @if (optionGroup.Max is not null)
-                                {<small class="mb-2">Max @optionGroup.Max</small>}
-                            }
-
-                            if (optionGroup.Name is null && vm.OptionGroups.Count() == 1)
-                            {
-                                <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">Options</MudText>
-                            }
-
-                            <div class="form-group mb-6">
-
-                                @foreach (var option in optionGroup.Options)
+                                if (attributeGroup.Name is not null)
                                 {
-                                    var optionValues = option.Values;
-
-                                    <div>
-
-                                        @if (optionValues.Any())
-                                        {
-                                            <MudSelect T="OptionValueVM" Class="mb-6" Label="@option.Name" Variant="Variant.Outlined" Value="option.SelectedValue" ValueChanged="async (e) => { option.SelectedValue = e; if (product.HasVariants) { await Update(vm, option); }; }" ToStringFunc="x => x.Name">
-                                                @foreach (var item in optionValues)
-                                                {
-                                                    <MudSelectItem Value="@item" />
-                                                }
-                                            </MudSelect>
-                                        }
-                                        else
-                                        {
-                                            <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
-                                            @if (option.Price is not null)
-                                            {
-                                                <text> (+ @option.Price?.ToString("c"))</text>
-                                            }
-                                        }
-
-                                    </div>
+                                    <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">@attributeGroup.Name</MudText>
                                 }
 
-                            </div>
-                        }
+                                if (attributeGroup.Name is null && vm.AttributeGroups.Count() == 1)
+                                {
+                                    <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">Options</MudText>
+                                }
 
-                    </EditForm>
+                                <div class="form-group mb-6">
 
-                </MudCardContent>
-            </MudCard>
+                                    @foreach (var attribute in attributeGroup.Attributes)
+                                    {
+                                        var attributeValues = attribute.Values;
+
+                                        <div>
+
+                                            @if (attributeValues.Any())
+                                            {
+                                                <MudSelect T="AttributeValueVM" Class="mb-6" Label="@(attribute.Name)" Variant="Variant.Outlined" Value="attribute.SelectedValue" ValueChanged="async (e) => { attribute.SelectedValue = e; if (product.HasVariants) { await Update(vm, attribute); }; }" ToStringFunc="x => x.Name">
+                                                    @foreach (var item in attributeValues)
+                                                    {
+                                                        <MudSelectItem Value="@item" />
+                                                    }
+                                                </MudSelect>
+                                            }
+                                            else
+                                            {
+                                                <MudText>@@attribute.Name"</MudText>
+                                            }
+
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+
+                        </EditForm>
+
+                    </MudCardContent>
+                </MudCard>
+            }
+
+            @if (vm.OptionGroups.Any())
+            {
+                <MudCard class="mb-2">
+                    <MudCardContent>
+
+                        <EditForm Model="@vm">
+
+                            @foreach (var optionGroup in vm.OptionGroups)
+                            {
+                                if (optionGroup.Name is not null)
+                                {
+                                    <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">@optionGroup.Name</MudText>
+
+                                    @if (optionGroup.Max is not null)
+                                    {<small class="mb-2">Max @optionGroup.Max</small>}
+                                }
+
+                                if (optionGroup.Name is null && vm.OptionGroups.Count() == 1)
+                                {
+                                    <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">Options</MudText>
+                                }
+
+                                <div class="form-group mb-6">
+
+                                    @foreach (var option in optionGroup.Options)
+                                    {
+                                        var optionValues = option.Values;
+
+                                        <div>
+
+                                            @if (optionValues.Any())
+                                            {
+                                                <MudSelect T="OptionValueVM" Class="mb-6" Label="@option.Name" Variant="Variant.Outlined" Value="option.SelectedValue" ValueChanged="async (e) => { option.SelectedValue = e; }" ToStringFunc="x => x.Name">
+                                                    @foreach (var item in optionValues)
+                                                    {
+                                                        <MudSelectItem Value="@item" />
+                                                    }
+                                                </MudSelect>
+                                            }
+                                            else
+                                            {
+                                                <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
+                                                @if (option.Price is not null)
+                                                {
+                                                    <text> (+ @option.Price?.ToString("c"))</text>
+                                                }
+                                            }
+
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+
+                        </EditForm>
+
+                    </MudCardContent>
+                </MudCard>
+            }
         </MudItem>
     </MudGrid>
 }
 
 @code
 {
-    async Task Update(ProductVM product, OptionVM option)
+    async Task Update(ProductVM product, AttributeVM attribute)
     {
-        var selectedOptions = product.OptionGroups
-           .SelectMany(x => x.Options)
+        var selectedAttributes = product.AttributeGroups
+           .SelectMany(x => x.Attributes)
            .Where(x => x.SelectedValue is not null)
            .ToDictionary(x => x.Id, x => x.SelectedValue!.Id);
 
-        variant = await ProductsClient.FindVariantByOptionValuesAsync(product.Id, selectedOptions);
+        variant = await ProductsClient.FindVariantByOptionValuesAsync(product.Id, selectedAttributes);
     }
 
     string Selector(OptionValueVM optionValue)
@@ -151,11 +208,13 @@ else
 
     ApiProduct? product;
     IEnumerable<IGrouping<string?, ApiOption>>? optionGroups;
+    IEnumerable<IGrouping<string?, ApiAttribute>>? attributeGroups;
     IEnumerable<ApiProductVariant>? variants;
 
     ApiProductVariant? variant;
 
     Dictionary<string, IEnumerable<ApiOptionValue>> optionsValues = new Dictionary<string, IEnumerable<ApiOptionValue>>();
+    Dictionary<string, IEnumerable<ApiAttributeValue>> attributeValues = new Dictionary<string, IEnumerable<ApiAttributeValue>>();
 
     [Parameter]
     public string? ProductId { get; set; }
@@ -163,6 +222,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         product = await ProductsClient.GetProductAsync(ProductId);
+
+        var attributes = await ProductsClient.GetProductAttributesAsync(ProductId);
+        attributeGroups = attributes
+            .OrderBy(x => x.Group)
+            .GroupBy(x => x.Group?.Name);
 
         var options2 = await ProductsClient.GetProductOptionsAsync(ProductId);
         optionGroups = options2
@@ -178,6 +242,51 @@ else
             Price = product.Price,
             Description = product.Description
         };
+
+        if (attributeGroups is not null)
+        {
+            foreach (var attributeGroup in attributeGroups)
+            {
+                AttributeGroupVM groupVm = new()
+                {
+                    Id = null!,
+                    Name = attributeGroup.Key
+                };
+
+                if (attributeGroup is null) continue;
+
+                foreach (var attribute in attributeGroup)
+                {
+                    AttributeVM attributeVm = new()
+                    {
+                        Id = attribute.Id,
+                        Name = attribute.Name
+                    };
+
+                    groupVm.Attributes.Add(attributeVm);
+
+                    var values = attribute.Values;
+
+                    attributeValues[attribute.Id] = values;
+
+                    foreach (var value in values.OrderBy(x => x.Seq))
+                    {
+                        AttributeValueVM optionValueVm = new()
+                        {
+                            Id = value.Id,
+                            Name = value.Name
+                        };
+
+                        attributeVm.Values.Add(optionValueVm);
+                    }
+
+
+                    attributeVm.SelectedValue = attributeVm.Values.FirstOrDefault();
+                }
+
+                vm.AttributeGroups.Add(groupVm);
+            }
+        }
 
         if (optionGroups is not null)
         {
@@ -261,6 +370,8 @@ else
 
         public decimal? Price { get; set; }
 
+        public List<AttributeGroupVM> AttributeGroups { get; set; } = new List<AttributeGroupVM>();
+
         public List<OptionGroupVM> OptionGroups { get; set; } = new List<OptionGroupVM>();
 
         public decimal Total => Price.GetValueOrDefault()
@@ -268,6 +379,33 @@ else
                 .Where(x => x.IsSelected || x.SelectedValue is not null)
                 .Select(x => x.Price.GetValueOrDefault() + (x?.SelectedValue?.Price ?? 0))
                 .Sum();
+    }
+
+    class AttributeVM
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public List<AttributeValueVM> Values { get; set; } = new List<AttributeValueVM>();
+
+        public AttributeValueVM? SelectedValue { get; set; }
+    }
+
+    class AttributeGroupVM
+    {
+        public string Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public List<AttributeVM> Attributes { get; set; } = new List<AttributeVM>();
+    }
+
+    class AttributeValueVM
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
     }
 
     class OptionVM
