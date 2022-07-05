@@ -11,6 +11,8 @@ else
 {
     <PageTitle>@vm.Name (@vm.Sku)</PageTitle>
 
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@vm.Name</MudText>
+
     <MudGrid Spacing="6">
         <MudItem xs="12" sm="12" md="6" lg="6">
             <div class="card shadow-sm">
@@ -26,9 +28,7 @@ else
         </MudItem>
 
         <MudItem xs="12" sm="12" md="6" lg="6">
-            <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@vm.Name</MudText>
-
-            <MudCard class="mb-4">
+            <MudCard>
                 <MudCardHeader>
                     <MudText Typo="Typo.h5" Align="Align.Center">Details</MudText>
                 </MudCardHeader>
@@ -69,11 +69,12 @@ else
 
                 </MudCardContent>
             </MudCard>
+        </MudItem>
 
             @if (vm.AttributeGroups.Any())
             {
-
-                <MudCard class="mb-2">
+        <MudItem xs="12" sm="12" md="6" lg="6">
+                <MudCard>
                     <MudCardContent>
 
                         <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">Attributes</MudText>
@@ -81,7 +82,9 @@ else
                         <EditForm Model="@vm">
 
                             <MudTable T="AttributeVM" Items="@vm.AttributeGroups.SelectMany(x => x.Attributes).Where(x => !x.ForVariant)"
-                                Dense="true" Hover="false" Class="mb-4"
+                                Class="pa-0 m-0"
+                                Dense="true" 
+                                Hover="false"
                                 Striped="true"
                                 GroupBy="@_groupDefinition"
                                 Elevation="0"
@@ -119,11 +122,14 @@ else
 
                     </MudCardContent>
                 </MudCard>
+        </MudItem>
             }
 
             @if (vm.OptionGroups.Any() || vm.AttributeGroups.Any())
             {
-                <MudCard class="mb-2">
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+
+                <MudCard>
                     <MudCardContent>
 
                         <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">Options</MudText>
@@ -208,8 +214,9 @@ else
 
                     </MudCardContent>
                 </MudCard>
+           </MudItem>
             }
-        </MudItem>
+     
     </MudGrid>
 }
 
