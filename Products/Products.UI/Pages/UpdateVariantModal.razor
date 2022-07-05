@@ -44,7 +44,7 @@
                         <tbody>
                             @if (Attributes is not null)
                             {
-                                @foreach (var attribute in Attributes)
+                                @foreach (var attribute in Attributes.Where(x => x.ForVariant))
                                 {
                                     <tr>
                                         <td>@(attribute.Name)</td>
@@ -107,12 +107,13 @@
         Price = Variant.Price.GetValueOrDefault();
 
         var attributes = await ProductsClient.GetProductAttributesAsync(ProductId);
-        foreach (var attribute in attributes)
+        foreach (var attribute in attributes.Where(x => x.ForVariant))
         {
             var vm = new AttributeVM()
             {
                 Id = attribute.Id,
                 Name = attribute.Name,
+                ForVariant = attribute.ForVariant
             };
 
             Attributes.Add(vm);
@@ -186,6 +187,8 @@
         public string Name { get; set; }
 
         public AttributeValueDto SelectedValue { get; set; }
+
+        public bool ForVariant { get; set; }
 
         public List<AttributeValueDto> Values { get; set; } = new List<AttributeValueDto>();
     }

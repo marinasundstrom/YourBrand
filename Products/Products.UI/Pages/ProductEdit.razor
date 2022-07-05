@@ -115,6 +115,7 @@ else
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>
+                    <MudTh>For Variant</MudTh>
                     <MudTh>Values</MudTh>
                     @* <MudTh>Default value</MudTh> *@
                     <MudTh></MudTh>
@@ -122,6 +123,7 @@ else
 
                 <RowTemplate Context="attribute">
                     <MudTd DataLabel="Name">@(attribute.Name)</MudTd>
+                    <MudTd DataLabel="ForVariant">@(attribute.ForVariant)</MudTd>
                     <MudTd DataLabel="Values">@string.Join(", ", attribute.Values.Select(x => x.Name))</MudTd>
                     @* <MudTd DataLabel="Default value">@attribute.DefaultValue?.Name</MudTd> *@
                     <MudTd>
