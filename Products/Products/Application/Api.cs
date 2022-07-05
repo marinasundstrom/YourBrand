@@ -30,7 +30,7 @@ public record class ApiUpdateProductGroup(string Name, string? Description, stri
 
 public record class ApiCreateProductOption(string Name, string? Description, OptionType OptionType, OptionGroupDto? Group, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiCreateProductOptionValue> Values);
 
-public record class ApiCreateProductAttribute(string Name, string? Description, string? GroupId, IEnumerable<ApiCreateProductOptionValue> Values);
+public record class ApiCreateProductAttribute(string Name, string? Description, string? GroupId, IEnumerable<ApiCreateProductAttributeValue> Values);
 
 
 public record class ApiCreateProductOptionValue(string Name, string? SKU, decimal? Price);
@@ -39,7 +39,7 @@ public record class ApiCreateProductAttributeValue(string Name);
 
 public record class ApiUpdateProductOption(string Name, string? Description, OptionType OptionType, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiUpdateProductOptionValue> Values);
 
-public record class ApiUpdateProductAttribute(string Name, string? Description, string GroupId, IEnumerable<ApiUpdateProductOptionValue> Values);
+public record class ApiUpdateProductAttribute(string Name, string? Description, string? GroupId, IEnumerable<ApiUpdateProductAttributeValue> Values);
 
 public record class ApiUpdateProductOptionValue(string? Id, string Name, string? SKU, decimal? Price);
 

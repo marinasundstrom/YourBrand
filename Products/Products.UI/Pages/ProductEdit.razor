@@ -93,16 +93,16 @@ else
         </MudSelect>
     </div>
 
-    <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Options</MudText>
+    <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Attributes</MudText>
 
     <div class="mb-4">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateOption" StartIcon="@Icons.Material.Filled.Add">Create option</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/options/groups")">Option groups</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateAttribute" StartIcon="@Icons.Material.Filled.Add">Create attribute</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/attributes/groups")">Attribute groups</MudButton>
     </div>
 
-    if (options is not null)
+    if (attributes is not null)
     {
-        @foreach (var group in options
+        @foreach (var group in attributes
 .ToList()
 .GroupBy(x => x.Group?.Name))
         {
@@ -111,24 +111,22 @@ else
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-2 mt-6">@group.Key</MudText>
             }
 
-            <MudTable T="OptionDto" Items="@group" Dense="true" Hover="true" @ref="table" Class="mb-4">
+            <MudTable T="AttributeDto" Items="@group" Dense="true" Hover="true" @ref="table2" Class="mb-4">
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>
-                    <MudTh>Multiple values</MudTh>
                     <MudTh>Values</MudTh>
-                    <MudTh>Default value</MudTh>
+                    @* <MudTh>Default value</MudTh> *@
                     <MudTh></MudTh>
                 </HeaderContent>
 
-                <RowTemplate Context="option">
-                    <MudTd DataLabel="Name">@option.Name</MudTd>
-                    <MudTd DataLabel="Multiple values">@(option.OptionType == OptionType.Multiple)</MudTd>
-                    <MudTd DataLabel="Values">@string.Join(", ", option.Values.Select(x => x.Name))</MudTd>
-                    <MudTd DataLabel="Default value">@option.DefaultValue?.Name</MudTd>
+                <RowTemplate Context="attribute">
+                    <MudTd DataLabel="Name">@(attribute.Name)</MudTd>
+                    <MudTd DataLabel="Values">@string.Join(", ", attribute.Values.Select(x => x.Name))</MudTd>
+                    @* <MudTd DataLabel="Default value">@attribute.DefaultValue?.Name</MudTd> *@
                     <MudTd>
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateOption(option)" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateAttribute(attribute)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteAttribute(attribute)" />
                     </MudTd>
                 </RowTemplate>
 
@@ -218,13 +216,66 @@ else
             }
         }
     }
+
+    <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Options</MudText>
+
+    <div class="mb-4">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateOption" StartIcon="@Icons.Material.Filled.Add">Create option</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/options/groups")">Option groups</MudButton>
+    </div>
+
+    if (options is not null)
+    {
+        @foreach (var group in options
+.ToList()
+.GroupBy(x => x.Group?.Name))
+        {
+            @if (group.Key is not null)
+            {
+                <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-2 mt-6">@group.Key</MudText>
+            }
+
+            <MudTable T="OptionDto" Items="@group" Dense="true" Hover="true" @ref="table" Class="mb-4">
+
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Multiple values</MudTh>
+                    <MudTh>Values</MudTh>
+                    <MudTh>Default value</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+
+                <RowTemplate Context="option">
+                    <MudTd DataLabel="Name">@option.Name</MudTd>
+                    <MudTd DataLabel="Multiple values">@(option.OptionType == OptionType.Multiple)</MudTd>
+                    <MudTd DataLabel="Values">@string.Join(", ", option.Values.Select(x => x.Name))</MudTd>
+                    <MudTd DataLabel="Default value">@option.DefaultValue?.Name</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateOption(option)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" />
+                    </MudTd>
+                </RowTemplate>
+
+                <NoRecordsContent>
+                    <MudText>No matching records found</MudText>
+                </NoRecordsContent>
+
+                <LoadingContent>
+                    <MudText>Loading...</MudText>
+                </LoadingContent>
+
+            </MudTable>
+        }
+    }
 }
 
 @code
 {
     MudTable<OptionDto> table;
+    MudTable<AttributeDto> table2;
 
     ProductDto? product;
+    List<AttributeDto>? attributes;
     List<ProductVariantDto>? variants;
     List<OptionDto>? options;
 
@@ -236,6 +287,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         product = await ProductsClient.GetProductAsync(ProductId);
+        attributes = (await ProductsClient.GetProductAttributesAsync(ProductId)).ToList();
         options = (await ProductsClient.GetProductOptionsAsync(ProductId)).ToList();
 
         variants = (await ProductsClient.GetVariantsAsync(ProductId)).ToList();
@@ -392,4 +444,51 @@ else
 
         public IEnumerable<OptionValueDto> Values { get; set; } = null!;
     }
+
+    async Task CreateAttribute()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(CreateProductAttributeModal.ProductId), ProductId);
+        parameters.Add(nameof(CreateProductAttributeModal.Product), product);
+
+        var modalRef = DialogService.Show<CreateProductAttributeModal>("New Attribute", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        attributes.Add((AttributeDto)result.Data);
+    }
+
+    async Task UpdateAttribute(AttributeDto attribute)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(UpdateProductAttributeModal.ProductId), ProductId);
+        parameters.Add(nameof(UpdateProductAttributeModal.Attribute), attribute);
+        parameters.Add(nameof(UpdateProductAttributeModal.Product), product);
+
+        var modalRef = DialogService.Show<UpdateProductAttributeModal>("Update Attribute", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        var index = attributes!.IndexOf(attribute);
+
+        attributes[index] = (AttributeDto)result.Data;
+    }
+
+    async Task DeleteAttribute(AttributeDto attribute)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the attribute?", "This cannot be undone.", yesText: "Yes", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        await ProductsClient.DeleteProductAttributeAsync(ProductId, attribute.Id);
+
+        attributes.Remove(attribute);
+    }
+
 }

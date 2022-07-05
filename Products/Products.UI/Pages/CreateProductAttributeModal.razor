@@ -14,7 +14,7 @@
 
             @if (Groups is not null)
             {
-                <MudSelect T="OptionGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
+                <MudSelect T="AttributeGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
                            For="() => Group">
                     @foreach (var item in Groups)
                     {
@@ -23,18 +23,11 @@
                 </MudSelect>
             }
 
-            <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
-
-            <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
-
-            <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
-
             @if (HasMultipleChoices)
             {
                 <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
 
                 <div class="form-group mb-2">
-
                     <MudButton Color="Color.Primary" OnClick="AddValue" StartIcon="@Icons.Material.Filled.Add">Add value</MudButton>
 
                     @if (Values.Any())
@@ -57,14 +50,6 @@
                                         </td>
 
                                         <td>
-                                            <MudTextField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="value.SKU" For="() => value.SKU" />
-                                        </td>
-
-                                        <td>
-                                            <MudNumericField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="value.Price" For="() => value.Price" />
-                                        </td>
-
-                                        <td>
                                             <MudIconButton Class="mb-2" Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteValue(value)" />
                                         </td>
                                     </tr>
@@ -78,19 +63,17 @@
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
 
 @code {
-    IList<OptionGroupDto?> Groups { get; set; }
+    IList<AttributeGroupDto?> Groups { get; set; }
 
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
     [Parameter] public string ProductId { get; set; }
-
-    [Parameter] public OptionDto Option { get; set; }
 
     [Parameter] public ProductDto Product { get; set; }
 
@@ -101,45 +84,28 @@
 
     public string Description { get; set; }
 
-    public OptionGroupDto? Group { get; set; }
+    public AttributeGroupDto? Group { get; set; }
 
     public string? SKU { get; set; }
 
     public decimal? Price { get; set; }
 
     [ValidateComplexType]
-    public List<OptionValueVM> Values { get; set; } = new List<OptionValueVM>();
+    public List<AttributeValueVM> Values { get; set; } = new List<AttributeValueVM>();
 
     protected override async Task OnInitializedAsync()
     {
-        Groups = (await ProductsClient.GetOptionGroupsAsync(ProductId)).Prepend(new OptionGroupDto { Id = null, Name = "None" }).ToList();
+        Groups = (await ProductsClient.GetAttributeGroupsAsync(ProductId)).Prepend(new AttributeGroupDto { Id = null, Name = "None" }).ToList();
 
-        Name = Option.Name;
-        Description = Option.Description;
-        Group = Groups.FirstOrDefault(x => x?.Id == Option.Group?.Id);
-        Price = Option.Price;
-        SKU = Option.Sku;
-        HasMultipleChoices = Option.OptionType == OptionType.Multiple;
-
-        foreach (var value in Option.Values)
-        {
-            Values.Add(new OptionValueVM()
-            {
-                Id = value.Id,
-                Name = value.Name,
-                Price = value.Price,
-                SKU = value.Sku
-            });
-        }
+        HasMultipleChoices = Product.HasVariants;
     }
 
     void AddValue()
     {
-        Values.Add(new OptionValueVM());
+        Values.Add(new AttributeValueVM());
     }
 
-
-    async Task DeleteValue(OptionValueVM vm)
+    async Task DeleteValue(AttributeValueVM vm)
     {
         var modalResult = await DialogService.ShowMessageBox("Delete the value?", "This cannot be undone.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -147,47 +113,30 @@
             return;
         }
 
-        if (vm.Id is not null)
-        {
-            await ProductsClient.DeleteProductOptionValueAsync(ProductId, Option.Id, vm.Id);
-        }
-
         Values.Remove(vm);
     }
 
     async Task OnSubmit()
     {
-        var data = new ApiUpdateProductOption
+        var data = new ApiCreateProductAttribute
         {
             Name = Name,
-            OptionType = HasMultipleChoices ? OptionType.Multiple : OptionType.Single,
             Description = Description,
             GroupId = Group?.Id,
-            Sku = SKU,
-            Price = Price,
-            Values = Values.Select(x => new ApiUpdateProductOptionValue()
+            Values = HasMultipleChoices ? Values.Select(x => new ApiCreateProductAttributeValue()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Sku = x.SKU,
-                Price = x.Price
-            }).ToList()
+                Name = x.Name
+            }).ToList() : Array.Empty<ApiCreateProductAttributeValue>().ToList()
         };
 
-        var result = await ProductsClient.UpdateProductOptionAsync(ProductId, Option.Id, data);
+        var result = await ProductsClient.CreateProductAttributeAsync(ProductId, data);
         Modal.Close(DialogResult.Ok(result));
     }
 
-    public class OptionValueVM
+    public class AttributeValueVM
     {
-        public string? Id { get; set; }
-
         [Required]
         public string Name { get; set; }
-
-        public string? SKU { get; set; }
-
-        public decimal? Price { get; set; }
     }
 }
 

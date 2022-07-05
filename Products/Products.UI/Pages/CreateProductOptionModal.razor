@@ -11,7 +11,7 @@
             <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
             <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
-
+ 
             @if (Groups is not null)
             {
                 <MudSelect T="OptionGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
@@ -23,14 +23,12 @@
                 </MudSelect>
             }
 
-            @if (!Product.HasVariants)
-            {
-                <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
-                <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+            <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
-                <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
-            }
+            <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+
+            <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
 
             @if (HasMultipleChoices)
             {

@@ -2021,12 +2021,12 @@
         "values": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiCreateProductOptionValue"
+            "$ref": "#/definitions/ApiCreateProductAttributeValue"
           }
         }
       }
     },
-    "ApiCreateProductOptionValue": {
+    "ApiCreateProductAttributeValue": {
       "type": "object",
       "required": [
         "name"
@@ -2034,13 +2034,6 @@
       "properties": {
         "name": {
           "type": "string"
-        },
-        "sku": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number",
-          "format": "decimal"
         }
       }
     },
@@ -2048,7 +2041,6 @@
       "type": "object",
       "required": [
         "name",
-        "groupId",
         "values"
       ],
       "properties": {
@@ -2064,12 +2056,12 @@
         "values": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiUpdateProductOptionValue"
+            "$ref": "#/definitions/ApiUpdateProductAttributeValue"
           }
         }
       }
     },
-    "ApiUpdateProductOptionValue": {
+    "ApiUpdateProductAttributeValue": {
       "type": "object",
       "required": [
         "name"
@@ -2078,24 +2070,6 @@
         "id": {
           "type": "string"
         },
-        "name": {
-          "type": "string"
-        },
-        "sku": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number",
-          "format": "decimal"
-        }
-      }
-    },
-    "ApiCreateProductAttributeValue": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
         "name": {
           "type": "string"
         }
@@ -2349,6 +2323,24 @@
         }
       }
     },
+    "ApiCreateProductOptionValue": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
     "ApiUpdateProductOption": {
       "type": "object",
       "required": [
@@ -2381,6 +2373,27 @@
           "items": {
             "$ref": "#/definitions/ApiUpdateProductOptionValue"
           }
+        }
+      }
+    },
+    "ApiUpdateProductOptionValue": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "decimal"
         }
       }
     },

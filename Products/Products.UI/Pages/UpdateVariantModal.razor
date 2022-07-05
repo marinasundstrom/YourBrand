@@ -32,30 +32,30 @@
             </div>
 
             <div class="form-group">
-                @if (Options is not null)
+                @if (Attributes is not null)
                 {
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Option</th>
+                                <th>Attribute</th>
                                 <th>Value</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Options is not null)
+                            @if (Attributes is not null)
                             {
-                                @foreach (var option in Options)
+                                @foreach (var attribute in Attributes)
                                 {
                                     <tr>
-                                        <td>@option.Name</td>
+                                        <td>@(attribute.Name)</td>
 
-                                        @if (option.Values is not null)
+                                        @if (attribute.Values is not null)
                                         {
                                             <td>
-                                                <MudSelect T="OptionValueDto" Class="mb-6" Variant="MudBlazor.Variant.Outlined"
-                                    @bind-Value="option.SelectedValue" ToStringFunc="x => x?.Name"
-                                    For="() => option.SelectedValue">
-                                                    @foreach (var item in option.Values)
+                                                <MudSelect T="AttributeValueDto" Class="mb-6" Variant="MudBlazor.Variant.Outlined"
+                                    @bind-Value="attribute.SelectedValue" ToStringFunc="x => x?.Name"
+                                    For="() => attribute.SelectedValue">
+                                                    @foreach (var item in attribute.Values)
                                                     {
                                                         <MudSelectItem Value="@item" />
                                                     }
@@ -97,7 +97,7 @@
     [Required]
     public decimal Price { get; set; }
 
-    public List<OptionVM> Options = new List<OptionVM>();
+    public List<AttributeVM> Attributes = new List<AttributeVM>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,21 +106,21 @@
         SKU = Variant.Sku;
         Price = Variant.Price.GetValueOrDefault();
 
-        var options = await ProductsClient.GetProductOptionsAsync(ProductId);
-        foreach (var option in options)
+        var attributes = await ProductsClient.GetProductAttributesAsync(ProductId);
+        foreach (var attribute in attributes)
         {
-            var vm = new OptionVM()
+            var vm = new AttributeVM()
             {
-                Id = option.Id,
-                Name = option.Name,
+                Id = attribute.Id,
+                Name = attribute.Name,
             };
 
-            Options.Add(vm);
+            Attributes.Add(vm);
 
             vm.Values.AddRange(
-            await ProductsClient.GetProductOptionValuesAsync(ProductId, option.Id));
+            await ProductsClient.GetProductAttributeValuesAsync(ProductId, attribute.Id));
 
-            var o = Variant.Options.FirstOrDefault(x => x.Name == option.Name);
+            var o = Variant.Options.FirstOrDefault(x => x.Name == attribute.Name);
 
             vm.SelectedValue = vm.Values.FirstOrDefault(x => x.Name == o?.Value);
 
@@ -149,16 +149,16 @@
             Options = new List<ApiUpdateProductVariantOption>()
         };
 
-        foreach (var option in Options)
+        foreach (var attribute in Attributes)
         {
-            var optionData = new ApiUpdateProductVariantOption
+            var attributeData = new ApiUpdateProductVariantOption
             {
-                //Id = option.Id,
-                OptionId = option.Id,
-                ValueId = option.SelectedValue?.Id,
+                //Id = attribute.Id,
+                OptionId = attribute.Id,
+                ValueId = attribute.SelectedValue?.Id,
             };
 
-            data.Options.Add(optionData);
+            data.Options.Add(attributeData);
         }
 
         try
@@ -179,14 +179,14 @@
         }
     }
 
-    public class OptionVM
+    public class AttributeVM
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public OptionValueDto SelectedValue { get; set; }
+        public AttributeValueDto SelectedValue { get; set; }
 
-        public List<OptionValueDto> Values { get; set; } = new List<OptionValueDto>();
+        public List<AttributeValueDto> Values { get; set; } = new List<AttributeValueDto>();
     }
 }
