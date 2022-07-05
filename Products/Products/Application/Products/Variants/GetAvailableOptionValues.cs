@@ -2,14 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Options;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record GetAvailableOptionValues(string ProductId, string OptionId, IDictionary<string, string?> SelectedOptions) : IRequest<IEnumerable<ApiOptionValue>>
+public record GetAvailableOptionValues(string ProductId, string OptionId, IDictionary<string, string?> SelectedOptions) : IRequest<IEnumerable<OptionValueDto>>
 {
-    public class Handler : IRequestHandler<GetAvailableOptionValues, IEnumerable<ApiOptionValue>>
+    public class Handler : IRequestHandler<GetAvailableOptionValues, IEnumerable<OptionValueDto>>
     {
         private readonly IProductsContext _context;
 
@@ -18,7 +19,7 @@ public record GetAvailableOptionValues(string ProductId, string OptionId, IDicti
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiOptionValue>> Handle(GetAvailableOptionValues request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OptionValueDto>> Handle(GetAvailableOptionValues request, CancellationToken cancellationToken)
         {
             IEnumerable<ProductVariant> variants = await _context.ProductVariants
                 .AsSplitQuery()
@@ -45,7 +46,7 @@ public record GetAvailableOptionValues(string ProductId, string OptionId, IDicti
                 .Where(x => x.Attribute.Id == request.OptionId)
                 .Select(x => x.Value);
 
-            return values.Select(x => new ApiOptionValue(x.Id, x.Name, x.Name, x.Price, x.Seq));
+            return values.Select(x => new OptionValueDto(x.Id, x.Name, x.Name, x.Price, x.Seq));
         }
     }
 }

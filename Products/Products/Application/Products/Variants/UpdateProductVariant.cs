@@ -7,9 +7,9 @@ using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record UpdateProductVariant(string ProductId, string ProductVariantId, ApiUpdateProductVariant Data) : IRequest<ApiProductVariant>
+public record UpdateProductVariant(string ProductId, string ProductVariantId, ApiUpdateProductVariant Data) : IRequest<ProductVariantDto>
 {
-    public class Handler : IRequestHandler<UpdateProductVariant, ApiProductVariant>
+    public class Handler : IRequestHandler<UpdateProductVariant, ProductVariantDto>
     {
         private readonly IProductsContext _context;
         private ProductVariantsService _productVariantsService;
@@ -20,7 +20,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
             _productVariantsService = productVariantsService;
         }
         
-        public async Task<ApiProductVariant> Handle(UpdateProductVariant request, CancellationToken cancellationToken)
+        public async Task<ProductVariantDto> Handle(UpdateProductVariant request, CancellationToken cancellationToken)
         {
             var match = await _productVariantsService.FindVariantCore(request.ProductId, request.ProductVariantId, request.Data.Options.ToDictionary(x => x.OptionId, x => x.ValueId));
 
@@ -90,8 +90,8 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
 
             await _context.SaveChangesAsync();
 
-            return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+            return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
+                variant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

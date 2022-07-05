@@ -46,7 +46,7 @@ public class AddOrderItemCommandHandler : IConsumer<AddOrderItemCommand>
             context.Orders.Add(order);
         }
 
-        ApiProduct? product = null;
+        ProductDto? product = null;
 
         if (message.ItemId is not null)
         {

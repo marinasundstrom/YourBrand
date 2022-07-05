@@ -43,7 +43,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiAttribute"
+              "$ref": "#/definitions/AttributeDto"
             }
           }
         }
@@ -74,7 +74,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOptionValue"
+              "$ref": "#/definitions/OptionValueDto"
             }
           }
         }
@@ -105,7 +105,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOption"
+              "$ref": "#/definitions/OptionDto"
             }
           }
         }
@@ -136,7 +136,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOption"
+              "$ref": "#/definitions/OptionDto"
             }
           }
         }
@@ -167,7 +167,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOptionValue"
+              "$ref": "#/definitions/OptionValueDto"
             }
           }
         }
@@ -220,7 +220,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductsResult"
+              "$ref": "#/definitions/ItemsResultOfProductDto"
             }
           }
         }
@@ -256,7 +256,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProduct"
+              "$ref": "#/definitions/ProductDto"
             }
           }
         }
@@ -287,7 +287,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProduct"
+              "$ref": "#/definitions/ProductDto"
             }
           }
         }
@@ -484,7 +484,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiProductGroup"
+                "$ref": "#/definitions/ProductGroupDto"
               }
             }
           }
@@ -521,7 +521,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductGroup"
+              "$ref": "#/definitions/ProductGroupDto"
             }
           }
         }
@@ -566,7 +566,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductGroup"
+              "$ref": "#/definitions/ProductGroupDto"
             }
           }
         }
@@ -623,7 +623,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiOptionGroup"
+                "$ref": "#/definitions/OptionGroupDto"
               }
             }
           }
@@ -667,7 +667,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOptionGroup"
+              "$ref": "#/definitions/OptionGroupDto"
             }
           }
         }
@@ -719,7 +719,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOptionGroup"
+              "$ref": "#/definitions/OptionGroupDto"
             }
           }
         }
@@ -783,7 +783,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiOption"
+                "$ref": "#/definitions/OptionDto"
               }
             }
           }
@@ -827,7 +827,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOption"
+              "$ref": "#/definitions/OptionDto"
             }
           }
         }
@@ -860,7 +860,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiAttribute"
+                "$ref": "#/definitions/AttributeDto"
               }
             }
           }
@@ -913,7 +913,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOption"
+              "$ref": "#/definitions/OptionDto"
             }
           }
         }
@@ -996,7 +996,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiOptionValue"
+              "$ref": "#/definitions/OptionValueDto"
             }
           }
         }
@@ -1034,7 +1034,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiOptionValue"
+                "$ref": "#/definitions/OptionValueDto"
               }
             }
           }
@@ -1132,7 +1132,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiOptionValue"
+                "$ref": "#/definitions/OptionValueDto"
               }
             }
           }
@@ -1166,7 +1166,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApiProductVariant"
+                "$ref": "#/definitions/ProductVariantDto"
               }
             }
           }
@@ -1210,7 +1210,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductVariant"
+              "$ref": "#/definitions/ProductVariantDto"
             }
           },
           "400": {
@@ -1286,7 +1286,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductVariant"
+              "$ref": "#/definitions/ProductVariantDto"
             }
           }
         }
@@ -1336,7 +1336,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductVariant"
+              "$ref": "#/definitions/ProductVariantDto"
             }
           },
           "400": {
@@ -1391,7 +1391,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductVariant"
+              "$ref": "#/definitions/ProductVariantDto"
             }
           }
         }
@@ -1429,7 +1429,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiProductVariant"
+              "$ref": "#/definitions/ProductVariantDto"
             }
           }
         }
@@ -1437,7 +1437,7 @@
     }
   },
   "definitions": {
-    "ApiAttribute": {
+    "AttributeDto": {
       "type": "object",
       "required": [
         "id",
@@ -1455,17 +1455,17 @@
           "type": "string"
         },
         "group": {
-          "$ref": "#/definitions/ApiAttributeGroup"
+          "$ref": "#/definitions/AttributeGroupDto"
         },
         "values": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiAttributeValue"
+            "$ref": "#/definitions/AttributeValueDto"
           }
         }
       }
     },
-    "ApiAttributeGroup": {
+    "AttributeGroupDto": {
       "type": "object",
       "required": [
         "id",
@@ -1483,7 +1483,7 @@
         }
       }
     },
-    "ApiAttributeValue": {
+    "AttributeValueDto": {
       "type": "object",
       "required": [
         "id",
@@ -1502,7 +1502,7 @@
         }
       }
     },
-    "ApiOptionValue": {
+    "OptionValueDto": {
       "type": "object",
       "required": [
         "id",
@@ -1528,7 +1528,7 @@
         }
       }
     },
-    "ApiOption": {
+    "OptionDto": {
       "type": "object",
       "required": [
         "id",
@@ -1551,7 +1551,7 @@
           "$ref": "#/definitions/OptionType"
         },
         "group": {
-          "$ref": "#/definitions/ApiOptionGroup"
+          "$ref": "#/definitions/OptionGroupDto"
         },
         "sku": {
           "type": "string"
@@ -1566,11 +1566,11 @@
         "values": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiOptionValue"
+            "$ref": "#/definitions/OptionValueDto"
           }
         },
         "defaultValue": {
-          "$ref": "#/definitions/ApiOptionValue"
+          "$ref": "#/definitions/OptionValueDto"
         }
       }
     },
@@ -1586,7 +1586,7 @@
         1
       ]
     },
-    "ApiOptionGroup": {
+    "OptionGroupDto": {
       "type": "object",
       "required": [
         "id",
@@ -1616,26 +1616,26 @@
         }
       }
     },
-    "ApiProductsResult": {
+    "ItemsResultOfProductDto": {
       "type": "object",
       "required": [
         "items",
-        "total"
+        "totalItems"
       ],
       "properties": {
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiProduct"
+            "$ref": "#/definitions/ProductDto"
           }
         },
-        "total": {
+        "totalItems": {
           "type": "integer",
           "format": "int32"
         }
       }
     },
-    "ApiProduct": {
+    "ProductDto": {
       "type": "object",
       "required": [
         "id",
@@ -1653,7 +1653,7 @@
           "type": "string"
         },
         "group": {
-          "$ref": "#/definitions/ApiProductGroup"
+          "$ref": "#/definitions/ProductGroupDto"
         },
         "sku": {
           "type": "string"
@@ -1673,7 +1673,7 @@
         }
       }
     },
-    "ApiProductGroup": {
+    "ProductGroupDto": {
       "type": "object",
       "required": [
         "id",
@@ -1860,7 +1860,7 @@
           "$ref": "#/definitions/OptionType"
         },
         "group": {
-          "$ref": "#/definitions/ApiOptionGroup"
+          "$ref": "#/definitions/OptionGroupDto"
         },
         "sku": {
           "type": "string"
@@ -1954,7 +1954,7 @@
         }
       }
     },
-    "ApiProductVariant": {
+    "ProductVariantDto": {
       "type": "object",
       "required": [
         "id",
@@ -1984,12 +1984,12 @@
         "options": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiProductVariantOption"
+            "$ref": "#/definitions/ProductVariantDtoOption"
           }
         }
       }
     },
-    "ApiProductVariantOption": {
+    "ProductVariantDtoOption": {
       "type": "object",
       "required": [
         "id",

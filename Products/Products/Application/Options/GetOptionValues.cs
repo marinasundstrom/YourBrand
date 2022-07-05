@@ -6,9 +6,9 @@ using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Options;
 
-public record GetOptionValues(string OptionId) : IRequest<IEnumerable<ApiOptionValue>>
+public record GetOptionValues(string OptionId) : IRequest<IEnumerable<OptionValueDto>>
 {
-    public class Handler : IRequestHandler<GetOptionValues, IEnumerable<ApiOptionValue>>
+    public class Handler : IRequestHandler<GetOptionValues, IEnumerable<OptionValueDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +17,7 @@ public record GetOptionValues(string OptionId) : IRequest<IEnumerable<ApiOptionV
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiOptionValue>> Handle(GetOptionValues request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OptionValueDto>> Handle(GetOptionValues request, CancellationToken cancellationToken)
         {
             var options = await _context.OptionValues
                 .AsSplitQuery()
@@ -27,7 +27,7 @@ public record GetOptionValues(string OptionId) : IRequest<IEnumerable<ApiOptionV
                 .Where(p => p.Option.Id == request.OptionId)
                 .ToArrayAsync();
 
-            return options.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq));  
+            return options.Select(x => new OptionValueDto(x.Id, x.Name, x.SKU, x.Price, x.Seq));  
         }
     }
 }

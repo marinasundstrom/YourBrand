@@ -7,9 +7,9 @@ using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Groups;
 
-public record CreateProductGroup(string ProductId, ApiCreateProductGroup Data) : IRequest<ApiProductGroup>
+public record CreateProductGroup(string ProductId, ApiCreateProductGroup Data) : IRequest<ProductGroupDto>
 {
-    public class Handler : IRequestHandler<CreateProductGroup, ApiProductGroup>
+    public class Handler : IRequestHandler<CreateProductGroup, ProductGroupDto>
     {
         private readonly IProductsContext _context;
 
@@ -18,7 +18,7 @@ public record CreateProductGroup(string ProductId, ApiCreateProductGroup Data) :
             _context = context;
         }
 
-        public async Task<ApiProductGroup> Handle(CreateProductGroup request, CancellationToken cancellationToken)
+        public async Task<ProductGroupDto> Handle(CreateProductGroup request, CancellationToken cancellationToken)
         {
             var parentGroup = await _context.ProductGroups
             .FirstOrDefaultAsync(x => x.Id == request.Data.ParentGroupId);
@@ -35,7 +35,7 @@ public record CreateProductGroup(string ProductId, ApiCreateProductGroup Data) :
 
             await _context.SaveChangesAsync();
 
-            return new ApiProductGroup(productGroup.Id, productGroup.Name, productGroup.Description, productGroup?.Parent?.Id);
+            return new ProductGroupDto(productGroup.Id, productGroup.Name, productGroup.Description, productGroup?.Parent?.Id);
 
         }
     }

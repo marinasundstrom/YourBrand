@@ -206,15 +206,15 @@ else
 
     ProductVM? vm = null;
 
-    ApiProduct? product;
-    IEnumerable<IGrouping<string?, ApiOption>>? optionGroups;
-    IEnumerable<IGrouping<string?, ApiAttribute>>? attributeGroups;
-    IEnumerable<ApiProductVariant>? variants;
+    ProductDto? product;
+    IEnumerable<IGrouping<string?, OptionDto>>? optionGroups;
+    IEnumerable<IGrouping<string?, AttributeDto>>? attributeGroups;
+    IEnumerable<ProductVariantDto>? variants;
 
-    ApiProductVariant? variant;
+    ProductVariantDto? variant;
 
-    Dictionary<string, IEnumerable<ApiOptionValue>> optionsValues = new Dictionary<string, IEnumerable<ApiOptionValue>>();
-    Dictionary<string, IEnumerable<ApiAttributeValue>> attributeValues = new Dictionary<string, IEnumerable<ApiAttributeValue>>();
+    Dictionary<string, IEnumerable<OptionValueDto>> optionsValues = new Dictionary<string, IEnumerable<OptionValueDto>>();
+    Dictionary<string, IEnumerable<AttributeValueDto>> attributeValues = new Dictionary<string, IEnumerable<AttributeValueDto>>();
 
     [Parameter]
     public string? ProductId { get; set; }

@@ -167,7 +167,7 @@
         </ChildRowContent>
         <RowEditingTemplate Context="orderItem">
             <MudTd DataLabel="Item">
-                <MudAutocomplete T="ApiProduct" Required
+                <MudAutocomplete T="ProductDto" Required
                                  @bind-Value="orderItem.Item"
                                  Disabled="@(orderItem.Id != null)"
                                  SearchFunc="@SearchItems"
@@ -462,7 +462,7 @@
 
     }
 
-    private async Task<IEnumerable<ApiProduct>> SearchItems(string value)
+    private async Task<IEnumerable<ProductDto>> SearchItems(string value)
     {
         var products = await ProductsClient.GetProductsAsync(false, null, 0, 100);
 

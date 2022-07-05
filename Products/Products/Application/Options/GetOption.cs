@@ -6,9 +6,9 @@ using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Options;
 
-public record GetOption(string OptionId) : IRequest<ApiOption>
+public record GetOption(string OptionId) : IRequest<OptionDto>
 {
-    public class Handler : IRequestHandler<GetOption, ApiOption>
+    public class Handler : IRequestHandler<GetOption, OptionDto>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +17,7 @@ public record GetOption(string OptionId) : IRequest<ApiOption>
             _context = context;
         }
 
-        public async Task<ApiOption> Handle(GetOption request, CancellationToken cancellationToken)
+        public async Task<OptionDto> Handle(GetOption request, CancellationToken cancellationToken)
         {
             var option = await _context.Options
                 .AsSplitQuery()
@@ -26,9 +26,9 @@ public record GetOption(string OptionId) : IRequest<ApiOption>
                 .Include(pv => pv.Values)
                 .FirstAsync(o => o.Id == request.OptionId);
 
-            return new ApiOption(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new ApiOptionGroup(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
-                option.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-                option.DefaultValue == null ? null : new ApiOptionValue(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
+            return new OptionDto(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new OptionGroupDto(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
+                option.Values.Select(x => new OptionValueDto(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
+                option.DefaultValue == null ? null : new OptionValueDto(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
         }
     }
 }

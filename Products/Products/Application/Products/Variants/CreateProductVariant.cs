@@ -7,9 +7,9 @@ using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record CreateProductVariant(string ProductId, ApiCreateProductVariant Data) : IRequest<ApiProductVariant>
+public record CreateProductVariant(string ProductId, ApiCreateProductVariant Data) : IRequest<ProductVariantDto>
 {
-    public class Handler : IRequestHandler<CreateProductVariant, ApiProductVariant>
+    public class Handler : IRequestHandler<CreateProductVariant, ProductVariantDto>
     {
         private readonly IProductsContext _context;
         private readonly ProductVariantsService _productVariantsService;
@@ -20,7 +20,7 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
             _productVariantsService = productVariantsService;
         }
 
-        public async Task<ApiProductVariant> Handle(CreateProductVariant request, CancellationToken cancellationToken)
+        public async Task<ProductVariantDto> Handle(CreateProductVariant request, CancellationToken cancellationToken)
         {
             ProductVariant? match = await _productVariantsService.FindVariantCore(request.ProductId, null, request.Data.Values.ToDictionary(x => x.OptionId, x => x.ValueId));
 
@@ -67,8 +67,8 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
 
             await _context.SaveChangesAsync();
 
-            return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+            return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
+                variant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

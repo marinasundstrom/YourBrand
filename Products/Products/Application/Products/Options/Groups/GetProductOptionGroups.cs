@@ -2,13 +2,14 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Options;
 using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products.Options.Groups;
 
-public record GetProductOptionGroups(string ProductId) : IRequest<IEnumerable<ApiOptionGroup>>
+public record GetProductOptionGroups(string ProductId) : IRequest<IEnumerable<OptionGroupDto>>
 {
-    public class Handler : IRequestHandler<GetProductOptionGroups, IEnumerable<ApiOptionGroup>>
+    public class Handler : IRequestHandler<GetProductOptionGroups, IEnumerable<OptionGroupDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +18,7 @@ public record GetProductOptionGroups(string ProductId) : IRequest<IEnumerable<Ap
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiOptionGroup>> Handle(GetProductOptionGroups request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OptionGroupDto>> Handle(GetProductOptionGroups request, CancellationToken cancellationToken)
         {
             var groups = await _context.OptionGroups
             .AsTracking()
@@ -25,7 +26,7 @@ public record GetProductOptionGroups(string ProductId) : IRequest<IEnumerable<Ap
             .Where(x => x.Product!.Id == request.ProductId)
             .ToListAsync();
 
-            return groups.Select(group => new ApiOptionGroup(group.Id, group.Name, group.Description, group.Seq, group.Min, group.Max));
+            return groups.Select(group => new OptionGroupDto(group.Id, group.Name, group.Description, group.Seq, group.Min, group.Max));
         }
     }
 }

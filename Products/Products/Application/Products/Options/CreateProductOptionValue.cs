@@ -2,14 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Options;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Options;
 
-public record CreateProductOptionValue(string ProductId, string OptionId, ApiCreateProductOptionValue Data) : IRequest<ApiOptionValue>
+public record CreateProductOptionValue(string ProductId, string OptionId, ApiCreateProductOptionValue Data) : IRequest<OptionValueDto>
 {
-    public class Handler : IRequestHandler<CreateProductOptionValue, ApiOptionValue>
+    public class Handler : IRequestHandler<CreateProductOptionValue, OptionValueDto>
     {
         private readonly IProductsContext _context;
 
@@ -18,7 +19,7 @@ public record CreateProductOptionValue(string ProductId, string OptionId, ApiCre
             _context = context;
         }
 
-        public async Task<ApiOptionValue> Handle(CreateProductOptionValue request, CancellationToken cancellationToken)
+        public async Task<OptionValueDto> Handle(CreateProductOptionValue request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
             .FirstAsync(x => x.Id == request.ProductId);
@@ -37,7 +38,7 @@ public record CreateProductOptionValue(string ProductId, string OptionId, ApiCre
 
             await _context.SaveChangesAsync();
 
-            return new ApiOptionValue(value.Id, value.Name, value.SKU, value.Price, value.Seq);
+            return new OptionValueDto(value.Id, value.Name, value.SKU, value.Price, value.Seq);
         }
     }
 }

@@ -2,14 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Options;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Options;
 
-public record UpdateProductOption(string ProductId, string OptionId, ApiUpdateProductOption Data) : IRequest<ApiOption>
+public record UpdateProductOption(string ProductId, string OptionId, ApiUpdateProductOption Data) : IRequest<OptionDto>
 {
-    public class Handler : IRequestHandler<UpdateProductOption, ApiOption>
+    public class Handler : IRequestHandler<UpdateProductOption, OptionDto>
     {
         private readonly IProductsContext _context;
 
@@ -18,7 +19,7 @@ public record UpdateProductOption(string ProductId, string OptionId, ApiUpdatePr
             _context = context;
         }
 
-        public async Task<ApiOption> Handle(UpdateProductOption request, CancellationToken cancellationToken)
+        public async Task<OptionDto> Handle(UpdateProductOption request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
             .AsNoTracking()
@@ -79,9 +80,9 @@ public record UpdateProductOption(string ProductId, string OptionId, ApiUpdatePr
 
         await _context.SaveChangesAsync();
 
-        return new ApiOption(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new ApiOptionGroup(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
-            option.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-            option.DefaultValue == null ? null : new ApiOptionValue(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
+        return new OptionDto(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new OptionGroupDto(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
+            option.Values.Select(x => new OptionValueDto(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
+            option.DefaultValue == null ? null : new OptionValueDto(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
     
         }
     }

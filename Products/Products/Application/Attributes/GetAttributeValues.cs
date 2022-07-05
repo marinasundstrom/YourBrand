@@ -6,9 +6,9 @@ using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Attributes;
 
-public record GetAttributeValues(string AttributeId) : IRequest<IEnumerable<ApiAttributeValue>>
+public record GetAttributeValues(string AttributeId) : IRequest<IEnumerable<AttributeValueDto>>
 {
-    public class Handler : IRequestHandler<GetAttributeValues, IEnumerable<ApiAttributeValue>>
+    public class Handler : IRequestHandler<GetAttributeValues, IEnumerable<AttributeValueDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +17,7 @@ public record GetAttributeValues(string AttributeId) : IRequest<IEnumerable<ApiA
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiAttributeValue>> Handle(GetAttributeValues request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<AttributeValueDto>> Handle(GetAttributeValues request, CancellationToken cancellationToken)
         {
             var options = await _context.AttributeValues
                 .AsSplitQuery()
@@ -27,7 +27,7 @@ public record GetAttributeValues(string AttributeId) : IRequest<IEnumerable<ApiA
                 .Where(p => p.Attribute.Id == request.AttributeId)
                 .ToArrayAsync();
 
-            return options.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq));  
+            return options.Select(x => new AttributeValueDto(x.Id, x.Name, x.Seq));  
         }
     }
 }

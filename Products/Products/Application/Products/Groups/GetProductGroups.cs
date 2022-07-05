@@ -6,9 +6,9 @@ using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products.Groups;
 
-public record GetProductGroups(bool IncludeWithUnlistedProducts) : IRequest<IEnumerable<ApiProductGroup>>
+public record GetProductGroups(bool IncludeWithUnlistedProducts) : IRequest<IEnumerable<ProductGroupDto>>
 {
-    public class Handler : IRequestHandler<GetProductGroups, IEnumerable<ApiProductGroup>>
+    public class Handler : IRequestHandler<GetProductGroups, IEnumerable<ProductGroupDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +17,7 @@ public record GetProductGroups(bool IncludeWithUnlistedProducts) : IRequest<IEnu
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiProductGroup>> Handle(GetProductGroups request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductGroupDto>> Handle(GetProductGroups request, CancellationToken cancellationToken)
         {
             var query = _context.ProductGroups
                     .Include(x => x.Products)
@@ -30,7 +30,7 @@ public record GetProductGroups(bool IncludeWithUnlistedProducts) : IRequest<IEnu
 
             var productGroups = await query.ToListAsync();
 
-            return productGroups.Select(group => new ApiProductGroup(group.Id, group.Name, group.Description, group?.Parent?.Id));
+            return productGroups.Select(group => new ProductGroupDto(group.Id, group.Name, group.Description, group?.Parent?.Id));
         }
     }
 }

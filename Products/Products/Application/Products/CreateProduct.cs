@@ -2,14 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Products.Groups;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products;
 
-public record CreateProduct(string Name, bool HasVariants, string? Description, string? GroupId, string? SKU, decimal? Price, ProductVisibility? Visibility) : IRequest<ApiProduct?>
+public record CreateProduct(string Name, bool HasVariants, string? Description, string? GroupId, string? SKU, decimal? Price, ProductVisibility? Visibility) : IRequest<ProductDto?>
 {
-    public class Handler : IRequestHandler<CreateProduct, ApiProduct?>
+    public class Handler : IRequestHandler<CreateProduct, ProductDto?>
     {
         private readonly IProductsContext _context;
 
@@ -18,7 +19,7 @@ public record CreateProduct(string Name, bool HasVariants, string? Description, 
             _context = context;
         }
 
-        public async Task<ApiProduct?> Handle(CreateProduct request, CancellationToken cancellationToken)
+        public async Task<ProductDto?> Handle(CreateProduct request, CancellationToken cancellationToken)
         {
             var group = await _context.ProductGroups
             .FirstOrDefaultAsync(x => x.Id == request.GroupId);
@@ -47,7 +48,7 @@ public record CreateProduct(string Name, bool HasVariants, string? Description, 
 
             await _context.SaveChangesAsync();
 
-            return new ApiProduct(product.Id, product.Name, product.Description, product.Group == null ? null : new ApiProductGroup(product.Group.Id, product.Group.Name, product.Group.Description, product.Group?.Parent?.Id),
+            return new ProductDto(product.Id, product.Name, product.Description, product.Group == null ? null : new ProductGroupDto(product.Group.Id, product.Group.Name, product.Group.Description, product.Group?.Parent?.Id),
                 product.SKU, product.Image, product.Price, product.HasVariants, product.Visibility == Domain.Enums.ProductVisibility.Listed ? ProductVisibility.Listed : ProductVisibility.Unlisted);
         
         }

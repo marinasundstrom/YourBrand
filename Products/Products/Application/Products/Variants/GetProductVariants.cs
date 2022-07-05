@@ -6,9 +6,9 @@ using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record GetProductVariants(string ProductId) : IRequest<IEnumerable<ApiProductVariant>>
+public record GetProductVariants(string ProductId) : IRequest<IEnumerable<ProductVariantDto>>
 {
-    public class Handler : IRequestHandler<GetProductVariants, IEnumerable<ApiProductVariant>>
+    public class Handler : IRequestHandler<GetProductVariants, IEnumerable<ProductVariantDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +17,7 @@ public record GetProductVariants(string ProductId) : IRequest<IEnumerable<ApiPro
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiProductVariant>> Handle(GetProductVariants request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductVariantDto>> Handle(GetProductVariants request, CancellationToken cancellationToken)
         {
             var variants = await _context.ProductVariants
             .AsSplitQuery()
@@ -30,8 +30,8 @@ public record GetProductVariants(string ProductId) : IRequest<IEnumerable<ApiPro
             .Where(pv => pv.Product.Id == request.ProductId)
             .ToArrayAsync();
 
-            return variants.Select(x => new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-                x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name))));
+            return variants.Select(x => new ProductVariantDto(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
+                x.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name))));
         }
 
         private static string? GetImageUrl(string? name)

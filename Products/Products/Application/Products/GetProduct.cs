@@ -2,13 +2,14 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Products.Groups;
 using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products;
 
-public record GetProduct(string ProductId) : IRequest<ApiProduct?>
+public record GetProduct(string ProductId) : IRequest<ProductDto?>
 {
-    public class Handler : IRequestHandler<GetProduct, ApiProduct?>
+    public class Handler : IRequestHandler<GetProduct, ProductDto?>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +18,7 @@ public record GetProduct(string ProductId) : IRequest<ApiProduct?>
             _context = context;
         }
 
-        public async Task<ApiProduct?> Handle(GetProduct request, CancellationToken cancellationToken)
+        public async Task<ProductDto?> Handle(GetProduct request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
                 .AsSplitQuery()
@@ -27,7 +28,7 @@ public record GetProduct(string ProductId) : IRequest<ApiProduct?>
 
             if (product == null) return null;
 
-            return new ApiProduct(product.Id, product.Name, product.Description, product.Group == null ? null : new ApiProductGroup(product.Group.Id, product.Group.Name, product.Group.Description, product.Group?.Parent?.Id),
+            return new ProductDto(product.Id, product.Name, product.Description, product.Group == null ? null : new ProductGroupDto(product.Group.Id, product.Group.Name, product.Group.Description, product.Group?.Parent?.Id),
                 product.SKU, GetImageUrl(product.Image), product.Price, product.HasVariants, product.Visibility == Domain.Enums.ProductVisibility.Listed ? ProductVisibility.Listed : ProductVisibility.Unlisted);
         }
 

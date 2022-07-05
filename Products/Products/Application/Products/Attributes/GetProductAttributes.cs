@@ -2,13 +2,14 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Attributes;
 using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products.Attributes;
 
-public record GetProductAttributes(string ProductId) : IRequest<IEnumerable<ApiAttribute>>
+public record GetProductAttributes(string ProductId) : IRequest<IEnumerable<AttributeDto>>
 {
-    public class Handler : IRequestHandler<GetProductAttributes, IEnumerable<ApiAttribute>>
+    public class Handler : IRequestHandler<GetProductAttributes, IEnumerable<AttributeDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +18,7 @@ public record GetProductAttributes(string ProductId) : IRequest<IEnumerable<ApiA
             _context = context;
         }
 
-        public async Task<IEnumerable<ApiAttribute>> Handle(GetProductAttributes request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<AttributeDto>> Handle(GetProductAttributes request, CancellationToken cancellationToken)
         {
             var attributes = await _context.Attributes
                 .AsSplitQuery()
@@ -28,8 +29,8 @@ public record GetProductAttributes(string ProductId) : IRequest<IEnumerable<ApiA
                 .ToArrayAsync();
 
 
-            return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
-                x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
+            return attributes.Select(x => new AttributeDto(x.Id, x.Name, x.Description, x.Group == null ? null : new AttributeGroupDto(x.Group.Id, x.Group.Name, x.Group.Description),
+                x.Values.Select(x => new AttributeValueDto(x.Id, x.Name, x.Seq))));
         }
     }
 }

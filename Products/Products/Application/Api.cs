@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Products.Application.Attributes;
+using YourBrand.Products.Application.Common.Models;
 using YourBrand.Products.Application.Options;
 using YourBrand.Products.Application.Products;
 using YourBrand.Products.Application.Products.Attributes;
@@ -28,12 +29,12 @@ public class Api
         _mediator = mediator;
     }
 
-    public async Task<ApiProductsResult> GetProducts(bool includeUnlisted = false, string? groupId = null, int page = 10, int pageSize = 10, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<ProductDto>> GetProducts(bool includeUnlisted = false, string? groupId = null, int page = 10, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send(new GetProducts(includeUnlisted, groupId, page, pageSize), cancellationToken);
     }
 
-    public async Task<ApiProduct?> GetProduct(string productId, CancellationToken cancellationToken)
+    public async Task<ProductDto?> GetProduct(string productId, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new GetProduct(productId), cancellationToken);
     }
@@ -48,7 +49,7 @@ public class Api
         return await _mediator.Send(new UploadProductVariantImage(productId, variantId, fileName, stream), cancellationToken); 
     }
 
-    public async Task<ApiProduct?> CreateProduct(ApiCreateProduct data, CancellationToken cancellationToken)
+    public async Task<ProductDto?> CreateProduct(ApiCreateProduct data, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new CreateProduct(data.Name, data.HasVariants, data.Description, data.GroupId, data.SKU, data.Price, data.Visibility), cancellationToken);
     }
@@ -63,12 +64,12 @@ public class Api
         await _mediator.Send(new UpdateProductVisibility(productId, visibility), cancellationToken);
     }
 
-    public async Task<ApiOptionValue> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data, CancellationToken cancellationToken)
+    public async Task<OptionValueDto> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new CreateProductOptionValue(productId, optionId, data), cancellationToken);
     }
 
-    public async Task<ApiOption> CreateProductOption(string productId, ApiCreateProductOption data, CancellationToken cancellationToken)
+    public async Task<OptionDto> CreateProductOption(string productId, ApiCreateProductOption data, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new CreateProductOption(productId, data), cancellationToken);
     }
@@ -78,17 +79,17 @@ public class Api
         await _mediator.Send(new DeleteProductOption(productId, optionId));
     }
 
-    public async Task<ApiOption> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data, CancellationToken cancellationToken)
+    public async Task<OptionDto> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new UpdateProductOption(productId, optionId, data), cancellationToken);
     }
 
-    public async Task<IEnumerable<ApiOption>> GetProductOptions(string productId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OptionDto>> GetProductOptions(string productId, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new GetProductOptions(productId), cancellationToken);
     }
 
-    public async Task<IEnumerable<ApiAttribute>> GetProductAttributes(string productId)
+    public async Task<IEnumerable<AttributeDto>> GetProductAttributes(string productId)
     {
         return await _mediator.Send(new GetProductAttributes(productId));
     }
@@ -98,38 +99,38 @@ public class Api
         await _mediator.Send(new DeleteProductOptionValue(productId, optionId, valueId), cancellationToken);
     }
 
-    public async Task<IEnumerable<ApiOption>> GetOptions(bool includeChoices)
+    public async Task<IEnumerable<OptionDto>> GetOptions(bool includeChoices)
     {
         return await _mediator.Send(new GetOptions(includeChoices));
     }
 
-    public async Task<IEnumerable<ApiAttribute>> GetAttributes()
+    public async Task<IEnumerable<AttributeDto>> GetAttributes()
     {
         return await _mediator.Send(new GetAttributes());
     }
 
-    public async Task<ApiOption> GetOption(string optionId, CancellationToken cancellationToken)
+    public async Task<OptionDto> GetOption(string optionId, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new GetOption(optionId), cancellationToken);
     }
 
-    public async Task<ApiAttribute> GetAttribute(string attributeId)
+    public async Task<AttributeDto> GetAttribute(string attributeId)
     {
         return await _mediator.Send(new GetAttribute(attributeId));
     }
 
-    public async Task<IEnumerable<ApiProductGroup>> GetProductGroups(bool includeWithUnlistedProducts = false)
+    public async Task<IEnumerable<ProductGroupDto>> GetProductGroups(bool includeWithUnlistedProducts = false)
     {
         return await _mediator.Send(new GetProductGroups(includeWithUnlistedProducts));
     }
 
 
-    public async Task<ApiProductGroup?> CreateProductGroup(ApiCreateProductGroup data)
+    public async Task<ProductGroupDto?> CreateProductGroup(ApiCreateProductGroup data)
     {
         return await _mediator.Send(new CreateProductGroup(data.Name, data));
     }
 
-    public async Task<ApiProductGroup?> UpdateProductGroup(string productGroupId, ApiUpdateProductGroup data)
+    public async Task<ProductGroupDto?> UpdateProductGroup(string productGroupId, ApiUpdateProductGroup data)
     {
         return await _mediator.Send(new UpdateProductGroup(productGroupId, data));
     }
@@ -139,17 +140,17 @@ public class Api
         await _mediator.Send(new DeleteProductGroup(productGroupId));
     }
 
-    public async Task<IEnumerable<ApiOptionGroup>> GetOptionGroups(string productId)
+    public async Task<IEnumerable<OptionGroupDto>> GetOptionGroups(string productId)
     {
         return await _mediator.Send(new GetProductOptionGroups(productId));
     }
 
-    public async Task<ApiOptionGroup?> CreateOptionGroup(string productId, ApiCreateProductOptionGroup data)
+    public async Task<OptionGroupDto?> CreateOptionGroup(string productId, ApiCreateProductOptionGroup data)
     {
         return await _mediator.Send(new CreateProductOptionGroup(productId, data));
     }
 
-    public async Task<ApiOptionGroup?> UpdateOptionGroup(string productId, string optionGroupId, ApiUpdateProductOptionGroup data)
+    public async Task<OptionGroupDto?> UpdateOptionGroup(string productId, string optionGroupId, ApiUpdateProductOptionGroup data)
     {
         return await _mediator.Send(new UpdateProductOptionGroup(productId, optionGroupId, data));
     }
@@ -159,7 +160,7 @@ public class Api
         await _mediator.Send(new DeleteProductOptionGroup(productId, optionGroupId));
     }
 
-    public async Task<ApiProductVariant> CreateVariant(string productId, ApiCreateProductVariant data)
+    public async Task<ProductVariantDto> CreateVariant(string productId, ApiCreateProductVariant data)
     {
         return await _mediator.Send(new CreateProductVariant(productId, data));
     }
@@ -174,72 +175,56 @@ public class Api
         await _mediator.Send(new DeleteProductVariant(productId, productVariantId));
     }
 
-    public async Task<ApiProductVariant> UpdateVariant(string productId, string productVariantId, ApiUpdateProductVariant data)
+    public async Task<ProductVariantDto> UpdateVariant(string productId, string productVariantId, ApiUpdateProductVariant data)
     {
         return await _mediator.Send(new UpdateProductVariant(productId, productVariantId, data));
     }
 
-    public async Task<IEnumerable<ApiOptionValue>> GetOptionValues(string optionId)
+    public async Task<IEnumerable<OptionValueDto>> GetOptionValues(string optionId)
     {
         return await _mediator.Send(new GetOptionValues(optionId));
     }
 
-    public async Task<IEnumerable<ApiAttributeValue>> GetAttributeValues(string attributeId)
+    public async Task<IEnumerable<AttributeValueDto>> GetAttributeValues(string attributeId)
     {
         return await _mediator.Send(new GetAttributeValues(attributeId));
     }
 
-    public async Task<IEnumerable<ApiProductVariant>> GetProductVariants(string productId)
+    public async Task<IEnumerable<ProductVariantDto>> GetProductVariants(string productId)
     {
         return await _mediator.Send(new GetProductVariants(productId));
     }
 
-    public async Task<ApiProductVariant?> GetProductVariant(string productId, string productVariantId)
+    public async Task<ProductVariantDto?> GetProductVariant(string productId, string productVariantId)
     {
         return await _mediator.Send(new GetProductVariant(productId, productVariantId));
     }
 
-    public async Task<ApiProductVariant?> FindProductVariant(string productId, Dictionary<string, string?> selectedOptions)
+    public async Task<ProductVariantDto?> FindProductVariant(string productId, Dictionary<string, string?> selectedOptions)
     {
         return await _mediator.Send(new FindProductVariant(productId, selectedOptions));
     }
 
-    public async Task<IEnumerable<ApiProductVariantOption>> GetProductVariantOptions(string productId, string productVariantId)
+    public async Task<IEnumerable<ProductVariantDtoOption>> GetProductVariantOptions(string productId, string productVariantId)
     {
         return await _mediator.Send(new GetProductVariantOptions(productId, productVariantId));
     }
 
-    public async Task<IEnumerable<ApiOptionValue>> GetAvailableOptionValues(string productId, string optionId, IDictionary<string, string?> selectedOptions)
+    public async Task<IEnumerable<OptionValueDto>> GetAvailableOptionValues(string productId, string optionId, IDictionary<string, string?> selectedOptions)
     {
         return await _mediator.Send(new GetAvailableOptionValues(productId, optionId, selectedOptions));
     }
 }
 
-public record class ApiProductsResult(IEnumerable<ApiProduct> Items, int Total);
-
-public record class ApiProduct(string Id, string Name, string? Description, ApiProductGroup? Group, string? SKU, string? Image, decimal? Price, bool HasVariants, ProductVisibility? Visibility);
-
 public record class ApiCreateProduct(string Name, bool HasVariants, string? Description, string? GroupId, string? SKU, decimal? Price, ProductVisibility? Visibility);
 
 public record class ApiUpdateProductDetails(string Name, string? Description, string? SKU, string? Image, decimal? Price, string? GroupId);
-
-
-public record class ApiProductGroup(string Id, string Name, string? Description, string? ParentGroupId);
 
 public record class ApiCreateProductGroup(string Name, string? Description, string? ParentGroupId);
 
 public record class ApiUpdateProductGroup(string Name, string? Description, string? ParentGroupId);
 
-
-public record class ApiOption(string Id, string Name, string? Description, OptionType OptionType, ApiOptionGroup? Group, string? SKU, decimal? Price, bool IsSelected, IEnumerable<ApiOptionValue> Values, ApiOptionValue? DefaultValue);
-
-public record class ApiAttribute(string Id, string Name, string? Description, ApiAttributeGroup? Group, IEnumerable<ApiAttributeValue> Values);
-
-public record class ApiOptionValue(string Id, string Name, string? SKU, decimal? Price, int? Seq);
-
-public record class ApiAttributeValue(string Id, string Name, int? Seq);
-
-public record class ApiCreateProductOption(string Name, string? Description, OptionType OptionType, ApiOptionGroup? Group, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiCreateProductOptionValue> Values);
+public record class ApiCreateProductOption(string Name, string? Description, OptionType OptionType, OptionGroupDto? Group, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiCreateProductOptionValue> Values);
 
 public record class ApiCreateProductOptionValue(string Name, string? SKU, decimal? Price);
 
@@ -247,19 +232,11 @@ public record class ApiUpdateProductOption(string Name, string? Description, Opt
 
 public record class ApiUpdateProductOptionValue(string? Id, string Name, string? SKU, decimal? Price);
 
-
-public record class ApiOptionGroup(string Id, string Name, string? Description, int? Seq, int? Min, int? Max);
-
-public record class ApiAttributeGroup(string Id, string Name, string? Description);
-
 public record class ApiCreateProductOptionGroup(string Name, string? Description, int? Min, int? Max);
 
 public record class ApiUpdateProductOptionGroup(string Name, string? Description, int? Min, int? Max);
 
-
-public record class ApiProductVariant(string Id, string Name, string? Description, string? SKU, string? Image, decimal? Price, IEnumerable<ApiProductVariantOption> Options);
-
-public record class ApiProductVariantOption(string Id, string Name, string Value);
+public record class ProductVariantDtoOption(string Id, string Name, string Value);
 
 
 public record class ApiCreateProductVariant(string Name, string? Description, string SKU, decimal Price, IEnumerable<ApiCreateProductVariantOption> Values);

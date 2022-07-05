@@ -13,7 +13,7 @@
 
             @if (Groups is not null)
             {
-                <MudSelect T="ApiProductGroup" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
+                <MudSelect T="ProductGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
                            For="() => Group">
                     @foreach (var item in Groups)
                     {
@@ -41,7 +41,7 @@
 </EditForm>
 
 @code {
-    public IList<ApiProductGroup> Groups { get; set; }
+    public IList<ProductGroupDto> Groups { get; set; }
 
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
@@ -52,7 +52,7 @@
 
     public string? Description { get; set; }
 
-    public ApiProductGroup Group { get; set; }
+    public ProductGroupDto Group { get; set; }
 
     public string? SKU { get; set; }
 

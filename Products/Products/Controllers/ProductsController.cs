@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Products.Application;
+using YourBrand.Products.Application.Attributes;
+using YourBrand.Products.Application.Common.Models;
+using YourBrand.Products.Application.Options;
+using YourBrand.Products.Application.Products;
+using YourBrand.Products.Application.Products.Groups;
+using YourBrand.Products.Application.Products.Variants;
 
 namespace YourBrand.Products.Controllers;
 
@@ -21,7 +27,7 @@ public class ProductsController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiProductsResult>> GetProducts(
+    public async Task<ActionResult<ItemsResult<ProductDto>>> GetProducts(
         bool includeUnlisted = false, string? groupId = null,
         int page = 0, int pageSize = 10 /*, bool includeNestedGroups = false */)
     {
@@ -29,7 +35,7 @@ public class ProductsController : Controller
     }
 
     [HttpGet("{productId}")]
-    public async Task<ActionResult<ApiProduct>> GetProduct(string productId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductDto>> GetProduct(string productId, CancellationToken cancellationToken)
     {
         return Ok(await api.GetProduct(productId, cancellationToken));
     }
@@ -65,25 +71,25 @@ public class ProductsController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiProduct>> CreateProduct(ApiCreateProduct data, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductDto>> CreateProduct(ApiCreateProduct data, CancellationToken cancellationToken)
     {
         return Ok(await api.CreateProduct(data, cancellationToken));
     }
 
     [HttpGet("Groups")]
-    public async Task<ActionResult<IEnumerable<ApiProductGroup>>> GetProductGroups(bool includeWithUnlistedProducts = false)
+    public async Task<ActionResult<IEnumerable<ProductGroupDto>>> GetProductGroups(bool includeWithUnlistedProducts = false)
     {
         return Ok(await api.GetProductGroups(includeWithUnlistedProducts));
     }
 
     [HttpPost("Groups")]
-    public async Task<ActionResult<ApiProductGroup>> CreateProductGroup(ApiCreateProductGroup data)
+    public async Task<ActionResult<ProductGroupDto>> CreateProductGroup(ApiCreateProductGroup data)
     {
         return Ok(await api.CreateProductGroup(data));
     }
 
     [HttpPut("Groups/{productGroupId}")]
-    public async Task<ActionResult<ApiProductGroup>> UpdateProductGroup(string productGroupId, ApiUpdateProductGroup data)
+    public async Task<ActionResult<ProductGroupDto>> UpdateProductGroup(string productGroupId, ApiUpdateProductGroup data)
     {
         return Ok(await api.UpdateProductGroup(productGroupId, data));
     }
@@ -96,19 +102,19 @@ public class ProductsController : Controller
     }
 
     [HttpGet("{productId}/Options/Groups")]
-    public async Task<ActionResult<IEnumerable<ApiOptionGroup>>> GetOptionGroups(string productId)
+    public async Task<ActionResult<IEnumerable<OptionGroupDto>>> GetOptionGroups(string productId)
     {
         return Ok(await api.GetOptionGroups(productId));
     }
 
     [HttpPost("{productId}/Options/Groups")]
-    public async Task<ActionResult<ApiOptionGroup>> CreateOptionGroup(string productId, ApiCreateProductOptionGroup data)
+    public async Task<ActionResult<OptionGroupDto>> CreateOptionGroup(string productId, ApiCreateProductOptionGroup data)
     {
         return Ok(await api.CreateOptionGroup(productId, data));
     }
 
     [HttpPut("{productId}/Options/Groups/{optionGroupId}")]
-    public async Task<ActionResult<ApiOptionGroup>> UpdateOptionGroup(string productId, string optionGroupId, ApiUpdateProductOptionGroup data)
+    public async Task<ActionResult<OptionGroupDto>> UpdateOptionGroup(string productId, string optionGroupId, ApiUpdateProductOptionGroup data)
     {
         return Ok(await api.UpdateOptionGroup(productId, optionGroupId, data));
     }
@@ -121,25 +127,25 @@ public class ProductsController : Controller
     }
 
     [HttpGet("{productId}/Options")]
-    public async Task<ActionResult<IEnumerable<ApiOption>>> GetProductOptions(string productId, CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<OptionDto>>> GetProductOptions(string productId, CancellationToken cancellationToken)
     {
         return Ok(await api.GetProductOptions(productId, cancellationToken));
     }
 
     [HttpGet("{productId}/Attributes")]
-    public async Task<ActionResult<IEnumerable<ApiAttribute>>> GetProductAttributes(string productId)
+    public async Task<ActionResult<IEnumerable<AttributeDto>>> GetProductAttributes(string productId)
     {
         return Ok(await api.GetProductAttributes(productId));
     }
 
     [HttpPost("{productId}/Options")]
-    public async Task<ActionResult<ApiOption>> CreateProductOption(string productId, ApiCreateProductOption data, CancellationToken cancellationToken)
+    public async Task<ActionResult<OptionDto>> CreateProductOption(string productId, ApiCreateProductOption data, CancellationToken cancellationToken)
     {
         return Ok(await api.CreateProductOption(productId, data, cancellationToken));
     }
 
     [HttpPut("{productId}/Options/{optionId}")]
-    public async Task<ActionResult<ApiOption>> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data, CancellationToken cancellationToken)
+    public async Task<ActionResult<OptionDto>> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data, CancellationToken cancellationToken)
     {
         return Ok(await api.UpdateProductOption(productId, optionId, data, cancellationToken));
     }
@@ -152,7 +158,7 @@ public class ProductsController : Controller
     }
 
     [HttpPost("{productId}/Options/{optionId}/Values")]
-    public async Task<ActionResult<ApiOptionValue>> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data, CancellationToken cancellationToken)
+    public async Task<ActionResult<OptionValueDto>> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data, CancellationToken cancellationToken)
     {
 
         return Ok(await api.CreateProductOptionValue(productId, optionId, data, cancellationToken));
@@ -166,19 +172,19 @@ public class ProductsController : Controller
     }
 
     [HttpPost("{productId}/Options/{optionId}/GetAvailableValues")]
-    public async Task<ActionResult<IEnumerable<ApiOptionValue>>> GetAvailableOptionValues(string productId, string optionId, Dictionary<string, string?> selectedOptions)
+    public async Task<ActionResult<IEnumerable<OptionValueDto>>> GetAvailableOptionValues(string productId, string optionId, Dictionary<string, string?> selectedOptions)
     {
         return Ok(await api.GetAvailableOptionValues(productId, optionId, selectedOptions));
     }
 
     [HttpGet("{productId}/Options/{optionId}/Values")]
-    public async Task<ActionResult<IEnumerable<ApiOptionValue>>> GetProductOptionValues(string productId, string optionId)
+    public async Task<ActionResult<IEnumerable<OptionValueDto>>> GetProductOptionValues(string productId, string optionId)
     {
         return Ok(await api.GetOptionValues(optionId));
     }
 
     [HttpGet("{productId}/Variants")]
-    public async Task<ActionResult<IEnumerable<ApiProductVariant>>> GetVariants(string productId)
+    public async Task<ActionResult<IEnumerable<ProductVariantDto>>> GetVariants(string productId)
     {
         return Ok(await api.GetProductVariants(productId));
     }
@@ -191,27 +197,27 @@ public class ProductsController : Controller
     }
 
     [HttpGet("{productId}/Variants/{variantId}")]
-    public async Task<ActionResult<ApiProductVariant>> GetVariant(string productId, string variantId)
+    public async Task<ActionResult<ProductVariantDto>> GetVariant(string productId, string variantId)
     {
         return Ok(await api.GetProductVariant(productId, variantId));
     }
 
     [HttpPost("{productId}/Variants/Find")]
-    public async Task<ActionResult<ApiProductVariant>> FindVariantByOptionValues(string productId, Dictionary<string, string?> selectedOptions)
+    public async Task<ActionResult<ProductVariantDto>> FindVariantByOptionValues(string productId, Dictionary<string, string?> selectedOptions)
     {
         return Ok(await api.FindProductVariant(productId, selectedOptions));
     }
 
     [HttpGet("{productId}/Variants/{variantId}/Options")]
-    public async Task<ActionResult<ApiProductVariant>> GetVariantOptions(string productId, string variantId)
+    public async Task<ActionResult<ProductVariantDto>> GetVariantOptions(string productId, string variantId)
     {
         return Ok(await api.GetProductVariantOptions(productId, variantId));
     }
 
     [HttpPost("{productId}/Variants")]
-    [ProducesResponseType(typeof(ApiProductVariant), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProductVariantDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ApiProductVariant>> CreateVariant(string productId, ApiCreateProductVariant variant)
+    public async Task<ActionResult<ProductVariantDto>> CreateVariant(string productId, ApiCreateProductVariant variant)
     {
         try
         {
@@ -228,9 +234,9 @@ public class ProductsController : Controller
     }
 
     [HttpPut("{productId}/Variants/{variantId}")]
-    [ProducesResponseType(typeof(ApiProductVariant), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProductVariantDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ApiProductVariant>> UpdateVariant(string productId, string variantId, ApiUpdateProductVariant data)
+    public async Task<ActionResult<ProductVariantDto>> UpdateVariant(string productId, string variantId, ApiUpdateProductVariant data)
     {
         try
         {

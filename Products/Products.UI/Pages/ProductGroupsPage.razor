@@ -9,7 +9,7 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateGroup" StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create group</MudButton>
 
-<MudTable T="ApiProductGroup" Items="productGroups"
+<MudTable T="ProductGroupDto" Items="productGroups"
           Dense="true" Hover="true">
     <HeaderContent>
         <MudTh>Name</MudTh>
@@ -34,7 +34,7 @@
 
 @code
 {
-    List<ApiProductGroup>? productGroups;
+    List<ProductGroupDto>? productGroups;
 
     [Parameter]
     public string? ProductId { get; set; }
@@ -54,10 +54,10 @@
 
         if (result.Cancelled) return;
 
-        productGroups.Add((ApiProductGroup)result.Data);
+        productGroups.Add((ProductGroupDto)result.Data);
     }
 
-    async Task UpdateGroup(ApiProductGroup productGroup)
+    async Task UpdateGroup(ProductGroupDto productGroup)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(UpdateProductGroupModal.ProductGroup), productGroup);
@@ -70,10 +70,10 @@
 
         var index = productGroups!.IndexOf(productGroup);
 
-        productGroups[index] = (ApiProductGroup)result.Data;
+        productGroups[index] = (ProductGroupDto)result.Data;
     }
 
-    async Task DeleteGroup(ApiProductGroup productGroup)
+    async Task DeleteGroup(ProductGroupDto productGroup)
     {
         var modalResult = await DialogService.ShowMessageBox("Delete the group?", "The group will be deleted, but the options will remain.\nThis cannot be undone.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())

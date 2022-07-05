@@ -52,7 +52,7 @@
                                         @if (option.Values is not null)
                                         {
                                             <td>
-                                                <MudSelect T="ApiOptionValue" Class="mb-6" Variant="MudBlazor.Variant.Outlined"
+                                                <MudSelect T="OptionValueDto" Class="mb-6" Variant="MudBlazor.Variant.Outlined"
                                     @bind-Value="option.SelectedValue" ToStringFunc="x => x?.Name"
                                     For="() => option.SelectedValue">
                                                     @foreach (var item in option.Values)
@@ -170,8 +170,8 @@
 
         public string Name { get; set; }
 
-        public ApiOptionValue SelectedValue { get; set; }
+        public OptionValueDto SelectedValue { get; set; }
 
-        public List<ApiOptionValue> Values { get; set; } = new List<ApiOptionValue>();
+        public List<OptionValueDto> Values { get; set; } = new List<OptionValueDto>();
     }
 }

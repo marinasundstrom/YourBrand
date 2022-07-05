@@ -14,7 +14,7 @@
 
             @if (Groups is not null)
             {
-                <MudSelect T="ApiOptionGroup" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
+                <MudSelect T="OptionGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
                            For="() => Group">
                     @foreach (var item in Groups)
                     {
@@ -86,13 +86,13 @@
 </EditForm>
 
 @code {
-    IList<ApiOptionGroup?> Groups { get; set; }
+    IList<OptionGroupDto?> Groups { get; set; }
 
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
     [Parameter] public string ProductId { get; set; }
 
-    [Parameter] public ApiProduct Product { get; set; }
+    [Parameter] public ProductDto Product { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -101,7 +101,7 @@
 
     public string Description { get; set; }
 
-    public ApiOptionGroup? Group { get; set; }
+    public OptionGroupDto? Group { get; set; }
 
     public string? SKU { get; set; }
 
@@ -112,7 +112,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Groups = (await ProductsClient.GetOptionGroupsAsync(ProductId)).Prepend(new ApiOptionGroup { Id = null, Name = "None" }).ToList();
+        Groups = (await ProductsClient.GetOptionGroupsAsync(ProductId)).Prepend(new OptionGroupDto { Id = null, Name = "None" }).ToList();
 
         HasMultipleChoices = Product.HasVariants;
     }

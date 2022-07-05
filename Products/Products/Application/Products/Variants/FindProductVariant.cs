@@ -4,9 +4,9 @@ using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record FindProductVariant(string ProductId, Dictionary<string, string?> SelectedOptions) : IRequest<ApiProductVariant?>
+public record FindProductVariant(string ProductId, Dictionary<string, string?> SelectedOptions) : IRequest<ProductVariantDto?>
 {
-    public class Handler : IRequestHandler<FindProductVariant, ApiProductVariant?>
+    public class Handler : IRequestHandler<FindProductVariant, ProductVariantDto?>
     {
         private readonly IProductsContext _context;
         private readonly ProductVariantsService _productVariantsService;
@@ -17,14 +17,14 @@ public record FindProductVariant(string ProductId, Dictionary<string, string?> S
             _productVariantsService = productVariantsService;
         }
 
-        public async Task<ApiProductVariant?> Handle(FindProductVariant request, CancellationToken cancellationToken)
+        public async Task<ProductVariantDto?> Handle(FindProductVariant request, CancellationToken cancellationToken)
         {
             var variant = await _productVariantsService.FindVariantCore(request.ProductId, null, request.SelectedOptions);
 
             if (variant is null) return null;
 
-            return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+            return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
+                variant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

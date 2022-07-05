@@ -195,7 +195,7 @@ public class CreateOrderCommandHandler : IConsumer<CreateOrderCommand>
 
     private async Task AddItem(Order order, CreateOrderItemDto dto)
     {
-        ApiProduct? product = null;
+        ProductDto? product = null;
 
         if (dto.ItemId is not null)
         {

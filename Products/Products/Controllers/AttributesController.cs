@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Products.Application;
+using YourBrand.Products.Application.Attributes;
+using YourBrand.Products.Application.Options;
 
 namespace YourBrand.Products.Controllers;
 
@@ -16,21 +18,21 @@ public class AttributesController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiAttribute>> GetAttributes()
+    public async Task<ActionResult<AttributeDto>> GetAttributes()
     {
         return Ok(await api.GetAttributes());
     }
 
     /*
     [HttpGet("{optionId}")]
-    public async Task<ActionResult<ApiOption>> GetProductOptionValues(string optionId)
+    public async Task<ActionResult<OptionDto>> GetProductOptionValues(string optionId)
     {
         return Ok(await api.GetOptions(false));
     }
     */
 
     [HttpGet("{attributeId}/Values")]
-    public async Task<ActionResult<ApiOptionValue>> GetAttributesValues(string attributeId)
+    public async Task<ActionResult<OptionValueDto>> GetAttributesValues(string attributeId)
     {
         return Ok(await api.GetAttributeValues(attributeId));
     }

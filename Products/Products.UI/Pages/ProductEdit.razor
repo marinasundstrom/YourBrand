@@ -111,7 +111,7 @@ else
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-2 mt-6">@group.Key</MudText>
             }
 
-            <MudTable T="ApiOption" Items="@group" Dense="true" Hover="true" @ref="table" Class="mb-4">
+            <MudTable T="OptionDto" Items="@group" Dense="true" Hover="true" @ref="table" Class="mb-4">
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>
@@ -159,20 +159,20 @@ else
 
             @if (variants is not null)
             {
-                <MudTable T="ApiProductVariant" Items="@variants"
+                <MudTable T="ProductVariantDto" Items="@variants"
                           Dense="true" Hover="true" Class="mb-4">
 
                     <HeaderContent>
-                        <MudTh><MudTableSortLabel SortLabel="nr_field1" T="ApiProductVariant">Image</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="nr_field" T="ApiProductVariant">Name</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="sign_field" T="ApiProductVariant">SKU</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="name_field" T="ApiProductVariant">Price</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="nr_field1" T="ProductVariantDto">Image</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="nr_field" T="ProductVariantDto">Name</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="sign_field" T="ProductVariantDto">SKU</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="name_field" T="ProductVariantDto">Price</MudTableSortLabel></MudTh>
 
                         @if (variants is not null && variants.Any())
                         {
                             @foreach (var option in variants.First().Options)
                             {
-                                <MudTh><MudTableSortLabel SortLabel="name_field" T="ApiProductVariant">@option.Name</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortLabel="name_field" T="ProductVariantDto">@option.Name</MudTableSortLabel></MudTh>
                             }
                         }
 
@@ -222,11 +222,11 @@ else
 
 @code
 {
-    MudTable<ApiOption> table;
+    MudTable<OptionDto> table;
 
-    ApiProduct? product;
-    List<ApiProductVariant>? variants;
-    List<ApiOption>? options;
+    ProductDto? product;
+    List<ProductVariantDto>? variants;
+    List<OptionDto>? options;
 
     public IList<ProductVisibility?> VisibilityOptions { get; } = Enum.GetValues<ProductVisibility>().Select(x => (ProductVisibility?)x).ToArray();
 
@@ -269,10 +269,10 @@ else
 
         if (result.Cancelled) return;
 
-        options.Add((ApiOption)result.Data);
+        options.Add((OptionDto)result.Data);
     }
 
-    async Task UpdateOption(ApiOption option)
+    async Task UpdateOption(OptionDto option)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(UpdateProductOptionModal.ProductId), ProductId);
@@ -287,10 +287,10 @@ else
 
         var index = options!.IndexOf(option);
 
-        options[index] = (ApiOption)result.Data;
+        options[index] = (OptionDto)result.Data;
     }
 
-    async Task DeleteOption(ApiOption option)
+    async Task DeleteOption(OptionDto option)
     {
         var modalResult = await DialogService.ShowMessageBox("Delete the option?", "This cannot be undone.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -314,10 +314,10 @@ else
 
         if (result.Cancelled) return;
 
-        variants.Add((ApiProductVariant)result.Data);
+        variants.Add((ProductVariantDto)result.Data);
     }
 
-    async Task UpdateVariant(ApiProductVariant variant)
+    async Task UpdateVariant(ProductVariantDto variant)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(UpdateVariantModal.ProductId), ProductId);
@@ -331,10 +331,10 @@ else
 
         var index = variants!.IndexOf(variant);
 
-        variants[index] = (ApiProductVariant)result.Data;
+        variants[index] = (ProductVariantDto)result.Data;
     }
 
-    async Task DeleteVariant(ApiProductVariant variant)
+    async Task DeleteVariant(ProductVariantDto variant)
     {
         var modalResult = await DialogService.ShowMessageBox("Delete the variant?", "This cannot be undone.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -388,8 +388,8 @@ else
 
         public string SKU { get; set; }
 
-        public ApiOptionValue? SelectedValue { get; set; }
+        public OptionValueDto? SelectedValue { get; set; }
 
-        public IEnumerable<ApiOptionValue> Values { get; set; } = null!;
+        public IEnumerable<OptionValueDto> Values { get; set; } = null!;
     }
 }

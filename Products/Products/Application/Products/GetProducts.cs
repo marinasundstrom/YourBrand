@@ -2,13 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Common.Models;
+using YourBrand.Products.Application.Products.Groups;
 using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products;
 
-public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, int Page = 10, int PageSize = 10) : IRequest<ApiProductsResult>
+public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, int Page = 10, int PageSize = 10) : IRequest<ItemsResult<ProductDto>>
 {
-    public class Handler : IRequestHandler<GetProducts, ApiProductsResult>
+    public class Handler : IRequestHandler<GetProducts, ItemsResult<ProductDto>>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +19,7 @@ public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, 
             _context = context;
         }
 
-        public async Task<ApiProductsResult> Handle(GetProducts request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<ProductDto>> Handle(GetProducts request, CancellationToken cancellationToken)
         {
             var query = _context.Products
                 .AsSplitQuery()
@@ -42,7 +44,7 @@ public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, 
                 .Take(request.PageSize).AsQueryable()
                 .ToArrayAsync();
 
-            return new ApiProductsResult(products.Select(x => new ApiProduct(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiProductGroup(x.Group.Id, x.Group.Name, x.Group.Description, x.Group?.Parent?.Id),
+            return new ItemsResult<ProductDto>(products.Select(x => new ProductDto(x.Id, x.Name, x.Description, x.Group == null ? null : new ProductGroupDto(x.Group.Id, x.Group.Name, x.Group.Description, x.Group?.Parent?.Id),
                 x.SKU, GetImageUrl(x.Image), x.Price, x.HasVariants, x.Visibility == Domain.Enums.ProductVisibility.Listed ? ProductVisibility.Listed : ProductVisibility.Unlisted)),
                 totalCount);
         }

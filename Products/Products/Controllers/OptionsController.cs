@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Products.Application;
+using YourBrand.Products.Application.Options;
 
 namespace YourBrand.Products.Controllers;
 
@@ -16,19 +17,19 @@ public class OptionsController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiOption>> GetOptions(bool includeChoices = false)
+    public async Task<ActionResult<OptionDto>> GetOptions(bool includeChoices = false)
     {
         return Ok(await api.GetOptions(includeChoices));
     }
 
     [HttpGet("{optionId}")]
-    public async Task<ActionResult<ApiOption>> GetProductOptionValues(string optionId)
+    public async Task<ActionResult<OptionDto>> GetProductOptionValues(string optionId)
     {
         return Ok(await api.GetOptions(false));
     }
 
     [HttpGet("{optionId}/Values")]
-    public async Task<ActionResult<ApiOptionValue>> GetOptionValues(string optionId)
+    public async Task<ActionResult<OptionValueDto>> GetOptionValues(string optionId)
     {
         return Ok(await api.GetOptionValues(optionId));
     }

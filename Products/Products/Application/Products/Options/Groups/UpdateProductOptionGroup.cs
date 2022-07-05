@@ -2,14 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Options;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Options.Groups;
 
-public record UpdateProductOptionGroup(string ProductId, string OptionGroupId, ApiUpdateProductOptionGroup Data) : IRequest<ApiOptionGroup>
+public record UpdateProductOptionGroup(string ProductId, string OptionGroupId, ApiUpdateProductOptionGroup Data) : IRequest<OptionGroupDto>
 {
-    public class Handler : IRequestHandler<UpdateProductOptionGroup, ApiOptionGroup>
+    public class Handler : IRequestHandler<UpdateProductOptionGroup, OptionGroupDto>
     {
         private readonly IProductsContext _context;
 
@@ -18,7 +19,7 @@ public record UpdateProductOptionGroup(string ProductId, string OptionGroupId, A
             _context = context;
         }
 
-        public async Task<ApiOptionGroup> Handle(UpdateProductOptionGroup request, CancellationToken cancellationToken)
+        public async Task<OptionGroupDto> Handle(UpdateProductOptionGroup request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
             .Include(x => x.OptionGroups)
@@ -34,7 +35,7 @@ public record UpdateProductOptionGroup(string ProductId, string OptionGroupId, A
 
             await _context.SaveChangesAsync();
 
-            return new ApiOptionGroup(optionGroup.Id, optionGroup.Name, optionGroup.Description, optionGroup.Seq, optionGroup.Min, optionGroup.Max);
+            return new OptionGroupDto(optionGroup.Id, optionGroup.Name, optionGroup.Description, optionGroup.Seq, optionGroup.Min, optionGroup.Max);
         }
     }
 }

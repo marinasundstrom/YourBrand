@@ -63,8 +63,8 @@
 @code
 {
     MudChip chip;
-    IEnumerable<ApiProductGroup>? productGroups = null;
-    IEnumerable<ApiProduct>? products = null;
+    IEnumerable<ProductGroupDto>? productGroups = null;
+    IEnumerable<ProductDto>? products = null;
 
     [Parameter]
     [SupplyParameterFromQuery]
@@ -85,7 +85,7 @@
 
         if (result.Cancelled) return;
 
-        var product = (ApiProduct)result.Data;
+        var product = (ProductDto)result.Data;
 
         NavigationManager.NavigateTo($"/products/{product.Id}/edit");
     }

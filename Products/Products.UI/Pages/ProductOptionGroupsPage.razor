@@ -17,7 +17,7 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateGroup" StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create group</MudButton>
 
-    <MudTable T="ApiOptionGroup" Items="optionGroups"
+    <MudTable T="OptionGroupDto" Items="optionGroups"
               Dense="true" Hover="true">
         <HeaderContent>
             <MudTh>Name</MudTh>
@@ -43,8 +43,8 @@ else
 
 @code
 {
-    ApiProduct? product;
-    List<ApiOptionGroup>? optionGroups;
+    ProductDto? product;
+    List<OptionGroupDto>? optionGroups;
 
     [Parameter]
     public string? ProductId { get; set; }
@@ -66,10 +66,10 @@ else
 
         if (result.Cancelled) return;
 
-        optionGroups.Add((ApiOptionGroup)result.Data);
+        optionGroups.Add((OptionGroupDto)result.Data);
     }
 
-    async Task UpdateGroup(ApiOptionGroup optionGroup)
+    async Task UpdateGroup(OptionGroupDto optionGroup)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(UpdateProductOptionGroupModal.ProductId), ProductId);
@@ -83,10 +83,10 @@ else
 
         var index = optionGroups!.IndexOf(optionGroup);
 
-        optionGroups[index] = (ApiOptionGroup)result.Data;
+        optionGroups[index] = (OptionGroupDto)result.Data;
     }
 
-    async Task DeleteGroup(ApiOptionGroup optionGroup)
+    async Task DeleteGroup(OptionGroupDto optionGroup)
     {
         var modalResult = await DialogService.ShowMessageBox("Delete the group?", "The group will be deleted, but the options will remain.\nThis cannot be undone.", yesText: "Yes", noText: "No");
         if (!modalResult.GetValueOrDefault())

@@ -2,13 +2,14 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Products.Variants;
 using YourBrand.Products.Domain;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record GetProductVariant(string ProductId, string ProductVariantId) : IRequest<ApiProductVariant?>
+public record GetProductVariant(string ProductId, string ProductVariantId) : IRequest<ProductVariantDto?>
 {
-    public class Handler : IRequestHandler<GetProductVariant, ApiProductVariant?>
+    public class Handler : IRequestHandler<GetProductVariant, ProductVariantDto?>
     {
         private readonly IProductsContext _context;
 
@@ -17,7 +18,7 @@ public record GetProductVariant(string ProductId, string ProductVariantId) : IRe
             _context = context;
         }
 
-        public async Task<ApiProductVariant?> Handle(GetProductVariant request, CancellationToken cancellationToken)
+        public async Task<ProductVariantDto?> Handle(GetProductVariant request, CancellationToken cancellationToken)
         {
             var productVariant = await _context.ProductVariants
                 .AsSplitQuery()
@@ -32,8 +33,8 @@ public record GetProductVariant(string ProductId, string ProductVariantId) : IRe
 
             if(productVariant is null) return null;
 
-            return new ApiProductVariant(productVariant.Id, productVariant.Name, productVariant.Description, productVariant.SKU, GetImageUrl(productVariant.Image), productVariant.Price,
-                productVariant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+            return new ProductVariantDto(productVariant.Id, productVariant.Name, productVariant.Description, productVariant.SKU, GetImageUrl(productVariant.Image), productVariant.Price,
+                productVariant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)
