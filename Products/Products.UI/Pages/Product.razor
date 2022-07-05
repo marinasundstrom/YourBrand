@@ -80,36 +80,40 @@ else
 
                         <EditForm Model="@vm">
 
- <MudTable T="AttributeVM" Items="@vm.AttributeGroups.SelectMany(x => x.Attributes)"
-                          Dense="true" Hover="false" Class="mb-4"
-          GroupBy="@_groupDefinition"
-          Elevation="0"
-          GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
-          GroupFooterClass="mb-4">
+                            <MudTable T="AttributeVM" Items="@vm.AttributeGroups.SelectMany(x => x.Attributes).Where(x => !x.ForVariant)"
+                                Dense="true" Hover="false" Class="mb-4"
+                                Striped="true"
+                                GroupBy="@_groupDefinition"
+                                Elevation="0"
+                                GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+                                GroupFooterClass="mb-4">
 
-                    @* <HeaderContent>
-                        <MudTh><MudTableSortLabel SortLabel="nr_field" T="AttributeVM">Name</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="sign_field" T="AttributeVM"></MudTableSortLabel></MudTh>
-                    </HeaderContent> *@
+                                @* <HeaderContent>
+                                    <MudTh><MudTableSortLabel SortLabel="nr_field" T="AttributeVM">Name</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel SortLabel="sign_field" T="AttributeVM"></MudTableSortLabel></MudTh>
+                                </HeaderContent> *@
 
-                     <GroupHeaderTemplate Context="c">
-                        <MudTh Class="mud-table-cell-custom-group" colspan="5">@($"{((AttributeGroupVM?)c.Key)?.Name}")</MudTh>
-                    </GroupHeaderTemplate>
+                                <GroupHeaderTemplate Context="c">
+                                    @if(!string.IsNullOrEmpty(((AttributeGroupVM?)c.Key)?.Name)) 
+                                    {
+                                        <MudTh Class="mud-table-cell-custom-group" colspan="5"> <MudText Typo="Typo.h6">@($"{((AttributeGroupVM?)c.Key)?.Name}")</MudText></MudTh>
+                                    }
+                                </GroupHeaderTemplate>
 
-                    <RowTemplate Context="a">
-                        <MudTd DataLabel="Name"><b>@a.Name</b></MudTd>
-                        <MudTd DataLabel="SKU">@string.Join(", ", a.Values.Select(x => x.Name))</MudTd>
-                    </RowTemplate>
+                                <RowTemplate Context="a">
+                                    <MudTd DataLabel="Name"><b>@a.Name</b></MudTd>
+                                    <MudTd DataLabel="SKU">@string.Join(", ", a.Values.Select(x => x.Name))</MudTd>
+                                </RowTemplate>
 
-                    <NoRecordsContent>
-                        <MudText>No matching records found</MudText>
-                    </NoRecordsContent>
+                                <NoRecordsContent>
+                                    <MudText>No matching records found</MudText>
+                                </NoRecordsContent>
 
-                    <LoadingContent>
-                        <MudText>Loading...</MudText>
-                    </LoadingContent>
+                                <LoadingContent>
+                                    <MudText>Loading...</MudText>
+                                </LoadingContent>
 
-                </MudTable>
+                            </MudTable>
 
                         </EditForm>
 
@@ -117,7 +121,7 @@ else
                 </MudCard>
             }
 
-            @if (vm.OptionGroups.Any())
+            @if (vm.OptionGroups.Any() || vm.AttributeGroups.Any())
             {
                 <MudCard class="mb-2">
                     <MudCardContent>
@@ -132,7 +136,7 @@ else
                                     <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-4">@attributeGroup.Name</MudText>
                                 }
 
-                                    @foreach (var attribute in attributeGroup.Attributes.Where(a => a.Values.Any()))
+                                    @foreach (var attribute in attributeGroup.Attributes.Where(a => a.ForVariant))
                                     {
                                         var attributeValues = attribute.Values;
 
@@ -155,8 +159,7 @@ else
                                     @if (optionGroup.Max is not null)
                                     {<small class="mb-2">Max @optionGroup.Max</small>}
                                 }
-
-                                if (optionGroup.Name is null && vm.OptionGroups.Count() == 1)
+                                else if (optionGroup.Name is null && vm.OptionGroups.Count() == 1)
                                 {
                                     <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-4">Options</MudText>
                                 }
@@ -174,17 +177,25 @@ else
                                                 <MudSelect T="OptionValueVM" Dense="true" Class="mb-6" Label="@option.Name" Variant="Variant.Outlined" Value="option.SelectedValue" ValueChanged="async (e) => { option.SelectedValue = e; }" ToStringFunc="x => x.Name">
                                                     @foreach (var item in optionValues)
                                                     {
-                                                        <MudSelectItem Value="@item" />
+                                                        <MudSelectItem Value="@item">
+                                                            @item.Name
+                                                            @if (item.Price is not null)
+                                                            {
+                                                                <text> (+ @item.Price?.ToString("c"))</text>
+                                                            }
+                                                        </MudSelectItem>
                                                     }
                                                 </MudSelect>
                                             }
                                             else
                                             {
-                                                <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
-                                                @if (option.Price is not null)
-                                                {
-                                                    <text> (+ @option.Price?.ToString("c"))</text>
-                                                }
+                                                <div class="my-4">
+                                                    <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
+                                                    @if (option.Price is not null)
+                                                    {
+                                                        <text> (+ @option.Price?.ToString("c"))</text>
+                                                    }
+                                                </div>
                                             }
 
                                         </div>
@@ -216,6 +227,7 @@ else
     {
         var selectedAttributes = product.AttributeGroups
            .SelectMany(x => x.Attributes)
+           .Where(x => x.ForVariant)
            .Where(x => x.SelectedValue is not null)
            .ToDictionary(x => x.Id, x => x.SelectedValue!.Id);
 
@@ -248,7 +260,7 @@ else
 
         var attributes = await ProductsClient.GetProductAttributesAsync(ProductId);
         attributeGroups = attributes
-            .OrderBy(x => x.Group)
+            .OrderBy(x => x.Group?.Id)
             .GroupBy(x => x.Group?.Name);
 
         var options2 = await ProductsClient.GetProductOptionsAsync(ProductId);
@@ -283,7 +295,8 @@ else
                     AttributeVM attributeVm = new()
                     {
                         Id = attribute.Id,
-                        Name = attribute.Name
+                        Name = attribute.Name,
+                        ForVariant = attribute.ForVariant
                     };
 
                     groupVm.Attributes.Add(attributeVm);
@@ -415,6 +428,8 @@ else
         public AttributeGroupVM Group { get; set; }
 
         public List<AttributeValueVM> Values { get; set; } = new List<AttributeValueVM>();
+
+        public bool ForVariant { get; set; }
 
         public AttributeValueVM? SelectedValue { get; set; }
     }

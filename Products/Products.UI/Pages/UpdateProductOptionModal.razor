@@ -23,11 +23,14 @@
                 </MudSelect>
             }
 
-            <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
+            @if (!Product.HasVariants)
+            {
+                <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
-            <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+                <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
 
-            <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
+                <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
+            }
 
             @if (HasMultipleChoices)
             {

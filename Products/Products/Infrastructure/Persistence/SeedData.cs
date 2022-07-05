@@ -71,7 +71,8 @@ public class SeedData
         var option = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
-            Name = "Size"
+            Name = "Size",
+            ForVariant = true
         };
 
         product.Attributes.Add(option);
@@ -168,7 +169,8 @@ public class SeedData
         var option = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
-            Name = "Size"
+            Name = "Size",
+            ForVariant = true
         };
 
         product.Attributes.Add(option);
@@ -202,7 +204,8 @@ public class SeedData
         var option2 = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
-            Name = "Color"
+            Name = "Color",
+            ForVariant = true
         };
 
         product.Attributes.Add(option2);

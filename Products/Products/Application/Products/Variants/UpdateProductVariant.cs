@@ -37,7 +37,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
                 .Include(pv => pv.Variants)
                     .ThenInclude(o => o.Values)
                     .ThenInclude(o => o.Value)
-                .Include(pv => pv.Options)
+                .Include(pv => pv.Attributes)
                     .ThenInclude(o => o.Values)
                 .FirstAsync(x => x.Id == request.ProductId);
 

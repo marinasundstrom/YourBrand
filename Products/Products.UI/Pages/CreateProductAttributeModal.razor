@@ -10,12 +10,13 @@
 
             <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
-            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined"
+                @bind-Value="Description" For="() => Description" />
 
             @if (Groups is not null)
             {
-                <MudSelect T="AttributeGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
-                           For="() => Group">
+                <MudSelect T="AttributeGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group"
+                ToStringFunc="x => x?.Name" For="() => Group">
                     @foreach (var item in Groups)
                     {
                         <MudSelectItem Value="@item" />
@@ -23,42 +24,47 @@
                 </MudSelect>
             }
 
-            @if (HasMultipleChoices)
+            @if(Product.HasVariants) 
             {
-                <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
-
-                <div class="form-group mb-2">
-                    <MudButton Color="Color.Primary" OnClick="AddValue" StartIcon="@Icons.Material.Filled.Add">Add value</MudButton>
-
-                    @if (Values.Any())
-                    {
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>SKU</th>
-                                    <th>Price</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var value in Values)
-                                {
-                                    <tr>
-                                        <td>
-                                            <MudTextField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="value.Name" For="() => value.Name" />
-                                        </td>
-
-                                        <td>
-                                            <MudIconButton Class="mb-2" Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteValue(value)" />
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                </div>
+                <MudCheckBox Label="For variant" Class="mb-6" @bind-Checked="ForVariant" For="() => ForVariant" />
             }
+
+            <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
+
+            <div class="form-group mb-2">
+                <MudButton Color="Color.Primary" OnClick="AddValue" StartIcon="@Icons.Material.Filled.Add">Add value
+                </MudButton>
+
+                @if (Values.Any())
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>SKU</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var value in Values)
+                            {
+                                <tr>
+                                    <td>
+                                        <MudTextField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                    @bind-Value="value.Name" For="() => value.Name" />
+                                    </td>
+
+                                    <td>
+                                        <MudIconButton Class="mb-2" Icon="@Icons.Material.Filled.Delete"
+                                    OnClick="async () => await DeleteValue(value)" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
 
         </DialogContent>
         <DialogActions>
@@ -80,24 +86,23 @@
     [Required]
     public string Name { get; set; }
 
-    public bool HasMultipleChoices { get; set; }
-
     public string Description { get; set; }
 
     public AttributeGroupDto? Group { get; set; }
 
-    public string? SKU { get; set; }
-
-    public decimal? Price { get; set; }
+    public bool ForVariant { get; set; }
 
     [ValidateComplexType]
     public List<AttributeValueVM> Values { get; set; } = new List<AttributeValueVM>();
 
     protected override async Task OnInitializedAsync()
     {
-        Groups = (await ProductsClient.GetAttributeGroupsAsync(ProductId)).Prepend(new AttributeGroupDto { Id = null, Name = "None" }).ToList();
-
-        HasMultipleChoices = Product.HasVariants;
+        Groups = (await ProductsClient.GetAttributeGroupsAsync(ProductId)).Prepend(new AttributeGroupDto
+        {
+            Id = null,
+            Name =
+        "None"
+        }).ToList();
     }
 
     void AddValue()
@@ -107,7 +112,8 @@
 
     async Task DeleteValue(AttributeValueVM vm)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the value?", "This cannot be undone.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the value?", "This cannot be undone.", yesText: "Yes",
+        noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -122,11 +128,12 @@
         {
             Name = Name,
             Description = Description,
+            ForVariant = ForVariant,
             GroupId = Group?.Id,
-            Values = HasMultipleChoices ? Values.Select(x => new ApiCreateProductAttributeValue()
+            Values = Values.Select(x => new ApiCreateProductAttributeValue()
             {
                 Name = x.Name
-            }).ToList() : Array.Empty<ApiCreateProductAttributeValue>().ToList()
+            }).ToList()
         };
 
         var result = await ProductsClient.CreateProductAttributeAsync(ProductId, data);
@@ -139,4 +146,3 @@
         public string Name { get; set; }
     }
 }
-

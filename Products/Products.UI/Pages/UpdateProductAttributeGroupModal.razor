@@ -1,0 +1,52 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public string ProductId { get; set; }
+
+    [Parameter] public AttributeGroupDto AttributeGroup { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Name = AttributeGroup.Name;
+        Description = AttributeGroup.Description;
+    }
+
+    async Task OnSubmit()
+    {
+        ApiUpdateProductAttributeGroup data = new()
+        {
+            Name = Name,
+            Description = Description
+        };
+        var result = await ProductsClient.UpdateAttributeGroupAsync(ProductId, AttributeGroup.Id, data);
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+}
+

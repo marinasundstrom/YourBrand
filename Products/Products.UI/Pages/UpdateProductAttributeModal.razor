@@ -23,8 +23,11 @@
                 </MudSelect>
             }
 
-            @if (HasMultipleChoices)
+            @if(Product.HasVariants) 
             {
+                <MudCheckBox Label="For variant" Class="mb-6" @bind-Checked="ForVariant" For="() => ForVariant" />
+            }
+
                 <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
 
                 <div class="form-group mb-2">
@@ -57,7 +60,6 @@
                         </table>
                     }
                 </div>
-            }
 
         </DialogContent>
         <DialogActions>
@@ -87,6 +89,8 @@
 
     public AttributeGroupDto? Group { get; set; }
 
+    public bool ForVariant { get; set; }
+
     [ValidateComplexType]
     public List<AttributeValueVM> Values { get; set; } = new List<AttributeValueVM>();
 
@@ -97,6 +101,7 @@
         Name = Attribute.Name;
         Description = Attribute.Description;
         Group = Groups.FirstOrDefault(x => x?.Id == Attribute.Group?.Id);
+        ForVariant = Attribute.ForVariant;
 
         foreach (var value in Attribute.Values)
         {
@@ -112,7 +117,6 @@
     {
         Values.Add(new AttributeValueVM());
     }
-
 
     async Task DeleteValue(AttributeValueVM vm)
     {
@@ -137,6 +141,7 @@
             Name = Name,
             Description = Description,
             GroupId = Group?.Id,
+            ForVariant = ForVariant,
             Values = Values.Select(x => new ApiUpdateProductAttributeValue()
             {
                 Id = x.Id,

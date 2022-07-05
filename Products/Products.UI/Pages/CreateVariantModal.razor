@@ -44,7 +44,7 @@
                         <tbody>
                             @if (Attributes is not null)
                             {
-                                @foreach (var attribute in Attributes)
+                                @foreach (var attribute in Attributes.Where(x => x.ForVariant))
                                 {
                                     <tr>
                                         <td>@(attribute.Name)</td>
@@ -106,6 +106,7 @@
             {
                 Id = attribute.Id,
                 Name = attribute.Name,
+                ForVariant = attribute.ForVariant
             };
 
             Attributes.Add(vm);
@@ -140,7 +141,7 @@
             var attributeData = new ApiCreateProductVariantOption
             {
                 OptionId = attribute.Id,
-                ValueId = attribute.SelectedValue.Id,
+                ValueId = attribute.SelectedValue.Id
             };
 
             data.Values.Add(attributeData);
@@ -171,6 +172,8 @@
         public string Name { get; set; }
 
         public AttributeValueDto SelectedValue { get; set; }
+
+        public bool ForVariant { get; set; }
 
         public List<AttributeValueDto> Values { get; set; } = new List<AttributeValueDto>();
     }

@@ -1828,6 +1828,7 @@
       "required": [
         "id",
         "name",
+        "forVariant",
         "values"
       ],
       "properties": {
@@ -1842,6 +1843,9 @@
         },
         "group": {
           "$ref": "#/definitions/AttributeGroupDto"
+        },
+        "forVariant": {
+          "type": "boolean"
         },
         "values": {
           "type": "array",
@@ -2006,6 +2010,7 @@
       "type": "object",
       "required": [
         "name",
+        "forVariant",
         "values"
       ],
       "properties": {
@@ -2014,6 +2019,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "forVariant": {
+          "type": "boolean"
         },
         "groupId": {
           "type": "string"
@@ -2041,6 +2049,7 @@
       "type": "object",
       "required": [
         "name",
+        "forVariant",
         "values"
       ],
       "properties": {
@@ -2049,6 +2058,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "forVariant": {
+          "type": "boolean"
         },
         "groupId": {
           "type": "string"
