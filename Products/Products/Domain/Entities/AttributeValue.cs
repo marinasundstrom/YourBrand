@@ -10,7 +10,5 @@ public class AttributeValue
 
     public string Name { get; set; } = null!;
 
-    public decimal Price { get; set; }
-
     public List<VariantValue> VariantValues { get; } = new List<VariantValue>();
 }

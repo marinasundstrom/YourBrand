@@ -28,6 +28,8 @@ public class Product
 
     public List<ProductAttribute> ProductAttributes { get; } = new List<ProductAttribute>();
 
+    public List<AttributeGroup> AttributeGroups { get; } = new List<AttributeGroup>();
+
     public List<ProductVariant> Variants { get; } = new List<ProductVariant>();
 
     public List<Option> Options { get; } = new List<Option>();

@@ -2,15 +2,15 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Products.Application.Options;
+using YourBrand.Products.Application.Attributes;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 namespace YourBrand.Products.Application.Products.Variants;
 
-public record GetAvailableOptionValues(string ProductId, string OptionId, IDictionary<string, string?> SelectedOptions) : IRequest<IEnumerable<OptionValueDto>>
+public record GetAvailableAttributeValues(string ProductId, string AttributeId, IDictionary<string, string?> SelectedAttributes) : IRequest<IEnumerable<AttributeValueDto>>
 {
-    public class Handler : IRequestHandler<GetAvailableOptionValues, IEnumerable<OptionValueDto>>
+    public class Handler : IRequestHandler<GetAvailableAttributeValues, IEnumerable<AttributeValueDto>>
     {
         private readonly IProductsContext _context;
 
@@ -19,7 +19,7 @@ public record GetAvailableOptionValues(string ProductId, string OptionId, IDicti
             _context = context;
         }
 
-        public async Task<IEnumerable<OptionValueDto>> Handle(GetAvailableOptionValues request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<AttributeValueDto>> Handle(GetAvailableAttributeValues request, CancellationToken cancellationToken)
         {
             IEnumerable<ProductVariant> variants = await _context.ProductVariants
                 .AsSplitQuery()
@@ -32,21 +32,21 @@ public record GetAvailableOptionValues(string ProductId, string OptionId, IDicti
                 .Where(pv => pv.Product.Id == request.ProductId)
                 .ToArrayAsync();
 
-            foreach (var selectedOption in request.SelectedOptions)
+            foreach (var selectedAttribute in request.SelectedAttributes)
             {
-                if (selectedOption.Value is null)
+                if (selectedAttribute.Value is null)
                     continue;
 
-                variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
+                variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedAttribute.Key && vv.Value.Id == selectedAttribute.Value));
             }
 
             var values = variants
                 .SelectMany(x => x.Values)
                 .DistinctBy(x => x.Attribute)
-                .Where(x => x.Attribute.Id == request.OptionId)
+                .Where(x => x.Attribute.Id == request.AttributeId)
                 .Select(x => x.Value);
 
-            return values.Select(x => new OptionValueDto(x.Id, x.Name, x.Name, x.Price, x.Seq));
+            return values.Select(x => new AttributeValueDto(x.Id, x.Name, x.Seq));
         }
     }
 }
