@@ -1196,7 +1196,7 @@
             "x-nullable": true
           },
           {
-            "name": "variant",
+            "name": "data",
             "in": "body",
             "required": true,
             "schema": {

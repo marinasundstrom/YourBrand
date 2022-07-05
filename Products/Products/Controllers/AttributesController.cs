@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+
+using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Products.Application;
 using YourBrand.Products.Application.Attributes;
@@ -10,17 +12,17 @@ namespace YourBrand.Products.Controllers;
 [Route("api/[controller]")]
 public class AttributesController : Controller
 {
-    private readonly Api api;
+    private readonly IMediator _mediator;
 
-    public AttributesController(Api api)
+    public AttributesController(IMediator mediator)
     {
-        this.api = api;
+        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<ActionResult<AttributeDto>> GetAttributes()
     {
-        return Ok(await api.GetAttributes());
+        return Ok( await _mediator.Send(new GetAttributes()));
     }
 
     /*
@@ -34,6 +36,6 @@ public class AttributesController : Controller
     [HttpGet("{attributeId}/Values")]
     public async Task<ActionResult<OptionValueDto>> GetAttributesValues(string attributeId)
     {
-        return Ok(await api.GetAttributeValues(attributeId));
+        return Ok( await _mediator.Send(new GetAttributeValues(attributeId)));
     }
 }

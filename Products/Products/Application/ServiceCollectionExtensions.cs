@@ -10,7 +10,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddMediatR(typeof(ServiceCollectionExtensions));
 
-        services.AddScoped<Api>();
         services.AddScoped<ProductVariantsService>();
 
         return services;
