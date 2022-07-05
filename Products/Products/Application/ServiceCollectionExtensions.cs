@@ -1,5 +1,7 @@
 using MediatR;
 
+using YourBrand.Products.Application.Products.Variants;
+
 namespace YourBrand.Products.Application;
 
 public static class ServiceCollectionExtensions
@@ -9,6 +11,7 @@ public static class ServiceCollectionExtensions
         services.AddMediatR(typeof(ServiceCollectionExtensions));
 
         services.AddScoped<Api>();
+        services.AddScoped<ProductVariantsService>();
 
         return services;
     }

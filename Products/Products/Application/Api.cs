@@ -4,894 +4,214 @@ using System;
 
 using Azure.Storage.Blobs;
 
+using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Products.Application.Attributes;
+using YourBrand.Products.Application.Options;
+using YourBrand.Products.Application.Products;
+using YourBrand.Products.Application.Products.Attributes;
+using YourBrand.Products.Application.Products.Groups;
+using YourBrand.Products.Application.Products.Options;
+using YourBrand.Products.Application.Products.Options.Groups;
+using YourBrand.Products.Application.Products.Variants;
 using YourBrand.Products.Domain;
 using YourBrand.Products.Domain.Entities;
 
 public class Api
 {
-    private readonly IProductsContext context;
-    private readonly BlobServiceClient blobServiceClient;
+    private readonly IMediator _mediator;
 
-    public Api(IProductsContext context, BlobServiceClient blobServiceClient)
+    public Api(IMediator mediator) 
     {
-        this.context = context;
-        this.blobServiceClient = blobServiceClient;
+        _mediator = mediator;
     }
 
-    public async Task<ApiProductsResult> GetProducts(bool includeUnlisted = false, string? groupId = null, int page = 10, int pageSize = 10)
+    public async Task<ApiProductsResult> GetProducts(bool includeUnlisted = false, string? groupId = null, int page = 10, int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var query = context.Products
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Group)
-            .AsQueryable();
-
-        if (!includeUnlisted)
-        {
-            query = query.Where(x => x.Visibility == Domain.Enums.ProductVisibility.Listed);
-        }
-
-        if (groupId is not null)
-        {
-            query = query.Where(x => x.Group.Id == groupId);
-        }
-
-        var totalCount = await query.CountAsync();
-
-        var products = await query
-            .Skip(page * pageSize)
-            .Take(pageSize).AsQueryable()
-            .ToArrayAsync();
-
-        return new ApiProductsResult(products.Select(x => new ApiProduct(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiProductGroup(x.Group.Id, x.Group.Name, x.Group.Description, x.Group?.Parent?.Id),
-            x.SKU, GetImageUrl(x.Image), x.Price, x.HasVariants, x.Visibility == Domain.Enums.ProductVisibility.Listed ? ProductVisibility.Listed : ProductVisibility.Unlisted)),
-            totalCount);
+        return await _mediator.Send(new GetProducts(includeUnlisted, groupId, page, pageSize), cancellationToken);
     }
 
-    public async Task<ApiProduct?> GetProduct(string productId)
+    public async Task<ApiProduct?> GetProduct(string productId, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Group)
-            .FirstOrDefaultAsync(p => p.Id == productId);
-
-        if (product == null) return null;
-
-        return new ApiProduct(product.Id, product.Name, product.Description, product.Group == null ? null : new ApiProductGroup(product.Group.Id, product.Group.Name, product.Group.Description, product.Group?.Parent?.Id),
-            product.SKU, GetImageUrl(product.Image), product.Price, product.HasVariants, product.Visibility == Domain.Enums.ProductVisibility.Listed ? ProductVisibility.Listed : ProductVisibility.Unlisted);
+        return await _mediator.Send(new GetProduct(productId), cancellationToken);
     }
 
-    public async Task<string?> UploadProductImage(string productId, string fileName, Stream strem)
+    public async Task<string?> UploadProductImage(string productId, string fileName, Stream stream, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-                   .FirstAsync(x => x.Id == productId);
-
-        var blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
-
-#if DEBUG
-        await blobContainerClient.CreateIfNotExistsAsync();
-#endif
-
-        var response = await blobContainerClient.UploadBlobAsync(fileName, strem);
-
-        if (product.Image is not null)
-        {
-            await blobContainerClient.DeleteBlobAsync(product.Image);
-        }
-        
-        product.Image = fileName;
-
-        await context.SaveChangesAsync();
-
-        return GetImageUrl(product.Image);
+        return await _mediator.Send(new UploadProductImage(productId, fileName, stream), cancellationToken); 
     }
 
-    public async Task<string?> UploadProductVariantImage(string productId, string variantId, string fileName, Stream strem)
+    public async Task<string?> UploadProductVariantImage(string productId, string variantId, string fileName, Stream stream, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .Include(x => x.Variants)
-            .FirstAsync(x => x.Id == productId);
-
-        var variant = await context.ProductVariants
-            .FirstAsync(x => x.Id == variantId);
-
-        var blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
-
-#if DEBUG
-        await blobContainerClient.CreateIfNotExistsAsync();
-#endif
-
-        var response = await blobContainerClient.UploadBlobAsync(fileName, strem);
-
-        if (variant.Image is not null)
-        {
-            await blobContainerClient.DeleteBlobAsync(variant.Image);
-        }
-
-        variant.Image = fileName;
-
-        await context.SaveChangesAsync();
-
-        return GetImageUrl(variant.Image);
+        return await _mediator.Send(new UploadProductVariantImage(productId, variantId, fileName, stream), cancellationToken); 
     }
 
-    public async Task<ApiProduct?> CreateProduct(ApiCreateProduct data)
+    public async Task<ApiProduct?> CreateProduct(ApiCreateProduct data, CancellationToken cancellationToken)
     {
-        var group = await context.ProductGroups
-            .FirstOrDefaultAsync(x => x.Id == data.GroupId);
-
-        var product = new Product()
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = data.Name,
-            Description = data.Description,
-            Group = group,
-            SKU = data.SKU,
-            Price = data.Price,
-            HasVariants = data.HasVariants
-        };
-
-        if (data.Visibility == null)
-        {
-            product.Visibility = Domain.Enums.ProductVisibility.Unlisted;
-        }
-        else
-        {
-            product.Visibility = data.Visibility == ProductVisibility.Listed ? Domain.Enums.ProductVisibility.Listed : Domain.Enums.ProductVisibility.Unlisted;
-        }
-
-        context.Products.Add(product);
-
-        await context.SaveChangesAsync();
-
-        return new ApiProduct(product.Id, product.Name, product.Description, product.Group == null ? null : new ApiProductGroup(product.Group.Id, product.Group.Name, product.Group.Description, product.Group?.Parent?.Id),
-            product.SKU, product.Image, product.Price, product.HasVariants, product.Visibility == Domain.Enums.ProductVisibility.Listed ? ProductVisibility.Listed : ProductVisibility.Unlisted);
+        return await _mediator.Send(new CreateProduct(data.Name, data.HasVariants, data.Description, data.GroupId, data.SKU, data.Price, data.Visibility), cancellationToken);
     }
 
-    public async Task UpdateProductDetails(string productId, ApiUpdateProductDetails data)
+    public async Task UpdateProductDetails(string productId, ApiUpdateProductDetails data, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .FirstAsync(x => x.Id == productId);
-
-        var group = await context.ProductGroups
-            .FirstOrDefaultAsync(x => x.Id == data.GroupId);
-
-        product.Name = data.Name;
-        product.Description = data.Description;
-        product.Group = group;
-        product.SKU = data.SKU;
-        product.Price = data.Price;
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new UpdateProductDetails(productId, data), cancellationToken);
     }
 
-    public async Task UpdateProductVisibility(string productId, ProductVisibility visibility)
+    public async Task UpdateProductVisibility(string productId, ProductVisibility visibility, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .FirstAsync(x => x.Id == productId);
-
-        product.Visibility = visibility == ProductVisibility.Listed ? Domain.Enums.ProductVisibility.Listed : Domain.Enums.ProductVisibility.Unlisted;
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new UpdateProductVisibility(productId, visibility), cancellationToken);
     }
 
-    public async Task<ApiOptionValue> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data)
+    public async Task<ApiOptionValue> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .FirstAsync(x => x.Id == productId);
-
-        var option = await context.Options
-            .FirstAsync(x => x.Id == optionId);
-
-        var value = new OptionValue
-        {
-            Name = data.Name,
-            SKU = data.SKU,
-            Price = data.Price
-        };
-
-        option.Values.Add(value);
-
-        await context.SaveChangesAsync();
-
-        return new ApiOptionValue(value.Id, value.Name, value.SKU, value.Price, value.Seq);
+        return await _mediator.Send(new CreateProductOptionValue(productId, optionId, data), cancellationToken);
     }
 
-    public async Task<ApiOption> CreateProductOption(string productId, ApiCreateProductOption data)
+    public async Task<ApiOption> CreateProductOption(string productId, ApiCreateProductOption data, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .FirstAsync(x => x.Id == productId);
-
-        var group = await context.OptionGroups
-            .FirstOrDefaultAsync(x => x.Id == data.GroupId);
-
-        Option option = new()
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = data.Name,
-            Description = data.Description,
-            SKU = data.SKU,
-            Group = group,
-            Price = data.Price,
-            OptionType = data.OptionType == OptionType.Single ? Domain.Enums.OptionType.Single : Domain.Enums.OptionType.Multiple
-        };
-
-        foreach (var v in data.Values)
-        {
-            var value = new OptionValue
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = v.Name,
-                SKU = v.SKU,
-                Price = v.Price
-            };
-
-            option.Values.Add(value);
-        }
-
-        product.Options.Add(option);
-
-        await context.SaveChangesAsync();
-
-        return new ApiOption(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new ApiOptionGroup(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
-            option.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-            option.DefaultValue == null ? null : new ApiOptionValue(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
+        return await _mediator.Send(new CreateProductOption(productId, data), cancellationToken);
     }
 
     public async Task DeleteProductOption(string productId, string optionId)
     {
-        var product = await context.Products
-            .Include(x => x.Options)
-            .FirstAsync(x => x.Id == productId);
-
-        var option = product.Options
-            .First(x => x.Id == optionId);
-
-        product.Options.Remove(option);
-        context.Options.Remove(option);
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new DeleteProductOption(productId, optionId));
     }
 
-    public async Task<ApiOption> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data)
+    public async Task<ApiOption> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .AsNoTracking()
-            .FirstAsync(x => x.Id == productId);
-
-        var option = await context.Options
-            .Include(x => x.Values)
-            .Include(x => x.Group)
-            .FirstAsync(x => x.Id == optionId);
-
-        var group = await context.OptionGroups
-            .FirstOrDefaultAsync(x => x.Id == data.GroupId);
-
-        option.Name = data.Name;
-        option.Description = data.Description;
-        option.SKU = data.SKU;
-        option.Group = group;
-        option.Price = data.Price;
-        option.OptionType = data.OptionType == OptionType.Single ? Domain.Enums.OptionType.Single : Domain.Enums.OptionType.Multiple;
-
-        foreach (var v in data.Values)
-        {
-            if (v.Id == null)
-            {
-                var value = new OptionValue
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = v.Name,
-                    SKU = v.SKU,
-                    Price = v.Price
-                };
-
-                option.Values.Add(value);
-                context.OptionValues.Add(value);
-            }
-            else
-            {
-                var value = option.Values.First(x => x.Id == v.Id);
-
-                value.Name = v.Name;
-                value.SKU = v.SKU;
-                value.Price = v.Price;
-            }
-        }
-
-        foreach (var v in option.Values.ToList())
-        {
-            if (context.Entry(v).State == EntityState.Added)
-                continue;
-
-            var value = data.Values.FirstOrDefault(x => x.Id == v.Id);
-
-            if (value is null)
-            {
-                option.Values.Remove(v);
-            }
-        }
-
-        await context.SaveChangesAsync();
-
-        return new ApiOption(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new ApiOptionGroup(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
-            option.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-            option.DefaultValue == null ? null : new ApiOptionValue(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
+        return await _mediator.Send(new UpdateProductOption(productId, optionId, data), cancellationToken);
     }
 
-    public async Task<IEnumerable<ApiOption>> GetProductOptions(string productId)
+    public async Task<IEnumerable<ApiOption>> GetProductOptions(string productId, CancellationToken cancellationToken)
     {
-        var options = await context.Options
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Group)
-            .Include(pv => pv.Values)
-            .Include(o => o.DefaultValue)
-            .Where(p => p.Products.Any(x => x.Id == productId))
-            .ToArrayAsync();
-
-        return options.Select(x => new ApiOption(x.Id, x.Name, x.Description, x.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, x.Group == null ? null : new ApiOptionGroup(x.Group.Id, x.Group.Name, x.Group.Description, x.Group.Seq, x.Group.Min, x.Group.Max), x.SKU, x.Price, x.IsSelected,
-            x.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-            x.DefaultValue == null ? null : new ApiOptionValue(x.DefaultValue.Id, x.DefaultValue.Name, x.DefaultValue.SKU, x.DefaultValue.Price, x.DefaultValue.Seq)));
+        return await _mediator.Send(new GetProductOptions(productId), cancellationToken);
     }
 
     public async Task<IEnumerable<ApiAttribute>> GetProductAttributes(string productId)
     {
-        var attributes = await context.Attributes
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Group)
-            .Include(pv => pv.Values)
-            .Where(p => p.Products.Any(x => x.Id == productId))
-            .ToArrayAsync();
-
-
-        return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
-             x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
+        return await _mediator.Send(new GetProductAttributes(productId));
     }
 
-
-    public async Task DeleteProductOptionValue(string productId, string optionId, string valueId)
+    public async Task DeleteProductOptionValue(string productId, string optionId, string valueId, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-            .AsSplitQuery()
-            .Include(pv => pv.Options)
-            .ThenInclude(pv => pv.Values)
-            .FirstAsync(p => p.Id == productId);
-
-        var option = product.Options.First(o => o.Id == optionId);
-
-        var value = option.Values.First(o => o.Id == valueId);
-
-        option.Values.Remove(value);
-        context.OptionValues.Remove(value);
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new DeleteProductOptionValue(productId, optionId, valueId), cancellationToken);
     }
 
     public async Task<IEnumerable<ApiOption>> GetOptions(bool includeChoices)
     {
-        var query = context.Options
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(o => o.Group)
-            .Include(o => o.Values)
-            .Include(o => o.DefaultValue)
-            .AsQueryable();
-
-        /*
-        if(includeChoices)
-        {
-            query = query.Where(x => !x.Values.Any());
-        }
-        */
-
-        var options = await query.ToArrayAsync();
-
-        return options.Select(x => new ApiOption(x.Id, x.Name, x.Description, x.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, x.Group == null ? null : new ApiOptionGroup(x.Group.Id, x.Group.Name, x.Group.Description, x.Group.Seq, x.Group.Min, x.Group.Max), x.SKU, x.Price, x.IsSelected,
-            x.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-            x.DefaultValue == null ? null : new ApiOptionValue(x.DefaultValue.Id, x.DefaultValue.Name, x.DefaultValue.SKU, x.DefaultValue.Price, x.DefaultValue.Seq)));
+        return await _mediator.Send(new GetOptions(includeChoices));
     }
 
     public async Task<IEnumerable<ApiAttribute>> GetAttributes()
     {
-        var query = context.Attributes
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(o => o.Group)
-            .Include(o => o.Values)
-            .AsQueryable();
-
-        var attributes = await query.ToArrayAsync();
-
-        return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
-             x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
+        return await _mediator.Send(new GetAttributes());
     }
 
-    public async Task<IEnumerable<ApiOption>> GetOption(string optionId)
+    public async Task<ApiOption> GetOption(string optionId, CancellationToken cancellationToken)
     {
-        var options = await context.Options
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Group)
-            .Include(pv => pv.Values)
-            .Where(o => o.Id == optionId)
-            .ToArrayAsync();
-
-        return options.Select(x => new ApiOption(x.Id, x.Name, x.Description, x.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, x.Group == null ? null : new ApiOptionGroup(x.Group.Id, x.Group.Name, x.Group.Description, x.Group.Seq, x.Group.Min, x.Group.Max), x.SKU, x.Price, x.IsSelected,
-            x.Values.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
-            x.DefaultValue == null ? null : new ApiOptionValue(x.DefaultValue.Id, x.DefaultValue.Name, x.DefaultValue.SKU, x.DefaultValue.Price, x.DefaultValue.Seq)));
+        return await _mediator.Send(new GetOption(optionId), cancellationToken);
     }
 
-    public async Task<IEnumerable<ApiAttribute>> GetAttribute(string attributeId)
+    public async Task<ApiAttribute> GetAttribute(string attributeId)
     {
-        var attributes = await context.Attributes
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Group)
-            .Include(pv => pv.Values)
-            .Where(o => o.Id == attributeId)
-            .ToArrayAsync();
-
-        return attributes.Select(x => new ApiAttribute(x.Id, x.Name, x.Description, x.Group == null ? null : new ApiAttributeGroup(x.Group.Id, x.Group.Name, x.Group.Description),
-             x.Values.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq))));
+        return await _mediator.Send(new GetAttribute(attributeId));
     }
 
     public async Task<IEnumerable<ApiProductGroup>> GetProductGroups(bool includeWithUnlistedProducts = false)
     {
-        var query = context.ProductGroups
-                .Include(x => x.Products)
-                .AsQueryable();
-
-        if (!includeWithUnlistedProducts)
-        {
-            query = query.Where(x => x.Products.Any(z => z.Visibility == Domain.Enums.ProductVisibility.Listed));
-        }
-
-        var productGroups = await query.ToListAsync();
-
-        return productGroups.Select(group => new ApiProductGroup(group.Id, group.Name, group.Description, group?.Parent?.Id));
+        return await _mediator.Send(new GetProductGroups(includeWithUnlistedProducts));
     }
 
 
     public async Task<ApiProductGroup?> CreateProductGroup(ApiCreateProductGroup data)
     {
-        var parentGroup = await context.ProductGroups
-            .FirstOrDefaultAsync(x => x.Id == data.ParentGroupId);
-
-        var productGroup = new ProductGroup()
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = data.Name,
-            Description = data.Description,
-            Parent = parentGroup
-        };
-
-        context.ProductGroups.Add(productGroup);
-
-        await context.SaveChangesAsync();
-
-        return new ApiProductGroup(productGroup.Id, productGroup.Name, productGroup.Description, productGroup?.Parent?.Id);
+        return await _mediator.Send(new CreateProductGroup(data.Name, data));
     }
 
     public async Task<ApiProductGroup?> UpdateProductGroup(string productGroupId, ApiUpdateProductGroup data)
     {
-        var productGroup = await context.ProductGroups
-                    .FirstAsync(x => x.Id == productGroupId);
-
-        var parentGroup = await context.ProductGroups
-            .FirstOrDefaultAsync(x => x.Id == data.ParentGroupId);
-
-        productGroup.Name = data.Name;
-        productGroup.Description = data.Description;
-        productGroup.Parent = parentGroup;
-
-        await context.SaveChangesAsync();
-
-        return new ApiProductGroup(productGroup.Id, productGroup.Name, productGroup.Description, productGroup?.Parent?.Id);
+        return await _mediator.Send(new UpdateProductGroup(productGroupId, data));
     }
 
     public async Task DeleteProductGroup(string productGroupId)
     {
-        var productGroup = await context.ProductGroups
-            .Include(x => x.Products)
-            .FirstAsync(x => x.Id == productGroupId);
-
-        productGroup.Products.Clear();
-
-        context.ProductGroups.Remove(productGroup);
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new DeleteProductGroup(productGroupId));
     }
 
     public async Task<IEnumerable<ApiOptionGroup>> GetOptionGroups(string productId)
     {
-        var groups = await context.OptionGroups
-            .AsTracking()
-            .Include(x => x.Product)
-            .Where(x => x.Product!.Id == productId)
-            .ToListAsync();
-
-        return groups.Select(group => new ApiOptionGroup(group.Id, group.Name, group.Description, group.Seq, group.Min, group.Max));
+        return await _mediator.Send(new GetProductOptionGroups(productId));
     }
-
 
     public async Task<ApiOptionGroup?> CreateOptionGroup(string productId, ApiCreateProductOptionGroup data)
     {
-        var product = await context.Products
-            .FirstAsync(x => x.Id == productId);
-
-        var group = new OptionGroup()
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = data.Name,
-            Description = data.Description,
-            Min = data.Min,
-            Max = data.Max
-        };
-
-        product.OptionGroups.Add(group);
-
-        await context.SaveChangesAsync();
-
-        return new ApiOptionGroup(group.Id, group.Name, group.Description, group.Seq, group.Min, group.Max);
+        return await _mediator.Send(new CreateProductOptionGroup(productId, data));
     }
 
     public async Task<ApiOptionGroup?> UpdateOptionGroup(string productId, string optionGroupId, ApiUpdateProductOptionGroup data)
     {
-        var product = await context.Products
-            .Include(x => x.OptionGroups)
-            .FirstAsync(x => x.Id == productId);
-
-        var optionGroup = product.OptionGroups
-            .First(x => x.Id == optionGroupId);
-
-        optionGroup.Name = data.Name;
-        optionGroup.Description = data.Description;
-        optionGroup.Min = data.Min;
-        optionGroup.Max = data.Max;
-
-        await context.SaveChangesAsync();
-
-        return new ApiOptionGroup(optionGroup.Id, optionGroup.Name, optionGroup.Description, optionGroup.Seq, optionGroup.Min, optionGroup.Max);
+        return await _mediator.Send(new UpdateProductOptionGroup(productId, optionGroupId, data));
     }
 
     public async Task DeleteOptionGroup(string productId, string optionGroupId)
     {
-        var product = await context.Products
-            .Include(x => x.OptionGroups)
-            .ThenInclude(x => x.Options)
-            .FirstAsync(x => x.Id == productId);
-
-        var optionGroup = product.OptionGroups
-            .First(x => x.Id == optionGroupId);
-
-        optionGroup.Options.Clear();
-
-        product.OptionGroups.Remove(optionGroup);
-        context.OptionGroups.Remove(optionGroup);
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new DeleteProductOptionGroup(productId, optionGroupId));
     }
 
     public async Task<ApiProductVariant> CreateVariant(string productId, ApiCreateProductVariant data)
     {
-        var match = await FindVariantCore(productId, null, data.Values.ToDictionary(x => x.OptionId, x => x.ValueId));
-
-        if (match is not null)
-        {
-            throw new VariantAlreadyExistsException("Variant with the same options already exists.");
-        }
-
-        var product = await context.Products
-            .AsSplitQuery()
-            .Include(pv => pv.Variants)
-                .ThenInclude(o => o.Values)
-                .ThenInclude(o => o.Attribute)
-            .Include(pv => pv.Variants)
-                .ThenInclude(o => o.Values)
-                .ThenInclude(o => o.Value)
-            .Include(pv => pv.Options)
-                .ThenInclude(o => o.Values)
-            .FirstAsync(x => x.Id == productId);
-
-        var variant = new ProductVariant()
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = data.Name,
-            Description = data.Description,
-            SKU = data.SKU,
-            Price = data.Price
-        };
-
-        foreach (var value in data.Values)
-        {
-            var option = product.Attributes.First(x => x.Id == value.OptionId);
-
-            var value2 = option.Values.First(x => x.Id == value.ValueId);
-
-            variant.Values.Add(new VariantValue()
-            {
-                Attribute = option,
-                Value = value2
-            });
-        }
-
-        product.Variants.Add(variant);
-
-        await context.SaveChangesAsync();
-
-        return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-            variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+        return await _mediator.Send(new CreateProductVariant(productId, data));
     }
 
-    private static string? GetImageUrl(string? name)
+    private static string?  GetImageUrl(string? name)
     {
         return name is null ? null : $"http://127.0.0.1:10000/devstoreaccount1/images/{name}";
     }
 
     public async Task DeleteVariant(string productId, string productVariantId)
     {
-        var product = await context.Products
-            .AsSplitQuery()
-            .Include(pv => pv.Variants)
-            .FirstAsync(x => x.Id == productId);
-
-        var variant = product.Variants.First(x => x.Id == productVariantId);
-
-        product.Variants.Remove(variant);
-        context.ProductVariants.Remove(variant);
-
-        await context.SaveChangesAsync();
+        await _mediator.Send(new DeleteProductVariant(productId, productVariantId));
     }
 
     public async Task<ApiProductVariant> UpdateVariant(string productId, string productVariantId, ApiUpdateProductVariant data)
     {
-        var match = await FindVariantCore(productId, productVariantId, data.Options.ToDictionary(x => x.OptionId, x => x.ValueId));
-
-        if (match is not null)
-        {
-            throw new VariantAlreadyExistsException("Variant with the same options already exists.");
-        }
-
-        var product = await context.Products
-            .AsSplitQuery()
-            .Include(pv => pv.Variants)
-                .ThenInclude(o => o.Values)
-                .ThenInclude(o => o.Attribute)
-            .Include(pv => pv.Variants)
-                .ThenInclude(o => o.Values)
-                .ThenInclude(o => o.Value)
-            .Include(pv => pv.Options)
-                .ThenInclude(o => o.Values)
-            .FirstAsync(x => x.Id == productId);
-
-        var variant = product.Variants.First(x => x.Id == productVariantId);
-
-        variant.Name = data.Name;
-        variant.Description = data.Description;
-        variant.SKU = data.SKU;
-        variant.Price = data.Price;
-
-        foreach (var v in data.Options)
-        {
-            if (v.Id == null)
-            {
-                var option = product.Attributes.First(x => x.Id == v.OptionId);
-
-                var value2 = option.Values.First(x => x.Id == v.ValueId);
-
-                variant.Values.Add(new VariantValue()
-                {
-                    Attribute = option,
-                    Value = value2
-                });
-            }
-            else
-            {
-                var option = product.Attributes.First(x => x.Id == v.OptionId);
-
-                var value2 = option.Values.First(x => x.Id == v.ValueId);
-
-                var value = variant.Values.First(x => x.Id == v.Id);
-
-                value.Attribute = option;
-                value.Value = value2;
-            }
-        }
-
-        foreach (var v in variant.Values.ToList())
-        {
-            if (context.Entry(v).State == EntityState.Added)
-                continue;
-
-            var value = data.Options.FirstOrDefault(x => x.Id == v.Id);
-
-            if (value is null)
-            {
-                variant.Values.Remove(v);
-            }
-        }
-
-        await context.SaveChangesAsync();
-
-        return new ApiProductVariant(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-            variant.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+        return await _mediator.Send(new UpdateProductVariant(productId, productVariantId, data));
     }
 
     public async Task<IEnumerable<ApiOptionValue>> GetOptionValues(string optionId)
     {
-        var options = await context.OptionValues
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Option)
-            .ThenInclude(pv => pv.Group)
-            .Where(p => p.Option.Id == optionId)
-            .ToArrayAsync();
-
-        return options.Select(x => new ApiOptionValue(x.Id, x.Name, x.SKU, x.Price, x.Seq));
+        return await _mediator.Send(new GetOptionValues(optionId));
     }
 
     public async Task<IEnumerable<ApiAttributeValue>> GetAttributeValues(string attributeId)
     {
-        var options = await context.AttributeValues
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Attribute)
-            .ThenInclude(pv => pv.Group)
-            .Where(p => p.Attribute.Id == attributeId)
-            .ToArrayAsync();
-
-        return options.Select(x => new ApiAttributeValue(x.Id, x.Name, x.Seq));
+        return await _mediator.Send(new GetAttributeValues(attributeId));
     }
 
     public async Task<IEnumerable<ApiProductVariant>> GetProductVariants(string productId)
     {
-        var variants = await context.ProductVariants
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Product)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Attribute)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Value)
-            .Where(pv => pv.Product.Id == productId)
-            .ToArrayAsync();
-
-        return variants.Select(x => new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-            x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name))));
+        return await _mediator.Send(new GetProductVariants(productId));
     }
 
-    public async Task<ApiProductVariant> GetProductVariant(string productId, string productVariantId)
+    public async Task<ApiProductVariant?> GetProductVariant(string productId, string productVariantId)
     {
-        var x = await context.ProductVariants
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Product)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Attribute)
-            //.ThenInclude(o => o.DefaultValue)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Value)
-            .FirstOrDefaultAsync(pv => pv.Product.Id == productId && pv.Id == productVariantId);
-
-        return new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-            x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
-
+        return await _mediator.Send(new GetProductVariant(productId, productVariantId));
     }
 
     public async Task<ApiProductVariant?> FindProductVariant(string productId, Dictionary<string, string?> selectedOptions)
     {
-        /*
-        IEnumerable<ProductVariant> variants = await context.ProductVariants
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Product)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Option)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Value)
-            .Where(pv => pv.Product.Id == productId)
-            .ToArrayAsync();
-
-        foreach (var selectedOption in selectedOptions)
-        {
-            if (selectedOption.Value is null)
-                continue;
-
-            variants = variants.Where(x => x.Values.Any(vv => vv.Option.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
-        }
-
-        var x = variants.SingleOrDefault((ProductVariant?)null);
-        */
-
-        var x = await FindVariantCore(productId, null, selectedOptions);
-
-        if (x is null) return null;
-
-        return new ApiProductVariant(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-            x.Values.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+        return await _mediator.Send(new FindProductVariant(productId, selectedOptions));
     }
 
     public async Task<IEnumerable<ApiProductVariantOption>> GetProductVariantOptions(string productId, string productVariantId)
     {
-        var variantOptionValues = await context.VariantValues
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Value)
-            .Include(pv => pv.Attribute)
-            //.ThenInclude(o => o.DefaultValue)
-            .Include(pv => pv.Variant)
-            .ThenInclude(p => p.Product)
-            .Where(pv => pv.Variant.Product.Id == productId && pv.Variant.Id == productVariantId)
-            .ToArrayAsync();
-
-        return variantOptionValues.Select(x => new ApiProductVariantOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name));
+        return await _mediator.Send(new GetProductVariantOptions(productId, productVariantId));
     }
 
     public async Task<IEnumerable<ApiOptionValue>> GetAvailableOptionValues(string productId, string optionId, IDictionary<string, string?> selectedOptions)
     {
-        IEnumerable<ProductVariant> variants = await context.ProductVariants
-          .AsSplitQuery()
-          .AsNoTracking()
-          .Include(pv => pv.Product)
-          .Include(pv => pv.Values)
-          .ThenInclude(pv => pv.Attribute)
-          .Include(pv => pv.Values)
-          .ThenInclude(pv => pv.Value)
-          .Where(pv => pv.Product.Id == productId)
-          .ToArrayAsync();
-
-        foreach (var selectedOption in selectedOptions)
-        {
-            if (selectedOption.Value is null)
-                continue;
-
-            variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
-        }
-
-        var values = variants
-            .SelectMany(x => x.Values)
-            .DistinctBy(x => x.Attribute)
-            .Where(x => x.Attribute.Id == optionId)
-            .Select(x => x.Value);
-
-        return values.Select(x => new ApiOptionValue(x.Id, x.Name, x.Name, x.Price, x.Seq));
-    }
-
-    private async Task<ProductVariant?> FindVariantCore(string productId, string? productVariantId, IDictionary<string, string?> selectedOptions)
-    {
-        var query = context.ProductVariants
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Include(pv => pv.Product)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Attribute)
-            .Include(pv => pv.Values)
-            .ThenInclude(pv => pv.Value)
-            .Where(pv => pv.Product.Id == productId)
-            .AsQueryable();
-
-        if (productVariantId is not null)
-        {
-            query = query.Where(pv => pv.Id != productVariantId);
-        }
-
-        IEnumerable<ProductVariant> variants = await query
-            .ToArrayAsync();
-
-        foreach (var selectedOption in selectedOptions)
-        {
-            if (selectedOption.Value is null)
-                continue;
-
-            variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
-        }
-
-        return variants.SingleOrDefault((ProductVariant?)null);
+        return await _mediator.Send(new GetAvailableOptionValues(productId, optionId, selectedOptions));
     }
 }
 

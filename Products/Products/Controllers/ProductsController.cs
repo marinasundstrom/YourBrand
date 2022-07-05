@@ -29,45 +29,45 @@ public class ProductsController : Controller
     }
 
     [HttpGet("{productId}")]
-    public async Task<ActionResult<ApiProduct>> GetProduct(string productId)
+    public async Task<ActionResult<ApiProduct>> GetProduct(string productId, CancellationToken cancellationToken)
     {
-        return Ok(await api.GetProduct(productId));
+        return Ok(await api.GetProduct(productId, cancellationToken));
     }
 
     [HttpPut("{productId}")]
-    public async Task<ActionResult> UpdateProductDetails(string productId, ApiUpdateProductDetails details)
+    public async Task<ActionResult> UpdateProductDetails(string productId, ApiUpdateProductDetails details, CancellationToken cancellationToken)
     {
-        await api.UpdateProductDetails(productId, details);
+        await api.UpdateProductDetails(productId, details, cancellationToken);
         return Ok();
     }
 
     [HttpPost("{productId}/UploadImage")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    public async Task<ActionResult> UploadProductImage([FromRoute] string productId, IFormFile file)
+    public async Task<ActionResult> UploadProductImage([FromRoute] string productId, IFormFile file, CancellationToken cancellationToken)
     {
-        var url = await api.UploadProductImage(productId, Guid.NewGuid().ToString().Replace("-", string.Empty), file.OpenReadStream());
+        var url = await api.UploadProductImage(productId, Guid.NewGuid().ToString().Replace("-", string.Empty), file.OpenReadStream(), cancellationToken);
         return Ok(url);
     }
 
     [HttpPost("{productId}/Variants/{variantId}/UploadImage")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    public async Task<ActionResult> UploadVariantImage([FromRoute] string productId, string variantId, IFormFile file)
+    public async Task<ActionResult> UploadVariantImage([FromRoute] string productId, string variantId, IFormFile file, CancellationToken cancellationToken)
     {
-        var url = await api.UploadProductVariantImage(productId, variantId, Guid.NewGuid().ToString().Replace("-", string.Empty), file.OpenReadStream());
+        var url = await api.UploadProductVariantImage(productId, variantId, Guid.NewGuid().ToString().Replace("-", string.Empty), file.OpenReadStream(), cancellationToken);
         return Ok(url);
     }
 
     [HttpGet("{productId}/Visibility")]
-    public async Task<ActionResult> UpdateProductVisibility(string productId, ProductVisibility visibility)
+    public async Task<ActionResult> UpdateProductVisibility(string productId, ProductVisibility visibility, CancellationToken cancellationToken)
     {
-        await api.UpdateProductVisibility(productId, visibility);
+        await api.UpdateProductVisibility(productId, visibility, cancellationToken);
         return Ok();
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiProduct>> CreateProduct(ApiCreateProduct data)
+    public async Task<ActionResult<ApiProduct>> CreateProduct(ApiCreateProduct data, CancellationToken cancellationToken)
     {
-        return Ok(await api.CreateProduct(data));
+        return Ok(await api.CreateProduct(data, cancellationToken));
     }
 
     [HttpGet("Groups")]
@@ -121,9 +121,9 @@ public class ProductsController : Controller
     }
 
     [HttpGet("{productId}/Options")]
-    public async Task<ActionResult<IEnumerable<ApiOption>>> GetProductOptions(string productId)
+    public async Task<ActionResult<IEnumerable<ApiOption>>> GetProductOptions(string productId, CancellationToken cancellationToken)
     {
-        return Ok(await api.GetProductOptions(productId));
+        return Ok(await api.GetProductOptions(productId, cancellationToken));
     }
 
     [HttpGet("{productId}/Attributes")]
@@ -133,15 +133,15 @@ public class ProductsController : Controller
     }
 
     [HttpPost("{productId}/Options")]
-    public async Task<ActionResult<ApiOption>> CreateProductOption(string productId, ApiCreateProductOption data)
+    public async Task<ActionResult<ApiOption>> CreateProductOption(string productId, ApiCreateProductOption data, CancellationToken cancellationToken)
     {
-        return Ok(await api.CreateProductOption(productId, data));
+        return Ok(await api.CreateProductOption(productId, data, cancellationToken));
     }
 
     [HttpPut("{productId}/Options/{optionId}")]
-    public async Task<ActionResult<ApiOption>> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data)
+    public async Task<ActionResult<ApiOption>> UpdateProductOption(string productId, string optionId, ApiUpdateProductOption data, CancellationToken cancellationToken)
     {
-        return Ok(await api.UpdateProductOption(productId, optionId, data));
+        return Ok(await api.UpdateProductOption(productId, optionId, data, cancellationToken));
     }
 
     [HttpDelete("{productId}/Options/{optionId}")]
@@ -152,16 +152,16 @@ public class ProductsController : Controller
     }
 
     [HttpPost("{productId}/Options/{optionId}/Values")]
-    public async Task<ActionResult<ApiOptionValue>> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data)
+    public async Task<ActionResult<ApiOptionValue>> CreateProductOptionValue(string productId, string optionId, ApiCreateProductOptionValue data, CancellationToken cancellationToken)
     {
 
-        return Ok(await api.CreateProductOptionValue(productId, optionId, data));
+        return Ok(await api.CreateProductOptionValue(productId, optionId, data, cancellationToken));
     }
 
     [HttpPost("{productId}/Options/{optionId}/Values/{valueId}")]
-    public async Task<ActionResult> DeleteProductOptionValue(string productId, string optionId, string valueId)
+    public async Task<ActionResult> DeleteProductOptionValue(string productId, string optionId, string valueId, CancellationToken cancellationToken)
     {
-        await api.DeleteProductOptionValue(productId, optionId, valueId);
+        await api.DeleteProductOptionValue(productId, optionId, valueId, cancellationToken);
         return Ok();
     }
 
