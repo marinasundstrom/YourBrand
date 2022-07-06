@@ -7,28 +7,60 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Products</MudText>
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateProduct" StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create product</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateProduct" StartIcon="@Icons.Material.Filled.Add"
+    Class="my-2">Create product</MudButton>
 
-<MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="/products/groups" Class="my-2">Product groups</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="/products/groups" Class="my-2">Product groups
+</MudButton>
 
-<MudTable T="ProductDto" ServerData="@(new Func<TableState, Task<TableData<ProductDto>>>(ServerReload))"
-          Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)">
+<MudTable T="ProductDto" ServerData="@(new Func<TableState, Task<TableData<ProductDto>>>(ServerReload))" Dense="true"
+    Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)">
     @*<ToolBarContent>
-            <MudText Typo="Typo.h6">Products</MudText>
-            <MudSpacer />
-            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
-                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudText Typo="Typo.h6">Products</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent> *@
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="nr_field" T="ProductDto">Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="sign_field" T="ProductDto">Description</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="name_field" T="ProductDto">Group</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="position_field" T="ProductDto">Sku</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="mass_field" T="ProductDto">Price</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="visibility" T="ProductDto">Visibility</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="nr_field" T="ProductDto">Name</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="sign_field" T="ProductDto">Description</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="name_field" T="ProductDto">Group</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="position_field" T="ProductDto">Sku</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="mass_field" T="ProductDto">Price</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="visibility" T="ProductDto">Visibility</MudTableSortLabel>
+        </MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
+        <MudTd>
+            @if (context.Image is not null)
+            {
+                <MudImage Src="@context.Image" ObjectFit="ObjectFit.Contain" Alt="Mony the dog" Width="100" Height="100" Elevation="0" Class="rounded-lg" />
+            }
+            @*
+            else
+            {
+                <svg class="rounded-lg" width="120px" height="120" xmlns="http://www.w3.org/2000/svg" role="img"
+                aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+                    dy=".3em">Thumbnail</text>
+                </svg>
+            }
+            *@
+        </MudTd>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
         <MudTd DataLabel="Group">@context.Group?.Name</MudTd>
@@ -85,4 +117,3 @@
         return new TableData<ProductDto>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 }
-

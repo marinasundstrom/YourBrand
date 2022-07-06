@@ -42,11 +42,11 @@
                             <div class="d-flex justify-center">
                                 @if (product.Image is not null)
                                 {
-                                    <img class="bd-placeholder-img card-img-top" style="width: 100%; height: 225px; object-fit: cover;" src="@product.Image" />
+                                    <MudImage Fluid="true" ObjectFit="ObjectFit.Cover" Src="@product.Image" Alt="Mony the dog" Elevation="25" Class="rounded-lg"/>
                                 }
                                 else
                                 {
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                    <svg class="rounded-lg" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
                                 }
                             </div>
                             <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">

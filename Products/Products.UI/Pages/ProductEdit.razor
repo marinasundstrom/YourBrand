@@ -21,14 +21,14 @@ else
     <MudGrid Spacing="6">
         <MudItem xs="12" sm="12" md="6" lg="6">
             <div class="card shadow-sm">
-                @if (product.Image is not null)
-                {
-                    <img class="bd-placeholder-img card-img-top" style="width: 100%; height: 100%; object-fit: cover;" src="@product.Image" />
-                }
-                else
-                {
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                }
+@if (product.Image is not null)
+                                {
+                                    <MudImage Src="@product.Image" Alt="Mony the dog" Fluid="true" Elevation="25" Class="rounded-lg"/>
+                                }
+                                else
+                                {
+                                    <svg class="rounded-lg" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                }
             </div>
 
             <InputFile id="fileInput" OnChange="UploadFiles" hidden accept="*.jpg, *.jpeg, *.png" />
@@ -84,14 +84,14 @@ else
 
     </MudGrid>
 
-    <div class="form-group mb-4">
+    <MudPaper Elevation="8" Class="pa-4">
         <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility" ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)" ToStringFunc="x => x?.ToString()">
             @foreach (var item in VisibilityOptions)
             {
                 <MudSelectItem Value="@item" />
             }
         </MudSelect>
-    </div>
+    </MudPaper>
 
     <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Attributes</MudText>
 
@@ -181,10 +181,10 @@ else
 
                     <RowTemplate Context="variant">
                         <MudTd DataLabel="Image">
-                            @if (variant.Image is not null) 
-                            {
-                                <img style="height: 100px; width: 100px; object-fit: cover;" src="@variant.Image" />
-                            }
+                           @if (variant.Image is not null)
+                                {
+                                    <MudImage Src="@variant.Image" Alt="Mony the dog" Elevation="0" Height="100" Class="rounded-lg"/>
+                                }
                         </MudTd>
                         <MudTd DataLabel="Name">@variant.Name</MudTd>
                         <MudTd DataLabel="SKU">@variant.Sku</MudTd>
