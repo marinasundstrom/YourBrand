@@ -25,7 +25,7 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.CreateGroup("documents", "Documents");
+        var group = navManager.GetGroup("misc") ?? navManager.CreateGroup("misc", "Miscellaneous");
         group.CreateItem("documents", "Documents", MudBlazor.Icons.Material.Filled.InsertDriveFile, "/documents");
     }
 }

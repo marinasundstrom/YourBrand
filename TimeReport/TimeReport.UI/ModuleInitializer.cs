@@ -24,7 +24,7 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.CreateGroup("project-management", "Project Management");
+        var group = navManager.CreateGroup("project-management", "Project management");
         group.CreateItem("projects", "Projects", MudBlazor.Icons.Material.Filled.List, "/projects");
         group.CreateItem("report-time", "Report time", MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
         group.CreateItem("reports", "Reports", MudBlazor.Icons.Material.Filled.ListAlt, "/reports");

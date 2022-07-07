@@ -25,7 +25,7 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.CreateGroup("human-resources", "Human Resources");
+        var group = navManager.CreateGroup("human-resources", "Human resources");
         group.CreateItem("organization", "Organization", MudBlazor.Icons.Material.Filled.House, "/hr/organization");
         group.CreateItem("persons", "Persons", MudBlazor.Icons.Material.Filled.Person, "/hr/persons");
         group.CreateItem("teams", "Teams", MudBlazor.Icons.Material.Filled.People, "/hr/teams");
