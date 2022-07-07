@@ -1,5 +1,5 @@
 ﻿using System;
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 
 namespace YourBrand.TimeReport;
 
@@ -14,7 +14,7 @@ public static class ServiceExtensions
         })
         .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http));
 
-        services.AddInvoicesClients((sp, http) =>
+        services.AddInvoicingClients((sp, http) =>
         {
             http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx", "https")}/api/invoicing/");
         });

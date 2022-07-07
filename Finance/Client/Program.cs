@@ -4,7 +4,7 @@ using YourBrand.Accounting.Client;
 
 using YourBrand.Finance.Client;
 
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -38,7 +38,7 @@ CultureInfo? culture = new("sv-SE");
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
 
-builder.Services.AddInvoicesClients((sp, http) =>
+builder.Services.AddInvoicingClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/invoicing/");
 });

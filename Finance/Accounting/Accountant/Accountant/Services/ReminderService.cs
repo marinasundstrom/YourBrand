@@ -4,7 +4,7 @@ using YourBrand.Accounting.Client;
 
 using YourBrand.Documents.Client;
 
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 
 using Newtonsoft.Json;
 

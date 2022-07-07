@@ -26,7 +26,7 @@
     <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
     <ProjectReference Include="..\..\Finance\Transactions\Transactions.Client\Transactions.Client.csproj" />
     <ProjectReference Include="..\..\Finance\Payments\Payments.Client\Payments.Client.csproj" />
-    <ProjectReference Include="..\..\Products\Products.Client\Products.Client.csproj" />
+    <ProjectReference Include="..\..\Catalog\Catalog.Client\Catalog.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.AspNetCore.SignalR.Client" />

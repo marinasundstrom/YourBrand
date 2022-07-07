@@ -2,8 +2,8 @@
 
 using YourBrand.Documents.Client;
 
-using YourBrand.Invoices.Client;
-using YourBrand.Invoices.Contracts;
+using YourBrand.Invoicing.Client;
+using YourBrand.Invoicing.Contracts;
 
 using MassTransit;
 using YourBrand.RotRutService.Domain;

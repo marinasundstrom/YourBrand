@@ -6,7 +6,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace YourBrand.Invoices.Controllers;
+namespace YourBrand.Invoicing.Controllers;
 
 [Route("[controller]")]
 public class TransactionsController : ControllerBase 

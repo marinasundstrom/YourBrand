@@ -28,7 +28,7 @@
 		<ProjectReference Include="..\..\Finance\Payments\Payments.Client\Payments.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
-		<ProjectReference Include="..\..\Products\Products.Client\Products.Client.csproj">
+		<ProjectReference Include="..\..\Catalog\Catalog.Client\Catalog.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
 		<ProjectReference Include="..\..\OrderPriceCalculator\OrderPriceCalculator.csproj">

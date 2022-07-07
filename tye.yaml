@@ -138,8 +138,8 @@ services:
       - protocol: https
         port: 5110
 
-  - name: products
-    project: Products/Products/Products.csproj
+  - name: catalog
+    project: Catalog/Catalog/Catalog.csproj
     bindings:
       - protocol: https
         port: 5120
@@ -182,8 +182,8 @@ services:
       - protocol: https
         port: 5095
 
-  - name: invoices
-    project: Finance/Invoices/Invoices/Invoices.csproj
+  - name: invoicing
+    project: Finance/Invoicing/Invoicing/Invoicing.csproj
     bindings:
       - protocol: https
         port: 5096

@@ -11,7 +11,7 @@ using YourBrand.Documents.Client;
 using Hangfire;
 using Hangfire.SqlServer;
 
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 
 using MassTransit;
 using YourBrand.Payments.Client;
@@ -49,7 +49,7 @@ builder.Services.AddAccountingClients((sp, http) =>
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/accounting/");
 });
 
-builder.Services.AddInvoicesClients((sp, http) =>
+builder.Services.AddInvoicingClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/invoicing/");
 });

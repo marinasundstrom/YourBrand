@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Invoices\Invoices.Client\Invoices.Client.csproj" />
+    <ProjectReference Include="..\..\..\Invoicing\Invoicing.Client\Invoicing.Client.csproj" />
     <ProjectReference Include="..\..\Accounting.Client\Accounting.Client.csproj" />
     <ProjectReference Include="..\..\..\Formulas\Formulas.csproj" />
   </ItemGroup>

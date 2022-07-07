@@ -33,7 +33,7 @@
     <ProjectReference Include="..\Accounting\Accounting.Client\Accounting.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Invoices\Invoices.Client\Invoices.Client.csproj">
+    <ProjectReference Include="..\Invoicing\Invoicing.Client\Invoicing.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\Transactions\Transactions.Client\Transactions.Client.csproj">

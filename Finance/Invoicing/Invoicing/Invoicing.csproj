@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+        <RootNamespace>YourBrand.Invoicing</RootNamespace>
+        <LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Documents' " />
+	<ItemGroup>
+		<PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
+		<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-preview.5.22302.2" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+    </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Invoicing.Contracts\Invoicing.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\Documents\Documents.Client\Documents.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Payments\Payments.Client\Payments.Client.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\..\Formulas\Formulas.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Calculations.cs">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Infrastructure\Persistence\Interceptors\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Infrastructure\Persistence\Interceptors\" />
+	</ItemGroup>
+</Project>

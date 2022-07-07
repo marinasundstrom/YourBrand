@@ -2,8 +2,8 @@
 
 using YourBrand.Documents.Client;
 
-using YourBrand.Invoices.Client;
-using YourBrand.Invoices.Contracts;
+using YourBrand.Invoicing.Client;
+using YourBrand.Invoicing.Contracts;
 
 using MassTransit;
 using YourBrand.Accountant.Domain;
@@ -70,7 +70,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             new YourBrand.Accounting.Client.FileParameter(file.Stream, $"invoice-{invoice.Id}{fileExt}", contentType));
     }
 
-    private static string? GetContentType(Invoices.Client.FileResponse file)
+    private static string? GetContentType(Invoicing.Client.FileResponse file)
     {
         var contentType = file.Headers
             .FirstOrDefault(x => x.Key.ToLowerInvariant() == "content-type").Value;
@@ -81,7 +81,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         return contentType.FirstOrDefault();
     }
 
-    private static string? GetFileName(Invoices.Client.FileResponse file)
+    private static string? GetFileName(Invoicing.Client.FileResponse file)
     {
         var contentDisposition = file.Headers
             .FirstOrDefault(x => x.Key.ToLowerInvariant() == "content-disposition").Value;

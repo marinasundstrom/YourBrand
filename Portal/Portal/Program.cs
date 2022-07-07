@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using YourBrand.Accounting;
-using YourBrand.Invoices;
+using YourBrand.Invoicing;
 using YourBrand.Payments;
 using YourBrand.Portal;
 using YourBrand.Showroom;
@@ -58,11 +58,11 @@ void LoadModules(IServiceCollection services)
     var moduleAssemblies = new List<ModuleEntry>
     {
         new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Products.ModuleInitializer).Assembly, true),
+        new ModuleEntry(typeof(YourBrand.Catalog.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Invoices.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Invoicing.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Payments.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Documents.ModuleInitializer).Assembly, false),

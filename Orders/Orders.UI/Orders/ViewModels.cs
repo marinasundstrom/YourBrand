@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-using YourBrand.Products.Client;
+using YourBrand.Catalog.Client;
 
 namespace YourBrand.Orders;
 

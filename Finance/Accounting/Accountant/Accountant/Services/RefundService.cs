@@ -1,6 +1,6 @@
 ﻿using YourBrand.Accounting.Client;
 
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 
 namespace YourBrand.Accountant.Services
 {

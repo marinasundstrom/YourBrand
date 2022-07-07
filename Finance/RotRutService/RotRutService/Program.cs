@@ -19,7 +19,7 @@ using System.Text.Json.Serialization;
 using YourBrand.Payments.Client;
 using YourBrand.Transactions.Client;
 using YourBrand.Accounting.Client;
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 using YourBrand.RotRutService.Domain.Entities;
 using YourBrand.RotRutService.Domain;
 

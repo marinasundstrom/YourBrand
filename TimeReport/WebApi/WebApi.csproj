@@ -47,7 +47,7 @@
     <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Finance\Invoices\Invoices.Client\Invoices.Client.csproj">
+    <ProjectReference Include="..\..\Finance\Invoicing\Invoicing.Client\Invoicing.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

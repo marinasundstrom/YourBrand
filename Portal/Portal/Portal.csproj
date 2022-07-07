@@ -49,7 +49,7 @@
     <ProjectReference Include="..\..\Finance\Transactions\Transactions.UI\Transactions.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Finance\Invoices\Invoices.UI\Invoices.UI.csproj">
+    <ProjectReference Include="..\..\Finance\Invoicing\Invoicing.UI\Invoicing.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\Finance\Payments\Payments.UI\Payments.UI.csproj">
@@ -67,7 +67,7 @@
     <ProjectReference Include="..\..\HumanResources\HumanResources.UI\HumanResources.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Products\Products.UI\Products.UI.csproj">
+    <ProjectReference Include="..\..\Catalog\Catalog.UI\Catalog.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\Orders\Orders.UI\Orders.UI.csproj">

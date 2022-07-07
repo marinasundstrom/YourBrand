@@ -1,4 +1,4 @@
-﻿using YourBrand.Products.Client;
+﻿using YourBrand.Catalog.Client;
 
 using MassTransit;
 

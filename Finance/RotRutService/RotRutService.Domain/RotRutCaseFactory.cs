@@ -1,4 +1,4 @@
-﻿using YourBrand.Invoices.Client;
+﻿using YourBrand.Invoicing.Client;
 using YourBrand.RotRutService.Domain.Entities;
 
 namespace YourBrand.RotRutService.Domain;

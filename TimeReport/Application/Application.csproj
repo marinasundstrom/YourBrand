@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj" />
     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
     <ProjectReference Include="..\..\Utils\Utils.csproj" />
-    <ProjectReference Include="..\..\Finance\Invoices\Invoices.Client\Invoices.Client.csproj" />
+    <ProjectReference Include="..\..\Finance\Invoicing\Invoicing.Client\Invoicing.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

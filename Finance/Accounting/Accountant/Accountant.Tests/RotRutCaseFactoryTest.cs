@@ -1,6 +1,6 @@
 ﻿using YourBrand.Accountant.Domain;
 
-using YourBrand.Invoices.Client;
+using YourBrand.Invoicing.Client;
 
 using Shouldly;
 

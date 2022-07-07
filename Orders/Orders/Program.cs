@@ -11,7 +11,7 @@ using YourBrand.Orders.Infrastructure.Persistence;
 using YourBrand.Orders.Services;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
-using YourBrand.Products.Client;
+using YourBrand.Catalog.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +70,7 @@ builder.Services.AddDocumentsClients((sp, http) =>
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/documents/");
 });
 
-builder.Services.AddProductsClient((sp, http) =>
+builder.Services.AddCatalogClient((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/products/");
 });
