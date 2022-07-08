@@ -1,8 +1,11 @@
 ﻿@inherits LayoutComponentBase
+@implements IAsyncDisposable
 @using YourBrand.Portal.Theming
 @using Blazored.LocalStorage
+@using MudBlazor.Services
 @inject ThemeManager ThemeManager
 @inject ILocalStorageService LocalStorage
+@inject IBreakpointService BreakpointListener
 
 <MudThemeProvider IsDarkMode="@(_currentColorScheme == ColorScheme.Dark)" Theme="_theme" />
 <MudDialogProvider />
@@ -10,7 +13,8 @@
 
 <MudLayout>
     <AppBar DrawerToggleCallback="DrawerToggle" />
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" DisableOverlay="true" Elevation="2" Variant="@DrawerVariant.Persistent">
+    <MudDrawer Open="_drawerOpen" OpenChanged="OpenChanged" ClipMode="DrawerClipMode.Always" DisableOverlay="_disableOverlay" Elevation="2"
+        Variant="@_drawerVariant">
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
@@ -43,20 +47,62 @@
 
     bool _drawerOpen = false;
     ColorScheme? _currentColorScheme;
+    Guid _subscriptionId;
+    DrawerVariant _drawerVariant = DrawerVariant.Persistent;
+    bool _disableOverlay = true;
 
     protected override async Task OnInitializedAsync()
     {
-        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
         _currentColorScheme = ThemeManager.CurrentColorScheme;
+        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+
+        var breakpoint = BreakpointListener.GetBreakpoint();
+
+        var subscriptionResult = await BreakpointListener.Subscribe((breakpoint) =>
+        {
+            UpdateDrawerVariant(breakpoint);
+        }, new ResizeOptions
+        {
+            ReportRate = 250,
+            NotifyOnBreakpointOnly = true,
+        });
 
         _drawerOpen = await LocalStorage.GetItemAsync<bool?>("drawerOpen") ?? true;
+    }
+
+    async Task OpenChanged(bool isOpen) 
+    {
+        _drawerOpen = isOpen;
+        await LocalStorage.SetItemAsync("drawerOpen", _drawerOpen);
+    }
+
+    void UpdateDrawerVariant(Breakpoint breakpoint)
+    {
+        if (breakpoint == Breakpoint.Xs || breakpoint == Breakpoint.Sm)
+        {
+            if(_drawerOpen) 
+            {
+                DrawerToggle();
+            }
+            _drawerVariant = DrawerVariant.Temporary;
+            _disableOverlay = false;
+        }
+        else
+        {
+            if(_drawerOpen) 
+            {
+                DrawerToggle();
+            }
+            _drawerVariant = DrawerVariant.Persistent;
+            _disableOverlay = true;
+        }
+
+        StateHasChanged();
     }
 
     async Task DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
-
-        await LocalStorage.SetItemAsync("drawerOpen", _drawerOpen);
     }
 
     void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs ea)
@@ -65,4 +111,6 @@
 
         StateHasChanged();
     }
+
+    public async ValueTask DisposeAsync() => await BreakpointListener.Unsubscribe(_subscriptionId);
 }

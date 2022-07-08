@@ -58,18 +58,18 @@ void LoadModules(IServiceCollection services)
     var moduleAssemblies = new List<ModuleEntry>
     {
         new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Catalog.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Invoicing.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Payments.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Documents.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Customers.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, true)
+        new ModuleEntry(typeof(YourBrand.Catalog.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Invoicing.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Payments.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Documents.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Customers.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, false)
     };
 
     moduleAssemblies.ForEach(x => ModuleLoader.LoadModule(x.Assembly, x.Enabled));
