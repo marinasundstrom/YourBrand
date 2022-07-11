@@ -23,7 +23,7 @@ public class Order : Resource<OrderEmbedded>
 {
     public Guid Id { get; set; }
     public int OrderNo { get; set; }
-    //public YourBrand.Orders.Contracts.OrderType Type { get; set; }
+    public OrderType Type { get; set; }
     public DateTime Date { get; set; }
     public string Status { get; set; } = null!;
 
@@ -54,6 +54,13 @@ public class Order : Resource<OrderEmbedded>
 
     [JsonExtensionData]
     public Dictionary<string, object>? CustomFields { get; set; }
+}
+
+[JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+public enum OrderType 
+{
+    Sale = 1,
+    Return = 2
 }
 
 public class OrderEmbedded

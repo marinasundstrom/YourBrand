@@ -20,6 +20,8 @@ namespace YourBrand.Orders.Domain.Entities
 
         public int OrderNo { get; set; }
 
+        public OrderType Type { get; set; }
+
         public DateTime? OrderDate { get; set; }
 
         public OrderStatus Status { get; set; } = null!;

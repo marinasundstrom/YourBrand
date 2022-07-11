@@ -5,7 +5,7 @@
     "title": "Orders API",
     "version": "0.1"
   },
-  "host": "localhost:7148",
+  "host": "localhost:5130",
   "schemes": [
     "https"
   ],
@@ -27,7 +27,7 @@
         }
       }
     },
-    "/api/Orders": {
+    "/Orders": {
       "get": {
         "tags": [
           "Orders"
@@ -113,7 +113,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}": {
+    "/Orders/{orderNo}": {
       "get": {
         "tags": [
           "Orders"
@@ -155,7 +155,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Totals": {
+    "/Orders/{orderNo}/Totals": {
       "get": {
         "tags": [
           "Orders"
@@ -187,7 +187,7 @@
         }
       }
     },
-    "/api/Orders/Create": {
+    "/Orders/Create": {
       "post": {
         "tags": [
           "Orders"
@@ -210,7 +210,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Place": {
+    "/Orders/{orderNo}/Place": {
       "post": {
         "tags": [
           "Orders"
@@ -233,7 +233,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Status": {
+    "/Orders/{orderNo}/Status": {
       "put": {
         "tags": [
           "Orders"
@@ -262,7 +262,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items": {
+    "/Orders/{orderNo}/Items": {
       "post": {
         "tags": [
           "Orders"
@@ -374,7 +374,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}": {
+    "/Orders/{orderNo}/Items/{orderItemId}": {
       "get": {
         "tags": [
           "Orders"
@@ -443,7 +443,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/Quantity": {
+    "/Orders/{orderNo}/Items/{orderItemId}/Quantity": {
       "put": {
         "tags": [
           "Orders"
@@ -489,7 +489,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Discounts": {
+    "/Orders/{orderNo}/Discounts": {
       "post": {
         "tags": [
           "Orders"
@@ -526,7 +526,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Discounts/{discountId}": {
+    "/Orders/{orderNo}/Discounts/{discountId}": {
       "delete": {
         "tags": [
           "Orders"
@@ -557,7 +557,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/Discounts": {
+    "/Orders/{orderNo}/Items/{orderItemId}/Discounts": {
       "post": {
         "tags": [
           "Orders"
@@ -602,7 +602,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/Discounts/{discountId}": {
+    "/Orders/{orderNo}/Items/{orderItemId}/Discounts/{discountId}": {
       "delete": {
         "tags": [
           "Orders"
@@ -641,7 +641,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Charges": {
+    "/Orders/{orderNo}/Charges": {
       "post": {
         "tags": [
           "Orders"
@@ -678,7 +678,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Charges/{chargeId}": {
+    "/Orders/{orderNo}/Charges/{chargeId}": {
       "delete": {
         "tags": [
           "Orders"
@@ -709,7 +709,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/Charges": {
+    "/Orders/{orderNo}/Items/{orderItemId}/Charges": {
       "post": {
         "tags": [
           "Orders"
@@ -754,7 +754,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/Charges/{chargeId}": {
+    "/Orders/{orderNo}/Items/{orderItemId}/Charges/{chargeId}": {
       "delete": {
         "tags": [
           "Orders"
@@ -793,7 +793,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/CustomFields": {
+    "/Orders/{orderNo}/CustomFields": {
       "post": {
         "tags": [
           "Orders"
@@ -830,7 +830,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/CustomFields/{customFieldId}": {
+    "/Orders/{orderNo}/CustomFields/{customFieldId}": {
       "delete": {
         "tags": [
           "Orders"
@@ -860,7 +860,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/CustomFields": {
+    "/Orders/{orderNo}/Items/{orderItemId}/CustomFields": {
       "post": {
         "tags": [
           "Orders"
@@ -905,7 +905,7 @@
         }
       }
     },
-    "/api/Orders/{orderNo}/Items/{orderItemId}/CustomFields/{customFieldId}": {
+    "/Orders/{orderNo}/Items/{orderItemId}/CustomFields/{customFieldId}": {
       "delete": {
         "tags": [
           "Orders"
@@ -943,7 +943,7 @@
         }
       }
     },
-    "/api/Orders/QueryOrdersByCustomField": {
+    "/Orders/QueryOrdersByCustomField": {
       "get": {
         "tags": [
           "Orders"
@@ -982,7 +982,7 @@
         }
       }
     },
-    "/api/OrderStatuses": {
+    "/OrderStatuses": {
       "get": {
         "tags": [
           "OrderStatuses"
@@ -1071,6 +1071,7 @@
           "required": [
             "id",
             "orderNo",
+            "type",
             "date",
             "status",
             "total"
@@ -1083,6 +1084,9 @@
             "orderNo": {
               "type": "integer",
               "format": "int32"
+            },
+            "type": {
+              "$ref": "#/definitions/OrderType"
             },
             "date": {
               "type": "string",
@@ -1131,6 +1135,18 @@
             }
           }
         }
+      ]
+    },
+    "OrderType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Sale",
+        "Return"
+      ],
+      "enum": [
+        "Sale",
+        "Return"
       ]
     },
     "OrderTotal": {

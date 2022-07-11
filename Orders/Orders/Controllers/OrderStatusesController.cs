@@ -18,7 +18,7 @@ using YourBrand.Orders.Infrastructure.Persistence;
 namespace YourBrand.Orders.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class OrderStatusesController : ControllerBase
     {
         private readonly ILogger<OrderStatusesController> _logger;

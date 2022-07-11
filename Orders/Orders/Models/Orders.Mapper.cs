@@ -27,7 +27,7 @@ public static partial class Mapper
         {
             Id = order.Id,
             OrderNo = order.OrderNo,
-            //Type = (Contracts.OrderType)order.Type,
+            Type = (OrderType)order.Type,
             Date = order.OrderDate.GetValueOrDefault(),
             Status = order.StatusId,
 
