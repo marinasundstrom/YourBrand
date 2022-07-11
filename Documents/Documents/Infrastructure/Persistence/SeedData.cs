@@ -64,53 +64,7 @@ Hello, @Model.Name!"
                     Id = "invoice",
                     Name = "Invoice",
                     TemplateLanguage = DocumentTemplateLanguage.Razor,
-                    Content =
-@$"
-@model dynamic
-
-<style>
-    body {{
-        font-family: 'Helvetica', 'Arial', sans-serif;
-    }}
-</style>
-
-<h1>Invoice @Model.Id</h1>
-
-<p>@Model.Status</p>
-
-<table>
-    <thead>
-        <tr>
-            <th>Description</th>
-            <th>Unit Price</th>
-            <th>Quantity</th>
-            <th>Unit</th>
-            <th>VAT Rate (%)</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach(var item in Model.Items) 
-    {{
-        <tr>
-            <td>@item.Description</td>
-            <td>@item.UnitPrice.ToString(""c"")</td>
-            <td>@item.Quantity</td>
-            <td>@item.Unit</td>
-            <td>@(item.VatRate * 100)</td>
-            <td>@item.LineTotal.ToString(""c"")</td>
-        </tr>
-    }}
-    </tbody>
-</table>
-
-<p>Sub Total: @Model.SubTotal.ToString(""c"")</p>
-<p>VAT: @Model.Vat.ToString(""c"")</p>
-@if(Model.DomesticService != null) 
-{{
- <p>RUT/ROT: @Model.DomesticService?.RequestedAmount?.ToString(""c"")</p>
-}}
-<p>Total: @Model.Total.ToString(""c"")</p>"
+                    Content = await File.ReadAllTextAsync("invoice.cshtml")
                 };
 
                 context.DocumentTemplates.Add(documentTemplate);
