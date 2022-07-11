@@ -36,14 +36,20 @@ public record UploadProductVariantImage(string ProductId, string VariantId, stri
             await blobContainerClient.CreateIfNotExistsAsync();
 #endif
 
-            var response = await blobContainerClient.UploadBlobAsync(request.FileName, request.Stream);
+            var blobId = $"{variant.Id}:{request.FileName}";
+
+            var response = await blobContainerClient.UploadBlobAsync(blobId, request.Stream);
 
             if (variant.Image is not null)
             {
-                await blobContainerClient.DeleteBlobAsync(variant.Image);
+                try 
+                {
+                    await blobContainerClient.DeleteBlobAsync(variant.Image);
+                }
+                catch (Exception) {}
             }
 
-            variant.Image = request.FileName;
+            variant.Image = blobId;
 
             await _context.SaveChangesAsync();
 

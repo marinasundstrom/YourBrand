@@ -8,7 +8,7 @@ using YourBrand.Catalog.Domain;
 
 namespace YourBrand.Catalog.Application.Products;
 
-public record UploadProductImage(string ProductId,  string FileName, Stream Stream) : IRequest<string?>
+public record UploadProductImage(string ProductId, string FileName, Stream Stream) : IRequest<string?>
 {
     public class Handler : IRequestHandler<UploadProductImage, string?>
     {
@@ -23,27 +23,33 @@ public record UploadProductImage(string ProductId,  string FileName, Stream Stre
 
         public async Task<string?> Handle(UploadProductImage request, CancellationToken cancellationToken)
         {
-var product = await _context.Products
-                   .FirstAsync(x => x.Id == request.ProductId);
+            var product = await _context.Products
+                               .FirstAsync(x => x.Id == request.ProductId);
 
-        var blobContainerClient = _blobServiceClient.GetBlobContainerClient("images");
+            var blobContainerClient = _blobServiceClient.GetBlobContainerClient("images");
 
 #if DEBUG
-        await blobContainerClient.CreateIfNotExistsAsync();
+            await blobContainerClient.CreateIfNotExistsAsync();
 #endif
 
-        var response = await blobContainerClient.UploadBlobAsync(request.FileName, request.Stream);
+            var blobId = $"{product.Id}:{request.FileName}";
 
-        if (product.Image is not null)
-        {
-            await blobContainerClient.DeleteBlobAsync(product.Image);
-        }
-        
-        product.Image = request.FileName;
+            var response = await blobContainerClient.UploadBlobAsync(blobId, request.Stream);
 
-        await _context.SaveChangesAsync();
+            if (product.Image is not null)
+            {
+                try 
+                {
+                    await blobContainerClient.DeleteBlobAsync(product.Image);
+                }
+                catch (Exception) {}
+            }
 
-        return GetImageUrl(product.Image);
+            product.Image = blobId;
+
+            await _context.SaveChangesAsync();
+
+            return GetImageUrl(product.Image);
         }
 
         private static string? GetImageUrl(string? name)
