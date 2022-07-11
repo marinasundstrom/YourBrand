@@ -1,4 +1,4 @@
-@page "/consultants"
+@page "/consultants/list"
 @attribute [Authorize]
 @using YourBrand.Showroom.Consultants.Profile
 @inject IConsultantsClient ConsultantProfilesClient
@@ -8,7 +8,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Consultants</MudText>
 
-<MudButton Link="/gallery" Variant="Variant.Filled" Color="Color.Default" Class="mb-2 me-2">Gallery</MudButton>
+<MudButton Link="/consultants" Variant="Variant.Filled" Color="Color.Default" Class="mb-2 me-2">Gallery</MudButton>
 
 <MudButton Link="/consultants/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
     New consultant
