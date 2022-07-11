@@ -2,7 +2,7 @@
 
 using MassTransit;
 
-using YourBrand.Worker.Contracts;
+using YourBrand.Notifications.Contracts;
 
 public class EmailService : IEmailService
 {

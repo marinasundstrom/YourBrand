@@ -1,5 +1,5 @@
 ﻿
-namespace YourBrand.Worker.Services
+namespace YourBrand.Notifications.Services
 {
     public interface IEmailService
     {

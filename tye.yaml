@@ -238,8 +238,8 @@ services:
       - protocol: https
         port: 5050
 
-  - name: worker
-    project: Worker/Worker/Worker.csproj
+  - name: notifications
+    project: Notifications/Notifications/Notifications.csproj
     bindings:
       - protocol: https
         port: 5030

@@ -22,7 +22,7 @@ public class NotificationConsumer : IConsumer<NotificationDto>
     {
         var notification = context.Message;
 
-        var dto = new Worker.Client.NotificationDto()
+        var dto = new YourBrand.Notifications.Client.NotificationDto()
         {
             Id = notification.Id,
             Published = notification.Published.GetValueOrDefault(),

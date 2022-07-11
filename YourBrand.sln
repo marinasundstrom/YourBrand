@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal", "Portal\Portal\Portal.csproj", "{477A0CC5-4676-461D-B440-98AE44366007}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worker", "Worker\Worker\Worker.csproj", "{B1340B6E-DFEF-474F-AF38-E3785E87580C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifications", "Notifications\Notifications\Notifications.csproj", "{B1340B6E-DFEF-474F-AF38-E3785E87580C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{6C545AF3-D120-42E1-9085-84304FC9365E}"
 EndProject
@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppService", "AppService", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService", "IdentityService\IdentityService\IdentityService.csproj", "{ABD9C8C1-56B2-4513-B15B-29BED2C71CDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worker.Client", "Worker\Worker.Client\Worker.Client.csproj", "{09733348-AD4B-4BB4-9C19-1852414BCB99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifications.Client", "Notifications\Notifications.Client\Notifications.Client.csproj", "{09733348-AD4B-4BB4-9C19-1852414BCB99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.Tests", "Portal\Portal.Tests\Portal.Tests.csproj", "{31825979-5DD6-42A3-AA43-C9F016CC02D2}"
 EndProject
@@ -55,7 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Contracts",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddChargeToOrderItemCommandHand.cs", "Seeder\AddChargeToOrderItemCommandHand.cs.csproj", "{3D78673B-B3BA-4399-A9A0-9A9A05387321}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{59804096-30F5-46BA-BDAD-6AD450594253}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{59804096-30F5-46BA-BDAD-6AD450594253}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityService", "IdentityService", "{A1A71766-1DD8-4DBB-BBD0-0915F7B9A6ED}"
 EndProject

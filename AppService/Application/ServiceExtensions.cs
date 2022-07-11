@@ -8,6 +8,7 @@ using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using YourBrand.Notifications.Client;
 
 namespace YourBrand.Application;
 
@@ -19,14 +20,14 @@ public static class ServiceExtensions
 
         services.AddScoped<Handler>();
 
-        services.AddHttpClient(nameof(Worker.Client.INotificationsClient), (sp, http) =>
+        services.AddNotificationsClients((sp, http) =>
         {
-            var conf = sp.GetRequiredService<IConfiguration>();
-
-            http.BaseAddress = conf.GetServiceUri("worker");
-        })
-        .AddTypedClient<Worker.Client.INotificationsClient>((http, sp) => new Worker.Client.NotificationsClient(http))
-        .AddHttpMessageHandler<Handler>();
+            http.BaseAddress = configuration.GetServiceUri("notifications");
+        },
+        builder =>
+        {
+            builder.AddHttpMessageHandler<Handler>();
+        });
 
         return services;
     }

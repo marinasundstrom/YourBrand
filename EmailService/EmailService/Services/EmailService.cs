@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace YourBrand.Worker.Services;
+namespace YourBrand.Notifications.Services;
 
 public class EmailService : IEmailService
 {

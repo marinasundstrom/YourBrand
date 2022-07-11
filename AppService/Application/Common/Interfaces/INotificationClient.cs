@@ -1,4 +1,4 @@
-﻿using Worker.Client;
+﻿using YourBrand.Notifications.Client;
 
 namespace YourBrand.Application.Common.Interfaces;
 

@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Worker.Client;
+using YourBrand.Notifications.Client;
 
 namespace YourBrand.Application.Notifications.Commands;
 
@@ -19,7 +19,7 @@ public record MarkNotificationAsReadCommand(string NotificationId) : IRequest
     {
         private readonly INotificationsClient _notificationsClient;
 
-        public MarkNotificationAsReadCommandHandler(Worker.Client.INotificationsClient notificationsClient)
+        public MarkNotificationAsReadCommandHandler(YourBrand.Notifications.Client.INotificationsClient notificationsClient)
         {
             _notificationsClient = notificationsClient;
         }

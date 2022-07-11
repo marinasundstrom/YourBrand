@@ -5,7 +5,7 @@ using YourBrand.WebApi.Hubs;
 
 using Microsoft.AspNetCore.SignalR;
 
-using Worker.Client;
+using YourBrand.Notifications.Client;
 
 namespace YourBrand.WebApi.Services;
 

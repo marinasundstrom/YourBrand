@@ -14,10 +14,10 @@ public record GetNotificationsQuery(bool IncludeUnreadNotificationsCount,
 {
     public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, NotificationsResults>
     {
-        private readonly Worker.Client.INotificationsClient _notificationsClient;
+        private readonly YourBrand.Notifications.Client.INotificationsClient _notificationsClient;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetNotificationsQueryHandler(Worker.Client.INotificationsClient notificationsClient, ICurrentUserService currentUserService)
+        public GetNotificationsQueryHandler(YourBrand.Notifications.Client.INotificationsClient notificationsClient, ICurrentUserService currentUserService)
         {
             _notificationsClient = notificationsClient;
             _currentUserService = currentUserService;
@@ -27,7 +27,7 @@ public record GetNotificationsQuery(bool IncludeUnreadNotificationsCount,
         {
             var userId = _currentUserService.UserId;
 
-            var results = await _notificationsClient.GetNotificationsAsync(userId, null, request.IncludeUnreadNotificationsCount, request.Page, request.PageSize, request.SortBy, (Worker.Client.SortDirection?)request.SortDirection);
+            var results = await _notificationsClient.GetNotificationsAsync(userId, null, request.IncludeUnreadNotificationsCount, request.Page, request.PageSize, request.SortBy, (YourBrand.Notifications.Client.SortDirection?)request.SortDirection);
             var notifications = results.Items;
 
             return new NotificationsResults(
