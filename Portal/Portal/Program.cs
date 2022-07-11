@@ -46,10 +46,10 @@ LoadModules(builder.Services);
 
 var app = builder.Build();
 
+await app.Services.Localize();
+
 var moduleBuilder = app.Services.GetRequiredService<ModuleLoader>();
 moduleBuilder.ConfigureServices();
-
-await app.Services.Localize();
 
 await app.RunAsync();
 

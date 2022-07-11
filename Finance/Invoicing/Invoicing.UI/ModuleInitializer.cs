@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Invoicing.Client;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Invoicing;
 
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
-        group.CreateItem("invoices", "Invoices", MudBlazor.Icons.Material.Filled.InsertDriveFile, "/invoices");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", () => resources["Finance"]);
+        group.CreateItem("invoices", () => resources["Invoices"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/invoices");
     }
 }

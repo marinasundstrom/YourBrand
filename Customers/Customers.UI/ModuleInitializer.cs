@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Customers.Client;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Customers;
 
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("customer-relations") ?? navManager.CreateGroup("customer-relations", "Customer relations");
-        group.CreateItem("persons", "Persons", MudBlazor.Icons.Material.Filled.Person, "/customers/persons");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("customer-relations") ?? navManager.CreateGroup("customer-relations", () => resources["Customer relations"]);
+        group.CreateItem("persons", () => resources["Persons"], MudBlazor.Icons.Material.Filled.Person, "/customers/persons");
     }
 }

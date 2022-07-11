@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Accounting.Client;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Accounting;
 
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
-        group.CreateItem("accounting", "Accounting", MudBlazor.Icons.Material.Filled.List, "/verifications");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", () => resources["Finance"]);
+        group.CreateItem("accounting", () => resources["Accounting"], MudBlazor.Icons.Material.Filled.List, "/verifications");
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
-        group.CreateItem("rotrut", "Rot & Rut ärenden", MudBlazor.Icons.Material.Filled.InsertDriveFile, "/rotrut");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", () => resources["Finance"]);
+        group.CreateItem("rotrut", () => resources["Rot & Rut ärenden"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/rotrut");
     }
 }

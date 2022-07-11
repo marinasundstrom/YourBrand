@@ -26,11 +26,5 @@
     <ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj" />
     <ProjectReference Include="..\Portal.Services\Portal.Services.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Blazored.LocalStorage" />
-    <None Remove="Modules\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\" />
-  </ItemGroup>
+
 </Project>

@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Catalog.Client;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Catalog;
 
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", "Sales");
-        group.CreateItem("products", "Products", MudBlazor.Icons.Material.Filled.FormatListBulleted, "/products");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", () => resources["Sales"]);
+        group.CreateItem("products", () => resources["Products"], MudBlazor.Icons.Material.Filled.FormatListBulleted, "/products");
     }
 }

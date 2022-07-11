@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Portal.Shared;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Messenger;
 
@@ -26,7 +27,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.CreateGroup("messenger", "Messenger");
-        group.CreateItem("conversations", "Conversations", MudBlazor.Icons.Material.Filled.Chat, "/conversations");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.CreateGroup("messenger", () => resources["Messenger"]);
+        group.CreateItem("conversations", () => resources["Conversations"], MudBlazor.Icons.Material.Filled.Chat, "/conversations");
     }
 }

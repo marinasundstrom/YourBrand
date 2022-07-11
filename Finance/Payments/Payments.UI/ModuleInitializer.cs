@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Payments.Client;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Payments;
 
@@ -22,6 +23,8 @@ public class ModuleInitializer : IModuleInitializer
 
     public static void ConfigureServices(IServiceProvider services)
     {
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
         /*
         var navManager = services
             .GetRequiredService<NavManager>();

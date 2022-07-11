@@ -22,16 +22,38 @@ public class NavManager
         return navGroup;
     }
 
+    public NavGroup CreateGroup(string id, Func<string> name)
+    {
+        var navGroup = new NavGroup()
+        {
+            Id = id,
+            NameFunc = name
+        };
+        _groups.Add(navGroup);
+
+        Updated?.Invoke(this, EventArgs.Empty);
+
+        return navGroup;
+    }
+
     public event EventHandler? Updated;
 }
 
 public class NavGroup
 {
+    private string? name;
+
     private List<NavItem> _items = new List<NavItem>();
 
     public string Id { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    public string Name 
+    { 
+        get => name ?? NameFunc?.Invoke() ?? throw new Exception();
+        set => name = value;
+    }
+
+    public Func<string>? NameFunc { get; set; }
 
     public IReadOnlyList<NavItem> Items => _items;
 
@@ -55,13 +77,34 @@ public class NavGroup
         _items.Add(navItem);
         return navItem;
     }
+
+    public NavItem CreateItem(string id, Func<string> name, string icon, string href)
+    {
+        var navItem = new NavItem()
+        {
+            Id = id,
+            NameFunc = name,
+            Icon = icon,
+            Href = href
+        };
+        _items.Add(navItem);
+        return navItem;
+    }
 }
 
 public class NavItem
 {
+    private string? name;
+
     public string Id { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    public string Name 
+    { 
+        get => name ?? NameFunc?.Invoke() ?? throw new Exception();
+        set => name = value;
+    }
+
+    public Func<string>? NameFunc { get; set; }
 
     public string? Icon { get; set; }
 

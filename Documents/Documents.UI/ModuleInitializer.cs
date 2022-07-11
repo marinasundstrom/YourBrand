@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Documents.Client;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Documents;
 
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("misc") ?? navManager.CreateGroup("misc", "Miscellaneous");
-        group.CreateItem("documents", "Documents", MudBlazor.Icons.Material.Filled.InsertDriveFile, "/documents");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("misc") ?? navManager.CreateGroup("misc", () => resources["Miscellaneous"]);
+        group.CreateItem("documents", () => resources["Documents"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/documents");
     }
 }

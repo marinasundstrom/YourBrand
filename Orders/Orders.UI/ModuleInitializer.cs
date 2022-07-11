@@ -5,6 +5,7 @@ using YourBrand.Portal.Shared;
 using YourBrand.Orders.Client;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
+using Microsoft.Extensions.Localization;
 
 namespace YourBrand.Orders;
 
@@ -25,7 +26,9 @@ public class ModuleInitializer : IModuleInitializer
         var navManager = services
             .GetRequiredService<NavManager>();
 
-        var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", "Sales");
-        group.CreateItem("orders", "Orders", MudBlazor.Icons.Material.Filled.InsertDriveFile, "/orders");
+        var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", () => resources["Sales"]);
+        group.CreateItem("orders", () => resources["Orders"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/orders");
     }
 }
