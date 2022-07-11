@@ -1,8 +1,8 @@
 ﻿{
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
-    "title": "Invoicing API",
+    "title": "Invoices API",
     "version": "0.1"
   },
   "host": "localhost:5096",
@@ -107,7 +107,7 @@
             "x-nullable": false
           },
           {
-            "name": "InvoiceDomesticServiceDto",
+            "name": "dto",
             "in": "body",
             "required": true,
             "description": "",
@@ -180,7 +180,7 @@
             "x-nullable": false
           },
           {
-            "name": "AddInvoiceItem",
+            "name": "dto",
             "in": "body",
             "required": true,
             "description": "",
@@ -231,7 +231,7 @@
             "x-nullable": false
           },
           {
-            "name": "UpdateInvoiceItem",
+            "name": "dto",
             "in": "body",
             "required": true,
             "description": "",
@@ -302,7 +302,7 @@
         ],
         "parameters": [
           {
-            "name": "CreateInvoice",
+            "name": "command",
             "in": "body",
             "required": true,
             "description": "",
@@ -541,6 +541,7 @@
             "x-nullable": false,
             "enum": [
               "Invoice",
+              "Cash",
               "Credit"
             ]
           }
@@ -740,10 +741,12 @@
       "description": "",
       "x-enumNames": [
         "Invoice",
+        "Cash",
         "Credit"
       ],
       "enum": [
         "Invoice",
+        "Cash",
         "Credit"
       ]
     },
