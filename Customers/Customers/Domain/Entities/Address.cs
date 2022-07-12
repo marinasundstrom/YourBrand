@@ -21,7 +21,9 @@ public class Address : AuditableEntity
 
     public string Id { get; private set; }
 
-    public Person Person { get; private set; } = null!;
+    public Organization? Organization { get; private set; } = null!;
+
+    public Person? Person { get; private set; } = null!;
 
     public AddressType Type { get; set; }
 
