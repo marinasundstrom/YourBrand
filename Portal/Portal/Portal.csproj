@@ -73,6 +73,9 @@
     <ProjectReference Include="..\..\Orders\Orders.UI\Orders.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Marketing\Marketing.UI\Marketing.UI.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

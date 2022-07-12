@@ -150,6 +150,12 @@ services:
       - protocol: https
         port: 5130
 
+  - name: marketing
+    project: Marketing/Marketing/Marketing.csproj
+    bindings:
+      - protocol: https
+        port: 5140
+
   # Start Finance
 
   - name: financeapp

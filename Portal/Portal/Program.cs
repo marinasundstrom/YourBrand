@@ -6,6 +6,7 @@ using YourBrand.Invoicing;
 using YourBrand.Payments;
 using YourBrand.Portal;
 using YourBrand.Showroom;
+using YourBrand.Marketing;
 using YourBrand.TimeReport;
 using YourBrand.Transactions;
 using YourBrand.Portal.Theming;
@@ -60,6 +61,7 @@ void LoadModules(IServiceCollection services)
         new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Catalog.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, true),
+        new ModuleEntry(typeof(YourBrand.Marketing.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Invoicing.ModuleInitializer).Assembly, true),
