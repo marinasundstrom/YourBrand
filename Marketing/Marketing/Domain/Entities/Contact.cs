@@ -4,17 +4,17 @@ using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Prospect
+public class Contact
 {
-    protected Prospect() { }
+    protected Contact() { }
 
-    public Prospect(string firstName, string lastName, string ssn)
+    public Contact(string firstName, string lastName, string ssn)
     {
         FirstName = firstName;
         LastName = lastName;
         Ssn = ssn;
 
-        //AddDomainEvent(new ProspectCreated(Id));
+        //AddDomainEvent(new ContactCreated(Id));
     }
 
     public string Id { get; set; } = Guid.NewGuid().ToString();

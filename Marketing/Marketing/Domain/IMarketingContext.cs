@@ -6,7 +6,7 @@ namespace YourBrand.Marketing.Domain;
 
 public interface IMarketingContext
 {
-    DbSet<Prospect> Prospects { get; }
+    DbSet<Contact> Contacts { get; }
 
     DbSet<Campaign> Campaigns { get; }
 

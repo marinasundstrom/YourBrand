@@ -4,11 +4,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Marketing.Application.Prospects.Commands;
+namespace YourBrand.Marketing.Application.Contacts.Commands;
 
-public record DeleteProspect(string ProspectId) : IRequest
+public record DeleteContact(string ContactId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteProspect>
+    public class Handler : IRequestHandler<DeleteContact>
     {
         private readonly IMarketingContext _context;
 
@@ -17,21 +17,21 @@ public record DeleteProspect(string ProspectId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProspect request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteContact request, CancellationToken cancellationToken)
         {
             /*
-            var invoice = await _context.Prospects
+            var invoice = await _context.Contacts
                 //.Include(i => i.Addresses)
                 .AsSplitQuery()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.ProspectId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.ContactId, cancellationToken);
 
             if(invoice is null)
             {
                 throw new Exception();
             }
 
-            _context.Prospects.Remove(invoice);
+            _context.Contacts.Remove(invoice);
 
             await _context.SaveChangesAsync(cancellationToken);
             */

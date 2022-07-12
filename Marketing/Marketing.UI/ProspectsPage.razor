@@ -1,19 +1,19 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client;
 
-@page "/prospects"
+@page "/contacts"
 
-@inject IProspectsClient ProspectsClient
+@inject IContactsClient ContactsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
-<PageTitle>Prospects</PageTitle>
+<PageTitle>Contacts</PageTitle>
 
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Prospects</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Contacts</MudText>
 
-@* <MudButton Variant="Variant.Filled" OnClick="NewProspect" Class="mb-2">New transaction</MudButton> *@
+@* <MudButton Variant="Variant.Filled" OnClick="NewContact" Class="mb-2">New transaction</MudButton> *@
 
-<MudTable T="ProspectDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
+<MudTable T="ContactDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" >
     
      <HeaderContent>
@@ -36,18 +36,18 @@
 
 @code
 {
-    MudTable<ProspectDto> table = null!;
+    MudTable<ContactDto> table = null!;
     bool loading = false;
 
-    private async Task<TableData<ProspectDto>> ServerReload(TableState state)
+    private async Task<TableData<ContactDto>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await ProspectsClient.GetProspects2Async(state.Page, state.PageSize);
+            var result = await ContactsClient.GetContacts2Async(state.Page, state.PageSize);
 
-            return new TableData<ProspectDto>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<ContactDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {
@@ -55,9 +55,9 @@
         }
     }
 
-    private TableData<ProspectDto>? GetTableData()
+    private TableData<ContactDto>? GetTableData()
     {
-        return (TableData<ProspectDto>?)table?.GetType()?
+        return (TableData<ContactDto>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

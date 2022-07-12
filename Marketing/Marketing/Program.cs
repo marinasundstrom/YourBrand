@@ -9,11 +9,11 @@ using YourBrand.Marketing.Application.Addresses;
 using YourBrand.Marketing.Application.Addresses.Commands;
 using YourBrand.Marketing.Application.Addresses.Queries;
 using YourBrand.Marketing.Application.Common.Interfaces;
-using YourBrand.Marketing.Application.Prospects.Commands;
-using YourBrand.Marketing.Application.Prospects.Queries;
+using YourBrand.Marketing.Application.Contacts.Commands;
+using YourBrand.Marketing.Application.Contacts.Queries;
 using YourBrand.Marketing.Infrastructure;
 using YourBrand.Marketing.Infrastructure.Persistence;
-using YourBrand.Marketing.Application.Prospects;
+using YourBrand.Marketing.Application.Contacts;
 using YourBrand.Marketing.Services;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
@@ -95,37 +95,37 @@ else
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/Prospects/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetProspect(personId), cancellationToken))
-    .WithName("Prospects_GetProspects")
-    .WithTags("Prospects")
-    .Produces<ProspectDto>(StatusCodes.Status200OK);
+app.MapGet("/Contacts/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetContact(personId), cancellationToken))
+    .WithName("Contacts_GetContacts")
+    .WithTags("Contacts")
+    .Produces<ContactDto>(StatusCodes.Status200OK);
 
-app.MapDelete("/Prospects/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeleteProspect(personId), cancellationToken))
-    .WithName("Prospects_DeleteProspect")
-    .WithTags("Prospects")
+app.MapDelete("/Contacts/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new DeleteContact(personId), cancellationToken))
+    .WithName("Contacts_DeleteContact")
+    .WithTags("Contacts")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPost("/Prospects", async (CreateProspect createProspect, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(createProspect, cancellationToken))
-    .WithName("Prospects_CreateProspects")
-    .WithTags("Prospects")
-    .Produces<ProspectDto>(StatusCodes.Status200OK);
+app.MapPost("/Contacts", async (CreateContact createContact, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(createContact, cancellationToken))
+    .WithName("Contacts_CreateContacts")
+    .WithTags("Contacts")
+    .Produces<ContactDto>(StatusCodes.Status200OK);
 
-app.MapGet("/Prospects/{personId}/Addresses", async (string personId, string foo, IMediator mediator, CancellationToken cancellationToken)
+app.MapGet("/Contacts/{personId}/Addresses", async (string personId, string foo, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetAddress(personId), cancellationToken))
     .WithName("Addresses_GetAddress")
     .WithTags("Addresses")
     .Produces<AddressDto>(StatusCodes.Status200OK);
 
-app.MapPost("/Prospects/{personId}/Addresses", async (CreateAddress createAddress, IMediator mediator, CancellationToken cancellationToken)
+app.MapPost("/Contacts/{personId}/Addresses", async (CreateAddress createAddress, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(createAddress, cancellationToken))
     .WithName("Addresses_CreateAddress")
     .WithTags("Addresses")
     .Produces<AddressDto>(StatusCodes.Status200OK);
 
-app.MapDelete("/Prospects/{personId}/Addresses/{addressId}", async (string personId, string addressId, IMediator mediator, CancellationToken cancellationToken)
+app.MapDelete("/Contacts/{personId}/Addresses/{addressId}", async (string personId, string addressId, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new DeleteAddress(addressId), cancellationToken))
     .WithName("Addresses_DeleteAddress")
     .WithTags("Addresses")

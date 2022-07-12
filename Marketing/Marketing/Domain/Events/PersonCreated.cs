@@ -2,12 +2,12 @@ using YourBrand.Marketing.Domain.Common;
 
 namespace YourBrand.Marketing.Domain.Events;
 
-public class ProspectCreated : DomainEvent
+public class ContactCreated : DomainEvent
 {
-    public ProspectCreated(string personId)
+    public ContactCreated(string personId)
     {
-        ProspectId = personId;
+        ContactId = personId;
     }
 
-    public string ProspectId { get; }
+    public string ContactId { get; }
 }

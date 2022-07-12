@@ -12,13 +12,10 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Marketing relations">
-      <value>Marketing relations</value>
-    </data>
-    <data name="Prospects">
-      <value>Prospects</value>
-    </data>
     <data name="Marketing">
         <value>Marketing</value>
+    </data>
+    <data name="Contacts">
+      <value>Contacts</value>
     </data>
 </root>

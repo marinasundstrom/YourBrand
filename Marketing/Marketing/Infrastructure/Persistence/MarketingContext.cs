@@ -42,7 +42,7 @@ public class MarketingContext : DbContext, IMarketingContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MarketingContext).Assembly);
     }
 
-    public DbSet<Prospect> Prospects { get; set; } = null!;
+    public DbSet<Contact> Contacts { get; set; } = null!;
 
     public DbSet<Campaign> Campaigns { get; set; } = null!;
 

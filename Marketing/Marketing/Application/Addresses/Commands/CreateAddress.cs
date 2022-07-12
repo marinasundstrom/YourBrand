@@ -2,7 +2,7 @@
 using YourBrand.Marketing.Domain;
 
 using MediatR;
-using YourBrand.Marketing.Application.Prospects;
+using YourBrand.Marketing.Application.Contacts;
 
 namespace YourBrand.Marketing.Application.Addresses.Commands;
 

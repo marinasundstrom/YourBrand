@@ -15,7 +15,7 @@ public class Campaign
         CampaignNo = organizationNo;
         VatNo = vatNo;
 
-        //AddDomainEvent(new ProspectCreated(Id));
+        //AddDomainEvent(new ContactCreated(Id));
     }
 
     public string Id { get; set; } = Guid.NewGuid().ToString();

@@ -23,7 +23,7 @@ public class Address : AuditableEntity
 
     public Campaign? Campaign { get; private set; } = null!;
 
-    public Prospect? Prospect { get; private set; } = null!;
+    public Contact? Contact { get; private set; } = null!;
 
     public AddressType Type { get; set; }
 

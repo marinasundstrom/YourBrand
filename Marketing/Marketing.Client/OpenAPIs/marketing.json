@@ -27,12 +27,12 @@
         }
       }
     },
-    "/Prospects/{personId}": {
+    "/Contacts/{personId}": {
       "get": {
         "tags": [
-          "Prospects"
+          "Contacts"
         ],
-        "operationId": "Prospects_GetProspects",
+        "operationId": "Contacts_GetContacts",
         "produces": [
           "application/json"
         ],
@@ -50,16 +50,16 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ProspectDto"
+              "$ref": "#/definitions/ContactDto"
             }
           }
         }
       },
       "delete": {
         "tags": [
-          "Prospects"
+          "Contacts"
         ],
-        "operationId": "Prospects_DeleteProspect",
+        "operationId": "Contacts_DeleteContact",
         "produces": [
           "application/json"
         ],
@@ -83,12 +83,12 @@
         }
       }
     },
-    "/Prospects": {
+    "/Contacts": {
       "post": {
         "tags": [
-          "Prospects"
+          "Contacts"
         ],
-        "operationId": "Prospects_CreateProspects",
+        "operationId": "Contacts_CreateContacts",
         "consumes": [
           "application/json"
         ],
@@ -97,12 +97,12 @@
         ],
         "parameters": [
           {
-            "name": "createProspect",
+            "name": "createContact",
             "in": "body",
             "required": true,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/CreateProspect"
+              "$ref": "#/definitions/CreateContact"
             },
             "x-nullable": false
           }
@@ -112,16 +112,16 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ProspectDto"
+              "$ref": "#/definitions/ContactDto"
             }
           }
         }
       },
       "get": {
         "tags": [
-          "Prospects"
+          "Contacts"
         ],
-        "operationId": "Prospects_GetProspects2",
+        "operationId": "Contacts_GetContacts2",
         "produces": [
           "text/plain",
           "application/json",
@@ -148,13 +148,13 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ItemsResultOfProspectDto"
+              "$ref": "#/definitions/ItemsResultOfContactDto"
             }
           }
         }
       }
     },
-    "/Prospects/{personId}/Addresses": {
+    "/Contacts/{personId}/Addresses": {
       "get": {
         "tags": [
           "Addresses"
@@ -190,7 +190,7 @@
         }
       }
     },
-    "/Prospects/Addresses": {
+    "/Contacts/Addresses": {
       "post": {
         "tags": [
           "Addresses"
@@ -225,7 +225,7 @@
         }
       }
     },
-    "/Prospects/{personId}/Addresses/{addressId}": {
+    "/Contacts/{personId}/Addresses/{addressId}": {
       "delete": {
         "tags": [
           "Addresses"
@@ -301,7 +301,7 @@
     }
   },
   "definitions": {
-    "ProspectDto": {
+    "ContactDto": {
       "type": "object",
       "required": [
         "id",
@@ -337,7 +337,7 @@
       "type": "object",
       "description": "Represents a void type, since Void is not a valid return type in C#."
     },
-    "CreateProspect": {
+    "CreateContact": {
       "type": "object",
       "required": [
         "firstName",
@@ -451,7 +451,7 @@
         }
       }
     },
-    "ItemsResultOfProspectDto": {
+    "ItemsResultOfContactDto": {
       "type": "object",
       "required": [
         "items",
@@ -461,7 +461,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ProspectDto"
+            "$ref": "#/definitions/ContactDto"
           }
         },
         "totalItems": {

@@ -1,14 +1,14 @@
 using YourBrand.Marketing.Application.Addresses;
 using YourBrand.Marketing.Domain.Entities;
-using YourBrand.Marketing.Application.Prospects;
+using YourBrand.Marketing.Application.Contacts;
 
 namespace YourBrand.Marketing.Application;
 
 public static class Mappings 
 {
-    public static ProspectDto ToDto(this Prospect person) 
+    public static ContactDto ToDto(this Contact person) 
     {
-        return new ProspectDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.PhoneHome, person.PhoneMobile, person.Email);
+        return new ContactDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.PhoneHome, person.PhoneMobile, person.Email);
     }
 
     public static AddressDto ToDto(this Address address) 

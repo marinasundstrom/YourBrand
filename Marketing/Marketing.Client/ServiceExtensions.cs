@@ -10,17 +10,17 @@ public static class ServiceExtensions
     {
         services
             .AddMarketingClient(configureClient, builder)
-            .AddProspectsClient(configureClient, builder);
+            .AddContactsClient(configureClient, builder);
             //.AddAddressesClient(configureClient, builder);
 
         return services;
     }
 
-    public static IServiceCollection AddProspectsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    public static IServiceCollection AddContactsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(ProspectsClient) + "M", configureClient)
-            .AddTypedClient<IProspectsClient>((http, sp) => new ProspectsClient(http));
+            .AddHttpClient(nameof(ContactsClient) + "M", configureClient)
+            .AddTypedClient<IContactsClient>((http, sp) => new ContactsClient(http));
 
         builder?.Invoke(b);
 

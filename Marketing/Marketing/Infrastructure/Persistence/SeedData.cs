@@ -15,9 +15,9 @@ public class SeedData
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
 
-            if (!context.Prospects.Any())
+            if (!context.Contacts.Any())
             {
-                var person = new Prospect("John", "Doe", "3234234234")
+                var person = new Contact("John", "Doe", "3234234234")
                 {
                     PhoneHome = null,
                     PhoneMobile = "072423123",
@@ -38,7 +38,7 @@ public class SeedData
                 });
                 */
 
-                context.Prospects.Add(person);
+                context.Contacts.Add(person);
 
                 await context.SaveChangesAsync();
             }

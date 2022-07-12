@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Marketing.Infrastructure.Persistence.Configurations;
 
-public class ProspectConfiguration : IEntityTypeConfiguration<Prospect>
+public class ContactConfiguration : IEntityTypeConfiguration<Contact>
 {
-    public void Configure(EntityTypeBuilder<Prospect> builder)
+    public void Configure(EntityTypeBuilder<Contact> builder)
     {
-        builder.ToTable("Prospects");
+        builder.ToTable("Contacts");
     }
 }

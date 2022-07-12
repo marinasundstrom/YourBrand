@@ -5,13 +5,13 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Marketing.Application.Prospects;
+using YourBrand.Marketing.Application.Contacts;
 
-namespace YourBrand.Marketing.Application.Prospects.Queries;
+namespace YourBrand.Marketing.Application.Contacts.Queries;
 
-public record GetProspects(int Page = 1, int PageSize = 10) : IRequest<ItemsResult<ProspectDto>>
+public record GetContacts(int Page = 1, int PageSize = 10) : IRequest<ItemsResult<ContactDto>>
 {
-    public class Handler : IRequestHandler<GetProspects, ItemsResult<ProspectDto>>
+    public class Handler : IRequestHandler<GetContacts, ItemsResult<ContactDto>>
     {
         private readonly IMarketingContext _context;
 
@@ -20,7 +20,7 @@ public record GetProspects(int Page = 1, int PageSize = 10) : IRequest<ItemsResu
             _context = context;
         }
 
-        public async Task<ItemsResult<ProspectDto>> Handle(GetProspects request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<ContactDto>> Handle(GetContacts request, CancellationToken cancellationToken)
         {
             if(request.PageSize < 0) 
             {
@@ -32,7 +32,7 @@ public record GetProspects(int Page = 1, int PageSize = 10) : IRequest<ItemsResu
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Prospects
+            var query = _context.Contacts
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
@@ -47,7 +47,7 @@ public record GetProspects(int Page = 1, int PageSize = 10) : IRequest<ItemsResu
 
             var items = await query.ToArrayAsync(cancellationToken);
 
-            return new ItemsResult<ProspectDto>(
+            return new ItemsResult<ContactDto>(
                 items.Select(invoice => invoice.ToDto()),
                 totalItems);
         }
