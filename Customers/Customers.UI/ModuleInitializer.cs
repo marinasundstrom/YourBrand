@@ -29,6 +29,6 @@ public class ModuleInitializer : IModuleInitializer
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
         var group = navManager.GetGroup("customer-relations") ?? navManager.CreateGroup("customer-relations", () => resources["Customer relations"]);
-        group.CreateItem("persons", () => resources["Persons"], MudBlazor.Icons.Material.Filled.Person, "/customers/persons");
+        group.CreateItem("customers", () => resources["Customers"], MudBlazor.Icons.Material.Filled.Person, "/customers");
     }
 }

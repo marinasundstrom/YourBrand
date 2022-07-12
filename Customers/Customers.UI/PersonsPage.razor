@@ -17,14 +17,16 @@
     Loading="@loading" LoadingProgressColor="Color.Info" >
     
      <HeaderContent>
+         <MudTh>Id</MudTh>
          <MudTh>First Name</MudTh>
          <MudTh>Last Name</MudTh>
          <MudTh>SSN</MudTh>
      </HeaderContent>
-     <RowTemplate Context="transaction">
-         <MudTd DataLabel="Date">@transaction.FirstName</MudTd>
-         <MudTd DataLabel="Date">@transaction.LastName</MudTd>
-         <MudTd DataLabel="Date">@transaction.Ssn</MudTd>
+     <RowTemplate Context="customer">
+         <MudTd DataLabel="Id">@customer.Id</MudTd>
+         <MudTd DataLabel="FirstName">@customer.FirstName</MudTd>
+         <MudTd DataLabel="LastName">@customer.LastName</MudTd>
+         <MudTd DataLabel="SSN">@customer.Ssn</MudTd>
      </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

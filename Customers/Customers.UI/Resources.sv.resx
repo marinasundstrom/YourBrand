@@ -18,4 +18,7 @@
     <data name="Persons">
       <value>Personer</value>
     </data>
+    <data name="Customers">
+        <value>Kunder</value>
+    </data>
 </root>
