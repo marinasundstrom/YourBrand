@@ -19,6 +19,7 @@ public record DeletePerson(string PersonId) : IRequest
 
         public async Task<Unit> Handle(DeletePerson request, CancellationToken cancellationToken)
         {
+            /*
             var invoice = await _context.Persons
                 //.Include(i => i.Addresses)
                 .AsSplitQuery()
@@ -33,6 +34,7 @@ public record DeletePerson(string PersonId) : IRequest
             _context.Persons.Remove(invoice);
 
             await _context.SaveChangesAsync(cancellationToken);
+            */
 
             return Unit.Value;
         }

@@ -19,6 +19,7 @@ public record CreatePerson(string FirstName, string LastName, string SSN) : IReq
 
         public async Task<PersonDto> Handle(CreatePerson request, CancellationToken cancellationToken)
         {
+            /*
             var person = new Domain.Entities.Person(request.FirstName, request.LastName, request.SSN);
 
             _context.Persons.Add(person);
@@ -26,6 +27,9 @@ public record CreatePerson(string FirstName, string LastName, string SSN) : IReq
             await _context.SaveChangesAsync(cancellationToken);
 
             return person.ToDto();
+            */
+
+            return null!;
         }
     }
 }

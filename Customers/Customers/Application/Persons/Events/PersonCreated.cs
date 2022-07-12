@@ -19,6 +19,7 @@ public class PersonCreatedHandler : INotificationHandler<DomainEventNotification
 
     public async Task Handle(DomainEventNotification<PersonCreated> notification, CancellationToken cancellationToken)
     {
+        /*
         var person = await _context.Persons
             .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.PersonId);
 
@@ -26,5 +27,6 @@ public class PersonCreatedHandler : INotificationHandler<DomainEventNotification
         {
            
         }
+        */
     }
 }

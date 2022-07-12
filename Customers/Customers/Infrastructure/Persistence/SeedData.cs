@@ -19,6 +19,7 @@ public class SeedData
             {
                 var person = new Person("John", "Doe", "3234234234")
                 {
+                    Name = "John Doe",
                     PhoneHome = null,
                     PhoneMobile = "072423123",
                     Email = "test@test.com",

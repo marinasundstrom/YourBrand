@@ -18,7 +18,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddPersonsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(PersonsClient), configureClient)
+            .AddHttpClient(nameof(PersonsClient) + "HR", configureClient)
             .AddTypedClient<IPersonsClient>((http, sp) => new PersonsClient(http));
 
         builder?.Invoke(b);

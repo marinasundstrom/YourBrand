@@ -16,7 +16,7 @@ public class Address : AuditableEntity
         Id = Guid.NewGuid().ToString();
         Thoroughfare = thoroughfare;
 
-        AddDomainEvent(new AddressCreated(Id));
+        //AddDomainEvent(new AddressCreated(Id));
     }
 
     public string Id { get; private set; }

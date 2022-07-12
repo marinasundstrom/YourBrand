@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Customers API",
@@ -298,6 +298,44 @@
           }
         }
       }
+    },
+    "/Customers": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Customers_GetCustomers",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfCustomerDto"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -308,13 +346,13 @@
         "firstName",
         "lastName",
         "ssn",
-        "phoneMobile",
         "email",
         "addresses"
       ],
       "properties": {
         "id": {
-          "type": "string"
+          "type": "integer",
+          "format": "int32"
         },
         "firstName": {
           "type": "string"
@@ -459,6 +497,66 @@
           "format": "int32"
         }
       }
+    },
+    "ItemsResultOfCustomerDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomerDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CustomerDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "customerType",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "customerType": {
+          "$ref": "#/definitions/CustomerType"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "orgNo": {
+          "type": "string"
+        },
+        "vatNo": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerType": {
+      "type": "integer",
+      "description": "",
+      "x-enumNames": [
+        "Individual",
+        "Organization"
+      ],
+      "enum": [
+        1,
+        2
+      ]
     },
     "ItemsResultOfPersonDto": {
       "type": "object",

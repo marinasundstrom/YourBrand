@@ -3,13 +3,13 @@
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Customers.Application.Persons;
+using YourBrand.Customers.Application.Customers;
 
-namespace YourBrand.Customers.Application.Persons.Queries;
+namespace YourBrand.Customers.Application.Customers.Queries;
 
-public record GetPerson(string PersonId) : IRequest<PersonDto?>
+public record GetCustomer(string CustomerId) : IRequest<CustomerDto?>
 {
-    public class Handler : IRequestHandler<GetPerson, PersonDto?>
+    public class Handler : IRequestHandler<GetCustomer, CustomerDto?>
     {
         private readonly ICustomersContext _context;
 
@@ -18,14 +18,14 @@ public record GetPerson(string PersonId) : IRequest<PersonDto?>
             _context = context;
         }
 
-        public async Task<PersonDto?> Handle(GetPerson request, CancellationToken cancellationToken)
+        public async Task<CustomerDto?> Handle(GetCustomer request, CancellationToken cancellationToken)
         {
             /*
-            var person = await _context.Persons
+            var person = await _context.Customers
                 .Include(i => i.Addresses)
                 .AsSplitQuery()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.PersonId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
 
             return person is null
                 ? null

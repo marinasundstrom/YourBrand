@@ -6,7 +6,11 @@ namespace YourBrand.Customers.Domain;
 
 public interface ICustomersContext
 {
+    DbSet<Customer> Customers { get; }
+
     DbSet<Person> Persons { get; }
+
+    DbSet<Organization> Organizations { get; }
 
     DbSet<Address> Addresses { get; }
 

@@ -37,10 +37,16 @@ public class CustomersContext : DbContext, ICustomersContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.HasSequence<int>("CustomerIds");
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CustomersContext).Assembly);
     }
 
+    public DbSet<Customer> Customers { get; set; } = null!;
+
     public DbSet<Person> Persons { get; set; } = null!;
+
+    public DbSet<Organization> Organizations { get; set; } = null!;
 
     public DbSet<Address> Addresses { get; set; }  = null!;
 
