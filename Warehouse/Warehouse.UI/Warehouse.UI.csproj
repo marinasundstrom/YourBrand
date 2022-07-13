@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>YourBrand.Orders</RootNamespace>
+    <RootNamespace>YourBrand.Warehouse</RootNamespace>
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
@@ -22,13 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Orders.Client\Orders.Client.csproj" />
+    <ProjectReference Include="..\Warehouse.Client\Warehouse.Client.csproj" />
     <ProjectReference Include="..\..\Finance\Transactions\Transactions.UI\Transactions.UI.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
     <ProjectReference Include="..\..\Finance\Transactions\Transactions.Client\Transactions.Client.csproj" />
     <ProjectReference Include="..\..\Finance\Payments\Payments.Client\Payments.Client.csproj" />
-    <ProjectReference Include="..\..\Catalog\Catalog.Client\Catalog.Client.csproj" />
-    <ProjectReference Include="..\..\Utils\Utils.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.AspNetCore.SignalR.Client" />

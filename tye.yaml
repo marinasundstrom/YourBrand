@@ -156,6 +156,12 @@ services:
       - protocol: https
         port: 5140
 
+  - name: warehouse
+    project: Warehouse/Warehouse/Warehouse.csproj
+    bindings:
+      - protocol: https
+        port: 5150
+
   # Start Finance
 
   - name: financeapp
