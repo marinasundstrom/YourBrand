@@ -1,21 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-using YourBrand.Accounting;
-using YourBrand.Invoicing;
-using YourBrand.Payments;
 using YourBrand.Portal;
-using YourBrand.Showroom;
-using YourBrand.Marketing;
-using YourBrand.TimeReport;
-using YourBrand.Transactions;
 using YourBrand.Portal.Theming;
 using Blazored.LocalStorage;
-using YourBrand.Documents;
-using YourBrand.Messenger;
-using YourBrand.RotRutService;
-using YourBrand.Customers;
-using YourBrand.HumanResources;
 
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;
