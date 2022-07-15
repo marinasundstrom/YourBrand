@@ -66,6 +66,21 @@ public abstract record Result<T, TError> : IDisposable
         }
     }
 
+    public static explicit operator T(Result<T, TError> result)
+    {
+        switch (result)
+        {
+            case Ok(T Value):
+                return Value;
+
+            case Error(TError Err):
+                throw new Exception($"Unhandled error in result: {Err}");
+
+            default:
+                throw new Exception("Unexpected exception");
+        }
+    }
+
     /*
     public static implicit operator T(Result<T, TError> result)
     {
