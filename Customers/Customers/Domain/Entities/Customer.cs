@@ -10,6 +10,12 @@ public abstract class Customer : AuditableEntity
     public int Id { get; private set; }
 
     public string Name { get; set; } = null!;
+    
+    public string Email { get; set; }
+
+    public string? PhoneHome { get; set; }
+
+    public string PhoneMobile { get; set; }
 
     public CustomerType CustomerType => this is Person ? CustomerType.Individual : CustomerType.Organization;
 

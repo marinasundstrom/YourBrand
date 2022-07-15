@@ -22,10 +22,4 @@ public class Person : Customer
     public string LastName { get; set; }
 
     public string Ssn { get; set; }
-
-    public string Email { get; set; }
-
-    public string? PhoneHome { get; set; }
-
-    public string PhoneMobile { get; set; }
 }

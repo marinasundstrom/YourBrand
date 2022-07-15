@@ -18,15 +18,7 @@ public class Organization : Customer
         //AddDomainEvent(new PersonCreated(Id));
     }
 
-    public string Name { get; set; }
-
     public string OrganizationNo { get; set; }
 
     public string VatNo { get; set; }
-
-    public string Email { get; set; }
-
-    public string? PhoneHome { get; set; }
-
-    public string PhoneMobile { get; set; }
 }

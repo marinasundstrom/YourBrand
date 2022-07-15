@@ -22,7 +22,7 @@ public class SeedData
                     Name = "John Doe",
                     PhoneHome = null,
                     PhoneMobile = "072423123",
-                    Email = "test@test.com",
+                    Email = "john.d@email.com",
                 };
 
                 person.AddAddress(new Address("foo") {
@@ -38,6 +38,35 @@ public class SeedData
                 });
 
                 context.Persons.Add(person);
+
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.Organizations.Any())
+            {
+                var organization = new Organization("John", "Doe", "3234234234")
+                {
+                    Name = "ACME Inc.",
+                    OrganizationNo = "2323434",
+                    VatNo = "SE-2323434",
+                    PhoneHome = null,
+                    PhoneMobile = "072423123",
+                    Email = "acme@email.com",
+                };
+
+                organization.AddAddress(new Address("foo") {
+                    Type = Domain.Enums.AddressType.Billing,
+                    Thoroughfare = "Baker Street",
+                    SubPremises = null,
+                    Premises = "42",
+                    PostalCode = "4534 23",
+                    Locality = "Testville",
+                    SubAdministrativeArea = "Sub",
+                    AdministrativeArea =  "Area",
+                    Country = "Testland"
+                });
+
+                context.Organizations.Add(organization);
 
                 await context.SaveChangesAsync();
             }
