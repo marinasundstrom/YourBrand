@@ -11,6 +11,8 @@ using YourBrand.TimeReport.Application.TimeSheets.Queries;
 using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Dtos;
 
+using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
+
 namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
@@ -65,8 +67,8 @@ public class TimeSheetsController : ControllerBase
 
         return result switch
         {
-            Result<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
-            Result<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+            Ok(EntryDto value) => Ok(value),
+            Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
             _ => BadRequest()
 
             /*
@@ -93,8 +95,8 @@ public class TimeSheetsController : ControllerBase
             
             return result switch
             {
-                Result<EntryDto, DomainException>.Ok(EntryDto value) => Ok(value),
-                Result<EntryDto, DomainException>.Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
+                Ok(EntryDto value) => Ok(value),
+                Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
                 _ => BadRequest()
             };
         }

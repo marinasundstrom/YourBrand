@@ -66,6 +66,7 @@ public abstract record Result<T, TError> : IDisposable
         }
     }
 
+    /*
     public static implicit operator T(Result<T, TError> result)
     {
         switch (result)
@@ -80,4 +81,5 @@ public abstract record Result<T, TError> : IDisposable
                 throw new Exception("Unexpected exception");
         }
     }
+    */
 }
