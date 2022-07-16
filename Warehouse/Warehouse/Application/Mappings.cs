@@ -5,8 +5,15 @@ namespace YourBrand.Warehouse.Application;
 
 public static class Mappings 
 {
-    public static ItemDto ToDto(this Item person) 
+    public static ItemDto ToDto(this Item item) 
     {
-        return new ItemDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.PhoneHome, person.PhoneMobile, person.Email);
+        return new ItemDto(
+            item.Id,
+            item.SKU,
+            item.Name,
+            item.QuantityOnHand,
+            item.QuantityPicked,
+            item.QuantityReserved,
+            item.QuantityAvailable);
     }
 }

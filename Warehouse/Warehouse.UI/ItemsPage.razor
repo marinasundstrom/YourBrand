@@ -17,14 +17,22 @@
     Loading="@loading" LoadingProgressColor="Color.Info" >
     
      <HeaderContent>
-         <MudTh>First Name</MudTh>
-         <MudTh>Last Name</MudTh>
-         <MudTh>SSN</MudTh>
+         <MudTh>Id</MudTh>
+         <MudTh>SKU</MudTh>
+         <MudTh>Name</MudTh>
+         <MudTh>Qt on hand</MudTh>
+         <MudTh>Qt picked</MudTh>
+         <MudTh>Qt reserved</MudTh>
+         <MudTh>Qt available</MudTh>
      </HeaderContent>
-     <RowTemplate Context="prospect">
-         <MudTd DataLabel="FirstName">@prospect.FirstName</MudTd>
-         <MudTd DataLabel="LastName">@prospect.LastName</MudTd>
-         <MudTd DataLabel="SSN">@prospect.Ssn</MudTd>
+     <RowTemplate Context="item">
+        <MudTd DataLabel="Id">@item.Id</MudTd>
+        <MudTd DataLabel="SKU">@item.Sku</MudTd>
+        <MudTd DataLabel="Name">@item.Name</MudTd>
+        <MudTd DataLabel="Qt on hand">@item.QuantityOnHand</MudTd>
+        <MudTd DataLabel="Qt on hand">@item.QuantityPicked</MudTd>
+        <MudTd DataLabel="Qt on hand">@item.QuantityReserved</MudTd>
+        <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
      </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

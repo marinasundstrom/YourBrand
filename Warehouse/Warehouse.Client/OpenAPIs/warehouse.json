@@ -5,7 +5,7 @@
     "title": "Warehouse API",
     "version": "0.1"
   },
-  "host": "localhost:5140",
+  "host": "localhost:5150",
   "schemes": [
     "https"
   ],
@@ -153,151 +153,6 @@
           }
         }
       }
-    },
-    "/Items/{personId}/Addresses": {
-      "get": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_GetAddress",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "string",
-            "name": "foo",
-            "in": "query",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/AddressDto"
-            }
-          }
-        }
-      }
-    },
-    "/Items/Addresses": {
-      "post": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_CreateAddress",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "createAddress",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/CreateAddress"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/AddressDto"
-            }
-          }
-        }
-      }
-    },
-    "/Items/{personId}/Addresses/{addressId}": {
-      "delete": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_DeleteAddress",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "string",
-            "name": "addressId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
-          }
-        }
-      }
-    },
-    "/Addresses": {
-      "get": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_GetAddresses",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ItemsResultOfAddressDto"
-            }
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -305,31 +160,38 @@
       "type": "object",
       "required": [
         "id",
-        "firstName",
-        "lastName",
-        "ssn"
+        "sku",
+        "name",
+        "quantityOnHand",
+        "quantityPicked",
+        "quantityReserved",
+        "quantityAvailable"
       ],
       "properties": {
         "id": {
           "type": "string"
         },
-        "firstName": {
+        "sku": {
           "type": "string"
         },
-        "lastName": {
+        "name": {
           "type": "string"
         },
-        "ssn": {
-          "type": "string"
+        "quantityOnHand": {
+          "type": "integer",
+          "format": "int32"
         },
-        "phoneHome": {
-          "type": "string"
+        "quantityPicked": {
+          "type": "integer",
+          "format": "int32"
         },
-        "phoneMobile": {
-          "type": "string"
+        "quantityReserved": {
+          "type": "integer",
+          "format": "int32"
         },
-        "email": {
-          "type": "string"
+        "quantityAvailable": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -353,101 +215,6 @@
         },
         "ssn": {
           "type": "string"
-        }
-      }
-    },
-    "AddressDto": {
-      "type": "object",
-      "required": [
-        "id",
-        "type",
-        "thoroughfare",
-        "postalCode",
-        "locality",
-        "subAdministrativeArea",
-        "administrativeArea",
-        "country"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "type": {
-          "$ref": "#/definitions/AddressType"
-        },
-        "thoroughfare": {
-          "type": "string"
-        },
-        "premises": {
-          "type": "string"
-        },
-        "subPremises": {
-          "type": "string"
-        },
-        "postalCode": {
-          "type": "string"
-        },
-        "locality": {
-          "type": "string"
-        },
-        "subAdministrativeArea": {
-          "type": "string"
-        },
-        "administrativeArea": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        }
-      }
-    },
-    "AddressType": {
-      "type": "integer",
-      "description": "",
-      "x-enumNames": [
-        "Delivery",
-        "Billing"
-      ],
-      "enum": [
-        1,
-        2
-      ]
-    },
-    "CreateAddress": {
-      "type": "object",
-      "required": [
-        "firstName",
-        "lastName",
-        "ssn"
-      ],
-      "properties": {
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "ssn": {
-          "type": "string"
-        }
-      }
-    },
-    "ItemsResultOfAddressDto": {
-      "type": "object",
-      "required": [
-        "items",
-        "totalItems"
-      ],
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AddressDto"
-          }
-        },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
         }
       }
     },
