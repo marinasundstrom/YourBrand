@@ -1,10 +1,11 @@
 ﻿using System;
 
+using YourBrand.Warehouse.Domain.Common;
 using YourBrand.Warehouse.Domain.Events;
 
 namespace YourBrand.Warehouse.Domain.Entities;
 
-public class Item
+public class Item : AuditableEntity
 {
     protected Item() { }
 
