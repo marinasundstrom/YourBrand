@@ -57,11 +57,16 @@
                     </MudItem>
                 }
             </MudGrid>
+
+            <MudPagination Color="Color.Primary" Count="pages" SelectedChanged="OnPageChanged" />
         }
 </div>
 
 @code
 {
+    int pageSize = 2;
+    int pages = 0;
+    int page = 1;
     MudChip chip;
     IEnumerable<ProductGroupDto>? productGroups = null;
     IEnumerable<ProductDto>? products = null;
@@ -73,8 +78,17 @@
     protected override async Task OnInitializedAsync()
     {
         productGroups = await ProductsClient.GetProductGroupsAsync(false);
-        var result = await ProductsClient.GetProductsAsync(false, GroupId, 0, 100);
+        
+        await OnPageChanged(1);
+    }
+
+    async Task OnPageChanged(int page) 
+    {
+        var result = await ProductsClient.GetProductsAsync(false, GroupId, page - 1, pageSize);
         products = result.Items;
+        
+        this.pages = (int)Math.Ceiling((double)result.TotalItems / (double)pageSize);
+        this.page = page;
     }
 
     async Task CreateProduct()
@@ -93,13 +107,13 @@
     async Task SetGroup(MudChip chip)
     {
         var group = productGroups.FirstOrDefault(g => g.Name == chip.Text);
+        GroupId = group?.Id;
 
-        var result = await ProductsClient.GetProductsAsync(false, group?.Id, 0, 100);
-        products = result.Items;
+        await OnPageChanged(1);
 
         this.chip = chip;
 
-        NavigationManager.NavigateTo($"/products?groupId={group?.Id}", replace: true);
+        NavigationManager.NavigateTo($"/products?groupId={GroupId}", replace: true);
     }
 }
 
