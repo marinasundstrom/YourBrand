@@ -22,21 +22,17 @@ public class SeedData
                     Phone = null,
                     PhoneMobile = "072423123",
                     Email = "test@test.com",
+                    Address = new Domain.ValueObjects.Address(
+                        Thoroughfare:"Baker Street",
+                        SubPremises: null,
+                        Premises: "42",
+                        PostalCode: "4534 23",
+                        Locality: "Testville",
+                        SubAdministrativeArea: "Sub",
+                        AdministrativeArea: "Area",
+                        Country: "Testland"
+                    )
                 };
-
-                /*
-                person.AddAddress(new Address("foo") {
-                    Type = Domain.Enums.AddressType.Billing,
-                    Thoroughfare = "Baker Street",
-                    SubPremises = null,
-                    Premises = "42",
-                    PostalCode = "4534 23",
-                    Locality = "Testville",
-                    SubAdministrativeArea = "Sub",
-                    AdministrativeArea =  "Area",
-                    Country = "Testland"
-                });
-                */
 
                 context.Contacts.Add(person);
 

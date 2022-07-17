@@ -6,15 +6,9 @@ namespace YourBrand.Marketing.Domain.Entities;
 
 public class Address : AuditableEntity
 {
-    protected Address()
-    {
-
-    }
-
-    public Address(string thoroughfare)
+    public Address()
     {
         Id = Guid.NewGuid().ToString();
-        Thoroughfare = thoroughfare;
 
         //AddDomainEvent(new AddressCreated(Id));
     }

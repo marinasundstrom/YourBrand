@@ -20,11 +20,20 @@
          <MudTh>First Name</MudTh>
          <MudTh>Last Name</MudTh>
          <MudTh>SSN</MudTh>
+         <MudTh>Phone</MudTh>
+         <MudTh>Phone (Mobile)</MudTh>
+         <MudTh>Email</MudTh>
+         <MudTh>Address</MudTh>
      </HeaderContent>
-     <RowTemplate Context="prospect">
-         <MudTd DataLabel="FirstName">@prospect.FirstName</MudTd>
-         <MudTd DataLabel="LastName">@prospect.LastName</MudTd>
-         <MudTd DataLabel="SSN">@prospect.Ssn</MudTd>
+     <RowTemplate Context="contact">
+         <MudTd DataLabel="FirstName">@contact.FirstName</MudTd>
+         <MudTd DataLabel="LastName">@contact.LastName</MudTd>
+         <MudTd DataLabel="SSN">@contact.Ssn</MudTd>
+         <MudTd DataLabel="Phone">@contact.Phone</MudTd>
+         <MudTd DataLabel="Phone (Mobile)">@contact.PhoneMobile</MudTd>
+         <MudTd DataLabel="Email">@contact.Email</MudTd>
+         <MudTd DataLabel="Address">
+            @contact.Address?.Thoroughfare @contact.Address?.SubPremises, @contact.Address?.Premises @contact.Address?.PostalCode @contact.Address?.Locality @contact.Address?.SubAdministrativeArea @contact.Address?.AdministrativeArea @contact.Address?.Country</MudTd>
      </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

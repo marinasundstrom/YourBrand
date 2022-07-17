@@ -322,13 +322,53 @@
         "ssn": {
           "type": "string"
         },
-        "phoneHome": {
+        "phone": {
           "type": "string"
         },
         "phoneMobile": {
           "type": "string"
         },
         "email": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/ContactAddressDto"
+        }
+      }
+    },
+    "ContactAddressDto": {
+      "type": "object",
+      "required": [
+        "thoroughfare",
+        "postalCode",
+        "locality",
+        "subAdministrativeArea",
+        "administrativeArea",
+        "country"
+      ],
+      "properties": {
+        "thoroughfare": {
+          "type": "string"
+        },
+        "premises": {
+          "type": "string"
+        },
+        "subPremises": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "locality": {
+          "type": "string"
+        },
+        "subAdministrativeArea": {
+          "type": "string"
+        },
+        "administrativeArea": {
+          "type": "string"
+        },
+        "country": {
           "type": "string"
         }
       }

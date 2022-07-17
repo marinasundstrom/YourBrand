@@ -19,7 +19,7 @@ public record CreateAddress(string FirstName, string LastName, string SSN) : IRe
 
         public async Task<AddressDto> Handle(CreateAddress request, CancellationToken cancellationToken)
         {
-            var person = new Domain.Entities.Address(request.LastName);
+            var person = new Domain.Entities.Address();
 
             _context.Addresses.Add(person);
 

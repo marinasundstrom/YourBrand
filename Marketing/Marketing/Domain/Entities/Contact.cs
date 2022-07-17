@@ -43,7 +43,7 @@ public class Contact : AuditableEntity
 
     public string? PhoneMobile { get; set; }
 
-    public Domain.ValueObjects.Address? Address { get; private set; } = null!;
+    public Domain.ValueObjects.Address? Address { get; set; }
 
     public IReadOnlyCollection<Discount> Discounts => discounts;
 
