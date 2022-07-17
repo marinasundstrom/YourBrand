@@ -20,7 +20,7 @@ public class SeedData
                 var person = new Person("John", "Doe", "3234234234")
                 {
                     Name = "John Doe",
-                    PhoneHome = null,
+                    Phone = null,
                     PhoneMobile = "072423123",
                     Email = "john.d@email.com",
                 };
@@ -49,7 +49,7 @@ public class SeedData
                     Name = "ACME Inc.",
                     OrganizationNo = "2323434",
                     VatNo = "SE-2323434",
-                    PhoneHome = null,
+                    Phone = null,
                     PhoneMobile = "072423123",
                     Email = "acme@email.com",
                 };

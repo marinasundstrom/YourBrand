@@ -14,7 +14,7 @@ public static class Mappings
 
     public static PersonDto ToDto(this Person person) 
     {
-        return new PersonDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.PhoneHome, person.PhoneMobile, person.Email, person.Addresses.Select(a => a.ToDto()));
+        return new PersonDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.IsDeceased.GetValueOrDefault(), person.Phone, person.PhoneMobile, person.Email, person.Addresses.Select(a => a.ToDto()));
     }
 
     public static AddressDto ToDto(this Address address) 

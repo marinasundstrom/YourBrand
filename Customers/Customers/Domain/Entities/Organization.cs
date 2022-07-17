@@ -21,4 +21,6 @@ public class Organization : Customer
     public string OrganizationNo { get; set; }
 
     public string VatNo { get; set; }
+
+    public bool? HasCeased { get; set; }
 }

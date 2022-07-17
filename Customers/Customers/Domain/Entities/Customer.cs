@@ -13,7 +13,7 @@ public abstract class Customer : AuditableEntity
     
     public string Email { get; set; }
 
-    public string? PhoneHome { get; set; }
+    public string? Phone { get; set; }
 
     public string PhoneMobile { get; set; }
 

@@ -8,7 +8,7 @@ public static class Mappings
 {
     public static ContactDto ToDto(this Contact person) 
     {
-        return new ContactDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.PhoneHome, person.PhoneMobile, person.Email);
+        return new ContactDto(person.Id, person.FirstName, person.LastName, person.Ssn, person.Phone, person.PhoneMobile, person.Email);
     }
 
     public static AddressDto ToDto(this Address address) 

@@ -22,4 +22,6 @@ public class Person : Customer
     public string LastName { get; set; }
 
     public string Ssn { get; set; }
+
+    public bool? IsDeceased { get; set; }
 }
