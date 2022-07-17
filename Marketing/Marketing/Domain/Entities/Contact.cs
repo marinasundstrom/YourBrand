@@ -10,6 +10,8 @@ namespace YourBrand.Marketing.Domain.Entities;
 
 public class Contact : AuditableEntity
 {
+    private HashSet<Discount> discounts = new HashSet<Discount>();
+
     protected Contact() { }
 
     public Contact(string firstName, string lastName, string ssn)
@@ -27,6 +29,8 @@ public class Contact : AuditableEntity
 
     public ContactStatus Status { get; private set; }
 
+    public int? CustomerId { get; private set; }
+
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
@@ -40,4 +44,11 @@ public class Contact : AuditableEntity
     public string? PhoneMobile { get; set; }
 
     public Domain.ValueObjects.Address? Address { get; private set; } = null!;
+
+    public IReadOnlyCollection<Discount> Discounts => discounts;
+
+    public void AddDiscount(Discount discount) 
+    {
+        discounts.Add(discount);
+    }
 }

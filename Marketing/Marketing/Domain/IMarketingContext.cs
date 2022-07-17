@@ -12,5 +12,7 @@ public interface IMarketingContext
 
     DbSet<Address> Addresses { get; }
 
+    DbSet<Discount> Discounts { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

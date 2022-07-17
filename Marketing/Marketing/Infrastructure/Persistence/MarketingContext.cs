@@ -48,6 +48,8 @@ public class MarketingContext : DbContext, IMarketingContext
 
     public DbSet<Address> Addresses { get; set; }  = null!;
 
+    public DbSet<Discount> Discounts { get; set; } = null!;
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await DispatchEvents();
