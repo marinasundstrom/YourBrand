@@ -3,32 +3,20 @@ using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Campaign
+public class Campaign : AuditableEntity
 {
     readonly HashSet<Address> _addresses = new HashSet<Address>();
 
     protected Campaign() { }
 
-    public Campaign(string name, string organizationNo, string vatNo)
+    public Campaign(string name)
     {
         Name = name;
-        CampaignNo = organizationNo;
-        VatNo = vatNo;
-
-        //AddDomainEvent(new ContactCreated(Id));
     }
 
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public string Name { get; set; }
 
-    public string CampaignNo { get; set; }
-
-    public string VatNo { get; set; }
-
-    public string Email { get; set; }
-
-    public string? PhoneHome { get; set; }
-
-    public string PhoneMobile { get; set; }
+    public string? Description { get; set; }
 }

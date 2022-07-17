@@ -21,10 +21,6 @@ public class Address : AuditableEntity
 
     public string Id { get; private set; }
 
-    public Campaign? Campaign { get; private set; } = null!;
-
-    public Contact? Contact { get; private set; } = null!;
-
     public AddressType Type { get; set; }
 
     // Street

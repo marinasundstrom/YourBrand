@@ -10,5 +10,7 @@ public class ContactConfiguration : IEntityTypeConfiguration<Contact>
     public void Configure(EntityTypeBuilder<Contact> builder)
     {
         builder.ToTable("Contacts");
+
+        builder.OwnsOne(x => x.Address);
     }
 }
