@@ -391,7 +391,7 @@ else
 
         if (product.HasVariants)
         {
-            variants = await ProductsClient.GetVariantsAsync(ProductId);
+            variants = (await ProductsClient.GetVariantsAsync(ProductId, 0, 10, null, null, null)).Items;
 
             await Update(vm, null!);
         }

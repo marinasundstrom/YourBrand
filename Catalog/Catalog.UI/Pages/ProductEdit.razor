@@ -157,22 +157,20 @@ else
         {
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateVariant" StartIcon="@Icons.Material.Filled.Add">Create variant</MudButton>
 
-            @if (variants is not null)
-            {
-                <MudTable T="ProductVariantDto" Items="@variants"
+                <MudTable T="ProductVariantDto" @ref="table3" ServerData="ServerReload"
                           Dense="true" Hover="true" Class="mb-4">
 
                     <HeaderContent>
-                        <MudTh><MudTableSortLabel SortLabel="nr_field1" T="ProductVariantDto">Image</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="nr_field" T="ProductVariantDto">Name</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="sign_field" T="ProductVariantDto">SKU</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="name_field" T="ProductVariantDto">Price</MudTableSortLabel></MudTh>
+                        <MudTh>Image</MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="Name" T="ProductVariantDto">Name</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="Sku" T="ProductVariantDto">SKU</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortLabel="Price" T="ProductVariantDto">Price</MudTableSortLabel></MudTh>
 
-                        @if (variants is not null && variants.Any())
+                        @if (GetTableData()?.Items is IEnumerable<ProductVariantDto> variants && variants.Any())
                         {
-                            @foreach (var option in variants.First().Options)
+                            @foreach (var option in GetTableData().Items.First().Options)
                             {
-                                <MudTh><MudTableSortLabel SortLabel="name_field" T="ProductVariantDto">@option.Name</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortLabel="Values.Value" T="ProductVariantDto">@option.Name</MudTableSortLabel></MudTh>
                             }
                         }
 
@@ -213,9 +211,11 @@ else
                         <MudText>Loading...</MudText>
                     </LoadingContent>
 
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
                 </MudTable>
 
-            }
         }
     }
 
@@ -275,10 +275,10 @@ else
 {
     MudTable<OptionDto> table;
     MudTable<AttributeDto> table2;
+    MudTable<ProductVariantDto> table3;
 
     ProductDto? product;
     List<AttributeDto>? attributes;
-    List<ProductVariantDto>? variants;
     List<OptionDto>? options;
 
     public IList<ProductVisibility?> VisibilityOptions { get; } = Enum.GetValues<ProductVisibility>().Select(x => (ProductVisibility?)x).ToArray();
@@ -291,8 +291,13 @@ else
         product = await ProductsClient.GetProductAsync(ProductId);
         attributes = (await ProductsClient.GetProductAttributesAsync(ProductId)).ToList();
         options = (await ProductsClient.GetProductOptionsAsync(ProductId)).ToList();
+    }
 
-        variants = (await ProductsClient.GetVariantsAsync(ProductId)).ToList();
+    private async Task<TableData<ProductVariantDto>> ServerReload(TableState state)
+    {
+        var result = await ProductsClient.GetVariantsAsync(ProductId, state.Page, state.PageSize, null, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Catalog.Client.SortDirection.Asc : Catalog.Client.SortDirection.Desc);
+
+        return new TableData<ProductVariantDto>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
     async Task UpdateVisibility(ProductVisibility? value)
@@ -368,7 +373,7 @@ else
 
         if (result.Cancelled) return;
 
-        variants.Add((ProductVariantDto)result.Data);
+        await table3.ReloadServerData();
     }
 
     async Task UpdateVariant(ProductVariantDto variant)
@@ -383,9 +388,11 @@ else
 
         if (result.Cancelled) return;
 
-        var index = variants!.IndexOf(variant);
+        //var index = variants!.IndexOf(variant);
 
-        variants[index] = (ProductVariantDto)result.Data;
+        //variants[index] = (ProductVariantDto)result.Data;
+
+        await table3.ReloadServerData();
     }
 
     async Task DeleteVariant(ProductVariantDto variant)
@@ -398,7 +405,9 @@ else
 
         await ProductsClient.DeleteVariantAsync(ProductId, variant.Id);
 
-        variants.Remove(variant);
+        //variants.Remove(variant);
+
+        await table3.ReloadServerData();
     }
 
     async Task EditDetails()
@@ -493,4 +502,13 @@ else
         attributes.Remove(attribute);
     }
 
+    private TableData<ProductVariantDto>? GetTableData()
+    {
+        if(table3 is null) return null;
+
+        return (TableData<ProductVariantDto>?)table3?.GetType()?
+            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
+                         System.Reflection.BindingFlags.Instance)?
+            .GetValue(table3);
+    }
 }

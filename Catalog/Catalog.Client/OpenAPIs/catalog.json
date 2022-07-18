@@ -1521,6 +1521,47 @@
             "in": "path",
             "required": true,
             "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
           }
         ],
         "responses": {
@@ -1528,10 +1569,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ProductVariantDto"
-              }
+              "$ref": "#/definitions/ItemsResultOfProductVariantDto"
             }
           }
         }
@@ -2485,6 +2523,25 @@
           "format": "int32"
         },
         "max": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ItemsResultOfProductVariantDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProductVariantDto"
+          }
+        },
+        "totalItems": {
           "type": "integer",
           "format": "int32"
         }

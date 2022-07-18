@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Catalog.Application;
+using YourBrand.Catalog.Application.Common.Models;
 using YourBrand.Catalog.Application.Products.Variants;
 
 namespace YourBrand.Catalog.Controllers;
@@ -8,9 +9,9 @@ namespace YourBrand.Catalog.Controllers;
 partial class ProductsController : Controller
 {
     [HttpGet("{productId}/Variants")]
-    public async Task<ActionResult<IEnumerable<ProductVariantDto>>> GetVariants(string productId)
+    public async Task<ActionResult<ItemsResult<ProductVariantDto>>> GetVariants(string productId, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetProductVariants(productId)));
+        return Ok(await _mediator.Send(new GetProductVariants(productId, page, pageSize, searchString, sortBy, sortDirection)));
     }
 
     [HttpDelete("{productId}/Variants/{variantId}")]
