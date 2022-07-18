@@ -9,13 +9,13 @@ using MediatR;
 
 namespace YourBrand.ApiKeys.Consumers;
 
-public class UserUpdated6Consumer : IConsumer<UserUpdated>
+public class ApiKeysUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserUpdated6Consumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
+    public ApiKeysUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _requestClient = requestClient;

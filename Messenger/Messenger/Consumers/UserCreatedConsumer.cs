@@ -7,14 +7,14 @@ using MassTransit;
 using MediatR;
 namespace YourBrand.Messenger.Consumers;
 
-public class UserCreated2Consumer : IConsumer<UserCreated>
+public class MessengerUserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
-    private readonly ILogger<UserCreated2Consumer> _logger;
+    private readonly ILogger<MessengerUserCreatedConsumer> _logger;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserCreated2Consumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<UserCreated2Consumer> logger)
+    public MessengerUserCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<MessengerUserCreatedConsumer> logger)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

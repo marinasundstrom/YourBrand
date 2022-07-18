@@ -9,12 +9,12 @@ using MediatR;
 
 namespace YourBrand.ApiKeys.Consumers;
 
-public class UserDeleted5Consumer : IConsumer<UserDeleted>
+public class ApiKeysUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserDeleted5Consumer(IMediator mediator, ICurrentUserService currentUserService)
+    public ApiKeysUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

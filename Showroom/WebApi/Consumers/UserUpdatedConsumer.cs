@@ -8,13 +8,13 @@ using YourBrand.Showroom.Application.Users.Commands;
 
 namespace YourBrand.Showroom.Consumers;
 
-public class UserUpdated1Consumer : IConsumer<UserUpdated>
+public class ShowroomUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserUpdated1Consumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
+    public ShowroomUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _requestClient = requestClient;

@@ -10,13 +10,13 @@ using YourBrand.Application.Users.Commands;
 
 namespace YourBrand.Consumers;
 
-public class UserDeleted0Consumer : IConsumer<UserDeleted>
+public class AppServiceUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly IUsersClient _usersClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserDeleted0Consumer(IMediator mediator, IUsersClient usersClient, ICurrentUserService currentUserService)
+    public AppServiceUserDeletedConsumer(IMediator mediator, IUsersClient usersClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _usersClient = usersClient;

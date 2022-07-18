@@ -7,14 +7,14 @@ using MassTransit;
 using MediatR;
 namespace YourBrand.ApiKeys.Consumers;
 
-public class UserCreated5Consumer : IConsumer<UserCreated>
+public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
-    private readonly ILogger<UserCreated5Consumer> _logger;
+    private readonly ILogger<ApiKeysUserCreatedConsumer> _logger;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserCreated5Consumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<UserCreated5Consumer> logger)
+    public ApiKeysUserCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<ApiKeysUserCreatedConsumer> logger)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

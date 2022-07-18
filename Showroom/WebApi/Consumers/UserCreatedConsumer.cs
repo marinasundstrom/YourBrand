@@ -7,14 +7,14 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.Users.Commands;
 namespace YourBrand.Showroom.Consumers;
 
-public class UserCreated1Consumer : IConsumer<UserCreated>
+public class ShowroomUserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
-    private readonly ILogger<UserCreated1Consumer> _logger;
+    private readonly ILogger<ShowroomUserCreatedConsumer> _logger;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserCreated1Consumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<UserCreated1Consumer> logger)
+    public ShowroomUserCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<ShowroomUserCreatedConsumer> logger)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

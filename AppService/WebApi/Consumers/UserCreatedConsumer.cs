@@ -6,14 +6,14 @@ using YourBrand.Application.Common.Interfaces;
 using YourBrand.Application.Users.Commands;
 namespace YourBrand.Consumers;
 
-public class UserCreated0Consumer : IConsumer<UserCreated>
+public class AppServiceUserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
-    private readonly ILogger<UserCreated0Consumer> _logger;
+    private readonly ILogger<AppServiceUserCreatedConsumer> _logger;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserCreated0Consumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<UserCreated0Consumer> logger)
+    public AppServiceUserCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<AppServiceUserCreatedConsumer> logger)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

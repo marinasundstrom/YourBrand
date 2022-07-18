@@ -10,12 +10,12 @@ using YourBrand.Showroom.Application.Users.Commands;
 
 namespace YourBrand.Showroom.Consumers;
 
-public class UserDeleted1Consumer : IConsumer<UserDeleted>
+public class ShowroomUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserDeleted1Consumer(IMediator mediator, ICurrentUserService currentUserService)
+    public ShowroomUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

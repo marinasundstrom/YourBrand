@@ -9,12 +9,12 @@ using MediatR;
 
 namespace YourBrand.Messenger.Consumers;
 
-public class UserDeleted2Consumer : IConsumer<UserDeleted>
+public class MessengerUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserDeleted2Consumer(IMediator mediator, ICurrentUserService currentUserService)
+    public MessengerUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;

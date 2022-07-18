@@ -12,13 +12,13 @@ using YourBrand.TimeReport.Application.Users.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
-public class UserUpdatedConsumer : IConsumer<UserUpdated>
+public class TimeReportUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
+    public TimeReportUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _requestClient = requestClient;

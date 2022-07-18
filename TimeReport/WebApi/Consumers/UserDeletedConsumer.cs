@@ -10,13 +10,13 @@ using YourBrand.TimeReport.Application.Users.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
-public class UserDeletedConsumer : IConsumer<UserDeleted>
+public class TimeReportUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly IUsersClient _usersClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserDeletedConsumer(IMediator mediator, IUsersClient usersClient, ICurrentUserService currentUserService)
+    public TimeReportUserDeletedConsumer(IMediator mediator, IUsersClient usersClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _usersClient = usersClient;

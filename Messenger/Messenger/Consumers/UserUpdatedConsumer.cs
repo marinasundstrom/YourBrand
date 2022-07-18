@@ -9,13 +9,13 @@ using MediatR;
 
 namespace YourBrand.Messenger.Consumers;
 
-public class UserUpdated2Consumer : IConsumer<UserUpdated>
+public class MessengerUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserUpdated2Consumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
+    public MessengerUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _requestClient = requestClient;

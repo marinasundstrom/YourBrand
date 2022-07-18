@@ -8,13 +8,13 @@ using YourBrand.Application.Users.Commands;
 
 namespace YourBrand.Consumers;
 
-public class UserUpdated0Consumer : IConsumer<UserUpdated>
+public class AppServiceUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public UserUpdated0Consumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
+    public AppServiceUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _requestClient = requestClient;
