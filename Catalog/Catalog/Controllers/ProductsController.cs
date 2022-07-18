@@ -22,9 +22,9 @@ public partial class ProductsController : Controller
     [HttpGet]
     public async Task<ActionResult<ItemsResult<ProductDto>>> GetProducts(
         bool includeUnlisted = false, string? groupId = null,
-        int page = 0, int pageSize = 10, CancellationToken cancellationToken = default)
+        int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetProducts(includeUnlisted, groupId, page, pageSize), cancellationToken));
+        return Ok(await _mediator.Send(new GetProducts(includeUnlisted, groupId, page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpGet("{productId}")]

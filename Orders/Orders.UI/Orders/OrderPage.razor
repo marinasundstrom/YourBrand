@@ -464,7 +464,7 @@
 
     private async Task<IEnumerable<ProductDto>> SearchItems(string value)
     {
-        var products = await ProductsClient.GetProductsAsync(false, null, 0, 100);
+        var products = await ProductsClient.GetProductsAsync(false, null, 0, 100, null, null, null);
 
         // if text is null or empty, show complete list
         if (string.IsNullOrEmpty(value))

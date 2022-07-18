@@ -8,7 +8,7 @@ using YourBrand.Catalog.Domain;
 
 namespace YourBrand.Catalog.Application.Products;
 
-public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, int Page = 10, int PageSize = 10) : IRequest<ItemsResult<ProductDto>>
+public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, int Page = 10, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProductDto>>
 {
     public class Handler : IRequestHandler<GetProducts, ItemsResult<ProductDto>>
     {
@@ -37,7 +37,17 @@ public record GetProducts(bool IncludeUnlisted = false, string? GroupId = null, 
                 query = query.Where(x => x.Group.Id == request.GroupId);
             }
 
+            if (request.SearchString is not null)
+            {
+                query = query.Where(ca => ca.Name.ToLower().Contains(request.SearchString.ToLower()));
+            }
+
             var totalCount = await query.CountAsync();
+
+            if (request.SortBy is not null)
+            {
+                query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Catalog.Application.SortDirection.Descending : Catalog.Application.SortDirection.Ascending);
+            }
 
             var products = await query
                 .Skip(request.Page * request.PageSize)
