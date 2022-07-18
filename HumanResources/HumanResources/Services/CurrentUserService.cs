@@ -6,7 +6,7 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 
 namespace YourBrand.HumanResources.Services;
 
-public class CurrentPersonService : ICurrentPersonService
+public class CurrentPersonService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -15,5 +15,5 @@ public class CurrentPersonService : ICurrentPersonService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? PersonId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 }

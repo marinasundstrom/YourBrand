@@ -26,13 +26,13 @@ cd ./Warehouse; sh seed.sh; cd ..;
 # Finance
 
 cd ./Finance/Accounting; sh seed.sh; cd ../..;
-cd ./Finance/Invoices; sh seed.sh; cd ../..;
+cd ./Finance/Invoicing; sh seed.sh; cd ../..;
 cd ./Finance/Payments; sh seed.sh; cd ../..;
 cd ./Finance/Transactions; sh seed.sh; cd ../..;
 cd ./Finance/RotRutService; sh seed.sh; cd ../..;
 
 # End Finance
 
-dotnet run --project Seeder/Seeder.csproj
+dotnet run --project ./Seeder/Seeder.csproj
 
 echo "All done"

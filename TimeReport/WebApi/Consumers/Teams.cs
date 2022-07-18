@@ -27,7 +27,7 @@ public class TimeReportTeamCreatedConsumer : IConsumer<TeamCreated>
 
         _currentTeamService.SetCurrentUser(message.CreatedById);
 
-        var result = await _mediator.Send(new CreateTeamCommand(message.TeamId, message.Name, message.Description));
+        var result = await _mediator.Send(new CreateTeamCommand(message.TeamId, message.OrganizationId, message.Name, message.Description));
     }
 }
 

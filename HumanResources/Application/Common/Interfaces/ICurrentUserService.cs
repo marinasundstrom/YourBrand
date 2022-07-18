@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.HumanResources.Application.Common.Interfaces;
 
-public interface ICurrentPersonService
+public interface ICurrentUserService
 {
-    string PersonId { get; }
+    string UserId { get; }
 }

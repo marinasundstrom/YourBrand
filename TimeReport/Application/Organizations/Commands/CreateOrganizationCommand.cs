@@ -5,7 +5,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Organizations.Commands;
 
-public record CreateOrganizationCommand(string Name, string? ParentOrganizationId) : IRequest<OrganizationDto>
+public record CreateOrganizationCommand(string Id, string Name, string? ParentOrganizationId) : IRequest<OrganizationDto>
 {
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
@@ -22,7 +22,7 @@ public record CreateOrganizationCommand(string Name, string? ParentOrganizationI
 
             if (organization is not null) throw new Exception();
 
-            organization = new Domain.Entities.Organization(request.Name, null);
+            organization = new Domain.Entities.Organization(request.Id, request.Name, null);
 
             var parentOrg = request.ParentOrganizationId is null ? null : await context.Organizations.FirstAsync(o => o.Id == request.ParentOrganizationId);
 

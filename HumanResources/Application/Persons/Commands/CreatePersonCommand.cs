@@ -19,10 +19,10 @@ public record CreatePersonCommand(string FirstName, string LastName, string? Dis
     public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, PersonDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentPersonService _currentPersonService;
+        private readonly ICurrentUserService _currentPersonService;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreatePersonCommandHandler(IApplicationDbContext context, ICurrentPersonService currentPersonService, IEventPublisher eventPublisher)
+        public CreatePersonCommandHandler(IApplicationDbContext context, ICurrentUserService currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
             _currentPersonService = currentPersonService;
@@ -54,7 +54,7 @@ public record CreatePersonCommand(string FirstName, string LastName, string? Dis
                .AsSplitQuery()
                .FirstAsync(x => x.Id == person.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonCreated(person.Id, _currentPersonService.PersonId));
+            await _eventPublisher.PublishEvent(new PersonCreated(person.Id, _currentPersonService.UserId));
 
             return person.ToDto();
         }

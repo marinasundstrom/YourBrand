@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
     <ProjectReference Include="..\TimeReport\TimeReport.Client\TimeReport.Client.csproj" />
+    <ProjectReference Include="..\HumanResources\HumanResources.Client\HumanResources.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

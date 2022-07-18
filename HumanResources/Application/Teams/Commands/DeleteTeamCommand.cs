@@ -10,33 +10,37 @@ using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources.Application.Teams.Commands;
 
-public record DeleteTeamCommand(string PersonId) : IRequest
+public record DeleteTeamCommand(string TeamId) : IRequest
 {
     public class Handler : IRequestHandler<DeleteTeamCommand>
     {
-        private readonly ICurrentPersonService _currentPersonService;
+        private readonly ICurrentUserService _currentPersonService;
+        private readonly IApplicationDbContext _context;
         private readonly IEventPublisher _eventPublisher;
 
-        public Handler(ICurrentPersonService currentPersonService, IEventPublisher eventPublisher)
+        public Handler(ICurrentUserService currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher)
         {
             _currentPersonService = currentPersonService;
+            _context = context;
             _eventPublisher = eventPublisher;
         }
 
         public async Task<Unit> Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
-            /*
-            var person = await _personManager.FindByIdAsync(request.PersonId);
+            var team = await _context.Teams
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(x => x.Id == request.TeamId, cancellationToken);
 
-            if (person is null)
+            if (team is null)
             {
-                throw new PersonNotFoundException(request.PersonId);
+                throw new PersonNotFoundException(request.TeamId);
             }
 
-            await _personManager.DeleteAsync(person);
+            _context.Teams.Remove(team);
 
-            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id, _currentPersonService.PersonId));
-            */
+            await _context.SaveChangesAsync(cancellationToken);
+
+            await _eventPublisher.PublishEvent(new Contracts.TeamDeleted(team.Id, _currentPersonService.UserId));
 
             return Unit.Value;
         }

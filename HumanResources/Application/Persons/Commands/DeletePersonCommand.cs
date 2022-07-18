@@ -15,10 +15,10 @@ public record DeletePersonCommand(string PersonId) : IRequest
     public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentPersonService _currentPersonService;
+        private readonly ICurrentUserService _currentPersonService;
         private readonly IEventPublisher _eventPublisher;
 
-        public DeletePersonCommandHandler(IApplicationDbContext context, ICurrentPersonService currentPersonService, IEventPublisher eventPublisher)
+        public DeletePersonCommandHandler(IApplicationDbContext context, ICurrentUserService currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
             _currentPersonService = currentPersonService;
@@ -40,7 +40,7 @@ public record DeletePersonCommand(string PersonId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id, _currentPersonService.PersonId));
+            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id, _currentPersonService.UserId));
 
             return Unit.Value;
         }

@@ -16,9 +16,9 @@ public class Organization : AuditableEntity, ISoftDelete
 
     }
 
-    public Organization(string name, string? description)
+    public Organization(string id, string name, string? description)
     {
-        Id = Guid.NewGuid().ToString();
+        Id = id;
         Name = name;
         Description = description;
     }
@@ -44,8 +44,8 @@ public class Organization : AuditableEntity, ISoftDelete
         project.Organization = this;
     }
 
-    public string Id { get; set; } = null!;
-
+    public string Id { get; private set; } 
+    
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }

@@ -54,11 +54,11 @@ public class TeamsController : Controller
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<TeamDto>> CreateTeam(CreateTeamDto createTeanDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<TeamDto>> CreateTeam(CreateTeamDto createTeamDto, CancellationToken cancellationToken)
     {
         try
         {
-            var team = await _mediator.Send(new CreateTeamCommand(createTeanDto.Name, createTeanDto.Description), cancellationToken);
+            var team = await _mediator.Send(new CreateTeamCommand(createTeamDto.Name, createTeamDto.Description, createTeamDto.OrganizationId), cancellationToken);
 
             return Ok(team);
         }
@@ -120,7 +120,7 @@ public class TeamsController : Controller
     }
 }
 
-public record class CreateTeamDto(string Name, string Description);
+public record class CreateTeamDto(string Name, string Description, string OrganizationId);
 
 public record class UpdateTeamDto(string Name, string Description);
 

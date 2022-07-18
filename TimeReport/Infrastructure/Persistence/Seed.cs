@@ -35,9 +35,11 @@ public static class Seed
 
         if (!context.Organizations.Any())
         {
+            /*
             context.Organizations.Add(new Organization("My org", //Guid.NewGuid().ToString(),
             "A description"
             ) { Id = "test" });
+            */
 
             await context.SaveChangesAsync();
         }

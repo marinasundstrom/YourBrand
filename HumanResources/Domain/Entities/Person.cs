@@ -26,6 +26,8 @@ public class Person : AuditableEntity, ISoftDelete
         Title = title;
         SSN = ssn;
         Email = email;
+
+        AddDomainEvent(new UserCreated(Id));
     }
 
     public string Id { get; set; } = null!;

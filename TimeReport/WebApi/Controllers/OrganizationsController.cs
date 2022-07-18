@@ -38,7 +38,7 @@ public class OrganizationsController : ControllerBase
     [HttpPost]
     public async Task<OrganizationDto> CreateOrganization(CreateOrganizationDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateOrganizationCommand(dto.Name, dto.ParentOrganizationId), cancellationToken);
+        return await _mediator.Send(new CreateOrganizationCommand(Guid.NewGuid().ToString(), dto.Name, dto.ParentOrganizationId), cancellationToken);
     }
 
     [HttpPut("{id}")]

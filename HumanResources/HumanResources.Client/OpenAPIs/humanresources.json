@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://localhost:5120"
+      "url": "https://localhost:5110"
     }
   ],
   "paths": {
@@ -411,6 +411,27 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ItemsResultOfRoleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Sync": {
+      "post": {
+        "tags": [
+          "Sync"
+        ],
+        "operationId": "Sync_SyncData",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }

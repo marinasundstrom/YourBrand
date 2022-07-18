@@ -59,7 +59,7 @@ void LoadModules(IServiceCollection services)
         new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Customers.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Warehouse.ModuleInitializer).Assembly, false)
     };
 

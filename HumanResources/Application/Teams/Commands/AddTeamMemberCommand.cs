@@ -8,10 +8,12 @@ public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
     public class Handler : IRequestHandler<AddTeamMemberCommand>
     {
         private readonly IApplicationDbContext context;
+        private readonly IEventPublisher _eventPublisher;
 
-        public Handler(IApplicationDbContext context)
+        public Handler(IApplicationDbContext context, IEventPublisher eventPublisher)
         {
             this.context = context;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<Unit> Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
@@ -31,6 +33,8 @@ public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
+            await _eventPublisher.PublishEvent(new Contracts.TeamMemberAdded(team.Id, user.Id));
+            
             return Unit.Value;
         }
     }

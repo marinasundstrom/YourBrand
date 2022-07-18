@@ -13,10 +13,10 @@ public record UpdatePersonDetailsCommand(string PersonId, string FirstName, stri
     public class UpdatePersonDetailsCommandHandler : IRequestHandler<UpdatePersonDetailsCommand, PersonDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentPersonService _currentPersonService;
+        private readonly ICurrentUserService _currentPersonService;
         private readonly IEventPublisher _eventPublisher;
 
-        public UpdatePersonDetailsCommandHandler(IApplicationDbContext context, ICurrentPersonService currentPersonService, IEventPublisher eventPublisher)
+        public UpdatePersonDetailsCommandHandler(IApplicationDbContext context, ICurrentUserService currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
             _currentPersonService = currentPersonService;
@@ -47,7 +47,7 @@ public record UpdatePersonDetailsCommand(string PersonId, string FirstName, stri
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonUpdated(person.Id, _currentPersonService.PersonId));
+            await _eventPublisher.PublishEvent(new PersonUpdated(person.Id, _currentPersonService.UserId));
 
             return person.ToDto();
         }

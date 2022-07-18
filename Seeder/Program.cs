@@ -2,16 +2,20 @@
 
 using YourBrand.IdentityService.Client;
 using YourBrand.TimeReport;
+using YourBrand.HumanResources;
+using YourBrand.HumanResources.Client;
 
 const string ApiKey = "asdsr34#34rswert35234aedae?2!";
 
 var services = BuildServiceProvider();
 
 var usersClient = services.GetRequiredService<IUsersClient>();
+var syncClient = services.GetRequiredService<ISyncClient>();
 
 if (args.ToArray().Contains("--sync-users"))
 {
     await usersClient.SyncUsersAsync();
+    await syncClient.SyncDataAsync();
     return;
 }
 
@@ -125,6 +129,12 @@ static IServiceProvider BuildServiceProvider()
     {
         http.BaseAddress = new Uri($"https://identity.local/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
+    }, (builder) => { });
+
+    services.AddHumanResourcesClients((sp, http) =>
+    {
+        http.BaseAddress = new Uri($"https://localhost/api/humanresources/");
+        //http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     }, (builder) => { });
 
     services.AddTimeReportClients((sp, http) =>

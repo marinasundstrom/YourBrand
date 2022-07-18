@@ -8,7 +8,8 @@ public static class ServiceExtensions
     {
         services
             .AddPersonsClient(configureClient, builder)
-            .AddRolesClient(configureClient, builder);
+            .AddRolesClient(configureClient, builder)
+            .AddSyncClient(configureClient, builder);
 
         builder?.Invoke(
            services.AddHttpClient(nameof(ITeamsClient) + "HR", configureClient)
@@ -33,6 +34,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(RolesClient), configureClient)
             .AddTypedClient<IRolesClient>((http, sp) => new RolesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddSyncClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(SyncClient), configureClient)
+            .AddTypedClient<ISyncClient>((http, sp) => new SyncClient(http));
 
         builder?.Invoke(b);
 

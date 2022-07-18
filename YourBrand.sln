@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Client", "I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Contracts", "IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj", "{38BBC401-4119-430C-BC04-C6993D7C1078}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seeder.cs", "Seeder\Seeder.cs.csproj", "{3D78673B-B3BA-4399-A9A0-9A9A05387321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seeder", "Seeder\Seeder.csproj", "{3D78673B-B3BA-4399-A9A0-9A9A05387321}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{59804096-30F5-46BA-BDAD-6AD450594253}"
 EndProject

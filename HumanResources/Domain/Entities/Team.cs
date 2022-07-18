@@ -16,6 +16,8 @@ public class Team : AuditableEntity
         Id = Guid.NewGuid().ToString();
         Name = name;
         Description = description;
+
+        AddDomainEvent(new TeamCreated(Id));
     }
 
     public string Id { get; private set; }
@@ -44,11 +46,14 @@ public class Team : AuditableEntity
     {
         var membership = new TeamMembership(person);
         _memberships.Add(membership);
+        AddDomainEvent(new TeamMemberAdded(Id, person.Id));
         return membership;
     }
 
     public void RemoveMember(Person person)
     {
+        
+        AddDomainEvent(new TeamMemberRemoved(Id, person.Id));
         _members.Remove(person);
     }
 }

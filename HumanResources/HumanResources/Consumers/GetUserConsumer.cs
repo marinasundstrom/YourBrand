@@ -10,9 +10,9 @@ namespace YourBrand.HumanResources.Consumers;
 public class GetPersonConsumer : IConsumer<GetPerson>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentPersonService _currentPersonService;
+    private readonly ICurrentUserService _currentPersonService;
 
-    public GetPersonConsumer(IMediator mediator, ICurrentPersonService currentPersonService)
+    public GetPersonConsumer(IMediator mediator, ICurrentUserService currentPersonService)
     {
         _mediator = mediator;
         _currentPersonService = currentPersonService;

@@ -5,7 +5,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Teams.Commands;
 
-public record CreateTeamCommand(string Id, string Name, string? Description) : IRequest<TeamDto>
+public record CreateTeamCommand(string Id, string OrganizationId, string Name, string? Description) : IRequest<TeamDto>
 {
     public class CreateTeamCommandHandler : IRequestHandler<CreateTeamCommand, TeamDto>
     {
@@ -23,6 +23,7 @@ public record CreateTeamCommand(string Id, string Name, string? Description) : I
             if (team is not null) throw new Exception();
 
             team = new Domain.Entities.Team(request.Id, request.Name, request.Description);
+            team.Organization = await context.Organizations.FirstAsync(x => x.Id == request.OrganizationId);
 
             context.Teams.Add(team);
 

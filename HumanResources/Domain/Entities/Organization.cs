@@ -1,6 +1,8 @@
+using YourBrand.HumanResources.Domain.Common;
+
 namespace YourBrand.HumanResources.Domain.Entities;
 
-public class Organization 
+public class Organization : AuditableEntity
 {
     private readonly HashSet<Team> _teams = new HashSet<Team>();
     private readonly HashSet<Person> _persons = new HashSet<Person>();
@@ -11,6 +13,8 @@ public class Organization
     {
         Id = Guid.NewGuid().ToString();
         Name = name;
+
+        AddDomainEvent(new OrganizationCreated(Id));
     }
 
     public string Id { get; private set; }
