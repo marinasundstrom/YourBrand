@@ -13,9 +13,9 @@ public record GetPerson(string PersonId, string RequestedById);
 public record GetPersonResponse(string PersonId, string FirstName, string LastName, string? DisplayName, string SSN, string Email);
 
 
-public record TeamCreated(string TeamId, string CreatedById);
+public record TeamCreated(string TeamId, string Name, string Description, string CreatedById);
 
-public record Teampdated(string TeamId, string UpdatedById);
+public record TeamUpdated(string TeamId, string Name, string Description, string UpdatedById);
 
 public record TeamDeleted(string TeamId, string DeletedById);
 

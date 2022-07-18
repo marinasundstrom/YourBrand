@@ -38,7 +38,9 @@ public class TeamsController : ControllerBase
     [HttpPost]
     public async Task<TeamDto> CreateTeam(CreateTeamDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateTeamCommand(dto.Name, dto.Description), cancellationToken);
+        //return await _mediator.Send(new CreateTeamCommand(dto.Name, dto.Description), cancellationToken);
+
+        return null!;
     }
 
     [HttpPut("{id}")]

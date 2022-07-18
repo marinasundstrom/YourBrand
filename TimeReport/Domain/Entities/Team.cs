@@ -16,9 +16,9 @@ public class Team : AuditableEntity, ISoftDelete, IHasTenant
 
     }
 
-    public Team(string name, string? description)
+    public Team(string id, string name, string? description)
     {
-        Id = Guid.NewGuid().ToString();
+        Id = id;
         Name = name;
         Description = description;
     }
