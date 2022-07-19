@@ -17,4 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-preview.5.22301.12" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Program2.cs" />
+  </ItemGroup>
 </Project>

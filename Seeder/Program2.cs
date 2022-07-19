@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
+using YourBrand.IdentityService.Client;
 using YourBrand.TimeReport;
 using YourBrand.HumanResources;
 using YourBrand.HumanResources.Client;
@@ -8,30 +9,22 @@ const string ApiKey = "asdsr34#34rswert35234aedae?2!";
 
 var services = BuildServiceProvider();
 
-var organizationsClient = services.GetRequiredService<IOrganizationsClient>();
-var personsClient = services.GetRequiredService<IPersonsClient>();
+var usersClient = services.GetRequiredService<IUsersClient>();
 var syncClient = services.GetRequiredService<ISyncClient>();
 
 if (args.ToArray().Contains("--sync-users"))
 {
     await syncClient.SyncDataAsync();
+    await usersClient.SyncUsersAsync();
     return;
 }
 
-Console.WriteLine("Creating organization...");
-
-var org = await organizationsClient.CreateOrganizationAsync(new CreateOrganizationDto
-{
-    Name = "My org"
-});
-
 Console.WriteLine("Creating users...");
 
-var userAdmin = await personsClient.CreatePersonAsync(new CreatePersonDto
+var userAdmin = await usersClient.CreateUserAsync(new CreateUserDto
 {
     FirstName = "Administrator",
     LastName = "Administrator",
-    Title = "Administrator",
     DisplayName = "Administrator",
     Role = "Administrator",
     Ssn = "",
@@ -39,11 +32,10 @@ var userAdmin = await personsClient.CreatePersonAsync(new CreatePersonDto
     Password = "Abc123!?"
 });
 
-var userTest = await personsClient.CreatePersonAsync(new CreatePersonDto
+var userTest = await usersClient.CreateUserAsync(new CreateUserDto
 {
     FirstName = "Test",
     LastName = "Testsson",
-    Title = "Software Developer",
     Role = "User",
     Ssn = "",
     Email = "test@email.com",
@@ -132,6 +124,12 @@ if (args.ToArray().Contains("--create-projects"))
 static IServiceProvider BuildServiceProvider()
 {
     ServiceCollection services = new();
+
+    services.AddIdentityServiceClients((sp, http) =>
+    {
+        http.BaseAddress = new Uri($"https://identity.local/");
+        http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
+    }, (builder) => { });
 
     services.AddHumanResourcesClients((sp, http) =>
     {

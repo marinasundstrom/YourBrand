@@ -27,7 +27,7 @@ public class Organization : AuditableEntity
 
     public string Name { get; private set; }
 
-    public string Currency { get; set; } 
+    public string Currency { get; set; } = "SEK";
 
     public IReadOnlyCollection<Team> Teams => _teams;
 

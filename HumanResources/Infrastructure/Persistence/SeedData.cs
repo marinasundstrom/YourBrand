@@ -19,6 +19,7 @@ public static class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
+            /*
             var organization = new Organization("my-company", "My Company") {
                 Currency = "SEK"
             };
@@ -28,6 +29,7 @@ public static class SeedData
             var person = new Person(organization, "Test", "Testsson", null, "Software Developer", "19900105-3835", "test@test.com");
             
             context.Persons.Add(person);
+            */
 
             context.Roles.Add(new Role("User"));
             context.Roles.Add(new Role("Administrator"));

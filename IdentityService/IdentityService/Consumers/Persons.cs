@@ -31,7 +31,7 @@ public class IdentityServicePersonCreatedConsumer : IConsumer<PersonCreated>
         var messageR = await _requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, (message.CreatedById)));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new CreateUserCommand(message2.FirstName, message2.LastName, message2.DisplayName, null, message2.SSN, message2.Email, null));
+        var result = await _mediator.Send(new CreateUserCommand(message2.FirstName, message2.LastName, message2.DisplayName, "User", message2.SSN, message2.Email, "Abc123!?"));
     }
 }
 
