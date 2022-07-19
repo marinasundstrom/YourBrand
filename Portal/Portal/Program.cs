@@ -46,11 +46,11 @@ void LoadModules(IServiceCollection services)
 {
     var moduleAssemblies = new List<ModuleEntry>
     {
-        new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Catalog.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Marketing.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, false),
+        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, true),
         new ModuleEntry(typeof(YourBrand.Invoicing.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, false),
         new ModuleEntry(typeof(YourBrand.Payments.ModuleInitializer).Assembly, false),

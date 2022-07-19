@@ -158,3 +158,14 @@ public class WeekHoursExceedPermittedWeeklyWorkingHoursException : DomainExcepti
 
     public string TimeSheetId { get; }
 }
+
+public class OrganizationNotFoundException : DomainException
+{
+    public OrganizationNotFoundException(string organizationName)
+         : base("Organization not found", $"Organization {organizationName} was not found.")
+    {
+        OrganizationName = organizationName;
+    }
+
+    public string OrganizationName { get; }
+}

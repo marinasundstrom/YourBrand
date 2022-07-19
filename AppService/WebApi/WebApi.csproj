@@ -46,13 +46,9 @@
     <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="System.CommandLine.DragonFruit" />
-    <None Remove="Consumers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Consumers\" />
-  </ItemGroup>
 </Project>

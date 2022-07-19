@@ -32,5 +32,15 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
             .HasOne(p => p.BankAccount)
             .WithOne(ba => ba.Person)
             .HasForeignKey<BankAccount>(ba => ba.PersonId);
+
+        builder
+            .HasMany(x => x.Contracts)
+            .WithOne(x => x.Person)
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
+        builder
+            .HasMany(x => x.TeamMemberships)
+            .WithOne(x => x.Person)
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

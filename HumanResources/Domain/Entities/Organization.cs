@@ -1,4 +1,5 @@
 using YourBrand.HumanResources.Domain.Common;
+using YourBrand.HumanResources.Domain.Events;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
@@ -9,12 +10,17 @@ public class Organization : AuditableEntity
 
     private Organization() { }
 
-    public Organization(string name)
+    public Organization(string id, string name)
     {
-        Id = Guid.NewGuid().ToString();
+        Id = id;
         Name = name;
 
         AddDomainEvent(new OrganizationCreated(Id));
+    }
+
+    public Organization(string name) : this(Guid.NewGuid().ToString(), name)
+    {
+
     }
 
     public string Id { get; private set; }
@@ -26,4 +32,12 @@ public class Organization : AuditableEntity
     public IReadOnlyCollection<Team> Teams => _teams;
 
     public IReadOnlyCollection<Person> Persons => _persons;
+
+    public void ChangeName(string name)
+    {
+        if(Name != name) 
+        {
+            Name = name;
+        }
+    }
 }

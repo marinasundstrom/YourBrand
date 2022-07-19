@@ -3,8 +3,6 @@
 using MediatR;
 
 using YourBrand.HumanResources.Contracts;
-using YourBrand.IdentityService.Client;
-using YourBrand.IdentityService.Contracts;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Organizations.Commands;
 

@@ -46,7 +46,7 @@
     <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj">
+    <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj">

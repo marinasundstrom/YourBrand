@@ -21,7 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using YourBrand.IdentityService.Contracts;
+using YourBrand.HumanResources.Contracts;
 using YourBrand.Consumers;
 
 static class Program

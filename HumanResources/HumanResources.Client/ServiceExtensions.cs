@@ -7,6 +7,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddHumanResourcesClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         services
+            .AddOrganizationsClient(configureClient, builder)
             .AddPersonsClient(configureClient, builder)
             .AddRolesClient(configureClient, builder)
             .AddSyncClient(configureClient, builder);
@@ -14,6 +15,17 @@ public static class ServiceExtensions
         builder?.Invoke(
            services.AddHttpClient(nameof(ITeamsClient) + "HR", configureClient)
            .AddTypedClient<ITeamsClient>((http, sp) => new TeamsClient(http)));
+
+        return services;
+    }
+
+    public static IServiceCollection AddOrganizationsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(OrganizationsClient), configureClient)
+            .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http));
+
+        builder?.Invoke(b);
 
         return services;
     }

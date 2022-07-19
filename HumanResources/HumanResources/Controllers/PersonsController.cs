@@ -78,7 +78,7 @@ public class PersonsController : Controller
     {
         try
         {
-            var person = await _mediator.Send(new UpdatePersonDetailsCommand(id, updatePersonDetailsDto.FirstName, updatePersonDetailsDto.LastName, updatePersonDetailsDto.DisplayName, updatePersonDetailsDto.Title, updatePersonDetailsDto.SSN, updatePersonDetailsDto.Email, updatePersonDetailsDto.ReportsTo), cancellationToken);
+            var person = await _mediator.Send(new UpdateOrganizationCommand(id, updatePersonDetailsDto.FirstName, updatePersonDetailsDto.LastName, updatePersonDetailsDto.DisplayName, updatePersonDetailsDto.Title, updatePersonDetailsDto.SSN, updatePersonDetailsDto.Email, updatePersonDetailsDto.ReportsTo), cancellationToken);
 
             return Ok(person);
         }

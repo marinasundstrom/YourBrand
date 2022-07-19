@@ -8,9 +8,9 @@ using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources.Application.Persons.Commands;
 
-public record UpdatePersonDetailsCommand(string PersonId, string FirstName, string LastName, string? DisplayName, string Title, string Ssn, string Email, string ReportsTo) : IRequest<PersonDto>
+public record UpdateOrganizationCommand(string PersonId, string FirstName, string LastName, string? DisplayName, string Title, string Ssn, string Email, string ReportsTo) : IRequest<PersonDto>
 {
-    public class UpdatePersonDetailsCommandHandler : IRequestHandler<UpdatePersonDetailsCommand, PersonDto>
+    public class UpdatePersonDetailsCommandHandler : IRequestHandler<UpdateOrganizationCommand, PersonDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly ICurrentUserService _currentPersonService;
@@ -23,7 +23,7 @@ public record UpdatePersonDetailsCommand(string PersonId, string FirstName, stri
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<PersonDto> Handle(UpdatePersonDetailsCommand request, CancellationToken cancellationToken)
+        public async Task<PersonDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var person = await _context.Persons
                 .Include(u => u.Roles)

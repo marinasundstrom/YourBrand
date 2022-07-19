@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityService.Application.Common.Interfaces;
-using YourBrand.IdentityService.Contracts;
+using YourBrand.HumanResources.Contracts;
 using YourBrand.IdentityService.Domain.Entities;
+using YourBrand.IdentityService.Contracts;
 
 namespace YourBrand.IdentityService.Application.Users.Commands;
 
-public record CreateUserCommand(string FirstName, string LastName, string? DisplayName, string Role, string Ssn, string Email, string DepartmentId, string Password) : IRequest<UserDto>
+public record CreateUserCommand(string FirstName, string LastName, string? DisplayName, string Role, string Ssn, string Email, string Password) : IRequest<UserDto>
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
@@ -61,7 +62,8 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
             result = await _userManager.AddClaimsAsync(user, new Claim[]{
                 new Claim(JwtClaimTypes.Name, $"{request.FirstName} {request.LastName}"),
                 new Claim(JwtClaimTypes.GivenName, request.FirstName),
-                new Claim(JwtClaimTypes.FamilyName, request.LastName)
+                new Claim(JwtClaimTypes.FamilyName, request.LastName),
+                new Claim("organizationId", "my-company")
             });
 
             if (!result.Succeeded)

@@ -1,4 +1,5 @@
 ﻿using YourBrand.HumanResources.Domain.Common;
+using YourBrand.HumanResources.Domain.Events;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 

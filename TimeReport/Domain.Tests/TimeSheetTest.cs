@@ -16,7 +16,7 @@ public class TimeSheetTest
 
     public TimeSheetTest()
     {
-        Organization organization = new("Test org", "Descr");
+        Organization organization = new("id", "Test org", "Descr");
 
         Project project = new("Test project", "Descr");
 

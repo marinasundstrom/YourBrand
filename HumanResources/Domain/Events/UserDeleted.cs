@@ -1,6 +1,6 @@
 using YourBrand.HumanResources.Domain.Common;
 
-namespace YourBrand.HumanResources.Domain.Entities;
+namespace YourBrand.HumanResources.Domain.Events;
 
 public class UserDeleted : DomainEvent
 {

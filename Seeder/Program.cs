@@ -14,8 +14,8 @@ var syncClient = services.GetRequiredService<ISyncClient>();
 
 if (args.ToArray().Contains("--sync-users"))
 {
-    await usersClient.SyncUsersAsync();
     await syncClient.SyncDataAsync();
+    await usersClient.SyncUsersAsync();
     return;
 }
 

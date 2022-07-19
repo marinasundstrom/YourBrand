@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Finance\Formulas\Formulas.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj" />
+    <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj" />
     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
     <ProjectReference Include="..\..\Utils\Utils.csproj" />
     <ProjectReference Include="..\..\Finance\Invoicing\Invoicing.Client\Invoicing.Client.csproj" />

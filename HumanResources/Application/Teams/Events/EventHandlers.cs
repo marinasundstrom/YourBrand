@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Application.Common.Models;
-using YourBrand.HumanResources.Domain.Entities;
+using YourBrand.HumanResources.Domain.Events;
 
 namespace YourBrand.HumanResources.Application.Teams.Events;
 

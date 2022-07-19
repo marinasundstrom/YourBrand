@@ -2,6 +2,7 @@
 
 using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Common.Interfaces;
+using YourBrand.HumanResources.Domain.Events;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
@@ -17,8 +18,9 @@ public class Person : AuditableEntity, ISoftDelete
 
     internal Person() { }
 
-    public Person(string firstName, string lastName, string? displayName, string title, string? ssn, string email)
+    public Person(Organization organization, string firstName, string lastName, string? displayName, string title, string? ssn, string email)
     {
+        Organization = organization;
         Id = Guid.NewGuid().ToString();
         FirstName = firstName;
         LastName = lastName;
@@ -67,6 +69,8 @@ public class Person : AuditableEntity, ISoftDelete
     {
         throw new NotImplementedException();
     }
+
+    public Organization Organization { get; private set; }
 
     public IReadOnlyCollection<PersonDependant> Dependants => _dependants;
 
