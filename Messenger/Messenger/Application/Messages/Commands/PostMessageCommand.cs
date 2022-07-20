@@ -8,6 +8,7 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Application.Messages.Commands;
 

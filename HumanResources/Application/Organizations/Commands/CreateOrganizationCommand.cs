@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Contracts;
 using YourBrand.HumanResources.Domain.Entities;
+using YourBrand.Identity;
 
 using OrganizationCreated = YourBrand.HumanResources.Contracts.OrganizationCreated;
 

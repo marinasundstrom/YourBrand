@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using YourBrand.Notifications.Domain.Common;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
+using YourBrand.Identity;
 
 namespace YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 

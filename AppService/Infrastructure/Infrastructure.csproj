@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Persistence\Interceptors\" />

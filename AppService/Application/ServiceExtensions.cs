@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Notifications.Client;
+using YourBrand.Identity;
 
 namespace YourBrand.Application;
 

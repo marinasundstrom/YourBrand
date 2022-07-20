@@ -1,5 +1,6 @@
 ﻿using System;
 
+using YourBrand.Identity;
 using YourBrand.Notifications.Application;
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Infrastructure;
@@ -11,7 +12,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddIdentityServices();
 
         services.AddScoped<INotifier, Notifier>();
 

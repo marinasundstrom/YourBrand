@@ -3,6 +3,7 @@
 using MediatR;
 
 using YourBrand.HumanResources.Contracts;
+using YourBrand.Identity;
 using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Application.Users.Commands;
 namespace YourBrand.IdentityService.Consumers;

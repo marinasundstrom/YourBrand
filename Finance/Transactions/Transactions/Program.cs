@@ -6,6 +6,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.Json;
 
+using YourBrand.Identity;
 using YourBrand.Transactions.Application;
 using YourBrand.Transactions.Application.Commands;
 using YourBrand.Transactions.Application.Common.Interfaces;
@@ -15,7 +16,6 @@ using YourBrand.Transactions.Domain.Enums;
 using YourBrand.Transactions.Hubs;
 using YourBrand.Transactions.Infrastructure;
 using YourBrand.Transactions.Infrastructure.Persistence;
-using YourBrand.Transactions.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +45,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>

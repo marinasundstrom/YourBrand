@@ -5,6 +5,8 @@ using YourBrand.ApiKeys.Application.Users.Commands;
 using MassTransit;
 
 using MediatR;
+using YourBrand.Identity;
+
 namespace YourBrand.ApiKeys.Consumers;
 
 public class ApiKeysPersonCreatedConsumer : IConsumer<PersonCreated>

@@ -2,6 +2,7 @@
 
 using YourBrand.Application;
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Identity;
 using YourBrand.Infrastructure;
 
 using YourBrand.WebApi.Hubs;
@@ -13,7 +14,7 @@ public static class ServiceExtensions
 {
     public  static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddIdentityServices();
         services.AddScoped<IUrlHelper, UrlHelper>();
 
         services.AddClients();

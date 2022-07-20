@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 
-using YourBrand.Messenger.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Http;
 
-namespace YourBrand.Messenger.Services;
+namespace YourBrand.Identity;
 
 public class CurrentUserService : ICurrentUserService
 {
@@ -15,11 +15,9 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => _currentUserId ??= (_claimsPrincipal ??= _httpContextAccessor.HttpContext?.User)?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? UserId => _currentUserId ??= _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-    public string? Role => (_claimsPrincipal ??= _httpContextAccessor.HttpContext?.User)?.FindFirstValue(ClaimTypes.Role);
-
-    public string? GetAccessToken() => (_claimsPrincipal ??= _httpContextAccessor.HttpContext?.User)?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
+    public string? GetAccessToken() => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
     public void SetCurrentUser(string userId)
     {
@@ -29,6 +27,14 @@ public class CurrentUserService : ICurrentUserService
         }
         _currentUserId = userId;
     }
+
+    public string? FirstName => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
+
+    public string? LastName => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
+
+    public string? Email => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+
+    public string? Role => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
 
     public void SetCurrentUser(ClaimsPrincipal claimsPrincipal)
     {

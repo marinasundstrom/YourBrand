@@ -5,6 +5,7 @@ using YourBrand.Messenger.Contracts;
 using MassTransit;
 
 using MediatR;
+using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Consumers;
 

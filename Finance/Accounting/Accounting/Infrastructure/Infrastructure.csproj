@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

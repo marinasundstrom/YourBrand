@@ -6,7 +6,6 @@ using YourBrand.RotRutService.Application.Queries;
 using YourBrand.RotRutService.Application.Commands;
 using YourBrand.RotRutService.Domain.Enums;
 using YourBrand.RotRutService.Infrastructure;
-using YourBrand.RotRutService.Services;
 
 using MassTransit;
 
@@ -22,6 +21,7 @@ using YourBrand.Accounting.Client;
 using YourBrand.Invoicing.Client;
 using YourBrand.RotRutService.Domain.Entities;
 using YourBrand.RotRutService.Domain;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +48,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 

@@ -19,6 +19,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Transactions.Contracts\Transactions.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Controllers\" />

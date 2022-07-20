@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Identity;
+﻿using System.Security.Claims;
+
+namespace YourBrand.Identity;
 
 public interface ICurrentUserService
 {
@@ -11,4 +13,5 @@ public interface ICurrentUserService
     string? GetAccessToken();
 
     void SetCurrentUser(string userId);
+    void SetCurrentUser(ClaimsPrincipal claimsPrincipal);
 }

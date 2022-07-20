@@ -4,6 +4,7 @@ using MassTransit;
 using MediatR;
 using YourBrand.HumanResources.Contracts;
 using YourBrand.HumanResources.Application.Common.Interfaces;
+using YourBrand.Identity;
 
 namespace YourBrand.HumanResources.Consumers;
 

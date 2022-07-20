@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Identity;
 using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain.Common;
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Exceptions;
+using YourBrand.Identity;
 
 namespace YourBrand.HumanResources.Application.Teams.Commands;
 

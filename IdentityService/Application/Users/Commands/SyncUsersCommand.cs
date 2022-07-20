@@ -2,6 +2,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Contracts;
 

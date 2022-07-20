@@ -3,6 +3,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.Notifications.Application.Common.Interfaces;
 
 namespace YourBrand.Notifications.Application.Notifications.Queries;

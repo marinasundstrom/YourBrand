@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Common.Interfaces;
+using YourBrand.Identity;
 
 namespace YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
 

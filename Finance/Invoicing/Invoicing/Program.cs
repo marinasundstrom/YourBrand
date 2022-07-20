@@ -6,7 +6,6 @@ using YourBrand.Invoicing.Application.Queries;
 using YourBrand.Invoicing.Application.Commands;
 using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Infrastructure;
-using YourBrand.Invoicing.Services;
 
 using MassTransit;
 
@@ -17,6 +16,7 @@ using Microsoft.AspNetCore.Http.Json;
 using YourBrand.Invoicing.Infrastructure.Persistence;
 using System.Text.Json.Serialization;
 using YourBrand.Payments.Client;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +42,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 

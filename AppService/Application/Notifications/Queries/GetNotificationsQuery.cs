@@ -2,6 +2,7 @@
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Application.Common.Models;
 using YourBrand.Domain;
+using YourBrand.Identity;
 
 using MediatR;
 

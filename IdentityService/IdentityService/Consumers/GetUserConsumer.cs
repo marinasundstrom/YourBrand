@@ -4,6 +4,7 @@ using MassTransit;
 using MediatR;
 using YourBrand.IdentityService.Contracts;
 using YourBrand.IdentityService.Application.Common.Interfaces;
+using YourBrand.Identity;
 
 namespace YourBrand.IdentityService.Consumers;
 

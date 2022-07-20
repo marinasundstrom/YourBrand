@@ -14,7 +14,6 @@ using YourBrand.Documents.Consumers;
 using YourBrand.Documents.Contracts;
 using YourBrand.Documents.Infrastructure;
 using YourBrand.Documents.Infrastructure.Persistence;
-using YourBrand.Documents.Services;
 
 using MassTransit;
 using MassTransit.MessageData;
@@ -26,6 +25,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using System.Globalization;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +42,7 @@ builder.Services
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 builder.Services.AddControllers();
 

@@ -8,6 +8,7 @@ using YourBrand.HumanResources.Contracts;
 using YourBrand.IdentityService.Domain.Entities;
 using YourBrand.IdentityService.Domain.Exceptions;
 using YourBrand.IdentityService.Contracts;
+using YourBrand.Identity;
 
 namespace YourBrand.IdentityService.Application.Users.Commands;
 

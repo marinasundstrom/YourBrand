@@ -14,9 +14,9 @@ using YourBrand.Customers.Application.Persons.Queries;
 using YourBrand.Customers.Infrastructure;
 using YourBrand.Customers.Infrastructure.Persistence;
 using YourBrand.Customers.Application.Persons;
-using YourBrand.Customers.Services;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +42,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 

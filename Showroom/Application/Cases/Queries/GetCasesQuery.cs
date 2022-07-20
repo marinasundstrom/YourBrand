@@ -13,6 +13,7 @@ using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Cases;
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Domain.Exceptions;
+using YourBrand.Identity;
 
 namespace YourBrand.Showroom.Application.Cases.Queries;
 

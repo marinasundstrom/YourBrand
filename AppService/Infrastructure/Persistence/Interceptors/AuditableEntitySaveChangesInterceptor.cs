@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Domain.Common;
+using YourBrand.Identity;
 
 namespace YourBrand.Infrastructure.Persistence.Interceptors;
 

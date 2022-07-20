@@ -28,6 +28,7 @@
      <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
      <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj" />
      <ProjectReference Include="..\IdentityService.Contracts\IdentityService.Contracts.csproj" />
+     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

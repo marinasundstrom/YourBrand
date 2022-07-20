@@ -27,6 +27,7 @@
     </ProjectReference>
      <ProjectReference Include="..\..\HumanResources\HumanResources.Client\HumanResources.Client.csproj" />
      <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj" />
+     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

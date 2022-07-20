@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Domain.Common;
+using YourBrand.Identity;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 

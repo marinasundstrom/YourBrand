@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Identity;
 using YourBrand.RotRutService.Application.Common.Interfaces;
 using YourBrand.RotRutService.Domain.Common;
 

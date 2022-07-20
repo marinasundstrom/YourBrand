@@ -6,6 +6,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.Json;
 
+using YourBrand.Identity;
 using YourBrand.Payments.Application;
 using YourBrand.Payments.Application.Commands;
 using YourBrand.Payments.Application.Common.Interfaces;
@@ -15,7 +16,6 @@ using YourBrand.Payments.Domain.Enums;
 using YourBrand.Payments.Hubs;
 using YourBrand.Payments.Infrastructure;
 using YourBrand.Payments.Infrastructure.Persistence;
-using YourBrand.Payments.Services;
 using YourBrand.Transactions.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,7 +48,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>

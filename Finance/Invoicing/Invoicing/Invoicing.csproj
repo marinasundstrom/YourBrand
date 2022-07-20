@@ -30,6 +30,9 @@
 		<ProjectReference Include="..\..\Formulas\Formulas.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
+		<ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
+		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+		</ProjectReference>
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Calculations.cs">

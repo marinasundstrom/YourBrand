@@ -5,6 +5,8 @@ using YourBrand.Messenger.Application.Users.Commands;
 using MassTransit;
 
 using MediatR;
+using YourBrand.Identity;
+
 namespace YourBrand.Messenger.Consumers;
 
 public class MessengerPersonCreatedConsumer : IConsumer<PersonCreated>

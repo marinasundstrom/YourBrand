@@ -9,6 +9,7 @@ using YourBrand.HumanResources.Domain.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Entities;
 using YourBrand.HumanResources.Infrastructure.Persistence.Configurations;
 using YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
+using YourBrand.Identity;
 
 namespace YourBrand.HumanResources.Infrastructure.Persistence;
 

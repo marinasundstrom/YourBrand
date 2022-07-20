@@ -12,6 +12,7 @@ using YourBrand.Showroom.Application.Organizations;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Domain.Exceptions;
+using YourBrand.Identity;
 
 namespace YourBrand.Showroom.Application.Organizations.Queries;
 

@@ -8,6 +8,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Hubs;
 

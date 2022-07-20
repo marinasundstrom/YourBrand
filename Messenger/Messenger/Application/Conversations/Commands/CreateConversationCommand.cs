@@ -7,6 +7,7 @@ using YourBrand.Messenger.Domain.Entities;
 using MassTransit;
 
 using MediatR;
+using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 

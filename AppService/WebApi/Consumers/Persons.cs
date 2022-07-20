@@ -4,6 +4,8 @@ using MediatR;
 using YourBrand.HumanResources.Contracts;
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Application.Users.Commands;
+using YourBrand.Identity;
+
 namespace YourBrand.Consumers;
 
 public class AppServicePersonCreatedConsumer : IConsumer<PersonCreated>

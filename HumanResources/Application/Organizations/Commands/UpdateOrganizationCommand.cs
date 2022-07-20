@@ -6,6 +6,7 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Application.Persons;
 using YourBrand.HumanResources.Contracts;
 using YourBrand.HumanResources.Domain.Exceptions;
+using YourBrand.Identity;
 
 namespace YourBrand.HumanResources.Application.Organizations.Commands;
 

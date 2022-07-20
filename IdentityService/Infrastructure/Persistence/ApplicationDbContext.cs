@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Domain.Common;
 using YourBrand.IdentityService.Domain.Common.Interfaces;

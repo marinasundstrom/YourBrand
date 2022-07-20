@@ -6,6 +6,8 @@ using IdentityModel.Client;
 
 using Microsoft.IdentityModel.Tokens;
 
+using YourBrand.Identity;
+
 namespace YourBrand.Messenger.Application.Common.Interfaces;
 
 public static class CurrentUserServiceJwtExtensions
@@ -47,6 +49,7 @@ public static class CurrentUserServiceJwtExtensions
         var claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(accessToken,
                             tokenValidationParameters, out var rawValidatedToken);
 
-        currentUserService.SetCurrentUser(claimsPrincipal);
+        //INFO: Fix
+        //currentUserService.SetCurrentUser(claimsPrincipal);
     }
 }

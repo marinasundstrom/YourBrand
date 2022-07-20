@@ -31,6 +31,9 @@
     <ProjectReference Include="..\..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

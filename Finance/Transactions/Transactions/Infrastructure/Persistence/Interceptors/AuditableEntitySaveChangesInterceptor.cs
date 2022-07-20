@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Identity;
 using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain.Common;
 

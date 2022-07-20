@@ -13,6 +13,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using YourBrand.Identity;
 
 namespace YourBrand.Messenger.WebApi.Controllers;
 

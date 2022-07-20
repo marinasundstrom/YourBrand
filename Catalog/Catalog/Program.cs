@@ -8,12 +8,12 @@ using YourBrand.Catalog.Application;
 using YourBrand.Catalog.Application.Common.Interfaces;
 using YourBrand.Catalog.Infrastructure;
 using YourBrand.Catalog.Infrastructure.Persistence;
-using YourBrand.Catalog.Services;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
 using Microsoft.Extensions.Azure;
 using Azure.Storage.Blobs;
 using Azure.Identity;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +39,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 

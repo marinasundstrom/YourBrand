@@ -8,6 +8,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Consumers;
 

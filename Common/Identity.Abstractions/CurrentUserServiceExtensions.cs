@@ -1,17 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace YourBrand.Messenger.Application.Common.Interfaces;
-
-public interface ICurrentUserService
-{
-    string? UserId { get; }
-    string? Role { get; }
-
-    string? GetAccessToken();
-
-    void SetCurrentUser(string userId);
-    void SetCurrentUser(ClaimsPrincipal claimsPrincipal);
-}
+namespace YourBrand.Identity;
 
 public static class CurrentUserServiceExtensions
 {

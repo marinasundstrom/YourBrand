@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Identity;
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Domain.Common;
 
