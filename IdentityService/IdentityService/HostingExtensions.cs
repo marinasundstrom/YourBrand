@@ -17,6 +17,7 @@ using IdentityModel;
 using YourBrand.ApiKeys;
 using YourBrand.IdentityService.Infrastructure;
 using YourBrand.IdentityService.Infrastructure.Persistence;
+using Duende.IdentityServer.Services;
 
 namespace YourBrand.IdentityService;
 
@@ -108,6 +109,8 @@ internal static class HostingExtensions
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<Person>();
+
+        builder.Services.AddTransient<IProfileService, MyProfileService>();
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

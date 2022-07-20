@@ -10,5 +10,6 @@ public class ProfileWithRoleIdentityResource : IdentityResources.Profile
     {
         this.UserClaims.Add(JwtClaimTypes.PreferredUserName);
         this.UserClaims.Add(JwtClaimTypes.Role);
+        this.UserClaims.Add("organizationId");
     }
 }

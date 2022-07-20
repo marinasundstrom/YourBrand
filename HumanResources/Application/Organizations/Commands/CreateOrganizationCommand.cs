@@ -15,7 +15,7 @@ using OrganizationCreated = YourBrand.HumanResources.Contracts.OrganizationCreat
 
 namespace YourBrand.HumanResources.Application.Organizations.Commands;
 
-public record CreateOrganizationCommand(string Name) : IRequest<OrganizationDto>
+public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRequest<OrganizationDto>
 {
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
@@ -32,7 +32,9 @@ public record CreateOrganizationCommand(string Name) : IRequest<OrganizationDto>
 
         public async Task<OrganizationDto> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = new Organization(request.Name);
+            var organization = new Organization(
+                 request.Name, 
+                 request.FriendlyName ?? request.Name.ToLower().Replace(' ', '-'));
 
             _context.Organizations.Add(organization);
 

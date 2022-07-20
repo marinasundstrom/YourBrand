@@ -39,7 +39,7 @@ public class OrganizationsController : ControllerBase
     [HttpPost]
     public async Task CreateOrganization(CreateOrganizationDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateOrganizationCommand(dto.Name), cancellationToken);
+        await _mediator.Send(new CreateOrganizationCommand(dto.Id, dto.Name), cancellationToken);
     }
 
     [HttpPut("{id}")]
@@ -56,7 +56,7 @@ public class OrganizationsController : ControllerBase
     }
 }
 
-public record CreateOrganizationDto(string Name);
+public record CreateOrganizationDto(string Id, string Name);
 
 public record UpdateOrganizationDto(string Name);
 

@@ -1058,6 +1058,10 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "friendlyName": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1093,6 +1097,9 @@
         "properties": {
           "id": {
             "type": "string"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationDto"
           },
           "firstName": {
             "type": "string"
@@ -1162,6 +1169,9 @@
           "id": {
             "type": "string"
           },
+          "organization": {
+            "$ref": "#/components/schemas/OrganizationDto"
+          },
           "firstName": {
             "type": "string"
           },
@@ -1217,6 +1227,10 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "organizationId": {
+            "type": "string",
+            "nullable": true
+          },
           "firstName": {
             "type": "string",
             "nullable": true

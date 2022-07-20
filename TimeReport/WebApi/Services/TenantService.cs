@@ -11,5 +11,5 @@ public class TenantService : ITenantService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? OrganizationId => "test"; // _httpContextAccessor?.HttpContext?.User?.FindFirst("organizationId")?.Value;
+    public string? OrganizationId => _httpContextAccessor?.HttpContext?.User?.FindFirst("organizationId")?.Value;
 }

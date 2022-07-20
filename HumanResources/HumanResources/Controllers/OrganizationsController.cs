@@ -54,7 +54,7 @@ public class OrganizationsController : Controller
     {
         try
         {
-            var organization = await _mediator.Send(new CreateOrganizationCommand(createOrganizationDto.Name), cancellationToken);
+            var organization = await _mediator.Send(new CreateOrganizationCommand(createOrganizationDto.Name, createOrganizationDto.FriendlyName), cancellationToken);
 
             return Ok(organization);
         }
@@ -97,6 +97,6 @@ public class OrganizationsController : Controller
     }
 }
 
-public record class CreateOrganizationDto(string Name);
+public record class CreateOrganizationDto(string Name, string? FriendlyName);
 
 public record class UpdateOrganizationDto(string Name);

@@ -14,7 +14,7 @@ using YourBrand.HumanResources.Domain.Entities;
 
 namespace YourBrand.HumanResources.Application.Persons.Commands;
 
-public record CreatePersonCommand(string FirstName, string LastName, string? DisplayName, string Title, string Role, string Ssn, string Email, string DepartmentId, string? ReportsTo, string Password) : IRequest<PersonDto>
+public record CreatePersonCommand(string OrganizationId, string FirstName, string LastName, string? DisplayName, string Title, string Role, string Ssn, string Email, string DepartmentId, string? ReportsTo, string Password) : IRequest<PersonDto>
 {
     public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, PersonDto>
     {
@@ -31,7 +31,7 @@ public record CreatePersonCommand(string FirstName, string LastName, string? Dis
 
         public async Task<PersonDto> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _context.Organizations.FirstAsync(cancellationToken);
+            var organization = await _context.Organizations.FirstAsync(o => o.Id == request.OrganizationId, cancellationToken);
 
             var person = new Person(organization, request.FirstName, request.LastName, request.DisplayName, request.Title, request.Ssn, request.Email);
 
@@ -50,7 +50,8 @@ public record CreatePersonCommand(string FirstName, string LastName, string? Dis
             await _context.SaveChangesAsync(cancellationToken);
 
             person = await _context.Persons
-               .Include(u => u.Roles)
+               .Include(u => u.Roles)   
+               .Include(u => u.Organization)
                .Include(u => u.Department)
                .AsNoTracking()
                .AsSplitQuery()

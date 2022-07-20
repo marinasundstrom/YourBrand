@@ -5,7 +5,7 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Organizations.Commands;
 
-public record CreateOrganizationCommand(string Name) : IRequest
+public record CreateOrganizationCommand(string Id, string Name) : IRequest
 {
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand>
     {
@@ -24,6 +24,7 @@ public record CreateOrganizationCommand(string Name) : IRequest
 
             organization = new Domain.Entities.Organization
             {
+                Id = request.Id ?? request.Name.ToLower().Replace(' ', '-'),
                 Name = request.Name
             };
 

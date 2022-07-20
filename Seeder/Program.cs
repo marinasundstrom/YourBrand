@@ -22,7 +22,8 @@ Console.WriteLine("Creating organization...");
 
 var org = await organizationsClient.CreateOrganizationAsync(new CreateOrganizationDto
 {
-    Name = "My org"
+    Name = "My org",
+    FriendlyName = "my-org",
 });
 
 Console.WriteLine("Creating users...");
@@ -36,7 +37,8 @@ var userAdmin = await personsClient.CreatePersonAsync(new CreatePersonDto
     Role = "Administrator",
     Ssn = "",
     Email = "admin@email.com",
-    Password = "Abc123!?"
+    Password = "Abc123!?",
+    OrganizationId = org.Id
 });
 
 var userTest = await personsClient.CreatePersonAsync(new CreatePersonDto
@@ -47,7 +49,8 @@ var userTest = await personsClient.CreatePersonAsync(new CreatePersonDto
     Role = "User",
     Ssn = "",
     Email = "test@email.com",
-    Password = "Abc123!?"
+    Password = "Abc123!?",
+    OrganizationId = org.Id
 });
 
 Console.WriteLine("Users created");

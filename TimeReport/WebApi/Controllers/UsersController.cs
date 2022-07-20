@@ -54,7 +54,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var user = await _mediator.Send(new CreateUserCommand(null, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email), cancellationToken);
+            var user = await _mediator.Send(new CreateUserCommand(null, null!, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email), cancellationToken);
 
             return Ok(user);
         }

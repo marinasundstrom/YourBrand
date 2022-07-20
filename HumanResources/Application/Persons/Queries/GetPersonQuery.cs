@@ -23,6 +23,7 @@ public record GetPersonQuery(string PersonId) : IRequest<PersonDto>
         {
             var person = await _context.Persons
                 .Include(u => u.Roles)
+                .Include(u => u.Organization)
                 .Include(u => u.Department)
                 .Include(u => u.ReportsTo)
                 .AsNoTracking()

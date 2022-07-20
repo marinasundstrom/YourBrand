@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Users.Commands;
 
-public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
+public record CreateUserCommand(string? Id, string OrganizationId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
@@ -41,8 +41,7 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
                 Email = request.Email
             };
 
-            // TODO: Temporary
-            var organization = await _context.Organizations.FirstAsync(cancellationToken);
+            var organization = await _context.Organizations.FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
             organization.AddUser(user);
 
             _context.Users.Add(user);

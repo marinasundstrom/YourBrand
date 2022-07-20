@@ -10,4 +10,4 @@ public record PersonDeleted(string PersonId, string DeletedById);
 
 public record GetPerson(string PersonId, string RequestedById);
 
-public record GetPersonResponse(string PersonId, string FirstName, string LastName, string? DisplayName, string SSN, string Email);
+public record GetPersonResponse(string PersonId, string OrganizationId, string FirstName, string LastName, string? DisplayName, string SSN, string Email);

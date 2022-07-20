@@ -15,7 +15,7 @@ using YourBrand.IdentityService.Contracts;
 
 namespace YourBrand.IdentityService.Application.Users.Commands;
 
-public record CreateUserCommand(string FirstName, string LastName, string? DisplayName, string Role, string Ssn, string Email, string Password) : IRequest<UserDto>
+public record CreateUserCommand(string Id, string OrganizationId, string FirstName, string LastName, string? DisplayName, string Role, string Ssn, string Email, string Password) : IRequest<UserDto>
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
@@ -36,6 +36,7 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
         {
             var user = new Person
             {
+                Id = request.Id,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DisplayName = request.DisplayName,
@@ -63,7 +64,7 @@ public record CreateUserCommand(string FirstName, string LastName, string? Displ
                 new Claim(JwtClaimTypes.Name, $"{request.FirstName} {request.LastName}"),
                 new Claim(JwtClaimTypes.GivenName, request.FirstName),
                 new Claim(JwtClaimTypes.FamilyName, request.LastName),
-                new Claim("organizationId", "my-company")
+                new Claim("organizationId", request.OrganizationId)
             });
 
             if (!result.Succeeded)

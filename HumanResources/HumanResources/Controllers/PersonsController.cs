@@ -62,7 +62,7 @@ public class PersonsController : Controller
     {
         try
         {
-            var person = await _mediator.Send(new CreatePersonCommand(createPersonDto.FirstName, createPersonDto.LastName, createPersonDto.DisplayName, createPersonDto.Title, createPersonDto.Role, createPersonDto.SSN, createPersonDto.Email, null, createPersonDto.ReportsTo, createPersonDto.Password), cancellationToken);
+            var person = await _mediator.Send(new CreatePersonCommand(createPersonDto.OrganizationId, createPersonDto.FirstName, createPersonDto.LastName, createPersonDto.DisplayName, createPersonDto.Title, createPersonDto.Role, createPersonDto.SSN, createPersonDto.Email, null, createPersonDto.ReportsTo, createPersonDto.Password), cancellationToken);
 
             return Ok(person);
         }
@@ -121,7 +121,7 @@ public class PersonsController : Controller
     }
 }
 
-public record class CreatePersonDto(string FirstName, string LastName, string? DisplayName, string Title, string Role, string SSN, string Email, string? ReportsTo, string Password);
+public record class CreatePersonDto(string OrganizationId, string FirstName, string LastName, string? DisplayName, string Title, string Role, string SSN, string Email, string? ReportsTo, string Password);
 
 public record class UpdatePersonDetailsDto(string FirstName, string LastName, string? DisplayName, string Title, string SSN, string Email, string? ReportsTo);
 

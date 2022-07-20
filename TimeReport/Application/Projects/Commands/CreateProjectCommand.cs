@@ -23,13 +23,13 @@ public record CreateProjectCommand(string Name, string? Description, string Orga
         {
             var project = new Project(request.Name, request.Description)
             {
-                Organization = await _context.Organizations.FirstAsync() //.FirstAsync(o => o.Id == request.OrganizationId)
+                Organization = await _context.Organizations.FirstAsync(p => p.Id == request.OrganizationId, cancellationToken)
             };
 
             _context.Projects.Add(project);
 
             await _context.SaveChangesAsync(cancellationToken);
-
+            
             project = await _context.Projects
                 .Include(x => x.Organization)
                 .FirstAsync(x => x.Id == project.Id);

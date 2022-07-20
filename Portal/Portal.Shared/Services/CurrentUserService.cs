@@ -51,5 +51,11 @@ public class CurrentUserService : ICurrentUserService
         var user = authenticationState.User;
         return user;
     }
+
+    public async Task<string?> GetOrganizationId() 
+    {
+        ClaimsPrincipal user = await GetUser();
+        return user?.FindFirst("organizationId")?.Value;
+    } 
 }
 
