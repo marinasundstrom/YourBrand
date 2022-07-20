@@ -21,15 +21,12 @@ public record CreateProjectCommand(string Name, string? Description, string Orga
 
         public async Task<ProjectDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = new Project(request.Name, request.Description)
-            {
-                Organization = await _context.Organizations.FirstAsync(p => p.Id == request.OrganizationId, cancellationToken)
-            };
+            var project = new Project(request.Name, request.Description);
 
             _context.Projects.Add(project);
 
             await _context.SaveChangesAsync(cancellationToken);
-            
+
             project = await _context.Projects
                 .Include(x => x.Organization)
                 .FirstAsync(x => x.Id == project.Id);

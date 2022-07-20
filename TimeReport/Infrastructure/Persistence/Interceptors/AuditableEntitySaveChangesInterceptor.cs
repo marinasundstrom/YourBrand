@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
@@ -14,13 +15,16 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
+    private readonly ITenantService _tenantService;
 
     public AuditableEntitySaveChangesInterceptor(
         ICurrentUserService currentUserService,
-        IDateTime dateTime)
+        IDateTime dateTime,
+        ITenantService tenantService)
     {
         _currentUserService = currentUserService;
         _dateTime = dateTime;
+        _tenantService = tenantService;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -47,11 +51,21 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             {
                 entry.Entity.CreatedById = _currentUserService.UserId;
                 entry.Entity.Created = _dateTime.Now;
+
+                if(entry.Entity is IHasTenant hasTenant) 
+                {
+                    hasTenant.OrganizationId = _tenantService.OrganizationId!;
+                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedById = _currentUserService.UserId;
                 entry.Entity.LastModified = _dateTime.Now;
+
+                if(entry.Entity is IHasTenant hasTenant) 
+                {
+                    hasTenant.OrganizationId = _tenantService.OrganizationId!;
+                }
             }
             else if (entry.State == EntityState.Deleted)
             {
