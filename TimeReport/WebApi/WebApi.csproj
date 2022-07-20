@@ -50,6 +50,12 @@
     <ProjectReference Include="..\..\Finance\Invoicing\Invoicing.Client\Invoicing.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

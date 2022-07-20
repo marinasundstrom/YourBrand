@@ -12,6 +12,8 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
+using YourBrand.Tenancy;
+using YourBrand.Identity;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 

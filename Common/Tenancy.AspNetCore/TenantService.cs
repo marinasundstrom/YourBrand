@@ -1,6 +1,6 @@
-﻿using YourBrand.TimeReport.Application.Services;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace YourBrand.TimeReport.WebAPI.Services;
+namespace YourBrand.Tenancy;
 
 public class TenantService : ITenantService
 {

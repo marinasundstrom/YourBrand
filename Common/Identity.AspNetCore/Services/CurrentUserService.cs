@@ -1,11 +1,8 @@
 ﻿using System.Security.Claims;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
-
-namespace YourBrand.TimeReport.Services;
+namespace YourBrand.Identity;
 
 public class CurrentUserService : ICurrentUserService
 {
@@ -17,7 +14,7 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => _currentUserId ??= _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? UserId => _currentUserId ??= _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
     public string? GetAccessToken() => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
@@ -30,11 +27,11 @@ public class CurrentUserService : ICurrentUserService
         _currentUserId = userId;
     }
 
-    public string? FirstName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName);
+    public string? FirstName => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
 
-    public string? LastName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName);
+    public string? LastName => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
 
-    public string? Email => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
+    public string? Email => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
 
-    public string? Role => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
+    public string? Role => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
 }

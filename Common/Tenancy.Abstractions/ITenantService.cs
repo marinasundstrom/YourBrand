@@ -1,4 +1,4 @@
-﻿namespace YourBrand.TimeReport.Application.Services;
+﻿namespace YourBrand.Tenancy;
 
 public interface ITenantService
 {

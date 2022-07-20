@@ -1,6 +1,4 @@
-﻿using YourBrand.TimeReport.Domain.Entities;
-
-namespace YourBrand.TimeReport.Application.Common.Interfaces;
+﻿namespace YourBrand.Identity;
 
 public interface ICurrentUserService
 {

@@ -4,6 +4,8 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Users;

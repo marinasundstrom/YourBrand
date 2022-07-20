@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 
 using YourBrand.ApiKeys;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Infrastructure.Persistence;
 
 namespace Tests;
@@ -41,6 +42,6 @@ public class TestBase
            .Options;
 
         return new TimeReportContext(options, fakeTenantService, fakeDomainEventService, fakeApiApplicationContext,
-            new YourBrand.TimeReport.Infrastructure.Persistence.Interceptors.AuditableEntitySaveChangesInterceptor(fakeCurrentUserService, fakeDateTimeService));
+            new YourBrand.TimeReport.Infrastructure.Persistence.Interceptors.AuditableEntitySaveChangesInterceptor(fakeCurrentUserService, fakeDateTimeService, fakeTenantService));
     }
 }

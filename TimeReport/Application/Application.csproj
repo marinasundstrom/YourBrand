@@ -18,6 +18,8 @@
     <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,4 +31,10 @@
     <PackageReference Include="EPPlus" Version="6.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>

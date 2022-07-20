@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
@@ -61,11 +62,6 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             {
                 entry.Entity.LastModifiedById = _currentUserService.UserId;
                 entry.Entity.LastModified = _dateTime.Now;
-
-                if(entry.Entity is IHasTenant hasTenant) 
-                {
-                    hasTenant.OrganizationId = _tenantService.OrganizationId!;
-                }
             }
             else if (entry.State == EntityState.Deleted)
             {

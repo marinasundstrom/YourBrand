@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 using YourBrand.ApiKeys;
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Services;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;

@@ -13,6 +13,8 @@ using YourBrand.TimeReport.Application.Teams
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
+using YourBrand.Tenancy;
+using YourBrand.Identity;
 
 namespace YourBrand.TimeReport.Application.Teams
 .Queries;
