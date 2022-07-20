@@ -1,0 +1,29 @@
+@using Navigation
+
+<MudNavGroup Title="@NavGroup.Name" Expanded="NavGroup.Expanded" ExpandedChanged="(v) => SaveCallback(v, NavGroup)">
+                @foreach (var navItem in NavGroup.Items)
+                {
+                    @if (navItem.RequireAuthorization)
+                    {
+                        if (navItem.Visible)
+                        {
+                            <AuthorizeView Roles="@navItem.Roles">
+                                <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                            </AuthorizeView>
+                        }
+                    }
+                    else
+                    {
+                        if (navItem.Visible)
+                        {
+                            <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                        }
+                    }
+                }
+            </MudNavGroup>
+
+            @code {
+                [Parameter] public NavGroup NavGroup { get; set; }
+
+                [Parameter] public Func<bool, NavGroup, bool> SaveCallback { get; set; }
+            }

@@ -30,6 +30,8 @@ public class ModuleInitializer : IModuleInitializer
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
         var group = navManager.CreateGroup("messenger", () => resources["Messenger"]);
+        group.RequiresAuthorization = true;
+
         group.CreateItem("conversations", () => resources["Conversations"], MudBlazor.Icons.Material.Filled.Chat, "/conversations");
     }
 }

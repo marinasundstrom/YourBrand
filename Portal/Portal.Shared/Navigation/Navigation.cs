@@ -61,7 +61,7 @@ public class NavGroup
 
     public bool Visible { get; set; } = true;
 
-    public bool RequireAuthorization { get; set; }
+    public bool RequiresAuthorization { get; set; }
 
     public string? Roles { get; set; }
 

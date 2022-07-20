@@ -12,38 +12,21 @@
     {
         @if (navGroup.Visible)
         {
-            <MudNavGroup Title="@navGroup.Name" Expanded="navGroup.Expanded" ExpandedChanged="(v) => Save(v, navGroup)">
-                @foreach (var navItem in navGroup.Items)
-                {
-                    @if (navItem.RequireAuthorization)
-                    {
-                        if (navItem.Visible)
-                        {
-                            <AuthorizeView Roles="@navItem.Roles">
-                                <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
-                            </AuthorizeView>
-                        }
-                    }
-                    else
-                    {
-                        if (navItem.Visible)
-                        {
-                            <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
-                        }
-                    }
-                }
-            </MudNavGroup>
+            if(navGroup.RequiresAuthorization) 
+            {
+                <AuthorizeView Roles="@navGroup.Roles">
+                    <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
+                </AuthorizeView>
+            }
+            else 
+            {
+                <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
+            }
         }
     }
 </MudNavMenu>
 
 @code {
-    bool general;
-    bool showroom;
-    bool projects;
-    bool finance;
-    bool admin;
-
     protected override void OnInitialized()
     {
         foreach (var navGroup in NavManager.Groups)

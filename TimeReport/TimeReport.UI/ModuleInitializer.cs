@@ -28,6 +28,8 @@ public class ModuleInitializer : IModuleInitializer
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
         var group = navManager.CreateGroup("project-management", () => resources["Project management"]);
+        group.RequiresAuthorization = true;
+
         group.CreateItem("projects", () => resources["Projects"], MudBlazor.Icons.Material.Filled.List, "/projects");
         group.CreateItem("report-time", () => resources["Report time"], MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
         group.CreateItem("reports", () => resources["Reports"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");

@@ -29,6 +29,8 @@ public class ModuleInitializer : IModuleInitializer
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
         var group = navManager.GetGroup("warehouse") ?? navManager.CreateGroup("warehouse", () => resources["Warehouse"]);
+        group.RequiresAuthorization = true;
+
         group.CreateItem("items", () => resources["Items"], MudBlazor.Icons.Material.Filled.ListAlt, "/warehouse/items");
     }
 }
