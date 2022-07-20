@@ -17,6 +17,7 @@ namespace YourBrand.HumanResources;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class TeamsController : Controller
 {
     private const string AuthSchemes =

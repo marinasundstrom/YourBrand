@@ -47,12 +47,10 @@
     {
         ProjectDto? result = null;
 
+        var organizationId = await CurrentUserService.GetOrganizationId();
+
         if (ProjectId is null)
         {
-            var organizationId = await CurrentUserService.GetOrganizationId();
-
-            Console.WriteLine(organizationId);
-
             result = await ProjectsClient.CreateProjectAsync(new CreateProjectDto
             {
                 Name = Name,
@@ -65,7 +63,8 @@
             result = await ProjectsClient.UpdateProjectAsync(ProjectId, new UpdateProjectDto
             {
                 Name = Name,
-                Description = Description
+                Description = Description,
+                OrganizationId = organizationId
             });
         }
 

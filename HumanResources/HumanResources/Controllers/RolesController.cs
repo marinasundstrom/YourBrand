@@ -18,6 +18,7 @@ namespace YourBrand.HumanResources;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class RolesController : Controller
 {
     private readonly IMediator _mediator;
