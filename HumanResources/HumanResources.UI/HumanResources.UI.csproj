@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HumanResources.Client\HumanResources.Client.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Teams\" />

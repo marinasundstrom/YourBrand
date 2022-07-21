@@ -2,7 +2,7 @@
 using System.Globalization;
 
 using YourBrand.Portal.Services;
-using YourBrand.Portal.Shared;
+using YourBrand.Portal;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -13,8 +13,6 @@ using Microsoft.JSInterop;
 using MudBlazor.Services;
 using YourBrand.IdentityService.Client;
 using YourBrand.AppService.Client;
-using YourBrand.Portal.Shared.Services;
-using Catalog.Shared.Services;
 
 namespace YourBrand.Portal;
 

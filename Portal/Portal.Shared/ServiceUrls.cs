@@ -1,8 +1,8 @@
-namespace YourBrand.Portal.Shared;
+namespace YourBrand.Portal;
 
 public static class ServiceUrls 
 {
-    public const string RootUrl = "https://localhost";
+    public const string RootUrl = "https://localhost/api";
 
     public const string ApiKeysServiceUrl = $"{RootUrl}/apikeys";
 

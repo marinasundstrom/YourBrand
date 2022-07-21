@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Portal.Shared;
+using YourBrand.Portal;
 using YourBrand.Documents.Client;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;

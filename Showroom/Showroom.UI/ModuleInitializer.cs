@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
-using YourBrand.Portal.Shared;
+using YourBrand.Portal;
 using YourBrand.Showroom.Client;
 
 namespace YourBrand.Showroom;

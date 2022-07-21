@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>YourBrand.Portal.Shared</RootNamespace>
+    <RootNamespace>YourBrand.Portal</RootNamespace>
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj" />
     <ProjectReference Include="..\Portal.Services\Portal.Services.csproj" />
+    <ProjectReference Include="..\Portal.Theming\Portal.Theming.csproj" />
   </ItemGroup>
 
 </Project>

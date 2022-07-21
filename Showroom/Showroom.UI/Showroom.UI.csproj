@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
     <ProjectReference Include="..\Showroom.Client\Showroom.Client.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
   </ItemGroup>
 
 </Project>

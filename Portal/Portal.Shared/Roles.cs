@@ -1,4 +1,4 @@
-namespace YourBrand.Portal.Shared;
+namespace YourBrand.Portal;
 
 public static class Roles 
 {

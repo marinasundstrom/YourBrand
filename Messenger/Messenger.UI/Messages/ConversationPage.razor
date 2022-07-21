@@ -309,7 +309,7 @@
         };
 
         userId = await CurrentUserService.GetUserId();
-        isCurrentUserAdmin = await CurrentUserService.IsUserInRole(YourBrand.Portal.Shared.Roles.Administrator);
+        isCurrentUserAdmin = await CurrentUserService.IsUserInRole(YourBrand.Portal.Roles.Administrator);
 
         try
         {

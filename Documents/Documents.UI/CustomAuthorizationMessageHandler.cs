@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-using YourBrand.Portal.Shared;
+using YourBrand.Portal;
 
 namespace YourBrand.Documents;
 

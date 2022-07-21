@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
 using YourBrand.Portal.Services;
 
-namespace YourBrand.Portal.Shared.Services;
+namespace YourBrand.Portal.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

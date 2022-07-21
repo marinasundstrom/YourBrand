@@ -1,10 +1,10 @@
 ﻿using System;
 
-using YourBrand.Portal.Shared.Services;
+using YourBrand.Portal.Services;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace Catalog.Shared.Services;
+namespace YourBrand.Portal.Services;
 
 public class AccessTokenProvider : YourBrand.Portal.Services.IAccessTokenProvider
 {

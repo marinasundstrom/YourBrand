@@ -1,6 +1,6 @@
 ﻿@page "/hr/persons/{personId}"
 @attribute [Authorize(Roles = "Administrator,Manager")]
-@using YourBrand.Portal.Shared
+@using YourBrand.Portal
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject YourBrand.HumanResources.Client.IPersonsClient PersonsClient
