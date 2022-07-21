@@ -79,3 +79,26 @@ public class TimeReportTeamUpdatedConsumer : IConsumer<TeamUpdated>
         var result = await _mediator.Send(new UpdateTeamCommand(message2.TeamId, message.Name, message.Description));
     }
 }
+
+public class TimeReportTeamMemberAddedConsumer : IConsumer<TeamMemberAdded>
+{
+    private readonly IMediator _mediator;
+    private readonly IRequestClient<GetTeam> _requestClient;
+    private readonly ICurrentUserService _currentTeamService;
+
+    public TimeReportTeamMemberAddedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, ICurrentUserService currentTeamService)
+    {
+        _mediator = mediator;
+        _requestClient = requestClient;
+        _currentTeamService = currentTeamService;
+    }
+
+    public async Task Consume(ConsumeContext<TeamMemberAdded> context)
+    {
+        var message = context.Message;
+
+        //_currentTeamService.SetCurrentUser(message.UpdatedById);
+
+        var result = await _mediator.Send(new AddTeamMemberCommand(message.TeamId, message.PersonId));
+    }
+}
