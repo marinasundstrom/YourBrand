@@ -40,6 +40,7 @@ public record GetTeamQuery(string Id) : IRequest<TeamDto?>
                .Teams
                .Include(x => x.Memberships)
                .ThenInclude(x => x.User)
+               .ThenInclude(x => x.Organization)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

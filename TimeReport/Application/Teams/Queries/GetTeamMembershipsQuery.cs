@@ -37,7 +37,6 @@ public record GetTeamMembershipsQuery(string Id, int Page = 0, int PageSize = 10
         {
             IQueryable<TeamMembership> result = _context
                     .TeamMemberships
-                    //.Include(t => t.User)
                     .OrderBy(o => o.Created)
                     .Where(t => t.TeamId == request.Id)
                     .AsNoTracking()
@@ -59,6 +58,7 @@ public record GetTeamMembershipsQuery(string Id, int Page = 0, int PageSize = 10
 
             var items = await result
                 .Include(x => x.User)
+                .ThenInclude(t => t.Organization)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);
