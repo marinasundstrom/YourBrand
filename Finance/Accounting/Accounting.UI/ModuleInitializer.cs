@@ -13,6 +13,8 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
+        services.AddScoped<CustomAuthorizationMessageHandler>();
+
         services.AddAccountingClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/accounting/");

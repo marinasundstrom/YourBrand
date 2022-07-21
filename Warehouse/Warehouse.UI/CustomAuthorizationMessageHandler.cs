@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace YourBrand.Portal.Shared;
+using YourBrand.Portal.Shared;
+
+namespace YourBrand.Warehouse;
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {
@@ -12,7 +14,7 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
         : base(provider, navigation)
     {
         ConfigureHandler(
-            authorizedUrls: new[] { ServiceUrls.AppServiceUrl, ServiceUrls.IdentityServiceUrl },
+            authorizedUrls: new[] { ServiceUrls.WarehouseServiceUrl },
             scopes: new[] { Scopes.MyApi});
     }
 }

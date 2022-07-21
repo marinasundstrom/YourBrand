@@ -15,6 +15,8 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
+        services.AddScoped<CustomAuthorizationMessageHandler>();
+
         services.AddMessengerClients((sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
