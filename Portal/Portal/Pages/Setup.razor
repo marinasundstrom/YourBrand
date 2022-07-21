@@ -30,19 +30,29 @@
 </MudContainer>
 
 @code {
+    protected override void OnInitialized()
+    {
+#if DEBUG
+        OrganizationName  = "My company";
+        Email = "admin@email.com";
+        Password = "Abc123!?";
+        RepeatPassword = "Abc123!?";
+#endif
+    }
+
     [Required]
-    public string OrganizationName { get; set; } = "My company";
+    public string OrganizationName { get; set; }
 
     [Required]
     [EmailAddress]
-    public string Email { get; set; } = "admin@email.com";
+    public string Email { get; set; }
 
     [Required]
-    public string Password { get; set; } = "Abc123!?";
+    public string Password { get; set; }
 
     [Required]
     [Compare(nameof(Password))]
-    public string RepeatPassword { get; set; } = "Abc123!?";
+    public string RepeatPassword { get; set; }
 
     async Task OnSubmit()
     {
