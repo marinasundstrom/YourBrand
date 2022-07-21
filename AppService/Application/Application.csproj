@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Application</RootNamespace>
     <LangVersion>preview</LangVersion>
+    <UserSecretsId>eb080cf9-6145-4537-8113-f41941020251</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0-preview.6.22324.4" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-preview.6.22324.4" />
     <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+    <PackageReference Include="MassTransit.Abstractions" Version="8.0.6-develop.519" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,12 +29,5 @@
      <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
      <ProjectReference Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj" />
      <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Setup\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Setup\" />
   </ItemGroup>
 </Project>
