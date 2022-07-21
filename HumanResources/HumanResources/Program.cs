@@ -98,7 +98,8 @@ static class Program
         {
             x.SetKebabCaseEndpointNameFormatter();
 
-            x.AddConsumers(typeof(Program).Assembly);
+            x.AddAppConsumers();
+
             //x.AddConsumer(typeof(PersonCreatedConsumer), typeof(PersonCreatedConsumerDefinition));
 
             x.UsingRabbitMq((context, cfg) =>

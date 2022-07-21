@@ -10,13 +10,13 @@ namespace YourBrand.HumanResources.Application;
 
 public static class Mapper
 {
-    public static OrganizationDto ToDto(this Organization organization) => new OrganizationDto(organization.Id, organization.Name);
+    public static OrganizationDto ToDto(this Organization organization) => new OrganizationDto(organization.Id, organization.Name, organization.FriendlyName);
 
-    public static PersonDto ToDto(this Person person ) => new PersonDto(person.Id, person.Organization.ToDto(), person.FirstName, person.LastName, person.DisplayName, person.Title, person.Roles.First().Name, person.SSN, person.Email,
+    public static PersonDto ToDto(this Person person) => new PersonDto(person.Id, person.Organization.ToDto(), person.FirstName, person.LastName, person.DisplayName, person.Title, person.Roles.First().Name, person.SSN, person.Email,
                 person.Department == null ? null : new DepartmentDto(person.Department.Id, person.Department.Name), person.ReportsTo?.ToDto2(),
                     person.Created, person.LastModified);
 
-    public static Person2Dto ToDto2(this Person person ) => new Person2Dto(person.Id, person.Organization.ToDto(), person.FirstName, person.LastName, person.DisplayName, person.Title,
+    public static Person2Dto ToDto2(this Person person) => new Person2Dto(person.Id, person.Organization.ToDto(), person.FirstName, person.LastName, person.DisplayName, person.Title,
                 person.Department == null ? null : new DepartmentDto(person.Department.Id, person.Department.Name));
 
 

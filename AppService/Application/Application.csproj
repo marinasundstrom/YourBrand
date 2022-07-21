@@ -29,4 +29,10 @@
      <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Setup\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Setup\" />
+  </ItemGroup>
 </Project>

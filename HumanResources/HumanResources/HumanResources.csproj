@@ -50,5 +50,8 @@
     <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\HumanResources.Consumers\HumanResources.Consumers.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

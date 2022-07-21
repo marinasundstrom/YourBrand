@@ -1,0 +1,73 @@
+@page "/setup"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+
+<PageTitle>Set up - YourBrand</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Set up</MudText>
+
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
+    <MudCard>
+        <MudCardContent>
+            <EditForm Model="@this" OnValidSubmit="OnSubmit">
+                <MudTextField Label="Organization" Class="mb-6" HelperText="The name of your organization" @bind-Value="OrganizationName" Variant="Variant.Outlined"  For="() => OrganizationName" />
+
+                <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Administrator account</MudText>
+
+                <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+
+                <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
+
+                <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
+            
+            </EditForm>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+@code {
+    [Required]
+    public string OrganizationName { get; set; } = "My company";
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = "admin@email.com";
+
+    [Required]
+    public string Password { get; set; } = "Abc123!?";
+
+    [Required]
+    [Compare(nameof(Password))]
+    public string RepeatPassword { get; set; } = "Abc123!?";
+
+    async Task OnSubmit()
+    {
+        /*
+
+        try
+        {
+            UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName,
+                Ssn = SSN,
+                Email = Email,
+                Role = Role.Name,
+                Password = Password
+            });
+
+            NavigationManager.NavigateTo($"/Users/{result.Id}");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        */
+
+        NavigationManager.NavigateTo("/products");
+    }
+}
