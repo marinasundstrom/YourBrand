@@ -29,8 +29,24 @@ public record SetupCommand(string OrganizationName, string Email, string Passwor
 
         public async Task<Unit> Handle(SetupCommand request, CancellationToken cancellationToken)
         {
-            var res = await _createOrgClient.GetResponse<GetOrganizationResponse>(new CreateOrganization(request.OrganizationName, null));
-            await _createOrgClient.GetResponse<GetPersonResponse>(new CreatePerson(res.Message.Id, "Administrator", "Administrator", "Administrator", "Administrator", "Administrator", "234234", request.Email, null!, null, request.Password));
+            var res = await _createOrgClient.GetResponse<CreateOrganizationResponse>(new CreateOrganization {
+                Name = request.OrganizationName, 
+                FriendlyName = null
+            });
+
+            await _createPersonClient.GetResponse<CreatePersonResponse>(new CreatePerson {
+                OrganizationId = res.Message.Id, 
+                FirstName = "Administrator", 
+                LastName = "Administrator", 
+                DisplayName = "Administrator", 
+                Title = "Administrator", 
+                Role = "Administrator", 
+                SSN = "234234", 
+                Email = request.Email,
+                DepartmentId = null!, 
+                ReportsTo = null, 
+                Password = request.Password
+            });
 
             return Unit.Value; 
         }

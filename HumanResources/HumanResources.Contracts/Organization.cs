@@ -2,7 +2,13 @@
 
 namespace YourBrand.HumanResources.Contracts;
 
-public record CreateOrganization(string Name, string? FriendlyName);
+public record CreateOrganization 
+{
+    public string Name{ get; init; }
+    public string? FriendlyName { get; init; }
+}
+
+public record CreateOrganizationResponse(string Id, string Name, string? FriendlyName);
 
 public record OrganizationCreated(string OrganizationId, string Name, string CreatedById);
 

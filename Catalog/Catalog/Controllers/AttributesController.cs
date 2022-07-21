@@ -9,7 +9,7 @@ using YourBrand.Catalog.Application.Options;
 namespace YourBrand.Catalog.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class AttributesController : Controller
 {
     private readonly IMediator _mediator;

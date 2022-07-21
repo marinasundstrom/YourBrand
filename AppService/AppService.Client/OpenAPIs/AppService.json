@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Web API",
@@ -78,7 +78,7 @@
         ],
         "operationId": "Items_AddItem",
         "requestBody": {
-          "x-name": "AddItemDto",
+          "x-name": "dto",
           "description": "",
           "content": {
             "application/json": {
@@ -169,7 +169,7 @@
           }
         ],
         "requestBody": {
-          "x-name": "UpdateItemDto",
+          "x-name": "dto",
           "description": "",
           "content": {
             "application/json": {
@@ -313,7 +313,7 @@
           }
         ],
         "requestBody": {
-          "x-name": "PostCommentDto",
+          "x-name": "dto",
           "description": "",
           "content": {
             "application/json": {
@@ -414,7 +414,7 @@
           }
         ],
         "requestBody": {
-          "x-name": "UpdateCommentDto",
+          "x-name": "dto",
           "description": "",
           "content": {
             "application/json": {
@@ -766,6 +766,36 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/Setup": {
+      "post": {
+        "tags": [
+          "Setup"
+        ],
+        "operationId": "Setup_Setup",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
           }
         },
         "security": [
@@ -1199,6 +1229,21 @@
         "enum": [
           "Item"
         ]
+      },
+      "SetupRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {

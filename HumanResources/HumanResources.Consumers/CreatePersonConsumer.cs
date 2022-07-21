@@ -25,6 +25,6 @@ public class CreatePersonConsumer : IConsumer<CreatePerson>
 
         var person = await _mediator.Send(new CreatePersonCommand(message.OrganizationId, message.FirstName, message.LastName, message.DisplayName, message.Title, message.Role, message.SSN, message.Email, message.DepartmentId, null, message.Password));
 
-        await context.RespondAsync(new GetPersonResponse(person.Id, person.Organization.Id, person.FirstName, person.LastName, person.DisplayName, person.SSN, person.Email));
+        await context.RespondAsync(new CreatePersonResponse(person.Id, person.Organization.Id, person.FirstName, person.LastName, person.DisplayName, person.SSN, person.Email));
     }
 }

@@ -9,7 +9,7 @@ using YourBrand.Catalog.Application.Products;
 namespace YourBrand.Catalog.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public partial class ProductsController : Controller
 {
     private readonly IMediator _mediator;

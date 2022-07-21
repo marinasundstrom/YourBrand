@@ -51,6 +51,11 @@ public static class ServiceExtensions
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
 
+        services.AddSetupClient((sp, http) => {
+            var navigationManager = sp.GetRequiredService<NavigationManager>();
+            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
+        });
+
         services.AddIdentityServiceClients((sp, http) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"https://identity.local/");

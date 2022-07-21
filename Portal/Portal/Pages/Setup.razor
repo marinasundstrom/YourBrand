@@ -1,6 +1,8 @@
 @page "/setup"
 @using System.ComponentModel.DataAnnotations
+@using YourBrand.AppService.Client
 @inject NavigationManager NavigationManager
+@inject ISetupClient SetupClient
 
 <PageTitle>Set up - YourBrand</PageTitle>
 
@@ -44,30 +46,20 @@
 
     async Task OnSubmit()
     {
-        /*
-
         try
         {
-            UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
+            await SetupClient.SetupAsync(new SetupRequest
             {
-                FirstName = FirstName,
-                LastName = LastName,
-                DisplayName = DisplayName,
-                Ssn = SSN,
+                OrganizationName = OrganizationName,
                 Email = Email,
-                Role = Role.Name,
                 Password = Password
             });
 
-            NavigationManager.NavigateTo($"/Users/{result.Id}");
+            NavigationManager.NavigateTo("/authentication/login");
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
-
-        */
-
-        NavigationManager.NavigateTo("/products");
     }
 }

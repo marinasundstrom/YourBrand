@@ -25,6 +25,6 @@ public class CreateOrganizationConsumer : IConsumer<CreateOrganization>
 
         var organization = await _mediator.Send(new CreateOrganizationCommand(message.Name, message.FriendlyName));
 
-        await context.RespondAsync(new GetOrganizationResponse(organization.Id, organization.Name, organization.FriendlyName));
+        await context.RespondAsync(new CreateOrganizationResponse(organization.Id, organization.Name, organization.FriendlyName));
     }
 }

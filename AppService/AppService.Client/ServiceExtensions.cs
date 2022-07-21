@@ -60,6 +60,17 @@ public static class ServiceExtensions
         return services;
     }
 
+    public static IServiceCollection AddSetupClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(SetupClient), configureClient)
+            .AddTypedClient<ISetupClient>((http, sp) => new SetupClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
     public static IServiceCollection AddClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services

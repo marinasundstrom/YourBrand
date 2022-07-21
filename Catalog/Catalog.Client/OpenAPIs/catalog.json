@@ -27,7 +27,7 @@
         }
       }
     },
-    "/api/Attributes": {
+    "/Attributes": {
       "get": {
         "tags": [
           "Attributes"
@@ -49,7 +49,7 @@
         }
       }
     },
-    "/api/Attributes/{attributeId}/Values": {
+    "/Attributes/{attributeId}/Values": {
       "get": {
         "tags": [
           "Attributes"
@@ -80,7 +80,7 @@
         }
       }
     },
-    "/api/Options": {
+    "/Options": {
       "get": {
         "tags": [
           "Options"
@@ -111,7 +111,7 @@
         }
       }
     },
-    "/api/Options/{optionId}/Values": {
+    "/Options/{optionId}/Values": {
       "get": {
         "tags": [
           "Options"
@@ -142,7 +142,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes": {
+    "/Products/{productId}/Attributes": {
       "get": {
         "tags": [
           "Products"
@@ -219,7 +219,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes/{attributeId}": {
+    "/Products/{productId}/Attributes/{attributeId}": {
       "put": {
         "tags": [
           "Products"
@@ -302,7 +302,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes/{attributeId}/Values": {
+    "/Products/{productId}/Attributes/{attributeId}/Values": {
       "post": {
         "tags": [
           "Products"
@@ -393,7 +393,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes/{attributeId}/Values/{valueId}": {
+    "/Products/{productId}/Attributes/{attributeId}/Values/{valueId}": {
       "post": {
         "tags": [
           "Products"
@@ -433,7 +433,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes/Groups": {
+    "/Products/{productId}/Attributes/Groups": {
       "get": {
         "tags": [
           "Products"
@@ -510,7 +510,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes/Groups/{attributeGroupId}": {
+    "/Products/{productId}/Attributes/Groups/{attributeGroupId}": {
       "put": {
         "tags": [
           "Products"
@@ -593,7 +593,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Attributes/{attributeId}/GetAvailableValues": {
+    "/Products/{productId}/Attributes/{attributeId}/GetAvailableValues": {
       "post": {
         "tags": [
           "Products"
@@ -651,7 +651,7 @@
         }
       }
     },
-    "/api/Products": {
+    "/Products": {
       "get": {
         "tags": [
           "Products"
@@ -765,7 +765,7 @@
         }
       }
     },
-    "/api/Products/{productId}": {
+    "/Products/{productId}": {
       "get": {
         "tags": [
           "Products"
@@ -834,7 +834,7 @@
         }
       }
     },
-    "/api/Products/{productId}/UploadImage": {
+    "/Products/{productId}/UploadImage": {
       "post": {
         "tags": [
           "Products"
@@ -874,7 +874,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Visibility": {
+    "/Products/{productId}/Visibility": {
       "get": {
         "tags": [
           "Products"
@@ -913,7 +913,7 @@
         }
       }
     },
-    "/api/Products/Groups": {
+    "/Products/Groups": {
       "get": {
         "tags": [
           "Products"
@@ -983,7 +983,7 @@
         }
       }
     },
-    "/api/Products/Groups/{productGroupId}": {
+    "/Products/Groups/{productGroupId}": {
       "put": {
         "tags": [
           "Products"
@@ -1052,7 +1052,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Options": {
+    "/Products/{productId}/Options": {
       "get": {
         "tags": [
           "Products"
@@ -1129,7 +1129,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Options/{optionId}": {
+    "/Products/{productId}/Options/{optionId}": {
       "put": {
         "tags": [
           "Products"
@@ -1212,7 +1212,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Options/{optionId}/Values": {
+    "/Products/{productId}/Options/{optionId}/Values": {
       "post": {
         "tags": [
           "Products"
@@ -1303,7 +1303,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Options/{optionId}/Values/{valueId}": {
+    "/Products/{productId}/Options/{optionId}/Values/{valueId}": {
       "post": {
         "tags": [
           "Products"
@@ -1343,7 +1343,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Options/Groups": {
+    "/Products/{productId}/Options/Groups": {
       "get": {
         "tags": [
           "Products"
@@ -1420,7 +1420,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Options/Groups/{optionGroupId}": {
+    "/Products/{productId}/Options/Groups/{optionGroupId}": {
       "put": {
         "tags": [
           "Products"
@@ -1503,7 +1503,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Variants": {
+    "/Products/{productId}/Variants": {
       "get": {
         "tags": [
           "Products"
@@ -1625,7 +1625,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Variants/{variantId}": {
+    "/Products/{productId}/Variants/{variantId}": {
       "delete": {
         "tags": [
           "Products"
@@ -1751,7 +1751,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Variants/Find": {
+    "/Products/{productId}/Variants/Find": {
       "post": {
         "tags": [
           "Products"
@@ -1799,7 +1799,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Variants/{variantId}/Options": {
+    "/Products/{productId}/Variants/{variantId}/Options": {
       "get": {
         "tags": [
           "Products"
@@ -1837,7 +1837,7 @@
         }
       }
     },
-    "/api/Products/{productId}/Variants/{variantId}/UploadImage": {
+    "/Products/{productId}/Variants/{variantId}/UploadImage": {
       "post": {
         "tags": [
           "Products"
