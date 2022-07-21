@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddWarehouseClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/warehouse/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.WarehouseServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

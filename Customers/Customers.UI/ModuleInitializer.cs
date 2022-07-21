@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddCustomersClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/customers/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.CustomersServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddRotRutClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/rotrut/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.RotRutServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddTransactionsClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/transactions/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.TransactionsServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

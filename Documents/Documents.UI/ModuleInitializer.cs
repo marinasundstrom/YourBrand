@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddDocumentsClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/documents/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.DocumentsServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

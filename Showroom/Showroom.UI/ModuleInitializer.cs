@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddShowroomClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/showroom/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.ShowroomServiceUrl}/");
         }, builder => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddInvoicingClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/invoicing/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.InvoicingServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

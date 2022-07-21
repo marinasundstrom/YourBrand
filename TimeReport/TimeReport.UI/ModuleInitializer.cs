@@ -16,7 +16,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddTimeReportClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/timereport/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.TimeReportServiceUrl}/");
         }, builder => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

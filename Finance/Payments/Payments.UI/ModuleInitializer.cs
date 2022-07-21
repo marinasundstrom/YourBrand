@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddPaymentsClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/payments/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.PaymentsServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

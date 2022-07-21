@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddAccountingClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/accounting/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.AccountingServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

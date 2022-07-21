@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddCatalogClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/catalog/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.CatalogServiceUrl}/");
         }, builder => {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

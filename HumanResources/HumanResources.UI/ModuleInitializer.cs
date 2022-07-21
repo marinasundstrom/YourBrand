@@ -17,7 +17,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddHumanResourcesClients((sp, httpClient) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{navigationManager.BaseUri}api/humanresources/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.HumanResourcesServiceUrl}/");
         }, builder => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
