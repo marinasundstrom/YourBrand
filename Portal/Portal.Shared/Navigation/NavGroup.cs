@@ -51,4 +51,34 @@ public class NavGroup
         _items.Add(navItem);
         return navItem;
     }
+
+    public NavItem CreateItem(string id, Action<NavItemOptions> setup)
+    {
+        NavItemOptions options = new NavItemOptions();
+        setup(options);
+
+        var navItem = new NavItem()
+        {
+            Id = id,
+            NameFunc = options.NameFunc,
+            Icon = options.Icon,
+            Href = options.Href,
+            RequireAuthorization = options.RequireAuthorization
+        };
+        _items.Add(navItem);
+        return navItem;
+    }
+}
+
+public class NavItemOptions
+{
+    public string Name { get; set; }
+
+    public Func<string> NameFunc { get; set; }
+
+    public string Icon { get; set; }
+
+    public string Href { get; set; }
+
+    public bool RequireAuthorization { get; set; }
 }

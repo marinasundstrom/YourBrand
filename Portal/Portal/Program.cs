@@ -8,6 +8,9 @@ using Blazored.LocalStorage;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;
 using System.Reflection;
+using Humanizer.Localisation;
+using Microsoft.Extensions.Localization;
+using YourBrand.TimeReport.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -32,13 +35,35 @@ builder.Services
     .AddScoped<ModuleLoader>();
 
 LoadModules(builder.Services);
-
 var app = builder.Build();
-
-await app.Services.Localize();
 
 var moduleBuilder = app.Services.GetRequiredService<ModuleLoader>();
 moduleBuilder.ConfigureServices();
+
+var navManager = app.Services
+    .GetRequiredService<NavManager>();
+
+var resources = app.Services.GetRequiredService<IStringLocalizer<YourBrand.Portal.Resources>>();
+
+var group = navManager.GetGroup("administration") ?? navManager.CreateGroup("administration", () => resources["Administration"]);
+
+group.CreateItem("users", options =>
+{
+    options.NameFunc = () => resources["Users"];
+    options.Icon = MudBlazor.Icons.Material.Filled.Person;
+    options.Href = "/users";
+    options.RequireAuthorization = true;
+});
+
+group.CreateItem("setup", options =>
+{
+    options.NameFunc = () => resources["SetUp"];
+    options.Icon = MudBlazor.Icons.Material.Filled.Settings;
+    options.Href = "/setup";
+});
+
+
+await app.Services.Localize();
 
 await app.RunAsync();
 

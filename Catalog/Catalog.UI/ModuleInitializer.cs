@@ -32,7 +32,7 @@ public class ModuleInitializer : IModuleInitializer
 
         var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", () => resources["Sales"]);
         group.RequiresAuthorization = true;
-
+        
         group.CreateItem("products", () => resources["Products"], MudBlazor.Icons.Material.Filled.FormatListBulleted, "/products");
     }
 }
