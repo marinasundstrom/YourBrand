@@ -82,9 +82,7 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.ConfigureEndpoints(context);
     });
-})
-.AddMassTransitHostedService(true)
-.AddGenericRequestClient();
+});
 
 var app = builder.Build();
 

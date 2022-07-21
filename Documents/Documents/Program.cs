@@ -91,9 +91,7 @@ builder.Services.AddMassTransit(x =>
 
         cfg.ConfigureEndpoints(context);
     });
-})
-.AddMassTransitHostedService(true)
-.AddGenericRequestClient();
+});
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IRazorTemplateCompiler, RazorTemplateCompiler>();

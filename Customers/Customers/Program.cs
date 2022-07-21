@@ -64,9 +64,7 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.ConfigureEndpoints(context);
     });
-})
-.AddMassTransitHostedService(true)
-.AddGenericRequestClient();
+});
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {

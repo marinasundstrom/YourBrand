@@ -7,13 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\HumanResources.Contracts\HumanResources.Contracts.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit.Abstractions" Version="8.0.6-develop.519" />
+    <PackageReference Include="MassTransit" Version="8.0.6-develop.519" />
+  </ItemGroup>
+
 </Project>

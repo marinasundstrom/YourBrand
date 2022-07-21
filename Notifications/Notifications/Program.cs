@@ -86,9 +86,7 @@ static class Program
             {
                 cfg.ConfigureEndpoints(context);
             });
-        })
-        .AddMassTransitHostedService(true)
-        .AddGenericRequestClient();
+        });
 
         // Add Hangfire services.
         builder.Services.AddHangfire(configuration => configuration

@@ -121,9 +121,7 @@ static class Program
             {
                 cfg.ConfigureEndpoints(context);
             });
-        })
-        .AddMassTransitHostedService(true)
-        .AddGenericRequestClient();
+        });
 
         services.AddSignalR();
 

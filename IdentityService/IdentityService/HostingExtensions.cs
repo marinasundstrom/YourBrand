@@ -65,9 +65,7 @@ internal static class HostingExtensions
             {
                 cfg.ConfigureEndpoints(context);
             });
-        })
-        .AddMassTransitHostedService(true)
-        .AddGenericRequestClient();
+        });
 
         builder.Services.AddCors(options =>
         {

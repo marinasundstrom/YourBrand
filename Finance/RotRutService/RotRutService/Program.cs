@@ -70,9 +70,7 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.ConfigureEndpoints(context);
     });
-})
-.AddMassTransitHostedService(true)
-.AddGenericRequestClient();
+});
 
 builder.Services.AddTransactionsClient((sp, http) =>
 {

@@ -9,8 +9,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
-	  <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6-develop.519" />
   </ItemGroup>
 
   <ItemGroup>

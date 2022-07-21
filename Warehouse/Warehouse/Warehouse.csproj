@@ -11,10 +11,9 @@
 
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Documents' " />
 	<ItemGroup>
-		<PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
-		<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6-develop.519" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-preview.5.22302.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-preview.6.22329.4" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
         <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
     </ItemGroup>
