@@ -22,6 +22,7 @@ public record GetProductVariants(string ProductId,  int Page = 10, int PageSize 
         {
             var query = _context.ProductVariants
                 .Where(pv => pv.Product.Id == request.ProductId)
+                .OrderBy(x => x.Id)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .AsQueryable();

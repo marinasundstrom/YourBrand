@@ -22,6 +22,7 @@ public record GetTeamQuery(string TeamId) : IRequest<TeamDto>
         public async Task<TeamDto> Handle(GetTeamQuery request, CancellationToken cancellationToken)
         {
             var team = await _context.Teams
+                .OrderBy(x => x.Id)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TeamId, cancellationToken);
