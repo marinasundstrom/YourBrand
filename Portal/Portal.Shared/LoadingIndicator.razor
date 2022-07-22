@@ -1,3 +1,17 @@
-<div class="d-flex justify-center flex-grow-1 gap-4">
-    <MudProgressCircular Color="Color.Info" Indeterminate="true" />
-</div>
+@if(show) 
+{
+    <div class="d-flex justify-center flex-grow-1 gap-4">
+        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+    </div>
+}
+
+@code {
+    bool show = false;
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await Task.Delay(1000);
+
+        show = true;
+    }
+}

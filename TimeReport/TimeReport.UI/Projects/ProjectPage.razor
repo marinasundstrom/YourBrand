@@ -127,11 +127,16 @@ else
     </MudTable>
 
     <MudPaper Class="pa-16 ma-2 mt-4">
+        @if (Series is null) 
+        {
+            <LoadingIndicator />
+        }
+        else 
+        {
+            <MudText Typo="Typo.h6" GutterBottom="true">Activity hours per month</MudText>
 
-        <MudText Typo="Typo.h6" GutterBottom="true">Activity hours per month</MudText>
-
-        <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
-
+            <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+        }
     </MudPaper>
 }
 

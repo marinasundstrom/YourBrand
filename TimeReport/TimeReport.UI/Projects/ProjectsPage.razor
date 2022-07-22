@@ -15,6 +15,10 @@
     {
         <StatisticsSummaryView Entries="statisticsSummary.Entries" />
     }
+    else 
+    {
+        <LoadingIndicator />
+    }
 </div>
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewProjectClicked">New project</MudButton>
@@ -50,17 +54,18 @@
     </PagerContent>
 </MudTable>
 
-
-@if (data is not null)
-{
-    <MudPaper Class="pa-16 ma-2">
-
+<MudPaper Class="pa-16 ma-2">
+    @if (data is not null)
+    {
         <MudText Typo="Typo.h6" GutterBottom="true">Project hours per month</MudText>
 
         <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
-
-    </MudPaper>
-}
+    }
+    else 
+    {
+        <LoadingIndicator />
+    }
+</MudPaper>
 
 @code {
     MudTable<ProjectDto> table;
