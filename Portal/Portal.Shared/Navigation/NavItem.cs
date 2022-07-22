@@ -14,6 +14,16 @@ public class NavItem
 
     public Func<string>? NameFunc { get; set; }
 
+    public void SetName(string name) 
+    {
+        Name = name;
+    }
+
+    public void SetName(Func<string> nameFunc) 
+    {
+        NameFunc = nameFunc;
+    }
+
     public string? Icon { get; set; }
 
     public string Href { get; set; } = null!;

@@ -8,6 +8,25 @@ public class NavManager
 
     public NavGroup? GetGroup(string id) => Groups.FirstOrDefault(g => g.Id == id);
 
+    public NavGroup? GetGroup(string id, Action<NavGroupOptions> setup) 
+    {
+        var navGroup = GetGroup(id);
+
+        if(navGroup is null) return null;
+
+        NavGroupOptions options = new NavGroupOptions();
+        setup(options);
+
+        navGroup.Name = options.Name;
+        navGroup.NameFunc = options.NameFunc;
+        navGroup.RequiresAuthorization = options.RequiresAuthorization;
+        navGroup.Roles = options.Roles;
+
+        Updated?.Invoke(this, EventArgs.Empty);
+
+        return navGroup;
+    }
+
     public NavGroup CreateGroup(string id, string name)
     {
         var navGroup = new NavGroup()
@@ -64,6 +83,16 @@ public class NavGroupOptions
     public string Name { get; set; }
 
     public Func<string> NameFunc { get; set; }
+
+    public void SetName(string name) 
+    {
+        Name = name;
+    }
+
+    public void SetName(Func<string> nameFunc) 
+    {
+        NameFunc = nameFunc;
+    }
 
     //public string Icon { get; set; }
 
