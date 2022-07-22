@@ -154,12 +154,6 @@ else
     {
         loadingFailed = false;
 
-#if DEBUG
-
-        await Task.Delay(2000);
-
-#endif
-
         try
         {
             consultant = await ConsultantsClient.GetConsultantAsync(Id);

@@ -25,10 +25,6 @@ public partial class ItemPage
     {
         loadingFailed = false;
 
-        #if DEBUG
-        await Task.Delay(2000);
-        #endif
-
         try
         {
             //throw new Exception();
