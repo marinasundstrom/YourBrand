@@ -12,7 +12,27 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
         : base(provider, navigation)
     {
         ConfigureHandler(
-            authorizedUrls: new[] { ServiceUrls.AppServiceUrl, ServiceUrls.IdentityServiceUrl },
-            scopes: new[] { Scopes.MyApi});
+            authorizedUrls: new[] {
+                ServiceUrls.ApiKeysServiceUrl,
+                ServiceUrls.AppServiceUrl,
+                ServiceUrls.CatalogServiceUrl,
+                ServiceUrls.CustomersServiceUrl,
+                ServiceUrls.DocumentsServiceUrl,
+                //ServiceUrls.EmailServiceUrl, 
+                ServiceUrls.AccountingServiceUrl,
+                ServiceUrls.InvoicingServiceUrl,
+                ServiceUrls.RotRutServiceUrl,
+                ServiceUrls.TransactionsServiceUrl,
+                ServiceUrls.HumanResourcesServiceUrl, 
+                ServiceUrls.IdentityServiceUrl,
+                ServiceUrls.MarketingServiceUrl,
+                ServiceUrls.MessengerServiceUrl,
+                ServiceUrls.NotificationsServiceUrl,
+                ServiceUrls.OrdersServiceUrl,
+                ServiceUrls.ShowroomServiceUrl,
+                ServiceUrls.TimeReportServiceUrl,
+                ServiceUrls.WarehouseServiceUrl
+            },
+            scopes: new[] { Scopes.MyApi });
     }
 }

@@ -31,7 +31,7 @@ public class ModuleInitializer : IModuleInitializer
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
         var group = navManager.GetGroup("marketing") ?? navManager.CreateGroup("marketing", options => {
-            options.NameFunc = () => resources["Marketing"];
+            options.SetName(() => resources["Marketing"]);
             options.RequiresAuthorization = true;
         });
 
