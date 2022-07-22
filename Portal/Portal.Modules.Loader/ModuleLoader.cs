@@ -28,7 +28,7 @@ public class ModuleLoader
         _moduleInitializerInterface = typeof(IModuleInitializer);
     }
 
-    public static void LoadModule(Assembly assembly, bool enabled) => _modules.Add(new Module(assembly) { Enabled = enabled });
+    public static void LoadModule(string name, Assembly assembly, bool enabled) => _modules.Add(new Module(name, assembly) { Enabled = enabled });
 
     public static void AddServices(IServiceCollection services)
     {
@@ -44,7 +44,7 @@ public class ModuleLoader
                 var moduleInitializeMethod = initializer.GetMethod("Initialize");
                 moduleInitializeMethod?.Invoke(null, new object[] { services });
 
-                Console.WriteLine($"Module \"{module.Assembly.GetName().Name}\" was initialized.");
+                Console.WriteLine($"Module \"{module.Name}\" was initialized.");
             }
         }
     }

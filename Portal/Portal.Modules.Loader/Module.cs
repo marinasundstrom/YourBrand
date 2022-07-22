@@ -4,10 +4,13 @@ namespace YourBrand.Portal.Modules;
 
 public class Module
 {
-    public Module(Assembly assembly)
+    public Module(string name, Assembly assembly)
     {
+        Name = name;
         Assembly = assembly;
     }
+
+    public string Name { get; }
 
     public Assembly Assembly { get; }
 

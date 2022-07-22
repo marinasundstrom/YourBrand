@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using System.Net.Http.Json;
 
 using YourBrand.Portal;
 using YourBrand.Portal.Theming;
@@ -34,7 +35,8 @@ builder.Services
     .AddNavigationServices()
     .AddScoped<ModuleLoader>();
 
-LoadModules(builder.Services);
+await LoadModules(builder.Services);
+
 var app = builder.Build();
 
 var moduleBuilder = app.Services.GetRequiredService<ModuleLoader>();
@@ -62,35 +64,24 @@ group.CreateItem("setup", options =>
     options.Href = "/setup";
 });
 
-
 await app.Services.Localize();
 
 await app.RunAsync();
 
-void LoadModules(IServiceCollection services)
+async Task LoadModules(IServiceCollection services)
 {
-    var moduleAssemblies = new List<ModuleEntry>
-    {
-        new ModuleEntry(typeof(YourBrand.Showroom.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Catalog.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Orders.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Marketing.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.TimeReport.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Invoicing.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Transactions.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Payments.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Accounting.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Documents.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Messenger.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.RotRutService.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.Customers.ModuleInitializer).Assembly, false),
-        new ModuleEntry(typeof(YourBrand.HumanResources.ModuleInitializer).Assembly, true),
-        new ModuleEntry(typeof(YourBrand.Warehouse.ModuleInitializer).Assembly, false)
-    };
+    var http = builder.Services
+        .BuildServiceProvider()
+        .GetRequiredService<HttpClient>();
 
-    moduleAssemblies.ForEach(x => ModuleLoader.LoadModule(x.Assembly, x.Enabled));
+    var entries = await http.GetFromJsonAsync<IEnumerable<ModuleDefinition>>("modules.json");
+
+    entries!.Where(x => x.Enabled).ToList().ForEach(x => 
+        ModuleLoader.LoadModule(x.Name, Assembly.Load(x.Assembly), x.Enabled));
 
     ModuleLoader.AddServices(builder.Services);
 }
 
 record ModuleEntry(Assembly Assembly, bool Enabled);
+
+public record ModuleDefinition(string Name, string Assembly, bool Enabled);

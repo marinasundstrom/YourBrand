@@ -1,0 +1,77 @@
+[
+    {
+        "Name": "Showroom",
+        "Assembly": "Showroom.UI",
+        "Enabled": false
+    },
+    {
+        "Name": "Catalog",
+        "Assembly": "Catalog.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Orders",
+        "Assembly": "Orders.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Marketing",
+        "Assembly": "Marketing.UI",
+        "Enabled": false
+    },
+    {
+        "Name": "TimeReport",
+        "Assembly": "TimeReport.UI",
+        "Enabled": false
+    },
+    {
+        "Name": "Invoicing",
+        "Assembly": "Invoicing.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Transactions",
+        "Assembly": "Transactions.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Payments",
+        "Assembly": "Payments.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Accounting",
+        "Assembly": "Accounting.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Documents",
+        "Assembly": "Documents.UI",
+        "Enabled": false
+    },
+    {
+        "Name": "Messenger",
+        "Assembly": "Messenger.UI",
+        "Enabled": false
+    },
+    {
+        "Name": "RotRutService",
+        "Assembly": "RotRutService.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Customers",
+        "Assembly": "Customers.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "HumanResources",
+        "Assembly": "HumanResources.UI",
+        "Enabled": true
+    },
+    {
+        "Name": "Warehouse",
+        "Assembly": "Warehouse.UI",
+        "Enabled": true
+    }
+]
