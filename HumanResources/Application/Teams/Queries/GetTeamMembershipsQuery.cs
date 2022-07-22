@@ -32,7 +32,7 @@ public record GetTeamMembershipsQuery(string TeamId, int Page = 0, int PageSize 
 
             var query = _context.TeamMemberships
                 .Where(x => x.TeamId == request.TeamId)
-                //.OrderBy(p => p.Created)
+                .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)
                 .AsNoTracking()

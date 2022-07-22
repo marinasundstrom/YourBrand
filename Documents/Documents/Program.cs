@@ -140,7 +140,7 @@ app.MapReverseProxy();
 
 app.MapGet("/{path?}", async (string? path, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetDirectory(path), cancellationToken))
-    .WithName("Documents_GetDirectory")
+    .WithName("Documents_GetDirectory2")
     .WithTags("Documents")
     .Produces<DirectoryDto>(StatusCodes.Status200OK);
 
