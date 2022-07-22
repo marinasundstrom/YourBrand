@@ -51,6 +51,7 @@ public record GetPersonsQuery(int Page = 0, int PageSize = 10, string? SearchStr
                 .Include(u => u.Organization)
                 .Include(u => u.Department)
                 .Include(u => u.ReportsTo)
+                .ThenInclude(u => u.Organization)
                 .ToListAsync(cancellationToken);
 
             var dtos = persons.Select(person => person.ToDto());

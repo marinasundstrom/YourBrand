@@ -32,7 +32,7 @@ public record CreatePersonCommand(string OrganizationId, string FirstName, strin
 
         public async Task<PersonDto> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _context.Organizations.FirstAsync(o => o.Id == request.OrganizationId, cancellationToken);
+            var organization = await _context.Organizations.FirstAsync(); // FirstAsync(o => o.Id == request.OrganizationId, cancellationToken);
 
             var person = new Person(organization, request.FirstName, request.LastName, request.DisplayName, request.Title, request.Ssn, request.Email);
 
