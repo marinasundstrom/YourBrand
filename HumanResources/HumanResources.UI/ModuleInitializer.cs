@@ -32,6 +32,7 @@ public class ModuleInitializer : IModuleInitializer
 
         var group = navManager.CreateGroup("human-resources", () => resources["Human resources"]);
         group.RequiresAuthorization = true;
+        //group.Roles = new[] { "Foo" } ;
 
         group.CreateItem("organization", () => resources["Organization"], MudBlazor.Icons.Material.Filled.House, "/hr/organization");
         group.CreateItem("persons", () => resources["Persons"], MudBlazor.Icons.Material.Filled.Person, "/hr/persons");

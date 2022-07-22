@@ -1,6 +1,7 @@
 ﻿@using System.Runtime.CompilerServices
 @using Navigation
 @inject NavManager NavManager
+@inject YourBrand.Portal.Services.ICurrentUserService CurrentUserService
 @inject IStringLocalizer<NavMenu> T
 @inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorageService
 @implements IDisposable
@@ -12,13 +13,19 @@
     {
         @if (navGroup.Visible)
         {
-            if(navGroup.RequiresAuthorization) 
+            if (navGroup.RequiresAuthorization)
             {
-                <AuthorizeView Roles="@navGroup.Roles">
-                    <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
-                </AuthorizeView>
+                if (navGroup.Roles == null || IsInAnyRole(navGroup.Roles))
+                {
+                    if (navGroup.Visible)
+                    {
+                        <AuthorizeView Roles="@(navGroup.Roles == null ? null : string.Join(",", navGroup.Roles))">
+                            <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
+                        </AuthorizeView>
+                    }
+                }
             }
-            else 
+            else
             {
                 <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
             }
@@ -27,8 +34,12 @@
 </MudNavMenu>
 
 @code {
-    protected override void OnInitialized()
+    IEnumerable<string> roles = Array.Empty<string>();
+
+    protected override async Task OnInitializedAsync()
     {
+        roles = await CurrentUserService.GetRoles();
+
         foreach (var navGroup in NavManager.Groups)
         {
             navGroup.Expanded = LocalStorageService.GetItem<bool>($"navmenu.{navGroup.Id.ToLower()}");
@@ -52,5 +63,16 @@
         LocalStorageService.SetItem($"navmenu.{navGroup.Id}", newValue);
         navGroup.Expanded = newValue;
         return newValue;
+    }
+
+    private bool IsInAnyRole(IEnumerable<string> desiredRoles)
+    {
+        foreach (var desiredRole in desiredRoles)
+        {
+            bool isInRole = roles.Any(r => r == desiredRole);
+            if (isInRole) return true;
+        }
+
+        return false;
     }
 }

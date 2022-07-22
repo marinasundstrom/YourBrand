@@ -52,7 +52,7 @@ group.CreateItem("users", options =>
     options.NameFunc = () => resources["Users"];
     options.Icon = MudBlazor.Icons.Material.Filled.Person;
     options.Href = "/users";
-    options.RequireAuthorization = true;
+    options.RequiresAuthorization = true;
 });
 
 group.CreateItem("setup", options =>

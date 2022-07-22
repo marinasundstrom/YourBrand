@@ -20,7 +20,7 @@ public class NavItem
 
     public bool Visible { get; set; } = true;
 
-    public bool RequireAuthorization { get; set; }
+    public bool RequiresAuthorization { get; set; }
 
-    public string? Roles { get; set; }
+    public IEnumerable<string>? Roles { get; set; }
 }

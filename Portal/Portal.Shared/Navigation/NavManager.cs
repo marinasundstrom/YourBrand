@@ -36,5 +36,40 @@ public class NavManager
         return navGroup;
     }
 
+    public NavGroup CreateGroup(string id, Action<NavGroupOptions> setup)
+    {
+        NavGroupOptions options = new NavGroupOptions();
+        setup(options);
+
+        var navGroup = new NavGroup()
+        {
+            Id = id,
+            Name = options.Name,
+            NameFunc = options.NameFunc,
+            RequiresAuthorization = options.RequiresAuthorization,
+            Roles = options.Roles
+        };
+        _groups.Add(navGroup);
+
+        Updated?.Invoke(this, EventArgs.Empty);
+
+        return navGroup;
+    }
+
     public event EventHandler? Updated;
+}
+
+public class NavGroupOptions
+{
+    public string Name { get; set; }
+
+    public Func<string> NameFunc { get; set; }
+
+    //public string Icon { get; set; }
+
+    //public string Href { get; set; }
+
+    public bool RequiresAuthorization { get; set; }
+
+    public IEnumerable<string>? Roles { get; set; }
 }

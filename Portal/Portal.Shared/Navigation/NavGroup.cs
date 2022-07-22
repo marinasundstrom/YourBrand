@@ -24,7 +24,7 @@ public class NavGroup
 
     public bool RequiresAuthorization { get; set; }
 
-    public string? Roles { get; set; }
+    public IEnumerable<string>? Roles { get; set; }
 
     public NavItem CreateItem(string id, string name, string icon, string href)
     {
@@ -60,10 +60,11 @@ public class NavGroup
         var navItem = new NavItem()
         {
             Id = id,
+            Name = options.Name,
             NameFunc = options.NameFunc,
             Icon = options.Icon,
             Href = options.Href,
-            RequireAuthorization = options.RequireAuthorization
+            RequiresAuthorization = options.RequiresAuthorization
         };
         _items.Add(navItem);
         return navItem;
@@ -80,5 +81,7 @@ public class NavItemOptions
 
     public string Href { get; set; }
 
-    public bool RequireAuthorization { get; set; }
+    public bool RequiresAuthorization { get; set; }
+
+    public IEnumerable<string>? Roles { get; set; }
 }

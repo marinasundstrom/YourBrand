@@ -12,10 +12,6 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Release' ">
-    <RunAOTCompilation>true</RunAOTCompilation>
-  </PropertyGroup>
-
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Portal' ">
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>

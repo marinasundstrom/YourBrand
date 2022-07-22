@@ -1,29 +1,51 @@
 @using Navigation
+@inject YourBrand.Portal.Services.ICurrentUserService CurrentUserService
 
 <MudNavGroup Title="@NavGroup.Name" Expanded="NavGroup.Expanded" ExpandedChanged="(v) => SaveCallback(v, NavGroup)">
-                @foreach (var navItem in NavGroup.Items)
+    @foreach (var navItem in NavGroup.Items)
+    {
+        @if (navItem.RequiresAuthorization)
+        {
+            if (navItem.Roles == null || IsInAnyRole(navItem.Roles))
+            {
+                if (navItem.Visible)
                 {
-                    @if (navItem.RequireAuthorization)
-                    {
-                        if (navItem.Visible)
-                        {
-                            <AuthorizeView Roles="@navItem.Roles">
-                                <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
-                            </AuthorizeView>
-                        }
-                    }
-                    else
-                    {
-                        if (navItem.Visible)
-                        {
-                            <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
-                        }
-                    }
+                    <AuthorizeView Roles="@(navItem.Roles == null ? null : string.Join(",", navItem.Roles))">
+                        <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+                    </AuthorizeView>
                 }
-            </MudNavGroup>
-
-            @code {
-                [Parameter] public NavGroup NavGroup { get; set; }
-
-                [Parameter] public Func<bool, NavGroup, bool> SaveCallback { get; set; }
             }
+        }
+        else
+        {
+            if (navItem.Visible)
+            {
+                <MudNavLink Icon="@navItem.Icon" Href="@navItem.Href">@navItem.Name</MudNavLink>
+            }
+        }
+    }
+</MudNavGroup>
+
+@code {
+    IEnumerable<string>? roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await CurrentUserService.GetRoles();
+    }
+
+    [Parameter] public NavGroup NavGroup { get; set; }
+
+    [Parameter] public Func<bool, NavGroup, bool> SaveCallback { get; set; }
+
+    private bool IsInAnyRole(IEnumerable<string> desiredRoles)
+    {
+        foreach(var desiredRole in desiredRoles)
+        {
+            bool isInRole = roles.Any(r => r == desiredRole);
+            if (isInRole) return true;
+        }
+
+        return false;
+    }
+}

@@ -30,8 +30,10 @@ public class ModuleInitializer : IModuleInitializer
 
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        var group = navManager.GetGroup("marketing") ?? navManager.CreateGroup("marketing", () => resources["Marketing"]);
-        group.RequiresAuthorization = true;
+        var group = navManager.GetGroup("marketing") ?? navManager.CreateGroup("marketing", options => {
+            options.NameFunc = () => resources["Marketing"];
+            options.RequiresAuthorization = true;
+        });
 
         group.CreateItem("contacts", () => resources["Contacts"], MudBlazor.Icons.Material.Filled.Person, "/contacts");
     }
