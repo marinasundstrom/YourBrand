@@ -2,7 +2,7 @@
     {
         "Name": "Showroom",
         "Assembly": "Showroom.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Catalog",
@@ -17,12 +17,12 @@
     {
         "Name": "Marketing",
         "Assembly": "Marketing.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "TimeReport",
         "Assembly": "TimeReport.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Invoicing",
@@ -47,12 +47,12 @@
     {
         "Name": "Documents",
         "Assembly": "Documents.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Messenger",
         "Assembly": "Messenger.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "RotRutService",
