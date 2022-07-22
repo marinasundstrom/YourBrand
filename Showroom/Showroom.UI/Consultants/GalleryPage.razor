@@ -48,7 +48,11 @@
     </MudExpansionPanel>
 </MudExpansionPanels>
 
-@if (consultants != null)
+@if (consultants is null)
+{
+    <YourBrand.Portal.LoadingIndicator />
+}
+else 
 {
     <MudGrid Spacing="6">
     @foreach (var consultant in consultants)

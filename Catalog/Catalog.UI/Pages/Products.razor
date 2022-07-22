@@ -27,9 +27,9 @@
             </MudChipSet>
         </div>
 
-        @if (products == null)
+        @if (products is null)
         {
-            <span>Loading...</span>
+            <YourBrand.Portal.LoadingIndicator />
         }
         else
         {
