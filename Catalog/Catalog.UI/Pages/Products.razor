@@ -33,27 +33,24 @@
         }
         else
         {
-            <MudGrid Spacing="6">
+            <MudGrid Spacing="6" Class="mb-4">
                 @foreach (var product in products)
                 {
                     <MudItem xs="12" sm="6" md="4" lg="4">
                         <a href="/products/@product.Id">
+                            <MudCard>
+                                <MudCardMedia Image="@product.Image" Height="200" />
 
-                            <div class="d-flex justify-center">
-                                @if (product.Image is not null)
-                                {
-                                    <MudImage Fluid="true" ObjectFit="ObjectFit.Cover" Src="@product.Image" Alt="Mony the dog" Elevation="25" Class="rounded-lg"/>
-                                }
-                                else
-                                {
-                                    <svg class="rounded-lg" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                                }
-                            </div>
-                            <MudText Typo="Typo.h4" Class="mt-4 mb-2" Style="text-align: center;">
-                                @product.Name
-                            </MudText>
-                            <small class="text-muted">@product.Price?.ToString("c")</small>
-                        </a>
+                                <MudCardContent>
+                                    <MudText Typo="Typo.h5">@product.Name</MudText>
+                                    <MudText Typo="Typo.body2">@product.Description</MudText>
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudText Typo="Typo.body2">@product.Price?.ToString("c")</MudText>
+                                    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/products/{product.Id}")">Learn More</MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                        </a> 
                     </MudItem>
                 }
             </MudGrid>
