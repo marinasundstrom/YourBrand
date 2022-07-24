@@ -23,14 +23,13 @@
                 </MudSelect>
             }
 
-
             <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
             <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
 
-            <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
+            <MudCheckBox Label="Has choices" Class="mb-6" @bind-Checked="HasChoice" For="() => HasChoice" />
 
-            @if (HasMultipleChoices)
+            @if (HasChoice)
             {
                 <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
 
@@ -95,7 +94,7 @@
     [Required]
     public string Name { get; set; }
 
-    public bool HasMultipleChoices { get; set; }
+    public bool HasChoice { get; set; }
 
     public string Description { get; set; }
 
@@ -112,7 +111,7 @@
     {
         Groups = (await ProductsClient.GetOptionGroupsAsync(ProductId)).Prepend(new OptionGroupDto { Id = null, Name = "None" }).ToList();
 
-        HasMultipleChoices = Product.HasVariants;
+        HasChoice = Product.HasVariants;
     }
 
     void AddValue()
@@ -136,12 +135,12 @@
         var data = new ApiCreateProductOption
         {
             Name = Name,
-            OptionType = HasMultipleChoices ? OptionType.Multiple : OptionType.Single,
+            OptionType = HasChoice ? OptionType.Choice : OptionType.YesOrNo,
             Description = Description,
             GroupId = Group?.Id,
             Sku = SKU,
             Price = Price,
-            Values = HasMultipleChoices ? Values.Select(x => new ApiCreateProductOptionValue()
+            Values = HasChoice ? Values.Select(x => new ApiCreateProductOptionValue()
             {
                 Name = x.Name,
                 Sku = x.SKU,

@@ -2031,8 +2031,8 @@
       "type": "integer",
       "description": "",
       "x-enumNames": [
-        "Single",
-        "Multiple"
+        "YesOrNo",
+        "Choice"
       ],
       "enum": [
         0,

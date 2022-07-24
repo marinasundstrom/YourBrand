@@ -2,6 +2,6 @@
 
 public enum OptionType
 {
-    Single,
-    Multiple
+    YesOrNo,
+    Choice
 }

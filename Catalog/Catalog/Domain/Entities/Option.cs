@@ -14,7 +14,7 @@ public class Option
 
     public OptionGroup? Group { get; set; }
 
-    public OptionType OptionType { get; set; } = OptionType.Multiple;
+    public OptionType OptionType { get; set; } = OptionType.Choice;
 
     public bool IsRequired { get; set; }
 

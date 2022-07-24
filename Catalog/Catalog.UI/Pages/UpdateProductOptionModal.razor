@@ -23,16 +23,13 @@
                 </MudSelect>
             }
 
-            @if (!Product.HasVariants)
-            {
-                <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
+            <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
-                <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+            <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
 
-                <MudCheckBox Label="Has multiple choices" Class="mb-6" @bind-Checked="HasMultipleChoices" For="() => HasMultipleChoices" />
-            }
+            <MudCheckBox Label="Has choice" Class="mb-6" @bind-Checked="HasChoice" For="() => HasChoice" />
 
-            @if (HasMultipleChoices)
+            @if (HasChoice)
             {
                 <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
 
@@ -100,7 +97,7 @@
     [Required]
     public string Name { get; set; }
 
-    public bool HasMultipleChoices { get; set; }
+    public bool HasChoice { get; set; }
 
     public string Description { get; set; }
 
@@ -122,7 +119,7 @@
         Group = Groups.FirstOrDefault(x => x?.Id == Option.Group?.Id);
         Price = Option.Price;
         SKU = Option.Sku;
-        HasMultipleChoices = Option.OptionType == OptionType.Multiple;
+        HasChoice = Option.OptionType == OptionType.Choice;
 
         foreach (var value in Option.Values)
         {
@@ -163,7 +160,7 @@
         var data = new ApiUpdateProductOption
         {
             Name = Name,
-            OptionType = HasMultipleChoices ? OptionType.Multiple : OptionType.Single,
+            OptionType = HasChoice ? OptionType.Choice : OptionType.YesOrNo,
             Description = Description,
             GroupId = Group?.Id,
             Sku = SKU,

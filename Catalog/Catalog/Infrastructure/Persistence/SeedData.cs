@@ -577,7 +577,7 @@ public class SeedData
         var optionHam = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Ham",
             Group = meatGroup,
             Price = 15
@@ -588,7 +588,7 @@ public class SeedData
         var optionKebab = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Kebab",
             Group = meatGroup,
             Price = 10,
@@ -600,7 +600,7 @@ public class SeedData
         var optionChicken = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Chicken",
             Group = meatGroup,
             Price = 10
@@ -611,7 +611,7 @@ public class SeedData
         var optionExtraCheese = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Extra cheese",
             Group = toppingsGroup,
             Price = 5
@@ -622,7 +622,7 @@ public class SeedData
         var optionGreenOlives = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Green Olives",
             Group = toppingsGroup,
             Price = 5
@@ -734,7 +734,7 @@ public class SeedData
         var optionChicken = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Kycklingfilé",
             Group = proteinGroup
         };
@@ -744,7 +744,7 @@ public class SeedData
         var optionSmokedTurkey = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Rökt kalkonfilé",
             Group = proteinGroup
         };
@@ -754,7 +754,7 @@ public class SeedData
         var optionBeanMix = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Marinerad bönmix",
             Group = proteinGroup
         };
@@ -764,7 +764,7 @@ public class SeedData
         var optionVegMe = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "VegMe",
             Group = proteinGroup
         };
@@ -774,7 +774,7 @@ public class SeedData
         var optionChevre = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Chevré",
             Group = proteinGroup
         };
@@ -784,7 +784,7 @@ public class SeedData
         var optionSmokedSalmon = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Varmrökt lax",
             Group = proteinGroup
         };
@@ -794,7 +794,7 @@ public class SeedData
         var optionPrawns = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Handskalade räkor",
             Group = proteinGroup
         };
@@ -804,7 +804,7 @@ public class SeedData
         var optionCheese = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Parmesanost",
             Group = additionalGroup
         };
@@ -814,7 +814,7 @@ public class SeedData
         var optionGreenOlives = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Gröna oliver",
             Group = additionalGroup
         };
@@ -824,7 +824,7 @@ public class SeedData
         var optionSoltorkadTomat = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Soltorkade tomater",
             Group = additionalGroup
         };
@@ -834,7 +834,7 @@ public class SeedData
         var optionInlagdRödlök = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Inlagd rödlök",
             Group = additionalGroup
         };
@@ -844,7 +844,7 @@ public class SeedData
         var optionRostadAioli = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Rostad aioli",
             Group = dressingGroup
         };
@@ -854,7 +854,7 @@ public class SeedData
         var optionPesto = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Pesto",
             Group = dressingGroup
         };
@@ -864,7 +864,7 @@ public class SeedData
         var optionOrtvinagret = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Örtvinägrett",
             Group = dressingGroup
         };
@@ -874,7 +874,7 @@ public class SeedData
         var optionSoyavinagret = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Soyavinägrett",
             Group = dressingGroup
         };
@@ -884,7 +884,7 @@ public class SeedData
         var optionRhodeIsland = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Rhode Island",
             Group = dressingGroup
         };
@@ -894,7 +894,7 @@ public class SeedData
         var optionKimchimayo = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Kimchimayo",
             Group = dressingGroup
         };
@@ -904,7 +904,7 @@ public class SeedData
         var optionCaesar = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Caesar",
             Group = dressingGroup
         };
@@ -914,7 +914,7 @@ public class SeedData
         var optionCitronLime = new Option()
         {
             Id = Guid.NewGuid().ToString(),
-            OptionType = OptionType.Single,
+            OptionType = OptionType.YesOrNo,
             Name = "Citronlime",
             Group = dressingGroup
         };

@@ -38,7 +38,7 @@ public record UpdateProductOption(string ProductId, string OptionId, ApiUpdatePr
         option.SKU = request.Data.SKU;
         option.Group = group;
         option.Price = request.Data.Price;
-        option.OptionType = request.Data.OptionType == OptionType.Single ? Domain.Enums.OptionType.Single : Domain.Enums.OptionType.Multiple;
+        option.OptionType = request.Data.OptionType == OptionType.YesOrNo ? Domain.Enums.OptionType.YesOrNo : Domain.Enums.OptionType.Choice;
 
         foreach (var v in request.Data.Values)
         {
@@ -80,7 +80,7 @@ public record UpdateProductOption(string ProductId, string OptionId, ApiUpdatePr
 
         await _context.SaveChangesAsync();
 
-        return new OptionDto(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.Single ? OptionType.Single : OptionType.Multiple, option.Group == null ? null : new OptionGroupDto(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
+        return new OptionDto(option.Id, option.Name, option.Description, option.OptionType == Domain.Enums.OptionType.YesOrNo ? OptionType.YesOrNo : OptionType.Choice, option.Group == null ? null : new OptionGroupDto(option.Group.Id, option.Group.Name, option.Group.Description, option.Group.Seq, option.Group.Min, option.Group.Max), option.SKU, option.Price, option.IsSelected,
             option.Values.Select(x => new OptionValueDto(x.Id, x.Name, x.SKU, x.Price, x.Seq)),
             option.DefaultValue == null ? null : new OptionValueDto(option.DefaultValue.Id, option.DefaultValue.Name, option.DefaultValue.SKU, option.DefaultValue.Price, option.DefaultValue.Seq));
     

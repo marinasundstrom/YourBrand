@@ -75,7 +75,7 @@ public class VariantAlreadyExistsException : Exception
 }
 
 
-public enum OptionType { Single, Multiple }
+public enum OptionType { YesOrNo, Choice }
 
 public enum ProductVisibility { Unlisted, Listed }
 

@@ -241,7 +241,7 @@ else
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>
-                    <MudTh>Multiple values</MudTh>
+                    <MudTh>Has choice</MudTh>
                     <MudTh>Values</MudTh>
                     <MudTh>Default value</MudTh>
                     <MudTh></MudTh>
@@ -249,7 +249,7 @@ else
 
                 <RowTemplate Context="option">
                     <MudTd DataLabel="Name">@option.Name</MudTd>
-                    <MudTd DataLabel="Multiple values">@(option.OptionType == OptionType.Multiple)</MudTd>
+                    <MudTd DataLabel="Has choice">@(option.OptionType == OptionType.Choice)</MudTd>
                     <MudTd DataLabel="Values">@string.Join(", ", option.Values.Select(x => x.Name))</MudTd>
                     <MudTd DataLabel="Default value">@option.DefaultValue?.Name</MudTd>
                     <MudTd>
