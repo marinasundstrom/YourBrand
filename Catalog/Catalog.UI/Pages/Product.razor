@@ -1,5 +1,6 @@
 ﻿@page "/products/{productId}"
 @inject IProductsClient ProductsClient
+@inject IDialogService DialogService
 
 <PageTitle>Product</PageTitle>
 
@@ -234,7 +235,14 @@ else
            .Where(x => x.SelectedValue is not null)
            .ToDictionary(x => x.Id, x => x.SelectedValue!.Id);
 
-        variant = await ProductsClient.FindVariantByOptionValuesAsync(product.Id, selectedAttributes);
+        try 
+        {
+            variant = await ProductsClient.FindVariantByOptionValuesAsync(product.Id, selectedAttributes);
+        }
+        catch(ApiException exc) 
+        {
+            DialogService.ShowMessageBox("Variant not found", "Could not find a variant for the selected options. Please try again.");
+        }
     }
 
     string Selector(OptionValueVM optionValue)
