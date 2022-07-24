@@ -1,11 +1,9 @@
 ﻿@inherits LayoutComponentBase
-@implements IAsyncDisposable
 @using YourBrand.Portal.Theming
 @using Blazored.LocalStorage
 @using MudBlazor.Services
 @inject ThemeManager ThemeManager
 @inject ILocalStorageService LocalStorage
-@inject IBreakpointService BreakpointListener
 
 <MudThemeProvider IsDarkMode="@(_currentColorScheme == ColorScheme.Dark)" Theme="_theme" />
 <MudDialogProvider />
@@ -14,7 +12,7 @@
 <MudLayout>
     <AppBar DrawerToggleCallback="DrawerToggle" />
     <MudDrawer Open="_drawerOpen" OpenChanged="OpenChanged" ClipMode="DrawerClipMode.Always" DisableOverlay="_disableOverlay" Elevation="2"
-        Variant="@_drawerVariant">
+        Variant="DrawerVariant.Responsive">
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
@@ -56,17 +54,6 @@
         _currentColorScheme = ThemeManager.CurrentColorScheme;
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
 
-        var breakpoint = BreakpointListener.GetBreakpoint();
-
-        var subscriptionResult = await BreakpointListener.Subscribe((breakpoint) =>
-        {
-            UpdateDrawerVariant(breakpoint);
-        }, new ResizeOptions
-        {
-            ReportRate = 250,
-            NotifyOnBreakpointOnly = true,
-        });
-
         _drawerOpen = await LocalStorage.GetItemAsync<bool?>("drawerOpen") ?? true;
     }
 
@@ -74,30 +61,6 @@
     {
         _drawerOpen = isOpen;
         await LocalStorage.SetItemAsync("drawerOpen", _drawerOpen);
-    }
-
-    void UpdateDrawerVariant(Breakpoint breakpoint)
-    {
-        if (breakpoint == Breakpoint.Xs || breakpoint == Breakpoint.Sm)
-        {
-            if(_drawerOpen) 
-            {
-                DrawerToggle();
-            }
-            _drawerVariant = DrawerVariant.Temporary;
-            _disableOverlay = false;
-        }
-        else
-        {
-            if(_drawerOpen) 
-            {
-                DrawerToggle();
-            }
-            _drawerVariant = DrawerVariant.Persistent;
-            _disableOverlay = true;
-        }
-
-        StateHasChanged();
     }
 
     async Task DrawerToggle()
@@ -111,6 +74,4 @@
 
         StateHasChanged();
     }
-
-    public async ValueTask DisposeAsync() => await BreakpointListener.Unsubscribe(_subscriptionId);
 }
