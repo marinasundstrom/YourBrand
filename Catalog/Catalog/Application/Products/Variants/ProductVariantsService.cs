@@ -14,7 +14,7 @@ public class ProductVariantsService
         _context = context;
     }
 
-    public async Task<ProductVariant?> FindVariantCore(string productId, string? productVariantId, IDictionary<string, string?> selectedOptions)
+    public async Task<ProductVariant?> FindVariantCore(string productId, string? productVariantId, IDictionary<string, string?> selectedAttributeValues)
     {
         var query = _context.ProductVariants
             .AsSplitQuery()
@@ -35,7 +35,7 @@ public class ProductVariantsService
         IEnumerable<ProductVariant> variants = await query
             .ToArrayAsync();
 
-        foreach (var selectedOption in selectedOptions)
+        foreach (var selectedOption in selectedAttributeValues)
         {
             if (selectedOption.Value is null)
                 continue;

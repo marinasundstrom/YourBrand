@@ -1776,7 +1776,7 @@
             "x-nullable": true
           },
           {
-            "name": "selectedOptions",
+            "name": "selectedAttributeValues",
             "in": "body",
             "required": true,
             "schema": {
@@ -2552,7 +2552,7 @@
       "required": [
         "id",
         "name",
-        "options"
+        "attributes"
       ],
       "properties": {
         "id": {
@@ -2574,15 +2574,15 @@
           "type": "number",
           "format": "decimal"
         },
-        "options": {
+        "attributes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ProductVariantDtoOption"
+            "$ref": "#/definitions/ProductVariantAttributeDto"
           }
         }
       }
     },
-    "ProductVariantDtoOption": {
+    "ProductVariantAttributeDto": {
       "type": "object",
       "required": [
         "id",
@@ -2629,7 +2629,7 @@
         "name",
         "sku",
         "price",
-        "values"
+        "attributes"
       ],
       "properties": {
         "name": {
@@ -2645,15 +2645,15 @@
           "type": "number",
           "format": "decimal"
         },
-        "values": {
+        "attributes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiCreateProductVariantOption"
+            "$ref": "#/definitions/ApiCreateProductVariantAttribute"
           }
         }
       }
     },
-    "ApiCreateProductVariantOption": {
+    "ApiCreateProductVariantAttribute": {
       "type": "object",
       "required": [
         "optionId",
@@ -2674,7 +2674,7 @@
         "name",
         "sku",
         "price",
-        "options"
+        "attributes"
       ],
       "properties": {
         "name": {
@@ -2690,18 +2690,18 @@
           "type": "number",
           "format": "decimal"
         },
-        "options": {
+        "attributes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ApiUpdateProductVariantOption"
+            "$ref": "#/definitions/ApiUpdateProductVariantAttribute"
           }
         }
       }
     },
-    "ApiUpdateProductVariantOption": {
+    "ApiUpdateProductVariantAttribute": {
       "type": "object",
       "required": [
-        "optionId",
+        "attributeId",
         "valueId"
       ],
       "properties": {
@@ -2709,7 +2709,7 @@
           "type": "integer",
           "format": "int32"
         },
-        "optionId": {
+        "attributeId": {
           "type": "string"
         },
         "valueId": {

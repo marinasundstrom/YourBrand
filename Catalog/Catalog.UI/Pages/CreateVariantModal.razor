@@ -133,18 +133,18 @@
             Description = Description,
             Sku = SKU,
             Price = Price,
-            Values = new List<ApiCreateProductVariantOption>()
+            Attributes = new List<ApiCreateProductVariantAttribute>()
         };
 
         foreach (var attribute in Attributes)
         {
-            var attributeData = new ApiCreateProductVariantOption
+            var attributeData = new ApiCreateProductVariantAttribute
             {
                 OptionId = attribute.Id,
                 ValueId = attribute.SelectedValue.Id
             };
 
-            data.Values.Add(attributeData);
+            data.Attributes.Add(attributeData);
         }
 
         try

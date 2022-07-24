@@ -24,7 +24,7 @@ public record FindProductVariant(string ProductId, Dictionary<string, string?> S
             if (variant is null) return null;
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

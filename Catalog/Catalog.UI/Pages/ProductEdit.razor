@@ -168,7 +168,7 @@ else
 
                         @if (GetTableData()?.Items is IEnumerable<ProductVariantDto> variants && variants.Any())
                         {
-                            @foreach (var option in GetTableData().Items.First().Options)
+                            @foreach (var option in GetTableData().Items.First().Attributes)
                             {
                                 <MudTh><MudTableSortLabel SortLabel="Values.Value" T="ProductVariantDto">@option.Name</MudTableSortLabel></MudTh>
                             }
@@ -188,9 +188,9 @@ else
                         <MudTd DataLabel="SKU">@variant.Sku</MudTd>
                         <MudTd DataLabel="SKU">@variant.Price?.ToString("c")</MudTd>
 
-                        @if (variant.Options is not null)
+                        @if (variant.Attributes is not null)
                         {
-                            foreach (var option in variant.Options)
+                            foreach (var option in variant.Attributes)
                             {
                                 <MudTd DataLabel="Name">@option.Value</MudTd>
                             }

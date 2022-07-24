@@ -22,7 +22,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
         
         public async Task<ProductVariantDto> Handle(UpdateProductVariant request, CancellationToken cancellationToken)
         {
-            var match = await _productVariantsService.FindVariantCore(request.ProductId, request.ProductVariantId, request.Data.Options.ToDictionary(x => x.OptionId, x => x.ValueId));
+            var match = await _productVariantsService.FindVariantCore(request.ProductId, request.ProductVariantId, request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId));
 
             if (match is not null)
             {
@@ -48,11 +48,11 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
             variant.SKU = request.Data.SKU;
             variant.Price = request.Data.Price;
 
-            foreach (var v in request.Data.Options)
+            foreach (var v in request.Data.Attributes)
             {
                 if (v.Id == null)
                 {
-                    var option = product.Attributes.First(x => x.Id == v.OptionId);
+                    var option = product.Attributes.First(x => x.Id == v.AttributeId);
 
                     var value2 = option.Values.First(x => x.Id == v.ValueId);
 
@@ -64,7 +64,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
                 }
                 else
                 {
-                    var option = product.Attributes.First(x => x.Id == v.OptionId);
+                    var option = product.Attributes.First(x => x.Id == v.AttributeId);
 
                     var value2 = option.Values.First(x => x.Id == v.ValueId);
 
@@ -80,7 +80,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
                 if (_context.Entry(v).State == EntityState.Added)
                     continue;
 
-                var value = request.Data.Options.FirstOrDefault(x => x.Id == v.Id);
+                var value = request.Data.Attributes.FirstOrDefault(x => x.Id == v.Id);
 
                 if (value is null)
                 {
@@ -91,7 +91,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
             await _context.SaveChangesAsync();
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

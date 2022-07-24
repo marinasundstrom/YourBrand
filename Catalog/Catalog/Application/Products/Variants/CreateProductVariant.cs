@@ -22,7 +22,7 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
 
         public async Task<ProductVariantDto> Handle(CreateProductVariant request, CancellationToken cancellationToken)
         {
-            ProductVariant? match = await _productVariantsService.FindVariantCore(request.ProductId, null, request.Data.Values.ToDictionary(x => x.OptionId, x => x.ValueId));
+            ProductVariant? match = await _productVariantsService.FindVariantCore(request.ProductId, null, request.Data.Attributes.ToDictionary(x => x.OptionId, x => x.ValueId));
 
             if (match is not null)
             {
@@ -50,7 +50,7 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
                 Price = request.Data.Price
             };
 
-            foreach (var value in request.Data.Values)
+            foreach (var value in request.Data.Attributes)
             {
                 var option = product.Attributes.First(x => x.Id == value.OptionId);
 
@@ -68,7 +68,7 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
             await _context.SaveChangesAsync();
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

@@ -8,7 +8,7 @@ using YourBrand.Catalog.Domain.Entities;
 
 namespace YourBrand.Catalog.Application.Products.Variants;
 
-public record GetAvailableAttributeValues(string ProductId, string AttributeId, IDictionary<string, string?> SelectedAttributes) : IRequest<IEnumerable<AttributeValueDto>>
+public record GetAvailableAttributeValues(string ProductId, string AttributeId, IDictionary<string, string?> SelectedAttributeValues) : IRequest<IEnumerable<AttributeValueDto>>
 {
     public class Handler : IRequestHandler<GetAvailableAttributeValues, IEnumerable<AttributeValueDto>>
     {
@@ -32,7 +32,7 @@ public record GetAvailableAttributeValues(string ProductId, string AttributeId, 
                 .Where(pv => pv.Product.Id == request.ProductId)
                 .ToArrayAsync();
 
-            foreach (var selectedAttribute in request.SelectedAttributes)
+            foreach (var selectedAttribute in request.SelectedAttributeValues)
             {
                 if (selectedAttribute.Value is null)
                     continue;

@@ -121,7 +121,7 @@
             vm.Values.AddRange(
             await ProductsClient.GetProductAttributeValuesAsync(ProductId, attribute.Id));
 
-            var o = Variant.Options.FirstOrDefault(x => x.Name == attribute.Name);
+            var o = Variant.Attributes.FirstOrDefault(x => x.Name == attribute.Name);
 
             vm.SelectedValue = vm.Values.FirstOrDefault(x => x.Name == o?.Value);
 
@@ -147,19 +147,19 @@
             Description = Description,
             Sku = SKU,
             Price = Price,
-            Options = new List<ApiUpdateProductVariantOption>()
+            Attributes = new List<ApiUpdateProductVariantAttribute>()
         };
 
         foreach (var attribute in Attributes)
         {
-            var attributeData = new ApiUpdateProductVariantOption
+            var attributeData = new ApiUpdateProductVariantAttribute
             {
                 //Id = attribute.Id,
-                OptionId = attribute.Id,
+                AttributeId = attribute.Id,
                 ValueId = attribute.SelectedValue?.Id,
             };
 
-            data.Options.Add(attributeData);
+            data.Attributes.Add(attributeData);
         }
 
         try

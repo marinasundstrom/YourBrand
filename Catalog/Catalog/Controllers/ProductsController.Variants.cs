@@ -28,15 +28,15 @@ partial class ProductsController : Controller
     }
 
     [HttpPost("{productId}/Variants/Find")]
-    public async Task<ActionResult<ProductVariantDto>> FindVariantByOptionValues(string productId, Dictionary<string, string?> selectedOptions)
+    public async Task<ActionResult<ProductVariantDto>> FindVariantByOptionValues(string productId, Dictionary<string, string?> selectedAttributeValues)
     {
-        return Ok(await _mediator.Send(new FindProductVariant(productId, selectedOptions)));
+        return Ok(await _mediator.Send(new FindProductVariant(productId, selectedAttributeValues)));
     }
 
     [HttpGet("{productId}/Variants/{variantId}/Options")]
     public async Task<ActionResult<ProductVariantDto>> GetVariantOptions(string productId, string variantId)
     {
-        return Ok(_mediator.Send(new GetProductVariantOptions(productId, variantId)));
+        return Ok(_mediator.Send(new GetProductVariantAttributes(productId, variantId)));
     }
 
     [HttpPost("{productId}/Variants")]

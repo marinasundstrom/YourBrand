@@ -50,7 +50,7 @@ public record class ApiCreateProductOptionGroup(string Name, string? Description
 
 public record class ApiUpdateProductOptionGroup(string Name, string? Description, int? Min, int? Max);
 
-public record class ProductVariantDtoOption(string Id, string Name, string Value);
+public record class ProductVariantAttributeDto(string Id, string Name, string Value);
 
 
 public record class ApiCreateProductAttributeGroup(string Name, string? Description);
@@ -59,14 +59,14 @@ public record class ApiUpdateProductAttributeGroup(string Name, string? Descript
 
 
 
-public record class ApiCreateProductVariant(string Name, string? Description, string SKU, decimal Price, IEnumerable<ApiCreateProductVariantOption> Values);
+public record class ApiCreateProductVariant(string Name, string? Description, string SKU, decimal Price, IEnumerable<ApiCreateProductVariantAttribute> Attributes);
 
-public record class ApiCreateProductVariantOption(string OptionId, string ValueId);
+public record class ApiCreateProductVariantAttribute(string OptionId, string ValueId);
 
 
-public record class ApiUpdateProductVariant(string Name, string? Description, string SKU, decimal Price, IEnumerable<ApiUpdateProductVariantOption> Options);
+public record class ApiUpdateProductVariant(string Name, string? Description, string SKU, decimal Price, IEnumerable<ApiUpdateProductVariantAttribute> Attributes);
 
-public record class ApiUpdateProductVariantOption(int? Id, string OptionId, string ValueId);
+public record class ApiUpdateProductVariantAttribute(int? Id, string AttributeId, string ValueId);
 
 
 public class VariantAlreadyExistsException : Exception

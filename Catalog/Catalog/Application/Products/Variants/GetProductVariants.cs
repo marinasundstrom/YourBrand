@@ -50,7 +50,7 @@ public record GetProductVariants(string ProductId,  int Page = 10, int PageSize 
                 .ToArrayAsync();
 
             return new ItemsResult<ProductVariantDto>(variants.Select(x => new ProductVariantDto(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-                x.Values.Select(x => new ProductVariantDtoOption(x.Attribute.Id, x.Attribute.Name, x.Value.Name)))),
+                x.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)))),
                 totalCount);
         }
 
