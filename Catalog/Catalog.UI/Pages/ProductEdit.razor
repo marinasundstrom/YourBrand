@@ -351,7 +351,7 @@ else
 
     async Task DeleteOption(OptionDto option)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the option?", "This cannot be undone.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the option?", "This cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -397,7 +397,7 @@ else
 
     async Task DeleteVariant(ProductVariantDto variant)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the variant?", "This cannot be undone.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the variant?", "This cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -491,7 +491,7 @@ else
 
     async Task DeleteAttribute(AttributeDto attribute)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the attribute?", "This cannot be undone.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the attribute?", "This cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

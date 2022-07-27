@@ -88,7 +88,7 @@ else
 
     async Task DeleteGroup(AttributeGroupDto attributeGroup)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the group?", "The group will be deleted, but the attributes will remain.\nThis cannot be undone.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the group?", "The group will be deleted, but the attributes will remain.\nThis cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
 
         {

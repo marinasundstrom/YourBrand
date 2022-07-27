@@ -261,7 +261,7 @@ else
 
     async Task DeleteMembership(ProjectMembershipDto membership)
     {
-        var modalResult = await DialogService.ShowMessageBox($"Revoke the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox($"Revoke the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -314,7 +314,7 @@ else
 
     async Task DeleteExpense(ExpenseDto expense)
     {
-        var modalResult = await DialogService.ShowMessageBox($"Delete the expense?", "This cannot be undone.", yesText: "Yes", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox($"Delete the expense?", "This cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

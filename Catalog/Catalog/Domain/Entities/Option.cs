@@ -32,4 +32,6 @@ public class Option
     public string? DefaultValueId { get; set; }
 
     public OptionValue? DefaultValue { get; set; }
+
+    //public bool HasCustomData { get; set; }
 }

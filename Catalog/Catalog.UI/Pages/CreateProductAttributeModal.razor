@@ -110,7 +110,7 @@
 
     async Task DeleteValue(AttributeValueVM vm)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the value?", "This cannot be undone.", yesText: "Yes",
+        var modalResult = await DialogService.ShowMessageBox("Delete the value?", "This cannot be undone.", yesText: "Delete",
         noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
