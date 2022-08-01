@@ -2025,9 +2025,28 @@
         "defaultValue": {
           "$ref": "#/definitions/OptionValueDto"
         },
+        "minNumberValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxNumberValue": {
+          "type": "integer",
+          "format": "int32"
+        },
         "defaultNumberValue": {
           "type": "integer",
           "format": "int32"
+        },
+        "stringValueMinLength": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "stringValueMaxLength": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "defaultStringValue": {
+          "type": "string"
         }
       }
     },
@@ -2037,12 +2056,14 @@
       "x-enumNames": [
         "YesOrNo",
         "Choice",
-        "NumberValue"
+        "NumberValue",
+        "StringValue"
       ],
       "enum": [
         0,
         1,
-        2
+        2,
+        3
       ]
     },
     "OptionGroupDto": {

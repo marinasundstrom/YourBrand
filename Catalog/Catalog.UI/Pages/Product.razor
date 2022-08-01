@@ -208,6 +208,12 @@ else
                                                     <MudNumericField Label="@option.Name" @bind-Value="option.NumberValue" Max="max" />
                                                 </div>
                                             }
+                                            else if (option.OptionType == OptionType.StringValue)
+                                            {
+                                                <div class="my-4">
+                                                    <MudTextField Label="@option.Name" @bind-Value="option.StringValue" />
+                                                </div>
+                                            }
                                         </div>
                                     }
 
@@ -368,7 +374,8 @@ else
                         Name = option.Name,
                         OptionType = option.OptionType,
                         Price = option.Price,
-                        //NumberValue = option.DefaultNumberValue
+                        NumberValue = option.DefaultNumberValue.GetValueOrDefault(),
+                        StringValue = option.DefaultStringValue
                     };
 
                     groupVm.Options.Add(optionVm);
@@ -491,6 +498,8 @@ else
         public OptionValueVM? SelectedValue { get; set; }
 
         public int NumberValue { get; set; }
+
+        public string? StringValue { get; set; }
     }
 
     class OptionGroupVM

@@ -40,4 +40,10 @@ public class Option
     public int? MaxNumberValue  { get; set; }
 
     public int? DefaultNumberValue { get; set; }
+
+    public int? StringValueMinLength  { get; set; }
+
+    public int? StringValueMaxLength  { get; set; }
+
+    public string? DefaultStringValue { get; set; }
 }

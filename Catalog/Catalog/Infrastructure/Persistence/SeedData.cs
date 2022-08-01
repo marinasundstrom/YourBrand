@@ -168,14 +168,14 @@ public class SeedData
 
         context.Products.Add(product);
 
-        var option = new Domain.Entities.Attribute()
+        var attr = new Domain.Entities.Attribute()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Size",
             ForVariant = true
         };
 
-        product.Attributes.Add(option);
+        product.Attributes.Add(attr);
 
         var valueSmall = new AttributeValue
         {
@@ -183,7 +183,7 @@ public class SeedData
             Name = "Small"
         };
 
-        option.Values.Add(valueSmall);
+        attr.Values.Add(valueSmall);
 
         var valueMedium = new AttributeValue
         {
@@ -191,7 +191,7 @@ public class SeedData
             Name = "Medium"
         };
 
-        option.Values.Add(valueMedium);
+        attr.Values.Add(valueMedium);
 
         var valueLarge = new AttributeValue
         {
@@ -199,9 +199,9 @@ public class SeedData
             Name = "Large"
         };
 
-        option.Values.Add(valueLarge);
+        attr.Values.Add(valueLarge);
 
-        product.Attributes.Add(option);
+        product.Attributes.Add(attr);
 
         var option2 = new Domain.Entities.Attribute()
         {
@@ -241,7 +241,7 @@ public class SeedData
 
         variantBlueSmall.Values.Add(new VariantValue()
         {
-            Attribute = option,
+            Attribute = attr,
             Value = valueSmall
         });
 
@@ -266,7 +266,7 @@ public class SeedData
 
         variantBlueMedium.Values.Add(new VariantValue()
         {
-            Attribute = option,
+            Attribute = attr,
             Value = valueMedium
         });
 
@@ -289,7 +289,7 @@ public class SeedData
 
         variantBlueLarge.Values.Add(new VariantValue()
         {
-            Attribute = option,
+            Attribute = attr,
             Value = valueLarge
         });
 
@@ -314,7 +314,7 @@ public class SeedData
 
         variantRedSmall.Values.Add(new VariantValue()
         {
-            Attribute = option,
+            Attribute = attr,
             Value = valueSmall
         });
 
@@ -337,7 +337,7 @@ public class SeedData
 
         variantRedMedium.Values.Add(new VariantValue()
         {
-            Attribute = option,
+            Attribute = attr,
             Value = valueMedium
         });
 
@@ -360,7 +360,7 @@ public class SeedData
 
         variantRedLarge.Values.Add(new VariantValue()
         {
-            Attribute = option,
+            Attribute = attr,
             Value = valueLarge
         });
 
@@ -371,6 +371,15 @@ public class SeedData
         });
 
         product.Variants.Add(variantRedLarge);
+
+        var textOption = new Domain.Entities.Option()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Custom text",
+            OptionType = OptionType.StringValue
+        };
+
+        product.Options.Add(textOption);
     }
 
     public static async Task CreateKebabPlate(CatalogContext context)
@@ -556,11 +565,18 @@ public class SeedData
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Sås",
+            OptionType = OptionType.YesOrNo,
             Price = 10,
             Group = extraGroup
         };
 
         product.Options.Add(optionSauce);
+
+        /*
+        optionSauce.Values.Add(new OptionValue() {
+            Name = "Favoritsås", 
+        });
+        */
 
         await context.SaveChangesAsync();
     }
