@@ -2024,6 +2024,10 @@
         },
         "defaultValue": {
           "$ref": "#/definitions/OptionValueDto"
+        },
+        "defaultNumberValue": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -2032,11 +2036,13 @@
       "description": "",
       "x-enumNames": [
         "YesOrNo",
-        "Choice"
+        "Choice",
+        "NumberValue"
       ],
       "enum": [
         0,
-        1
+        1,
+        2
       ]
     },
     "OptionGroupDto": {

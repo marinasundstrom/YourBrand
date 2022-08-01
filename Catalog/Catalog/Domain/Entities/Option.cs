@@ -34,4 +34,10 @@ public class Option
     public OptionValue? DefaultValue { get; set; }
 
     //public bool HasCustomData { get; set; }
+
+    public int? MinNumberValue  { get; set; }
+
+    public int? MaxNumberValue  { get; set; }
+
+    public int? DefaultNumberValue { get; set; }
 }

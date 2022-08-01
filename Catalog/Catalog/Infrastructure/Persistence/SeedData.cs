@@ -47,6 +47,8 @@ public class SeedData
 
             await CreateHerrgardsStek(context);
 
+            await CreateKorg(context);
+
             await CreatePizza(context);
 
             await CreateSalad(context);
@@ -479,6 +481,86 @@ public class SeedData
         };
 
         product.Options.Add(optionSize);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task CreateKorg(CatalogContext context)
+    {
+        var product = new Product()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Korg",
+            Description = "En korg med smårätter",
+            Price = 179,
+            Group = await context.ProductGroups.FirstAsync(x => x.Name == "Food")
+        };
+
+        context.Products.Add(product);
+
+        await context.SaveChangesAsync();
+
+        var ratterGroup = new OptionGroup()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Rätter",
+            Max = 7
+        };
+
+        product.OptionGroups.Add(ratterGroup);
+
+        var optionFalafel = new Option()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Falafel",
+            OptionType = OptionType.NumberValue,
+            Group = ratterGroup
+        };
+
+        product.Options.Add(optionFalafel);
+
+        var optionChickenWing = new Option()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Spicy Chicken Wing",
+            OptionType = OptionType.NumberValue,
+            Group = ratterGroup
+        };
+
+        product.Options.Add(optionChickenWing);
+
+        var optionRib = new Option()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Rib",
+            OptionType = OptionType.NumberValue,
+            Group = ratterGroup
+        };
+
+        product.Options.Add(optionRib);
+
+        await context.SaveChangesAsync();
+
+        
+        var extraGroup = new OptionGroup()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Extra"
+        };
+
+        product.OptionGroups.Add(extraGroup);
+
+        await context.SaveChangesAsync();
+
+        var optionSauce = new Option()
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Sås",
+            Price = 10,
+            Group = extraGroup
+        };
+
+        product.Options.Add(optionSauce);
 
         await context.SaveChangesAsync();
     }

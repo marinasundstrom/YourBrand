@@ -158,24 +158,22 @@ else
                             }
 
                             @foreach (var optionGroup in vm.OptionGroups)
-                            {
-                                if (optionGroup.Name is not null)
                                 {
+                                    if (optionGroup.Name is not null)
+                                    {
                                     <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-4">@optionGroup.Name</MudText>
 
                                     @if (optionGroup.Max is not null)
-                                    {<small class="mb-2">Max @optionGroup.Max</small>}
-                                }
+                                        {<small class="mb-2">Max @optionGroup.Max</small>}
+                                    }
 
                                 <div class="form-group mb-6">
-
                                     @foreach (var option in optionGroup.Options)
                                     {
                                         var optionValues = option.Values;
 
                                         <div>
-
-                                            @if (optionValues.Any())
+                                            @if (option.OptionType == OptionType.Choice)
                                             {
                                                 <MudSelect T="OptionValueVM" Dense="true" Class="mb-6" Label="@option.Name" Variant="Variant.Outlined" Value="option.SelectedValue" ValueChanged="async (e) => { option.SelectedValue = e; }" ToStringFunc="x => x.Name">
                                                     @foreach (var item in optionValues)
@@ -190,7 +188,7 @@ else
                                                     }
                                                 </MudSelect>
                                             }
-                                            else
+                                            else if (option.OptionType == OptionType.YesOrNo)
                                             {
                                                 <div class="my-4">
                                                     <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
@@ -200,7 +198,16 @@ else
                                                     }
                                                 </div>
                                             }
+                                            else if (option.OptionType == OptionType.NumberValue)
+                                            {
+                                                var max = optionGroup.Max.GetValueOrDefault() - optionGroup.Options.Sum(x => x.NumberValue);
 
+                                                Console.WriteLine("{0}: {1}", option.Name, max);
+
+                                                <div class="my-4">
+                                                    <MudNumericField Label="@option.Name" @bind-Value="option.NumberValue" Max="max" />
+                                                </div>
+                                            }
                                         </div>
                                     }
 
@@ -349,6 +356,8 @@ else
                     Max = optionGroup.ElementAt(0)?.Group?.Max
                 };
 
+                Console.WriteLine(groupVm.Max);
+
                 if (optionGroup is null) continue;
 
                 foreach (var option in optionGroup)
@@ -357,7 +366,9 @@ else
                     {
                         Id = option.Id,
                         Name = option.Name,
-                        Price = option.Price
+                        OptionType = option.OptionType,
+                        Price = option.Price,
+                        //NumberValue = option.DefaultNumberValue
                     };
 
                     groupVm.Options.Add(optionVm);
@@ -467,6 +478,8 @@ else
 
         public string Name { get; set; }
 
+        public OptionType OptionType { get; set; }
+
         public string? Sku { get; set; }
 
         public decimal? Price { get; set; }
@@ -476,6 +489,8 @@ else
         public List<OptionValueVM> Values { get; set; } = new List<OptionValueVM>();
 
         public OptionValueVM? SelectedValue { get; set; }
+
+        public int NumberValue { get; set; }
     }
 
     class OptionGroupVM

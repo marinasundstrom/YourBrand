@@ -3,5 +3,6 @@
 public enum OptionType
 {
     YesOrNo,
-    Choice
+    Choice,
+    NumberValue
 }
