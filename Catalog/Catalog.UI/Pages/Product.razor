@@ -198,20 +198,20 @@ else
                                                     }
                                                 </div>
                                             }
-                                            else if (option.OptionType == OptionType.NumberValue)
+                                            else if (option.OptionType == OptionType.NumericalValue)
                                             {
-                                                var max = optionGroup.Max.GetValueOrDefault() - optionGroup.Options.Sum(x => x.NumberValue);
+                                                var max = optionGroup.Max.GetValueOrDefault() - optionGroup.Options.Sum(x => x.NumericalValue);
 
                                                 Console.WriteLine("{0}: {1}", option.Name, max);
 
                                                 <div class="my-4">
-                                                    <MudNumericField Label="@option.Name" @bind-Value="option.NumberValue" Max="max" />
+                                                    <MudNumericField Label="@option.Name" @bind-Value="option.NumericalValue" Max="max" />
                                                 </div>
                                             }
-                                            else if (option.OptionType == OptionType.StringValue)
+                                            else if (option.OptionType == OptionType.TextValue)
                                             {
                                                 <div class="my-4">
-                                                    <MudTextField Label="@option.Name" @bind-Value="option.StringValue" />
+                                                    <MudTextField Label="@option.Name" @bind-Value="option.TextValue" />
                                                 </div>
                                             }
                                         </div>
@@ -374,8 +374,8 @@ else
                         Name = option.Name,
                         OptionType = option.OptionType,
                         Price = option.Price,
-                        NumberValue = option.DefaultNumberValue.GetValueOrDefault(),
-                        StringValue = option.DefaultStringValue
+                        NumericalValue = option.DefaultNumericalValue.GetValueOrDefault(),
+                        TextValue = option.DefaultTextValue
                     };
 
                     groupVm.Options.Add(optionVm);
@@ -497,9 +497,9 @@ else
 
         public OptionValueVM? SelectedValue { get; set; }
 
-        public int NumberValue { get; set; }
+        public int NumericalValue { get; set; }
 
-        public string? StringValue { get; set; }
+        public string? TextValue { get; set; }
     }
 
     class OptionGroupVM

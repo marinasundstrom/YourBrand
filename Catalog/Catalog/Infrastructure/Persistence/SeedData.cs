@@ -376,7 +376,7 @@ public class SeedData
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Custom text",
-            OptionType = OptionType.StringValue
+            OptionType = OptionType.TextValue
         };
 
         product.Options.Add(textOption);
@@ -522,7 +522,7 @@ public class SeedData
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Falafel",
-            OptionType = OptionType.NumberValue,
+            OptionType = OptionType.NumericalValue,
             Group = ratterGroup
         };
 
@@ -532,7 +532,7 @@ public class SeedData
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Spicy Chicken Wing",
-            OptionType = OptionType.NumberValue,
+            OptionType = OptionType.NumericalValue,
             Group = ratterGroup
         };
 
@@ -542,7 +542,7 @@ public class SeedData
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Rib",
-            OptionType = OptionType.NumberValue,
+            OptionType = OptionType.NumericalValue,
             Group = ratterGroup
         };
 

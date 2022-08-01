@@ -35,15 +35,15 @@ public class Option
 
     //public bool HasCustomData { get; set; }
 
-    public int? MinNumberValue  { get; set; }
+    public int? MinNumericalValue  { get; set; }
 
-    public int? MaxNumberValue  { get; set; }
+    public int? MaxNumericalValue  { get; set; }
 
-    public int? DefaultNumberValue { get; set; }
+    public int? DefaultNumericalValue { get; set; }
 
-    public int? StringValueMinLength  { get; set; }
+    public int? TextValueMinLength  { get; set; }
 
-    public int? StringValueMaxLength  { get; set; }
+    public int? TextValueMaxLength  { get; set; }
 
-    public string? DefaultStringValue { get; set; }
+    public string? DefaultTextValue { get; set; }
 }

@@ -4,6 +4,6 @@ public enum OptionType
 {
     YesOrNo,
     Choice,
-    NumberValue,
-    StringValue
+    NumericalValue,
+    TextValue
 }

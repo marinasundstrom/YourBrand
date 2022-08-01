@@ -2025,15 +2025,15 @@
         "defaultValue": {
           "$ref": "#/definitions/OptionValueDto"
         },
-        "minNumberValue": {
+        "minNumericalValue": {
           "type": "integer",
           "format": "int32"
         },
-        "maxNumberValue": {
+        "maxNumericalValue": {
           "type": "integer",
           "format": "int32"
         },
-        "defaultNumberValue": {
+        "defaultNumericalValue": {
           "type": "integer",
           "format": "int32"
         },
@@ -2056,7 +2056,7 @@
       "x-enumNames": [
         "YesOrNo",
         "Choice",
-        "NumberValue",
+        "NumericalValue",
         "StringValue"
       ],
       "enum": [
