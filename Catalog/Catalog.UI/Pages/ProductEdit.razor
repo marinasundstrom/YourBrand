@@ -123,7 +123,7 @@ else
 
                 <RowTemplate Context="attribute">
                     <MudTd DataLabel="Name">@(attribute.Name)</MudTd>
-                    <MudTd DataLabel="ForVariant">@(attribute.ForVariant)</MudTd>
+                    <MudTd DataLabel="For Variant">@(attribute.ForVariant)</MudTd>
                     <MudTd DataLabel="Values">@string.Join(", ", attribute.Values.Select(x => x.Name))</MudTd>
                     @* <MudTd DataLabel="Default value">@attribute.DefaultValue?.Name</MudTd> *@
                     <MudTd>
@@ -186,7 +186,7 @@ else
                         </MudTd>
                         <MudTd DataLabel="Name">@variant.Name</MudTd>
                         <MudTd DataLabel="SKU">@variant.Sku</MudTd>
-                        <MudTd DataLabel="SKU">@variant.Price?.ToString("c")</MudTd>
+                        <MudTd DataLabel="Price">@variant.Price?.ToString("c")</MudTd>
 
                         @if (variant.Attributes is not null)
                         {
@@ -241,7 +241,9 @@ else
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>
-                    <MudTh>Has choice</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>SKU</MudTh>
+                    <MudTh>Price</MudTh>
                     <MudTh>Values</MudTh>
                     <MudTh>Default value</MudTh>
                     <MudTh></MudTh>
@@ -249,7 +251,9 @@ else
 
                 <RowTemplate Context="option">
                     <MudTd DataLabel="Name">@option.Name</MudTd>
-                    <MudTd DataLabel="Has choice">@(option.OptionType == OptionType.Choice)</MudTd>
+                    <MudTd DataLabel="Type">@option.OptionType</MudTd>
+                    <MudTd DataLabel="SKU">@option.Sku</MudTd>
+                    <MudTd DataLabel="Price">@option.Price?.ToString("c")</MudTd>
                     <MudTd DataLabel="Values">@string.Join(", ", option.Values.Select(x => x.Name))</MudTd>
                     <MudTd DataLabel="Default value">@option.DefaultValue?.Name</MudTd>
                     <MudTd>

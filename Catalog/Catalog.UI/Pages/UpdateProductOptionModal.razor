@@ -12,6 +12,13 @@
 
             <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
+            <MudSelect Label="Option Type" Variant="Variant.Outlined" Class="mb-6" @bind-Value="OptionType" For="() => OptionType">
+                @foreach(var optionType in Enum.GetValues<OptionType>())
+                {
+                    <MudSelectItem Value="@optionType">@Enum.GetName(typeof(OptionType), optionType)</MudSelectItem>
+                }     
+            </MudSelect>
+
             @if (Groups is not null)
             {
                 <MudSelect T="OptionGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
@@ -23,13 +30,14 @@
                 </MudSelect>
             }
 
-            <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
+            @if (OptionType == OptionType.YesOrNo)
+            {
+                <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
-            <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+                <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+            }
 
-            <MudCheckBox Label="Has choice" Class="mb-6" @bind-Checked="HasChoice" For="() => HasChoice" />
-
-            @if (HasChoice)
+            @if (OptionType == OptionType.Choice)
             {
                 <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
 
@@ -97,7 +105,7 @@
     [Required]
     public string Name { get; set; }
 
-    public bool HasChoice { get; set; }
+    public OptionType OptionType { get; set; }
 
     public string Description { get; set; }
 
@@ -119,7 +127,7 @@
         Group = Groups.FirstOrDefault(x => x?.Id == Option.Group?.Id);
         Price = Option.Price;
         SKU = Option.Sku;
-        HasChoice = Option.OptionType == OptionType.Choice;
+        OptionType = Option.OptionType;
 
         foreach (var value in Option.Values)
         {
@@ -160,7 +168,7 @@
         var data = new ApiUpdateProductOption
         {
             Name = Name,
-            OptionType = HasChoice ? OptionType.Choice : OptionType.YesOrNo,
+            OptionType = OptionType,
             Description = Description,
             GroupId = Group?.Id,
             Sku = SKU,
