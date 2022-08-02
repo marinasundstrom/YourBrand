@@ -41,11 +41,11 @@
 <MudText Typo="Typo.body2">
     @if (Model.isSub)
     {
-        <p>@experience.EmploymentType</p>
+        <p>@experience.EmploymentType @(experience.EmployerName != experience.CompanyName ? "• " + experience.EmployerName : null)</p>
     }
     else
     {
-        <p>@experience.CompanyName • @experience.EmploymentType</p>
+        <p>@experience.CompanyName • @experience.EmploymentType @(experience.EmployerName != experience.CompanyName ? "• " + experience.EmployerName : null)</p>
     }
     </MudText>
 

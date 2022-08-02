@@ -50,6 +50,8 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Cons
             var totalCount = await result.CountAsync(cancellationToken);
 
             result = result
+                .Include(x => x.Employment)
+                .ThenInclude(x => x.Employer)
                 .Include(x => x.Company)
                 .Include(x => x.Skills)
                 .ThenInclude(x => x.ConsultantProfileSkill)

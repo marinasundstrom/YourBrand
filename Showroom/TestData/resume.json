@@ -11,7 +11,7 @@
             "current": true,
             "startDate": "2022-04-20",
             "endDate": null,
-            "description": "Digitalizing housing cooperative business. Focus on backend.\n\nFor Nexer Group.",
+            "description": "Digitalizing housing cooperative business. Focus on backend.",
             "skills": ["C#", ".NET", "Microsoft Azure", "Microservices", "ASP.NET Core", "MassTransit"]
         },
         {
@@ -40,7 +40,7 @@
             "current": false,
             "startDate": "2022-01-11",
             "endDate": "2022-03-20",
-            "description": "Working on Line of Business (LOB) tools for handling insurance policy claims.\n\nFor Skymill.",
+            "description": "Working on Line of Business (LOB) tools for handling insurance policy claims.",
             "skills": [
                 ".NET",
                 "C#",
@@ -89,7 +89,7 @@
         },
         {
             "title": "Software Developer",
-            "employer": "Nordengren AI",
+            "employer": "ESSIQ AB",
             "employmentType": "Contract",
             "company": "Nordengren AI",
             "companyLogo": null,
@@ -98,7 +98,7 @@
             "current": false,
             "startDate": "2020-02-01",
             "endDate": "2020-05-01",
-            "description": "Developing e-Commerce site for customer.\n\nProject for insurance firm.\n\nFor ESSIQ.",
+            "description": "Developing e-Commerce site for customer.\n\nProject for insurance firm.",
             "skills": [
                 ".NET",
                 "C#",
@@ -133,7 +133,7 @@
             "current": false,
             "startDate": "2019-01-01",
             "endDate": "2019-12-30",
-            "description": "Developing current Manufacturing Execution System (MES) for running customer production facilities in the area of Processing and Packaging.\n\nModular solution with backend service.\n\nBeing part of a fresh and diverse team. In close collaboration with other individuals and teams both on site and in other places around the world.\n\nInitiative to make refactoring in project structure in order to facilitate cross-team development.\n\nFor ESSIQ.",
+            "description": "Developing current Manufacturing Execution System (MES) for running customer production facilities in the area of Processing and Packaging.\n\nModular solution with backend service.\n\nBeing part of a fresh and diverse team. In close collaboration with other individuals and teams both on site and in other places around the world.\n\nInitiative to make refactoring in project structure in order to facilitate cross-team development.",
             "skills": [
                 ".NET",
                 "C#",
@@ -156,7 +156,7 @@
             "current": false,
             "startDate": "2018-04-01",
             "endDate": "2018-11-30",
-            "description": "Developing Video Management Software (VMS) targeting small businesses.\n\nFor ESSIQ.",
+            "description": "Developing Video Management Software (VMS) targeting small businesses.",
             "skills": [
                 ".NET",
                 "C#",
@@ -174,7 +174,7 @@
             "current": false,
             "startDate": "2017-05-01",
             "endDate": "2018-04-01",
-            "description": "Building UX for Audio and Access Control products, as part of the New Business (NB) division.\n\nFrontend development for firmware on cameras and other devices.\n\nWorking closely with backend-developers and testers.\n\nFor Tedsys.",
+            "description": "Building UX for Audio and Access Control products, as part of the New Business (NB) division.\n\nFrontend development for firmware on cameras and other devices.\n\nWorking closely with backend-developers and testers.",
             "skills": [
                 "Web",
                 "JavaScript",
@@ -227,7 +227,7 @@
             "current": false,
             "startDate": "2016-08-01",
             "endDate": "2017-02-01",
-            "description": "Developing medical system for microscopic analysis in the field of hematology.\n\nWorking on client software with native components. Educational web app for training hematologists written in Silverlight.\n\nFor Tedsys.",
+            "description": "Developing medical system for microscopic analysis in the field of hematology.\n\nWorking on client software with native components. Educational web app for training hematologists written in Silverlight.",
             "skills": [
                 ".NET",
                 "C#",
@@ -248,7 +248,7 @@
             "current": false,
             "startDate": "2016-05-01",
             "endDate": "2016-07-01",
-            "description": "Work on internal charter booking system.\nKnowledge gained in the domain of aviation and charter flights.\n\nFor Tedsys.",
+            "description": "Work on internal charter booking system.\nKnowledge gained in the domain of aviation and charter flights.",
             "skills": [
                 ".NET",
                 "C#",
