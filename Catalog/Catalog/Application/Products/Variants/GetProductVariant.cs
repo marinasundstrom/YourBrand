@@ -24,17 +24,17 @@ public record GetProductVariant(string ProductId, string ProductVariantId) : IRe
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Product)
-                .Include(pv => pv.Values)
+                .Include(pv => pv.AttributeValues)
                 .ThenInclude(pv => pv.Attribute)
                 //.ThenInclude(o => o.DefaultValue)
-                .Include(pv => pv.Values)
+                .Include(pv => pv.AttributeValues)
                 .ThenInclude(pv => pv.Value)
                 .FirstOrDefaultAsync(pv => pv.Product.Id == request.ProductId && pv.Id == request.ProductVariantId);
 
             if(productVariant is null) return null;
 
             return new ProductVariantDto(productVariant.Id, productVariant.Name, productVariant.Description, productVariant.SKU, GetImageUrl(productVariant.Image), productVariant.Price,
-                productVariant.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                productVariant.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

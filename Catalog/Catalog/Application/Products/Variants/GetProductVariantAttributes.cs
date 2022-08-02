@@ -19,7 +19,7 @@ public record GetProductVariantAttributes(string ProductId, string ProductVarian
 
         public async Task<IEnumerable<ProductVariantAttributeDto>> Handle(GetProductVariantAttributes request, CancellationToken cancellationToken)
         {
-            var variantOptionValues = await _context.VariantValues
+            var variantOptionValues = await _context.ProductVariantAttributeValues
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Value)

@@ -10,5 +10,10 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
     public void Configure(EntityTypeBuilder<ProductVariant> builder)
     {
         builder.ToTable("ProductVariants");
+
+        builder
+            .HasMany(x => x.ProductVariantOptions)
+            .WithOne(x => x.ProductVariant)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

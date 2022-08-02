@@ -113,7 +113,7 @@ public class SeedData
             UPC = "4345547457457",
         };
 
-        variantSmall.Values.Add(new VariantValue()
+        variantSmall.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option,
             Value = valueSmall
@@ -129,7 +129,7 @@ public class SeedData
             UPC = "543453454567",
         };
 
-        variantMedium.Values.Add(new VariantValue()
+        variantMedium.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option,
             Value = valueMedium
@@ -145,7 +145,7 @@ public class SeedData
             UPC = "6876345345345",
         };
 
-        variantLarge.Values.Add(new VariantValue()
+        variantLarge.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option,
             Value = valueLarge
@@ -239,13 +239,13 @@ public class SeedData
             Price = 120,
         };
 
-        variantBlueSmall.Values.Add(new VariantValue()
+        variantBlueSmall.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = attr,
             Value = valueSmall
         });
 
-        variantBlueSmall.Values.Add(new VariantValue()
+        variantBlueSmall.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option2,
             Value = valueBlue
@@ -264,13 +264,13 @@ public class SeedData
             Price = 120
         };
 
-        variantBlueMedium.Values.Add(new VariantValue()
+        variantBlueMedium.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = attr,
             Value = valueMedium
         });
 
-        variantBlueMedium.Values.Add(new VariantValue()
+        variantBlueMedium.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option2,
             Value = valueBlue
@@ -287,13 +287,13 @@ public class SeedData
             Price = 60,
         };
 
-        variantBlueLarge.Values.Add(new VariantValue()
+        variantBlueLarge.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = attr,
             Value = valueLarge
         });
 
-        variantBlueLarge.Values.Add(new VariantValue()
+        variantBlueLarge.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option2,
             Value = valueBlue
@@ -312,13 +312,13 @@ public class SeedData
             Price = 120,
         };
 
-        variantRedSmall.Values.Add(new VariantValue()
+        variantRedSmall.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = attr,
             Value = valueSmall
         });
 
-        variantRedSmall.Values.Add(new VariantValue()
+        variantRedSmall.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option2,
             Value = valueRed
@@ -335,13 +335,13 @@ public class SeedData
             Price = 120,
         };
 
-        variantRedMedium.Values.Add(new VariantValue()
+        variantRedMedium.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = attr,
             Value = valueMedium
         });
 
-        variantRedMedium.Values.Add(new VariantValue()
+        variantRedMedium.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option2,
             Value = valueRed
@@ -358,13 +358,13 @@ public class SeedData
             Price = 120,
         };
 
-        variantRedLarge.Values.Add(new VariantValue()
+        variantRedLarge.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = attr,
             Value = valueLarge
         });
 
-        variantRedLarge.Values.Add(new VariantValue()
+        variantRedLarge.AttributeValues.Add(new ProductVariantAttributeValue()
         {
             Attribute = option2,
             Value = valueRed

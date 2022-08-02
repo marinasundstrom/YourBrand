@@ -21,7 +21,9 @@ public interface ICatalogContext
 
     DbSet<ProductVariant> ProductVariants { get; }
 
-    DbSet<VariantValue> VariantValues { get; }
+    DbSet<ProductVariantOption> ProductVariantOptions { get; }
+
+    DbSet<ProductVariantAttributeValue> ProductVariantAttributeValues { get; }
 
     DbSet<ProductOption> ProductOptions { get; }
 

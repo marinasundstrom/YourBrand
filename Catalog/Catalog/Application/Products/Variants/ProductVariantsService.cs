@@ -20,9 +20,9 @@ public class ProductVariantsService
             .AsSplitQuery()
             .AsNoTracking()
             .Include(pv => pv.Product)
-            .Include(pv => pv.Values)
+            .Include(pv => pv.AttributeValues)
             .ThenInclude(pv => pv.Attribute)
-            .Include(pv => pv.Values)
+            .Include(pv => pv.AttributeValues)
             .ThenInclude(pv => pv.Value)
             .Where(pv => pv.Product.Id == productId)
             .AsQueryable();
@@ -40,7 +40,7 @@ public class ProductVariantsService
             if (selectedOption.Value is null)
                 continue;
 
-            variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
+            variants = variants.Where(x => x.AttributeValues.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
         }
 
         return variants.SingleOrDefault((ProductVariant?)null);

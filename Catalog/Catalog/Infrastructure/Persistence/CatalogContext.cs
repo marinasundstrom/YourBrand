@@ -54,7 +54,9 @@ public class CatalogContext : DbContext, ICatalogContext
 
     public DbSet<ProductVariant> ProductVariants { get; set; } = null!;
 
-    public DbSet<VariantValue> VariantValues { get; set; } = null!;
+    public DbSet<ProductVariantOption> ProductVariantOptions { get; set; } = null!;
+
+    public DbSet<ProductVariantAttributeValue> ProductVariantAttributeValues { get; set; } = null!;
 
     public DbSet<ProductOption> ProductOptions { get; set; } = null!;
 

@@ -28,6 +28,8 @@ public class Option
 
     public List<Product> Products { get; } = new List<Product>();
 
+    public List<ProductVariantOption> ProductVariantOptions { get; } = new List<ProductVariantOption>();
+
     [ForeignKey(nameof(DefaultValue))]
     public string? DefaultValueId { get; set; }
 

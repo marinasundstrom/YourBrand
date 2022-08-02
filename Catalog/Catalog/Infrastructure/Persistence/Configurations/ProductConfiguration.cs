@@ -20,5 +20,15 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMany(p => p.Attributes)
             .WithMany(p => p.Products)
             .UsingEntity<ProductAttribute>();
+
+        builder
+            .HasMany(x => x.Variants)
+            .WithOne(x => x.Product)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(x => x.ProductVariantOptions)
+            .WithOne(x => x.Product)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

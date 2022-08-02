@@ -32,10 +32,10 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
             var product = await _context.Products
                 .AsSplitQuery()
                 .Include(pv => pv.Variants)
-                    .ThenInclude(o => o.Values)
+                    .ThenInclude(o => o.AttributeValues)
                     .ThenInclude(o => o.Attribute)
                 .Include(pv => pv.Variants)
-                    .ThenInclude(o => o.Values)
+                    .ThenInclude(o => o.AttributeValues)
                     .ThenInclude(o => o.Value)
                 .Include(pv => pv.Attributes)
                     .ThenInclude(o => o.Values)
@@ -56,7 +56,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
 
                     var value2 = option.Values.First(x => x.Id == v.ValueId);
 
-                    variant.Values.Add(new VariantValue()
+                    variant.AttributeValues.Add(new ProductVariantAttributeValue()
                     {
                         Attribute = option,
                         Value = value2
@@ -68,14 +68,14 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
 
                     var value2 = option.Values.First(x => x.Id == v.ValueId);
 
-                    var value = variant.Values.First(x => x.Id == v.Id);
+                    var value = variant.AttributeValues.First(x => x.Id == v.Id);
 
                     value.Attribute = option;
                     value.Value = value2;
                 }
             }
 
-            foreach (var v in variant.Values.ToList())
+            foreach (var v in variant.AttributeValues.ToList())
             {
                 if (_context.Entry(v).State == EntityState.Added)
                     continue;
@@ -84,14 +84,14 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
 
                 if (value is null)
                 {
-                    variant.Values.Remove(v);
+                    variant.AttributeValues.Remove(v);
                 }
             }
 
             await _context.SaveChangesAsync();
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

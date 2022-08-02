@@ -36,6 +36,8 @@ public class Product
 
     public List<ProductOption> ProductOptions { get; } = new List<ProductOption>();
 
+    public List<ProductVariantOption> ProductVariantOptions { get; } = new List<ProductVariantOption>();
+
     public List<OptionGroup> OptionGroups { get; } = new List<OptionGroup>();
 
     public ProductVisibility Visibility { get; set; }

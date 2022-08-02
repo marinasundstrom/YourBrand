@@ -25,9 +25,9 @@ public record GetAvailableAttributeValues(string ProductId, string AttributeId, 
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Product)
-                .Include(pv => pv.Values)
+                .Include(pv => pv.AttributeValues)
                 .ThenInclude(pv => pv.Attribute)
-                .Include(pv => pv.Values)
+                .Include(pv => pv.AttributeValues)
                 .ThenInclude(pv => pv.Value)
                 .Where(pv => pv.Product.Id == request.ProductId)
                 .ToArrayAsync();
@@ -37,11 +37,11 @@ public record GetAvailableAttributeValues(string ProductId, string AttributeId, 
                 if (selectedAttribute.Value is null)
                     continue;
 
-                variants = variants.Where(x => x.Values.Any(vv => vv.Attribute.Id == selectedAttribute.Key && vv.Value.Id == selectedAttribute.Value));
+                variants = variants.Where(x => x.AttributeValues.Any(vv => vv.Attribute.Id == selectedAttribute.Key && vv.Value.Id == selectedAttribute.Value));
             }
 
             var values = variants
-                .SelectMany(x => x.Values)
+                .SelectMany(x => x.AttributeValues)
                 .DistinctBy(x => x.Attribute)
                 .Where(x => x.Attribute.Id == request.AttributeId)
                 .Select(x => x.Value);

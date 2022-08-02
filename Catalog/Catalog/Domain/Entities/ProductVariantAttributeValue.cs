@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Catalog.Domain.Entities;
 
-public class VariantValue
+public class ProductVariantAttributeValue
 {
     public int Id { get; set; }
 

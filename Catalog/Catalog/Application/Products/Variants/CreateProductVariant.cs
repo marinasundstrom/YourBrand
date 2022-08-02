@@ -32,10 +32,10 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
             var product = await _context.Products
                 .AsSplitQuery()
                 .Include(pv => pv.Variants)
-                    .ThenInclude(o => o.Values)
+                    .ThenInclude(o => o.AttributeValues)
                     .ThenInclude(o => o.Attribute)
                 .Include(pv => pv.Variants)
-                    .ThenInclude(o => o.Values)
+                    .ThenInclude(o => o.AttributeValues)
                     .ThenInclude(o => o.Value)
                 .Include(pv => pv.Attributes)
                     .ThenInclude(o => o.Values)
@@ -56,7 +56,7 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
 
                 var value2 = option.Values.First(x => x.Id == value.ValueId);
 
-                variant.Values.Add(new VariantValue()
+                variant.AttributeValues.Add(new ProductVariantAttributeValue()
                 {
                     Attribute = option,
                     Value = value2
@@ -68,7 +68,7 @@ public record CreateProductVariant(string ProductId, ApiCreateProductVariant Dat
             await _context.SaveChangesAsync();
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
         }
 
         private static string? GetImageUrl(string? name)

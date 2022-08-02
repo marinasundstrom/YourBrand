@@ -41,16 +41,16 @@ public record GetProductVariants(string ProductId,  int Page = 10, int PageSize 
 
             var variants = await query
                 .Include(pv => pv.Product)
-                .Include(pv => pv.Values)
+                .Include(pv => pv.AttributeValues)
                 .ThenInclude(pv => pv.Attribute)
-                .Include(pv => pv.Values)
+                .Include(pv => pv.AttributeValues)
                 .ThenInclude(pv => pv.Value)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize).AsQueryable()
                 .ToArrayAsync();
 
             return new ItemsResult<ProductVariantDto>(variants.Select(x => new ProductVariantDto(x.Id, x.Name, x.Description, x.SKU, GetImageUrl(x.Image), x.Price,
-                x.Values.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)))),
+                x.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)))),
                 totalCount);
         }
 
