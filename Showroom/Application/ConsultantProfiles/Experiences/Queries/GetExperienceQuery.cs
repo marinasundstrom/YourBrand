@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,10 @@ public record GetExperienceQuery(string ConsultantProfileId, string Id) : IReque
         {
             var experience = await _context
                .ConsultantProfileExperiences
-               //.Include(c => c.Manager)
+               .Include(x => x.Skills)
+               .ThenInclude(x => x.ConsultantProfileSkill)
+                .ThenInclude(x => x.Skill)
+                .ThenInclude(x => x.Area)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

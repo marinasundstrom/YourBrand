@@ -1,4 +1,4 @@
-﻿
+
 using YourBrand.Showroom.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
@@ -6,15 +6,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-class ConsultantProfileSkillConfiguration : IEntityTypeConfiguration<ConsultantProfileSkill>
+class ConsultantProfileExperienceSkillConfiguration : IEntityTypeConfiguration<ConsultantProfileExperienceSkill>
 {
-    public void Configure(EntityTypeBuilder<ConsultantProfileSkill> builder)
+    public void Configure(EntityTypeBuilder<ConsultantProfileExperienceSkill> builder)
     {
-        builder.ToTable("ConsultantProfileSkills");
+        builder.ToTable("ConsultantProfileExperienceSkills");
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
-        builder.OwnsOne(x => x.Link);
+        builder.HasOne(x => x.ConsultantProfileExperience)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.ConsultantProfileSkill)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

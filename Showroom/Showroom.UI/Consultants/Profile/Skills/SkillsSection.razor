@@ -40,16 +40,23 @@
                     @skillGroup.Name
                 </MudText>
 
-                <MudChipSet>
+                <MudChipSet Class="mt-2">
                     @foreach (var skill in skillGroup.Skills)
                     {
-                        @if (IsEditing) 
+                        @if (IsEditing)
                         {
                             <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Name</MudChip>
                         }
-                        else 
+                        else
                         {
-                            <MudChip>@skill.Name</MudChip>   
+                            <MudTooltip>
+                                <ChildContent>
+                                    <MudChip Size="Size.Medium">@skill.Name</MudChip>
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.h6">@skill.Name</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
                         }
                     }
                 </MudChipSet>
@@ -72,9 +79,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var skills = await ConsultantsClient.GetSkillsAsync(ConsultantProfileId, 1, null, null, null, null);
+        var skills = await ConsultantsClient.GetSkillsAsync(ConsultantProfileId, 1, 150, null, null, null);
 
-        foreach(var skill in skills.Items) 
+        foreach(var skill in skills.Items)
         {          
             var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == skill.Skill.Area.Id);
             if(skillGroup is null) 

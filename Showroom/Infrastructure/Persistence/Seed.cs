@@ -30,7 +30,7 @@ public static class Seed
 
             context.Languages.Add(language);
 
-        language = new Language
+            language = new Language
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "English",
@@ -43,7 +43,8 @@ public static class Seed
 
         if (!context.Users.Any())
         {
-            context.Users.Add(new User {
+            context.Users.Add(new User
+            {
                 Id = "api",
                 FirstName = "API",
                 LastName = "User",
@@ -99,22 +100,29 @@ public static class Seed
             await context.SaveChangesAsync();
         }
 
+        /*
+
         if (!context.SkillAreas.Any())
         {
             var area1 = new SkillArea
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Software Architecture"
+                Name = "Software Architecture",
+                Slug = "software-architecture"
             };
 
-            area1.Skills.Add(new Skill {
+            area1.Skills.Add(new Skill
+            {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Micro services"
+                Name = "Microservices",
+                Slug = "microservices"
             });
 
-            area1.Skills.Add(new Skill {
+            area1.Skills.Add(new Skill
+            {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Event-driven Architecture"
+                Name = "Event-driven Architecture",
+                Slug = "event-driven-architecture"
             });
 
             context.SkillAreas.Add(area1);
@@ -122,35 +130,46 @@ public static class Seed
             var area2 = new SkillArea
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Development Platforms"
+                Name = "Development Platforms",
+                Slug = "development-platforms"
             };
 
-            area2.Skills.Add(new Skill {
+            area2.Skills.Add(new Skill
+            {
                 Id = Guid.NewGuid().ToString(),
-                Name = ".NET"
+                Name = ".NET",
+                Slug = "net"
             });
 
-            area2.Skills.Add(new Skill {
+            area2.Skills.Add(new Skill
+            {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Java"
+                Name = "Java",
+                Slug = "java"
             });
 
-            area2.Skills.Add(new Skill {
+            area2.Skills.Add(new Skill
+            {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Node"
+                Name = "Node",
+                Slug = "node"
             });
 
-            area2.Skills.Add(new Skill {
+            area2.Skills.Add(new Skill
+            {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Web"
+                Name = "Web",
+                Slug = "web"
             });
 
             context.SkillAreas.Add(area2);
 
             await context.SaveChangesAsync();
         }
+        */
 
-        ConsultantProfile consultantProfile = new ConsultantProfile() {
+        ConsultantProfile consultantProfile = new ConsultantProfile()
+        {
             Id = Guid.NewGuid().ToString(),
             FirstName = "Marina",
             LastName = "Sundström",
@@ -170,10 +189,65 @@ My career began back in 2014, when I was working as a software developer for a l
 
         context.ConsultantProfiles.Add(consultantProfile);
 
-        var resume = Resume.FromJson(await File.ReadAllTextAsync("../TestData/resume.json"));
-        foreach(var experience in resume.Experience)
+        await LoadTestData(context, consultantProfile);
+
+        await context.SaveChangesAsync();
+
+        /*
+        consultantProfile.Languages.Add(new LanguageSkill {
+            Language = context.Languages.FirstOrDefault(l => l.ISO639 == "sv"),
+            SkillLevel = SkillLevel.Native
+        });
+        */
+    }
+
+    private static async Task LoadTestData(ShowroomContext context, ConsultantProfile consultantProfile)
+    {
+        var skillGroups = Skills2.FromJson(await File.ReadAllTextAsync("../TestData/skills.json"));
+        foreach (var skillGroup in skillGroups)
         {
-            consultantProfile.Experience.Add(new Domain.Entities.ConsultantProfileExperience() {
+            var skillArea = new Domain.Entities.SkillArea()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = skillGroup.Key,
+                Slug = NewMethod(skillGroup.Key),
+            };
+
+            foreach (var skillPair in skillGroup.Value)
+            {
+                var skillName = skillPair.Key;
+                var skillInfo = skillPair.Value;
+
+                var skill = new Domain.Entities.Skill()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = skillName,
+                    Slug = NewMethod(skillName),
+                };
+
+                skillArea.Skills.Add(skill);
+                
+                consultantProfile.ConsultantProfileSkills.Add(new ConsultantProfileSkill
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Skill = skill,
+                    //Years = skillInfo.Years,
+                    Level = (Domain.Enums.SkillLevel?)skillInfo.Level,
+                    Comment = skillInfo.Comment,
+                    Link = skillInfo.Link is null ? null : new Domain.ValueObjects.Link(skillInfo.Link.Title, skillInfo.Link.Href)
+                });
+            }
+
+            context.SkillAreas.Add(skillArea);
+
+            await context.SaveChangesAsync();
+        }
+
+        var resume = Resume.FromJson(await File.ReadAllTextAsync("../TestData/resume.json"));
+        foreach (var experience in resume.Experience)
+        {
+            var experience2 = new Domain.Entities.ConsultantProfileExperience()
+            {
                 Id = Guid.NewGuid().ToString(),
                 ConsultantProfile = consultantProfile,
                 Current = experience.Current,
@@ -187,16 +261,52 @@ My career began back in 2014, when I was working as a software developer for a l
                 StartDate = experience.StartDate,
                 EndDate = experience.EndDate,
                 Description = experience.Description
-            });
+            };
+
+            foreach (var skill in experience.Skills)
+            {
+                var name = NewMethod(skill);
+
+                var sk = await context.ConsultantProfileSkills.FirstOrDefaultAsync(x => x.Skill.Slug == name);
+
+                if (sk is null)
+                {
+                    var sk2 = await context.Skills.FirstOrDefaultAsync(x => x.Slug == name);
+
+                    if (sk2 is null) continue;
+
+                    sk = new ConsultantProfileSkill()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ConsultantProfile = consultantProfile,
+                        Skill = sk2!
+                    };
+
+                    consultantProfile.ConsultantProfileSkills.Add(sk);
+                }
+
+                experience2.Skills.Add(new ConsultantProfileExperienceSkill()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ConsultantProfileExperience = experience2,
+                    ConsultantProfileSkill = sk
+                });
+            }
+
+            consultantProfile.Experience.Add(experience2);
         }
 
         await context.SaveChangesAsync();
+    }
 
-        /*
-        consultantProfile.Languages.Add(new LanguageSkill {
-            Language = context.Languages.FirstOrDefault(l => l.ISO639 == "sv"),
-            SkillLevel = SkillLevel.Native
-        });
-        */
+    private static string NewMethod(string skillName)
+    {
+        return skillName
+                            .ToLower()
+                            .Replace(" ", "-")
+                            .Replace("(", string.Empty)
+                            .Replace(")", string.Empty)
+                            .Replace(".", string.Empty)
+                            .Replace("#", string.Empty);
     }
 }

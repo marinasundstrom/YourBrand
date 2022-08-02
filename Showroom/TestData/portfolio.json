@@ -1,0 +1,202 @@
+{
+    "projects": [
+        {
+            "name": "Commuter",
+            "type": "Private",
+            "for": null,
+            "startDate": "2019-11-19",
+            "endDate": "2019-02-19",
+            "ongoing": false,
+            "description": "Conceptual commuter app that helps commuters see the upcoming departures at stops close to their current location.\n\nThis apps was developed out of a personal need when I was commuting.\n\nThe stops and timetables are continuously refreshing as the user moves.",
+            "image": "/assets/commuter.jpg",
+            "links": [
+                {
+                    "name": "Source Code",
+                    "type": "GitHub",
+                    "url": "https://github.com/marinasundstrom/commuter"
+                }
+            ],
+            "skills": {
+                "platforms": [
+                    ".NET",
+                    "Mobile"
+                ],
+                "programmingLanguages": [
+                    "C#"
+                ],
+                "frameworks": [
+                    "Xamarin.Forms"
+                ],
+                "technologies": [
+                    "HTTP API"
+                ]
+            }
+        },
+        {
+            "name": "Accounting app",
+            "type": "Private",
+            "for": null,
+            "startDate": "2021-10-18",
+            "endDate": "2022-01-24",
+            "ongoing": false,
+            "description": "Concept app for doing accounting with focus on user experience.\n\nHandles accounting using the BAS Accountint Plans.\nAlso provides a customized view for registering a sale.\n\nMore screenshots at project page.",
+            "image": "/assets/accounting.png",
+            "links": [
+                {
+                    "name": "Source Code",
+                    "type": "GitHub",
+                    "url": "https://github.com/marinasundstrom/accounting-app"
+                }
+            ],
+            "skills": {
+                "platforms": [
+                    ".NET 6",
+                    "Web"
+                ],
+                "programmingLanguages": [
+                    "C#"
+                ],
+                "frameworks": [
+                    "ASP.NET Core",
+                    "Blazor"
+                ],
+                "technologies": [
+                    "HTTP API"
+                ]
+            }
+        },
+        {
+            "name": "Point of Sale",
+            "type": "Private",
+            "for": null,
+            "startDate": "2021-07-01",
+            "endDate": "2021-10-01",
+            "ongoing": false,
+            "description": "Checkout app with product catalog and receipts.\n\nThe user adds items from a catalog into a cart. Price gets calculated. When the items get checked out the user gets a receipt that can be printed, or downloaded as a PDF file.",
+            "image": "/assets/pos.png",
+            "links": [
+                {
+                    "name": "Video 1",
+                    "type": "YouTube",
+                    "url": "https://youtu.be/wDP1ShXDgY8"
+                },
+                {
+                    "name": "Video 2",
+                    "type": "YouTube",
+                    "url": "https://www.youtube.com/watch?v=5MCQMhSh_gg"
+                }
+            ],
+            "skills": {
+                "platforms": [
+                    ".NET 6",
+                    "Web"
+                ],
+                "programmingLanguages": [
+                    "C#"
+                ],
+                "frameworks": [
+                    "ASP.NET Core",
+                    "Blazor"
+                ],
+                "applications": [
+                    "RabbitMQ",
+                    "Docker"
+                ],
+                "technologies": [
+                    "Microservices",
+                    "Asynchronous messaging",
+                    "HTTP API"
+                ]
+            }
+        },
+        {
+            "name": "Showroom",
+            "type": "Private",
+            "for": null,
+            "startDate": "2020-02-18",
+            "endDate": "2021-02-28",
+            "ongoing": false,
+            "description": "Site helping consulting company present consultants to customers.\n\nIt consists of a gallery, profile pages with video presentation, and functionality for managers to communicate with clients.",
+            "image": "/assets/showroom.png",
+            "links": [
+                {
+                    "name": "Video",
+                    "type": "YouTube",
+                    "url": "https://www.youtube.com/watch?v=bRMFgDmwXmM"
+                },
+                {
+                    "name": "Source Code",
+                    "type": "GitHub",
+                    "url": "https://github.com/marinasundstrom/showroom"
+                }
+            ],
+            "skills": {
+                "platforms": [
+                    ".NET 5",
+                    "Web"
+                ],
+                "programmingLanguages": [
+                    "C#"
+                ],
+                "frameworks": [
+                    "ASP.NET Core",
+                    "Blazor"
+                ],
+                "technologies": [
+                    "HTTP API"
+                ]
+            }
+        },
+        {
+            "name": "Access Control",
+            "type": "Private",
+            "for": null,
+            "startDate": "2018-09-01",
+            "endDate": "2022-01-04",
+            "ongoing": false,
+            "description": "Physical Access Control system that is built around Raspberry Pi - Home alarm.\n\nThe Raspberry Pi respresents a physical Access Point that provides a RFID reader for authorization by card, or tag, and a magnet switch for detecting unauthorized access. The software on the RPi communicates with the custom cloud service that verifies the identity of the person requesting access.\n\nAccess can also be requested via the Web Portal. From there you can view the access logs. There is also a mobile app.",
+            "image": "/assets/accesscontrol.jpg",
+            "links": [
+                {
+                    "name": "Video 1",
+                    "type": "YouTube",
+                    "url": "https://www.youtube.com/watch?v=9nb2P9FmH2Y"
+                },
+                {
+                    "name": "Video 2",
+                    "type": "YouTube",
+                    "url": "https://www.youtube.com/watch?v=VlSKTeJASYc"
+                },
+                {
+                    "name": "Source Code",
+                    "type": "GitHub",
+                    "url": "https://github.com/marinasundstrom/AccessControl"
+                }
+            ],
+            "skills": {
+                "platforms": [
+                    ".NET 5",
+                    "Web",
+                    "Mobile",
+                    "Azure",
+                    "Raspberry Pi"
+                ],
+                "programmingLanguages": [
+                    "C#"
+                ],
+                "frameworks": [
+                    "ASP.NET Core",
+                    "Blazor",
+                    "Xamarin"
+                ],
+                "applications": [
+                    "Docker"
+                ],
+                "technologies": [
+                    "Asynchronous messaging",
+                    "HTTP API"
+                ]
+            }
+        }
+    ]
+}

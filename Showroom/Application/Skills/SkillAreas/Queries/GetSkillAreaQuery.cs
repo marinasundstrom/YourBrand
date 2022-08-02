@@ -26,6 +26,8 @@ public record GetSkillAreaQuery(string Id) : IRequest<SkillAreaDto?>
         {
             var skillArea = await _context
                .SkillAreas
+                .Include(x => x.Skills)
+                .ThenInclude(x => x.Area)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id, cancellationToken);
 

@@ -16,11 +16,7 @@
 
             <div class="flex-grow-1">
                 <div class="mb-5">
-                    <MudText Typo="Typo.h5" Class="mb-2">
-                        @experience.Title
-                    </MudText>
-
-                    <ExperienceView Model="@Foo(experience, false)" />
+                    <ExperienceView Model="@Foo(experience, false)" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience" />
                 </div>
             </div>
         </div>
@@ -67,11 +63,7 @@
                                 {
                                     <MudTimelineItem Size="Size.Small" Color="Color.Info">
                                         <MudPaper Elevation="0" Class="mt-n1">
-                                            <MudText Typo="Typo.h5" Class="mb-2 mt-1">
-                                                @experience.Title
-                                            </MudText>
-
-                                            <ExperienceView Model="@Foo(experience, true)" />
+                                            <ExperienceView Model="@Foo(experience, true)" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience" />
                                         </MudPaper>
                                     </MudTimelineItem>
                                 }
@@ -91,6 +83,12 @@
     [Parameter]
     [EditorRequired]
     public IEnumerable<IGrouping<string, ExperienceDto>> Groups { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<ExperienceDto> AddOrEditExperience { get; set; }
+
+    [Parameter]
+    public EventCallback<ExperienceDto> DeleteExperience { get; set; }
 
     public Obj Foo(ExperienceDto experience, bool isSub)
     {

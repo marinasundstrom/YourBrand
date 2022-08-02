@@ -6,7 +6,7 @@
 
 <MudCard Class="pa-md-8 mb-4">
     <MudCardHeader>
-        <div class="d-flex justify-space-between align-center">
+        <div class="d-flex justify-space-between align-center" style="width: 100%;">
             <MudText Typo="Typo.h4">
                 Experience
             </MudText>
@@ -23,7 +23,7 @@
                    .GroupBy(e => e.CompanyName);
         }
 
-        <ExperienceList Groups="groups" />
+        <ExperienceList Groups="groups" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience"  />
 
         @if (experiences.Count() < total)
         {
@@ -112,7 +112,7 @@
         total = experiencesResult.TotalCount;
     }
 
-    async Task RemoveExperience(ExperienceDto experience)
+    async Task DeleteExperience(ExperienceDto experience)
     {
         try
         {

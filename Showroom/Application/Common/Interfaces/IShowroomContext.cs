@@ -27,6 +27,8 @@ public interface IShowroomContext
 
     DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get; }
 
+    DbSet<ConsultantProfileExperienceSkill> ConsultantProfileExperienceSkills { get; }
+
     DbSet<ConsultantProfileEducation> ConsultantProfileEducation { get; }
 
     DbSet<ConsultantProfileLanguage> ConsultantProfileLanguages { get; }

@@ -1,0 +1,316 @@
+{
+    "Fields": {
+        "Software development": {
+            "Level": 4,
+            "Comment": "Started programming back in 2007. Been working professionally since 2014.",
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Software_development"
+            }
+        }
+    },
+    "Competence areas": {
+        "Frontend development": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Frontend_and_backend"
+            }
+        },
+        "Backend development": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Frontend_and_backend"
+            }
+        },
+        "Software design": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Software_design"
+            }
+        },
+        "User experience (UX)": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/User_experience"
+            }
+        },
+        "Mobile development": {
+            "Level": 3
+        },
+        "Internet of things (IoT)": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Internet_of_things"
+            }
+        }
+    },
+    "Programming languages": {
+        "C#": {
+            "Level": 5,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/C_Sharp_(programming_language)"
+            }
+        },
+        "JavaScript": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/JavaScript"
+            }
+        },
+        "TypeScript": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/TypeScript"
+            }
+        },
+        "PHP": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/PHP"
+            }
+        },
+        "C++": {
+            "Level": 2,
+            "Link":  {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/C%2B%2B"
+            }
+        }
+    },
+    "Platforms": {
+        ".NET": {
+            "Level": 5,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://dot.net/"
+            }
+        },
+        "Web": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/World_Wide_Web"
+            }
+        },
+        "NodeJS": {
+            "Level": 3,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://nodejs.org/"
+            }
+        }
+    },
+    "Frameworks": {
+        "ASP.NET Core": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/ASP.NET_Core"
+            }
+        },
+        "Blazor": {
+            "Level": 4,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor"
+            }
+        },
+        "React": {
+            "Level": 3,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://reactjs.org/"
+            }
+        },
+        "WPF": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Windows_Presentation_Foundation"
+            }
+        },
+        "Xamarin": {
+            "Level": 2,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Xamarin"
+            }
+        }
+    },
+    "Technologies": {
+        "HTTP API": {
+            "Level": 4
+        },
+        "Asynchronous messaging": {
+            "Level": 2
+        }
+    },
+    "Tools": {
+        "Visual Studio": {
+            "Level": 4,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://visualstudio.microsoft.com/"
+            }
+        },
+        "VS Code": {
+            "Level": 4,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://code.visualstudio.com/"
+            }
+        },
+        "Git": {
+            "Level": 4,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://git-scm.com/"
+            }
+        },
+        "Tye": {
+            "Level": 4,
+            "Link": {
+                "Title": "GitHub",
+                "Href": "https://github.com/dotnet/tye"
+            }
+        }
+    },
+    "Applications": {
+        "Microsoft SQL Server": {
+            "Level": 3,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://www.microsoft.com/en-us/sql-server"
+            }
+        },
+        "MySQL": {
+            "Level": 3,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://www.mysql.com/"
+            }
+        },
+        "RabbitMQ": {
+            "Level": 2,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://www.rabbitmq.com/"
+            }
+        },
+        "Docker": {
+            "Level": 3,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://www.docker.com/"
+            }
+        },
+        "Kubernetes": {
+            "Level": 2,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://kubernetes.io/"
+            } 
+        }
+    },
+    "Operating systems": {
+        "MacOS": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/macOS"
+            } 
+        },
+        "Windows": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Microsoft_Windows"
+            } 
+        },
+        "Linux": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Linux"
+            } 
+        }
+    },
+    "Methodologies": {
+        "Agile software development": {
+            "Level": 4,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Agile_software_development"
+            } 
+        },
+        "Domain-driven design (DDD)": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Domain-driven_design"
+            } 
+        },
+        "Behavior-driven development (BDD)": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Behavior-driven_development"
+            } 
+        }
+    },
+    "Architecture": {
+        "Distributed Applications": {
+            "Level": 3
+        },
+        "Service Oriented Applications (SOA)": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Service-oriented_architecture"
+            } 
+        },
+        "Microservices": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Microservices"
+            } 
+        }
+    },
+    "Business domains": {
+        "Enterprise Resource Planning (ERP)": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Enterprise_resource_planning"
+            } 
+        },
+        "Video Management (VMS)": {
+            "Level": 3
+        },
+        "Physical Access Control": {
+            "Level": 3,
+            "Link": {
+                "Title": "Wikipedia",
+                "Href": "https://en.wikipedia.org/wiki/Enterprise_resource_planning"
+            } 
+        },
+        "Insurance": {
+            "Level": 1,
+            "Comment": "Basic knowledge about how insurance business works."
+        },
+        "Housing cooperative": {
+            "Level": 1,
+            "Comment": "Knowledge about how how housing cooperatives work."
+        }
+    }
+}

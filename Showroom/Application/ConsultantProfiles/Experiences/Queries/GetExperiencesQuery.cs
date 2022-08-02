@@ -49,6 +49,12 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Cons
 
             var totalCount = await result.CountAsync(cancellationToken);
 
+            result = result
+                .Include(x => x.Skills)
+                .ThenInclude(x => x.ConsultantProfileSkill)
+                .ThenInclude(x => x.Skill)
+                .ThenInclude(x => x.Area);
+
             if (request.SortBy is not null)
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);

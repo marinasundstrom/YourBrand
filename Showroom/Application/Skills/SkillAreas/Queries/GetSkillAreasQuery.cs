@@ -46,6 +46,8 @@ public record GetSkillAreasQuery(int Page = 0, int PageSize = 10, string? Search
             }
 
             var items = await result
+                .Include(x => x.Skills)
+                .ThenInclude(x => x.Area)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);

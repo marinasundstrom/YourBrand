@@ -29,6 +29,8 @@ public class ConsultantProfileExperience : AuditableEntity, ISoftDelete
 
     public string? Description { get; set; }
 
+    public HashSet<ConsultantProfileExperienceSkill> Skills { get; private set; } = new HashSet<ConsultantProfileExperienceSkill>();
+
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

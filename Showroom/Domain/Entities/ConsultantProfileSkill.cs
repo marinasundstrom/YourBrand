@@ -1,4 +1,6 @@
 ﻿using YourBrand.Showroom.Domain.Common;
+using YourBrand.Showroom.Domain.Enums;
+using YourBrand.Showroom.Domain.ValueObjects;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
@@ -16,7 +18,11 @@ public class ConsultantProfileSkill : AuditableEntity, ISoftDelete
 
     public int? Years { get; set; }
 
-    //public int? Level { get; set; }
+    public SkillLevel? Level { get; set; }
+
+    public string? Comment { get; set; }
+    
+    public Link? Link { get; set; }
 
     public List<ConsultantProfile> ConsultantProfiles { get; set; } = new List<ConsultantProfile>();
 

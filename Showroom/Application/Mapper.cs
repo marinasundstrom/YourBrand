@@ -61,7 +61,7 @@ public static class Mapper
 
     public static ExperienceDto ToDto(this Domain.Entities.ConsultantProfileExperience experience)
     {
-        return new ExperienceDto(experience.Id, experience.Title, experience.CompanyName, experience.CompanyLogo, experience.Link, experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description);
+        return new ExperienceDto(experience.Id, experience.Title, experience.CompanyName, experience.CompanyLogo, experience.Link, experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description, experience.Skills.Select(x => x.ConsultantProfileSkill.ToDto()));
     }
 
     public static SkillDto ToDto(this Domain.Entities.Skill skill)
@@ -76,7 +76,12 @@ public static class Mapper
 
     public static ConsultantProfileSkillDto ToDto(this Domain.Entities.ConsultantProfileSkill consultantProfileSkill)
     {
-        return new ConsultantProfileSkillDto(consultantProfileSkill.Id, consultantProfileSkill.Skill.ToDto());
+        return new ConsultantProfileSkillDto(consultantProfileSkill.Id, consultantProfileSkill.Skill.ToDto(), consultantProfileSkill.Level, consultantProfileSkill.Comment, consultantProfileSkill.Link?.ToDto());
+    }
+
+    public static LinkDto ToDto(this Domain.ValueObjects.Link link)
+    {
+        return new LinkDto(link.Title, link.Href);
     }
 
     public static CaseDto ToDto(this Domain.Entities.Case @case, IUrlHelper urlHelper)

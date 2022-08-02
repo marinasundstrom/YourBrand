@@ -1,8 +1,8 @@
 {
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
-    "title": "Web API",
+    "title": "Showroom API",
     "version": "v1"
   },
   "servers": [
@@ -2490,6 +2490,101 @@
           "description": {
             "type": "string",
             "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConsultantProfileSkillDto"
+            }
+          }
+        }
+      },
+      "ConsultantProfileSkillDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "skill": {
+            "$ref": "#/components/schemas/SkillDto"
+          },
+          "level": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SkillLevel"
+              }
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LinkDto"
+              }
+            ]
+          }
+        }
+      },
+      "SkillDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "area": {
+            "$ref": "#/components/schemas/SkillAreaDto"
+          }
+        }
+      },
+      "SkillAreaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SkillLevel": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Novice",
+          "AdvancedBeginner",
+          "Competent",
+          "Proficient",
+          "Expert"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "LinkDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
           }
         }
       },
@@ -2601,45 +2696,6 @@
           }
         }
       },
-      "ConsultantProfileSkillDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "skill": {
-            "$ref": "#/components/schemas/SkillDto"
-          }
-        }
-      },
-      "SkillDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "area": {
-            "$ref": "#/components/schemas/SkillAreaDto"
-          }
-        }
-      },
-      "SkillAreaDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
       "AddConsultantProfileSkillDto": {
         "type": "object",
         "additionalProperties": false,
@@ -2678,6 +2734,9 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           }

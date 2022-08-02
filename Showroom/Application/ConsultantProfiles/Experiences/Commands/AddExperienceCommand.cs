@@ -55,6 +55,8 @@ public record AddExperienceCommand(
             await _context.SaveChangesAsync(cancellationToken);
 
             experience = await _context.ConsultantProfileExperiences
+                .Include(x => x.Skills)
+                .ThenInclude(x => x.ConsultantProfileSkill)
                 .FirstAsync(x => x.Id == experience.Id);
 
             return experience.ToDto();

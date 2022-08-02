@@ -10,7 +10,7 @@
             "current": true,
             "startDate": "2022-04-20",
             "endDate": null,
-            "description": "Digitalizing housing cooperative business.\n\nFor Nexer Group.",
+            "description": "Digitalizing housing cooperative business. Focus on backend.\n\nFor Nexer Group.",
             "skills": ["C#", ".NET", "Microsoft Azure", "Microservices", "ASP.NET Core", "MassTransit"]
         },
         {
@@ -24,7 +24,7 @@
             "current": true,
             "startDate": "2022-04-04",
             "endDate": null,
-            "description": "Consulting as part of Nexer Group.",
+            "description": "Consulting as part of Nexer Group (previously Sigma IT Consulting) in the Malmö area.",
             "skills": []
         },
         {
@@ -68,16 +68,18 @@
             "current": false,
             "startDate": "2020-05-01",
             "endDate": "2021-09-20",
-            "description": "Developing Web-based e-Commerce solution from the ground up. Providing functionality that supported the customer's entire business flow - from ordering to invoicing.\n\nResponsible for both backend and frontend development.\n\nBuilt concept sites for potential customers.",
+            "description": "Developing Web-based e-Commerce solution from the ground up in customer-focused business. Providing functionality that supported the customer's entire business flow - from ordering to invoicing.\n\nWorking on both backend and frontend development. Responsible for Software design and Architecture\n\nOne of our customers was a company providing cleaning services.\n\nMaking proof-of-concept commerce site for well-known chef selling kitchen utensils and presenting food recipes.",
             "skills": [
                 ".NET",
                 "C#",
                 "Web",
                 "ASP.NET Core",
+                "Service-oriented architecture (SOA)",
                 "Blazor",
                 "Wordpress",
                 "PHP",
-                "SQL Server"
+                "SQL Server",
+                "IIS"
             ]
         },
         {
@@ -90,7 +92,7 @@
             "current": false,
             "startDate": "2020-02-01",
             "endDate": "2020-05-01",
-            "description": "Developing e-Commerce site for customer.\n\nFor ESSIQ.",
+            "description": "Developing e-Commerce site for customer.\n\nProject for insurance firm.\n\nFor ESSIQ.",
             "skills": [
                 ".NET",
                 "C#",
@@ -132,7 +134,7 @@
                 "Web",
                 "React",
                 "TypeScript",
-                "SAFe"
+                "Scaled Agile Framework (SAFe)"
             ]
         },
         {
