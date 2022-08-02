@@ -11,9 +11,9 @@ namespace YourBrand.Catalog.Controllers;
 partial class ProductsController : Controller
 {
     [HttpGet("{productId}/Options")]
-    public async Task<ActionResult<IEnumerable<OptionDto>>> GetProductOptions(string productId, CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<OptionDto>>> GetProductOptions(string productId, string? variantId, CancellationToken cancellationToken)
     {
-        return Ok(await _mediator.Send(new GetProductOptions(productId), cancellationToken));
+        return Ok(await _mediator.Send(new GetProductOptions(productId, variantId), cancellationToken));
     }
 
     [HttpPost("{productId}/Options")]

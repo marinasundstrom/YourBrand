@@ -290,7 +290,7 @@ else
     {
         product = await ProductsClient.GetProductAsync(ProductId);
         attributes = (await ProductsClient.GetProductAttributesAsync(ProductId)).ToList();
-        options = (await ProductsClient.GetProductOptionsAsync(ProductId)).ToList();
+        options = (await ProductsClient.GetProductOptionsAsync(ProductId, null)).ToList();
     }
 
     private async Task<TableData<ProductVariantDto>> ServerReload(TableState state)

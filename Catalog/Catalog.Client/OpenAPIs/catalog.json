@@ -1070,6 +1070,12 @@
             "in": "path",
             "required": true,
             "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "variantId",
+            "in": "query",
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -2037,15 +2043,15 @@
           "type": "integer",
           "format": "int32"
         },
-        "stringValueMinLength": {
+        "textValueMinLength": {
           "type": "integer",
           "format": "int32"
         },
-        "stringValueMaxLength": {
+        "textValueMaxLength": {
           "type": "integer",
           "format": "int32"
         },
-        "defaultStringValue": {
+        "defaultTextValue": {
           "type": "string"
         }
       }
@@ -2057,7 +2063,7 @@
         "YesOrNo",
         "Choice",
         "NumericalValue",
-        "StringValue"
+        "TextValue"
       ],
       "enum": [
         0,
