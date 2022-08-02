@@ -49,11 +49,15 @@ class ShowroomContext : DbContext, IShowroomContext
 
 #nullable disable
 
+    public DbSet<Company> Companies { get; set; } = null!;
+
     public DbSet<ConsultantProfile> ConsultantProfiles { get; set; } = null!;
 
     public DbSet<CompetenceArea> CompetenceAreas { get; set; } = null!;
 
     public DbSet<Organization> Organizations { get; set; } = null!;
+
+    public DbSet<Employment> Employments { get; set; } = null!;
 
     public DbSet<User> Users { get; set; } = null!;
 

@@ -43,7 +43,7 @@ public record AddExperienceCommand(
                 Id = Guid.NewGuid().ToString(),
                 ConsultantProfile = consultantProfile,
                 Title = request.Title,
-                CompanyName = request.CompanyName,
+                //CompanyName = request.CompanyName,
                 Location = request.Location,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
@@ -55,6 +55,7 @@ public record AddExperienceCommand(
             await _context.SaveChangesAsync(cancellationToken);
 
             experience = await _context.ConsultantProfileExperiences
+                .Include(x => x.Company)
                 .Include(x => x.Skills)
                 .ThenInclude(x => x.ConsultantProfileSkill)
                 .FirstAsync(x => x.Id == experience.Id);

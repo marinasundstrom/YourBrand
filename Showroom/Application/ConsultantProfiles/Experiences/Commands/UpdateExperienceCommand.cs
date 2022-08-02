@@ -43,7 +43,7 @@ public record UpdateExperienceCommand(
             }
 
             experience.Title = request.Title;
-            experience.CompanyName = request.CompanyName;
+            //experience.CompanyName = request.CompanyName;
             experience.Location = request.Location;
             experience.StartDate = request.StartDate;
             experience.EndDate = request.EndDate;

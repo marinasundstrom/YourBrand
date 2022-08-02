@@ -7,11 +7,15 @@ namespace YourBrand.Showroom.Application.Common.Interfaces;
 
 public interface IShowroomContext
 {
+    DbSet<Company> Companies { get; } 
+
     DbSet<ConsultantProfile> ConsultantProfiles { get; }
 
     DbSet<CompetenceArea> CompetenceAreas { get; }
 
     DbSet<Organization> Organizations { get; }
+
+    DbSet<Employment> Employments { get; }
 
     DbSet<User> Users { get; }
 

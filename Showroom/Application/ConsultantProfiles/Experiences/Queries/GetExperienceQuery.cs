@@ -34,6 +34,7 @@ public record GetExperienceQuery(string ConsultantProfileId, string Id) : IReque
         {
             var experience = await _context
                .ConsultantProfileExperiences
+               .Include(x => x.Company)
                .Include(x => x.Skills)
                .ThenInclude(x => x.ConsultantProfileSkill)
                 .ThenInclude(x => x.Skill)

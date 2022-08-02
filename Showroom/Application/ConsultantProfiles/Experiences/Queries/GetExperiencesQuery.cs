@@ -42,7 +42,7 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Cons
             if (request.SearchString is not null)
             {
                 result = result.Where(p =>
-                    p.CompanyName.ToLower().Contains(request.SearchString.ToLower())
+                    p.Company.Name.ToLower().Contains(request.SearchString.ToLower())
                     || p.Location!.ToLower().Contains(request.SearchString.ToLower())
                     || p.Title.ToLower().Contains(request.SearchString.ToLower()));
             }
@@ -50,6 +50,7 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Cons
             var totalCount = await result.CountAsync(cancellationToken);
 
             result = result
+                .Include(x => x.Company)
                 .Include(x => x.Skills)
                 .ThenInclude(x => x.ConsultantProfileSkill)
                 .ThenInclude(x => x.Skill)

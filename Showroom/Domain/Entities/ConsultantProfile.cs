@@ -58,6 +58,8 @@ public class ConsultantProfile : AuditableEntity, ISoftDelete
     public List<Skill> Skills { get; set; } = new List<Skill>();
 
     public List<ConsultantProfileSkill> ConsultantProfileSkills { get; set; } = new List<ConsultantProfileSkill>();
+    
+    public List<Employment> Employments { get; set; } = new List<Employment>();
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

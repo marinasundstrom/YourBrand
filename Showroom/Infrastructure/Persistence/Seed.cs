@@ -226,7 +226,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 };
 
                 skillArea.Skills.Add(skill);
-                
+
                 consultantProfile.ConsultantProfileSkills.Add(new ConsultantProfileSkill
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -246,17 +246,61 @@ My career began back in 2014, when I was working as a software developer for a l
         var resume = Resume.FromJson(await File.ReadAllTextAsync("../TestData/resume.json"));
         foreach (var experience in resume.Experience)
         {
+            var company = await context.Companies.FirstOrDefaultAsync(x => x.Name == experience.Company);
+
+            if(company is null) 
+            {
+                company = new Company() {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = experience.Company,
+                    Logo = experience.CompanyLogo,
+                    Link = experience.Link,
+                };
+
+                context.Companies.Add(company);
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+        foreach (var experience in resume.Experience)
+        {
+            var company = await context.Companies.FirstAsync(x => x.Name == experience.Company);
+
+            var employment = await context.Employments.FirstOrDefaultAsync(x => x.Employer.Name == experience.Employer);
+
+            if(employment is null) 
+            {
+                employment = new Employment() {
+                    Id = Guid.NewGuid().ToString(),
+                    Employer = await context.Companies.FirstAsync(x => x.Name == experience.Employer),
+                    Title = experience.Title, // Incorrect
+                    StartDate = resume.Experience.OrderBy(x => x.StartDate).First(x => x.Company == experience.Company).StartDate,
+                    EndDate = resume.Experience.OrderBy(x => x.StartDate).Last(x => x.Company == experience.Company).EndDate
+                };
+
+                consultantProfile.Employments.Add(employment);
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+        foreach (var experience in resume.Experience)
+        {
+            var company = await context.Companies.FirstAsync(x => x.Name == experience.Company);
+
+            var employment = await context.Employments.FirstOrDefaultAsync(x => x.Employer.Name == experience.Employer);
+
             var experience2 = new Domain.Entities.ConsultantProfileExperience()
             {
                 Id = Guid.NewGuid().ToString(),
                 ConsultantProfile = consultantProfile,
                 Current = experience.Current,
                 Highlight = experience.Highlight,
-                CompanyName = experience.Company,
-                CompanyLogo = experience.CompanyLogo,
-                Link = experience.Link,
+                Company = company,
                 Location = experience.Location,
                 Title = experience.Title,
+                Employment = employment, 
                 EmploymentType = experience.EmploymentType,
                 StartDate = experience.StartDate,
                 EndDate = experience.EndDate,

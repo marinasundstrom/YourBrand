@@ -2,6 +2,7 @@
     "experience": [
         {
             "title": "Software Developer",
+            "employer": "Nexer Group",
             "employmentType": "Contract",
             "company": "HSB",
             "companyLogo": "/assets/logos/hsb.jpeg",
@@ -15,6 +16,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "Nexer Group",
             "employmentType": "Full-time",
             "highlight": true,
             "company": "Nexer Group",
@@ -29,6 +31,7 @@
         },
         {
             "title": ".NET Developer",
+            "employer": "Skymill",
             "employmentType": "Contract",
             "company": "Trygg Hansa",
             "companyLogo": "/assets/logos/trygghansa.jpg",
@@ -47,6 +50,7 @@
         },
         {
             "title": "Software Engineer",
+            "employer": "Skymill",
             "employmentType": "Full-time",
             "company": "Skymill",
             "companyLogo": "/assets/logos/skymill.jpg",
@@ -60,6 +64,7 @@
         },
         {
             "title": "Senior Software Developer",
+            "employer": "Nordengren AI",
             "employmentType": "Full-time",
             "company": "Nordengren AI",
             "companyLogo": null,
@@ -84,6 +89,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "Nordengren AI",
             "employmentType": "Contract",
             "company": "Nordengren AI",
             "companyLogo": null,
@@ -104,6 +110,7 @@
         },
         {
             "title": "Software Engineering Consultant",
+            "employer": "ESSIQ AB",
             "employmentType": "Full-time",
             "company": "ESSIQ AB",
             "companyLogo": "/assets/logos/essiq.jpg",
@@ -117,6 +124,7 @@
         },
         {
             "title": ".NET Senior Expert",
+            "employer": "ESSIQ AB",
             "employmentType": "Contract",
             "company": "Tetra Pak",
             "companyLogo": "/assets/logos/tetrapak.jpg",
@@ -139,6 +147,7 @@
         },
         {
             "title": "Software Engineer",
+            "employer": "ESSIQ AB",
             "employmentType": "Contract",
             "company": "AXIS Communications",
             "companyLogo": "/assets/logos/axis.jpg",
@@ -156,6 +165,7 @@
         },
         {
             "title": "Web Developer",
+            "employer": "Tedsys AB",
             "employmentType": "Contract",
             "company": "AXIS Communications",
             "companyLogo": "/assets/logos/axis.jpg",
@@ -173,6 +183,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "Tedsys AB",
             "employmentType": "Full-time",
             "company": "Tedsys AB",
             "companyLogo": "/assets/logos/tedsys.jpg",
@@ -186,6 +197,7 @@
         },
         {
             "title": "Software Developer Consultant",
+            "employer": "Tedsys AB",
             "employmentType": "Contract",
             "company": "Skanska AB",
             "companyLogo": "/assets/logos/skanska.jpg",
@@ -206,6 +218,7 @@
         },
         {
             "title": "Software Engineer",
+            "employer": "Tedsys AB",
             "employmentType": "Contract",
             "company": "CellaVision",
             "companyLogo": "/assets/logos/cellavision.jpg",
@@ -226,6 +239,7 @@
         },
         {
             "title": "Software Engineer",
+            "employer": "Tedsys AB",
             "employmentType": "Contract",
             "company": "BRA - Braathens Regional Airlines",
             "companyLogo": "/assets/logos/bra.jpg",
@@ -245,6 +259,7 @@
         },
         {
             "title": "System Developer",
+            "employer": "Teleservice Skåne AB",
             "employmentType": "Full-time",
             "company": "Teleservice Skåne AB",
             "companyLogo": "/assets/logos/teleservice.jpg",
@@ -268,6 +283,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "Teleservice Skåne AB",
             "employmentType": "Internship",
             "company": "Teleservice Skåne AB",
             "companyLogo": "/assets/logos/teleservice.jpg",
@@ -286,6 +302,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "Ericsson",
             "employmentType": "Internship",
             "company": "Ericsson",
             "companyLogo": "/assets/logos/ericsson.jpg",
@@ -303,6 +320,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "Ericsson",
             "employmentType": "Internship",
             "company": "Ericsson",
             "companyLogo": "/assets/logos/ericsson.jpg",
@@ -319,6 +337,7 @@
         },
         {
             "title": "Software Developer",
+            "employer": "BTH Innovation",
             "employmentType": "Part-time",
             "company": "BTH Innovation",
             "companyLogo": "/assets/logos/bth.jpg",

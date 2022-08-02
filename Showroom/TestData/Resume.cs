@@ -21,6 +21,9 @@ namespace YourBrand.Showroom.TestData
         [JsonPropertyName("title")]
         public string Title { get; set; }  = null!;
 
+        [JsonPropertyName("employer")]
+        public string Employer { get; set; }  = null!;
+
         [JsonPropertyName("employmentType")]
         public string EmploymentType { get; set; }  = null!;
 
