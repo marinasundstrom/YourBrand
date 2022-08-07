@@ -30,7 +30,7 @@ public record GetSkillsQuery(string ConsultantProfileId, int Page = 0, int? Page
             IQueryable<ConsultantProfileSkill> result = _context
                     .ConsultantProfileSkills
                     .Where(x => x.ConsultantProfileId == request.ConsultantProfileId)
-                    .OrderBy(o => o.Created)
+                    .OrderBy(x => x.Skill.Name)
                     .AsNoTracking()
                     .AsQueryable();
 
@@ -64,7 +64,8 @@ public record GetSkillsQuery(string ConsultantProfileId, int Page = 0, int? Page
                     .Take(request.PageSize.GetValueOrDefault());
             }
 
-            return new Results<ConsultantProfileSkillDto>(items.Select(cp => cp.ToDto()), totalCount);
+            return new Results<ConsultantProfileSkillDto>(
+                items.Select(cp => cp.ToDto()), totalCount);
         }
     }
 }

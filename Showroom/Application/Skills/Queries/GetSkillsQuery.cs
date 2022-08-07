@@ -29,7 +29,7 @@ public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SearchStri
         {
             IQueryable<Skill> result = _context
                     .Skills
-                    .OrderBy(o => o.Created)
+                    .OrderBy(o => o.Name)
                     .AsNoTracking()
                     .AsQueryable();
 
