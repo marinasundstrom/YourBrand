@@ -19,7 +19,7 @@
             <div class="card shadow-sm">
                 @if ((variant?.Image ?? vm.Image) is not null)
         {
-                    <MudImage Src="@(variant?.Image ?? vm.Image)" Alt="Mony the dog" Fluid="true" Elevation="25" Class="rounded-lg"/>
+                    <MudImage Src="@(variant?.Image ?? vm.Image)" Alt="Mony the dog" Fluid="true" Elevation="25" Class="rounded-lg" Style="width:100%;" />
         }
         else
         {
