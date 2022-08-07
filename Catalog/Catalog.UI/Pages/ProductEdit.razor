@@ -16,27 +16,31 @@ else
 
     <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@product.Name</MudText>
 
-    <MudButton StartIcon="@Icons.Material.Filled.Link" Color="Color.Primary" Link="@($"/products/{product.Id}")">View product</MudButton>
+    <MudButton StartIcon="@Icons.Material.Filled.Link" Color="Color.Primary" Link="@($"/products/{product.Id}")">View
+        product</MudButton>
 
     <MudGrid Spacing="6">
         <MudItem xs="12" sm="12" md="6" lg="6">
             <div class="card shadow-sm">
-@if (product.Image is not null)
-                                {
-                                    <MudImage Src="@product.Image" Alt="Mony the dog" Fluid="true" Elevation="25" Class="rounded-lg" Style="width: 100%;" />
-                                }
-                                else
-                                {
-                                    <svg class="rounded-lg" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                                }
+                @if (product.Image is not null)
+                {
+                    <MudImage Src="@product.Image" Alt="Mony the dog" Fluid="true" Elevation="25" Class="rounded-lg"
+                Style="width: 100%;" />
+                }
+                else
+                {
+                    <svg class="rounded-lg" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img"
+                aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+                    dy=".3em">Thumbnail</text>
+                    </svg>
+                }
             </div>
 
             <InputFile id="fileInput" OnChange="UploadFiles" hidden accept="*.jpg, *.jpeg, *.png" />
 
-            <MudButton HtmlTag="label"
-                       Color="Color.Secondary"
-                       StartIcon="@Icons.Filled.CloudUpload"
-                       for="fileInput">
+            <MudButton HtmlTag="label" Color="Color.Secondary" StartIcon="@Icons.Filled.CloudUpload" for="fileInput">
                 Upload image
             </MudButton>
 
@@ -75,13 +79,16 @@ else
                         }
                     </dl>
 
-                    <MudButton StartIcon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="EditDetails" Class="my-2">Edit details</MudButton>
+                    <MudButton StartIcon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="EditDetails"
+                    Class="my-2">Edit details</MudButton>
 
                 </MudCardContent>
             </MudCard>
 
             <MudPaper Elevation="25" Class="pa-4 mt-2">
-                <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility" ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)" ToStringFunc="x => x?.ToString()">
+                <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility"
+                ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)"
+                ToStringFunc="x => x?.ToString()">
                     @foreach (var item in VisibilityOptions)
                     {
                         <MudSelectItem Value="@item" />
@@ -96,15 +103,17 @@ else
     <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Attributes</MudText>
 
     <div class="mb-4">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateAttribute" StartIcon="@Icons.Material.Filled.Add">Create attribute</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/attributes/groups")">Attribute groups</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateAttribute"
+        StartIcon="@Icons.Material.Filled.Add">Create attribute</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/attributes/groups")">
+            Attribute groups</MudButton>
     </div>
 
     if (attributes is not null)
     {
         @foreach (var group in attributes
-.ToList()
-.GroupBy(x => x.Group?.Name))
+       .ToList()
+       .GroupBy(x => x.Group?.Name))
         {
             @if (group.Key is not null)
             {
@@ -130,7 +139,8 @@ else
                     @* <MudTd DataLabel="Default value">@attribute.DefaultValue?.Name</MudTd> *@
                     <MudTd>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateAttribute(attribute)" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteAttribute(attribute)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                OnClick="async () => await DeleteAttribute(attribute)" />
                     </MudTd>
                 </RowTemplate>
 
@@ -148,7 +158,6 @@ else
 
     @if (product.HasVariants)
     {
-
         <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Variants</MudText>
 
         @if (!attributes.Any())
@@ -158,67 +167,76 @@ else
         else
         {
             <div class="mb-4">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateVariant" StartIcon="@Icons.Material.Filled.Add">Create variant</MudButton>
-            </div>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateVariant"
+        StartIcon="@Icons.Material.Filled.Add">Create variant</MudButton>
+</div>
 
-                <MudTable T="ProductVariantDto" @ref="table3" ServerData="ServerReload"
-                          Dense="true" Hover="true" Class="mb-4" Elevation="25">
+            <MudTable T="ProductVariantDto" @ref="table3" ServerData="ServerReload" Dense="true" Hover="true" Class="mb-4"
+    Elevation="25">
 
-                    <HeaderContent>
-                        <MudTh>Image</MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="Name" T="ProductVariantDto">Name</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="Sku" T="ProductVariantDto">SKU</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortLabel="Price" T="ProductVariantDto">Price</MudTableSortLabel></MudTh>
+                <HeaderContent>
+                    <MudTh>Image</MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Name" T="ProductVariantDto">Name</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Sku" T="ProductVariantDto">SKU</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Price" T="ProductVariantDto">Price</MudTableSortLabel>
+                    </MudTh>
 
-                        @if (GetTableData()?.Items is IEnumerable<ProductVariantDto> variants && variants.Any())
+                    @if (GetTableData()?.Items is IEnumerable<ProductVariantDto> variants && variants.Any())
+                    {
+                        @foreach (var option in GetTableData().Items.First().Attributes)
                         {
-                            @foreach (var option in GetTableData().Items.First().Attributes)
-                            {
-                                <MudTh><MudTableSortLabel SortLabel="Values.Value" T="ProductVariantDto">@option.Name</MudTableSortLabel></MudTh>
-                            }
+                            <MudTh>
+                                <MudTableSortLabel SortLabel="Values.Value" T="ProductVariantDto">@option.Name</MudTableSortLabel>
+                            </MudTh>
                         }
+                    }
 
-                        <MudTh></MudTh>
-                    </HeaderContent>
+                    <MudTh></MudTh>
+                </HeaderContent>
 
-                    <RowTemplate Context="variant">
-                        <MudTd DataLabel="Image">
-                           @if (variant.Image is not null)
-                                {
-                                    <MudImage Src="@variant.Image" Alt="Mony the dog" Elevation="0" Height="100" Class="rounded-lg"/>
-                                }
-                        </MudTd>
-                        <MudTd DataLabel="Name">@variant.Name</MudTd>
-                        <MudTd DataLabel="SKU">@variant.Sku</MudTd>
-                        <MudTd DataLabel="Price">@variant.Price?.ToString("c")</MudTd>
-
-                        @if (variant.Attributes is not null)
+                <RowTemplate Context="variant">
+                    <MudTd DataLabel="Image">
+                        @if (variant.Image is not null)
                         {
-                            foreach (var option in variant.Attributes)
-                            {
-                                <MudTd DataLabel="Name">@option.Value</MudTd>
-                            }
+                            <MudImage Src="@variant.Image" Alt="Mony the dog" Elevation="0" Height="100" Class="rounded-lg" />
                         }
+                    </MudTd>
+                    <MudTd DataLabel="Name">@variant.Name</MudTd>
+                    <MudTd DataLabel="SKU">@variant.Sku</MudTd>
+                    <MudTd DataLabel="Price">@variant.Price?.ToString("c")</MudTd>
 
-                        <MudTd>
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateVariant(variant)" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteVariant(variant)" />
-                        </MudTd>
+                    @if (variant.Attributes is not null)
+                    {
+                        foreach (var option in variant.Attributes)
+                        {
+                            <MudTd DataLabel="Name">@option.Value</MudTd>
+                        }
+                    }
 
-                    </RowTemplate>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateVariant(variant)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteVariant(variant)" />
+                    </MudTd>
 
-                    <NoRecordsContent>
-                        <MudText>No matching records found</MudText>
-                    </NoRecordsContent>
+                </RowTemplate>
 
-                    <LoadingContent>
-                        <MudText>Loading...</MudText>
-                    </LoadingContent>
+                <NoRecordsContent>
+                    <MudText>No matching records found</MudText>
+                </NoRecordsContent>
 
-                    <PagerContent>
-                        <MudTablePager />
-                    </PagerContent>
-                </MudTable>
+                <LoadingContent>
+                    <MudText>Loading...</MudText>
+                </LoadingContent>
+
+                <PagerContent>
+                    <MudTablePager />
+                </PagerContent>
+            </MudTable>
 
         }
     }
@@ -226,15 +244,17 @@ else
     <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Options</MudText>
 
     <div class="mb-4">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateOption" StartIcon="@Icons.Material.Filled.Add">Create option</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/options/groups")">Option groups</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateOption"
+        StartIcon="@Icons.Material.Filled.Add">Create option</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="@($"/products/{product.Id}/options/groups")">
+            Option groups</MudButton>
     </div>
 
     if (options is not null)
     {
         @foreach (var group in options
-.ToList()
-.GroupBy(x => x.Group?.Name))
+       .ToList()
+       .GroupBy(x => x.Group?.Name))
         {
             @if (group.Key is not null)
             {
@@ -289,7 +309,8 @@ else
     List<AttributeDto>? attributes;
     List<OptionDto>? options;
 
-    public IList<ProductVisibility?> VisibilityOptions { get; } = Enum.GetValues<ProductVisibility>().Select(x => (ProductVisibility?)x).ToArray();
+    public IList<ProductVisibility?> VisibilityOptions { get; } = Enum.GetValues<ProductVisibility>().Select(x =>
+    (ProductVisibility?)x).ToArray();
 
     [Parameter]
     public string? ProductId { get; set; }
@@ -303,7 +324,9 @@ else
 
     private async Task<TableData<ProductVariantDto>> ServerReload(TableState state)
     {
-        var result = await ProductsClient.GetVariantsAsync(ProductId, state.Page, state.PageSize, null, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? Catalog.Client.SortDirection.Asc : Catalog.Client.SortDirection.Desc);
+        var result = await ProductsClient.GetVariantsAsync(ProductId, state.Page, state.PageSize, null, state.SortLabel,
+        state.SortDirection == MudBlazor.SortDirection.Ascending ? Catalog.Client.SortDirection.Asc :
+        Catalog.Client.SortDirection.Desc);
 
         return new TableData<ProductVariantDto>() { TotalItems = result.TotalItems, Items = result.Items };
     }
@@ -359,7 +382,8 @@ else
 
     async Task DeleteOption(OptionDto option)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the option?", "This cannot be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the option?", "This cannot be undone.", yesText: "Delete",
+        noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -372,40 +396,18 @@ else
 
     async Task CreateVariant()
     {
-        DialogParameters parameters = new();
-        parameters.Add(nameof(CreateVariantModal.ProductId), ProductId);
-
-        var modalRef = DialogService.Show<CreateVariantModal>("New Variant", parameters);
-
-        var result = await modalRef.Result;
-
-        if (result.Cancelled) return;
-
-        await table3.ReloadServerData();
+        NavigationManager.NavigateTo($"/products/{ProductId}/variants/new");
     }
 
     async Task UpdateVariant(ProductVariantDto variant)
     {
-        DialogParameters parameters = new();
-        parameters.Add(nameof(UpdateVariantModal.ProductId), ProductId);
-        parameters.Add(nameof(UpdateVariantModal.Variant), variant);
-
-        var modalRef = DialogService.Show<UpdateVariantModal>("Update Variant", parameters);
-
-        var result = await modalRef.Result;
-
-        if (result.Cancelled) return;
-
-        //var index = variants!.IndexOf(variant);
-
-        //variants[index] = (ProductVariantDto)result.Data;
-
-        await table3.ReloadServerData();
+        NavigationManager.NavigateTo($"/products/{ProductId}/variants/{variant.Id}/edit");
     }
 
     async Task DeleteVariant(ProductVariantDto variant)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the variant?", "This cannot be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the variant?", "This cannot be undone.", yesText: "Delete",
+        noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -446,7 +448,8 @@ else
     private async void UploadFiles(InputFileChangeEventArgs e)
     {
         var file = e.GetMultipleFiles().First();
-        product.Image = await ProductsClient.UploadProductImageAsync(product.Id, new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
+        product.Image = await ProductsClient.UploadProductImageAsync(product.Id, new FileParameter(file.OpenReadStream(3 *
+        1000000), file.Name));
 
         StateHasChanged();
     }
@@ -499,7 +502,8 @@ else
 
     async Task DeleteAttribute(AttributeDto attribute)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the attribute?", "This cannot be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBox("Delete the attribute?", "This cannot be undone.", yesText:
+        "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -512,11 +516,11 @@ else
 
     private TableData<ProductVariantDto>? GetTableData()
     {
-        if(table3 is null) return null;
+        if (table3 is null) return null;
 
         return (TableData<ProductVariantDto>?)table3?.GetType()?
-            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
-                         System.Reflection.BindingFlags.Instance)?
-            .GetValue(table3);
+        .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
+        System.Reflection.BindingFlags.Instance)?
+        .GetValue(table3);
     }
 }
