@@ -226,13 +226,13 @@
         Console.WriteLine("{0}: {1}", option.Name, max);
 
                                                 <div class="my-4">
-                                                    <MudNumericField Label="@option.Name" @bind-Value="option.NumericalValue" Max="max" />
+                                                    <MudNumericField Variant="Variant.Outlined" Label="@option.Name" @bind-Value="option.NumericalValue" Max="max" />
                                                 </div>
     }
     else if (option.OptionType == OptionType.TextValue)
     {
                                                 <div class="my-4">
-                                                    <MudTextField Label="@option.Name" @bind-Value="option.TextValue" />
+                                                    <MudTextField Variant="Variant.Outlined" Label="@option.Name" @bind-Value="option.TextValue" />
                                                 </div>
     }
                                         </div>
