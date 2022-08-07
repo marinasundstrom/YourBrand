@@ -80,18 +80,18 @@ else
                 </MudCardContent>
             </MudCard>
 
+            <MudPaper Elevation="25" Class="pa-4 mt-2">
+                <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility" ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)" ToStringFunc="x => x?.ToString()">
+                    @foreach (var item in VisibilityOptions)
+                    {
+                        <MudSelectItem Value="@item" />
+                    }
+                </MudSelect>
+            </MudPaper>
+
         </MudItem>
 
     </MudGrid>
-
-    <MudPaper Elevation="25" Class="pa-4">
-        <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility" ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)" ToStringFunc="x => x?.ToString()">
-            @foreach (var item in VisibilityOptions)
-            {
-                <MudSelectItem Value="@item" />
-            }
-        </MudSelect>
-    </MudPaper>
 
     <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-6 mb-2">Attributes</MudText>
 
