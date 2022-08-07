@@ -14,7 +14,7 @@ public class ProductVariantsService
         _context = context;
     }
 
-    public async Task<ProductVariant?> FindVariantCore(string productId, string? productVariantId, IDictionary<string, string?> selectedAttributeValues)
+    public async Task<IEnumerable<ProductVariant>> FindVariantCore(string productId, string? productVariantId, IDictionary<string, string?> selectedAttributeValues)
     {
         var query = _context.ProductVariants
             .AsSplitQuery()
@@ -43,6 +43,6 @@ public class ProductVariantsService
             variants = variants.Where(x => x.AttributeValues.Any(vv => vv.Attribute.Id == selectedOption.Key && vv.Value.Id == selectedOption.Value));
         }
 
-        return variants.SingleOrDefault((ProductVariant?)null);
+        return variants;
     }
 }

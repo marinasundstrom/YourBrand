@@ -26,8 +26,7 @@ public record GetAttribute(string AttributeId) : IRequest<AttributeDto>
                 .Include(pv => pv.Values)
                 .FirstAsync(o => o.Id == request.AttributeId);
 
-            return new AttributeDto(attribute.Id, attribute.Name, attribute.Description, attribute.Group == null ? null : new AttributeGroupDto(attribute.Group.Id, attribute.Group.Name, attribute.Group.Description), attribute.ForVariant,
-                attribute.Values.Select(x => new AttributeValueDto(x.Id, x.Name, x.Seq)));
+            return attribute.ToDto();
         }
     }
 }

@@ -28,8 +28,7 @@ public record GetAttributes() : IRequest<IEnumerable<AttributeDto>>
 
             var attributes = await query.ToArrayAsync();
 
-            return attributes.Select(x => new AttributeDto(x.Id, x.Name, x.Description, x.Group == null ? null : new AttributeGroupDto(x.Group.Id, x.Group.Name, x.Group.Description), x.ForVariant,
-                x.Values.Select(x => new AttributeValueDto(x.Id, x.Name, x.Seq))));     
+            return attributes.Select(x => x.ToDto());     
         }
     }
 }

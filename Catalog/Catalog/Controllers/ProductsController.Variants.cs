@@ -28,15 +28,21 @@ partial class ProductsController : Controller
     }
 
     [HttpPost("{productId}/Variants/Find")]
-    public async Task<ActionResult<ProductVariantDto>> FindVariantByOptionValues(string productId, Dictionary<string, string?> selectedAttributeValues)
+    public async Task<ActionResult<ProductVariantDto>> FindVariantByAttributeValues(string productId, Dictionary<string, string?> selectedAttributeValues)
     {
         return Ok(await _mediator.Send(new FindProductVariant(productId, selectedAttributeValues)));
     }
 
-    [HttpGet("{productId}/Variants/{variantId}/Options")]
-    public async Task<ActionResult<ProductVariantDto>> GetVariantOptions(string productId, string variantId)
+    [HttpPost("{productId}/Variants/Find2")]
+    public async Task<ActionResult<IEnumerable<ProductVariantDto>>> FindVariantByAttributeValues2(string productId, Dictionary<string, string?> selectedAttributeValues)
     {
-        return Ok(_mediator.Send(new GetProductVariantAttributes(productId, variantId)));
+        return Ok(await _mediator.Send(new FindProductVariants(productId, selectedAttributeValues)));
+    }
+
+    [HttpGet("{productId}/Variants/{variantId}/Options")]
+    public async Task<ActionResult<ProductVariantAttributeDto>> GetVariantAttributes(string productId, string variantId)
+    {
+        return Ok(await _mediator.Send(new GetProductVariantAttributes(productId, variantId)));
     }
 
     [HttpPost("{productId}/Variants")]

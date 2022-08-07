@@ -37,6 +37,7 @@ public record UpdateProductAttribute(string ProductId, string AttributeId, ApiUp
             attribute.Description = request.Data.Description;
             attribute.Group = group;
             attribute.ForVariant = request.Data.ForVariant;
+            attribute.IsMainAttribute = request.Data.IsMainAttribute;
 
             foreach (var v in request.Data.Values)
             {
@@ -74,8 +75,7 @@ public record UpdateProductAttribute(string ProductId, string AttributeId, ApiUp
 
             await _context.SaveChangesAsync();
 
-            return new AttributeDto(attribute.Id, attribute.Name, attribute.Description, attribute.Group == null ? null : new AttributeGroupDto(attribute.Group.Id, attribute.Group.Name, attribute.Group.Description), attribute.ForVariant,         
-                    attribute.Values.Select(attribute => new AttributeValueDto(attribute.Id, attribute.Name, attribute.Seq)));
+            return attribute.ToDto();
         }
     }
 }

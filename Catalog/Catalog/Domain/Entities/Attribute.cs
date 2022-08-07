@@ -12,6 +12,8 @@ public class Attribute
 
     public bool ForVariant { get; set; }
 
+    public bool IsMainAttribute { get; set; }
+
     public List<Product> Products { get; } = new List<Product>();
 
     public List<AttributeValue> Values { get; } = new List<AttributeValue>();

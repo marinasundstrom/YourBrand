@@ -33,7 +33,8 @@ public record CreateProductAttribute(string ProductId, ApiCreateProductAttribute
                 Name = request.Data.Name,
                 Description = request.Data.Description,
                 Group = group,
-                ForVariant = request.Data.ForVariant
+                ForVariant = request.Data.ForVariant,
+                IsMainAttribute = request.Data.IsMainAttribute
             };
 
             foreach (var v in request.Data.Values)
@@ -51,9 +52,7 @@ public record CreateProductAttribute(string ProductId, ApiCreateProductAttribute
 
             await _context.SaveChangesAsync();
 
-            return new AttributeDto(attribute.Id, attribute.Name, attribute.Description, attribute.Group == null ? null : new AttributeGroupDto(attribute.Group.Id, attribute.Group.Name, attribute.Group.Description), attribute.ForVariant,
-                attribute.Values.Select(attribute => new AttributeValueDto(attribute.Id, attribute.Name, attribute.Seq)));
-        
+            return attribute.ToDto();    
         }
     }
 }

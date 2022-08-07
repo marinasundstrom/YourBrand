@@ -30,7 +30,7 @@ public record class ApiUpdateProductGroup(string Name, string? Description, stri
 
 public record class ApiCreateProductOption(string Name, string? Description, OptionType OptionType, OptionGroupDto? Group, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiCreateProductOptionValue> Values);
 
-public record class ApiCreateProductAttribute(string Name, string? Description, bool ForVariant, string? GroupId, IEnumerable<ApiCreateProductAttributeValue> Values);
+public record class ApiCreateProductAttribute(string Name, string? Description, bool ForVariant, bool IsMainAttribute, string? GroupId, IEnumerable<ApiCreateProductAttributeValue> Values);
 
 
 public record class ApiCreateProductOptionValue(string Name, string? SKU, decimal? Price);
@@ -39,7 +39,7 @@ public record class ApiCreateProductAttributeValue(string Name);
 
 public record class ApiUpdateProductOption(string Name, string? Description, OptionType OptionType, string? SKU, decimal? Price, string? GroupId, IEnumerable<ApiUpdateProductOptionValue> Values);
 
-public record class ApiUpdateProductAttribute(string Name, string? Description, bool ForVariant, string? GroupId, IEnumerable<ApiUpdateProductAttributeValue> Values);
+public record class ApiUpdateProductAttribute(string Name, string? Description, bool ForVariant, bool IsMainAttribute, string? GroupId, IEnumerable<ApiUpdateProductAttributeValue> Values);
 
 public record class ApiUpdateProductOptionValue(string? Id, string Name, string? SKU, decimal? Price);
 
@@ -50,7 +50,7 @@ public record class ApiCreateProductOptionGroup(string Name, string? Description
 
 public record class ApiUpdateProductOptionGroup(string Name, string? Description, int? Min, int? Max);
 
-public record class ProductVariantAttributeDto(string Id, string Name, string Value);
+public record class ProductVariantAttributeDto(string Id, string Name, string Value, string? ValueId, bool IsMainAttribute);
 
 
 public record class ApiCreateProductAttributeGroup(string Name, string? Description);

@@ -22,7 +22,8 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
         
         public async Task<ProductVariantDto> Handle(UpdateProductVariant request, CancellationToken cancellationToken)
         {
-            var match = await _productVariantsService.FindVariantCore(request.ProductId, request.ProductVariantId, request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId));
+            var match = (await _productVariantsService.FindVariantCore(request.ProductId, request.ProductVariantId, request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)))
+                .SingleOrDefault();
 
             if (match is not null)
             {
@@ -91,7 +92,7 @@ public record UpdateProductVariant(string ProductId, string ProductVariantId, Ap
             await _context.SaveChangesAsync();
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.AttributeValues.Select(x => x.ToDto()));
         }
 
         private static string? GetImageUrl(string? name)

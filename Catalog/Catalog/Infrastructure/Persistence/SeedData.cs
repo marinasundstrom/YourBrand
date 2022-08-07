@@ -207,7 +207,8 @@ public class SeedData
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Color",
-            ForVariant = true
+            ForVariant = true,
+            IsMainAttribute = true
         };
 
         product.Attributes.Add(option2);

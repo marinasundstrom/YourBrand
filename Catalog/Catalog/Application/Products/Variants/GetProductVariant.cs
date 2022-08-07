@@ -34,7 +34,7 @@ public record GetProductVariant(string ProductId, string ProductVariantId) : IRe
             if(productVariant is null) return null;
 
             return new ProductVariantDto(productVariant.Id, productVariant.Name, productVariant.Description, productVariant.SKU, GetImageUrl(productVariant.Image), productVariant.Price,
-                productVariant.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                productVariant.AttributeValues.Select(x => x.ToDto()));
         }
 
         private static string? GetImageUrl(string? name)

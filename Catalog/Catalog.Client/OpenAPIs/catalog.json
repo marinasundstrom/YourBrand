@@ -1762,7 +1762,7 @@
         "tags": [
           "Products"
         ],
-        "operationId": "Products_FindVariantByOptionValues",
+        "operationId": "Products_FindVariantByAttributeValues",
         "consumes": [
           "application/json",
           "text/json",
@@ -1805,12 +1805,63 @@
         }
       }
     },
+    "/Products/{productId}/Variants/Find2": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "Products_FindVariantByAttributeValues2",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "selectedAttributeValues",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductVariantDto"
+              }
+            }
+          }
+        }
+      }
+    },
     "/Products/{productId}/Variants/{variantId}/Options": {
       "get": {
         "tags": [
           "Products"
         ],
-        "operationId": "Products_GetVariantOptions",
+        "operationId": "Products_GetVariantAttributes",
         "produces": [
           "text/plain",
           "application/json",
@@ -1837,7 +1888,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ProductVariantDto"
+              "$ref": "#/definitions/ProductVariantAttributeDto"
             }
           }
         }
@@ -1898,6 +1949,7 @@
         "id",
         "name",
         "forVariant",
+        "isMainAttribute",
         "values"
       ],
       "properties": {
@@ -1914,6 +1966,9 @@
           "$ref": "#/definitions/AttributeGroupDto"
         },
         "forVariant": {
+          "type": "boolean"
+        },
+        "isMainAttribute": {
           "type": "boolean"
         },
         "values": {
@@ -2107,6 +2162,7 @@
       "required": [
         "name",
         "forVariant",
+        "isMainAttribute",
         "values"
       ],
       "properties": {
@@ -2117,6 +2173,9 @@
           "type": "string"
         },
         "forVariant": {
+          "type": "boolean"
+        },
+        "isMainAttribute": {
           "type": "boolean"
         },
         "groupId": {
@@ -2146,6 +2205,7 @@
       "required": [
         "name",
         "forVariant",
+        "isMainAttribute",
         "values"
       ],
       "properties": {
@@ -2156,6 +2216,9 @@
           "type": "string"
         },
         "forVariant": {
+          "type": "boolean"
+        },
+        "isMainAttribute": {
           "type": "boolean"
         },
         "groupId": {
@@ -2620,7 +2683,8 @@
       "required": [
         "id",
         "name",
-        "value"
+        "value",
+        "isMainAttribute"
       ],
       "properties": {
         "id": {
@@ -2631,6 +2695,12 @@
         },
         "value": {
           "type": "string"
+        },
+        "valueId": {
+          "type": "string"
+        },
+        "isMainAttribute": {
+          "type": "boolean"
         }
       }
     },

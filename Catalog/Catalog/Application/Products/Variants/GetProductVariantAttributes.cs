@@ -30,7 +30,7 @@ public record GetProductVariantAttributes(string ProductId, string ProductVarian
                 .Where(pv => pv.Variant.Product.Id == request.ProductId && pv.Variant.Id == request.ProductVariantId)
                 .ToArrayAsync();
 
-            return variantOptionValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name));
+            return variantOptionValues.Select(x => x.ToDto());
         }
 
         private static string? GetImageUrl(string? name)

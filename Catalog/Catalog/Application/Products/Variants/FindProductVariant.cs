@@ -19,12 +19,13 @@ public record FindProductVariant(string ProductId, Dictionary<string, string?> S
 
         public async Task<ProductVariantDto?> Handle(FindProductVariant request, CancellationToken cancellationToken)
         {
-            var variant = await _productVariantsService.FindVariantCore(request.ProductId, null, request.SelectedOptions);
+            var variant = (await _productVariantsService.FindVariantCore(request.ProductId, null, request.SelectedOptions))
+                .SingleOrDefault();
 
             if (variant is null) return null;
 
             return new ProductVariantDto(variant.Id, variant.Name, variant.Description, variant.SKU, GetImageUrl(variant.Image), variant.Price,
-                variant.AttributeValues.Select(x => new ProductVariantAttributeDto(x.Attribute.Id, x.Attribute.Name, x.Value.Name)));
+                variant.AttributeValues.Select(x => x.ToDto()));
         }
 
         private static string? GetImageUrl(string? name)
