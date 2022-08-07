@@ -15,7 +15,7 @@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New Team</MudButton>
 
 <MudTable T="TeamDto" ServerData="@(new Func<TableState, Task<TableData<TeamDto>>>(ServerReload))"
-          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)">
+          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)" Elevation="25">
     <ToolBarContent>
         <MudAutocomplete T="UserDto" Label="User" Variant="Variant.Text" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
                          For="() => User"

@@ -27,7 +27,7 @@ else
 
     <MudText Typo="Typo.h3" GutterBottom="true">@item.Name</MudText>
 
-    <MudPaper Class="px-8 py-8">
+    <MudPaper Class="px-8 py-8" Elevation="25">
 
         <MudGrid>
             @if (item.Image is not null)
@@ -55,7 +55,7 @@ else
 
     </MudPaper>
 
-    <MudPaper Class="mt-4 px-4 py-4">
+    <MudPaper Class="mt-4 px-4 py-4" Elevation="25">
         <MudText Typo="Typo.h6" Align="Align.Left" GutterBottom="true"> @T["Comments"]</MudText>
 
         <MudButton OnClick="async () => await OpenDialog(null)" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 mb-2">

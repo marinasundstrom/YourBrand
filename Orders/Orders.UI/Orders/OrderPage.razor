@@ -16,7 +16,7 @@
 
     <MudGrid Class="mb-8">
         <MudItem xs="12" sm="6" md="3">
-            <MudCard>
+            <MudCard Elevation="25">
                 <MudCardContent>
                     <MudSelect T="OrderStatusDto" Class="mb-8" Label="Status" Value="orderStatus" ValueChanged="s => UpdateOrderStatus(s)" ToStringFunc="(ci) => ci.Name">
                         @foreach (var status in (orderStatuses ?? Array.Empty<OrderStatusDto>()))
@@ -39,7 +39,7 @@
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
-            <MudCard>
+            <MudCard Elevation="25">
                 <MudCardContent>
                     <MudField Label="Sub Total" Class="mb-8">@order.SubTotal?.ToString("c")</MudField>
 
@@ -56,7 +56,7 @@
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="6">
-            <MudCard>
+            <MudCard Elevation="25">
                 <MudCardContent>
                     <MudTable Items="@Totals" Context="total" Hover="true" Breakpoint="Breakpoint.Sm" Elevation="0">
                         <HeaderContent>
@@ -77,7 +77,7 @@
         </MudItem>
     </MudGrid>
 
-    <MudTable T="OrderItemVM" @ref="table" Class="mb-8"
+    <MudTable T="OrderItemVM" @ref="table" Class="mb-8" Elevation="25"
               Items="@Items" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" @bind-SelectedItem="selectedItem" S
               CanCancelEdit="true" SortLabel="Sort" CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
         <ToolBarContent>

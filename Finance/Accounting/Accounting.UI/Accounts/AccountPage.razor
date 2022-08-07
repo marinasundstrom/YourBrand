@@ -27,7 +27,7 @@
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
 
-    <MudTable ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="1" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Date</MudTh>
             <MudTh>Verification No</MudTh>

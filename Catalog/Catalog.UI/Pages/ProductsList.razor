@@ -14,7 +14,7 @@
 </MudButton>
 
 <MudTable T="ProductDto" ServerData="@(new Func<TableState, Task<TableData<ProductDto>>>(ServerReload))" Dense="true"
-    Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)">
+    Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" Elevation="25">
     @*<ToolBarContent>
         <MudText Typo="Typo.h6">Products</MudText>
         <MudSpacer />

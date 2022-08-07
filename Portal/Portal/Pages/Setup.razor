@@ -9,7 +9,7 @@
 <MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Set up</MudText>
 
 <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
-    <MudCard>
+    <MudCard Elevation="25">
         <MudCardContent>
             <EditForm Model="@this" OnValidSubmit="OnSubmit">
                 <MudTextField Label="Organization" Class="mb-6" HelperText="The name of your organization" @bind-Value="OrganizationName" Variant="Variant.Outlined"  For="() => OrganizationName" />

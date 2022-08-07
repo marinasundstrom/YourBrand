@@ -38,7 +38,7 @@
                 {
                     <MudItem xs="12" sm="6" md="4" lg="4">
                         <a href="/products/@product.Id">
-                            <MudCard>
+                            <MudCard Elevation="25">
                                 <MudCardMedia Image="@product.Image" Height="200" />
 
                                 <MudCardContent>
@@ -61,7 +61,7 @@
 
 @code
 {
-    int pageSize = 2;
+    int pageSize = 9;
     int pages = 0;
     int page = 1;
     MudChip chip;

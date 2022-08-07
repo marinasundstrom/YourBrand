@@ -15,7 +15,7 @@
                 </MudButton>
                 </div>
 
-<MudTable T="RotRutCaseDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
+<MudTable T="RotRutCaseDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
           Loading="@loading" LoadingProgressColor="Color.Info">
     <ToolBarContent>
         <MudSelect T="DomesticServiceKind?" Label="Kind" Value="kind" ValueChanged="OnSelectedKindChanged" Class="mt-0">

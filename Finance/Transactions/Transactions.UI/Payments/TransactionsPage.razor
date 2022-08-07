@@ -14,7 +14,7 @@
 
 <MudButton Variant="Variant.Filled" OnClick="NewTransaction" Class="mb-2">New transaction</MudButton>
 
-<MudTable T="TransactionDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="1" Breakpoint="Breakpoint.Sm"
+<MudTable T="TransactionDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateTransactionReference(e.Item)" >
      <ToolBarContent>
         <MudSpacer />

@@ -20,7 +20,7 @@
 
         <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
 
-        <MudPaper Elevation="1" Class="pa-4">
+        <MudPaper Elevation="25" Class="pa-4">
 
             <div class="mb-4">
                 <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">
@@ -154,7 +154,7 @@
                 <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
     }
 
-        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Model.Items" Hover="true" Elevation="1"
+        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Model.Items" Hover="true" Elevation="25"
               Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateInvoiceItem(e.Item)">
             <HeaderContent>
                 <MudTh>Description</MudTh>
@@ -198,7 +198,7 @@
     }
     else
     {
-                <MudPaper Elevation="1" Class="pa-4 mt-4">
+                <MudPaper Elevation="25" Class="pa-4 mt-4">
                     <MudText Typo="Typo.h6" GutterBottom="true" Class="mb-4">Rot & Rut</MudText>
 
                     <MudField Label="Kind">@invoice.DomesticService.Kind</MudField>

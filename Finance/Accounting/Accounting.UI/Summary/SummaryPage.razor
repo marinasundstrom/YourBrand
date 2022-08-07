@@ -10,7 +10,7 @@
 
 <MudText Class="mt-16" Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Accounts</MudText>
 
-<MudTable T="AccountClassSummaryItemViewModel" Class="mt-8 mb-16" Elevation="1" Items="accountClasses" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accountClasses is null)" LoadingProgressColor="Color.Info" OnRowClick="@(async (e) => await ToggleItem(e.Item.AccountClass.Id))">
+<MudTable T="AccountClassSummaryItemViewModel" Class="mt-8 mb-16" Elevation="25" Items="accountClasses" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accountClasses is null)" LoadingProgressColor="Color.Info" OnRowClick="@(async (e) => await ToggleItem(e.Item.AccountClass.Id))">
 
     <RowTemplate Context="context">
         <MudTd><MudIconButton Icon="@(context.IsExpanded ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)" OnClick="@(async () => await ToggleItem(context.AccountClass.Id))" /></MudTd>
@@ -25,7 +25,7 @@
             <MudTr>
 
                 <td colspan="4">
-                    <MudTable T="AccountDto" Elevation="1" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+                    <MudTable T="AccountDto" Elevation="25" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
                         <HeaderContent>
                             <MudTh></MudTh>
                             <MudTh colspan="2">Account</MudTh>

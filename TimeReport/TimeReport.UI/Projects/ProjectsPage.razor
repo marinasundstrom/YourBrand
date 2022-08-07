@@ -24,7 +24,7 @@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewProjectClicked">New project</MudButton>
 
 <MudTable T="ProjectDto" ServerData="@(new Func<TableState, Task<TableData<ProjectDto>>>(ServerReload))"
-          Hover="true" @ref="table" OnRowClick="(TableRowClickEventArgs<ProjectDto> project) => GotToProject(project.Item)" Class="mt-4 mb-4">
+          Hover="true" @ref="table" OnRowClick="(TableRowClickEventArgs<ProjectDto> project) => GotToProject(project.Item)" Class="mt-4 mb-4" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
@@ -54,7 +54,7 @@
     </PagerContent>
 </MudTable>
 
-<MudPaper Class="pa-16 ma-2">
+<MudPaper Class="pa-16 ma-2" Elevation="25">
     @if (data is not null)
     {
         <MudText Typo="Typo.h6" GutterBottom="true">Project hours per month</MudText>

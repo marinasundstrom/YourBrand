@@ -12,7 +12,7 @@
 
 <MudCheckBox Checked="includeUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnIncludeUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
 
-<MudTable T="AccountDto" Items="accounts" Elevation="1" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<AccountDto, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+<MudTable T="AccountDto" Items="accounts" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<AccountDto, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
     <ToolBarContent>
         @if (accountClasses is not null)
         {

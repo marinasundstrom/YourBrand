@@ -44,7 +44,7 @@ else
 
         <MudItem xs="12" sm="12" md="6" lg="6">
 
-            <MudCard class="mb-4">
+            <MudCard class="mb-4" Elevation="25">
                 <MudCardHeader>
                     <MudText Typo="Typo.h5" Align="Align.Center">Details</MudText>
                 </MudCardHeader>
@@ -84,7 +84,7 @@ else
 
     </MudGrid>
 
-    <MudPaper Elevation="8" Class="pa-4">
+    <MudPaper Elevation="25" Class="pa-4">
         <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility" ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)" ToStringFunc="x => x?.ToString()">
             @foreach (var item in VisibilityOptions)
             {
@@ -111,7 +111,7 @@ else
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-2 mt-6">@group.Key</MudText>
             }
 
-            <MudTable T="AttributeDto" Items="@group" Dense="true" Hover="true" @ref="table2" Class="mb-4">
+            <MudTable T="AttributeDto" Items="@group" Dense="true" Hover="true" @ref="table2" Class="mb-4" Elevation="25">
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>
@@ -158,7 +158,7 @@ else
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateVariant" StartIcon="@Icons.Material.Filled.Add">Create variant</MudButton>
 
                 <MudTable T="ProductVariantDto" @ref="table3" ServerData="ServerReload"
-                          Dense="true" Hover="true" Class="mb-4">
+                          Dense="true" Hover="true" Class="mb-4" Elevation="25">
 
                     <HeaderContent>
                         <MudTh>Image</MudTh>
@@ -237,7 +237,7 @@ else
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mb-2 mt-6">@group.Key</MudText>
             }
 
-            <MudTable T="OptionDto" Items="@group" Dense="true" Hover="true" @ref="table" Class="mb-4">
+            <MudTable T="OptionDto" Items="@group" Dense="true" Hover="true" @ref="table" Class="mb-4" Elevation="25">
 
                 <HeaderContent>
                     <MudTh>Name</MudTh>

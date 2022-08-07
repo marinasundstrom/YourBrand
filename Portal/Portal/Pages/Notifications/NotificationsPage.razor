@@ -10,7 +10,7 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Notifications"]</MudText>
 
-<MudTable T="NotificationDto" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<NotificationDto>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+<MudTable T="NotificationDto" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<NotificationDto>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
         <MudTh></MudTh>
         <MudTh><MudTableSortLabel T="NotificationDto" SortLabel="Title">@T["Header_Title"]</MudTableSortLabel></MudTh>

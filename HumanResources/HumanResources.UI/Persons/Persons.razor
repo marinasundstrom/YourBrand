@@ -12,7 +12,7 @@
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewPersonClicked">New Person</MudButton>
 
 <MudTable T="PersonDto" ServerData="@(new Func<TableState, Task<TableData<PersonDto>>>(ServerReload))"
-          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToPerson(e.Item)">
+          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToPerson(e.Item)" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"

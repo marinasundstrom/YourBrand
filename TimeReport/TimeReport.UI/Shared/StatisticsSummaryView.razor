@@ -2,7 +2,7 @@
     @foreach (var entry in Entries)
     {
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Class="px-4 py-4">
+            <MudPaper Class="px-4 py-4" Elevation="25">
                 <MudText Typo="Typo.h6" Class="mb-2">@entry.Name</MudText>
                 <MudText Typo="Typo.h4">
                     @if (entry.Value2 is not null)

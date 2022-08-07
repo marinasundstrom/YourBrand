@@ -11,7 +11,7 @@
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">New Verification</MudText>
 
     <EditForm Model="@formModel" OnValidSubmit="OnValidSubmit">
-        <MudPaper Elevation="2" Class="pa-4">
+        <MudPaper Elevation="25" Class="pa-4">
 
         <ObjectGraphDataAnnotationsValidator />
 
@@ -19,7 +19,7 @@
             StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
 
         <MudTable @ref="table" Items="@formModel.Entries" Dense="false" Hover="@true" ReadOnly="@false"
-            CanCancelEdit="@true" SortLabel="Sort By" CommitEditTooltip="Commit Edit" Elevation="1"
+            CanCancelEdit="@true" SortLabel="Sort By" CommitEditTooltip="Commit Edit" Elevation="25"
             OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem"
             RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
             <ToolBarContent>
@@ -89,7 +89,7 @@
 
     </MudPaper>
 
-    <MudPaper Elevation="2" Class="mt-4 py-4 px-4">
+    <MudPaper Elevation="25" Class="mt-4 py-4 px-4">
         <MudText Typo="Typo.h6" Class="mb-4">Document</MudText>
         <MudPaper @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="300px" Outlined="true" Class="@DragClass">
             @if (!Clearing)
@@ -110,7 +110,7 @@
         </MudToolBar>
     </MudPaper>
 
-    <MudPaper Class="mt-4 py-4 px-4">
+    <MudPaper Class="mt-4 py-4 px-4" Elevation="25">
         <MudText Color="@Color.Error">
             <ValidationSummary />
         </MudText>

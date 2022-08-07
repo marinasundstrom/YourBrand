@@ -23,7 +23,7 @@
         }
     </MudSelect>
 
-    <MudTable @ref="table" Items="@formModel.Entries" Elevation="1" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By" RowEditCommit="ItemHasBeenCommitted">
+    <MudTable @ref="table" Items="@formModel.Entries" Elevation="25" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By" RowEditCommit="ItemHasBeenCommitted">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Entries</MudText>
             <MudSpacer />
@@ -95,7 +95,7 @@
 
     *@
 
-    <MudPaper Class="mt-4 py-4 px-4">
+    <MudPaper Class="mt-4 py-4 px-4" Elevation="25">
         <MudText Typo="Typo.h6" Class="mb-4">Document</MudText>
 
         <InputFile id="fileInput112" OnChange="UploadFile" hidden multiple accept=".jpg, .jpeg, .png, .pdf, .docx, .doc" />

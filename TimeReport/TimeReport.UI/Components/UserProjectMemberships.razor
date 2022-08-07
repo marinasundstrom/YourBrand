@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 
 <MudTable T="ProjectMembershipDto" ServerData="@(new Func<TableState, Task<TableData<ProjectMembershipDto>>>(ServerReload2))"
-            Hover="true" @ref="table2" Class="mt-4" OnRowClick="(e) => GotToProject(e.Item)">
+            Hover="true" @ref="table2" Class="mt-4" OnRowClick="(e) => GotToProject(e.Item)" Elevation="25">
     <HeaderContent>
         <MudTh><MudTableSortLabel T="ProjectMembershipDto" SortLabel="Project.Name">Project</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="ProjectMembershipDto" SortLabel="Project.Description">Description</MudTableSortLabel></MudTh>

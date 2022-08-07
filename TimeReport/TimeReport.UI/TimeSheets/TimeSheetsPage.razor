@@ -11,7 +11,7 @@
 
 @* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTimeSheetClicked">New TimeSheet</MudButton> *@
 
-<MudTable T="TimeSheetDto" ServerData="@(new Func<TableState, Task<TableData<TimeSheetDto>>>(ServerReload))"
+<MudTable T="TimeSheetDto" ServerData="@(new Func<TableState, Task<TableData<TimeSheetDto>>>(ServerReload))" Elevation="25"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTimeSheet(e.Item)" GroupBy="@_groupDefinition">
     <ToolBarContent>
         <MudAutocomplete T="UserDto" Label="User" Variant="Variant.Text" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"

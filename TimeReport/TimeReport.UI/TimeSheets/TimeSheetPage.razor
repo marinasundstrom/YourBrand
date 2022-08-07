@@ -34,7 +34,7 @@
         <ObjectGraphDataAnnotationsValidator />
 
         <MudTable T="ActivityModel" Items="ActivitiesModels" Hover="true" Loading="@isLoading"
-                  GroupBy="@_groupDefinition">
+                  GroupBy="@_groupDefinition" Elevation="25">
 
             <ToolBarContent>
                 <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatusDto.Open">New activity</MudButton>
