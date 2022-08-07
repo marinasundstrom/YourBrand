@@ -26,6 +26,11 @@
             @if(Product.HasVariants) 
             {
                 <MudCheckBox Label="For variant" Class="mb-6" @bind-Checked="ForVariant" For="() => ForVariant" />
+
+                @if(ForVariant) 
+                {
+                    <MudCheckBox Label="Is main attribute" Class="mb-6" @bind-Checked="IsMainAttribute" For="() => IsMainAttribute" />
+                }   
             }
 
                 <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
@@ -91,6 +96,8 @@
 
     public bool ForVariant { get; set; }
 
+    public bool IsMainAttribute { get; set; }
+
     [ValidateComplexType]
     public List<AttributeValueVM> Values { get; set; } = new List<AttributeValueVM>();
 
@@ -102,6 +109,7 @@
         Description = Attribute.Description;
         Group = Groups.FirstOrDefault(x => x?.Id == Attribute.Group?.Id);
         ForVariant = Attribute.ForVariant;
+        IsMainAttribute = Attribute.IsMainAttribute;
 
         foreach (var value in Attribute.Values)
         {
@@ -142,6 +150,7 @@
             Description = Description,
             GroupId = Group?.Id,
             ForVariant = ForVariant,
+            IsMainAttribute = IsMainAttribute,
             Values = Values.Select(x => new ApiUpdateProductAttributeValue()
             {
                 Id = x.Id,

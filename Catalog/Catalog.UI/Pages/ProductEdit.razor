@@ -116,6 +116,7 @@ else
                 <HeaderContent>
                     <MudTh>Name</MudTh>
                     <MudTh>For Variant</MudTh>
+                    <MudTh>Is main attribute</MudTh>
                     <MudTh>Values</MudTh>
                     @* <MudTh>Default value</MudTh> *@
                     <MudTh></MudTh>
@@ -124,6 +125,7 @@ else
                 <RowTemplate Context="attribute">
                     <MudTd DataLabel="Name">@(attribute.Name)</MudTd>
                     <MudTd DataLabel="For Variant">@(attribute.ForVariant)</MudTd>
+                    <MudTd DataLabel="Is main attribute">@(attribute.IsMainAttribute)</MudTd>
                     <MudTd DataLabel="Values">@string.Join(", ", attribute.Values.Select(x => x.Name))</MudTd>
                     @* <MudTd DataLabel="Default value">@attribute.DefaultValue?.Name</MudTd> *@
                     <MudTd>
@@ -155,7 +157,9 @@ else
         }
         else
         {
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateVariant" StartIcon="@Icons.Material.Filled.Add">Create variant</MudButton>
+            <div class="mb-4">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateVariant" StartIcon="@Icons.Material.Filled.Add">Create variant</MudButton>
+            </div>
 
                 <MudTable T="ProductVariantDto" @ref="table3" ServerData="ServerReload"
                           Dense="true" Hover="true" Class="mb-4" Elevation="25">
