@@ -34,16 +34,9 @@ public record UploadProductImage(string ProductId, string FileName, Stream Strea
 
             var blobId = $"{product.Id}:{request.FileName}";
 
-            var response = await blobContainerClient.UploadBlobAsync(blobId, request.Stream);
+            await blobContainerClient.DeleteBlobIfExistsAsync(blobId);
 
-            if (product.Image is not null)
-            {
-                try 
-                {
-                    await blobContainerClient.DeleteBlobAsync(product.Image);
-                }
-                catch (Exception) {}
-            }
+            var response = await blobContainerClient.UploadBlobAsync(blobId, request.Stream);
 
             product.Image = blobId;
 
