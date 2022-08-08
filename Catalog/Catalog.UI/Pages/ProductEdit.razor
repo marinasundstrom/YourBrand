@@ -3,6 +3,7 @@
 @inject IProductsClient ProductsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@using System.ComponentModel.DataAnnotations
 
 <PageTitle>Product</PageTitle>
 
@@ -53,48 +54,46 @@ else
                     <MudText Typo="Typo.h5" Align="Align.Center">Details</MudText>
                 </MudCardHeader>
                 <MudCardContent>
-                    <dl>
-                        @if (!string.IsNullOrEmpty(product.Description))
-                        {
-                            <dt>Description</dt>
-                            <dd>@product.Description</dd>
-                        }
+                    <EditForm Model="@this" OnValidSubmit="OnDetailsFormSubmit">
+                        <DataAnnotationsValidator />
 
-                        @if (product.Group is not null)
-                        {
-                            <dt>Group</dt>
-                            <dd>@product.Group.Name</dd>
-                        }
+                                <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
-                        @if (!string.IsNullOrEmpty(product.Sku))
-                        {
-                            <dt>SKU</dt>
-                            <dd>@product.Sku</dd>
-                        }
+                                <MudTextField Lines="3" Class="mb-6" Label="Description" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
-                        @if (product.Price is not null)
-                        {
-                            <dt>Price</dt>
-                            <dd>@product.Price?.ToString("c")</dd>
-                        }
-                    </dl>
+                                @if (Groups is not null)
+                                {
+                                    <MudSelect T="ProductGroupDto" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group" ToStringFunc="x => x?.Name"
+                                               For="() => Group">
+                                        @foreach (var item in Groups)
+                                        {
+                                            <MudSelectItem Value="@item" />
+                                        }
+                                    </MudSelect>
+                                }
 
-                    <MudButton StartIcon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="EditDetails"
-                    Class="my-2">Edit details</MudButton>
+                                @if (!product.HasVariants)
+                                {
+                                    <MudTextField Label="SKU" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SKU" For="() => SKU" />
 
-                </MudCardContent>
+                                    <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price" For="() => Price" />
+                                }
+
+       
+                                <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Save</MudButton>
+                        </EditForm>
+
+                        <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility"
+                                   ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)"
+                                   ToStringFunc="x => x?.ToString()" Class="mt-8">
+                            @foreach (var item in VisibilityOptions)
+                            {
+                                <MudSelectItem Value="@item" />
+                            }
+                        </MudSelect>
+
+</MudCardContent>
             </MudCard>
-
-            <MudPaper Elevation="25" Class="pa-4 mt-2">
-                <MudSelect T="ProductVisibility?" Label="Visibility" Variant="Variant.Outlined" Value="@product.Visibility"
-                ValueChanged="async (e) => await UpdateVisibility((ProductVisibility?)e)"
-                ToStringFunc="x => x?.ToString()">
-                    @foreach (var item in VisibilityOptions)
-                    {
-                        <MudSelectItem Value="@item" />
-                    }
-                </MudSelect>
-            </MudPaper>
 
         </MudItem>
 
@@ -320,6 +319,16 @@ else
         product = await ProductsClient.GetProductAsync(ProductId);
         attributes = (await ProductsClient.GetProductAttributesAsync(ProductId)).ToList();
         options = (await ProductsClient.GetProductOptionsAsync(ProductId, null)).ToList();
+
+        var groups = await ProductsClient.GetProductGroupsAsync(true);
+        Groups = groups.ToList();
+
+        Name = product.Name;
+        Description = product.Description;
+        SKU = product.Sku;
+        Price = product.Price;
+
+        Group = groups.FirstOrDefault(x => x.Id == product.Group?.Id);
     }
 
     private async Task<TableData<ProductVariantDto>> ServerReload(TableState state)
@@ -420,30 +429,6 @@ else
         await table3.ReloadServerData();
     }
 
-    async Task EditDetails()
-    {
-        DialogParameters parameters = new();
-        parameters.Add(nameof(UpdateProductDetailsModal.ProductId), ProductId);
-        parameters.Add(nameof(UpdateProductDetailsModal.Product), product);
-
-        var modalRef = DialogService.Show<UpdateProductDetailsModal>("Update Details", parameters);
-
-        var result = await modalRef.Result;
-
-        if (result.Cancelled) return;
-
-        product = await ProductsClient.GetProductAsync(ProductId);
-
-        /*
-        product.Name = data.Name;
-        product.Description = data.Description;
-        product.Sku = data.Sku;
-        product.Price = data.Price;
-        product.Group = data.GroupId;
-        */
-
-        //NavigationManager.NavigateTo($"/products/{product.Id}/edit", true);
-    }
 
     private async void UploadFiles(InputFileChangeEventArgs e)
     {
@@ -523,4 +508,41 @@ else
         System.Reflection.BindingFlags.Instance)?
         .GetValue(table3);
     }
+
+    async Task OnDetailsFormSubmit()
+    {
+        try
+        {
+            ApiUpdateProductDetails data = new()
+            {
+                Name = Name,
+                Description = Description,
+                GroupId = Group.Id,
+                Sku = SKU,
+                Price = Price
+            };
+            await ProductsClient.UpdateProductDetailsAsync(ProductId, data);
+
+            product = await ProductsClient.GetProductAsync(ProductId);
+
+            Snackbar.Add("Details updated", Severity.Info);
+        }
+        catch(Exception e)
+        {
+            Snackbar.Add("Failed to update details", Severity.Error);
+        }
+    }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    public ProductGroupDto Group { get; set; }
+
+    public string? SKU { get; set; }
+
+    public decimal? Price { get; set; }
+
+    public IList<ProductGroupDto> Groups { get; set; }
 }
