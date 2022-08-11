@@ -14,6 +14,7 @@ using YourBrand.Showroom.Application.ConsultantProfiles.Experiences.Queries;
 using YourBrand.Showroom.Application.ConsultantProfiles.Queries;
 using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Commands;
 using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
+using YourBrand.Showroom.Domain.Enums;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
@@ -125,15 +126,21 @@ public class ConsultantsController : ControllerBase
     }
 
     [HttpGet("{id}/Skills/{skillId}")]
-    public async Task<ConsultantProfileSkillDto?> GetSkill(string id, string skillId, CancellationToken cancellationToken)
+    public async Task<ConsultantProfileSkillExperiencesDto?> GetSkill(string id, string skillId, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetSkillQuery(skillId), cancellationToken);
+        return await _mediator.Send(new GetSkillExperiencesQuery(id, skillId), cancellationToken);
+    }
+
+    [HttpPost("{id}/Skills/{skillId}/Experiences")]
+    public async Task UpdateSkillExperiences(string id, string skillId, [FromBody] IEnumerable<UpdateSkillExperienceDto> experiences, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UpdateSkillExperiencesCommand(id, skillId, experiences), cancellationToken);
     }
 
     [HttpPost("{id}/Skills")]
-    public async Task AddSkill(string id, AddConsultantProfileSkillDto dto, CancellationToken cancellationToken)
+    public async Task<ConsultantProfileSkillDto> AddSkill(string id, AddConsultantProfileSkillDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(
+        return await _mediator.Send(
             new AddSkillCommand(id, dto.SkillId),
             cancellationToken);
     }
@@ -142,7 +149,7 @@ public class ConsultantsController : ControllerBase
     public async Task UpdateSkill(string id, string skillId, UpdateConsultantProfileSkillDto dto, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            new UpdateSkillCommand(skillId, string.Empty),
+            new UpdateSkillCommand(skillId, dto.Level, dto.Comment),
             cancellationToken);
     }
 
@@ -155,4 +162,4 @@ public class ConsultantsController : ControllerBase
 
 public record AddConsultantProfileSkillDto(string SkillId);
 
-public record UpdateConsultantProfileSkillDto(string SkillId);
+public record UpdateConsultantProfileSkillDto(string SkillId, SkillLevel Level, string? Comment);

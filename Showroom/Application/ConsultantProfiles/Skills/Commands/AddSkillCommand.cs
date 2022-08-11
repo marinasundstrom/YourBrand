@@ -1,13 +1,15 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Commands;
 
-public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IRequest
+public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IRequest<ConsultantProfileSkillDto>
 {
-    public class AddSkillCommandHandler : IRequestHandler<AddSkillCommand>
+    public class AddSkillCommandHandler : IRequestHandler<AddSkillCommand, ConsultantProfileSkillDto>
     {
         private readonly IShowroomContext context;
 
@@ -16,7 +18,7 @@ public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IReq
             this.context = context;
         }
 
-        public async Task<Unit> Handle(AddSkillCommand request, CancellationToken cancellationToken)
+        public async Task<ConsultantProfileSkillDto> Handle(AddSkillCommand request, CancellationToken cancellationToken)
         {
             var consultantProfile = await context.ConsultantProfiles
                 .FirstOrDefaultAsync(i => i.Id == request.ConsultantProfileId, cancellationToken);
@@ -46,7 +48,14 @@ public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IReq
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            consultantProfileSkill = await context
+               .ConsultantProfileSkills
+               .Include(x => x.Skill)
+               .ThenInclude(x => x.Area)
+               .AsNoTracking()
+               .FirstAsync(c => c.Id == request.SkillId, cancellationToken);
+
+            return consultantProfileSkill.ToDto();
         }
     }
 }

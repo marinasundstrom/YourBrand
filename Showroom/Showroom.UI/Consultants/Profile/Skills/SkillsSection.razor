@@ -1,6 +1,7 @@
 ﻿@inject IConsultantsClient ConsultantsClient
 @inject ISkillsClient SkillsClient
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService 
 
 <MudCard Elevation="25">
     <MudCardContent>
@@ -45,16 +46,16 @@
                     {
                         @if (IsEditing)
                         {
-                            <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Name</MudChip>
+                            <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Skill.Name</MudChip>
                         }
                         else
                         {
                             <MudTooltip>
                                 <ChildContent>
-                                    <MudChip Size="Size.Medium">@skill.Name</MudChip>
+                                    <MudChip Size="Size.Medium" OnClick="async () => await OnSkillClicked(skill)">@skill.Skill.Name</MudChip>
                                 </ChildContent>
                                 <TooltipContent>
-                                    <MudText Typo="Typo.h6">@skill.Name</MudText>
+                                    <MudText Typo="Typo.h6">@skill.Skill.Name</MudText>
                                 </TooltipContent>
                             </MudTooltip>
                         }
@@ -82,34 +83,34 @@
         var skills = await ConsultantsClient.GetSkillsAsync(ConsultantProfileId, 1, 150, null, null, null);
 
         foreach(var skill in skills.Items)
-        {          
+        {
             var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == skill.Skill.Area.Id);
-            if(skillGroup is null) 
+            if(skillGroup is null)
             {
                 skillGroup = new SkillArea() {
                     Id = skill.Skill.Area.Id,
                     Name = skill.Skill.Area.Name
                 };
-                
+
                 SkillAreas.Add(skillGroup);
 
                 SkillAreas = SkillAreas.OrderBy(x => x.Name).ToList();
             }
 
-            skillGroup.Skills.Add(new SkillDto() { Id = skill.Skill.Id, Name = skill.Skill.Name });
+            skillGroup.Skills.Add(skill);
         }
     }
 
-    async Task AddSkill() 
+    async Task AddSkill()
     {
         var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == Skill.Area.Id);
-        if(skillGroup is null) 
+        if(skillGroup is null)
         {
             skillGroup = new SkillArea() {
-              Id = Skill.Area.Id,
-              Name = Skill.Area.Name 
+                Id = Skill.Area.Id,
+                Name = Skill.Area.Name
             };
-            
+
             SkillAreas.Add(skillGroup);
 
             SkillAreas = SkillAreas.OrderBy(x => x.Name).ToList();
@@ -117,24 +118,24 @@
 
         var skill = skillGroup.Skills.FirstOrDefault(x => x.Id == Skill.Id);
 
-        if(skill is not null) 
+        if(skill is not null)
         {
-            Snackbar.Add($"The skill \"{skill.Name}\" has already been added.", Severity.Error);
+            Snackbar.Add($"The skill \"{skill.Skill.Name}\" has already been added.", Severity.Error);
 
             Skill = null;
             return;
         }
 
-        await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto() { SkillId = Skill.Id });
+        var cpsk = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto() { SkillId = Skill.Id });
 
-        skillGroup.Skills.Add(new SkillDto() { Id = Skill.Id, Name = Skill.Name });
+        skillGroup.Skills.Add(cpsk);
 
         Skill = null;
     }
 
-    async Task RemoveSkill(SkillArea skillGroup, SkillDto skill)
+    async Task RemoveSkill(SkillArea skillGroup, ConsultantProfileSkillDto skill)
     {
-        await ConsultantsClient.RemoveSkillAsync(ConsultantProfileId, skill.Id);
+        await ConsultantsClient.RemoveSkillAsync(ConsultantProfileId, skill.Skill.Id);
 
         skillGroup.Skills.Remove(skill);
 
@@ -152,8 +153,9 @@
 
         public string Name { get; set; } = null!;
 
-        public List<SkillDto> Skills  { get; set; } = new List<SkillDto>();
+        public List<ConsultantProfileSkillDto> Skills  { get; set; } = new List<ConsultantProfileSkillDto>();
     }
+
 
     async Task<IEnumerable<SkillDto>> SearchSkills(string text)
     {
@@ -168,5 +170,22 @@
         }
 
         return null;
+    }
+
+    async Task OnSkillClicked(ConsultantProfileSkillDto dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(UpdateSkillDialog.ConsultantProfileId), ConsultantProfileId);
+            parameters.Add(nameof(UpdateSkillDialog.ConsultantProfileSkillId), dto.Id);
+
+            var dialogReference = DialogService.Show<UpdateSkillDialog>($"Update {dto.Skill.Name}", parameters);
+            var result = await dialogReference.Result;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 }

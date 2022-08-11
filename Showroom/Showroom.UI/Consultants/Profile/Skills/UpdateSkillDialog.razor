@@ -1,0 +1,114 @@
+@using System.ComponentModel.DataAnnotations
+@inject IConsultantsClient ConsultantsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 300px; overflow-y: scroll">
+                <MudSelect Label="Skill Level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
+                           For="@(() => SkillLevel)">
+                    <MudSelectItem Value="@((SkillLevel?)null)">Unspecified</MudSelectItem>
+                    @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
+                    {
+                        <MudSelectItem T="SkillLevel?" Value="@skillLevel">@skillLevel</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudTextField Label="Comment" Lines="5" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Comment"
+                              For="@(() => Comment)" />
+
+                <MudText Typo="Typo.h6" Class="mt-4">Experience</MudText>
+
+                @foreach (var experience in experiences)
+                {
+                    <MudCheckBox @bind-Checked="experience.Checked">@experience.Title at @experience.CompanyName</MudCheckBox>
+                }
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Save changes</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+    List<ExperienceVM> experiences = new List<ExperienceVM>();
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string ConsultantProfileId { get; set; } = null!;
+
+    [Parameter]
+    public string? ConsultantProfileSkillId { get; set; } = null!;
+
+    public SkillLevel? SkillLevel { get; set; }
+
+    public string? Comment { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        var skill = await ConsultantsClient.GetSkillAsync(ConsultantProfileId, ConsultantProfileSkillId);
+        SkillLevel = skill.Level;
+        Comment = skill.Comment;
+        var selectedExperiences = skill.Experiences;
+
+        var experiences2 = (await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 120, null, null, null)).Items;
+
+        foreach (var experience in experiences2)
+        {
+            var v = selectedExperiences.Any(x => x.Id == experience.Id);
+
+            experiences.Add(new ExperienceVM
+            {
+                Id = experience.Id,
+                CompanyName = experience.CompanyName,
+                Title = experience.Title,
+                Checked = v
+            });
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if (context.IsModified())
+        {
+            await ConsultantsClient.UpdateSkillAsync(ConsultantProfileId, ConsultantProfileSkillId, new UpdateConsultantProfileSkillDto
+            {
+                SkillId = ConsultantProfileSkillId,
+                Level = SkillLevel.GetValueOrDefault(),
+                Comment = Comment
+            });
+        }
+
+       await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, ConsultantProfileSkillId,
+       experiences.Select(x => new UpdateSkillExperienceDto()
+       {
+           ConsultantProfileExperienceId = x.Id,
+           Checked = x.Checked
+       }));
+
+        Dialog.Close(DialogResult.Ok(true));
+    }
+
+    public class ExperienceVM
+    {
+        public string Id { get; set; }
+
+        public string CompanyName { get; set; }
+
+        public string Title { get; set; }
+
+        public bool Checked { get; set; }
+    }
+}

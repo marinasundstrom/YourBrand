@@ -2,10 +2,11 @@
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Enums;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Commands;
 
-public record UpdateSkillCommand(string Id, string Name) : IRequest
+public record UpdateSkillCommand(string Id, SkillLevel Level, string? Comment) : IRequest
 {
     public class UpdateSkillCommandHandler : IRequestHandler<UpdateSkillCommand>
     {
@@ -18,11 +19,12 @@ public record UpdateSkillCommand(string Id, string Name) : IRequest
 
         public async Task<Unit> Handle(UpdateSkillCommand request, CancellationToken cancellationToken)
         {
-            var skill = await context.ConsultantProfileSkills.FirstOrDefaultAsync(i => i.SkillId == request.Id, cancellationToken);
+            var skill = await context.ConsultantProfileSkills.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (skill is null) throw new Exception();
 
-            //skill.Name = request.Name;
+            skill.Level = request.Level;
+            skill.Comment = request.Comment;
 
             await context.SaveChangesAsync(cancellationToken);
 

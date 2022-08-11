@@ -1267,7 +1267,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultantProfileSkillDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1311,7 +1318,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConsultantProfileSkillDto"
+                  "$ref": "#/components/schemas/ConsultantProfileSkillExperiencesDto"
                 }
               }
             }
@@ -1400,6 +1407,61 @@
             "x-position": 2
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/Consultants/{id}/Skills/{skillId}/Experiences": {
+      "post": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_UpdateSkillExperiences",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "skillId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "experiences",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UpdateSkillExperienceDto"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
         "responses": {
           "200": {
             "description": ""
@@ -2451,6 +2513,9 @@
           "id": {
             "type": "string"
           },
+          "employerName": {
+            "type": "string"
+          },
           "title": {
             "type": "string"
           },
@@ -2696,6 +2761,80 @@
           }
         }
       },
+      "ConsultantProfileSkillExperiencesDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "skill": {
+            "$ref": "#/components/schemas/SkillDto"
+          },
+          "level": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SkillLevel"
+              }
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LinkDto"
+              }
+            ]
+          },
+          "experiences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkillExperienceDto"
+            }
+          }
+        }
+      },
+      "SkillExperienceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateSkillExperienceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "consultantProfileExperienceId": {
+            "type": "string"
+          },
+          "checked": {
+            "type": "boolean"
+          }
+        }
+      },
       "AddConsultantProfileSkillDto": {
         "type": "object",
         "additionalProperties": false,
@@ -2711,6 +2850,13 @@
         "properties": {
           "skillId": {
             "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/SkillLevel"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
