@@ -107,6 +107,13 @@
                 "Title": "Website",
                 "Href": "https://nodejs.org/"
             }
+        },
+        "Microsoft Azure": {
+            "Level": 2,
+            "Link": {
+                "Title": "Website",
+                "Href": "https://www.azure.com/"
+            }
         }
     },
     "Frameworks": {

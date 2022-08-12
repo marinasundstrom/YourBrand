@@ -17,6 +17,8 @@
         {
             <div class="d-flex flex-grow-1 gap-4 mb-4">
 
+                @*
+
                 <MudAutocomplete T="SkillDto" Label="Find skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
                     For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name">
                     <ItemTemplate Context="context2">
@@ -27,9 +29,9 @@
                     <ItemSelectedTemplate Context="context2">
                         <MudText Typo="Typo.body1">@context2.Name</MudText>
                     </ItemSelectedTemplate>
-                </MudAutocomplete>
+                </MudAutocomplete> *@
 
-                <MudIconButton Icon="@Icons.Filled.Add" Disabled="@(Skill is null)" OnClick="AddSkill" />
+                <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddSkillClicked" />
 
             </div>
         }
@@ -181,6 +183,22 @@
             parameters.Add(nameof(UpdateSkillDialog.ConsultantProfileSkillId), dto.Id);
 
             var dialogReference = DialogService.Show<UpdateSkillDialog>($"Update {dto.Skill.Name}", parameters);
+            var result = await dialogReference.Result;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task AddSkillClicked()
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(AddSkillDialog.ConsultantProfileId), ConsultantProfileId);
+
+            var dialogReference = DialogService.Show<AddSkillDialog>("Add new skill", parameters);
             var result = await dialogReference.Result;
         }
         catch (AccessTokenNotAvailableException exception)

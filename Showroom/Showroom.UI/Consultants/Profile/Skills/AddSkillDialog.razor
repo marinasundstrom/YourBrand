@@ -1,14 +1,27 @@
 @using System.ComponentModel.DataAnnotations
 @inject IConsultantsClient ConsultantsClient
 @inject ISnackbar Snackbar
+@inject ISkillsClient SkillsClient
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 300px; overflow-y: scroll">
-                <MudSelect Label="Skill Level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
-                           For="@(() => SkillLevel)">
+                <MudAutocomplete T="SkillDto" Label="Skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
+                For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+
+                <MudSelect Label="Skill level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
+                           For="@(() => SkillLevel)" Class="mt-4">
                     <MudSelectItem Value="@((SkillLevel?)null)">Unspecified</MudSelectItem>
                     @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
                     {
@@ -30,7 +43,7 @@
 
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Save changes</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Add</MudButton>
         </DialogActions>
     </MudDialog>
 
@@ -47,8 +60,8 @@
     [Parameter]
     public string ConsultantProfileId { get; set; } = null!;
 
-    [Parameter]
-    public string? ConsultantProfileSkillId { get; set; } = null!;
+    [Required]
+    public SkillDto Skill { get; set; } = null!;
 
     public SkillLevel? SkillLevel { get; set; }
 
@@ -58,48 +71,37 @@
     {
         context = new EditContext(this);
 
-        var skill = await ConsultantsClient.GetSkillAsync(ConsultantProfileId, ConsultantProfileSkillId);
-        SkillLevel = skill.Level;
-        Comment = skill.Comment;
-        var selectedExperiences = skill.Experiences;
-
         var experiences2 = (await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 120, null, null, null)).Items;
 
         foreach (var experience in experiences2)
         {
-            var v = selectedExperiences.Any(x => x.Id == experience.Id);
-
             experiences.Add(new ExperienceVM
             {
                 Id = experience.Id,
                 CompanyName = experience.CompanyName,
                 Title = experience.Title,
-                OriginalChecked = v,
-                Checked = v
+                Checked = false
             });
         }
     }
 
     public async Task OnValidSubmit()
     {
-        if (context.IsModified())
+        var consultantProfileSkill = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto
         {
-            await ConsultantsClient.UpdateSkillAsync(ConsultantProfileId, ConsultantProfileSkillId, new UpdateConsultantProfileSkillDto
-            {
-                Level = SkillLevel.GetValueOrDefault(),
-                Comment = Comment
-            });
-        }
+            SkillId = Skill.Id,
+            Level = SkillLevel.GetValueOrDefault(),
+            Comment = Comment
+        });
 
         var dtos = experiences
-            .Where(x => x.Checked != x.OriginalChecked)
             .Select(x => new UpdateSkillExperienceDto()
             {
                 ConsultantProfileExperienceId = x.Id,
                 Checked = x.Checked
             });
 
-        await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, ConsultantProfileSkillId, dtos);
+        await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, consultantProfileSkill.Id, dtos);
 
         Dialog.Close(DialogResult.Ok(true));
     }
@@ -112,8 +114,22 @@
 
         public string Title { get; set; }
 
-        public bool OriginalChecked { get; set; }
-
         public bool Checked { get; set; }
     }
+
+    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
+    {
+        try
+        {
+            var results = await SkillsClient.GetSkillsAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
 }

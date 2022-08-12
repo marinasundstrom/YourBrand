@@ -12,7 +12,16 @@
             "startDate": "2022-04-20",
             "endDate": null,
             "description": "Digitalizing housing cooperative business. Focus on backend.",
-            "skills": ["Software development", "C#", ".NET", "Microsoft Azure", "Microservices", "ASP.NET Core", "MassTransit"]
+            "skills": [
+                "Software development",
+                "Agile software development",
+                "C#",
+                ".NET",
+                "Microsoft Azure",
+                "Microservices",
+                "ASP.NET Core",
+                "MassTransit"
+            ]
         },
         {
             "title": "Software Developer",
@@ -27,7 +36,9 @@
             "startDate": "2022-04-04",
             "endDate": null,
             "description": "Consulting as part of Nexer Group (previously Sigma IT Consulting) in the Malmö area.",
-            "skills": [ "Software development" ]
+            "skills": [
+                "Software development"
+            ]
         },
         {
             "title": ".NET Developer",
@@ -61,7 +72,9 @@
             "startDate": "2021-12-16",
             "endDate": "2022-04-04",
             "description": "Consulting as part of Skymill",
-            "skills": [ "Software development" ]
+            "skills": [
+                "Software development"
+            ]
         },
         {
             "title": "Senior Software Developer",
@@ -123,7 +136,9 @@
             "startDate": "2018-04-01",
             "endDate": "2020-05-01",
             "description": "Consulting work as part of ESSIQ Syd",
-            "skills": [ "Software development" ]
+            "skills": [
+                "Software development"
+            ]
         },
         {
             "title": ".NET Senior Expert",
@@ -199,7 +214,9 @@
             "startDate": "2016-05-01",
             "endDate": "2018-04-01",
             "description": "Consulting for various companies. Primarily in .NET and JavaScript.\n\nTedsys AB is part of the Tedkomp Group, providing consulting services in the areas of IT, industrial services, and business administration.",
-            "skills": [ "Software development" ]
+            "skills": [
+                "Software development"
+            ]
         },
         {
             "title": "Software Developer Consultant",
@@ -404,7 +421,7 @@
                 "Computer Management",
                 "Computer Networking",
                 "Programming",
-                "Project and Entrepreneurship", 
+                "Project and Entrepreneurship",
                 "Web Design",
                 "Windows Server",
                 "Linux",

@@ -141,7 +141,7 @@ public class ConsultantsController : ControllerBase
     public async Task<ConsultantProfileSkillDto> AddSkill(string id, AddConsultantProfileSkillDto dto, CancellationToken cancellationToken)
     {
         return await _mediator.Send(
-            new AddSkillCommand(id, dto.SkillId),
+            new AddSkillCommand(id, dto.SkillId, dto.Level, dto.Comment),
             cancellationToken);
     }
 
@@ -160,6 +160,6 @@ public class ConsultantsController : ControllerBase
     }
 }
 
-public record AddConsultantProfileSkillDto(string SkillId);
+public record AddConsultantProfileSkillDto(string SkillId, SkillLevel Level, string? Comment);
 
-public record UpdateConsultantProfileSkillDto(string SkillId, SkillLevel Level, string? Comment);
+public record UpdateConsultantProfileSkillDto(SkillLevel Level, string? Comment);

@@ -2841,6 +2841,13 @@
         "properties": {
           "skillId": {
             "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/SkillLevel"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -2848,9 +2855,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "skillId": {
-            "type": "string"
-          },
           "level": {
             "$ref": "#/components/schemas/SkillLevel"
           },

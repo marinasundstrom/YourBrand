@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
+using YourBrand.Showroom.Domain.Enums;
 
 namespace YourBrand.Showroom.Application.ConsultantProfiles.Skills.Commands;
 
-public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IRequest<ConsultantProfileSkillDto>
+public record AddSkillCommand(string ConsultantProfileId, string SkillId, SkillLevel Level, string? Comment) : IRequest<ConsultantProfileSkillDto>
 {
     public class AddSkillCommandHandler : IRequestHandler<AddSkillCommand, ConsultantProfileSkillDto>
     {
@@ -42,6 +43,8 @@ public record AddSkillCommand(string ConsultantProfileId, string SkillId) : IReq
                 Id = Guid.NewGuid().ToString(),
                 ConsultantProfileId = consultantProfile.Id,
                 Skill = skill,
+                Level = request.Level,
+                Comment = request.Comment
             };
 
             context.ConsultantProfileSkills.Add(consultantProfileSkill);
