@@ -14,33 +14,39 @@ Based on the [item-catalog](https://github.com/marinasundstrom/item-catalog) pro
 
 ### Consultant Management ("Showroom")
 
-<a href="/Screenshots/ConsultantProfile1.png">
-<img src="/Screenshots/ConsultantProfile1.png" height="250"  alt="ConsultantProfile1"  /></a>
+<a href="/Screenshots/Showroom - Profile.png">
+<img src="/Screenshots/Showroom - Profile.png" height="250"  alt="Showroom - Profile"  /></a>
 
-Profile (1)
+Profile
 
-<a href="/Screenshots/ConsultantProfile2.png">
-<img src="/Screenshots/ConsultantProfile2.png" height="250"  alt="ConsultantProfile2"  /></a>
-
-Profile (2)
-
-<a href="/Screenshots/ConsultantGallery.png">
-<img src="/Screenshots/ConsultantGallery.png" height="250"  alt="ConsultantGallery"  /></a>
+<a href="/Screenshots/Showroom - Consultants.png">
+<img src="/Screenshots/Showroom - Consultants.png" height="250"  alt="Showroom - Consultants"  /></a>
 
 Gallery
 
 ### Project Manager ("Time Report")
 
-<a href="/Screenshots/TimeReport.png">
-<img src="/Screenshots/TimeReport.png" height="250"  alt="TimeReport"  /></a>
+<a href="/Screenshots/Time Report.png">
+<img src="/Screenshots/Time Report.png" height="250"  alt="TimeReport"  /></a>
 
 Timesheet
 
-<a href="/Screenshots/Project.png">
-<img src="/Screenshots/Project.png" height="250"  alt="Project"  /></a>
+<a href="/Screenshots/Time Report - Projects.png">
+<img src="/Screenshots/Time Report - Projects.png" height="250"  alt="Project"  /></a>
 
-Project
+Projects
 
+### Products ("Catalog")
+
+<a href="/Screenshots/Catalog - Products.png">
+<img src="/Screenshots/Catalog - Products.png" height="250"  alt="Products"  /></a>
+
+Products
+
+<a href="/Screenshots/Catalog - Product 2.png">
+<img src="/Screenshots/Catalog - Product 2.png" height="250"  alt="Product"  /></a>
+
+Product
 
 ## Architecture
 
