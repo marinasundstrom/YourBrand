@@ -2,7 +2,9 @@
 
 App for managing a consultancy business - from sales to running a project - A private business network.
 
-This project brings [TimeReport](https://github.com/marinasundstrom/timereport) and a re-imagined [Showroom](https://github.com/marinasundstrom/showroom) together into one product.
+This project brings [TimeReport](https://github.com/marinasundstrom/timereport) and a re-imagined [Showroom](https://github.com/marinasundstrom/showroom) together into one product. 
+
+It also led to including other projects like FinanceApp and Catalog (Product Catalog). And then some additional services where created. That is how we end up with a basic ERP.
 
 This is a concept developed when learning building distributed applications. It is not production ready. But please, be inspired! :)
 
