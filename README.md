@@ -8,7 +8,9 @@ It also led to including other projects like FinanceApp and Catalog (Product Cat
 
 This is a concept developed when learning building distributed applications. It is not production ready. But please, be inspired! :)
 
-Watch the [video](https://www.youtube.com/watch?v=mOtbuWFD650).
+Watch the [video](https://youtu.be/iL9s-bCr_r4).
+
+Another [video](https://youtu.be/r0hApprPM1g) on Product Catalog.
 
 Based on the [item-catalog](https://github.com/marinasundstrom/item-catalog) project - which at the moment is more evolved. I try to keep the common functionality in sync.
 
