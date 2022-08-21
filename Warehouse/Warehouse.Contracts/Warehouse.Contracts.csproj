@@ -8,6 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="MassTransit" Version="8.0.6-develop.519" />
+	  <PackageReference Include="MassTransit" Version="8.0.7-develop.566" />
   </ItemGroup>
 </Project>

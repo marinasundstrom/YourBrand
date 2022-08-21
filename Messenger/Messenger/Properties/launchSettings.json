@@ -11,7 +11,7 @@
     "Messenger": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7281;http://localhost:5220",
+      "applicationUrl": "http://localhost:61788",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

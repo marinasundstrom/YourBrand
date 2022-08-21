@@ -11,7 +11,7 @@
     "YourBrand.IdentityService": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:9933;http://localhost:13122",
+      "applicationUrl": "https://localhost:62702;http://localhost:11836",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

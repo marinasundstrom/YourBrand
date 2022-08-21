@@ -15,7 +15,7 @@
     "YourBrand.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:25155",
+      "applicationUrl": "http://localhost:46614",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -15,7 +15,7 @@
     "YourBrand.TimeReport": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:39732",
+      "applicationUrl": "http://localhost:37577",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

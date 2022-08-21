@@ -26,7 +26,7 @@
     "Notifications": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:19365;http://localhost:63833",
+      "applicationUrl": "https://localhost:8826;http://localhost:20893",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
