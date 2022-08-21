@@ -49,7 +49,7 @@ public static class CurrentUserServiceJwtExtensions
         var claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(accessToken,
                             tokenValidationParameters, out var rawValidatedToken);
 
-        //INFO: Fix
-        //currentUserService.SetCurrentUser(claimsPrincipal);
+        //INFO: Fix ?
+        currentUserService.SetCurrentUser(claimsPrincipal);
     }
 }

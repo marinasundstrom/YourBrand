@@ -13,11 +13,12 @@ public class CurrentUserService : ICurrentUserService
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
+        _claimsPrincipal = _httpContextAccessor.HttpContext?.User;
     }
 
-    public string? UserId => _currentUserId ??= _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    public string? UserId => _currentUserId ??= _claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-    public string? GetAccessToken() => _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
+    public string? GetAccessToken() => _claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
     public void SetCurrentUser(string userId)
     {
@@ -28,13 +29,13 @@ public class CurrentUserService : ICurrentUserService
         _currentUserId = userId;
     }
 
-    public string? FirstName => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
+    public string? FirstName => _claimsPrincipal?.FindFirst(ClaimTypes.GivenName)?.Value;
 
-    public string? LastName => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.GivenName)?.Value;
+    public string? LastName => _claimsPrincipal?.FindFirst(ClaimTypes.GivenName)?.Value;
 
-    public string? Email => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+    public string? Email => _claimsPrincipal?.FindFirst(ClaimTypes.Email)?.Value;
 
-    public string? Role => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
+    public string? Role => _claimsPrincipal?.FindFirst(ClaimTypes.Role)?.Value;
 
     public void SetCurrentUser(ClaimsPrincipal claimsPrincipal)
     {
