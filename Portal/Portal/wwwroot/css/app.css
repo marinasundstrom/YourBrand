@@ -72,3 +72,18 @@ h1:focus {
 .notification-unread {
     background-color: #e0f7f9 !important;
 }
+
+.mud-progress-linear-bar {
+    transform: translateX(calc(-1 * var(--blazor-load-percentage)));
+}
+
+.progress-text {
+  height: 45px;
+}
+
+.progress-text:before {
+    margin-top: 45px;
+    display: block;
+    content: var(--blazor-load-percentage-text);
+    color : white;
+}

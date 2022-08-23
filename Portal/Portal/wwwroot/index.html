@@ -21,14 +21,25 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+
+    <script src="js/app.js" defer></script>
+    <script src="_framework/blazor.webassembly.js" defer></script>
+    <script src="_content/TimeReport/js/app.js" defer></script>
+    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js" defer></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js" defer></script>
 </head>
 
 <body>
     <div id="app">
         <div id="splashscreen" style="height:100%; width:100%; margin:0; position:fixed; background-color: #242222;">
             <div style="display: flex; justify-content: center; align-items:center; height:100%; width:100%;">
-                <img src="logo.svg" style="height: 50px; max-width: 650px; margin-left: 20px; margin-right: 20px;" />
-                <h1 style="color: white">YourBrand</h1>
+                <div>
+                    <div style="display: flex; justify-content: center; align-items:center; width:100%;">
+                        <img src="logo.svg" style="height: 50px; max-width: 650px; margin-left: 20px; margin-right: 20px;" />
+                        <h1 style="color: white">YourBrand</h1>
+                    </div>
+                    <div class="progress-text" style="display: flex; justify-content: center;"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -38,11 +49,6 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
-    <script src="js/app.js"></script>
-    <script src="_content/TimeReport/js/app.js"></script>
-    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
-    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>
 
 </html>
