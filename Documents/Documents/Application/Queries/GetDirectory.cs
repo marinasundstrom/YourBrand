@@ -11,12 +11,12 @@ public record GetDirectory(string Path) : IRequest<DirectoryDto?>
     public class Handler : IRequestHandler<GetDirectory, DirectoryDto?>
     {
         private readonly DocumentsContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUrlResolver _urlResolver;
 
-        public Handler(DocumentsContext context, IHttpContextAccessor httpContextAccessor)
+        public Handler(DocumentsContext context, IUrlResolver urlResolver)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
+            _urlResolver = urlResolver;
         }
 
         public async Task<DirectoryDto?> Handle(GetDirectory request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ public record GetDirectory(string Path) : IRequest<DirectoryDto?>
 
             return directory is null
                 ? null
-                : directory.ToDto();
+                : directory.ToDto(_urlResolver.GetUrl); 
         }
     }
 }

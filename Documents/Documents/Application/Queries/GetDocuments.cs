@@ -17,12 +17,12 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
     public class Handler : IRequestHandler<GetDocuments, ItemsResult<DocumentDto>>
     {
         private readonly DocumentsContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUrlResolver _urlResolver;
 
-        public Handler(DocumentsContext context, IHttpContextAccessor httpContextAccessor)
+        public Handler(DocumentsContext context, IUrlResolver urlResolver)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
+            _urlResolver = urlResolver;
         }
 
         public async Task<ItemsResult<DocumentDto>> Handle(GetDocuments request, CancellationToken cancellationToken)
@@ -52,17 +52,8 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<DocumentDto>(
-                items.Select(document => document.ToDto(GetUrl(document))),
+                items.Select(document => document.ToDto(_urlResolver.GetUrl)),
                 totalItems);
-        }
-
-        private string GetUrl(Document document)
-        {
-            var request = _httpContextAccessor.HttpContext!.Request;
-
-            return $"{request.Scheme}://{request.Host}/Documents/{document.Id}/File";
-
-            //return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
         }
     }
 }

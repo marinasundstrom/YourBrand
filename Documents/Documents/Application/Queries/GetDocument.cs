@@ -3,7 +3,6 @@ using YourBrand.Documents.Infrastructure.Persistence;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Documents.Domain.Entities;
 
 namespace YourBrand.Documents.Application.Queries;
 
@@ -12,12 +11,12 @@ public record GetDocument(string DocumentId) : IRequest<DocumentDto?>
     public class Handler : IRequestHandler<GetDocument, DocumentDto?>
     {
         private readonly DocumentsContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUrlResolver _urlResolver;
 
-        public Handler(DocumentsContext context, IHttpContextAccessor httpContextAccessor)
+        public Handler(DocumentsContext context, IUrlResolver urlResolver)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
+            _urlResolver = urlResolver;
         }
 
         public async Task<DocumentDto?> Handle(GetDocument request, CancellationToken cancellationToken)
@@ -29,16 +28,7 @@ public record GetDocument(string DocumentId) : IRequest<DocumentDto?>
 
             return document is null
                 ? null
-                : document.ToDto(GetUrl(document));
-        }
-
-        private string GetUrl(Document document)
-        {
-            var request = _httpContextAccessor.HttpContext!.Request;
-
-            return $"{request.Scheme}://{request.Host}/Documents/{document.Id}/File";
-
-            //return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
+                : document.ToDto(_urlResolver.GetUrl);
         }
     }
 }

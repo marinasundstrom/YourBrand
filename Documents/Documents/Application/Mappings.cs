@@ -6,14 +6,14 @@ namespace YourBrand.Documents.Application;
 
 public static class Mappings
 {
-    public static DirectoryDto ToDto(this Directory directory)
+    public static DirectoryDto ToDto(this Directory directory, Func<Document, string> toString)
     {
-        return new DirectoryDto(directory.Id, directory.Name, directory.Description, directory.Directories.Select(x => x.ToDto()), directory.Documents.Select(x => x.ToDto(GetUrl(x))), directory.Created, directory.LastModified);
+        return new DirectoryDto(directory.Id, directory.Name, directory.Description, directory.Directories.Select(x => x.ToDto(toString)), directory.Documents.Select(x => x.ToDto(toString)), directory.Created, directory.LastModified);
     }
 
-    public static DocumentDto ToDto(this Document document, string url)
+    public static DocumentDto ToDto(this Document document, Func<Document, string> toString)
     {
-        return new DocumentDto(document.Id, document.Name, document.Extension, document.ContentType, document.Description, url, document.Created, document.LastModified);
+        return new DocumentDto(document.Id, document.Name, document.Extension, document.ContentType, document.Description, toString(document), document.Created, document.LastModified);
     }
 
 

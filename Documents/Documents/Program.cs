@@ -97,6 +97,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IRazorTemplateCompiler, RazorTemplateCompiler>();
 builder.Services.AddScoped<IPdfGenerator, PdfGenerator>();
 builder.Services.AddScoped<IFileUploaderService, FileUploaderService>();
+builder.Services.AddScoped<IUrlResolver, UrlResolver>();
 
 //IronPdf.Logging.Logger.EnableDebugging = true;
 //IronPdf.Logging.Logger.LogFilePath = "Default.log"; //May be set to a directory name or full file
@@ -136,14 +137,9 @@ else
 
 app.UseRouting();
 
-app.MapReverseProxy();
+//app.MapReverseProxy();
 
-app.MapGet("/{path?}", async (string? path, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetDirectory(path), cancellationToken))
-    .WithName("Documents_GetDirectory2")
-    .WithTags("Documents")
-    .Produces<DirectoryDto>(StatusCodes.Status200OK);
-
+/*
 app.MapGet("/Documents", async (int page, int pageSize, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetDocuments(page, pageSize), cancellationToken))
     .WithName("Documents_GetDocuments")
@@ -195,6 +191,7 @@ app.MapPut("/Documents/{id}/Description", async (string id, string newDescriptio
     .WithName("Documents_UpdateDescription")
     .WithTags("Documents")
     .Produces(StatusCodes.Status200OK);
+*/
 
 /*
 app.MapPost("/GenerateDocument", async (string templateId, [FromBody] string model, IMediator mediator) =>

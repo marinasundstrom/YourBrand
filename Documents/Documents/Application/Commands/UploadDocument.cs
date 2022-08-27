@@ -5,6 +5,7 @@ using MediatR;
 using YourBrand.Documents.Domain;
 using YourBrand.Documents.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Application.Queries;
 
 namespace YourBrand.Documents.Application.Commands;
 
@@ -14,13 +15,13 @@ public record UploadDocument(string Name, string ContentType, Stream Stream, str
     {
         private readonly IDocumentsContext _context;
         private readonly IFileUploaderService _fileUploaderService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUrlResolver _urlResolver;
 
-        public Handler(IDocumentsContext context, IFileUploaderService fileUploaderService, IHttpContextAccessor httpContextAccessor)
+        public Handler(IDocumentsContext context, IFileUploaderService fileUploaderService, IUrlResolver urlResolver)
         {
             _context = context;
             _fileUploaderService = fileUploaderService;
-            _httpContextAccessor = httpContextAccessor;
+            _urlResolver = urlResolver;
         }
 
         public async Task<DocumentDto> Handle(UploadDocument request, CancellationToken cancellationToken)
@@ -57,16 +58,7 @@ public record UploadDocument(string Name, string ContentType, Stream Stream, str
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return document.ToDto(GetUrl(document));
-        }
-
-        private string GetUrl(Document document)
-        {
-            var request = _httpContextAccessor.HttpContext!.Request;
-
-            return $"{request.Scheme}://{request.Host}/Documents/{document.Id}/File";
-
-            //return $"{request.Scheme}://{request.Host}/content/documents/{blobId}";
+            return document.ToDto(_urlResolver.GetUrl);
         }
     }
 }

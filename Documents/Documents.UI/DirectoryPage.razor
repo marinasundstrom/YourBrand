@@ -1,5 +1,6 @@
 @page "/documents/{id?}"
 @inject IDocumentsClient DocumentsClient
+@inject IDirectoriesClient DirectoriesClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
@@ -75,7 +76,7 @@
             Id = string.Empty;
         }
 
-        directoryDto = await DocumentsClient.GetDirectoryAsync(Id!);
+        directoryDto = await DirectoriesClient.GetDirectoryAsync(Id!);
 
         foreach(var dir in directoryDto.Directories)
         {
