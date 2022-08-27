@@ -9,12 +9,12 @@ namespace YourBrand.Accounting.Domain.Entities;
 
 public class Entry : BaseEntity
 {
-    protected Entry()
+    public Entry()
     {
 
     }
 
-    internal Entry(DateTime date, Account account, decimal? debit, decimal? credit, string? description)
+    public Entry(DateTime date, Account account, decimal? debit, decimal? credit, string? description)
     {
         Date = date;
         Account = account;

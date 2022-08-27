@@ -33,6 +33,8 @@ public class Verification
 
     public IReadOnlyCollection<Entry> Entries => _entries;
 
+    public void AddEntries(IEnumerable<Entry> entries) => entries.ToList().ForEach(x => _entries.Add(x));
+
     public Entry AddDebitEntry(Account account, decimal debit, string? description = null)
     {
         var entry = new Entry(Date, account, debit, null, description);
