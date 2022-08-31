@@ -46,7 +46,7 @@ public static class ServiceExtensions
     {
         services.AddAppServiceClients((sp, http) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
+            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/appservice/");
         }, (builder) => {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });

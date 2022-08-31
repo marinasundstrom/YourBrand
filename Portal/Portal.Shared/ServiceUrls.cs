@@ -6,7 +6,7 @@ public static class ServiceUrls
 
     public const string ApiKeysServiceUrl = $"{RootUrl}/apikeys";
 
-    public const string AppServiceUrl = $"{RootUrl}";
+    public const string AppServiceUrl = $"{RootUrl}/appservice";
 
     public const string CatalogServiceUrl = $"{RootUrl}/catalog";
 
