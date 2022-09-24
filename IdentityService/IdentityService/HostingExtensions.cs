@@ -85,8 +85,6 @@ internal static class HostingExtensions
             .AddControllers()
             .AddNewtonsoftJson();
 
-        builder.Services.AddInfrastructure(builder.Configuration);
-
         builder.Services.AddIdentity<Person, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
