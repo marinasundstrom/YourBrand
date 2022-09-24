@@ -63,7 +63,7 @@ public class TimeSheetsTest : TestBase
         // Has Domain Event been published ?
 
         /*
-        await fakeDomainEventService
+        await fakeDomainEventDispatcher
             .Received(1)
             .Publish(Arg.Is<ItemCreatedEvent>(d => d.ItemId == item.Id));
 

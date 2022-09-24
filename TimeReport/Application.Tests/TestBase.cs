@@ -14,7 +14,7 @@ namespace Tests;
 
 public class TestBase
 {
-    protected readonly IDomainEventService fakeDomainEventService;
+    protected readonly IDomainEventDispatcher fakeDomainEventDispatcher;
     protected readonly ICurrentUserService fakeCurrentUserService;
     protected readonly ITenantService fakeTenantService;
     protected readonly IDateTime fakeDateTimeService;
@@ -22,7 +22,7 @@ public class TestBase
 
     public TestBase()
     {
-        fakeDomainEventService = Substitute.For<IDomainEventService>();
+        fakeDomainEventDispatcher = Substitute.For<IDomainEventDispatcher>();
 
         fakeCurrentUserService = Substitute.For<ICurrentUserService>();
 
@@ -41,7 +41,7 @@ public class TestBase
            .UseInMemoryDatabase(databaseName: "Test")
            .Options;
 
-        return new TimeReportContext(options, fakeTenantService, fakeDomainEventService, fakeApiApplicationContext,
-            new YourBrand.TimeReport.Infrastructure.Persistence.Interceptors.AuditableEntitySaveChangesInterceptor(fakeCurrentUserService, fakeDateTimeService, fakeTenantService));
+        return null!; //new TimeReportContext(options, fakeTenantService, fakeDomainEventDispatcher, fakeApiApplicationContext,
+            //new YourBrand.TimeReport.Infrastructure.Persistence.Interceptors.AuditableEntitySaveChangesInterceptor(fakeCurrentUserService, fakeDateTimeService, fakeTenantService));
     }
 }

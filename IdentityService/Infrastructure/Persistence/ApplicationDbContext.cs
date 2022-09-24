@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using Newtonsoft.Json;
+
 using YourBrand.Identity;
 using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Domain.Common;
@@ -10,20 +12,21 @@ using YourBrand.IdentityService.Domain.Common.Interfaces;
 using YourBrand.IdentityService.Domain.Entities;
 using YourBrand.IdentityService.Infrastructure.Persistence.Configurations;
 using YourBrand.IdentityService.Infrastructure.Persistence.Interceptors;
+using YourBrand.IdentityService.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.IdentityService.Infrastructure.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<Person, Role, string, IdentityUserClaim<string>, PersonRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
-    private readonly IDomainEventService _domainEventService;
+    private readonly IDomainEventDispatcher _domainEventService;
     private readonly IDateTime _dateTime;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService currentUserService,
-        IDomainEventService domainEventService,
+        IDomainEventDispatcher domainEventService,
         IDateTime dateTime,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
@@ -53,25 +56,33 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await DispatchEvents();
-
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task DispatchEvents()
-    {
         var entities = ChangeTracker
-            .Entries<IHasDomainEvents>()
-            .Where(e => e.Entity.DomainEvents.Any())
-            .Select(e => e.Entity);
+                        .Entries<Entity>()
+                        .Where(e => e.Entity.DomainEvents.Any())
+                        .Select(e => e.Entity);
 
         var domainEvents = entities
             .SelectMany(e => e.DomainEvents)
             .ToList();
 
-        entities.ToList().ForEach(e => e.ClearDomainEvents());
+        var outboxMessages = domainEvents.Select(domainEvent =>
+        {
+            return new OutboxMessage()
+            {
+                Id = Guid.NewGuid(),
+                OccurredOnUtc = DateTime.UtcNow,
+                Type = domainEvent.GetType().Name,
+                Content = JsonConvert.SerializeObject(
+                    domainEvent,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    })
+            };
+        }).ToList();
 
-        foreach (var domainEvent in domainEvents)
-            await _domainEventService.Publish(domainEvent);
+        this.Set<OutboxMessage>().AddRange(outboxMessages);
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }

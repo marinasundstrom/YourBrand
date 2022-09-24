@@ -13,6 +13,8 @@
 	<ItemGroup>
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.591" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.17.0" />
+        <PackageReference Include="Quartz" Version="3.5.0" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
 		<PackageReference Include="RazorLight" Version="2.1.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-rc.1.22426.7" />
         <PackageReference Include="IronPdf" Version="2022.9.9056" />

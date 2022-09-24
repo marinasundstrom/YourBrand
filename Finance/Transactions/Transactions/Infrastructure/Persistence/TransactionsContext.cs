@@ -1,24 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using Newtonsoft.Json;
+
 using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain;
 using YourBrand.Transactions.Domain.Common;
 using YourBrand.Transactions.Domain.Entities;
 using YourBrand.Transactions.Infrastructure.Persistence.Interceptors;
+using YourBrand.Transactions.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Transactions.Infrastructure.Persistence;
 
 public class TransactionsContext : DbContext, ITransactionsContext
 {
-    private IDomainEventService _domainEventService;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public TransactionsContext(
         DbContextOptions<TransactionsContext> options,
-        IDomainEventService domainEventService,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _domainEventService = domainEventService;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
@@ -44,25 +44,33 @@ public class TransactionsContext : DbContext, ITransactionsContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await DispatchEvents();
-
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task DispatchEvents()
-    {
         var entities = ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.Entity.DomainEvents.Any())
-            .Select(e => e.Entity);
+                        .Entries<Entity>()
+                        .Where(e => e.Entity.DomainEvents.Any())
+                        .Select(e => e.Entity);
 
         var domainEvents = entities
             .SelectMany(e => e.DomainEvents)
             .ToList();
 
-        entities.ToList().ForEach(e => e.ClearDomainEvents());
+        var outboxMessages = domainEvents.Select(domainEvent =>
+        {
+            return new OutboxMessage()
+            {
+                Id = Guid.NewGuid(),
+                OccurredOnUtc = DateTime.UtcNow,
+                Type = domainEvent.GetType().Name,
+                Content = JsonConvert.SerializeObject(
+                    domainEvent,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    })
+            };
+        }).ToList();
 
-        foreach (var domainEvent in domainEvents)
-            await _domainEventService.Publish(domainEvent);
+        this.Set<OutboxMessage>().AddRange(outboxMessages);
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }

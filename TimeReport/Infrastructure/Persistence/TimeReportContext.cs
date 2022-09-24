@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
+using Newtonsoft.Json;
+
 using YourBrand.ApiKeys;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
@@ -10,25 +12,23 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
+using YourBrand.TimeReport.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
 public class TimeReportContext : DbContext, ITimeReportContext
 {
     private readonly ITenantService _tenantService;
-    private readonly IDomainEventService _domainEventService;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
     private readonly string _organizationId;
 
     public TimeReportContext(
         DbContextOptions<TimeReportContext> options,
         ITenantService tenantService,
-        IDomainEventService domainEventService,
         IApiApplicationContext apiApplicationContext,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _tenantService = tenantService;
-        _domainEventService = domainEventService;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         _organizationId = _tenantService.OrganizationId!;
     }
@@ -97,25 +97,33 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await DispatchEvents();
-
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task DispatchEvents()
-    {
         var entities = ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.Entity.DomainEvents.Any())
-            .Select(e => e.Entity);
+                        .Entries<Entity>()
+                        .Where(e => e.Entity.DomainEvents.Any())
+                        .Select(e => e.Entity);
 
         var domainEvents = entities
             .SelectMany(e => e.DomainEvents)
             .ToList();
 
-        entities.ToList().ForEach(e => e.ClearDomainEvents());
+        var outboxMessages = domainEvents.Select(domainEvent =>
+        {
+            return new OutboxMessage()
+            {
+                Id = Guid.NewGuid(),
+                OccurredOnUtc = DateTime.UtcNow,
+                Type = domainEvent.GetType().Name,
+                Content = JsonConvert.SerializeObject(
+                    domainEvent,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    })
+            };
+        }).ToList();
 
-        foreach (var domainEvent in domainEvents)
-            await _domainEventService.Publish(domainEvent);
+        this.Set<OutboxMessage>().AddRange(outboxMessages);
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }

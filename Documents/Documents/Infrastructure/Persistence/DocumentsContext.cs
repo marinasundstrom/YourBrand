@@ -7,20 +7,19 @@ using YourBrand.Documents.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Documents.Infrastructure.Persistence.Interceptors;
+using YourBrand.Documents.Infrastructure.Persistence.Outbox;
+using Newtonsoft.Json;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
 public class DocumentsContext : DbContext, IDocumentsContext
 {
-    private IDomainEventService _domainEventService;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public DocumentsContext(
         DbContextOptions<DocumentsContext> options,
-        IDomainEventService domainEventService,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _domainEventService = domainEventService;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }
 
@@ -52,25 +51,33 @@ public class DocumentsContext : DbContext, IDocumentsContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await DispatchEvents();
-
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task DispatchEvents()
-    {
         var entities = ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.Entity.DomainEvents.Any())
-            .Select(e => e.Entity);
+                        .Entries<Entity>()
+                        .Where(e => e.Entity.DomainEvents.Any())
+                        .Select(e => e.Entity);
 
         var domainEvents = entities
             .SelectMany(e => e.DomainEvents)
             .ToList();
 
-        entities.ToList().ForEach(e => e.ClearDomainEvents());
+        var outboxMessages = domainEvents.Select(domainEvent =>
+        {
+            return new OutboxMessage()
+            {
+                Id = Guid.NewGuid(),
+                OccurredOnUtc = DateTime.UtcNow,
+                Type = domainEvent.GetType().Name,
+                Content = JsonConvert.SerializeObject(
+                    domainEvent,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    })
+            };
+        }).ToList();
 
-        foreach (var domainEvent in domainEvents)
-            await _domainEventService.Publish(domainEvent);
+        this.Set<OutboxMessage>().AddRange(outboxMessages);
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }

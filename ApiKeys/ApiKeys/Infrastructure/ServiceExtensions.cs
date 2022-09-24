@@ -4,6 +4,8 @@ using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Infrastructure.Persistence;
 using YourBrand.ApiKeys.Infrastructure.Services;
+using Quartz;
+using YourBrand.ApiKeys.Infrastructure.BackgroundJobs;
 
 namespace YourBrand.ApiKeys.Infrastructure;
 
@@ -26,9 +28,25 @@ public static class ServiceExtensions
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
-        services.AddScoped<IDomainEventService, DomainEventService>();
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
         services.AddTransient<IDateTime, DateTimeService>();
+
+        services.AddQuartz(configure =>
+            {
+                var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+
+                configure
+                    .AddJob<ProcessOutboxMessagesJob>(jobKey)
+                    .AddTrigger(trigger => trigger.ForJob(jobKey)
+                        .WithSimpleSchedule(schedule => schedule
+                            .WithIntervalInSeconds(10)
+                            .RepeatForever()));
+
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService();
 
         return services;
     }

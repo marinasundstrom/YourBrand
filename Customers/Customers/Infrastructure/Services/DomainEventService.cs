@@ -8,21 +8,21 @@ using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Customers.Infrastructure.Services;
 
-class DomainEventService : IDomainEventService
+class DomainEventDispatcher : IDomainEventDispatcher
 {
-    private readonly ILogger<DomainEventService> _logger;
+    private readonly ILogger<DomainEventDispatcher> _logger;
     private readonly IPublisher _mediator;
 
-    public DomainEventService(ILogger<DomainEventService> logger, IPublisher mediator)
+    public DomainEventDispatcher(ILogger<DomainEventDispatcher> logger, IPublisher mediator)
     {
         _logger = logger;
         _mediator = mediator;
     }
 
-    public async Task Publish(DomainEvent domainEvent)
+    public async Task Dispatch(DomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Publishing domain event. Event - {event}", domainEvent.GetType().Name);
-        await _mediator.Publish(GetNotificationCorrespondingToDomainEvent(domainEvent));
+        await _mediator.Publish(GetNotificationCorrespondingToDomainEvent(domainEvent), cancellationToken);
     }
 
     private INotification GetNotificationCorrespondingToDomainEvent(DomainEvent domainEvent)

@@ -2,7 +2,7 @@
 
 namespace YourBrand.Accounting.Application.Common.Interfaces;
 
-public interface IDomainEventService
+public interface IDomainEventDispatcher
 {
-    Task Publish(DomainEvent domainEvent);
+    Task Dispatch(DomainEvent domainEvent, CancellationToken cancellationToken = default);
 }

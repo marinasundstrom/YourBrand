@@ -7,6 +7,8 @@ using YourBrand.Showroom.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
+using Quartz;
+using YourBrand.Showroom.Infrastructure.BackgroundJobs;
 
 namespace YourBrand.Showroom.Infrastructure;
 
@@ -29,9 +31,25 @@ public static class ServiceExtensions
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
-        services.AddScoped<IDomainEventService, DomainEventService>();
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
         services.AddTransient<IDateTime, DateTimeService>();
+
+        services.AddQuartz(configure =>
+            {
+                var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+
+                configure
+                    .AddJob<ProcessOutboxMessagesJob>(jobKey)
+                    .AddTrigger(trigger => trigger.ForJob(jobKey)
+                        .WithSimpleSchedule(schedule => schedule
+                            .WithIntervalInSeconds(10)
+                            .RepeatForever()));
+
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService();
 
         return services;
     }

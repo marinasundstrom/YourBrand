@@ -1,6 +1,8 @@
 using YourBrand.Marketing.Application.Common.Interfaces;
 using YourBrand.Marketing.Infrastructure.Persistence;
 using YourBrand.Marketing.Infrastructure.Services;
+using Quartz;
+using YourBrand.Marketing.Infrastructure.BackgroundJobs;
 
 namespace YourBrand.Marketing.Infrastructure;
 
@@ -10,9 +12,25 @@ public static class ServiceCollectionExtensions
     {
         services.AddPersistence(configuration);
 
-        services.AddScoped<IDomainEventService, DomainEventService>();
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
         services.AddTransient<IDateTime, DateTimeService>();
+
+        services.AddQuartz(configure =>
+            {
+                var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+
+                configure
+                    .AddJob<ProcessOutboxMessagesJob>(jobKey)
+                    .AddTrigger(trigger => trigger.ForJob(jobKey)
+                        .WithSimpleSchedule(schedule => schedule
+                            .WithIntervalInSeconds(10)
+                            .RepeatForever()));
+
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
+
+            services.AddQuartzHostedService();
 
         return services;
     }

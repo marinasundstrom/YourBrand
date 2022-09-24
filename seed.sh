@@ -9,27 +9,27 @@ echo "WARNING: Both services and databases must have been started in order for t
 echo "Seeding databases"
 
 cd ./HumanResources; sh seed.sh; cd ..;
-# cd ./Customers; sh seed.sh; cd ..;
+cd ./Customers; sh seed.sh; cd ..;
 cd ./IdentityService; sh seed.sh; cd ..;
-# cd ./AppService; sh seed.sh; cd ..;
+cd ./AppService; sh seed.sh; cd ..;
 cd ./TimeReport; sh seed.sh; cd ..;
-# cd ./Showroom; sh seed.sh; cd ..;
-# cd ./Notifications; sh seed.sh; cd ..;
-# cd ./ApiKeys; sh seed.sh; cd ..;
-# cd ./Documents; sh seed.sh; cd ..;
-# cd ./Messenger; sh seed.sh; cd ..;
-# cd ./Catalog; sh seed.sh; cd ..;
-# cd ./Orders; sh seed.sh; cd ..;
-# cd ./Marketing; sh seed.sh; cd ..;
-# cd ./Warehouse; sh seed.sh; cd ..;
+cd ./Showroom; sh seed.sh; cd ..;
+cd ./Notifications; sh seed.sh; cd ..;
+cd ./ApiKeys; sh seed.sh; cd ..;
+cd ./Documents; sh seed.sh; cd ..;
+cd ./Messenger; sh seed.sh; cd ..;
+cd ./Catalog; sh seed.sh; cd ..;
+cd ./Orders; sh seed.sh; cd ..;
+cd ./Marketing; sh seed.sh; cd ..;
+cd ./Warehouse; sh seed.sh; cd ..;
 
 # Finance
 
-# cd ./Finance/Accounting; sh seed.sh; cd ../..;
-# cd ./Finance/Invoicing; sh seed.sh; cd ../..;
-# cd ./Finance/Payments; sh seed.sh; cd ../..;
-# cd ./Finance/Transactions; sh seed.sh; cd ../..;
-# cd ./Finance/RotRutService; sh seed.sh; cd ../..;
+cd ./Finance/Accounting; sh seed.sh; cd ../..;
+cd ./Finance/Invoicing; sh seed.sh; cd ../..;
+cd ./Finance/Payments; sh seed.sh; cd ../..;
+cd ./Finance/Transactions; sh seed.sh; cd ../..;
+cd ./Finance/RotRutService; sh seed.sh; cd ../..;
 
 # End Finance
 
