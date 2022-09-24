@@ -19,22 +19,6 @@ public static class ServiceExtensions
     {
         services.AddPersistence(configuration);
 
-        return services;
-    }
-
-    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("mssql", "IdentityServer") ?? configuration.GetConnectionString("DefaultConnection")));
-
-        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
-
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-
-        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-
-        services.AddTransient<IDateTime, DateTimeService>();
-
         services.AddQuartz(configure =>
             {
                 var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
@@ -50,6 +34,22 @@ public static class ServiceExtensions
             });
 
             services.AddQuartzHostedService();
+
+        return services;
+    }
+
+    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("mssql", "IdentityServer") ?? configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+
+        services.AddTransient<IDateTime, DateTimeService>();
 
         return services;
     }
