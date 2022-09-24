@@ -10,7 +10,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.566" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.591" />
 	  <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
 	  <PackageReference Include="Hangfire.AspNetCore" Version="1.8.0-rc1" />
 	  <PackageReference Include="Hangfire.SqlServer" Version="1.8.0-rc1" />

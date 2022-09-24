@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.Abstractions" Version="8.0.7-develop.566" />
-    <PackageReference Include="MassTransit" Version="8.0.7-develop.566" />
+    <PackageReference Include="MassTransit.Abstractions" Version="8.0.7-develop.591" />
+    <PackageReference Include="MassTransit" Version="8.0.7-develop.591" />
   </ItemGroup>
 
 </Project>

@@ -26,7 +26,7 @@
     "YourBrand.Warehouse": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:10463;http://localhost:49363",
+      "applicationUrl": "https://localhost:31180;http://localhost:33866",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
