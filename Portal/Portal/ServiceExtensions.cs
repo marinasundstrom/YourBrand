@@ -53,7 +53,7 @@ public static class ServiceExtensions
 
         services.AddSetupClient((sp, http) => {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/");
+            http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/appservice/");
         });
 
         services.AddIdentityServiceClients((sp, http) => {
