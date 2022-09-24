@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YourBrand.Payments.Domain.Common;
+namespace YourBrand.Orders.Domain.Common;
 
-public abstract class BaseEntity
+public abstract class Entity
 {
     private readonly List<DomainEvent> _domainEvents = new();
 

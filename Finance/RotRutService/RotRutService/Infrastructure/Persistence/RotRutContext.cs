@@ -54,7 +54,7 @@ public class RotRutContext : DbContext, IRotRutContext
     private async Task DispatchEvents()
     {
         var entities = ChangeTracker
-            .Entries<BaseEntity>()
+            .Entries<Entity>()
             .Where(e => e.Entity.DomainEvents.Any())
             .Select(e => e.Entity);
 

@@ -3,7 +3,7 @@ using YourBrand.Payments.Domain.Events;
 
 namespace YourBrand.Payments.Domain.Entities;
 
-public class Capture : BaseEntity
+public class Capture : Entity
 {
     private Capture()
     {

@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Warehouse.Domain.Common;
 
-public abstract class AuditableEntity: BaseEntity
+public abstract class AuditableEntity: Entity
 {
     public DateTime Created { get; set; }
 

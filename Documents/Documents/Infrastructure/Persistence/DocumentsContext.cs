@@ -60,7 +60,7 @@ public class DocumentsContext : DbContext, IDocumentsContext
     private async Task DispatchEvents()
     {
         var entities = ChangeTracker
-            .Entries<BaseEntity>()
+            .Entries<Entity>()
             .Where(e => e.Entity.DomainEvents.Any())
             .Select(e => e.Entity);
 

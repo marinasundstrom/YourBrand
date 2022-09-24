@@ -4,7 +4,7 @@ using YourBrand.Transactions.Domain.Events;
 
 namespace YourBrand.Transactions.Domain.Entities;
 
-public class Transaction : BaseEntity
+public class Transaction : Entity
 {
     private Transaction()
     {

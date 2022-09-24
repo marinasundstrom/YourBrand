@@ -6,7 +6,7 @@ using YourBrand.Invoicing.Domain.Events;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class Invoice : BaseEntity
+public class Invoice : Entity
 {
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 

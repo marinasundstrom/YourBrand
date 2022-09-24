@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YourBrand.Messenger.Domain.Common;
+namespace YourBrand.RotRutService.Domain.Common;
 
-public abstract class BaseEntity
+public abstract class Entity
 {
     private readonly List<DomainEvent> _domainEvents = new();
 

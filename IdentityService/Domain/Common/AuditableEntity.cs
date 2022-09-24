@@ -2,7 +2,7 @@
 
 namespace YourBrand.IdentityService.Domain.Common;
 
-public abstract class AuditableEntity : BaseEntity, IAuditableEntity
+public abstract class AuditableEntity : Entity, IAuditableEntity
 {
     public DateTime Created { get; set; }
 

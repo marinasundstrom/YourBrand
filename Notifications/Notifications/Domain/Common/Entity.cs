@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-using YourBrand.IdentityService.Domain.Common.Interfaces;
+namespace YourBrand.Notifications.Domain.Common;
 
-namespace YourBrand.IdentityService.Domain.Common;
-
-public abstract class BaseEntity : IHasDomainEvents
+public abstract class Entity
 {
     private readonly List<DomainEvent> _domainEvents = new();
 

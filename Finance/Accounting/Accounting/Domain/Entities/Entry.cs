@@ -7,7 +7,7 @@ using YourBrand.Accounting.Domain.Common;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Entry : BaseEntity
+public class Entry : Entity
 {
     public Entry()
     {

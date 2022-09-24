@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YourBrand.Orders.Domain.Common;
+using YourBrand.IdentityService.Domain.Common.Interfaces;
 
-public abstract class BaseEntity
+namespace YourBrand.IdentityService.Domain.Common;
+
+public abstract class Entity : IHasDomainEvents
 {
     private readonly List<DomainEvent> _domainEvents = new();
 

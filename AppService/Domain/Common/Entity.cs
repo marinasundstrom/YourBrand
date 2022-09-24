@@ -2,7 +2,7 @@
 
 namespace YourBrand.Domain.Common;
 
-public abstract class BaseEntity
+public abstract class Entity
 {
     private readonly List<DomainEvent> _domainEvents = new();
 
