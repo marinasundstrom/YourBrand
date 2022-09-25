@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0-rc.1.22427.2" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-rc.1.22426.10" />
-    <PackageReference Include="MudBlazor" Version="6.0.17-dev.1" />
+    <PackageReference Include="MudBlazor" Version="6.0.16" />
     <PackageReference Include="Humanizer" Version="2.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="7.0.0-rc.1.22427.2" />
