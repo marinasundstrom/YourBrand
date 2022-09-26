@@ -54,7 +54,7 @@ public record CreateVerificationCommand(string Description, int? InvoiceId, List
                     entry = verification.AddDebitEntry(account, entryDto.Debit.GetValueOrDefault(), entryDto.Description);
                 }
 
-                entry.AddDomainEvent(new EntryCreatedEvent(entry));
+                //entry.AddDomainEvent(new EntryCreatedEvent(entry.Id));
             }
 
             context.Verifications.Add(verification);

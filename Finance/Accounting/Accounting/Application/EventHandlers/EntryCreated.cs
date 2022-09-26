@@ -19,7 +19,7 @@ public class EntryCreatedEventHandler : INotificationHandler<DomainEventNotifica
 
     public Task Handle(DomainEventNotification<EntryCreatedEvent> notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Entry created: {notification.DomainEvent.Entry.Id}");
+        _logger.LogInformation($"Entry created: {notification.DomainEvent.EntryId}");
 
         return Task.CompletedTask;
     }

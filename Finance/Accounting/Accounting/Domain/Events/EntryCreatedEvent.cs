@@ -5,10 +5,10 @@ namespace YourBrand.Accounting.Domain.Events;
 
 public class EntryCreatedEvent : DomainEvent
 {
-    public EntryCreatedEvent(Entry entry)
+    public EntryCreatedEvent(int entryId)
     {
-        Entry = entry;
+        EntryId = entryId;
     }
 
-    public Entry Entry { get; }
+    public int EntryId { get; }
 }
