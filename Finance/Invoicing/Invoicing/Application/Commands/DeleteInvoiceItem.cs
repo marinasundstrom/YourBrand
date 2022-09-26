@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record DeleteInvoiceItem(int InvoiceId, int InvoiceItemId) : IRequest
+public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IRequest
 {
     public class Handler : IRequestHandler<DeleteInvoiceItem>
     {

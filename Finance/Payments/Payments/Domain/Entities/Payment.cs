@@ -13,7 +13,7 @@ public class Payment : AuditableEntity
 
     }
 
-    public Payment(int invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
+    public Payment(string invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
     {
         if(amount <= 0)
         {
@@ -45,7 +45,7 @@ public class Payment : AuditableEntity
 
     public string Id { get; private set; } = null!;
 
-    public int InvoiceId { get; private set; }
+    public string InvoiceId { get; private set; }
 
     public PaymentStatus Status { get; private set; } = PaymentStatus.Created;
 

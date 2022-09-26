@@ -6,7 +6,7 @@ namespace YourBrand.Invoicing.Invoicing;
 
 public class InvoiceViewModel
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required]
     public DateTime? Date { get; set; }

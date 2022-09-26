@@ -9,7 +9,7 @@ using YourBrand.Payments.Domain.Enums;
 
 namespace YourBrand.Payments.Application.Queries;
 
-public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null, int? InvoiceId = null) : IRequest<ItemsResult<PaymentDto>>
+public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null, string? InvoiceId = null) : IRequest<ItemsResult<PaymentDto>>
 {
     public class Handler : IRequestHandler<GetPayments, ItemsResult<PaymentDto>>
     {
@@ -46,7 +46,7 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
 
             if(request.InvoiceId is not null) 
             {
-                int invoiceId = request.InvoiceId.GetValueOrDefault();
+                string invoiceId = request.InvoiceId;
                 query = query.Where(i => i.InvoiceId == invoiceId);
             }
 

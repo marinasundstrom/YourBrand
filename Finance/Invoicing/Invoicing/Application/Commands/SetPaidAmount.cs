@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record SetPaidAmount(int InvoiceId, decimal Amount) : IRequest
+public record SetPaidAmount(string InvoiceId, decimal Amount) : IRequest
 {
     public class Handler : IRequestHandler<SetPaidAmount>
     {
@@ -31,7 +31,7 @@ public record SetPaidAmount(int InvoiceId, decimal Amount) : IRequest
     }
 }
 
-public record SetDate(int InvoiceId, DateTime Date) : IRequest
+public record SetDate(string InvoiceId, DateTime Date) : IRequest
 {
     public class Handler : IRequestHandler<SetDate>
     {
@@ -55,7 +55,7 @@ public record SetDate(int InvoiceId, DateTime Date) : IRequest
     }
 }
 
-public record SetType(int InvoiceId, InvoiceType Type) : IRequest
+public record SetType(string InvoiceId, InvoiceType Type) : IRequest
 {
     public class Handler : IRequestHandler<SetType>
     {
@@ -79,7 +79,7 @@ public record SetType(int InvoiceId, InvoiceType Type) : IRequest
     }
 }
 
-public record SetDueDate(int InvoiceId, DateTime DueDate) : IRequest
+public record SetDueDate(string InvoiceId, DateTime DueDate) : IRequest
 {
     public class Handler : IRequestHandler<SetDueDate>
     {
@@ -103,7 +103,7 @@ public record SetDueDate(int InvoiceId, DateTime DueDate) : IRequest
     }
 }
 
-public record SetReference(int InvoiceId, string? Reference) : IRequest
+public record SetReference(string InvoiceId, string? Reference) : IRequest
 {
     public class Handler : IRequestHandler<SetReference>
     {
@@ -127,7 +127,7 @@ public record SetReference(int InvoiceId, string? Reference) : IRequest
     }
 }
 
-public record SetNote(int InvoiceId, string? Note) : IRequest
+public record SetNote(string InvoiceId, string? Note) : IRequest
 {
     public class Handler : IRequestHandler<SetNote>
     {

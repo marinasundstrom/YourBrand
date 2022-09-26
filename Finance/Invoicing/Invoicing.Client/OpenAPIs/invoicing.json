@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Invoices API",
@@ -38,12 +38,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -66,12 +65,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -99,12 +97,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "query",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "name": "dto",
@@ -139,12 +136,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -172,12 +168,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "name": "dto",
@@ -215,20 +210,18 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceItemId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "name": "dto",
@@ -261,20 +254,18 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceItemId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -396,12 +387,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -447,12 +437,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "number",
@@ -485,12 +474,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -523,12 +511,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -568,12 +555,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -606,12 +592,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -642,12 +627,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "format": "int32",
-            "x-nullable": false
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -683,8 +667,7 @@
       ],
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string"
         },
         "date": {
           "type": "string",
@@ -791,8 +774,7 @@
       ],
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string"
         },
         "productType": {
           "$ref": "#/definitions/ProductType"

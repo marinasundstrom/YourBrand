@@ -50,7 +50,7 @@ public class RotRutCaseFactory
             new Domain.Entities.RotRutCase(
                 (Domain.Enums.DomesticServiceKind)domesticServices.Kind,
                 invoice.DomesticService!.Buyer, paymentDate, laborCost,
-                paidAmount, requestedAmount, invoice.Id, otherCosts, hours, materialCost, null);
+                paidAmount, requestedAmount, int.Parse(invoice.Id), otherCosts, hours, materialCost, null);
 
         if (domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
         {

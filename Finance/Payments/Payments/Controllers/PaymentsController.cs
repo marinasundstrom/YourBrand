@@ -19,7 +19,7 @@ public class PaymentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ItemsResult<PaymentDto>>> GetPaymentsAsync(int page, int pageSize, [FromQuery] PaymentStatus[]? status,  [FromQuery] int? invoiceId, CancellationToken cancellationToken = default) 
+    public async Task<ActionResult<ItemsResult<PaymentDto>>> GetPaymentsAsync(int page, int pageSize, [FromQuery] PaymentStatus[]? status,  [FromQuery] string? invoiceId, CancellationToken cancellationToken = default) 
     {
         var result = await _mediator.Send(new GetPayments(page, pageSize, status, invoiceId), cancellationToken);
         return Ok(result);

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Queries;
 
-public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>
+public record GetInvoice(string InvoiceId) : IRequest<InvoiceDto?>
 {
     public class Handler : IRequestHandler<GetInvoice, InvoiceDto?>
     {

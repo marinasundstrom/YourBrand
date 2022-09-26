@@ -4,10 +4,10 @@ namespace YourBrand.Invoicing.Domain.Events;
 
 public class InvoiceCreated : DomainEvent
 {
-    public InvoiceCreated(int invoiceId)
+    public InvoiceCreated(string invoiceId)
     {
         InvoiceId = invoiceId;
     }
 
-    public int InvoiceId { get; }
+    public string InvoiceId { get; }
 }

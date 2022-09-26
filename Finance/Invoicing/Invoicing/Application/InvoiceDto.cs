@@ -6,7 +6,7 @@ using YourBrand.Invoicing.Domain.Enums;
 namespace YourBrand.Invoicing.Application;
 
 public record InvoiceDto(
-    int Id, 
+    string Id, 
     DateTime? Date, 
     Domain.Enums.InvoiceType Type, 
     Domain.Enums.InvoiceStatus Status, 
@@ -29,7 +29,7 @@ public record InvoiceDomesticServiceDto(
     PropertyDetailsDto? PropertyDetails);
 
 public record InvoiceItemDto(
-    int Id, 
+    string Id, 
     ProductType ProductType, 
     string Description, 
     decimal UnitPrice, 

@@ -5,13 +5,13 @@ namespace YourBrand.Invoicing.Domain.Events;
 
 public class InvoiceTypeChanged : DomainEvent
 {
-    public InvoiceTypeChanged(int invoiceId, InvoiceType type)
+    public InvoiceTypeChanged(string invoiceId, InvoiceType type)
     {
         InvoiceId = invoiceId;
         Type = type;
     }
 
-    public int InvoiceId { get; }
+    public string InvoiceId { get; }
 
     public InvoiceType Type { get; }
 }

@@ -53,7 +53,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
             Description = $"Skickade ut faktura #{i.Id}",
-            InvoiceId = invoice.Id,
+            InvoiceId = int.Parse(invoice.Id),
             Entries = entries.ToList(),
         }, cancellationToken);
 
@@ -66,7 +66,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         string contentType = GetContentType(file);
 
         await _verificationsClient.AddFileAttachmentToVerificationAsync(
-            verificationId, null, invoice.Id,
+            verificationId, null, int.Parse(invoice.Id),
             new YourBrand.Accounting.Client.FileParameter(file.Stream, $"invoice-{invoice.Id}{fileExt}", contentType));
     }
 

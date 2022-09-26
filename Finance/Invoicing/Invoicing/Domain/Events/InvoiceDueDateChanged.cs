@@ -4,13 +4,13 @@ namespace YourBrand.Invoicing.Domain.Events;
 
 public class InvoiceDueDateChanged : DomainEvent
 {
-    public InvoiceDueDateChanged(int invoiceId, DateTime? dueDate)
+    public InvoiceDueDateChanged(string invoiceId, DateTime? dueDate)
     {
         InvoiceId = invoiceId;
         DueDate = dueDate;
     }
 
-    public int InvoiceId { get; }
+    public string InvoiceId { get; }
 
     public DateTime? DueDate { get; }
 }

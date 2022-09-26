@@ -147,7 +147,7 @@
 
     [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
 
-    [Parameter] public int InvoiceId { get; set; }
+    [Parameter] public string? InvoiceId { get; set; }
 
     [Parameter] public InvoiceItemViewModel? Model { get; set; } = null!;
 
@@ -164,7 +164,7 @@
 
     async Task Submit()
     {
-        if(Model.Id == 0)
+        if(Model.Id == null)
         {
             var dto = Model.ToAddInvoiceItem();
             item = await InvoicesClient.AddItemAsync(InvoiceId, dto);

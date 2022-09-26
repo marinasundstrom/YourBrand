@@ -2,6 +2,6 @@
 
 public record InvoicesBatch(IEnumerable<Invoice> Invoices);
 
-public record Invoice(int Id);
+public record Invoice(string Id);
 
-public record InvoicePaid(int Id);
+public record InvoicePaid(string Id);

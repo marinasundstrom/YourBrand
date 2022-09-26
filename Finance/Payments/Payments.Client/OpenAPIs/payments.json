@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Payments API",
@@ -41,7 +41,7 @@
         ],
         "parameters": [
           {
-            "name": "CreatePayment",
+            "name": "payment",
             "in": "body",
             "required": true,
             "description": "",
@@ -97,10 +97,9 @@
             }
           },
           {
-            "type": "integer",
+            "type": "string",
             "name": "invoiceId",
             "in": "query",
-            "format": "int32",
             "x-nullable": true
           }
         ],
@@ -264,8 +263,7 @@
       ],
       "properties": {
         "invoiceId": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string"
         },
         "currency": {
           "type": "string"
@@ -314,8 +312,7 @@
           "type": "string"
         },
         "invoiceId": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/PaymentStatus"

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record ActivateRotAndRut(int InvoiceId, InvoiceDomesticServiceDto? DomesticService) : IRequest<InvoiceDto>
+public record ActivateRotAndRut(string InvoiceId, InvoiceDomesticServiceDto? DomesticService) : IRequest<InvoiceDto>
 {
     public class Handler : IRequestHandler<ActivateRotAndRut, InvoiceDto>
     {

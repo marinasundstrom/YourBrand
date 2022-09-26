@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record SetInvoiceStatus(int InvoiceId, InvoiceStatus Status) : IRequest
+public record SetInvoiceStatus(string InvoiceId, InvoiceStatus Status) : IRequest
 {
     public class Handler : IRequestHandler<SetInvoiceStatus>
     {

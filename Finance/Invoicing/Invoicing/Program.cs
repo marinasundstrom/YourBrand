@@ -109,25 +109,25 @@ app.MapGet("/invoices/rut", async (IMediator mediator)
     .Produces<string>(StatusCodes.Status200OK);
 */
 
-app.MapGet("/Invoices/{invoiceId}", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+app.MapGet("/Invoices/{invoiceId}", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetInvoice(invoiceId), cancellationToken))
     .WithName("Invoices_GetInvoice")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-app.MapPost("/invoices/activateRotAndRut", async (int invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
+app.MapPost("/invoices/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
     => await mediator.Send(new ActivateRotAndRut(invoiceId, dto)))
     .WithName("Invoices_ActivateRotAndRut")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapGet("/Invoices/{invoiceId}/File", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+app.MapGet("/Invoices/{invoiceId}/File", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);
 
-app.MapPost("/Invoices/{invoiceId}/Items", async (int invoiceId, 
+app.MapPost("/Invoices/{invoiceId}/Items", async (string invoiceId, 
     AddInvoiceItem dto, 
     IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(invoiceId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
@@ -135,7 +135,7 @@ app.MapPost("/Invoices/{invoiceId}/Items", async (int invoiceId,
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Items/{invoiceItemId}", async (int invoiceId, int invoiceItemId,
+app.MapPut("/Invoices/{invoiceId}/Items/{invoiceItemId}", async (string invoiceId, string invoiceItemId,
     UpdateInvoiceItem dto,
     IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItem(invoiceId, invoiceItemId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService), cancellationToken))
@@ -149,62 +149,62 @@ app.MapPost("/Invoices", async (CreateInvoice command, IMediator mediator, Cance
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Status", async (int invoiceId, InvoiceStatus status, 
+app.MapPut("/Invoices/{invoiceId}/Status", async (string invoiceId, InvoiceStatus status, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetInvoiceStatus(invoiceId, status), cancellationToken))
     .WithName("Invoices_SetInvoiceStatus")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/PaidAmount", async (int invoiceId, decimal amount, 
+app.MapPut("/Invoices/{invoiceId}/PaidAmount", async (string invoiceId, decimal amount, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetPaidAmount(invoiceId, amount), cancellationToken))
     .WithName("Invoices_SetPaidAmount")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Date", async (int invoiceId, DateTime date, 
+app.MapPut("/Invoices/{invoiceId}/Date", async (string invoiceId, DateTime date, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetDate(invoiceId, date), cancellationToken))
     .WithName("Invoices_SetDate")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Type", async (int invoiceId, InvoiceType type, 
+app.MapPut("/Invoices/{invoiceId}/Type", async (string invoiceId, InvoiceType type, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetType(invoiceId, type), cancellationToken))
     .WithName("Invoices_SetType")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/DueDate", async (int invoiceId, DateTime dueDate, 
+app.MapPut("/Invoices/{invoiceId}/DueDate", async (string invoiceId, DateTime dueDate, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetDueDate(invoiceId, dueDate), cancellationToken))
     .WithName("Invoices_SetDueDate")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Reference", async (int invoiceId, string? reference, 
+app.MapPut("/Invoices/{invoiceId}/Reference", async (string invoiceId, string? reference, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetReference(invoiceId, reference), cancellationToken))
     .WithName("Invoices_SetReference")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Note", async (int invoiceId, string? note, 
+app.MapPut("/Invoices/{invoiceId}/Note", async (string invoiceId, string? note, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetNote(invoiceId, note), cancellationToken))
     .WithName("Invoices_SetNote")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapDelete("/Invoices/{invoiceId}", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+app.MapDelete("/Invoices/{invoiceId}", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new DeleteInvoice(invoiceId), cancellationToken))
     .WithName("Invoices_DeleteInvoice")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapDelete("/Invoices/{invoiceId}/Items/{invoiceItemId}", async (int invoiceId, int invoiceItemId, IMediator mediator, CancellationToken cancellationToken)
+app.MapDelete("/Invoices/{invoiceId}/Items/{invoiceItemId}", async (string invoiceId, string invoiceItemId, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new DeleteInvoiceItem(invoiceId, invoiceItemId), cancellationToken))
     .WithName("Invoices_DeleteInvoiceItem")
     .WithTags("Invoices")

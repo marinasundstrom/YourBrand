@@ -1,5 +1,5 @@
 @page "/invoices/new"
-@page "/invoices/{Id:int}"
+@page "/invoices/{Id}"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Invoicing.Invoicing
@@ -219,7 +219,7 @@
     HubConnection hubConnection = null!;
 
     [Parameter]
-    public int? Id { get; set; }
+    public string? Id { get; set; }
 
     [Required]
     public InvoiceViewModel Model { get; set;  }
@@ -228,7 +228,7 @@
     {
         if (Id is not null)
         {
-            invoice = await InvoicesClient.GetInvoiceAsync(Id.GetValueOrDefault());
+            invoice = await InvoicesClient.GetInvoiceAsync(Id);
 
             Model = invoice.ToModel();
         }
@@ -386,7 +386,7 @@
 
     public async Task UpdateInvoiceStatus()
     {
-        int invoiceId = Id.GetValueOrDefault();
+        string invoiceId = Id;
 
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoiceId);
@@ -418,7 +418,7 @@
             {
                 date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
-                await InvoicesClient.SetDateAsync(Id.GetValueOrDefault(),
+                await InvoicesClient.SetDateAsync(Id,
                 date.GetValueOrDefault().ToUniversalTime());
 
                 Model.Date = date;
@@ -438,7 +438,7 @@
             {
                 date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
-                await InvoicesClient.SetDueDateAsync(Id.GetValueOrDefault(),
+                await InvoicesClient.SetDueDateAsync(Id,
                 date.GetValueOrDefault().ToUniversalTime());
 
                 Model.DueDate = date;
@@ -454,7 +454,7 @@
     {
         if (reference != Model.Reference)
         {
-            await InvoicesClient.SetReferenceAsync(Id.GetValueOrDefault(), reference);
+            await InvoicesClient.SetReferenceAsync(Id, reference);
             Model.Reference = reference;
         }
     }
@@ -463,7 +463,7 @@
     {
         if (note != Model.Note)
         {
-            await InvoicesClient.SetNoteAsync(Id.GetValueOrDefault(), note);
+            await InvoicesClient.SetNoteAsync(Id, note);
             Model.Note = note;
         }
     }
@@ -487,7 +487,7 @@
         if (!result.GetValueOrDefault())
             return;
 
-        await InvoicesClient.DeleteInvoiceItemAsync(Id.GetValueOrDefault(), invoiceItem.Id);
+        await InvoicesClient.DeleteInvoiceItemAsync(Id, invoiceItem.Id);
 
         Model.Items.Remove(invoiceItem);
     }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record UpdateInvoiceItem(int InvoiceId, int InvoiceItemId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
+public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
 {
     public class Handler : IRequestHandler<UpdateInvoiceItem, InvoiceItemDto>
     {

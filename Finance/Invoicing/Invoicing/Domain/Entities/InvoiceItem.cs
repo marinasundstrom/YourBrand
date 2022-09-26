@@ -13,6 +13,7 @@ public class InvoiceItem
 
     public InvoiceItem(Invoice invoice, ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
     {
+        Id = Guid.NewGuid().ToString();
         Invoice = invoice;
         ProductType = productType;
         Description = description;
@@ -21,11 +22,11 @@ public class InvoiceItem
         UpdateQuantity(quantity);
     }
 
-    public int Id { get; private set; }
+    public string Id { get; private set; }
 
     public Invoice Invoice { get; private set; }
 
-    public int InvoiceId { get; private set; }
+    public string InvoiceId { get; private set; }
 
     public string? ProductId { get; private set; }
 

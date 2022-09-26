@@ -23,7 +23,7 @@ public class Invoice : Entity
         AddDomainEvent(new InvoiceCreated(Id));
     }
 
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     public DateTime? Date { get; set; }
 

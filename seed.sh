@@ -25,11 +25,11 @@ echo "Seeding databases"
 
 # Finance
 
-cd ./Finance/Accounting; sh seed.sh; cd ../..;
+# cd ./Finance/Accounting; sh seed.sh; cd ../..;
 cd ./Finance/Invoicing; sh seed.sh; cd ../..;
-cd ./Finance/Payments; sh seed.sh; cd ../..;
-cd ./Finance/Transactions; sh seed.sh; cd ../..;
-cd ./Finance/RotRutService; sh seed.sh; cd ../..;
+# cd ./Finance/Payments; sh seed.sh; cd ../..;
+# cd ./Finance/Transactions; sh seed.sh; cd ../..;
+# cd ./Finance/RotRutService; sh seed.sh; cd ../..;
 
 # End Finance
 

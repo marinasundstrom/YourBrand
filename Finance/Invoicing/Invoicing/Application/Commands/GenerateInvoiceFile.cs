@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record GenerateInvoiceFile(int InvoiceId) : IRequest<Stream>
+public record GenerateInvoiceFile(string InvoiceId) : IRequest<Stream>
 {
     public class Handler : IRequestHandler<GenerateInvoiceFile, Stream>
     {

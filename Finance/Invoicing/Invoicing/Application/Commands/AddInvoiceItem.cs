@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record AddItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
+public record AddItem(string InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
 {
     public class Handler : IRequestHandler<AddItem, InvoiceItemDto>
     {

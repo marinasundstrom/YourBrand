@@ -6,7 +6,7 @@ namespace YourBrand.Invoicing.Invoicing;
 
 public class InvoiceItemViewModel
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [Required]
     public string Description { get; set; } = null!;
