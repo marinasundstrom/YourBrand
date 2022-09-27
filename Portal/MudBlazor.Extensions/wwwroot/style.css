@@ -109,6 +109,12 @@
     border: 1px solid #dddddd;
 }
 
+.reply-bubble.deleted {
+    background-color: #fff !important;
+    color: #000;
+    border: 1px solid #dddddd;
+}
+
 .message .row {
     /* margin-top: 5px; */
 }

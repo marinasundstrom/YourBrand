@@ -130,10 +130,17 @@
                                 {
                                     if (message.ReplyTo is not null)
                                     {
-                                        <div class="reply-bubble @(message.SentBy.Id == userId ? "right" : "left")">
-                                            <small><b>@message.ReplyTo.SentBy.GetDisplayName()</b></small>
+                                        <div class="reply-bubble @(message.ReplyTo.Deleted is not null ? "deleted" : string.Empty) @(message.SentBy.Id == userId ? "right" : "left")">
                                             <div>
-                                                @message.ReplyTo.Text
+                                                @if (message.ReplyTo.Deleted is not null)
+                                                {
+                                                    <p>Message was deleted.</p>
+                                                }
+                                                else 
+                                                {
+                                                    <small><b>@message.ReplyTo.SentBy.GetDisplayName()</b></small>
+                                                    <p> @message.ReplyTo.Text</p>
+                                                }
                                             </div>
                                         </div>
                                     }
@@ -304,7 +311,7 @@
 
         ThemeManager.ColorSchemeChanged += (s, e) => {
             IsDark = e.ColorScheme == Portal.Theming.ColorScheme.Dark;
-            Console.WriteLine(IsDark);
+            //Console.WriteLine(IsDark);
             StateHasChanged();
         };
 
@@ -355,6 +362,8 @@
         {
             Snackbar.Add(exc.Message.ToString(), Severity.Error);
         }
+
+        StateHasChanged();
 
         await LoadItems(30);
 
@@ -410,7 +419,7 @@
         }
         else
         {
-            Console.WriteLine("Reply");
+            //Console.WriteLine("Reply");
 
             var parent = messages.First(x => x.Id == model.ReplyTo.Id);
             parent.Replies.Add(model);
@@ -423,7 +432,7 @@
 
         if (dto.SentBy.Id != userId)
         {
-            Console.WriteLine("Send message read");
+            //Console.WriteLine("Send message read");
 
             await hubConnection.SendAsync("MessageRead", ConversationId, dto.Id);
         }
@@ -446,13 +455,13 @@
 
     async Task OnMessageRead(ReceiptDto dto)
     {
-        Console.WriteLine("Receive message read");
+        //Console.WriteLine("Receive message read");
 
         var message = messages.FirstOrDefault(x => x.Id == dto.MessageId);
 
         if (message is not null)
         {
-            Console.WriteLine("Add message read");
+            //Console.WriteLine("Add message read");
 
             message.Receipts.Add(dto);
 
@@ -471,6 +480,18 @@
 
             StateHasChanged();
         }
+
+        var replies = messages
+            .Where(x => x.ReplyTo is not null && x.ReplyTo.Id == dto.Id)
+            .Select(x => x.ReplyTo);
+
+        foreach(var reply in replies) 
+        {
+            reply.Text = String.Empty;
+            reply.Deleted = DateTime.Now;
+        }
+        
+        StateHasChanged();
     }
 
     public record Point(double X, double Y);
@@ -622,7 +643,7 @@
         {
             message = await ConversationsClient.PostMessageAsync(ConversationId, text, replyToMessage?.Id);
 
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(message));
+            //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(message));
 
             await OnMessageReceived(message);
         }
