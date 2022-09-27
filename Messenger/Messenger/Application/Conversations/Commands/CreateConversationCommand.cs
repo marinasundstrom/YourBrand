@@ -8,6 +8,8 @@ using MassTransit;
 
 using MediatR;
 using YourBrand.Identity;
+using YourBrand.Messenger.Domain.Repositories;
+using YourBrand.Messenger.Domain;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 
@@ -15,15 +17,15 @@ public record CreateConversationCommand(string? Title) : IRequest<ConversationDt
 {
     public class CreateConversationCommandHandler : IRequestHandler<CreateConversationCommand, ConversationDto>
     {
-        private readonly IMediator _mediator;
-        private readonly IMessengerContext context;
+        private readonly IConversationRepository _conversationRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
         private readonly IBus _bus;
 
-        public CreateConversationCommandHandler(IMediator mediator, IMessengerContext context, ICurrentUserService currentUserService, IBus bus)
+        public CreateConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
         {
-            _mediator = mediator;
-            this.context = context;
+            _conversationRepository = conversationRepository;
+            _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
             _bus = bus;
         }
@@ -37,13 +39,14 @@ public record CreateConversationCommand(string? Title) : IRequest<ConversationDt
                 Title = request.Title
             };
 
-            context.Conversations.Add(conversation);
+            _conversationRepository.AddConversation(conversation);
 
-            await context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _mediator.Send(new JoinConversationCommand(conversation.Id), cancellationToken);
+            //await _mediator.Send(new JoinConversationCommand(conversation.Id), cancellationToken);
 
-            return await _mediator.Send(new GetConversationQuery(conversation.Id), cancellationToken)!;
+            conversation = await _conversationRepository.GetConversation(conversation.Id);
+            return conversation!.ToDto();
         }
     }
 }

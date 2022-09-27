@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Messenger API",
@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://localhost:5050"
+      "url": "https://localhost:5099"
     }
   ],
   "paths": {
@@ -580,7 +580,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/MessageDto"
+                "$ref": "#/components/schemas/ReplyToMessageDto"
               }
             ]
           },
@@ -597,6 +597,55 @@
             "items": {
               "$ref": "#/components/schemas/MessageDto"
             }
+          },
+          "sent": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sentBy": {
+            "$ref": "#/components/schemas/UserDto"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifiedBy": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            ]
+          },
+          "deleted": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            ]
+          }
+        }
+      },
+      "ReplyToMessageDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "conversationId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
           },
           "sent": {
             "type": "string",

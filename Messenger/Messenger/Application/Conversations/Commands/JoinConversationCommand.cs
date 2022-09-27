@@ -8,6 +8,8 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
+using YourBrand.Messenger.Domain.Repositories;
+using YourBrand.Messenger.Domain;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 
@@ -15,13 +17,17 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
 {
     public class JoinConversationCommandHandler : IRequestHandler<JoinConversationCommand>
     {
-        private readonly IMessengerContext context;
+        private readonly IConversationRepository _conversationRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
         private readonly IBus _bus;
 
-        public JoinConversationCommandHandler(IMessengerContext context, ICurrentUserService currentUserService, IBus bus)
+        public JoinConversationCommandHandler(IConversationRepository conversationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
         {
-            this.context = context;
+            _conversationRepository = conversationRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
             _bus = bus;
         }
@@ -30,14 +36,14 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
         {
             var userId = _currentUserService.UserId;
 
-            var conversation = await context.Conversations.FirstOrDefaultAsync(x => x.Id == request.ConversationId, cancellationToken);
+            var conversation = await _conversationRepository.GetConversation(request.ConversationId!, cancellationToken);
 
             if(conversation is null)
             {
                 throw new Exception();
             }
 
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+            var user = await _userRepository.GetUserById(userId!, cancellationToken);
 
             if (user is null)
             {
@@ -46,7 +52,7 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
 
             conversation.AddParticipant(user);
 
-            await context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

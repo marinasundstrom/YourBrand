@@ -11,7 +11,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Application.Messages.Commands;
 
-public record UpdateMessageCommand(string MessageId, string Text) : IRequest
+public record UpdateMessageCommand(string ConversationId, string MessageId, string Text) : IRequest
 {
     public class UpdateMessageCommandHandler : IRequestHandler<UpdateMessageCommand>
     {

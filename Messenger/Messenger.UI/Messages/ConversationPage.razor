@@ -278,7 +278,7 @@
         var result = await DialogService.ShowMessageBox("Delete message", "Are you sure?", "Yes", "No");
         if (result.GetValueOrDefault())
         {
-            await hubConnection.SendAsync("DeleteMessage", message.Id);
+            await hubConnection.SendAsync("DeleteMessage", ConversationId, message.Id);
         }
     }
 
@@ -313,7 +313,7 @@
 
         try
         {
-            hubConnection = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/messenger/hubs/messages", options =>
+            hubConnection = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/messenger/hubs/messages?conversationId={ConversationId}", options =>
             {
                 options.AccessTokenProvider = async () =>
                 {
@@ -425,7 +425,7 @@
         {
             Console.WriteLine("Send message read");
 
-            await hubConnection.SendAsync("MessageRead", dto.Id);
+            await hubConnection.SendAsync("MessageRead", ConversationId, dto.Id);
         }
 
         StateHasChanged();
@@ -542,7 +542,7 @@
 
             if (dto.SentBy.Id != userId && !message.Receipts.Any(x => x.User.Id == userId))
             {
-                await hubConnection.SendAsync("MessageRead", dto.Id);
+                await hubConnection.SendAsync("MessageRead", ConversationId, dto.Id);
             }
         }
 
@@ -616,7 +616,7 @@
         {
             //message = await ConversationsClient.PostMessageAsync(text, replyToMessage?.Id);
 
-            await hubConnection.SendAsync("EditMessage", editMessage.Id, text);
+            await hubConnection.SendAsync("EditMessage", ConversationId, editMessage.Id, text);
         }
         else
         {
@@ -649,7 +649,7 @@
     {
         public string Id { get; set; } = null!;
 
-        public MessageDto? ReplyTo { get; set; }
+        public ReplyToMessageDto? ReplyTo { get; set; }
 
         public UserDto SentBy { get; set; } = null!;
 

@@ -93,7 +93,7 @@ public class ConversationsController : ControllerBase
         string conversationId, string id,
         CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(new DeleteMessageCommand(id), cancellationToken);
+        await _mediator.Send(new DeleteMessageCommand(conversationId, id), cancellationToken);
         return Ok();
     }
 }

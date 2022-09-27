@@ -32,21 +32,4 @@ public static class ServiceExtensions
 
         return services;
     }
-
-    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSqlServer<MessengerContext>(
-            configuration.GetConnectionString("mssql", "Messenger") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
-
-        services.AddScoped<IMessengerContext>(sp => sp.GetRequiredService<MessengerContext>());
-
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-
-        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-
-        services.AddTransient<IDateTime, DateTimeService>();
-
-        return services;
-    }
 }

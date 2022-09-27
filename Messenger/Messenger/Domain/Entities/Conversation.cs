@@ -1,5 +1,6 @@
 ﻿
 using YourBrand.Messenger.Domain.Common;
+using YourBrand.Messenger.Domain.Events;
 
 namespace YourBrand.Messenger.Domain.Entities;
 
@@ -21,15 +22,25 @@ public class Conversation : AuditableEntity, ISoftDelete
 
     public IReadOnlyCollection<Message> Messages => _messages;
 
-    public void AddMessage(Message message) => _messages.Add(message);
+    public void AddMessage(Message message) 
+    {
+         _messages.Add(message);
+        message.AddDomainEvent(new MessagePostedEvent(Id, message.Id));
+    }
 
     public void DeleteMessage(Message message)
     {
         message.Text = String.Empty;
         _messages.Remove(message);
+         message.AddDomainEvent(new MessageDeletedEvent(Id, message.Id));
     }
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
+
+    public void RemoveParticipant(ConversationParticipant participant)
+    {
+        _participants.Add(participant);
+    }
 }

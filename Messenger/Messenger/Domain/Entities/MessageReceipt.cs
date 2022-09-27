@@ -8,6 +8,4 @@ public class MessageReceipt : AuditableEntity
     public string Id { get; set; } = null!;
 
     public Message Message { get; set; } = null!;
-
-    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

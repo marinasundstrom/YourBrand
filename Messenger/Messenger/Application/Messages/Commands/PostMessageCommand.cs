@@ -9,6 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
+using YourBrand.Messenger.Domain.Events;
 
 namespace YourBrand.Messenger.Application.Messages.Commands;
 
@@ -45,7 +46,7 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
             }
 
             var message = new Message(request.Text, request.ReplyToId);
-
+            
             conversation.AddMessage(message);
 
             await context.SaveChangesAsync(cancellationToken);

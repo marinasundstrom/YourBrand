@@ -7,6 +7,8 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
+using YourBrand.Messenger.Domain.Repositories;
+using YourBrand.Messenger.Domain;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 
@@ -14,13 +16,15 @@ public record LeaveConversationCommand(string? ConversationId) : IRequest
 {
     public class LeaveConversationCommandHandler : IRequestHandler<LeaveConversationCommand>
     {
-        private readonly IMessengerContext context;
+        private readonly IConversationRepository _conversationRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
         private readonly IBus _bus;
 
-        public LeaveConversationCommandHandler(IMessengerContext context, ICurrentUserService currentUserService, IBus bus)
+        public LeaveConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
         {
-            this.context = context;
+            _conversationRepository = conversationRepository;
+            _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
             _bus = bus;
         }
@@ -29,16 +33,23 @@ public record LeaveConversationCommand(string? ConversationId) : IRequest
         {
             var userId = _currentUserService.UserId;
 
-            var participant = await context.ConversationParticipants.FirstOrDefaultAsync(x => x.Id == request.ConversationId, cancellationToken);
+            var conversation = await _conversationRepository.GetConversation(request.ConversationId!, cancellationToken);
 
+            if (conversation is null)
+            {
+                throw new Exception();
+            }
+
+            var participant = conversation.Participants.FirstOrDefault(x => x.Id == request.ConversationId);
+            
             if (participant is null)
             {
                 throw new Exception();
             }
 
-            context.ConversationParticipants.Remove(participant);
+            conversation.RemoveParticipant(participant);
 
-            await context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

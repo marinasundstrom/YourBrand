@@ -53,7 +53,7 @@ public class UpdateMessageConsumer : IConsumer<UpdateMessage>
 
         await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
-        await _mediator.Send(new UpdateMessageCommand(message.MessageId!, message.Text));
+        await _mediator.Send(new UpdateMessageCommand(message.ConversationId, message.MessageId!, message.Text));
     }
 }
 
@@ -76,7 +76,7 @@ public class DeleteMessageConsumer : IConsumer<DeleteMessage>
 
         await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
-        await _mediator.Send(new DeleteMessageCommand(message.MessageId));
+        await _mediator.Send(new DeleteMessageCommand(message.ConversationId, message.MessageId));
     }
 }
 

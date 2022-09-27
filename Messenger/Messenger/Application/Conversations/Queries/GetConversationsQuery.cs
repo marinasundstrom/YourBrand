@@ -6,6 +6,7 @@ using YourBrand.Messenger.Contracts;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Messenger.Domain.Repositories;
 
 namespace YourBrand.Messenger.Application.Conversations.Queries;
 
@@ -15,24 +16,16 @@ public record GetConversationsQuery(
 {
     public class GetConversationsQueryHandler : IRequestHandler<GetConversationsQuery, Results<ConversationDto>>
     {
-        private readonly IMessengerContext context;
+        private readonly IConversationRepository _conversationRepository;
 
-        public GetConversationsQueryHandler(IMessengerContext context)
+        public GetConversationsQueryHandler(IConversationRepository conversationRepository)
         {
-            this.context = context;
+            _conversationRepository = conversationRepository;
         }
 
         public async Task<Results<ConversationDto>> Handle(GetConversationsQuery request, CancellationToken cancellationToken)
         {
-            var query = context.Conversations
-                .Include(c => c.Participants)
-                .ThenInclude(c => c.User)
-                .Include(c => c.CreatedBy)
-                .Include(c => c.LastModifiedBy)
-                .OrderByDescending(c => c.Created)
-                .AsSplitQuery()
-                .AsNoTracking()
-                .AsQueryable();
+            var query = _conversationRepository.GetConversations();
 
             var totalCount = await query.CountAsync(cancellationToken);
 
