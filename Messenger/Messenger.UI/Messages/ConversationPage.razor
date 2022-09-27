@@ -248,6 +248,9 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
     [Parameter]
     public string ConversationId { get; set; } = null!;
 
@@ -315,7 +318,18 @@
             StateHasChanged();
         };
 
-        userId = await CurrentUserService.GetUserId();
+        var authenticationState = await AuthenticationStateTask;
+
+        //userId = await CurrentUserService.GetUserId();
+
+        Console.WriteLine("Is auth: " + authenticationState.User.Identity.IsAuthenticated);
+
+        Console.WriteLine("Foo");
+
+        userId = authenticationState.User?.FindFirst("sub")?.Value;
+
+        Console.WriteLine(userId);
+
         isCurrentUserAdmin = await CurrentUserService.IsUserInRole(YourBrand.Portal.Roles.Administrator);
 
         try
