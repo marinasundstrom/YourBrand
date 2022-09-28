@@ -36,21 +36,4 @@ public static class ServiceExtensions
 
         return services;
     }
-
-    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSqlServer<TimeReportContext>(
-            configuration.GetConnectionString("mssql", "TimeReport") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
-
-        services.AddScoped<ITimeReportContext>(sp => sp.GetRequiredService<TimeReportContext>());
-
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-
-        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-
-        services.AddTransient<IDateTime, DateTimeService>();
-
-        return services;
-    }
 }

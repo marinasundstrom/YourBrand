@@ -7,7 +7,9 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Users;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
@@ -15,31 +17,20 @@ public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? Projec
 {
     public class GetTimeSheetsQueryHandler : IRequestHandler<GetTimeSheetsQuery, ItemsResult<TimeSheetDto>>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public GetTimeSheetsQueryHandler(ITimeReportContext context)
+        public GetTimeSheetsQueryHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
         }
 
         public async Task<ItemsResult<TimeSheetDto>> Handle(GetTimeSheetsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.TimeSheets
-                       .Include(x => x.User)
-                       .Include(x => x.Activities)
-                       .ThenInclude(x => x.Entries)
-                       .ThenInclude(x => x.MonthGroup)
-                       .Include(x => x.Activities)
-                       .ThenInclude(x => x.Activity)
-                       .Include(x => x.Activities)
-                       .ThenInclude(x => x.Project)             
-                       .ThenInclude(x => x.Organization)
-                       .Include(x => x.Activities)
-                       .ThenInclude(x => x.Activity)
-                       .ThenInclude(x => x.Project)
-                        .ThenInclude(x => x.Organization)
-                       .OrderByDescending(x => x.Year)
-                       .ThenByDescending(x => x.Week)
+            var query = _timeSheetRepository.GetTimeSheets()
                        .AsNoTracking()
                        .AsSplitQuery();
 

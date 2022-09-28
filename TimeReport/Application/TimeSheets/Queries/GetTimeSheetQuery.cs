@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Users;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
@@ -14,44 +16,31 @@ public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
 {
     public class GetTimeSheetQueryHandler : IRequestHandler<GetTimeSheetQuery, TimeSheetDto?>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public GetTimeSheetQueryHandler(ITimeReportContext context)
+        public GetTimeSheetQueryHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _monthGroupRepository = monthGroupRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
         }
 
         public async Task<TimeSheetDto?> Handle(GetTimeSheetQuery request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets
-                .Include(x => x.User)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Entries)
-                .ThenInclude(x => x.MonthGroup)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Activity)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Project)
-                .ThenInclude(x => x.Organization)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Activity)
-                .ThenInclude(x => x.Project)
-                .ThenInclude(x => x.Organization)
-                .AsNoTracking()
-                .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == request.TimeSheetId, cancellationToken);
+            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
                 return null;
             }
 
-            var monthInfo = await _context.TimeSheetMonths
-                .Where(x => x.UserId == timeSheet.UserId)
-                .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
-                .ToArrayAsync(cancellationToken);
+            var monthInfos = await _monthGroupRepository.GetMonthGroupsForTimeSheet(timeSheet, cancellationToken);
 
-            return timeSheet.ToDto(monthInfo);
+            return timeSheet.ToDto(monthInfos);
         }
     }
 }

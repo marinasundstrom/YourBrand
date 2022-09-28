@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Activities;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Domain.Repositories;
 
 using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
@@ -17,16 +19,20 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
 {
     public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Result<EntryDto, DomainException>>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public UpdateEntryCommandHandler(ITimeReportContext context)
+        public UpdateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
         }
 
         public async Task<Result<EntryDto, DomainException>> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
+            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -65,7 +71,7 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
                 return new Result<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new Result<EntryDto, DomainException>.Ok(entry.ToDto());
         }

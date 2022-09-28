@@ -14,6 +14,8 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
 using YourBrand.Tenancy;
 using YourBrand.Identity;
+using YourBrand.TimeReport.Domain.Repositories;
+using YourBrand.TimeReport.Domain;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
@@ -21,18 +23,26 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 {
     public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, Result<EntryDto, DomainException>>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
 
-        public CreateEntryCommandHandler(ITimeReportContext context, ICurrentUserService currentUserService)
+        public CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _monthGroupRepository = monthGroupRepository;
+            _projectRepository = projectRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
             _currentUserService = currentUserService;
         }
 
         public async Task<Result<EntryDto, DomainException>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
+            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -44,13 +54,13 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
-            var group = await _context.TimeSheetMonths.GetMonth(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
+            var group = await _monthGroupRepository.GetMonthGroupForUser(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
 
             if (group is null)
             {
                 group = new MonthEntryGroup(timeSheet.User, request.Date.Year, request.Date.Month);
 
-                _context.TimeSheetMonths.Add(group);
+                _monthGroupRepository.AddMonthGroup(group);
             }
             else
             {
@@ -70,11 +80,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new Error(new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId));
             }
 
-            var project = await _context.Projects
-                .Include(x => x.Organization)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.ActivityType)
-                .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
+            var project = await _projectRepository.GetProject(request.ProjectId, cancellationToken);
 
             if (project is null)
             {
@@ -114,11 +120,9 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             var entry = timeSheetActivity.AddEntry(request.Date, request.Hours, request.Description);
 
-            //entry.MonthGroup = group;
-
             group.AddEntry(entry);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new Ok(entry.ToDto());
         }

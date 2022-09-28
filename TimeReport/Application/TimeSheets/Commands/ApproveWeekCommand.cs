@@ -4,8 +4,10 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
@@ -13,16 +15,18 @@ public record ApproveWeekCommand(string TimeSheetId) : IRequest
 {
     public class ApproveWeekCommandHandler : IRequestHandler<ApproveWeekCommand>
     {
-        private readonly ITimeReportContext _context;
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ApproveWeekCommandHandler(ITimeReportContext context)
+        public ApproveWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _timeSheetRepository = timeSheetRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(ApproveWeekCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
+            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -31,7 +35,7 @@ public record ApproveWeekCommand(string TimeSheetId) : IRequest
 
             timeSheet.Approve();
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

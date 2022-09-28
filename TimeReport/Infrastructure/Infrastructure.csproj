@@ -21,10 +21,5 @@
     <PackageReference Include="Quartz" Version="3.5.0" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Persistence\Interceptors\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persistence\Interceptors\" />
-  </ItemGroup>
+
 </Project>

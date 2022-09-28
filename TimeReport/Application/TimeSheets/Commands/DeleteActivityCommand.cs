@@ -4,8 +4,10 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
@@ -13,16 +15,20 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
 {
     public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityCommand>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public DeleteActivityCommandHandler(ITimeReportContext context)
+        public DeleteActivityCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
         }
 
         public async Task<Unit> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
+            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -53,7 +59,7 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
                 }
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

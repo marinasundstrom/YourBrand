@@ -32,7 +32,7 @@ public class MonthEntryGroup : AuditableEntity
 
     public IReadOnlyCollection<Entry> Entries => _entries;
 
-    public EntryStatus Status { get; private set; } = EntryStatus.Unlocked;
+    public EntryStatus Status { get; private set; }
 
     public void UpdateStatus(EntryStatus status)
     {

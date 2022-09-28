@@ -10,7 +10,9 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Users;
 using YourBrand.TimeReport.Application.Users.Commands;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
@@ -18,30 +20,26 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
 {
     public class GetTimeSheetForWeekQueryHandler : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetTimeSheetForWeekQueryHandler(ITimeReportContext context, ICurrentUserService currentUserService)
+        public GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _monthGroupRepository = monthGroupRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
             _currentUserService = currentUserService;
         }
 
         public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.TimeSheets
-                .Include(x => x.User)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Entries)
-                .ThenInclude(x => x.MonthGroup)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Activity)
-                .ThenInclude(x => x.Project)
-                .ThenInclude(x => x.Organization)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.Project)
-                .ThenInclude(x => x.Organization)
-                .Include(x => x.Activities)
+            var query = _timeSheetRepository.GetTimeSheets()
                 .AsSplitQuery();
 
             string? userId = request.UserId ?? _currentUserService.UserId;
@@ -52,7 +50,7 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
 
             if (timeSheet is null)
             {
-                User? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+                User? user = await _userRepository.GetUser(userId!, cancellationToken);
                 
                 userId = user?.Id;
 
@@ -62,15 +60,12 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
 
                 _context.TimeSheets.Add(timeSheet);
 
-                await _context.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
 
-            var monthInfo = await _context.TimeSheetMonths
-                .Where(x => x.UserId == timeSheet.UserId)
-                .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
-                .ToArrayAsync(cancellationToken);
+            var monthInfos = await _monthGroupRepository.GetMonthGroupsForTimeSheet(timeSheet, cancellationToken);
 
-            return timeSheet.ToDto(monthInfo);
+            return timeSheet.ToDto(monthInfos);
         }
     }
 }

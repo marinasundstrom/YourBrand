@@ -12,6 +12,8 @@ using Xunit;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Application.TimeSheets;
+using YourBrand.TimeReport.Domain.Repositories;
+using YourBrand.TimeReport.Domain;
 
 namespace Tests;
 
@@ -44,7 +46,10 @@ public class TimeSheetsTest : TestBase
 
         */
 
-        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(context, fakeCurrentUserService);
+        var timeSheetRepository = Substitute.For<ITimeSheetRepository>();
+        var unitOfWork = Substitute.For<IUnitOfWork>();
+
+        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(timeSheetRepository, unitOfWork, context, fakeCurrentUserService);
 
         var initialTimeSheetsCount = await context.TimeSheets.CountAsync();
 

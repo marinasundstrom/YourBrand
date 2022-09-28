@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Activities;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
+using YourBrand.TimeReport.Domain.Repositories;
 
 using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
@@ -18,16 +20,20 @@ public record UpdateEntryDetailsCommand(string TimeSheetId, string EntryId, stri
 {
     public class UpdateEntryDetailsCommandHandler : IRequestHandler<UpdateEntryDetailsCommand, EntryDto>
     {
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public UpdateEntryDetailsCommandHandler(ITimeReportContext context)
+        public UpdateEntryDetailsCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
+            _timeSheetRepository = timeSheetRepository;
+            _unitOfWork = unitOfWork;
             _context = context;
         }
 
         public async Task<EntryDto> Handle(UpdateEntryDetailsCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _context.TimeSheets.GetTimeSheetAsync(request.TimeSheetId, cancellationToken);
+            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -53,7 +59,7 @@ public record UpdateEntryDetailsCommand(string TimeSheetId, string EntryId, stri
 
             entry.Description = request.Description;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return entry.ToDto();
         }
