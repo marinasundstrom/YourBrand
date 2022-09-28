@@ -25,9 +25,10 @@ public static class ServiceExtensions
         services.AddScoped<ITimeReportContext>(sp => sp.GetRequiredService<TimeReportContext>());
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<ITimeSheetRepository, TimeSheetRepository>();
-        services.AddScoped<IMonthGroupRepository, MonthGroupRepository>();
+        services.AddScoped<IReportingPeriodRepository, ReportingPeriodRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();

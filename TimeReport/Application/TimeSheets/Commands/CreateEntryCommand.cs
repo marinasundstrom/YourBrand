@@ -24,16 +24,16 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
     public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, Result<EntryDto, DomainException>>
     {
         private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IReportingPeriodRepository _reportingPeriodRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
 
-        public CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
+        public CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
         {
             _timeSheetRepository = timeSheetRepository;
-            _monthGroupRepository = monthGroupRepository;
+            _reportingPeriodRepository = reportingPeriodRepository;
             _projectRepository = projectRepository;
             _unitOfWork = unitOfWork;
             _context = context;
@@ -54,13 +54,13 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
-            var group = await _monthGroupRepository.GetMonthGroupForUser(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
+            var group = await _reportingPeriodRepository.GetReportingPeriod(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
 
             if (group is null)
             {
-                group = new MonthEntryGroup(timeSheet.User, request.Date.Year, request.Date.Month);
+                group = new ReportingPeriod(timeSheet.User, request.Date.Year, request.Date.Month);
 
-                _monthGroupRepository.AddMonthGroup(group);
+                _reportingPeriodRepository.AddReportingPeriod(group);
             }
             else
             {

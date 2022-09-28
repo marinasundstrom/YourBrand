@@ -3,11 +3,11 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class MonthEntryGroup : AuditableEntity
+public class ReportingPeriod : AuditableEntity
 {
     private HashSet<Entry> _entries = new HashSet<Entry>();
 
-    public MonthEntryGroup(User user, int year, int month)
+    public ReportingPeriod(User user, int year, int month)
     {
         Id = Guid.NewGuid().ToString();
         User = user;
@@ -16,7 +16,7 @@ public class MonthEntryGroup : AuditableEntity
         Status = EntryStatus.Unlocked;
     }
 
-    internal MonthEntryGroup()
+    internal ReportingPeriod()
     {
     }
 

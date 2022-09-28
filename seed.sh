@@ -12,7 +12,7 @@ echo "Seeding databases"
 # cd ./Customers; sh seed.sh; cd ..;
 # cd ./IdentityService; sh seed.sh; cd ..;
 # cd ./AppService; sh seed.sh; cd ..;
-# cd ./TimeReport; sh seed.sh; cd ..;
+cd ./TimeReport; sh seed.sh; cd ..;
 # cd ./Showroom; sh seed.sh; cd ..;
 # cd ./Notifications; sh seed.sh; cd ..;
 # cd ./ApiKeys; sh seed.sh; cd ..;
@@ -26,7 +26,7 @@ echo "Seeding databases"
 # Finance
 
 # cd ./Finance/Accounting; sh seed.sh; cd ../..;
-cd ./Finance/Invoicing; sh seed.sh; cd ../..;
+# cd ./Finance/Invoicing; sh seed.sh; cd ../..;
 # cd ./Finance/Payments; sh seed.sh; cd ../..;
 # cd ./Finance/Transactions; sh seed.sh; cd ../..;
 # cd ./Finance/RotRutService; sh seed.sh; cd ../..;

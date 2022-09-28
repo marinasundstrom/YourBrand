@@ -66,14 +66,14 @@ public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? Projec
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var monthInfo = await _context.TimeSheetMonths
+            var period = await _context.ReportingPeriods
                 .Where(x => x.Status == EntryStatus.Locked)
                 .ToArrayAsync(cancellationToken);
 
             return new ItemsResult<TimeSheetDto>(
                 timeSheets.Select(timeSheet =>
                 {
-                    var m = monthInfo
+                    var m = period
                             .Where(x => x.UserId == timeSheet.UserId)
                             .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month);
 

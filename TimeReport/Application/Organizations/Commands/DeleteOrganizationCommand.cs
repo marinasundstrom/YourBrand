@@ -2,6 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Domain;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.Organizations
 .Commands;
@@ -10,23 +12,24 @@ public record DeleteOrganizationCommand(string Id) : IRequest
 {
     public class DeleteOrganizationCommandHandler : IRequestHandler<DeleteOrganizationCommand>
     {
-        private readonly ITimeReportContext context;
+        private readonly IOrganizationRepository _organizationRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteOrganizationCommandHandler(ITimeReportContext context)
+        public DeleteOrganizationCommandHandler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork)
         {
-            this.context = context;
+            _organizationRepository = organizationRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await context.Organizations
-                .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var organization = await _organizationRepository.GetOrganizationById(request.Id, cancellationToken);
 
             if (organization is null) throw new Exception();
 
-            context.Organizations.Remove(organization);
+            _organizationRepository.RemoveOrganization(organization);
            
-            await context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

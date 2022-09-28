@@ -6,23 +6,23 @@ using YourBrand.TimeReport.Infrastructure.Persistence;
 
 namespace YourBrand.TimeReport.Domain;
 
-public sealed class MonthGroupRepository : IMonthGroupRepository
+public sealed class ReportingPeriodRepository : IReportingPeriodRepository
 {
     private readonly TimeReportContext _context;
 
-    public MonthGroupRepository(TimeReportContext context)
+    public ReportingPeriodRepository(TimeReportContext context)
     {
         _context = context;
     }
 
-    public void AddMonthGroup(MonthEntryGroup monthEntryGroup)
+    public void AddReportingPeriod(ReportingPeriod monthEntryGroup)
     {
-        _context.TimeSheetMonths.Add(monthEntryGroup);
+        _context.ReportingPeriods.Add(monthEntryGroup);
     }
 
-    public async Task<MonthEntryGroup?> GetMonthGroupForUser(string userId, int year, int month, CancellationToken cancellationToken = default)
+    public async Task<ReportingPeriod?> GetReportingPeriod(string userId, int year, int month, CancellationToken cancellationToken = default)
     {
-        return await _context.TimeSheetMonths
+        return await _context.ReportingPeriods
                 .Include(x => x.User)
                 .Include(meg => meg.Entries)
                 .ThenInclude(e => e.TimeSheet)
@@ -33,9 +33,9 @@ public sealed class MonthGroupRepository : IMonthGroupRepository
                     && meg.Month == month, cancellationToken);
     }
 
-    public async Task<IEnumerable<MonthEntryGroup>> GetMonthGroupsForTimeSheet(TimeSheet timeSheet, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ReportingPeriod>> GetReportingPeriodForTimeSheet(TimeSheet timeSheet, CancellationToken cancellationToken = default)
     {
-        return await _context.TimeSheetMonths
+        return await _context.ReportingPeriods
                 .Where(x => x.UserId == timeSheet.UserId)
                 .Where(x => x.Month == timeSheet.From.Month || x.Month == timeSheet.To.Month)
                 .ToArrayAsync(cancellationToken);

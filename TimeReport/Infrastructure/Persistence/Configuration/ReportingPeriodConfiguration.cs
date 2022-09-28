@@ -6,11 +6,11 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 
-public class MonthEntryGroupConfiguration : IEntityTypeConfiguration<MonthEntryGroup>
+public class ReportingPeriodConfiguration : IEntityTypeConfiguration<ReportingPeriod>
 {
-    public void Configure(EntityTypeBuilder<MonthEntryGroup> builder)
+    public void Configure(EntityTypeBuilder<ReportingPeriod> builder)
     {
-        builder.ToTable("TimeSheetMonths");
+        builder.ToTable("ReportingPeriods");
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

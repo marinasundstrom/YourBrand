@@ -60,7 +60,7 @@ public static class Mapper
         return new (expenseType.Id, expenseType.Name, expenseType.Description, expenseType.Project?.ToDto());
     }
 
-    public static TimeSheetDto ToDto(this Domain.Entities.TimeSheet timeSheet, IEnumerable<MonthEntryGroup> monthInfo)
+    public static TimeSheetDto ToDto(this Domain.Entities.TimeSheet timeSheet, IEnumerable<ReportingPeriod> period)
     {
         var activities = timeSheet.Activities
             .OrderBy(e => e.Created)
@@ -68,7 +68,7 @@ public static class Mapper
             .ToArray();
 
         return new (timeSheet.Id, timeSheet.Year, timeSheet.Week, timeSheet.From, timeSheet.To, (TimeSheetStatusDto)timeSheet.Status, timeSheet.User.ToDto(),
-                activities, monthInfo.Select(x => new MonthInfoDto(x.Month, x.Status == EntryStatus.Locked)));
+                activities, period.Select(x => new ReportingPeriodDto(x.Month, x.Status == EntryStatus.Locked)));
     }
 
     public static TimeSheetActivityDto ToDto(this Domain.Entities.TimeSheetActivity activity)

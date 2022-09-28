@@ -42,7 +42,7 @@ public class Entry : AuditableEntity
 
     public TimeSheetActivity TimeSheetActivity { get; private set; } = null!;
 
-    public MonthEntryGroup? MonthGroup { get; set; }
+    public ReportingPeriod? MonthGroup { get; set; }
 
     public DateOnly Date { get; set; }
 

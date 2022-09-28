@@ -21,16 +21,16 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
     public class GetTimeSheetForWeekQueryHandler : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
     {
         private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IReportingPeriodRepository _reportingPeriodRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
+        public GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
         {
             _timeSheetRepository = timeSheetRepository;
-            _monthGroupRepository = monthGroupRepository;
+            _reportingPeriodRepository = reportingPeriodRepository;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _context = context;
@@ -63,9 +63,9 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
 
-            var monthInfos = await _monthGroupRepository.GetMonthGroupsForTimeSheet(timeSheet, cancellationToken);
+            var periods = await _reportingPeriodRepository.GetReportingPeriodForTimeSheet(timeSheet, cancellationToken);
 
-            return timeSheet.ToDto(monthInfos);
+            return timeSheet.ToDto(periods);
         }
     }
 }

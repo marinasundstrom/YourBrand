@@ -17,14 +17,14 @@ public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
     public class GetTimeSheetQueryHandler : IRequestHandler<GetTimeSheetQuery, TimeSheetDto?>
     {
         private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IReportingPeriodRepository _reportingPeriodRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public GetTimeSheetQueryHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
+        public GetTimeSheetQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
             _timeSheetRepository = timeSheetRepository;
-            _monthGroupRepository = monthGroupRepository;
+            _reportingPeriodRepository = reportingPeriodRepository;
             _unitOfWork = unitOfWork;
             _context = context;
         }
@@ -38,9 +38,9 @@ public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
                 return null;
             }
 
-            var monthInfos = await _monthGroupRepository.GetMonthGroupsForTimeSheet(timeSheet, cancellationToken);
+            var periods = await _reportingPeriodRepository.GetReportingPeriodForTimeSheet(timeSheet, cancellationToken);
 
-            return timeSheet.ToDto(monthInfos);
+            return timeSheet.ToDto(periods);
         }
     }
 }

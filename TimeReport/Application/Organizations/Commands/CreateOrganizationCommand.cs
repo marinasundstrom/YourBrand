@@ -2,6 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Domain;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.Organizations.Commands;
 
@@ -9,28 +11,30 @@ public record CreateOrganizationCommand(string Id, string Name, string? ParentOr
 {
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
-        private readonly ITimeReportContext context;
+        private readonly IOrganizationRepository _organizationRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateOrganizationCommandHandler(ITimeReportContext context)
+        public CreateOrganizationCommandHandler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork)
         {
-            this.context = context;
+            _organizationRepository = organizationRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<OrganizationDto> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await context.Organizations.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
+            var organization = await _organizationRepository.GetOrganizationByName(request.Name, cancellationToken);
 
             if (organization is not null) throw new Exception();
 
             organization = new Domain.Entities.Organization(request.Id, request.Name, null);
 
-            var parentOrg = request.ParentOrganizationId is null ? null : await context.Organizations.FirstAsync(o => o.Id == request.ParentOrganizationId);
+            var parentOrg = request.ParentOrganizationId is null ? null : await _organizationRepository.GetOrganizationById(request.ParentOrganizationId);
 
             parentOrg?.AddSubOrganization(organization);
 
-            context.Organizations.Add(organization);
+            _organizationRepository.AddOrganization(organization);
 
-            await context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return organization.ToDto();
         }

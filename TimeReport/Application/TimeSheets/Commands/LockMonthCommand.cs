@@ -16,14 +16,14 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
     public class LockMonthCommandHandler : IRequestHandler<LockMonthCommand>
     {
         private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IMonthGroupRepository _monthGroupRepository;
+        private readonly IReportingPeriodRepository _reportingPeriodRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
 
-        public LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IMonthGroupRepository monthGroupRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
+        public LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
         {
             _timeSheetRepository = timeSheetRepository;
-            _monthGroupRepository = monthGroupRepository;
+            _reportingPeriodRepository = reportingPeriodRepository;
             _unitOfWork = unitOfWork;
             _context = context;
         }
@@ -76,7 +76,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
 
             var userId = timeSheet.User.Id;
 
-            var group = await _monthGroupRepository.GetMonthGroupForUser(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
+            var group = await _reportingPeriodRepository.GetReportingPeriod(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
 
             if (group is not null)
             {
