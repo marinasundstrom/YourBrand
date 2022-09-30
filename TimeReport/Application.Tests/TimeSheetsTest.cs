@@ -47,9 +47,12 @@ public class TimeSheetsTest : TestBase
         */
 
         var timeSheetRepository = Substitute.For<ITimeSheetRepository>();
+        var reportingPeriodRepository = Substitute.For<IReportingPeriodRepository>();
+        var userRepository = Substitute.For<IUserRepository>();
+
         var unitOfWork = Substitute.For<IUnitOfWork>();
 
-        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(timeSheetRepository, unitOfWork, context, fakeCurrentUserService);
+        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(timeSheetRepository, reportingPeriodRepository, userRepository, unitOfWork, context, fakeCurrentUserService);
 
         var initialTimeSheetsCount = await context.TimeSheets.CountAsync();
 

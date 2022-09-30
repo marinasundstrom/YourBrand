@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+
+using Polly;
+using Polly.Retry;
+
 using Quartz;
 
 using YourBrand.Warehouse.Application.Common.Interfaces;
@@ -50,8 +54,14 @@ public sealed class ProcessOutboxMessagesJob : IJob
                 continue;
             }
 
-            await domainEventDispatcher.Dispatch(domainEvent, context.CancellationToken);
+            AsyncRetryPolicy policy = Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(3, attempt => TimeSpan.FromMicroseconds(50 * attempt));
 
+            PolicyResult result = await policy.ExecuteAndCaptureAsync(() =>
+                domainEventDispatcher.Dispatch(domainEvent, context.CancellationToken));
+
+            outboxMessage.Error = result.FinalException?.ToString();
             outboxMessage.ProcessedOnUtc = DateTime.UtcNow;
         }
 

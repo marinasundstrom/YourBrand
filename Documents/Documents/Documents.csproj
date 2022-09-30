@@ -13,6 +13,7 @@
 	<ItemGroup>
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.591" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.17.0" />
+        <PackageReference Include="Polly" Version="7.2.3" />
         <PackageReference Include="Quartz" Version="3.5.0" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
 		<PackageReference Include="RazorLight" Version="2.1.0" />
