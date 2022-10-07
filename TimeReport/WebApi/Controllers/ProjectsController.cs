@@ -257,6 +257,6 @@ public class ProjectsController : ControllerBase
     }
 }
 
-public record class CreateProjectDto(string Name, string? Description, string OrganizationId);
+public record class CreateProjectDto(string Name, string? Description, string? OrganizationId);
 
-public record class UpdateProjectDto(string Name, string? Description, string OrganizationId);
+public record class UpdateProjectDto(string Name, string? Description, string? OrganizationId);

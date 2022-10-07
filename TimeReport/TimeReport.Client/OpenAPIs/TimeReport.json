@@ -4638,7 +4638,8 @@
             "nullable": true
           },
           "organizationId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -4654,7 +4655,8 @@
             "nullable": true
           },
           "organizationId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
