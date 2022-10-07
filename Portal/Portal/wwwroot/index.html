@@ -31,16 +31,12 @@
 
 <body>
     <div id="app">
-        <div id="splashscreen" style="height:100%; width:100%; margin:0; position:fixed; background-color: #242222;">
-            <div style="display: flex; justify-content: center; align-items:center; height:100%; width:100%;">
-                <div>
-                    <div style="display: flex; justify-content: center; align-items:center; width:100%;">
-                        <img src="logo.svg" style="height: 50px; max-width: 650px; margin-left: 20px; margin-right: 20px;" />
-                        <h1 style="color: white">YourBrand</h1>
-                    </div>
-                    <div class="progress-text" style="display: flex; justify-content: center;"></div>
-                </div>
-            </div>
+        <div id="splashscreen" style="height:100%; width:100%; margin:0; position:fixed;">
+            <svg class="loading-progress">
+                <circle r="40%" cx="50%" cy="50%" />
+                <circle r="40%" cx="50%" cy="50%" />
+            </svg>
+            <div class="loading-progress-text"></div>
         </div>
     </div>
 

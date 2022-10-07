@@ -48,7 +48,8 @@ function splashscreen() {
     if(colorScheme == 1) 
     {
         const elem = document.getElementById("splashscreen");
-        elem.style.backgroundColor = "#27272fff"; 
+        elem.style.backgroundColor = "#27272fff";
+        elem.classList.toggle("dark");
     }
 }
 
