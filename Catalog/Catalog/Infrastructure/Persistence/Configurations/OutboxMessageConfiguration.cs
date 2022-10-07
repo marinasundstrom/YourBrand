@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using YourBrand.Catalog.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Catalog.Infrastructure.Persistence.Configurations;

@@ -3,6 +3,9 @@ using YourBrand.Catalog.Infrastructure.Persistence;
 using YourBrand.Catalog.Infrastructure.Services;
 using YourBrand.Catalog.Infrastructure.BackgroundJobs;
 using Quartz;
+using MediatR;
+using YourBrand.Catalog.Infrastructure.Idempotence;
+using Scrutor;
 
 namespace YourBrand.Catalog.Infrastructure;
 
@@ -13,6 +16,15 @@ public static class ServiceCollectionExtensions
         services.AddPersistence(configuration);
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+
+        try 
+        {
+            services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
+        }
+        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        {
+            Console.WriteLine(exc);
+        }
 
         services.AddTransient<IDateTime, DateTimeService>();
 

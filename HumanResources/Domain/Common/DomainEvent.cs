@@ -1,6 +1,8 @@
-﻿namespace YourBrand.HumanResources.Domain.Common;
+﻿using MediatR;
 
-public abstract class DomainEvent
+namespace YourBrand.HumanResources.Domain.Common;
+
+public abstract class DomainEvent : INotification
 {
-
+    public Guid Id { get; } = Guid.NewGuid();
 }

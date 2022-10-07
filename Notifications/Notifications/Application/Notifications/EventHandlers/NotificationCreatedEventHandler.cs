@@ -11,7 +11,7 @@ using YourBrand.Notifications.Domain.Events;
 
 namespace YourBrand.Notifications.Application.Notifications.EventHandlers;
 
-public class NotificationCreatedEventHandler : INotificationHandler<DomainEventNotification<NotificationCreatedEvent>>
+public class NotificationCreatedEventHandler : IDomainEventHandler<NotificationCreatedEvent>
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly INotificationPublisher _notficationPublisher;
@@ -24,9 +24,9 @@ public class NotificationCreatedEventHandler : INotificationHandler<DomainEventN
         _recurringJobManager = recurringJobManager;
     }
 
-    public async Task Handle(DomainEventNotification<NotificationCreatedEvent> notification2, CancellationToken cancellationToken)
+    public async Task Handle(NotificationCreatedEvent notification2, CancellationToken cancellationToken)
     {
-        var domainEvent = notification2.DomainEvent;
+        var domainEvent = notification2;
 
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IWorkerContext>();

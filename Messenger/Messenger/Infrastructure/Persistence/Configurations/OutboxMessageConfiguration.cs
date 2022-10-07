@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using YourBrand.Messenger.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence.Configurations;

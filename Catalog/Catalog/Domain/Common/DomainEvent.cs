@@ -1,6 +1,8 @@
-﻿namespace YourBrand.Catalog.Domain.Common;
+﻿using MediatR;
 
-public abstract class DomainEvent
+namespace YourBrand.Catalog.Domain.Common;
+
+public abstract class DomainEvent : INotification
 {
-
+    public Guid Id { get; } = Guid.NewGuid();
 }

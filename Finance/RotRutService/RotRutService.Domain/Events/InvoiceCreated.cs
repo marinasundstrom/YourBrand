@@ -2,7 +2,6 @@ using YourBrand.RotRutService.Domain.Common;
 
 namespace YourBrand.RotRutService.Domain.Events;
 
-/*
 public class InvoiceCreated : DomainEvent
 {
     public InvoiceCreated(int invoiceId)
@@ -12,4 +11,3 @@ public class InvoiceCreated : DomainEvent
 
     public int InvoiceId { get; }
 }
-*/

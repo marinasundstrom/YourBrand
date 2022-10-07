@@ -2,13 +2,12 @@
 using YourBrand.Accounting.Application.Common.Models;
 using YourBrand.Accounting.Domain.Events;
 
-using MediatR;
-
 using Microsoft.Extensions.Logging;
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.EventHandlers;
 
-public class EntryCreatedEventHandler : INotificationHandler<DomainEventNotification<EntryCreatedEvent>>
+public class EntryCreatedEventHandler : IDomainEventHandler<EntryCreatedEvent>
 {
     private readonly ILogger<EntryCreatedEventHandler> _logger;
 
@@ -17,9 +16,9 @@ public class EntryCreatedEventHandler : INotificationHandler<DomainEventNotifica
         _logger = logger;
     }
 
-    public Task Handle(DomainEventNotification<EntryCreatedEvent> notification, CancellationToken cancellationToken)
+    public Task Handle(EntryCreatedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Entry created: {notification.DomainEvent.EntryId}");
+        _logger.LogInformation($"Entry created: {notification.EntryId}");
 
         return Task.CompletedTask;
     }

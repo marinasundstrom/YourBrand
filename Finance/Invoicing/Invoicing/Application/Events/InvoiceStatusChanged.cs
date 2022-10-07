@@ -6,14 +6,13 @@ using YourBrand.Invoicing.Domain.Events;
 
 using MassTransit;
 
-using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Payments.Client;
+using YourBrand.Invoicing.Application.Common.Interfaces;
 
 namespace YourBrand.Invoicing.Application.Events;
 
-public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotification<InvoiceStatusChanged>>
+public class InvoiceStatusChangedHandler : IDomainEventHandler<InvoiceStatusChanged>
 {
     private readonly IInvoicingContext _context;
     private readonly IPaymentsClient _paymentsClient;
@@ -26,17 +25,17 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task Handle(DomainEventNotification<InvoiceStatusChanged> notification, CancellationToken cancellationToken)
+    public async Task Handle(InvoiceStatusChanged notification, CancellationToken cancellationToken)
     {
-        if (notification.DomainEvent.Status == InvoiceStatus.Paid)
+        if (notification.Status == InvoiceStatus.Paid)
         {
-            await _publishEndpoint.Publish(new InvoicePaid(notification.DomainEvent.InvoiceId));
+            await _publishEndpoint.Publish(new InvoicePaid(notification.InvoiceId));
             return;
         }
 
         var invoice = await _context.Invoices
             .Include(i => i.Items)
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.InvoiceId);
+            .FirstOrDefaultAsync(i => i.Id == notification.InvoiceId);
 
         if (invoice is not null)
         {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Items.EventHandlers;
 
-public class ItemDeletedEventHandler : INotificationHandler<DomainEventNotification<ItemDeletedEvent>>
+public class ItemDeletedEventHandler : IDomainEventHandler<ItemDeletedEvent>
 {
     private readonly ICatalogContext _context;
     private readonly IItemsClient _itemsClient;
@@ -20,9 +20,9 @@ public class ItemDeletedEventHandler : INotificationHandler<DomainEventNotificat
         _itemsClient = itemsClient;
     }
 
-    public async Task Handle(DomainEventNotification<ItemDeletedEvent> notification, CancellationToken cancellationToken)
+    public async Task Handle(ItemDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var domainEvent = notification.DomainEvent;
+        var domainEvent = notification;
 
         await _itemsClient.ItemDeleted(domainEvent.Id, domainEvent.Name);
     }

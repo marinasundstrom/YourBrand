@@ -5,10 +5,11 @@ using YourBrand.Transactions.Domain.Events;
 using MediatR;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Transactions.Application.Common.Interfaces;
 
 namespace YourBrand.Transactions.Application.Events;
 
-public class TransactionReferenceUpdatedHandler : INotificationHandler<DomainEventNotification<TransactionReferenceUpdated>>
+public class TransactionReferenceUpdatedHandler : IDomainEventHandler<TransactionReferenceUpdated>
 {
     private readonly ITransactionsContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
@@ -19,11 +20,11 @@ public class TransactionReferenceUpdatedHandler : INotificationHandler<DomainEve
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task Handle(DomainEventNotification<TransactionReferenceUpdated> notification, CancellationToken cancellationToken)
+    public async Task Handle(TransactionReferenceUpdated notification, CancellationToken cancellationToken)
     {
         var t = await _context
             .Transactions
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.TransactionId);
+            .FirstOrDefaultAsync(i => i.Id == notification.TransactionId);
 
         if(t is not null) 
         {

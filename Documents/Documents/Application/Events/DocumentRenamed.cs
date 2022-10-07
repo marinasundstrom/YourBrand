@@ -5,12 +5,13 @@ using YourBrand.Documents.Domain.Events;
 using MediatR;
 
 using Microsoft.Extensions.Logging;
+using YourBrand.Documents.Application.Common.Interfaces;
 
 namespace YourBrand.Documents.Application.Events;
 
-public class DocumentRenamedHandler : INotificationHandler<DomainEventNotification<DocumentRenamed>>
+public class DocumentRenamedHandler : IDomainEventHandler<DocumentRenamed>
 {
-    public Task Handle(DomainEventNotification<DocumentRenamed> notification, CancellationToken cancellationToken)
+    public Task Handle(DocumentRenamed notification, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

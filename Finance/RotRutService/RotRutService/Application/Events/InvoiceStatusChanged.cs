@@ -10,11 +10,21 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Payments.Client;
+using YourBrand.RotRutService.Domain.Events;
+using YourBrand.RotRutService.Application.Common.Interfaces;
 
 namespace YourBrand.RotRutService.Application.Events;
 
+public class InvoiceStatusChangedHandler : IDomainEventHandler<InvoiceCreated>
+{
+    public Task Handle(InvoiceCreated notification, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+}
+
 /*
-public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotification<InvoiceStatusChanged>>
+public class InvoiceStatusChangedHandler : IDomainEventHandler<InvoiceStatusChanged>>
 {
     private readonly IRotRutContext _context;
     private readonly IPaymentsClient _paymentsClient;
@@ -31,7 +41,7 @@ public class InvoiceStatusChangedHandler : INotificationHandler<DomainEventNotif
     {
         var invoice = await _context.RotRutService
             .Include(i => i.Items)
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.InvoiceId);
+            .FirstOrDefaultAsync(i => i.Id == notification.InvoiceId);
 
         if(invoice is not null) 
         {

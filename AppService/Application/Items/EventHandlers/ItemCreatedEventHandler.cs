@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Application.Items.EventHandlers;
 
-public class ItemCreatedEventHandler : INotificationHandler<DomainEventNotification<ItemCreatedEvent>>
+public class ItemCreatedEventHandler : IDomainEventHandler<ItemCreatedEvent>
 {
     private readonly ICatalogContext _context;
     private readonly IUrlHelper _urlHelper;
@@ -24,9 +24,9 @@ public class ItemCreatedEventHandler : INotificationHandler<DomainEventNotificat
         _itemsClient = itemsClient;
     }
 
-    public async Task Handle(DomainEventNotification<ItemCreatedEvent> notification, CancellationToken cancellationToken)
+    public async Task Handle(ItemCreatedEvent notification, CancellationToken cancellationToken)
     {
-        var domainEvent = notification.DomainEvent;
+        var domainEvent = notification;
 
         var item = await _context.Items
             .Include(i => i.CreatedBy)

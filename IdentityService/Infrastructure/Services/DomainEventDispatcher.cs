@@ -24,12 +24,6 @@ class DomainEventDispatcher : IDomainEventDispatcher
     public async Task Dispatch(DomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Publishing domain event. Event - {event}", domainEvent.GetType().Name);
-        await _mediator.Publish(GetNotificationCorrespondingToDomainEvent(domainEvent), cancellationToken);
-    }
-
-    private INotification GetNotificationCorrespondingToDomainEvent(DomainEvent domainEvent)
-    {
-        return (INotification)Activator.CreateInstance(
-            typeof(DomainEventNotification<>).MakeGenericType(domainEvent.GetType()), domainEvent)!;
+        await _mediator.Publish(domainEvent, cancellationToken);
     }
 }

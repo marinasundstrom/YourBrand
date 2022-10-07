@@ -34,5 +34,6 @@ public class ModuleInitializer : IModuleInitializer
         group.RequiresAuthorization = true;
 
         group.CreateItem("cvs", () => resources["CVs"], MudBlazor.Icons.Material.Filled.Person, "/consultants");
+        group.CreateItem("cases", () => resources["Cases"], MudBlazor.Icons.Material.Filled.Cases, "/cases");
     }
 }

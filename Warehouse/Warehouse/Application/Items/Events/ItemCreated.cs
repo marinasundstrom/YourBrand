@@ -5,10 +5,11 @@ using YourBrand.Warehouse.Domain.Events;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Warehouse.Application.Common.Interfaces;
 
 namespace YourBrand.Warehouse.Application.Items.Events;
 
-public class ItemCreatedHandler : INotificationHandler<DomainEventNotification<ItemCreated>>
+public class ItemCreatedHandler : IDomainEventHandler<ItemCreated>
 {
     private readonly IWarehouseContext _context;
 
@@ -17,11 +18,11 @@ public class ItemCreatedHandler : INotificationHandler<DomainEventNotification<I
         _context = context;
     }
 
-    public async Task Handle(DomainEventNotification<ItemCreated> notification, CancellationToken cancellationToken)
+    public async Task Handle(ItemCreated notification, CancellationToken cancellationToken)
     {
         /*
         var person = await _context.Items
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.ItemId);
+            .FirstOrDefaultAsync(i => i.Id == notification.ItemId);
 
         if(person is not null) 
         {

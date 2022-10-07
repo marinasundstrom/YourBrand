@@ -4,12 +4,13 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
+using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.EventHandlers;
 
-public class EntryHoursUpdatedEventHandler : INotificationHandler<DomainEventNotification<EntryHoursUpdatedEvent>>
+public class EntryHoursUpdatedEventHandler : IDomainEventHandler<EntryHoursUpdatedEvent>
 {
     private readonly ILogger<EntryHoursUpdatedEventHandler> _logger;
 
@@ -18,9 +19,9 @@ public class EntryHoursUpdatedEventHandler : INotificationHandler<DomainEventNot
         _logger = logger;
     }
 
-    public Task Handle(DomainEventNotification<EntryHoursUpdatedEvent> notification, CancellationToken cancellationToken)
+    public Task Handle(EntryHoursUpdatedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Hours for {notification.DomainEvent.EntryId} was updated to {notification.DomainEvent.Hours}.");
+        _logger.LogInformation($"Hours for {notification.EntryId} was updated to {notification.Hours}.");
 
         return Task.CompletedTask;
     }

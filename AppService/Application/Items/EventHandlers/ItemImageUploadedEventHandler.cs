@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Items.EventHandlers;
 
-public class ItemImageUploadedEventHandler : INotificationHandler<DomainEventNotification<ItemImageUploadedEvent>>
+public class ItemImageUploadedEventHandler : IDomainEventHandler<ItemImageUploadedEvent>
 {
     private readonly ICatalogContext _context;
     private readonly IUrlHelper _urlHelper;
@@ -22,9 +22,9 @@ public class ItemImageUploadedEventHandler : INotificationHandler<DomainEventNot
         _itemsClient = itemsClient;
     }
 
-    public async Task Handle(DomainEventNotification<ItemImageUploadedEvent> notification, CancellationToken cancellationToken)
+    public async Task Handle(ItemImageUploadedEvent notification, CancellationToken cancellationToken)
     {
-        var domainEvent = notification.DomainEvent;
+        var domainEvent = notification;
 
         var item = await _context.Items.FirstAsync(i => i.Id == domainEvent.Id, cancellationToken);
 

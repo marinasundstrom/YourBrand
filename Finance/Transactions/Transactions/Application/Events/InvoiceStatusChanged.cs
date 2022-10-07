@@ -6,10 +6,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Transactions.Hubs;
+using YourBrand.Transactions.Application.Common.Interfaces;
 
 namespace YourBrand.Transactions.Application.Events;
 
-public class TransactionStatusChangedHandler : INotificationHandler<DomainEventNotification<TransactionStatusChanged>>
+public class TransactionStatusChangedHandler : IDomainEventHandler<TransactionStatusChanged>
 {
     private readonly ITransactionsContext _context;
     private readonly ITransactionsHubClient _transactionsHubClient;
@@ -20,11 +21,11 @@ public class TransactionStatusChangedHandler : INotificationHandler<DomainEventN
         _transactionsHubClient = transactionsHubClient;
     }
 
-    public async Task Handle(DomainEventNotification<TransactionStatusChanged> notification, CancellationToken cancellationToken)
+    public async Task Handle(TransactionStatusChanged notification, CancellationToken cancellationToken)
     {
         var transaction = await _context
             .Transactions
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.TransactionId);
+            .FirstOrDefaultAsync(i => i.Id == notification.TransactionId);
 
         if(transaction is not null) 
         {

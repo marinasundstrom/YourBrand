@@ -1,6 +1,8 @@
-﻿namespace YourBrand.Messenger.Domain.Common;
+﻿using MediatR;
 
-public abstract class DomainEvent
+namespace YourBrand.Messenger.Domain.Common;
+
+public abstract class DomainEvent : INotification
 {
-
+    public Guid Id { get; set; } = Guid.NewGuid();
 }

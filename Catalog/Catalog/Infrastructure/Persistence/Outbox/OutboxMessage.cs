@@ -16,4 +16,3 @@ public sealed class OutboxMessage
 
     public string? Error { get; set; }
 }
-

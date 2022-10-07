@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Application.Items.EventHandlers;
 
-public class CommentPostedEventHandler : INotificationHandler<DomainEventNotification<CommentPostedEvent>>
+public class CommentPostedEventHandler : IDomainEventHandler<CommentPostedEvent>
 {
     private readonly ICatalogContext context;
 
@@ -17,9 +17,9 @@ public class CommentPostedEventHandler : INotificationHandler<DomainEventNotific
         this.context = context;
     }
 
-    public async Task Handle(DomainEventNotification<CommentPostedEvent> notification, CancellationToken cancellationToken)
+    public async Task Handle(CommentPostedEvent notification, CancellationToken cancellationToken)
     {
-        var domainEvent = notification.DomainEvent;
+        var domainEvent = notification;
 
         var item = await context.Items
             .FirstOrDefaultAsync(i => i.Id == domainEvent.ItemId, cancellationToken);

@@ -2,13 +2,12 @@ using YourBrand.Marketing.Application.Common.Models;
 using YourBrand.Marketing.Domain;
 using YourBrand.Marketing.Domain.Events;
 
-using MediatR;
-
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Marketing.Application.Common.Interfaces;
 
 namespace YourBrand.Marketing.Application.Addresses.Events;
 
-public class AddressCreatedHandler : INotificationHandler<DomainEventNotification<AddressCreated>>
+public class AddressCreatedHandler : IDomainEventHandler<AddressCreated>
 {
     private readonly IMarketingContext _context;
 
@@ -17,10 +16,10 @@ public class AddressCreatedHandler : INotificationHandler<DomainEventNotificatio
         _context = context;
     }
 
-    public async Task Handle(DomainEventNotification<AddressCreated> notification, CancellationToken cancellationToken)
+    public async Task Handle(AddressCreated notification, CancellationToken cancellationToken)
     {
         var person = await _context.Addresses
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.AddressId);
+            .FirstOrDefaultAsync(i => i.Id == notification.AddressId);
 
         if(person is not null) 
         {

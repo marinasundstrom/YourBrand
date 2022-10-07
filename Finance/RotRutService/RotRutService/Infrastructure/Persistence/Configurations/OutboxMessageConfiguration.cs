@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using YourBrand.RotRutService.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.RotRutService.Infrastructure.Persistence.Configurations;

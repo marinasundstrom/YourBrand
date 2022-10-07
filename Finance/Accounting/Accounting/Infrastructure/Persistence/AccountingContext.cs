@@ -66,7 +66,7 @@ public class AccountingContext : DbContext, IAccountingContext
         {
             return new OutboxMessage()
             {
-                Id = Guid.NewGuid(),
+                Id = domainEvent.Id,
                 OccurredOnUtc = DateTime.UtcNow,
                 Type = domainEvent.GetType().Name,
                 Content = JsonConvert.SerializeObject(

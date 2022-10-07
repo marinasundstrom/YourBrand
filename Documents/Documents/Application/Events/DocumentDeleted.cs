@@ -3,12 +3,13 @@ using YourBrand.Documents.Application.Common.Models;
 using YourBrand.Documents.Domain.Events;
 
 using MediatR;
+using YourBrand.Documents.Application.Common.Interfaces;
 
 namespace YourBrand.Documents.Application.Events;
 
-public class DocumentDeletedHandler : INotificationHandler<DomainEventNotification<DocumentDeleted>>
+public class DocumentDeletedHandler : IDomainEventHandler<DocumentDeleted>
 {
-    public Task Handle(DomainEventNotification<DocumentDeleted> notification, CancellationToken cancellationToken)
+    public Task Handle(DocumentDeleted notification, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

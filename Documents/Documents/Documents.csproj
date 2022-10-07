@@ -25,6 +25,7 @@
         <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0-beta.1" />
 		<PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
 		<PackageReference Include="Yarp.ReverseProxy" Version="1.1.1" />
+		<PackageReference Include="Scrutor" Version="4.2.0" />
     </ItemGroup>
 
 	<ItemGroup>

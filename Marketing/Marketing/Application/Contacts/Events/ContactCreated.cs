@@ -5,10 +5,11 @@ using YourBrand.Marketing.Domain.Events;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Marketing.Application.Common.Interfaces;
 
 namespace YourBrand.Marketing.Application.Contacts.Events;
 
-public class ContactCreatedHandler : INotificationHandler<DomainEventNotification<ContactCreated>>
+public class ContactCreatedHandler : IDomainEventHandler<ContactCreated>
 {
     private readonly IMarketingContext _context;
 
@@ -17,11 +18,11 @@ public class ContactCreatedHandler : INotificationHandler<DomainEventNotificatio
         _context = context;
     }
 
-    public async Task Handle(DomainEventNotification<ContactCreated> notification, CancellationToken cancellationToken)
+    public async Task Handle(ContactCreated notification, CancellationToken cancellationToken)
     {
         /*
         var person = await _context.Contacts
-            .FirstOrDefaultAsync(i => i.Id == notification.DomainEvent.ContactId);
+            .FirstOrDefaultAsync(i => i.Id == notification.ContactId);
 
         if(person is not null) 
         {
