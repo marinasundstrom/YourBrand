@@ -103,7 +103,7 @@ public class ConsultantsController : ControllerBase
     public async Task AddExperience(string id, CreateExperienceDto dto, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            new AddExperienceCommand(id, dto.Title, dto.CompanyName, dto.Location, dto.StartDate, dto.EndDate, dto.Description),
+            new AddExperienceCommand(id, dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType, dto.StartDate, dto.EndDate, dto.Description),
             cancellationToken);
     }
 
@@ -112,7 +112,7 @@ public class ConsultantsController : ControllerBase
     {
         await _mediator.Send(
             new UpdateExperienceCommand(id, experienceId,
-            dto.Title, dto.CompanyName, dto.Location, dto.StartDate, dto.EndDate, dto.Description),
+            dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType,  dto.StartDate, dto.EndDate, dto.Description),
             cancellationToken);
     }
 

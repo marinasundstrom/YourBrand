@@ -28,6 +28,10 @@ public static class ServiceExtensions
             services.AddHttpClient(nameof(ICasesClient), configureClient)
             .AddTypedClient<ICasesClient>((http, sp) => new CasesClient(http)));
 
+        builder(
+            services.AddHttpClient(nameof(ICompaniesClient), configureClient)
+            .AddTypedClient<ICompaniesClient>((http, sp) => new CompaniesClient(http)));
+
         return services;
     }
 }

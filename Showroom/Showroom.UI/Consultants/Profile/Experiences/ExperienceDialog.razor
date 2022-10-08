@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IConsultantsClient ConsultantsClient
+@inject ICompaniesClient CompaniesClient
 @inject ISnackbar Snackbar
 
 <div style="width: 350px; max-width: 350px;">
@@ -9,10 +10,25 @@
             <DialogContent>
                 <MudTextField Label="Title" Variant="Variant.Outlined"
                               @bind-Value="Title" For="@(() => Title)" />
-                <MudTextField Label="Company" Class="mb-2" Variant="Variant.Outlined"
-                              @bind-Value="Company" For="@(() => Company)" />
+
+                <MudAutocomplete T="CompanyDto" Label="Company" Dense="true" Variant="Variant.Outlined" Class="mb-2"  ResetValueOnEmptyText="true" @bind-Value="Company" For="() => Company" SearchFunc="SearchCompany" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+
                 <MudTextField Label="Location" Class="mb-2" Variant="Variant.Outlined"
                               @bind-Value="Location" For="@(() => Location)" />
+                <MudSelect Label="Employment Type" Variant="Variant.Outlined" Class="mb-2" @bind-Value="EmploymentType" For="() => EmploymentType">
+                    @foreach(var optionType in Enum.GetValues<EmploymentType>())
+                    {
+                        <MudSelectItem Value="@optionType">@(optionType.GetAttribute<DisplayAttribute>()!.Name)</MudSelectItem>
+                    }     
+                </MudSelect>
                 <MudGrid>
                     <MudItem xs="12" sm="6" md="6">
                         <MudDatePicker Label="Start date" Variant="Variant.Outlined" @bind-Date="StartDate" For="@(() => StartDate)" Class="mb-2" />
@@ -49,10 +65,13 @@
     public string Title { get; set; }
 
     [Required]
-    public string Company { get; set; }
+    public CompanyDto Company { get; set; }
 
     [Required]
     public string Location { get; set; }
+
+    [Required]
+    public EmploymentType EmploymentType { get; set; }
 
     [Required]
     public DateTime? StartDate { get; set; }
@@ -66,15 +85,16 @@
     {
         if (Experience is not null) 
         {
-                Title = Experience.Title;
-                Company = Experience.CompanyName;
-                Location = Experience.Location;
-                StartDate = Experience.StartDate.Date;
-                EndDate = Experience.EndDate?.Date;
-                Description = Experience.Description;
+            Title = Experience.Title;
+            Company = Experience.Company;
+            Location = Experience.Location;
+            EmploymentType = Enum.Parse<EmploymentType>(Experience.EmploymentType);
+            StartDate = Experience.StartDate.Date;
+            EndDate = Experience.EndDate?.Date;
+            Description = Experience.Description;
         }
     }
-
+    
     public async Task OnValidSubmit()
     {
         if (Experience is null)
@@ -82,8 +102,9 @@
             await ConsultantsClient.AddExperienceAsync(ConsultantProfileId, new CreateExperienceDto
             {
                 Title = Title,
-                CompanyName = Company,
+                CompanyId = Company.Id,
                 Location = Location,
+                EmploymentType = EmploymentType.ToString(),
                 StartDate = StartDate.GetValueOrDefault().Date,
                 EndDate = EndDate,
                 Description = Description
@@ -94,8 +115,9 @@
             await ConsultantsClient.UpdateExperienceAsync(ConsultantProfileId, Experience.Id, new UpdateExperienceDto
             {
                 Title = Title,
-                CompanyName = Company,
+                CompanyId = Company.Id,
                 Location = Location,
+                EmploymentType = EmploymentType.ToString(),
                 StartDate = StartDate.GetValueOrDefault().Date,
                 EndDate = EndDate,
                 Description = Description
@@ -104,4 +126,19 @@
 
         Dialog.Close(DialogResult.Ok(true));
     }
+
+    async Task<IEnumerable<CompanyDto>> SearchCompany(string text)
+    {
+        try
+        {
+            var results = await CompaniesClient.GetCompaniesAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
     }
+}

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Entities;
@@ -15,8 +17,9 @@ public record UpdateExperienceCommand(
     string ConsultantProfileId,
     string Id,
     string Title,
-    string CompanyName,
+    string CompanyId,
     string? Location,
+    string EmploymentType,
     DateTime StartDate, DateTime? EndDate,
     string? Description)
     : IRequest<ExperienceDto>
@@ -43,13 +46,22 @@ public record UpdateExperienceCommand(
             }
 
             experience.Title = request.Title;
-            //experience.CompanyName = request.CompanyName;
+            experience.CompanyId = request.CompanyId;
+            experience.EmploymentType = request.EmploymentType;
             experience.Location = request.Location;
             experience.StartDate = request.StartDate;
             experience.EndDate = request.EndDate;
             experience.Description = request.Description;
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            experience = await _context.ConsultantProfileExperiences
+                .Include(x => x.Employment)
+                .ThenInclude(x => x.Employer)
+                .Include(x => x.Company)
+                .Include(x => x.Skills)
+                .ThenInclude(x => x.ConsultantProfileSkill)
+                .FirstAsync(x => x.Id == experience.Id);
 
             return experience.ToDto();
         }

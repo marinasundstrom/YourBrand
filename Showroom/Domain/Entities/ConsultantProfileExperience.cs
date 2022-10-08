@@ -12,11 +12,13 @@ public class ConsultantProfileExperience : AuditableEntity, ISoftDelete
 
     public Company Company { get; set; }
 
+    public string CompanyId { get; set; }
+
     public string? Location { get; set; }
 
-    public Employment Employment { get; set; }
+    public Employment? Employment { get; set; }
 
-    public string EmploymentType { get; set; } = null!;
+    public string? EmploymentType { get; set; } = null!;
 
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }

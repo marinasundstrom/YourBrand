@@ -15,8 +15,9 @@ namespace YourBrand.Showroom.Application.ConsultantProfiles.Experiences.Commands
 public record AddExperienceCommand(
     string ConsultantProfileId,
     string Title,
-    string CompanyName,
+    string CompanyId,
     string? Location,
+    string EmploymentType,
     DateTime StartDate, DateTime? EndDate,
     string? Description)
     : IRequest<ExperienceDto>
@@ -43,7 +44,8 @@ public record AddExperienceCommand(
                 Id = Guid.NewGuid().ToString(),
                 ConsultantProfile = consultantProfile,
                 Title = request.Title,
-                //CompanyName = request.CompanyName,
+                CompanyId = request.CompanyId,
+                EmploymentType = request.EmploymentType,
                 Location = request.Location,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,

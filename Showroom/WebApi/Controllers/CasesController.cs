@@ -61,4 +61,3 @@ public class CasesController : ControllerBase
 public record CreateCaseDto(string? Description);
 
 public record UpdateCaseDto(string? Description);
-

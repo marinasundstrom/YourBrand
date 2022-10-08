@@ -41,11 +41,11 @@
 <MudText Typo="Typo.body2">
     @if (Model.isSub)
     {
-        <p>@experience.EmploymentType @(experience.EmployerName != experience.CompanyName ? "• " + experience.EmployerName : null)</p>
+        <p>@experience.EmploymentType @(experience.EmployerName != experience.Company.Name ? "• " + experience.EmployerName : null)</p>
     }
     else
     {
-        <p>@experience.CompanyName • @experience.EmploymentType @(experience.EmployerName != experience.CompanyName ? "• " + experience.EmployerName : null)</p>
+        <p>@experience.Company.Name • @experience.EmploymentType @(experience.EmployerName != experience.Company.Name ? "• " + experience.EmployerName : null)</p>
     }
     </MudText>
 
@@ -57,7 +57,7 @@
     <MudText Typo="Typo.body2">@experience.Location</MudText>
 
     <MudText Typo="Typo.body1" Class="mt-4 mb-2">
-        @((MarkupString)experience.Description.Replace("\n", "<br />"))
+        @((MarkupString)experience.Description?.Replace("\n", "<br />"))
     </MudText>
 
     <MudChipSet Class="mt-4">

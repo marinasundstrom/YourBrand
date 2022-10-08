@@ -20,7 +20,7 @@
             var groups = experiences
                    .OrderByDescending(x => x.Highlight)
                    .ThenByDescending(x => Default(x.EndDate))
-                   .GroupBy(e => e.CompanyName);
+                   .GroupBy(e => e.Company.Name);
         }
 
         <ExperienceList Groups="groups" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience"  />
@@ -116,7 +116,7 @@
     {
         try
         {
-            var result = await DialogService.ShowMessageBox($"Delete experience at {experience.CompanyName}?", "Are you sure?", "Yes", "No");
+            var result = await DialogService.ShowMessageBox($"Delete experience at {experience.Company.Name}?", "Are you sure?", "Yes", "No");
             if (result.GetValueOrDefault())
             {
                 await ConsultantsClient.RemoveExperienceAsync(ConsultantProfileId, experience.Id);

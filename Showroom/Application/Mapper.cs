@@ -11,6 +11,7 @@ using YourBrand.Showroom.Application.ConsultantProfiles.Experiences;
 using YourBrand.Showroom.Application.Skills;
 using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 using YourBrand.Showroom.Application.Cases;
+using YourBrand.Showroom.Application.Companies;
 
 namespace YourBrand.Showroom.Application;
 
@@ -61,7 +62,7 @@ public static class Mapper
 
     public static ExperienceDto ToDto(this Domain.Entities.ConsultantProfileExperience experience)
     {
-        return new ExperienceDto(experience.Id, experience.Employment.Employer.Name, experience.Title, experience.Company.Name, experience.Company.Logo, experience.Company.Link, experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description, 
+        return new ExperienceDto(experience.Id, experience.Employment?.Employer?.Name, experience.Title, experience.Company.ToDto(), experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description, 
             experience.Skills.OrderBy(s => s.ConsultantProfileSkill.Skill.Name).Select(x => x.ConsultantProfileSkill.ToDto()));
     }
 
@@ -93,5 +94,10 @@ public static class Mapper
     public static CaseConsultantDto ToDto(this Domain.Entities.CaseConsultant caseConsultant, IUrlHelper urlHelper)
     {
         return new CaseConsultantDto(caseConsultant.Id, caseConsultant.ConsultantProfile.ToDto(urlHelper), caseConsultant.Presentation);
+    }
+    
+    public static CompanyDto ToDto(this Domain.Entities.Company company)
+    {
+        return new CompanyDto(company.Id, company.Name, company.Logo, company.Link);
     }
 }

@@ -10,8 +10,8 @@
 
         <div class="d-flex mt-4" style="page-break-inside: avoid;">
             <div class="col-logo">
-                <Logo Src="@experience.CompanyLogo" Alt="@($"{experience.CompanyName} logo")" Class="me-4"
-                    Href="@experience.Link" />
+                <Logo Src="@experience.Company.Logo" Alt="@($"{experience.Company.Name} logo")" Class="me-4"
+                    Href="@experience.Company.Link" />
             </div>
 
             <div class="flex-grow-1">
@@ -29,8 +29,8 @@
         <div style="page-break-inside: avoid;">
             <div class="d-flex mt-4">
                 <div class="col-logo">
-                        <Logo Src="@firstExperience.CompanyLogo" Alt="@($"{firstExperience.CompanyName} logo")" Class="me-4"
-                        Href="@firstExperience.Link" />
+                        <Logo Src="@firstExperience.Company.Logo" Alt="@($"{firstExperience.Company.Name} logo")" Class="me-4"
+                        Href="@firstExperience.Company.Link" />
 
                         @*
                                         <a href="@experience.Link">
@@ -44,7 +44,7 @@
 
                 <div class="flex-grow-1">
                     <MudText Typo="Typo.h5" Class="mb-2">
-                        @firstExperience.CompanyName
+                        @firstExperience.Company.Name
                     </MudText>
 
                     <p class="text-muted meta mb-5">
@@ -73,7 +73,7 @@
         </div>
     }
 
-    @if (Groups.LastOrDefault() != group)
+    @if (Groups.LastOrDefault() != group )
     {
         <hr />
     }

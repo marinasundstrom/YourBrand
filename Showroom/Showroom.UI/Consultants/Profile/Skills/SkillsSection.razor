@@ -76,11 +76,19 @@
     [Parameter]
     public bool IsEditing { get; set; }
 
+    [Parameter]
+    public EventCallback OnUpdated { get; set; }
+
     public SkillDto Skill { get; set; }
 
     public List<SkillArea> SkillAreas  { get; set; } = new List<SkillArea>();
 
     protected override async Task OnInitializedAsync()
+    {
+        await LoadSkills();
+    }
+
+    async Task LoadSkills() 
     {
         var skills = await ConsultantsClient.GetSkillsAsync(ConsultantProfileId, 1, 150, null, null, null);
 
@@ -103,14 +111,14 @@
         }
     }
 
-    async Task AddSkill()
+    async Task AddSkill(ConsultantProfileSkillDto consultantProfileSkill)
     {
-        var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == Skill.Area.Id);
+        var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == consultantProfileSkill.Skill.Area.Id);
         if(skillGroup is null)
         {
             skillGroup = new SkillArea() {
-                Id = Skill.Area.Id,
-                Name = Skill.Area.Name
+                Id = consultantProfileSkill.Skill.Area.Id,
+                Name = consultantProfileSkill.Skill.Area.Name
             };
 
             SkillAreas.Add(skillGroup);
@@ -118,7 +126,7 @@
             SkillAreas = SkillAreas.OrderBy(x => x.Name).ToList();
         }
 
-        var skill = skillGroup.Skills.FirstOrDefault(x => x.Id == Skill.Id);
+        var skill = skillGroup.Skills.FirstOrDefault(x => x.Skill.Id == consultantProfileSkill.Skill.Id);
 
         if(skill is not null)
         {
@@ -128,9 +136,7 @@
             return;
         }
 
-        var cpsk = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto() { SkillId = Skill.Id });
-
-        skillGroup.Skills.Add(cpsk);
+        skillGroup.Skills.Add(consultantProfileSkill);
 
         Skill = null;
     }
@@ -179,10 +185,13 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(UpdateSkillDialog.ConsultantProfileId), ConsultantProfileId);
-            parameters.Add(nameof(UpdateSkillDialog.ConsultantProfileSkillId), dto.Id);
+            parameters.Add(nameof(SkillDialog.ConsultantProfileId), ConsultantProfileId);
+            parameters.Add(nameof(SkillDialog.ConsultantProfileSkillId), dto.Id);
 
-            var dialogReference = DialogService.Show<UpdateSkillDialog>($"Update {dto.Skill.Name}", parameters);
+            var dialogReference = DialogService.Show<SkillDialog>($"Update {dto.Skill.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
             var result = await dialogReference.Result;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -196,10 +205,17 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(AddSkillDialog.ConsultantProfileId), ConsultantProfileId);
+            parameters.Add(nameof(SkillDialog.ConsultantProfileId), ConsultantProfileId);
 
-            var dialogReference = DialogService.Show<AddSkillDialog>("Add new skill", parameters);
+            var dialogReference = DialogService.Show<SkillDialog>("Add new skill", parameters, new DialogOptions {
+                //FullScreen = true
+                MaxWidth = MaxWidth.ExtraLarge
+            });
             var result = await dialogReference.Result;
+
+            await AddSkill((ConsultantProfileSkillDto)result.Data);
+
+            await OnUpdated.InvokeAsync();
         }
         catch (AccessTokenNotAvailableException exception)
         {

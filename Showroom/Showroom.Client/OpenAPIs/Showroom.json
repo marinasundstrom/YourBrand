@@ -263,6 +263,88 @@
         ]
       }
     },
+    "/Companies": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "operationId": "Companies_GetCompanies",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            },
+            "x-position": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 2
+          },
+          {
+            "name": "searchString",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SortDirection"
+                    }
+                  ]
+                }
+              ]
+            },
+            "x-position": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultsOfCompanyDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/CompetenceAreas": {
       "get": {
         "tags": [
@@ -2393,6 +2475,42 @@
           }
         }
       },
+      "ResultsOfCompanyDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CompanyDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string",
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "ResultsOfCompetenceAreaDto": {
         "type": "object",
         "additionalProperties": false,
@@ -2581,21 +2699,14 @@
             "type": "string"
           },
           "employerName": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
             "type": "string"
           },
-          "companyName": {
-            "type": "string"
-          },
-          "companyLogo": {
-            "type": "string",
-            "nullable": true
-          },
-          "link": {
-            "type": "string",
-            "nullable": true
+          "company": {
+            "$ref": "#/components/schemas/CompanyDto"
           },
           "location": {
             "type": "string",
@@ -2727,16 +2838,8 @@
           "title": {
             "type": "string"
           },
-          "companyName": {
+          "companyId": {
             "type": "string"
-          },
-          "companyLogo": {
-            "type": "string",
-            "nullable": true
-          },
-          "link": {
-            "type": "string",
-            "nullable": true
           },
           "location": {
             "type": "string",
@@ -2773,16 +2876,8 @@
           "title": {
             "type": "string"
           },
-          "companyName": {
+          "companyId": {
             "type": "string"
-          },
-          "companyLogo": {
-            "type": "string",
-            "nullable": true
-          },
-          "link": {
-            "type": "string",
-            "nullable": true
           },
           "location": {
             "type": "string",

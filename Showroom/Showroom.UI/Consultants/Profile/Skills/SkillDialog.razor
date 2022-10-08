@@ -7,7 +7,7 @@
     <DataAnnotationsValidator />
     <MudDialog DisableSidePadding="true">
         <DialogContent>
-            <MudContainer Style="max-height: 300px; overflow-y: scroll">
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudAutocomplete T="SkillDto" Label="Skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
                 For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
                 ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
@@ -37,7 +37,7 @@
 
                 @foreach (var experience in experiences)
                 {
-                    <MudCheckBox @bind-Checked="experience.Checked">@experience.Title at @experience.CompanyName</MudCheckBox>
+                    <MudCheckBox @bind-Checked="experience.Checked">@experience.Title at @experience.Company.Name</MudCheckBox>
                 }
             </MudContainer>
         </DialogContent>
@@ -61,6 +61,9 @@
     [Parameter]
     public string ConsultantProfileId { get; set; } = null!;
 
+    [Parameter]
+    public string? ConsultantProfileSkillId { get; set; } = null!;
+
     [Required]
     public SkillDto? Skill { get; set; } = null!;
 
@@ -72,48 +75,108 @@
     {
         context = new EditContext(this);
 
-        var experiences2 = (await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 120, null, null, null)).Items;
-
-        foreach (var experience in experiences2)
+        if(ConsultantProfileSkillId is null) 
         {
-            experiences.Add(new ExperienceVM
+            var experiences2 = (await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 120, null, null, null)).Items;
+
+            foreach (var experience in experiences2)
             {
-                Id = experience.Id,
-                CompanyName = experience.CompanyName,
-                Title = experience.Title,
-                Checked = false
-            });
+                experiences.Add(new ExperienceVM
+                {
+                    Id = experience.Id,
+                    Company = experience.Company,
+                    Title = experience.Title,
+                    Checked = false
+                });
+            }
+        }
+        else 
+        {
+            var skill = await ConsultantsClient.GetSkillAsync(ConsultantProfileId, ConsultantProfileSkillId);
+            SkillLevel = skill.Level;
+            Comment = skill.Comment;
+            var selectedExperiences = skill.Experiences;
+
+            var experiences2 = (await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 120, null, null, null)).Items;
+
+            foreach (var experience in experiences2)
+            {
+                var v = selectedExperiences.Any(x => x.Id == experience.Id);
+
+                experiences.Add(new ExperienceVM
+                {
+                    Id = experience.Id,
+                    Company = experience.Company,
+                    Title = experience.Title,
+                    OriginalChecked = v,
+                    Checked = v
+                });
+            }
         }
     }
 
     public async Task OnValidSubmit()
     {
-        var consultantProfileSkill = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto
+        if(ConsultantProfileSkillId is null) 
         {
-            SkillId = Skill.Id,
-            Level = SkillLevel.GetValueOrDefault(),
-            Comment = Comment
-        });
-
-        var dtos = experiences
-            .Select(x => new UpdateSkillExperienceDto()
+            var consultantProfileSkill = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto
             {
-                ConsultantProfileExperienceId = x.Id,
-                Checked = x.Checked
+                SkillId = Skill.Id,
+                Level = SkillLevel.GetValueOrDefault(),
+                Comment = Comment
             });
 
-        await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, consultantProfileSkill.Id, dtos);
+            var dtos = experiences
+                .Select(x => new UpdateSkillExperienceDto()
+                {
+                    ConsultantProfileExperienceId = x.Id,
+                    Checked = x.Checked
+                });
 
-        Dialog.Close(DialogResult.Ok(true));
+            if(dtos.Any()) 
+            {
+                await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, consultantProfileSkill.Id, dtos);
+            }
+
+            Dialog.Close(DialogResult.Ok(consultantProfileSkill));
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await ConsultantsClient.UpdateSkillAsync(ConsultantProfileId, ConsultantProfileSkillId, new UpdateConsultantProfileSkillDto
+                {
+                    Level = SkillLevel.GetValueOrDefault(),
+                    Comment = Comment
+                });
+            }
+
+            var dtos = experiences
+                .Where(x => x.Checked != x.OriginalChecked)
+                .Select(x => new UpdateSkillExperienceDto()
+                {
+                    ConsultantProfileExperienceId = x.Id,
+                    Checked = x.Checked
+                });
+
+            if(dtos.Any()) 
+            {
+                await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, ConsultantProfileSkillId, dtos);
+            }
+
+            //Dialog.Close(DialogResult.Ok(consultantProfileSkill));
+        }
     }
 
     public class ExperienceVM
     {
         public string Id { get; set; }
 
-        public string CompanyName { get; set; }
+        public CompanyDto Company { get; set; }
 
         public string Title { get; set; }
+
+        public bool OriginalChecked { get; set; }
 
         public bool Checked { get; set; }
     }

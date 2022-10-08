@@ -19,7 +19,7 @@ public record RemoveSkillCommand(string Id) : IRequest
         public async Task<Unit> Handle(RemoveSkillCommand request, CancellationToken cancellationToken)
         {
             var skill = await context.ConsultantProfileSkills
-                .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(i => i.Skill.Id == request.Id, cancellationToken);
 
             if (skill is null) throw new Exception();
 
