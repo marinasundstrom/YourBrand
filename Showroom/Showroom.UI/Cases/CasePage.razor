@@ -1,0 +1,51 @@
+@page "/cases/{Id}"
+@attribute [Authorize]
+@using Humanizer
+@inject ICasesClient CasesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+@if (@case is null)
+{
+    if (loadingFailed)
+    {
+        <MudText Typo="Typo.h3" Class="mb-4">Error when loading case.</MudText>
+    }
+    else
+    {
+        <LoadingIndicator />
+    }
+}
+else
+{
+    <MudText Typo="Typo.h3" Class="mb-4">Case @Id</MudText>
+
+    <MudPaper Class="pa-4" Elevation="25">
+        Test
+    </MudPaper>
+}
+
+@code 
+{
+    private CaseDto? @case;
+    private bool loadingFailed = false;
+
+    [Parameter]
+    public string Id { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loadingFailed = false;
+
+        try
+        {
+            this.@case = await CasesClient.GetCaseAsync(Id);
+        }
+        catch (Exception exc)
+        {
+            loadingFailed = true;
+            //await JSHelpers.Alert(exc.Message);
+        }
+    }
+}

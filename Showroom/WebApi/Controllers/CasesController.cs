@@ -37,9 +37,12 @@ public class CasesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task CreateCase(CreateCaseDto dto, CancellationToken cancellationToken)
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(typeof(CaseDto), StatusCodes.Status201Created)]
+    public async Task<ActionResult> CreateCase(CreateCaseDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateCaseCommand(dto.Description), cancellationToken);
+        var dto2 = await _mediator.Send(new CreateCaseCommand(dto.Description), cancellationToken);
+        return CreatedAtAction(nameof(GetCase), new { id = dto2.Id }, dto2);
     }
 
     [HttpPut("{id}")]

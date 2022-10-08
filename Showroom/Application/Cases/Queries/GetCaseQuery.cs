@@ -34,8 +34,10 @@ public record GetCaseQuery(string Id) : IRequest<CaseDto?>
 
         public async Task<CaseDto?> Handle(GetCaseQuery request, CancellationToken cancellationToken)
         {
-            var @case = await _context
-               .Cases
+            var @case = await _context.Cases
+               .Include(c => c.Consultants)
+               .Include(c => c.CreatedBy)
+               .Include(c => c.LastModifiedBy)
                .FirstAsync(c => c.Id == request.Id);
 
             if (@case is null)

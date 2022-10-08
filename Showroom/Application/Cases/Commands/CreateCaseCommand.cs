@@ -5,18 +5,20 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Cases.Commands;
 
-public record CreateCaseCommand(string? Description) : IRequest
+public record CreateCaseCommand(string? Description) : IRequest<CaseDto>
 {
-    public class CreateCaseCommandHandler : IRequestHandler<CreateCaseCommand>
+    public class CreateCaseCommandHandler : IRequestHandler<CreateCaseCommand, CaseDto>
     {
         private readonly IShowroomContext context;
+        private readonly IUrlHelper _urlHelper;
 
-        public CreateCaseCommandHandler(IShowroomContext context)
+        public CreateCaseCommandHandler(IShowroomContext context, IUrlHelper urlHelper)
         {
             this.context = context;
+            _urlHelper = urlHelper;
         }
 
-        public async Task<Unit> Handle(CreateCaseCommand request, CancellationToken cancellationToken)
+        public async Task<CaseDto> Handle(CreateCaseCommand request, CancellationToken cancellationToken)
         {
             var @case = new Domain.Entities.Case
             {
@@ -29,7 +31,13 @@ public record CreateCaseCommand(string? Description) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            @case = await context.Cases          
+                .Include(c => c.Consultants)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.LastModifiedBy)
+                .FirstOrDefaultAsync(x => x.Id == @case.Id);
+
+            return @case.ToDto(_urlHelper);
         }
     }
 }
