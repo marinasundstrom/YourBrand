@@ -149,9 +149,9 @@ public class ConsultantsController : ControllerBase
     }
 
     [HttpPut("{id}/Skills/{skillId}")]
-    public async Task UpdateSkill(string id, string skillId, UpdateConsultantProfileSkillDto dto, CancellationToken cancellationToken)
+    public async Task<ConsultantProfileSkillDto> UpdateSkill(string id, string skillId, UpdateConsultantProfileSkillDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(
+        return await _mediator.Send(
             new UpdateSkillCommand(skillId, dto.Level, dto.Comment),
             cancellationToken);
     }

@@ -8,18 +8,22 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudAutocomplete T="SkillDto" Label="Skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
-                For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
-                ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
-                    </ItemTemplate>
+                @if(ConsultantProfileSkillId is null) 
+                {
+                    <MudAutocomplete T="SkillDto" Label="Skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
+                        For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
+                        ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+                        <ItemTemplate Context="context2">
+                            <MudText Typo="Typo.body1">@context2.Name</MudText>
+                            <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
+                        </ItemTemplate>
 
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                        <ItemSelectedTemplate Context="context2">
+                            <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        </ItemSelectedTemplate>
+                    </MudAutocomplete>
+                }
+
 
                 <MudSelect Label="Skill level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
                            For="@(() => SkillLevel)" Class="mt-4">
@@ -44,7 +48,16 @@
 
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">Add</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(ConsultantProfileSkillId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
         </DialogActions>
     </MudDialog>
 
@@ -75,7 +88,7 @@
     {
         context = new EditContext(this);
 
-        if(ConsultantProfileSkillId is null) 
+        if (ConsultantProfileSkillId is null) 
         {
             var experiences2 = (await ConsultantsClient.GetExperiencesAsync(ConsultantProfileId, 1, 120, null, null, null)).Items;
 
@@ -93,6 +106,7 @@
         else 
         {
             var skill = await ConsultantsClient.GetSkillAsync(ConsultantProfileId, ConsultantProfileSkillId);
+            Skill = skill.Skill;
             SkillLevel = skill.Level;
             Comment = skill.Comment;
             var selectedExperiences = skill.Experiences;
@@ -117,9 +131,11 @@
 
     public async Task OnValidSubmit()
     {
+        ConsultantProfileSkillDto? consultantProfileSkill = null;
+
         if(ConsultantProfileSkillId is null) 
         {
-            var consultantProfileSkill = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto
+            consultantProfileSkill = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto
             {
                 SkillId = Skill.Id,
                 Level = SkillLevel.GetValueOrDefault(),
@@ -137,14 +153,12 @@
             {
                 await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, consultantProfileSkill.Id, dtos);
             }
-
-            Dialog.Close(DialogResult.Ok(consultantProfileSkill));
         }
         else 
         {
             if (context.IsModified())
             {
-                await ConsultantsClient.UpdateSkillAsync(ConsultantProfileId, ConsultantProfileSkillId, new UpdateConsultantProfileSkillDto
+                consultantProfileSkill = await ConsultantsClient.UpdateSkillAsync(ConsultantProfileId, ConsultantProfileSkillId, new UpdateConsultantProfileSkillDto
                 {
                     Level = SkillLevel.GetValueOrDefault(),
                     Comment = Comment
@@ -163,9 +177,9 @@
             {
                 await ConsultantsClient.UpdateSkillExperiencesAsync(ConsultantProfileId, ConsultantProfileSkillId, dtos);
             }
-
-            //Dialog.Close(DialogResult.Ok(consultantProfileSkill));
         }
+
+        Dialog.Close(DialogResult.Ok(consultantProfileSkill));
     }
 
     public class ExperienceVM
