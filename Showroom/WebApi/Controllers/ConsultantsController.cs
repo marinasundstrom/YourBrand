@@ -43,9 +43,12 @@ public class ConsultantsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task CreateConsultant(CreateConsultantProfileDto dto, CancellationToken cancellationToken)
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(typeof(ConsultantProfileDto), StatusCodes.Status201Created)]
+    public async Task<ActionResult> CreateConsultant(CreateConsultantProfileDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateConsultantProfileCommand(dto), cancellationToken);
+        var dto2 = await _mediator.Send(new CreateConsultantProfileCommand(dto), cancellationToken);
+        return CreatedAtAction(nameof(GetConsultant), new { id = dto2.Id }, dto2);
     }
 
     [HttpPut("{id}")]

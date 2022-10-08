@@ -8,7 +8,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Consultants</MudText>
 
-<MudButton Link="/consultants" Variant="Variant.Filled" Color="Color.Default" Class="mb-2 me-2">Gallery</MudButton>
+<MudButton Link="/consultants" Variant="Variant.Filled" StartIcon="@Icons.Filled.Dashboard" Color="Color.Default" Class="mb-2 me-2">Gallery</MudButton>
 
 <MudButton Link="/consultants/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
     New consultant
@@ -82,7 +82,7 @@
     {
         try
         {
-            var results = await ConsultantProfilesClient.GetConsultantsAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc);
+            var results = await ConsultantProfilesClient.GetConsultantsAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
             return new TableData<ConsultantProfileDto> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)

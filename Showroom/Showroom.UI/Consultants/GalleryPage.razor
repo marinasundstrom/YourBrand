@@ -8,6 +8,12 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-14">Consultants</MudText>
 
+<MudButton Link="/consultants/list" Variant="Variant.Filled" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">List</MudButton>
+
+<MudButton Link="/consultants/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+    New consultant
+</MudButton>
+
 <MudExpansionPanels Class="mb-10" Elevation="25">
     <MudExpansionPanel Text="Find consultant" Class="pa-4" @bind-IsExpanded="isExpanded">
         <MudGrid>

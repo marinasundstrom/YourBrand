@@ -74,7 +74,7 @@
 
     private async Task Submit()
     {
-        await ConsultantProfilesClient.CreateConsultantAsync(new CreateConsultantProfileDto {
+        var dto = await ConsultantProfilesClient.CreateConsultantAsync(new CreateConsultantProfileDto {
             FirstName = FirstName,
             LastName = LastName,
             DisplayName = DisplayName,
@@ -86,9 +86,7 @@
             ManagerId = ""
         });
 
-        string id = "x";
-
-        NavigationManager.NavigateTo($"/consultants/{id}");
+        NavigationManager.NavigateTo($"/consultants/{dto.Id}");
     }
 
     async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
