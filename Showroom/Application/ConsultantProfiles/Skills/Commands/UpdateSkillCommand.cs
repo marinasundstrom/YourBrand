@@ -20,7 +20,10 @@ public record UpdateSkillCommand(string Id, SkillLevel Level, string? Comment) :
 
         public async Task<ConsultantProfileSkillDto> Handle(UpdateSkillCommand request, CancellationToken cancellationToken)
         {
-            var skill = await context.ConsultantProfileSkills.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var skill = await context.ConsultantProfileSkills
+               .Include(x => x.Skill)
+               .ThenInclude(x => x.Area)
+               .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (skill is null) throw new Exception();
 

@@ -36,6 +36,12 @@ public class ConsultantsController : ControllerBase
         return await _mediator.Send(new GetConsultantProfilesQuery(page - 1, pageSize, organizationId, competenceAreaId, availableFrom, searchString, sortBy, sortDirection), cancellationToken);
     }
 
+    [HttpPost("Find")]
+    public async Task<Results<ConsultantProfileDto>> FindConsultantsQuery([FromBody] ConsultantQuery query, int page = 1, int pageSize = 10, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    {
+        return await _mediator.Send(new FindConsultantsQuery(query, page - 1, pageSize, sortBy, sortDirection), cancellationToken);
+    }
+
     [HttpGet("{id}")]
     public async Task<ConsultantProfileDto?> GetConsultant(string id, CancellationToken cancellationToken)
     {

@@ -715,6 +715,91 @@
         ]
       }
     },
+    "/Consultants/Find": {
+      "post": {
+        "tags": [
+          "Consultants"
+        ],
+        "operationId": "Consultants_FindConsultantsQuery",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            },
+            "x-position": 2
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 3
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SortDirection"
+                    }
+                  ]
+                }
+              ]
+            },
+            "x-position": 5
+          }
+        ],
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultantQuery"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultsOfConsultantProfileDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/Consultants/{id}": {
       "get": {
         "tags": [
@@ -2568,6 +2653,60 @@
           }
         }
       },
+      "ConsultantQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "searchString": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "competenceAreaId": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuerySkill"
+            }
+          }
+        }
+      },
+      "QuerySkill": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "skillId": {
+            "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/SkillLevel"
+          }
+        }
+      },
+      "SkillLevel": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Novice",
+          "AdvancedBeginner",
+          "Competent",
+          "Proficient",
+          "Expert"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
       "CreateConsultantProfileDto": {
         "type": "object",
         "additionalProperties": false,
@@ -2807,24 +2946,6 @@
             "type": "string"
           }
         }
-      },
-      "SkillLevel": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Novice",
-          "AdvancedBeginner",
-          "Competent",
-          "Proficient",
-          "Expert"
-        ],
-        "enum": [
-          1,
-          2,
-          3,
-          4,
-          5
-        ]
       },
       "LinkDto": {
         "type": "object",
