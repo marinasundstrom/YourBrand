@@ -36,6 +36,9 @@ namespace YourBrand.Showroom.TestData
         [JsonPropertyName("companyLogo")]
         public string? CompanyLogo { get; set; }  = null!;
 
+        [JsonPropertyName("industry")]
+        public string Industry { get; set; }  = null!;
+
         [JsonPropertyName("link")]
         public string? Link { get; set; }  = null!;
 

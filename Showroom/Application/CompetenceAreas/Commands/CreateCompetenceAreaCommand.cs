@@ -5,9 +5,9 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.CompetenceAreas.Commands;
 
-public record CreateCompetenceAreaCommand(string Name) : IRequest
+public record CreateCompetenceAreaCommand(string Name) : IRequest<CompetenceAreaDto>
 {
-    public class CreateCompetenceAreaCommandHandler : IRequestHandler<CreateCompetenceAreaCommand>
+    public class CreateCompetenceAreaCommandHandler : IRequestHandler<CreateCompetenceAreaCommand, CompetenceAreaDto>
     {
         private readonly IShowroomContext context;
 
@@ -16,7 +16,7 @@ public record CreateCompetenceAreaCommand(string Name) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(CreateCompetenceAreaCommand request, CancellationToken cancellationToken)
+        public async Task<CompetenceAreaDto> Handle(CreateCompetenceAreaCommand request, CancellationToken cancellationToken)
         {
             var competenceArea = await context.CompetenceAreas.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
@@ -24,6 +24,7 @@ public record CreateCompetenceAreaCommand(string Name) : IRequest
 
             competenceArea = new Domain.Entities.CompetenceArea
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = request.Name
             };
 
@@ -31,7 +32,12 @@ public record CreateCompetenceAreaCommand(string Name) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            competenceArea = await context
+               .CompetenceAreas
+               .AsNoTracking()
+               .FirstAsync(c => c.Id == competenceArea.Id);
+
+            return competenceArea.ToDto();
         }
     }
 }

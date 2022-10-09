@@ -5,9 +5,9 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Skills.Commands;
 
-public record CreateSkillCommand(string Name) : IRequest
+public record CreateSkillCommand(string Name, string SkillAreaId) : IRequest<SkillDto>
 {
-    public class CreateSkillCommandHandler : IRequestHandler<CreateSkillCommand>
+    public class CreateSkillCommandHandler : IRequestHandler<CreateSkillCommand, SkillDto>
     {
         private readonly IShowroomContext context;
 
@@ -16,7 +16,7 @@ public record CreateSkillCommand(string Name) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
+        public async Task<SkillDto> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
         {
             var skill = await context.Skills.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
@@ -24,14 +24,24 @@ public record CreateSkillCommand(string Name) : IRequest
 
             skill = new Domain.Entities.Skill
             {
-                Name = request.Name
+                Id = Guid.NewGuid().ToString(),
+                Name = request.Name,
+                Slug = "",
+                Area = await context.SkillAreas.FirstAsync(x => x.Id == request.SkillAreaId, cancellationToken)
             };
 
             context.Skills.Add(skill);
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            skill = await context
+               .Skills
+               .Include(x => x.Area)      
+               .ThenInclude(x => x.Industry)
+               .AsNoTracking()
+               .FirstAsync(c => c.Id == skill.Id, cancellationToken);
+
+            return skill.ToDto();
         }
     }
 }

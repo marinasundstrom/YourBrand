@@ -1,7 +1,10 @@
+using YourBrand.Showroom.Application.Industries;
+
 namespace YourBrand.Showroom.Application.Skills;
 
 public record SkillAreaDto
 (
     string Id,
-    string Name
+    string Name,
+    IndustryDto Industry
 );

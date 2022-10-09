@@ -5,6 +5,7 @@ using YourBrand.Showroom.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Showroom.TestData;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -189,6 +190,8 @@ My career began back in 2014, when I was working as a software developer for a l
 
         context.ConsultantProfiles.Add(consultantProfile);
 
+        await LoadIndustries(context);
+
         await LoadTestData(context, consultantProfile);
 
         await context.SaveChangesAsync();
@@ -211,6 +214,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 Id = Guid.NewGuid().ToString(),
                 Name = skillGroup.Key,
                 Slug = NewMethod(skillGroup.Key),
+                Industry = await context.Industries.FirstAsync(x => x.Name == "Computer Software"),
             };
 
             foreach (var skillPair in skillGroup.Value)
@@ -253,6 +257,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 company = new Company() {
                     Id = Guid.NewGuid().ToString(),
                     Name = experience.Company,
+                    Industry = await context.Industries.FirstAsync(x => x.Name == experience.Industry),
                     Logo = experience.CompanyLogo,
                     Link = experience.Link,
                 };
@@ -352,5 +357,21 @@ My career began back in 2014, when I was working as a software developer for a l
                             .Replace(")", string.Empty)
                             .Replace(".", string.Empty)
                             .Replace("#", string.Empty);
+    }
+
+     private static async Task LoadIndustries(ShowroomContext context)
+    {
+        var industries = JsonDocument.Parse(await File.ReadAllTextAsync("../Infrastructure/industries.json"));
+        foreach (var i in industries.RootElement.EnumerateArray())
+        {
+            var sk = new Industry()
+            {
+                Name = i.GetProperty("Name").GetString()!
+            };
+
+            context.Industries.Add(sk);
+        }
+
+        await context.SaveChangesAsync();
     }
 }

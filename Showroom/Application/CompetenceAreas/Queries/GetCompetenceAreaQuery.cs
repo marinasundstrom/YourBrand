@@ -33,7 +33,7 @@ public record GetCompetenceAreaQuery(string Id) : IRequest<CompetenceAreaDto?>
         {
             var competenceArea = await _context
                .CompetenceAreas
-            .AsNoTracking()
+               .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 
             if (competenceArea is null)

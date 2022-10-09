@@ -80,6 +80,8 @@ public class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<Language> Languages { get;  set; } = null!;
 
+    public DbSet<Industry> Industries { get; set; } = null!;
+
 #nullable restore
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

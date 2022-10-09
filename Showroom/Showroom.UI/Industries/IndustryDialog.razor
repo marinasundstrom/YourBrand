@@ -1,0 +1,114 @@
+@using System.ComponentModel.DataAnnotations
+@inject IIndustriesClient IndustriesClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
+
+               @* 
+                <MudAutocomplete T="IndustryDto" Label="Area" Class="mt-4" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Area" For="() => Area" SearchFunc="SearchIndustries" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+                *@
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(IndustryId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public int? IndustryId { get; set; } = null!;
+
+    //[Required]
+    //public IndustryDto Area { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (IndustryId is not null) 
+        {
+            var industry = await IndustriesClient.GetIndustryAsync(IndustryId.GetValueOrDefault());
+            //Area = industry.Area;
+            Name = industry.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(IndustryId is null) 
+        {
+            var industry = await IndustriesClient.CreateIndustryAsync(new CreateIndustryDto {
+                //IndustryId = Area.Id,
+                Name = Name
+            });
+
+            Dialog.Close(industry);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await IndustriesClient.UpdateIndustryAsync(IndustryId.GetValueOrDefault(), new UpdateIndustryDto
+                {
+                    //IndustryId = Area.Id,
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+    }
+
+    
+
+    async Task<IEnumerable<IndustryDto>> SearchIndustries(string text)
+    {
+        try
+        {
+            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

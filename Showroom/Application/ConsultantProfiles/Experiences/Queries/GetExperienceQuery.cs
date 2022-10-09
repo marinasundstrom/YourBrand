@@ -37,10 +37,12 @@ public record GetExperienceQuery(string ConsultantProfileId, string Id) : IReque
                 .Include(x => x.Employment)
                 .ThenInclude(x => x.Employer)
                .Include(x => x.Company)
+                .ThenInclude(x => x.Industry)
                .Include(x => x.Skills)
                .ThenInclude(x => x.ConsultantProfileSkill)
                 .ThenInclude(x => x.Skill)
                 .ThenInclude(x => x.Area)
+                .ThenInclude(x => x.Industry)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

@@ -14,6 +14,7 @@
                 <MudAutocomplete T="CompanyDto" Label="Company" Dense="true" Variant="Variant.Outlined" Class="mb-2"  ResetValueOnEmptyText="true" @bind-Value="Company" For="() => Company" SearchFunc="SearchCompany" ToStringFunc="(x) => x.Name">
                     <ItemTemplate Context="context2">
                         <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
                     </ItemTemplate>
 
                     <ItemSelectedTemplate Context="context2">
@@ -131,7 +132,7 @@
     {
         try
         {
-            var results = await CompaniesClient.GetCompaniesAsync(1, 10, text, null, null, default);
+            var results = await CompaniesClient.GetCompaniesAsync(1, 10, null, text, null, null, default);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

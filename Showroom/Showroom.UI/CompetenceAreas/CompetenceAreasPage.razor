@@ -1,0 +1,134 @@
+@page "/competenceareas"
+@attribute [Authorize]
+@using YourBrand.Showroom.Consultants.Profile
+@inject ICompetenceAreasClient CompetenceAreasClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudText Typo="Typo.h3" Class="mb-4">Competence Areas</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnCompetenceAreaClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New Competence Area
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="CompetenceAreaDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+            @*
+                <MudAutocomplete T="CompetenceAreaDto" Label="Area" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+                *@
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="CompetenceAreaDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            @*<MudTh><MudTableSortLabel T="CompetenceAreaDto" SortLabel="Area">Area</MudTableSortLabel></MudTh>*@
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            @*<MudTd DataLabel="Name">@context.Area.Name</MudTd> *@
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    MudTable<CompetenceAreaDto> table; 
+    string? searchString;
+
+    public CompetenceAreaDto CompetenceArea { get; set; }
+
+    private async Task<TableData<CompetenceAreaDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            return new TableData<CompetenceAreaDto> { Items = results.Items, TotalItems = results.TotalCount };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<CompetenceAreaDto> ev)
+    {
+        var item = ev.Item;
+
+        await OnCompetenceAreaClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto sa)
+    {
+        CompetenceArea = sa;
+        table.ReloadServerData();
+    }
+
+
+    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task OnCompetenceAreaClicked(CompetenceAreaDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(CompetenceAreaDialog.CompetenceAreaId), dto?.Id);
+
+            var dialogReference = DialogService.Show<CompetenceAreaDialog>(dto is null ? "New Competence Area" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

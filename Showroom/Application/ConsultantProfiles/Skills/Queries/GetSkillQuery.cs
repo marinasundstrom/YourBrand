@@ -28,7 +28,8 @@ public record GetSkillQuery(string Id) : IRequest<ConsultantProfileSkillDto?>
             var consultantProfileSkill = await _context
                .ConsultantProfileSkills
                .Include(x => x.Skill)
-               .ThenInclude(x => x.Area)
+               .ThenInclude(x => x.Area)         
+               .ThenInclude(x => x.Industry)
                .AsNoTracking()
                .FirstAsync(c => c.SkillId == request.Id, cancellationToken);
 

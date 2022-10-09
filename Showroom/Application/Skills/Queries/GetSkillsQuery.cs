@@ -10,7 +10,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.Skills.Queries;
 
-public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SkillDto>>
+public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SkillAreaId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SkillDto>>
 {
     class GetSkillsQueryHandler : IRequestHandler<GetSkillsQuery, Results<SkillDto>>
     {
@@ -33,6 +33,11 @@ public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SearchStri
                     .AsNoTracking()
                     .AsQueryable();
 
+            if (request.SkillAreaId is not null)
+            {
+                result = result.Where(ca => ca.Area.Id == request.SkillAreaId);
+            }
+
             if (request.SearchString is not null)
             {
                 result = result.Where(ca => ca.Name.ToLower().Contains(request.SearchString.ToLower()));
@@ -44,9 +49,14 @@ public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SearchStri
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
+            else 
+            {
+                result = result.OrderBy(x => x.Name);
+            }
 
             var items = await result
-                .Include(x => x.Area)
+                .Include(x => x.Area)  
+                .ThenInclude(x => x.Industry)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);

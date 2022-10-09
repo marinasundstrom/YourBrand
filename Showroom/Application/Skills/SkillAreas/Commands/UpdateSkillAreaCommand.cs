@@ -5,7 +5,7 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Skills.SkillAreas.Commands;
 
-public record UpdateSkillAreaCommand(string Id, string Name) : IRequest
+public record UpdateSkillAreaCommand(string Id, string Name, int IndustryId) : IRequest
 {
     public class UpdateSkillAreaCommandHandler : IRequestHandler<UpdateSkillAreaCommand>
     {
@@ -18,11 +18,12 @@ public record UpdateSkillAreaCommand(string Id, string Name) : IRequest
 
         public async Task<Unit> Handle(UpdateSkillAreaCommand request, CancellationToken cancellationToken)
         {
-            var skill = await context.SkillAreas.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var skillArea = await context.SkillAreas.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
-            if (skill is null) throw new Exception();
+            if (skillArea is null) throw new Exception();
 
-            skill.Name = request.Name;
+            skillArea.Name = request.Name;
+            skillArea.Industry = await context.Industries.FirstAsync(x => x.Id == request.IndustryId, cancellationToken);
 
             await context.SaveChangesAsync(cancellationToken);
 

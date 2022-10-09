@@ -1,0 +1,138 @@
+@page "/skills"
+@attribute [Authorize]
+@using YourBrand.Showroom.Consultants.Profile
+@inject ISkillsClient SkillsClient
+@inject ISkillAreasClient SkillAreasClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudText Typo="Typo.h3" Class="mb-4">Skills</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnSkillClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New skill
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Href="/skills/areas" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">
+    Areas
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="SkillDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+                <MudAutocomplete T="SkillAreaDto" Label="Area" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="SkillArea" ValueChanged="(ca) => OnSkillAreaChanged(ca)" For="() => SkillArea" SearchFunc="SearchSkillAreas" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Area">Area</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Name">@context.Area.Name (@context.Area.Industry.Name)</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    MudTable<SkillDto> table; 
+    string? searchString;
+
+    public SkillAreaDto SkillArea { get; set; }
+
+    private async Task<TableData<SkillDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await SkillsClient.GetSkillsAsync(state.Page + 1, state.PageSize, SkillArea?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            return new TableData<SkillDto> { Items = results.Items, TotalItems = results.TotalCount };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<SkillDto> ev)
+    {
+        var item = ev.Item;
+
+        await OnSkillClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnSkillAreaChanged(SkillAreaDto sa)
+    {
+        SkillArea = sa;
+        table.ReloadServerData();
+    }
+
+
+    async Task<IEnumerable<SkillAreaDto>> SearchSkillAreas(string text)
+    {
+        try
+        {
+            var results = await SkillAreasClient.GetSkillAreasAsync(1, 10, null, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task OnSkillClicked(SkillDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(SkillDialog.SkillId), dto?.Id);
+
+            var dialogReference = DialogService.Show<SkillDialog>(dto is null ? "New Skill" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

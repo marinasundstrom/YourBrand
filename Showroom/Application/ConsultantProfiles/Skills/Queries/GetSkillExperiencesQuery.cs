@@ -29,6 +29,7 @@ public record GetSkillExperiencesQuery(string ConsultantProfileId, string Id) : 
                .ConsultantProfileSkills
                .Include(x => x.Skill)
                .ThenInclude(x => x.Area)
+                .ThenInclude(x => x.Industry)
                .AsNoTracking()
                .FirstAsync(c => c.ConsultantProfile.Id == request.ConsultantProfileId && c.Id == request.Id, cancellationToken);
 
@@ -36,6 +37,7 @@ public record GetSkillExperiencesQuery(string ConsultantProfileId, string Id) : 
                .ConsultantProfileExperiences
                .Where(x => x.ConsultantProfile.Id == request.ConsultantProfileId)
                .Include(x => x.Company)
+                .ThenInclude(x => x.Industry)
                .Include(x => x.Skills)
                .ThenInclude(x => x.ConsultantProfileSkill)
                .AsNoTracking()

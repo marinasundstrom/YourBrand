@@ -15,7 +15,7 @@
                         ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
                         <ItemTemplate Context="context2">
                             <MudText Typo="Typo.body1">@context2.Name</MudText>
-                            <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
+                            <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
                         </ItemTemplate>
 
                         <ItemSelectedTemplate Context="context2">
@@ -26,7 +26,6 @@
 
                 <MudSelect Label="Skill level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
                            For="@(() => SkillLevel)" Class="mt-4">
-                    <MudSelectItem Value="@((SkillLevel?)null)">Unspecified</MudSelectItem>
                     @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
                     {
                         <MudSelectItem T="SkillLevel?" Value="@skillLevel">@skillLevel</MudSelectItem>
@@ -198,7 +197,7 @@
     {
         try
         {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, text, null, null, default);
+            var results = await SkillsClient.GetSkillsAsync(1, 10, null, text, null, default);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

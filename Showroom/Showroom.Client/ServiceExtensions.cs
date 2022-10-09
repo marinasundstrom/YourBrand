@@ -25,12 +25,20 @@ public static class ServiceExtensions
             .AddTypedClient<ISkillsClient>((http, sp) => new SkillsClient(http)));
 
         builder(
+            services.AddHttpClient(nameof(ISkillAreasClient), configureClient)
+            .AddTypedClient<ISkillAreasClient>((http, sp) => new SkillAreasClient(http)));
+
+        builder(
             services.AddHttpClient(nameof(ICasesClient), configureClient)
             .AddTypedClient<ICasesClient>((http, sp) => new CasesClient(http)));
 
         builder(
             services.AddHttpClient(nameof(ICompaniesClient), configureClient)
             .AddTypedClient<ICompaniesClient>((http, sp) => new CompaniesClient(http)));
+
+        builder(
+            services.AddHttpClient(nameof(IIndustriesClient), configureClient)
+            .AddTypedClient<IIndustriesClient>((http, sp) => new IndustriesClient(http)));
 
         return services;
     }

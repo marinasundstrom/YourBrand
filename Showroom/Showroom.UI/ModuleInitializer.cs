@@ -30,10 +30,15 @@ public class ModuleInitializer : IModuleInitializer
 
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", () => resources["Sales"]);
+        var group = navManager.GetGroup("showroom") ?? navManager.CreateGroup("showroom", () => resources["Showroom"]);
         group.RequiresAuthorization = true;
 
-        group.CreateItem("cvs", () => resources["CVs"], MudBlazor.Icons.Material.Filled.Person, "/consultants");
+        group.CreateItem("search", () => resources["Search"], MudBlazor.Icons.Material.Filled.Search, "/consultants/find");
+        group.CreateItem("profiles", () => resources["Profiles"], MudBlazor.Icons.Material.Filled.Person, "/consultants");
         group.CreateItem("cases", () => resources["Cases"], MudBlazor.Icons.Material.Filled.Task, "/cases");
+        group.CreateItem("skills", () => resources["Skills"], MudBlazor.Icons.Material.Filled.List, "/skills");
+        group.CreateItem("competenceAreas", () => resources["CompetenceAreas"], MudBlazor.Icons.Material.Filled.List, "/competenceareas");
+        group.CreateItem("companies", () => resources["Companies"], MudBlazor.Icons.Material.Filled.List, "/companies");
+        group.CreateItem("industries", () => resources["Industries"], MudBlazor.Icons.Material.Filled.List, "/industries");
     }
 }

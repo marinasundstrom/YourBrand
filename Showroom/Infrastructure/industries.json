@@ -1,0 +1,896 @@
+[
+    {
+      "Id": 1,
+      "Name": "Information Technology and Services",
+      "2022": "21,700,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 2,
+      "Name": "Hospital & Health Care",
+      "2022": "16,800,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 3,
+      "Name": "Construction",
+      "2022": "16,400,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 4,
+      "Name": "Retail",
+      "2022": "13,000,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 5,
+      "Name": "Education Management",
+      "2022": "12,900,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 6,
+      "Name": "Financial Services",
+      "2022": "11,900,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 7,
+      "Name": "Accounting",
+      "2022": "11,500,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 8,
+      "Name": "Computer Software",
+      "2022": "10,700,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 9,
+      "Name": "Higher Education",
+      "2022": "9,850,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 10,
+      "Name": "Automotive",
+      "2022": "9,810,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 11,
+      "Name": "Government Administration",
+      "2022": "9,680,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 12,
+      "Name": "Marketing and Advertising",
+      "2022": "9,600,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 13,
+      "Name": "Banking",
+      "2022": "9,000,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 14,
+      "Name": "Health, Wellness and Fitness",
+      "2022": "8,800,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 15,
+      "Name": "Real Estate",
+      "2022": "7,980,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 16,
+      "Name": "Food & Beverages",
+      "2022": "7,950,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 17,
+      "Name": "Telecommunications",
+      "2022": "7,310,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 18,
+      "Name": "Oil & Energy",
+      "2022": "6,800,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 19,
+      "Name": "Mechanical or Industrial Engineering",
+      "2022": "6,670,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 20,
+      "Name": "Hospitality",
+      "2022": "6,530,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 21,
+      "Name": "Primary/Secondary Education",
+      "2022": "6,310,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 22,
+      "Name": "Electrical/Electronic Manufacturing",
+      "2022": "6,110,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 23,
+      "Name": "Internet",
+      "2022": "6,100,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 24,
+      "Name": "Insurance",
+      "2022": "5,910,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 25,
+      "Name": "Consumer Services",
+      "2022": "5,710,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 26,
+      "Name": "Medical Practice",
+      "2022": "5,450,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 27,
+      "Name": "Human Resources",
+      "2022": "5,230,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 28,
+      "Name": "Transportation/Trucking/Railroad",
+      "2022": "5,230,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 29,
+      "Name": "Restaurants",
+      "2022": "4,770,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 30,
+      "Name": "Civil Engineering",
+      "2022": "4,690,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 31,
+      "Name": "Pharmaceuticals",
+      "2022": "4,660,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 32,
+      "Name": "Design",
+      "2022": "4,630,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 33,
+      "Name": "Logistics and Supply Chain",
+      "2022": "4,610,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 34,
+      "Name": "Research",
+      "2022": "4,500,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 35,
+      "Name": "Management Consulting",
+      "2022": "4,450,000",
+      "CHANGE FROM 2021": "-4"
+    },
+    {
+      "Id": 36,
+      "Name": "Architecture & Planning",
+      "2022": "4,120,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 37,
+      "Name": "Apparel & Fashion",
+      "2022": "4,030,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 38,
+      "Name": "Food Production",
+      "2022": "4,030,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 39,
+      "Name": "Law Practice",
+      "2022": "3,950,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 40,
+      "Name": "Facilities Services",
+      "2022": "3,920,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 41,
+      "Name": "Consumer Goods",
+      "2022": "3,670,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 42,
+      "Name": "Non-Profit Organization Management",
+      "2022": "3,420,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 43,
+      "Name": "Machinery",
+      "2022": "3,410,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 44,
+      "Name": "Entertainment",
+      "2022": "3,350,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 45,
+      "Name": "Chemicals",
+      "2022": "3,300,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 46,
+      "Name": "Wholesale",
+      "2022": "3,250,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 47,
+      "Name": "Arts and Crafts",
+      "2022": "3,150,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 48,
+      "Name": "Farming",
+      "2022": "3,120,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 49,
+      "Name": "Utilities",
+      "2022": "3,000,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 50,
+      "Name": "Legal Services",
+      "2022": "2,980,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 51,
+      "Name": "Sports",
+      "2022": "2,820,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 52,
+      "Name": "Mining & Metals",
+      "2022": "2,810,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 53,
+      "Name": "Airlines/Aviation",
+      "2022": "2,750,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 54,
+      "Name": "Building Materials",
+      "2022": "2,720,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 55,
+      "Name": "Leisure, Travel & Tourism",
+      "2022": "2,650,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 56,
+      "Name": "Environmental Services",
+      "2022": "2,440,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 57,
+      "Name": "Professional Training & Coaching",
+      "2022": "2,430,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 58,
+      "Name": "Medical Devices",
+      "2022": "2,420,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 59,
+      "Name": "Music",
+      "2022": "2,390,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 60,
+      "Name": "Individual & Family Services",
+      "2022": "2,300,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 61,
+      "Name": "Cosmetics",
+      "2022": "2,200,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 62,
+      "Name": "Staffing and Recruiting",
+      "2022": "2,100,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 63,
+      "Name": "Mental Health Care",
+      "2022": "2,060,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 64,
+      "Name": "Graphic Design",
+      "2022": "2,060,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 65,
+      "Name": "Industrial Automation",
+      "2022": "2,040,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 66,
+      "Name": "Security and Investigations",
+      "2022": "1,970,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 67,
+      "Name": "Biotechnology",
+      "2022": "1,890,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 68,
+      "Name": "Aviation & Aerospace",
+      "2022": "1,880,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 69,
+      "Name": "Business Supplies and Equipment",
+      "2022": "1,860,000",
+      "CHANGE FROM 2021": "5"
+    },
+    {
+      "Id": 70,
+      "Name": "Public Relations and Communications",
+      "2022": "1,850,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 71,
+      "Name": "Import and Export",
+      "2022": "1,840,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 72,
+      "Name": "Textiles",
+      "2022": "1,820,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 73,
+      "Name": "Writing and Editing",
+      "2022": "1,800,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 74,
+      "Name": "Consumer Electronics",
+      "2022": "1,760,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 75,
+      "Name": "Media Production",
+      "2022": "1,750,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 76,
+      "Name": "Renewables & Environment",
+      "2022": "1,730,000",
+      "CHANGE FROM 2021": "4"
+    },
+    {
+      "Id": 77,
+      "Name": "Broadcast Media",
+      "2022": "1,720,000",
+      "CHANGE FROM 2021": "-5"
+    },
+    {
+      "Id": 78,
+      "Name": "International Trade and Development",
+      "2022": "1,680,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 79,
+      "Name": "Military",
+      "2022": "1,670,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 80,
+      "Name": "Computer Networking",
+      "2022": "1,670,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 81,
+      "Name": "Civic & Social Organization",
+      "2022": "1,590,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 82,
+      "Name": "Events Services",
+      "2022": "1,540,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 83,
+      "Name": "Photography",
+      "2022": "1,520,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 84,
+      "Name": "E-Learning",
+      "2022": "1,510,000",
+      "CHANGE FROM 2021": "4"
+    },
+    {
+      "Id": 85,
+      "Name": "Computer Hardware",
+      "2022": "1,480,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 86,
+      "Name": "Computer & Network Security",
+      "2022": "1,460,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 87,
+      "Name": "Defense & Space",
+      "2022": "1,430,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 88,
+      "Name": "Furniture",
+      "2022": "1,430,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 89,
+      "Name": "Fine Art",
+      "2022": "1,290,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 90,
+      "Name": "Warehousing",
+      "2022": "1,290,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 91,
+      "Name": "Printing",
+      "2022": "1,230,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 92,
+      "Name": "Investment Management",
+      "2022": "1,230,000",
+      "CHANGE FROM 2021": "-4"
+    },
+    {
+      "Id": 93,
+      "Name": "Outsourcing/Offshoring",
+      "2022": "1,210,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 94,
+      "Name": "Publishing",
+      "2022": "1,160,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 95,
+      "Name": "Information Services",
+      "2022": "1,150,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 96,
+      "Name": "Law Enforcement",
+      "2022": "1,140,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 97,
+      "Name": "Supermarkets",
+      "2022": "1,120,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 98,
+      "Name": "Animation",
+      "2022": "1,110,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 99,
+      "Name": "Maritime",
+      "2022": "1,080,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 100,
+      "Name": "Executive Office",
+      "2022": "1,070,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 101,
+      "Name": "Religious Institutions",
+      "2022": "1,040,000",
+      "CHANGE FROM 2021": "-6"
+    },
+    {
+      "Id": 102,
+      "Name": "Government Relations",
+      "2022": "1,000,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 103,
+      "Name": "Semiconductors",
+      "2022": "1,000,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 104,
+      "Name": "Program Development",
+      "2022": "952,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 105,
+      "Name": "Plastics",
+      "2022": "877,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 106,
+      "Name": "Online Media",
+      "2022": "870,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 107,
+      "Name": "Public Safety",
+      "2022": "858,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 108,
+      "Name": "Packaging and Containers",
+      "2022": "820,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 109,
+      "Name": "Commercial Real Estate",
+      "2022": "796,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 110,
+      "Name": "Alternative Medicine",
+      "2022": "792,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 111,
+      "Name": "Motion Pictures and Film",
+      "2022": "764,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 112,
+      "Name": "Judiciary",
+      "2022": "757,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 113,
+      "Name": "Performing Arts",
+      "2022": "753,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 114,
+      "Name": "Computer Games",
+      "2022": "737,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 115,
+      "Name": "Veterinary",
+      "2022": "731,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 116,
+      "Name": "Luxury Goods & Jewelry",
+      "2022": "688,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 117,
+      "Name": "Investment Banking",
+      "2022": "682,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 118,
+      "Name": "Package/Freight Delivery",
+      "2022": "670,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 119,
+      "Name": "International Affairs",
+      "2022": "667,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 120,
+      "Name": "Market Research",
+      "2022": "654,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 121,
+      "Name": "Recreational Facilities and Services",
+      "2022": "651,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 122,
+      "Name": "Translation and Localization",
+      "2022": "625,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 123,
+      "Name": "Wine and Spirits",
+      "2022": "612,000",
+      "CHANGE FROM 2021": "-3"
+    },
+    {
+      "Id": 124,
+      "Name": "Capital Markets",
+      "2022": "605,000",
+      "CHANGE FROM 2021": "3"
+    },
+    {
+      "Id": 125,
+      "Name": "Public Policy",
+      "2022": "595,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 126,
+      "Name": "Sporting Goods",
+      "2022": "583,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 127,
+      "Name": "Newspapers",
+      "2022": "576,000",
+      "CHANGE FROM 2021": "-5"
+    },
+    {
+      "Id": 128,
+      "Name": "Paper & Forest Products",
+      "2022": "564,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 129,
+      "Name": "Venture Capital & Private Equity",
+      "2022": "525,000",
+      "CHANGE FROM 2021": "2"
+    },
+    {
+      "Id": 130,
+      "Name": "Wireless",
+      "2022": "506,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 131,
+      "Name": "Libraries",
+      "2022": "498,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 132,
+      "Name": "Gambling & Casinos",
+      "2022": "478,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 133,
+      "Name": "Ranching",
+      "2022": "470,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 134,
+      "Name": "Glass, Ceramics & Concrete",
+      "2022": "448,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 135,
+      "Name": "Philanthropy",
+      "2022": "443,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 136,
+      "Name": "Dairy",
+      "2022": "423,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 137,
+      "Name": "Shipbuilding",
+      "2022": "393,000",
+      "CHANGE FROM 2021": "1"
+    },
+    {
+      "Id": 138,
+      "Name": "Museums and Institutions",
+      "2022": "385,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 139,
+      "Name": "Think Tanks",
+      "2022": "377,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 140,
+      "Name": "Political Organization",
+      "2022": "368,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 141,
+      "Name": "Fishery",
+      "2022": "332,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 142,
+      "Name": "Horticulture",
+      "2022": "288,000",
+      "CHANGE FROM 2021": "New"
+    },
+    {
+      "Id": 143,
+      "Name": "Tobacco",
+      "2022": "283,000",
+      "CHANGE FROM 2021": "-"
+    },
+    {
+      "Id": 144,
+      "Name": "Fund-Raising",
+      "2022": "282,000",
+      "CHANGE FROM 2021": "-2"
+    },
+    {
+      "Id": 145,
+      "Name": "Railroad Manufacture",
+      "2022": "274,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 146,
+      "Name": "Alternative Dispute Resolution",
+      "2022": "273,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 147,
+      "Name": "Nanotechnology",
+      "2022": "193,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 148,
+      "Name": "Legislative Office",
+      "2022": "159,000",
+      "CHANGE FROM 2021": "-1"
+    },
+    {
+      "Id": 149,
+      "Name": "Mobile Games",
+      "2022": "43,000",
+      "CHANGE FROM 2021": "-1"
+    }
+   ]

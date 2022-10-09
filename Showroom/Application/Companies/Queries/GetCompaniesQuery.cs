@@ -10,7 +10,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.Companies;
 
-public record GetCompaniesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CompanyDto>>
+public record GetCompaniesQuery(int Page = 0, int PageSize = 10, int? IndustryId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CompanyDto>>
 {
     class GetCompaniesQueryHandler : IRequestHandler<GetCompaniesQuery, Results<CompanyDto>>
     {
@@ -35,6 +35,11 @@ public record GetCompaniesQuery(int Page = 0, int PageSize = 10, string? SearchS
                     .AsNoTracking()
                     .AsQueryable();
 
+            if (request.IndustryId is not null)
+            {
+                result = result.Where(p =>
+                    p.Industry.Id  == request.IndustryId);
+            }
 
             if (request.SearchString is not null)
             {
@@ -48,8 +53,13 @@ public record GetCompaniesQuery(int Page = 0, int PageSize = 10, string? SearchS
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
+            else 
+            {
+                result = result.OrderBy(x => x.Name);
+            }
 
             var items = await result
+                .Include(x => x.Industry)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

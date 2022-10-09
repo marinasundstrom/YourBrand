@@ -4,9 +4,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.ApiKeys;
 using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Companies;
-using YourBrand.ApiKeys;
+using YourBrand.Showroom.Application.Companies.Commands;
+using YourBrand.Showroom.Application.Companies.Queries;
+using YourBrand.Showroom.Application.ConsultantProfiles.Queries;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
@@ -23,12 +26,10 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<Results<CompanyDto>> GetCompanies(int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<Results<CompanyDto>> GetCompanies(int page = 1, int pageSize = 10, int? industryId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetCompaniesQuery(page - 1, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await _mediator.Send(new GetCompaniesQuery(page - 1, pageSize, industryId, searchString, sortBy, sortDirection), cancellationToken);
     }
-
-    /*
 
     [HttpGet("{id}")]
     public async Task<CompanyDto?> GetCompany(string id, CancellationToken cancellationToken)
@@ -37,18 +38,15 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesDefaultResponseType]
-    [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status201Created)]
-    public async Task<ActionResult> CreateCompany(CreateCompanyDto dto, CancellationToken cancellationToken)
+    public async Task<CompanyDto> CreateCompany(CreateCompanyDto dto, CancellationToken cancellationToken)
     {
-        var dto2 = await _mediator.Send(new CreateCompanyCommand(dto.Description), cancellationToken);
-        return CreatedAtAction(nameof(GetCompany), new { id = dto2.Id }, dto2);
+        return await _mediator.Send(new CreateCompanyCommand(dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateCompany(string id, UpdateCompanyDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateCompanyCommand(id, dto.Description), cancellationToken);
+        await _mediator.Send(new UpdateCompanyCommand(id, dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -56,7 +54,9 @@ public class CompaniesController : ControllerBase
     {
         await _mediator.Send(new DeleteCompanyCommand(id), cancellationToken);
     }
-
-    */
 }
+
+public record CreateCompanyDto(string Name, int IndustryId);
+
+public record UpdateCompanyDto(string Name, int IndustryId);
 

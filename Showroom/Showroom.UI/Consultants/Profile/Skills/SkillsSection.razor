@@ -213,6 +213,9 @@
             });
             var result = await dialogReference.Result;
 
+            if(result.Cancelled)
+                return;
+
             await AddSkill((ConsultantProfileSkillDto)result.Data);
 
             await OnUpdated.InvokeAsync();

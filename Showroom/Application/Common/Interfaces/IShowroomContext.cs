@@ -39,5 +39,7 @@ public interface IShowroomContext
 
     DbSet<Language> Languages { get; }
 
+    DbSet<Industry> Industries { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

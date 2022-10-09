@@ -5,7 +5,7 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Skills.SkillAreas.Commands;
 
-public record CreateSkillAreaCommand(string Name) : IRequest
+public record CreateSkillAreaCommand(string Name, int? IndustryId) : IRequest
 {
     public class CreateSkillAreaCommandHandler : IRequestHandler<CreateSkillAreaCommand>
     {
@@ -18,16 +18,19 @@ public record CreateSkillAreaCommand(string Name) : IRequest
 
         public async Task<Unit> Handle(CreateSkillAreaCommand request, CancellationToken cancellationToken)
         {
-            var skill = await context.SkillAreas.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
+            var skillArea = await context.SkillAreas.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
-            if (skill is not null) throw new Exception();
+            if (skillArea is not null) throw new Exception();
 
-            skill = new Domain.Entities.SkillArea
+            skillArea = new Domain.Entities.SkillArea
             {
-                Name = request.Name
+                Id = Guid.NewGuid().ToString(),
+                Slug = "",
+                Name = request.Name,
+                Industry = await context.Industries.FirstAsync(x => x.Id == request.IndustryId, cancellationToken)
             };
 
-            context.SkillAreas.Add(skill);
+            context.SkillAreas.Add(skillArea);
 
             await context.SaveChangesAsync(cancellationToken);
 

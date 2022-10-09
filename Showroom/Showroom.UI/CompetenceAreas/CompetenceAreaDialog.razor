@@ -1,0 +1,114 @@
+@using System.ComponentModel.DataAnnotations
+@inject ICompetenceAreasClient CompetenceAreasClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
+
+               @* 
+                <MudAutocomplete T="CompetenceAreaDto" Label="Area" Class="mt-4" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Area" For="() => Area" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+                *@
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(CompetenceAreaId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? CompetenceAreaId { get; set; } = null!;
+
+    //[Required]
+    //public CompetenceAreaDto Area { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (CompetenceAreaId is not null) 
+        {
+            var competenceArea = await CompetenceAreasClient.GetCompetenceAreaAsync(CompetenceAreaId);
+            //Area = competenceArea.Area;
+            Name = competenceArea.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(CompetenceAreaId is null) 
+        {
+            var competenceArea = await CompetenceAreasClient.CreateCompetenceAreaAsync(new CreateCompetenceAreaDto {
+                //CompetenceAreaId = Area.Id,
+                Name = Name
+            });
+
+            Dialog.Close(competenceArea);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await CompetenceAreasClient.UpdateCompetenceAreaAsync(CompetenceAreaId, new UpdateCompetenceAreaDto
+                {
+                    //CompetenceAreaId = Area.Id,
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+    }
+
+    
+
+    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

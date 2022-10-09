@@ -1,0 +1,114 @@
+@using System.ComponentModel.DataAnnotations
+@inject ISkillsClient SkillsClient
+@inject ISnackbar Snackbar
+@inject ISkillAreasClient SkillAreasClient
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
+
+                <MudAutocomplete T="SkillAreaDto" Label="Area" Class="mt-4" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Area" For="() => Area" SearchFunc="SearchSkillAreas" ToStringFunc="(x) => x.Name">
+                    <ItemTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
+                    </ItemTemplate>
+
+                    <ItemSelectedTemplate Context="context2">
+                        <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    </ItemSelectedTemplate>
+                </MudAutocomplete>
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(SkillId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? SkillId { get; set; } = null!;
+
+    [Required]
+    public SkillAreaDto Area { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (SkillId is not null) 
+        {
+            var skill = await SkillsClient.GetSkillAsync(SkillId);
+            Area = skill.Area;
+            Name = skill.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(SkillId is null) 
+        {
+            var skill = await SkillsClient.CreateSkillAsync(new CreateSkillDto {
+                SkillAreaId = Area.Id,
+                Name = Name
+            });
+
+            Dialog.Close(skill);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await SkillsClient.UpdateSkillAsync(SkillId, new UpdateSkillDto
+                {
+                    SkillAreaId = Area.Id,
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+    }
+
+    
+
+    async Task<IEnumerable<SkillAreaDto>> SearchSkillAreas(string text)
+    {
+        try
+        {
+            var results = await SkillAreasClient.GetSkillAreasAsync(1, 10, null, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

@@ -25,9 +25,9 @@ public class SkillAreasController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<Results<SkillAreaDto>> GetSkillAreas(int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<Results<SkillAreaDto>> GetSkillAreas(int page = 1, int pageSize = 10, int? industryId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetSkillAreasQuery(page - 1, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await _mediator.Send(new GetSkillAreasQuery(page - 1, pageSize, industryId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
@@ -39,13 +39,13 @@ public class SkillAreasController : ControllerBase
     [HttpPost]
     public async Task CreateSkillArea(CreateSkillAreaDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateSkillAreaCommand(dto.Name), cancellationToken);
+        await _mediator.Send(new CreateSkillAreaCommand(dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateSkillArea(string id, UpdateSkillAreaDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateSkillAreaCommand(id, dto.Name), cancellationToken);
+        await _mediator.Send(new UpdateSkillAreaCommand(id, dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -55,7 +55,7 @@ public class SkillAreasController : ControllerBase
     }
 }
 
-public record CreateSkillAreaDto(string Name);
+public record CreateSkillAreaDto(string Name, int IndustryId);
 
-public record UpdateSkillAreaDto(string Name);
+public record UpdateSkillAreaDto(string Name, int IndustryId);
 

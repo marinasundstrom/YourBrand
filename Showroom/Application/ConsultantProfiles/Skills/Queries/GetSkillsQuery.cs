@@ -45,6 +45,10 @@ public record GetSkillsQuery(string ConsultantProfileId, int Page = 0, int? Page
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
+            else 
+            {
+                result = result.OrderBy(x => x.Skill.Name);
+            }
 
             IQueryable<ConsultantProfileSkill> items = null!;
 
@@ -52,14 +56,16 @@ public record GetSkillsQuery(string ConsultantProfileId, int Page = 0, int? Page
             {
                 items = result
                     .Include(x => x.Skill)
-                    .ThenInclude(x => x.Area)
+                    .ThenInclude(x => x.Area) 
+                    .ThenInclude(x => x.Industry)
                     .AsQueryable();
             }
             else 
             {
                 items = result
                     .Include(x => x.Skill)
-                    .ThenInclude(x => x.Area)
+                    .ThenInclude(x => x.Area) 
+                    .ThenInclude(x => x.Industry)
                     .Skip((request.Page) * request.PageSize.GetValueOrDefault())
                     .Take(request.PageSize.GetValueOrDefault());
             }

@@ -53,10 +53,12 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Cons
                 .Include(x => x.Employment)
                 .ThenInclude(x => x.Employer)
                 .Include(x => x.Company)
+                .ThenInclude(x => x.Industry)
                 .Include(x => x.Skills)
                 .ThenInclude(x => x.ConsultantProfileSkill)
                 .ThenInclude(x => x.Skill)
-                .ThenInclude(x => x.Area);
+                .ThenInclude(x => x.Area)
+                .ThenInclude(x => x.Industry);
 
             if (request.SortBy is not null)
             {

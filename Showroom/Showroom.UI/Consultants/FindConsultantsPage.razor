@@ -85,7 +85,7 @@
                             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
                             <ItemTemplate Context="context2">
                                 <MudText Typo="Typo.body1">@context2.Name</MudText>
-                                <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
+                                <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
                             </ItemTemplate>
 
                             <ItemSelectedTemplate Context="context2">
@@ -93,7 +93,7 @@
                             </ItemSelectedTemplate>
                 </MudAutocomplete>
 
-                <MudSelect Label="Skill level" Dense="true" Variant="Variant.Outlined" @bind-Value="SkillSelector.SkillLevel"
+                <MudSelect Label="Level" Dense="true" Variant="Variant.Outlined" @bind-Value="SkillSelector.SkillLevel"
                             For="@(() => SkillSelector.SkillLevel)" Class="mt-4">
                         @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
                         {
@@ -101,7 +101,7 @@
                         }
                     </MudSelect>
 
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 mt-2 me-2">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
                     Add skill
                 </MudButton>
             </EditForm>
@@ -239,7 +239,7 @@
     {
         try
         {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, text, null, null, default);
+            var results = await SkillsClient.GetSkillsAsync(1, 10, null, text, null, default);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

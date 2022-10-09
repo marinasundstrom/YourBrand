@@ -12,6 +12,7 @@ using YourBrand.Showroom.Application.Skills;
 using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
 using YourBrand.Showroom.Application.Cases;
 using YourBrand.Showroom.Application.Companies;
+using YourBrand.Showroom.Application.Industries;
 
 namespace YourBrand.Showroom.Application;
 
@@ -73,7 +74,7 @@ public static class Mapper
 
     public static SkillAreaDto ToDto(this Domain.Entities.SkillArea skillArea)
     {
-        return new SkillAreaDto(skillArea.Id, skillArea.Name);
+        return new SkillAreaDto(skillArea.Id, skillArea.Name, skillArea.Industry.ToDto());
     }
 
     public static ConsultantProfileSkillDto ToDto(this Domain.Entities.ConsultantProfileSkill consultantProfileSkill)
@@ -98,6 +99,11 @@ public static class Mapper
     
     public static CompanyDto ToDto(this Domain.Entities.Company company)
     {
-        return new CompanyDto(company.Id, company.Name, company.Logo, company.Link);
+        return new CompanyDto(company.Id, company.Name, company.Logo, company.Link, company.Industry.ToDto());
+    }
+
+    public static IndustryDto ToDto(this Domain.Entities.Industry industry)
+    {
+        return new IndustryDto(industry.Id, industry.Name);
     }
 }

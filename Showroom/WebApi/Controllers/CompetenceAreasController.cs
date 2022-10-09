@@ -38,9 +38,9 @@ public class CompetenceAreasController : ControllerBase
     }
 
     [HttpPost]
-    public async Task CreateCompetenceArea(CreateCompetenceAreaDto dto, CancellationToken cancellationToken)
+    public async Task<CompetenceAreaDto> CreateCompetenceArea(CreateCompetenceAreaDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateCompetenceAreaCommand(dto.Name), cancellationToken);
+        return await _mediator.Send(new CreateCompetenceAreaCommand(dto.Name), cancellationToken);
     }
 
     [HttpPut("{id}")]

@@ -32,11 +32,6 @@ public record FindConsultantsQuery(ConsultantQuery Query, int Page = 0, int Page
         {
             IQueryable<ConsultantProfile> result = _context
                     .ConsultantProfiles
-                    .OrderBy(x => x.FirstName)
-                    .ThenBy(x => x.LastName)
-                    .Include(x => x.Organization)
-                    .Include(c => c.CompetenceArea)
-                    //.Include(c => c.Manager)
                     .AsNoTracking()
                     .AsQueryable();
 
@@ -86,8 +81,17 @@ public record FindConsultantsQuery(ConsultantQuery Query, int Page = 0, int Page
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
+            else 
+            {
+                result = result
+                    .OrderBy(x => x.FirstName)
+                    .ThenBy(x => x.LastName);
+            }
 
             var items = await result
+                .Include(x => x.Organization)
+                .Include(c => c.CompetenceArea)
+                //.Include(c => c.Manager)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

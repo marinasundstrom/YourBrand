@@ -51,6 +51,10 @@ public record GetCompetenceAreasQuery(int Page = 0, int PageSize = 10, string? S
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
+            else 
+            {
+                result = result.OrderBy(x => x.Name);
+            }
 
             var items = await result
                 .Skip((request.Page) * request.PageSize)

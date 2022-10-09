@@ -59,6 +59,7 @@ public record UpdateExperienceCommand(
                 .Include(x => x.Employment)
                 .ThenInclude(x => x.Employer)
                 .Include(x => x.Company)
+                .ThenInclude(x => x.Industry)
                 .Include(x => x.Skills)
                 .ThenInclude(x => x.ConsultantProfileSkill)
                 .FirstAsync(x => x.Id == experience.Id);

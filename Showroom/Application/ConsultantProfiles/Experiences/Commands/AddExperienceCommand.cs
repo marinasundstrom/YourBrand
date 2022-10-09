@@ -59,7 +59,8 @@ public record AddExperienceCommand(
             experience = await _context.ConsultantProfileExperiences
                 .Include(x => x.Employment)
                 .ThenInclude(x => x.Employer)
-                .Include(x => x.Company)
+                .Include(x => x.Company)  
+                .ThenInclude(x => x.Industry)
                 .Include(x => x.Skills)
                 .ThenInclude(x => x.ConsultantProfileSkill)
                 .FirstAsync(x => x.Id == experience.Id);

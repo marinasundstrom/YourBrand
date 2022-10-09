@@ -23,6 +23,7 @@ public record UpdateSkillCommand(string Id, SkillLevel Level, string? Comment) :
             var skill = await context.ConsultantProfileSkills
                .Include(x => x.Skill)
                .ThenInclude(x => x.Area)
+               .ThenInclude(x => x.Industry)
                .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (skill is null) throw new Exception();

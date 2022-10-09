@@ -55,6 +55,7 @@ public record AddSkillCommand(string ConsultantProfileId, string SkillId, SkillL
                .ConsultantProfileSkills
                .Include(x => x.Skill)
                .ThenInclude(x => x.Area)
+               .ThenInclude(x => x.Industry)
                .AsNoTracking()
                .FirstAsync(c => c.SkillId == request.SkillId, cancellationToken);
 
