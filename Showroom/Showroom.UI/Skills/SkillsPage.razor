@@ -38,10 +38,12 @@
         <HeaderContent>
             <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Area">Area</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Area.Industry">Industry</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Name">@context.Area.Name (@context.Area.Industry.Name)</MudTd>
+            <MudTd DataLabel="Name">@context.Area.Name</MudTd>
+            <MudTd DataLabel="Name">@context.Area.Industry.Name</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
