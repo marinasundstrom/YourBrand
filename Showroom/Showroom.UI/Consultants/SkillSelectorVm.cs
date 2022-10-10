@@ -15,7 +15,7 @@ namespace YourBrand.Showroom.Consultants;
 
         public List<SkillVM> Skills { get; set; } = new List<SkillVM>();
 
-        public void AddSkill() 
+        public void AddSkill()
         {
             Skills.Add(new SkillVM() {
                 Skill = Skill!,

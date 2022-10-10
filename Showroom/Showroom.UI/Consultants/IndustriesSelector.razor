@@ -1,0 +1,71 @@
+@inject IIndustriesClient IndustriesClient
+
+<EditForm Model="@Model" OnValidSubmit="AddIndustry">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+
+                <MudAutocomplete T="IndustryDto" Label="Industry" Dense="true" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Model.Industry"
+                            For="() => Model.Industry" SearchFunc="SearchIndustries" ToStringFunc="(x) => x.Name"
+                            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+                            <ItemTemplate Context="context2">
+                                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                            </ItemTemplate>
+
+                            <ItemSelectedTemplate Context="context2">
+                                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                            </ItemSelectedTemplate>
+                </MudAutocomplete>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
+                    Add industry
+                </MudButton>
+            </EditForm>
+
+            <MudList>
+                @foreach (var industry in Model.Industries)
+                {
+                    <MudListItem Class="pa-0">
+                        <div class="d-flex flex-grow-1 gap-4">
+                            <MudCheckBox Dense="true" T="bool" Checked="industry.Selected" CheckedChanged="async (e) => { industry.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{industry.Industry.Name} ({industry.Years} years)")" />
+                            <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveIndustry(industry)"></MudIconButton>
+                        </div>
+                    </MudListItem>
+                }      
+            </MudList>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IndustrySelectorVm Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnUpdated { get; set; }
+
+    async Task AddIndustry() 
+    {
+        Model.AddIndustry();
+
+        await OnUpdated.InvokeAsync();
+    }
+
+    async Task RemoveIndustry(IndustryVM industry) 
+    {
+        Model.RemoveIndustry(industry);
+
+        await OnUpdated.InvokeAsync();
+    }
+
+    async Task<IEnumerable<IndustryDto>> SearchIndustries(string text)
+    {
+        try
+        {
+            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

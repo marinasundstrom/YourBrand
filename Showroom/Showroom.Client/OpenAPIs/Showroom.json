@@ -3121,6 +3121,12 @@
             "items": {
               "$ref": "#/components/schemas/QuerySkill"
             }
+          },
+          "industries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QueryIndustry"
+            }
           }
         }
       },
@@ -3153,6 +3159,20 @@
           4,
           5
         ]
+      },
+      "QueryIndustry": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "industryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "years": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "CreateConsultantProfileDto": {
         "type": "object",

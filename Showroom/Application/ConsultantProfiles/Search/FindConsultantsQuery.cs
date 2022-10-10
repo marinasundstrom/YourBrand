@@ -65,6 +65,17 @@ public record FindConsultantsQuery(ConsultantQuery Query, int Page = 0, int Page
                     }
                 }
 
+                if(query.Industries?.Any() ?? false) 
+                {
+                    foreach(var industry in request.Query.Industries) 
+                    {
+                        result = result.Where(p => 
+                            p.Experience.Where(x => x.Company.Industry.Id == industry.IndustryId)
+                            .OrderBy(x => x.StartDate)
+                            .Any());
+                    }
+                }
+
                 if (query.SearchString is not null)
                 {
                     result = result.Where(p =>
