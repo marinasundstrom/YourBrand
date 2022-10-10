@@ -1,0 +1,56 @@
+@using System.Linq.Expressions
+@inject ICompaniesClient CompaniesClient
+
+<MudAutocomplete T="CompanyDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+    For="For" SearchFunc="SearchCompanies" ToStringFunc="(x) => x.Name"
+    ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+    <ItemTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
+    </ItemTemplate>
+
+    <ItemSelectedTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Company";
+
+    [Parameter]
+    public CompanyDto Value { get; set; }
+
+    [Parameter]
+    public EventCallback<CompanyDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<CompanyDto>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public int? IndustryId { get; set; }
+
+    async Task<IEnumerable<CompanyDto>> SearchCompanies(string text)
+    {
+        try
+        {
+            var results = await CompaniesClient.GetCompaniesAsync(1, 10, IndustryId, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

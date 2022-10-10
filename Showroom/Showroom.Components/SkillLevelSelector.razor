@@ -1,0 +1,33 @@
+@using System.Linq.Expressions
+@inject ISkillsClient SkillsClient
+
+                <MudSelect Label="Label" Variant="Variant"  Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+                           For="@(() => Value)">
+                    @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
+                    {
+                        <MudSelectItem T="SkillLevel" Value="@skillLevel">@skillLevel</MudSelectItem>
+                    }
+                </MudSelect>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Skill Level";
+
+    [Parameter]
+    public SkillLevel Value { get; set; }
+
+    [Parameter]
+    public EventCallback<SkillLevel> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<SkillLevel>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+}

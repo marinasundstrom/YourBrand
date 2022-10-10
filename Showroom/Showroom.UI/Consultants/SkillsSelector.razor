@@ -1,28 +1,10 @@
-@inject ISkillsClient SkillsClient
-
 <EditForm Model="@Model" OnValidSubmit="AddSkill">
                 <DataAnnotationsValidator></DataAnnotationsValidator>
 
-                <MudAutocomplete T="SkillDto" Label="Skill" Dense="true" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Model.Skill"
-                            For="() => Model.Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
-                            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-                            <ItemTemplate Context="context2">
-                                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                                <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
-                            </ItemTemplate>
+                <SkillSelector Variant="Variant.Outlined" @bind-Value="Model.Skill" For="() => Model.Skill" />
 
-                            <ItemSelectedTemplate Context="context2">
-                                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                            </ItemSelectedTemplate>
-                </MudAutocomplete>
-
-                <MudSelect Label="Level" Dense="true" Variant="Variant.Outlined" @bind-Value="Model.SkillLevel"
-                            For="@(() => Model.SkillLevel)" Class="mt-4">
-                        @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
-                        {
-                            <MudSelectItem T="SkillLevel?" Value="@skillLevel">@skillLevel</MudSelectItem>
-                        }
-                    </MudSelect>
+                <SkillLevelSelector Label="Skill level" Variant="Variant.Outlined" @bind-Value="Model.SkillLevel"
+                           For="@(() => Model.SkillLevel)" Class="mt-4" />
 
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
                     Add skill
@@ -61,20 +43,5 @@
         Model.RemoveSkill(skill);
 
         await OnUpdated.InvokeAsync();
-    }
-
-    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
-    {
-        try
-        {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, null, text, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

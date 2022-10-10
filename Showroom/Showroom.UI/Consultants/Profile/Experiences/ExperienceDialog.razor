@@ -1,6 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IConsultantsClient ConsultantsClient
-@inject ICompaniesClient CompaniesClient
 @inject ISnackbar Snackbar
 
 <div style="width: 350px; max-width: 350px;">
@@ -11,16 +10,7 @@
                 <MudTextField Label="Title" Variant="Variant.Outlined"
                               @bind-Value="Title" For="@(() => Title)" />
 
-                <MudAutocomplete T="CompanyDto" Label="Company" Dense="true" Variant="Variant.Outlined" Class="mb-2"  ResetValueOnEmptyText="true" @bind-Value="Company" For="() => Company" SearchFunc="SearchCompany" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <CompanySelector Variant="Variant.Outlined" Class="mb-2" @bind-Value="Company" For="() => Company" />
 
                 <MudTextField Label="Location" Class="mb-2" Variant="Variant.Outlined"
                               @bind-Value="Location" For="@(() => Location)" />
@@ -126,20 +116,5 @@
         }
 
         Dialog.Close(DialogResult.Ok(true));
-    }
-
-    async Task<IEnumerable<CompanyDto>> SearchCompany(string text)
-    {
-        try
-        {
-            var results = await CompaniesClient.GetCompaniesAsync(1, 10, null, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

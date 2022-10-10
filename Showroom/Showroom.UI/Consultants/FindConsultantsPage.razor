@@ -4,8 +4,6 @@
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Showroom.Consultants.Profile
 @inject IConsultantsClient ConsultantProfilesClient
-@inject IOrganizationsClient OrganizationsClient
-@inject ICompetenceAreasClient CompetenceAreasClient
 @inject NavigationManager NavigationManager
 
 <MudContainer Class="mt-16 mb-16" MaxWidth="MaxWidth.ExtraLarge">
@@ -19,27 +17,11 @@
         <MudTable @ref="table" T="ConsultantProfileDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
                 Striped="true" OnRowClick="ItemOnClick">
             <ToolBarContent>
-                <MudAutocomplete T="OrganizationDto" Label="Organization" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="Organization" ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <OrganizationSelector Value="Organization" ValueChanged="OnOrganizationChanged" For="() => Organization" />
 
                 <MudSpacer />
 
-                <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <CompetenceAreaSelector Value="CompetenceArea" ValueChanged="OnCompetenceAreaChanged" For="() => CompetenceArea" />
 
                 <MudSpacer />
 
@@ -148,36 +130,6 @@
         var item = ev.Item;
 
         NavigationManager.NavigateTo($"/Consultants/{item.Id}");
-    }
-
-    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
-    {
-        try
-        {
-            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
-
-    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
-    {
-        try
-        {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     private void OnSearch(string text)

@@ -15,17 +15,6 @@
     <MudTable @ref="table" T="CompetenceAreaDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
-            @*
-                <MudAutocomplete T="CompetenceAreaDto" Label="Area" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="CompetenceArea" ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
-                *@
 
             <MudSpacer />
 
@@ -90,22 +79,6 @@
     {
         CompetenceArea = sa;
         table.ReloadServerData();
-    }
-
-
-    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
-    {
-        try
-        {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     async Task OnCompetenceAreaClicked(CompetenceAreaDto? dto)

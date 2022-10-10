@@ -1,7 +1,6 @@
 @using System.ComponentModel.DataAnnotations
 @inject ISkillsClient SkillsClient
 @inject ISnackbar Snackbar
-@inject ISkillAreasClient SkillAreasClient
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -11,16 +10,7 @@
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
 
-                <MudAutocomplete T="SkillAreaDto" Label="Area" Class="mt-4" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Area" For="() => Area" SearchFunc="SearchSkillAreas" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <SkillAreaSelector Label="Area" Class="mt-4" Variant="Variant.Outlined" @bind-Value="Area" For="() => Area" />
             </MudContainer>
         </DialogContent>
 
@@ -93,22 +83,5 @@
 
             Dialog.Close();
         }
-    }
-
-    
-
-    async Task<IEnumerable<SkillAreaDto>> SearchSkillAreas(string text)
-    {
-        try
-        {
-            var results = await SkillAreasClient.GetSkillAreasAsync(1, 10, null, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

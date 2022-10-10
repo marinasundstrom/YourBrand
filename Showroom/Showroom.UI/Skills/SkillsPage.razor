@@ -2,7 +2,6 @@
 @attribute [Authorize]
 @using YourBrand.Showroom.Consultants.Profile
 @inject ISkillsClient SkillsClient
-@inject ISkillAreasClient SkillAreasClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 
@@ -20,16 +19,7 @@
     <MudTable @ref="table" T="SkillDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
-                <MudAutocomplete T="SkillAreaDto" Label="Area" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="SkillArea" ValueChanged="(ca) => OnSkillAreaChanged(ca)" For="() => SkillArea" SearchFunc="SearchSkillAreas" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+            <SkillAreaSelector Label="Area" Value="SkillArea" ValueChanged="OnSkillAreaChanged" For="() => SkillArea" />
 
             <MudSpacer />
 
@@ -96,22 +86,6 @@
     {
         SkillArea = sa;
         table.ReloadServerData();
-    }
-
-
-    async Task<IEnumerable<SkillAreaDto>> SearchSkillAreas(string text)
-    {
-        try
-        {
-            var results = await SkillAreasClient.GetSkillAreasAsync(1, 10, null, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     async Task OnSkillClicked(SkillDto? dto)

@@ -2,7 +2,6 @@
 @attribute [Authorize]
 @using YourBrand.Showroom.Consultants.Profile
 @inject ISkillAreasClient SkillAreasClient
-@inject IIndustriesClient IndustriesClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 
@@ -17,28 +16,23 @@
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
 
-            <MudAutocomplete T="IndustryDto" Label="Industry" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="Industry" ValueChanged="(ca) => OnIndustryChanged(ca)" For="() => Industry" SearchFunc="SearchIndustry" ToStringFunc="(x) => x.Name">
-                <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemTemplate>
-
-                <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemSelectedTemplate>
-            </MudAutocomplete>
+            <IndustrySelector Label="Industry" Value="Industry" ValueChanged="OnIndustryChanged" For="() => Industry" />
 
             <MudSpacer />
 
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
+
         <HeaderContent>
             <MudTh><MudTableSortLabel T="SkillAreaDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel T="SkillAreaDto" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
         </HeaderContent>
+
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
             <MudTd DataLabel="Industry">@context.Industry.Name</MudTd> 
         </RowTemplate>
+
         <PagerContent>
             <MudTablePager />
         </PagerContent>
@@ -90,22 +84,6 @@
     {
         Industry = sa;
         table.ReloadServerData();
-    }
-
-
-    async Task<IEnumerable<IndustryDto>> SearchIndustry(string text)
-    {
-        try
-        {
-            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     async Task OnSkillAreaClicked(SkillAreaDto? dto)

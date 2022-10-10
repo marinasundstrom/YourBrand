@@ -3,17 +3,7 @@
 <EditForm Model="@Model" OnValidSubmit="AddIndustry">
                 <DataAnnotationsValidator></DataAnnotationsValidator>
 
-                <MudAutocomplete T="IndustryDto" Label="Industry" Dense="true" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Model.Industry"
-                            For="() => Model.Industry" SearchFunc="SearchIndustries" ToStringFunc="(x) => x.Name"
-                            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-                            <ItemTemplate Context="context2">
-                                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                            </ItemTemplate>
-
-                            <ItemSelectedTemplate Context="context2">
-                                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                            </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <IndustrySelector Variant="Variant.Outlined" @bind-Value="Model.Industry" For="() => Model.Industry" />
 
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
                     Add industry
@@ -52,20 +42,5 @@
         Model.RemoveIndustry(industry);
 
         await OnUpdated.InvokeAsync();
-    }
-
-    async Task<IEnumerable<IndustryDto>> SearchIndustries(string text)
-    {
-        try
-        {
-            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

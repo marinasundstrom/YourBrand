@@ -17,20 +17,6 @@
         {
             <div class="d-flex flex-grow-1 gap-4 mb-4">
 
-                @*
-
-                <MudAutocomplete T="SkillDto" Label="Find skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
-                    For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        <MudText Typo="Typo.body2">@context2.Area.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete> *@
-
                 <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddSkillClicked" />
 
             </div>
@@ -162,22 +148,6 @@
         public string Name { get; set; } = null!;
 
         public List<ConsultantProfileSkillDto> Skills  { get; set; } = new List<ConsultantProfileSkillDto>();
-    }
-
-
-    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
-    {
-        try
-        {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     async Task OnSkillClicked(ConsultantProfileSkillDto dto)

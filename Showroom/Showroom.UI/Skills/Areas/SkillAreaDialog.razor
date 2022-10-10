@@ -1,6 +1,5 @@
 @using System.ComponentModel.DataAnnotations
 @inject ISkillAreasClient SkillAreasClient
-@inject IIndustriesClient IndustriesClient
 @inject ISnackbar Snackbar
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
@@ -11,15 +10,8 @@
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
 
-                <MudAutocomplete T="IndustryDto" Label="Industry" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Industry" For="() => Industry" SearchFunc="SearchIndustry" ToStringFunc="(x) => x.Name" Class="mt-4">
-                    <ItemTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
+                <IndustrySelector Label="Industry" Variant="Variant.Outlined" @bind-Value="Industry" For="() => Industry" />
 
-                    <ItemSelectedTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
             </MudContainer>
         </DialogContent>
 
@@ -94,22 +86,5 @@
         }
 
         Dialog.Close();
-    }
-
-    
-
-    async Task<IEnumerable<IndustryDto>> SearchIndustry(string text)
-    {
-        try
-        {
-            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

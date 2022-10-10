@@ -10,17 +10,6 @@
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
 
-               @* 
-                <MudAutocomplete T="CompetenceAreaDto" Label="Area" Class="mt-4" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Area" For="() => Area" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
-                *@
             </MudContainer>
         </DialogContent>
 
@@ -93,22 +82,5 @@
 
             Dialog.Close();
         }
-    }
-
-    
-
-    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
-    {
-        try
-        {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

@@ -10,27 +10,11 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 @if(ConsultantProfileSkillId is null) 
                 {
-                    <MudAutocomplete T="SkillDto" Label="Skill" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Skill"
-                        For="() => Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
-                        ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-                        <ItemTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                            <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
-                        </ItemTemplate>
-
-                        <ItemSelectedTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        </ItemSelectedTemplate>
-                    </MudAutocomplete>
+                    <SkillSelector Variant="Variant.Outlined" @bind-Value="Skill" For="() => Skill" />
                 }
 
-                <MudSelect Label="Skill level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
-                           For="@(() => SkillLevel)" Class="mt-4">
-                    @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
-                    {
-                        <MudSelectItem T="SkillLevel?" Value="@skillLevel">@skillLevel</MudSelectItem>
-                    }
-                </MudSelect>
+                <SkillLevelSelector Label="Skill level" Variant="Variant.Outlined" @bind-Value="SkillLevel"
+                           For="@(() => SkillLevel)" Class="mt-4" />
 
                 <MudTextField Label="Comment" Lines="5" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Comment"
                               For="@(() => Comment)" />
@@ -78,7 +62,7 @@
     [Required]
     public SkillDto? Skill { get; set; } = null!;
 
-    public SkillLevel? SkillLevel { get; set; }
+    public SkillLevel SkillLevel { get; set; } = SkillLevel.Novice;
 
     public string? Comment { get; set; }
 
@@ -105,7 +89,7 @@
         {
             var skill = await ConsultantsClient.GetSkillAsync(ConsultantProfileId, ConsultantProfileSkillId);
             Skill = skill.Skill;
-            SkillLevel = skill.Level;
+            SkillLevel = skill.Level.GetValueOrDefault();
             Comment = skill.Comment;
             var selectedExperiences = skill.Experiences;
 
@@ -136,7 +120,7 @@
             consultantProfileSkill = await ConsultantsClient.AddSkillAsync(ConsultantProfileId, new AddConsultantProfileSkillDto
             {
                 SkillId = Skill.Id,
-                Level = SkillLevel.GetValueOrDefault(),
+                Level = SkillLevel,
                 Comment = Comment
             });
 
@@ -158,7 +142,7 @@
             {
                 consultantProfileSkill = await ConsultantsClient.UpdateSkillAsync(ConsultantProfileId, ConsultantProfileSkillId, new UpdateConsultantProfileSkillDto
                 {
-                    Level = SkillLevel.GetValueOrDefault(),
+                    Level = SkillLevel,
                     Comment = Comment
                 });
             }
@@ -192,20 +176,4 @@
 
         public bool Checked { get; set; }
     }
-
-    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
-    {
-        try
-        {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, null, text, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
-
 }

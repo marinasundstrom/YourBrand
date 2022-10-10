@@ -3,8 +3,6 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
 @inject ICasesClient CasesClient
-@inject IOrganizationsClient OrganizationsClient
-@inject ICompetenceAreasClient CompetenceAreasClient
 @inject NavigationManager NavigationManager
 
 <MudText Typo="Typo.h3" Class="mb-4">New Case</MudText>
@@ -21,27 +19,15 @@
 
             <MudGrid>
                 <MudItem xs="12" md="6">
-                    <MudAutocomplete T="OrganizationDto" Label="Organization" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
-                        <ItemTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        </ItemTemplate>
-
-                        <ItemSelectedTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        </ItemSelectedTemplate>
-                    </MudAutocomplete>
+                    <OrganizationSelector Variant="Variant.Outlined" @bind-Value="Organization" For="() => Organization" />
                 </MudItem>
 
                 <MudItem xs="12" md="6">
-                    <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" Variant="Variant.Outlined" Class="mb-4" @bind-Value="CompetenceArea" For="() => CompetenceArea" SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                        <ItemTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        </ItemTemplate>
+                    <CustomerSelector Variant="Variant.Outlined" @bind-Value="Customer" For="() => Customer" />
+                </MudItem>
 
-                        <ItemSelectedTemplate Context="context2">
-                            <MudText Typo="Typo.body1">@context2.Name</MudText>
-                        </ItemSelectedTemplate>
-                    </MudAutocomplete>
+                <MudItem xs="12" md="6">
+                    <CompetenceAreaSelector Variant="Variant.Outlined" @bind-Value="CompetenceArea" For="() => CompetenceArea" />
                 </MudItem>
             </MudGrid>
 
@@ -54,6 +40,11 @@
     public string Description { get; set; } = null!;
 
     public string? DisplayName { get; set; }
+
+
+    [Required]
+    public YourBrand.Customers.Client.CustomerDto? Customer { get; set; }
+
 
     //[Required]
     public OrganizationDto? Organization { get; set; }
@@ -68,35 +59,5 @@
         });
 
        NavigationManager.NavigateTo($"/Cases/{dto.Id}");
-    }
-
-    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
-    {
-        try
-        {
-            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
-
-    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
-    {
-        try
-        {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

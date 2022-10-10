@@ -1,9 +1,6 @@
 @page "/consultants"
 @attribute [Authorize]
 @inject IConsultantsClient ConsultantProfilesClient
-@inject IOrganizationsClient OrganizationsClient
-@inject ICompetenceAreasClient CompetenceAreasClient
-
 @inject NavigationManager NavigationManager
 
 <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-14">Consultants</MudText>
@@ -22,32 +19,10 @@
     <MudExpansionPanel Text="Find consultant" Class="pa-4" @bind-IsExpanded="isExpanded">
         <MudGrid>
             <MudItem xs="12" sm="6" md="4">
-                <MudAutocomplete T="OrganizationDto" Label="Organization" HelperText="Pick an organization"
-                    Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="Organization"
-                    ValueChanged="(o) => OnOrganizationChanged(o)" For="() => Organization"
-                    SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <OrganizationSelector Variant="Variant.Outlined" Value="Organization" ValueChanged="OnOrganizationChanged" For="() => Organization" />
             </MudItem>
             <MudItem xs="12" sm="6" md="4">
-                <MudAutocomplete T="CompetenceAreaDto" Label="Competence Area" HelperText="Pick a competence area"
-                    Variant="Variant.Outlined" ResetValueOnEmptyText="true" Value="CompetenceArea"
-                    ValueChanged="(ca) => OnCompetenceAreaChanged(ca)" For="() => CompetenceArea"
-                    SearchFunc="SearchCompetenceAreas" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
+                <CompetenceAreaSelector Variant="Variant.Outlined" Value="CompetenceArea" ValueChanged="OnCompetenceAreaChanged" For="() => CompetenceArea" />
             </MudItem>
             <MudItem xs="12" sm="6" md="4">
                 <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date"
@@ -125,36 +100,6 @@ else
 
     int page = 1;
     int total = 0;
-
-    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
-    {
-        try
-        {
-            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
-
-    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
-    {
-        try
-        {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
 
     private async Task Search()
     {

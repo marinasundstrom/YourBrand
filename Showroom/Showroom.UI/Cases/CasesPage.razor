@@ -1,8 +1,6 @@
 @page "/cases"
 @attribute [Authorize]
 @inject ICasesClient CasesClient
-@inject IOrganizationsClient OrganizationsClient
-@inject ICompetenceAreasClient CompetenceAreasClient
 @inject NavigationManager NavigationManager
 
 <MudText Typo="Typo.h3" Class="mb-4">Cases</MudText>
@@ -15,6 +13,8 @@
     <MudTable @ref="table" T="CaseDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
+            <MudSpacer />
+
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
@@ -67,36 +67,6 @@
         var item = ev.Item;
 
         NavigationManager.NavigateTo($"/Cases/{item.Id}");
-    }
-
-    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
-    {
-        try
-        {
-            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
-
-    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
-    {
-        try
-        {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     private void OnSearch(string text)

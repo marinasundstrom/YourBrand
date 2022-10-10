@@ -2,8 +2,6 @@
 @attribute [Authorize]
 @using YourBrand.Showroom.Consultants.Profile
 @inject ICompaniesClient CompaniesClient 
-@inject IIndustriesClient IndustriesClient
-@inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 
 <MudText Typo="Typo.h3" Class="mb-4">Companies</MudText>
@@ -17,15 +15,7 @@
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
             
-            <MudAutocomplete T="IndustryDto" Label="Industry" Dense="true" Variant="Variant.Text" ResetValueOnEmptyText="true" Value="Industry" ValueChanged="(ca) => OnIndustryChanged(ca)" For="() => Industry" SearchFunc="SearchIndustry" ToStringFunc="(x) => x.Name">
-                <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemTemplate>
-
-                <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                </ItemSelectedTemplate>
-            </MudAutocomplete>
+            <IndustrySelector Value="Industry" ValueChanged="OnIndustryChanged" For="() => Industry" />
 
             <MudSpacer />
 
@@ -90,22 +80,6 @@
     {
         Industry = sa;
         table.ReloadServerData();
-    }
-
-
-    async Task<IEnumerable<IndustryDto>> SearchIndustry(string text)
-    {
-        try
-        {
-            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 
     async Task OnCompanyClicked(CompanyDto? dto)

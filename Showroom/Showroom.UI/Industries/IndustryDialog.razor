@@ -9,18 +9,6 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
-
-               @* 
-                <MudAutocomplete T="IndustryDto" Label="Area" Class="mt-4" Dense="true" Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Area" For="() => Area" SearchFunc="SearchIndustries" ToStringFunc="(x) => x.Name">
-                    <ItemTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemTemplate>
-
-                    <ItemSelectedTemplate Context="context2">
-                        <MudText Typo="Typo.body1">@context2.Name</MudText>
-                    </ItemSelectedTemplate>
-                </MudAutocomplete>
-                *@
             </MudContainer>
         </DialogContent>
 
@@ -93,22 +81,5 @@
 
             Dialog.Close();
         }
-    }
-
-    
-
-    async Task<IEnumerable<IndustryDto>> SearchIndustries(string text)
-    {
-        try
-        {
-            var results = await IndustriesClient.GetIndustriesAsync(1, 10, text, null, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
     }
 }

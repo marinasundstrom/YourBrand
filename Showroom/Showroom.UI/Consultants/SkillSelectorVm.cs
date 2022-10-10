@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.Consultants;
         public SkillDto? Skill { get; set; }
 
         [Required]
-        public SkillLevel? SkillLevel { get; set; } = Showroom.Client.SkillLevel.Competent;
+        public SkillLevel SkillLevel { get; set; } = Showroom.Client.SkillLevel.Competent;
 
         public List<SkillVM> Skills { get; set; } = new List<SkillVM>();
 
@@ -19,7 +19,7 @@ namespace YourBrand.Showroom.Consultants;
         {
             Skills.Add(new SkillVM() {
                 Skill = Skill!,
-                Level = SkillLevel.GetValueOrDefault(),
+                Level = SkillLevel,
                 Selected = true
             });
 
