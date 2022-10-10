@@ -14,7 +14,7 @@
                 @foreach (var industry in Model.Industries)
                 {
                     <MudListItem Class="pa-0">
-                        <div class="d-flex flex-grow-1 gap-4">
+                        <div class="d-flex flex-grow-1 gap-1">
                             <MudCheckBox Dense="true" T="bool" Checked="industry.Selected" CheckedChanged="async (e) => { industry.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{industry.Industry.Name} ({industry.Years} years)")" />
                             <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveIndustry(industry)"></MudIconButton>
                         </div>

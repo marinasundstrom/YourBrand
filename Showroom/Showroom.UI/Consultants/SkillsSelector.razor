@@ -15,7 +15,7 @@
                 @foreach (var skill in Model.Skills)
                 {
                     <MudListItem Class="pa-0">
-                        <div class="d-flex flex-grow-1 gap-4">
+                        <div class="d-flex flex-grow-1 gap-1">
                             <MudCheckBox Dense="true" T="bool" Checked="skill.Selected" CheckedChanged="async (e) => { skill.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{skill.Skill.Name} ({skill.Level})")" />
                             <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveSkill(skill)"></MudIconButton>
                         </div>

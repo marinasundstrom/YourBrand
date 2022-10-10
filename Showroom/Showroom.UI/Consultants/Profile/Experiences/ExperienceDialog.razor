@@ -10,7 +10,7 @@
                 <MudTextField Label="Title" Variant="Variant.Outlined"
                               @bind-Value="Title" For="@(() => Title)" />
 
-                <CompanySelector Variant="Variant.Outlined" Class="mb-2" @bind-Value="Company" For="() => Company" />
+                <CompanySelector Variant="Variant.Outlined" Class="mb-2" @bind-Value="Company" For="() => Company" ShowAddButton="true" />
 
                 <MudTextField Label="Location" Class="mb-2" Variant="Variant.Outlined"
                               @bind-Value="Location" For="@(() => Location)" />

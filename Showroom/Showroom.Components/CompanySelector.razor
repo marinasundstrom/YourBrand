@@ -1,18 +1,28 @@
 @using System.Linq.Expressions
 @inject ICompaniesClient CompaniesClient
+@inject IDialogService DialogService
 
-<MudAutocomplete T="CompanyDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-    For="For" SearchFunc="SearchCompanies" ToStringFunc="(x) => x.Name"
-    ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-    <ItemTemplate Context="context2">
-        <MudText Typo="Typo.body1">@context2.Name</MudText>
-        <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
-    </ItemTemplate>
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="CompanyDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchCompanies" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                <MudText Typo="Typo.body2">@context2.Industry.Name</MudText>
+            </ItemTemplate>
 
-    <ItemSelectedTemplate Context="context2">
-        <MudText Typo="Typo.body1">@context2.Name</MudText>
-    </ItemSelectedTemplate>
-</MudAutocomplete>
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddCompany" />
+    }
+</div>
 
 @code {
     [Parameter]
@@ -39,6 +49,9 @@
     [Parameter]
     public int? IndustryId { get; set; }
 
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
     async Task<IEnumerable<CompanyDto>> SearchCompanies(string text)
     {
         try
@@ -52,5 +65,34 @@
         }
 
         return null;
+    }
+
+    async Task AddCompany() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Showroom.UI")
+                .GetType("YourBrand.Showroom.Companies.CompanyDialog");
+
+            var dialogReference = DialogService.Show(type, "New Company", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (CompanyDto)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 }

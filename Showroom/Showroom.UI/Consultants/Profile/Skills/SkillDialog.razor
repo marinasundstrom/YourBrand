@@ -10,7 +10,7 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 @if(ConsultantProfileSkillId is null) 
                 {
-                    <SkillSelector Variant="Variant.Outlined" @bind-Value="Skill" For="() => Skill" />
+                    <SkillSelector Variant="Variant.Outlined" @bind-Value="Skill" For="() => Skill" ShowAddButton="true" />
                 }
 
                 <SkillLevelSelector Label="Skill level" Variant="Variant.Outlined" @bind-Value="SkillLevel"

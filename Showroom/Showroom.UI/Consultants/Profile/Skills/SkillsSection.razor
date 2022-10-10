@@ -10,17 +10,16 @@
                 Skills
             </MudText>
 
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="ToggleEdit" />
-        </div>
-
-        @if (IsEditing)
-        {
-            <div class="d-flex flex-grow-1 gap-4 mb-4">
-
+            <div>
+                
+            @if (IsEditing)
+            {
                 <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddSkillClicked" />
+            }
 
+            <MudIconButton Icon="@(IsEditing ? Icons.Material.Filled.Close : Icons.Material.Filled.Edit)" OnClick="ToggleEdit" />
             </div>
-        }
+        </div>
 
         @foreach (var skillGroup in SkillAreas)
         {

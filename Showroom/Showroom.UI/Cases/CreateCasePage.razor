@@ -29,6 +29,11 @@
                 <MudItem xs="12" md="6">
                     <CompetenceAreaSelector Variant="Variant.Outlined" @bind-Value="CompetenceArea" For="() => CompetenceArea" />
                 </MudItem>
+
+
+                <MudItem xs="12" md="6">
+                    <ConsultantProfileSelector Variant="Variant.Outlined" @bind-Value="Consultant" For="() => Consultant" />
+                </MudItem>
             </MudGrid>
 
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">Create</MudButton>
@@ -51,6 +56,8 @@
 
     //[Required]
     public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    public ConsultantProfileDto? Consultant { get; set; }
 
     private async Task Submit()
     {
