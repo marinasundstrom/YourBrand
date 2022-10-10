@@ -6,7 +6,6 @@
 @inject IConsultantsClient ConsultantProfilesClient
 @inject IOrganizationsClient OrganizationsClient
 @inject ICompetenceAreasClient CompetenceAreasClient
-@inject ISkillsClient SkillsClient
 @inject NavigationManager NavigationManager
 
 <MudContainer Class="mt-16 mb-16" MaxWidth="MaxWidth.ExtraLarge">
@@ -77,47 +76,7 @@
         <MudItem sm="12" md="3">
     <MudExpansionPanels Class="mb-10" Elevation="25">
         <MudExpansionPanel Text="Skills" Class="pa-2" IsExpanded="true">
-            <EditForm Model="@SkillSelector" OnValidSubmit="AddSkill">
-                <DataAnnotationsValidator></DataAnnotationsValidator>
-
-                <MudAutocomplete T="SkillDto" Label="Skill" Dense="true" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="SkillSelector.Skill"
-                            For="() => SkillSelector.Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
-                            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-                            <ItemTemplate Context="context2">
-                                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                                <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
-                            </ItemTemplate>
-
-                            <ItemSelectedTemplate Context="context2">
-                                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                            </ItemSelectedTemplate>
-                </MudAutocomplete>
-
-                <MudSelect Label="Level" Dense="true" Variant="Variant.Outlined" @bind-Value="SkillSelector.SkillLevel"
-                            For="@(() => SkillSelector.SkillLevel)" Class="mt-4">
-                        @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
-                        {
-                            <MudSelectItem T="SkillLevel?" Value="@skillLevel">@skillLevel</MudSelectItem>
-                        }
-                    </MudSelect>
-
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
-                    Add skill
-                </MudButton>
-            </EditForm>
-
-            <MudList>
-                @foreach (var skill in SkillSelector.Skills)
-                {
-                    <MudListItem Class="pa-0">
-                        <div class="d-flex flex-grow-1 gap-4">
-                            <MudCheckBox Dense="true" T="bool" Checked="skill.Selected" CheckedChanged="async (e) => { skill.Selected = e; await table.ReloadServerData(); } " class="flex-1 d-flex" Label="@($"{skill.Skill.Name} ({skill.Level})")" />
-                            <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveSkill(skill)"></MudIconButton>
-                        </div>
-                    </MudListItem>
-                }      
-            </MudList>
-
+            <SkillsSelector Model="Model" OnUpdated="OnSelectorUpdate" />
         </MudExpansionPanel>
       
     </MudExpansionPanels>
@@ -133,19 +92,10 @@
     public OrganizationDto? Organization { get; set; }
     public CompetenceAreaDto? CompetenceArea { get; set; }
 
-    public SkillSelectorVm SkillSelector { get; set; } = new SkillSelectorVm();
+    public SkillSelectorVm Model { get; set; } = new SkillSelectorVm();
 
-    async Task AddSkill() 
+    async Task OnSelectorUpdate() 
     {
-        SkillSelector.AddSkill();
-
-        await table.ReloadServerData();
-    }
-
-    async Task RemoveSkill(SkillVM skill) 
-    {
-        SkillSelector.RemoveSkill(skill);
-
         await table.ReloadServerData();
     }
 
@@ -157,7 +107,7 @@
                 OrganizationId = Organization?.Id,
                 CompetenceAreaId = CompetenceArea?.Id,
                 SearchString = searchString,
-                Skills = SkillSelector.Skills.Where(x => x.Selected).Select(s => new QuerySkill {
+                Skills = Model.Skills.Where(x => x.Selected).Select(s => new QuerySkill {
                     SkillId = s.Skill.Id,
                     Level = s.Level
                 }).ToList()
@@ -233,57 +183,5 @@
     {
         CompetenceArea = ca;
         table.ReloadServerData();
-    }
-
-    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
-    {
-        try
-        {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, null, text, null, default);
-            return results.Items;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
-    }
-
-    public class SkillSelectorVm 
-    {
-        [Required]
-        public SkillDto? Skill { get; set; }
-
-        [Required]
-        public SkillLevel? SkillLevel { get; set; } = Showroom.Client.SkillLevel.Competent;
-
-        public List<SkillVM> Skills { get; set; } = new List<SkillVM>();
-
-        public void AddSkill() 
-        {
-            Skills.Add(new SkillVM() {
-                Skill = Skill!,
-                Level = SkillLevel.GetValueOrDefault(),
-                Selected = true
-            });
-
-            Skill = null;
-            SkillLevel = Showroom.Client.SkillLevel.Competent;
-        }
-
-        public void RemoveSkill(SkillVM skill) 
-        {
-            Skills.Remove(skill);
-        }
-    }
-
-    public class SkillVM
-    {
-        public SkillDto Skill { get; set; }
-
-        public SkillLevel Level { get; set; } = Showroom.Client.SkillLevel.Competent;
-
-        public bool Selected { get; set; }
     }
 }

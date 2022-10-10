@@ -1,0 +1,80 @@
+@inject ISkillsClient SkillsClient
+
+<EditForm Model="@Model" OnValidSubmit="AddSkill">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+
+                <MudAutocomplete T="SkillDto" Label="Skill" Dense="true" Variant="Variant.Outlined" Class="flex-grow-1" @bind-Value="Model.Skill"
+                            For="() => Model.Skill" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
+                            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+                            <ItemTemplate Context="context2">
+                                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                                <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
+                            </ItemTemplate>
+
+                            <ItemSelectedTemplate Context="context2">
+                                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                            </ItemSelectedTemplate>
+                </MudAutocomplete>
+
+                <MudSelect Label="Level" Dense="true" Variant="Variant.Outlined" @bind-Value="Model.SkillLevel"
+                            For="@(() => Model.SkillLevel)" Class="mt-4">
+                        @foreach (SkillLevel skillLevel in Enum.GetValues<SkillLevel>())
+                        {
+                            <MudSelectItem T="SkillLevel?" Value="@skillLevel">@skillLevel</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
+                    Add skill
+                </MudButton>
+            </EditForm>
+
+            <MudList>
+                @foreach (var skill in Model.Skills)
+                {
+                    <MudListItem Class="pa-0">
+                        <div class="d-flex flex-grow-1 gap-4">
+                            <MudCheckBox Dense="true" T="bool" Checked="skill.Selected" CheckedChanged="async (e) => { skill.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{skill.Skill.Name} ({skill.Level})")" />
+                            <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveSkill(skill)"></MudIconButton>
+                        </div>
+                    </MudListItem>
+                }      
+            </MudList>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public SkillSelectorVm Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnUpdated { get; set; }
+
+    async Task AddSkill() 
+    {
+        Model.AddSkill();
+
+        await OnUpdated.InvokeAsync();
+    }
+
+    async Task RemoveSkill(SkillVM skill) 
+    {
+        Model.RemoveSkill(skill);
+
+        await OnUpdated.InvokeAsync();
+    }
+
+    async Task<IEnumerable<SkillDto>> SearchSkills(string text)
+    {
+        try
+        {
+            var results = await SkillsClient.GetSkillsAsync(1, 10, null, text, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}
