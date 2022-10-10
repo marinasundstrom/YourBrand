@@ -20,7 +20,7 @@
                               For="@(() => BirthDate)" />
                 <MudTextField Label="Location" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="Location"
                               For="@(() => Location)" />
-                @*
+     
         <MudAutocomplete T="OrganizationDto" Label="Organization" Class="mb-2"
                          Variant="Variant.Outlined" ResetValueOnEmptyText="true" @bind-Value="Organization" For="() => Organization"
                          SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name">
@@ -43,7 +43,7 @@
                 <MudText Typo="Typo.body1">@context2.Name</MudText>
             </ItemSelectedTemplate>
         </MudAutocomplete>
-                *@
+                
             </DialogContent>
             <DialogActions>
                 <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">
@@ -107,6 +107,8 @@
                 DisplayName = DisplayName,
                 BirthDate = BirthDate,
                 Location = Location
+
+                // Add Organization, ComepetenceArea
             });
 
             ConsultantProfile.FirstName = FirstName;
@@ -114,6 +116,8 @@
             ConsultantProfile.DisplayName = DisplayName;
             ConsultantProfile.BirthDate = BirthDate;
             ConsultantProfile.Location = Location;
+            ConsultantProfile.Organization = Organization;
+            ConsultantProfile.CompetenceArea = CompetenceArea;
 
             Dialog.Close(DialogResult.Ok(true));
         }
