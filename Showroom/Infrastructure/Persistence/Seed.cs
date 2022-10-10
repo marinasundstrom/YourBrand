@@ -83,19 +83,31 @@ public static class Seed
             context.CompetenceAreas.Add(new CompetenceArea
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Area 1"
+                Name = "Electrical Engineering"
             });
 
             context.CompetenceAreas.Add(new CompetenceArea
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Area 2"
+                Name = "Mechanical Engineering"
             });
 
             context.CompetenceAreas.Add(new CompetenceArea
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Area 3"
+                Name = "Project Management"
+            });
+
+            context.CompetenceAreas.Add(new CompetenceArea
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Quality Assurance (QA)"
+            });
+
+            context.CompetenceAreas.Add(new CompetenceArea
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Software Engineering"
             });
 
             await context.SaveChangesAsync();
@@ -177,7 +189,7 @@ public static class Seed
             DisplayName = null,
             BirthDate = new DateTime(1990, 1, 5),
             Organization = await context.Organizations.FirstAsync(),
-            CompetenceArea = await context.CompetenceAreas.FirstAsync(),
+            CompetenceArea = await context.CompetenceAreas.FirstAsync(x => x.Name.Contains("Software")),
             Headline = "Senior Software Developer",
             ShortPresentation = "I'm as Software developer who is based in Malmö, Sweden.",
             Presentation = @"
@@ -359,7 +371,7 @@ My career began back in 2014, when I was working as a software developer for a l
                             .Replace("#", string.Empty);
     }
 
-     private static async Task LoadIndustries(ShowroomContext context)
+    private static async Task LoadIndustries(ShowroomContext context)
     {
         var industries = JsonDocument.Parse(await File.ReadAllTextAsync("../Infrastructure/industries.json"));
         foreach (var i in industries.RootElement.EnumerateArray())
