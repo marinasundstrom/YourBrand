@@ -1,0 +1,51 @@
+@page "/customers/{Id}"
+@attribute [Authorize]
+@using Humanizer
+@inject ICustomersClient CustomersClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+@if (@customer is null)
+{
+    if (loadingFailed)
+    {
+        <MudText Typo="Typo.h3" Class="mb-4">Error when loading customer.</MudText>
+    }
+    else
+    {
+        <LoadingIndicator />
+    }
+}
+else
+{
+    <MudText Typo="Typo.h3" Class="mb-4">Customer @Id</MudText>
+
+    <MudPaper Class="pa-4" Elevation="25">
+        Test
+    </MudPaper>
+}
+
+@code 
+{
+    private CustomerDto? @customer;
+    private bool loadingFailed = false;
+
+    [Parameter]
+    public string Id { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loadingFailed = false;
+
+        try
+        {
+            //this.@customer = await CustomersClient.GetCustomerAsync(Id);
+        }
+        catch (Exception exc)
+        {
+            loadingFailed = true;
+            //await JSHelpers.Alert(exc.Message);
+        }
+    }
+}

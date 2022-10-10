@@ -5,13 +5,13 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Customers.Application.Persons;
+using YourBrand.Customers.Application.Organizations;
 
-namespace YourBrand.Customers.Application.Persons.Queries;
+namespace YourBrand.Customers.Application.Organizations.Queries;
 
-public record GetPersons(int Page = 1, int PageSize = 10, string? SearchString = null) : IRequest<ItemsResult<PersonDto>>
+public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchString = null) : IRequest<ItemsResult<OrganizationDto>>
 {
-    public class Handler : IRequestHandler<GetPersons, ItemsResult<PersonDto>>
+    public class Handler : IRequestHandler<GetOrganizations, ItemsResult<OrganizationDto>>
     {
         private readonly ICustomersContext _context;
 
@@ -20,7 +20,7 @@ public record GetPersons(int Page = 1, int PageSize = 10, string? SearchString =
             _context = context;
         }
 
-        public async Task<ItemsResult<PersonDto>> Handle(GetPersons request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizations request, CancellationToken cancellationToken)
         {
             if(request.PageSize < 0) 
             {
@@ -32,7 +32,7 @@ public record GetPersons(int Page = 1, int PageSize = 10, string? SearchString =
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Persons
+            var query = _context.Organizations
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
@@ -41,11 +41,9 @@ public record GetPersons(int Page = 1, int PageSize = 10, string? SearchString =
             if(request.SearchString is not null) 
             {
                 query = query.Where(x => x.Id.ToString().Contains(request.SearchString) 
-                    || x.Name.ToLower().Contains(request.SearchString.ToLower())
-                    || (x as Domain.Entities.Person)!.FirstName.ToLower().Contains(request.SearchString.ToLower())
-                    || (x as Domain.Entities.Person)!.LastName.ToLower().Contains(request.SearchString.ToLower())
-                    || (x as Domain.Entities.Person)!.Ssn.ToLower().Contains(request.SearchString.ToLower()));
-            }
+                    || x.Name.ToLower().Contains(request.SearchString.ToLower())
+                    || (x as Domain.Entities.Organization)!.OrganizationNo.ToLower().Contains(request.SearchString.ToLower()));
+            }          
 
             int totalItems = await query.CountAsync(cancellationToken);
 
@@ -56,7 +54,7 @@ public record GetPersons(int Page = 1, int PageSize = 10, string? SearchString =
 
             var items = await query.ToArrayAsync(cancellationToken);
 
-            return new ItemsResult<PersonDto>(
+            return new ItemsResult<OrganizationDto>(
                 items.Select(invoice => invoice.ToDto()),
                 totalItems);
         }

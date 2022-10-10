@@ -9,7 +9,7 @@ using YourBrand.Customers.Application.Customers;
 
 namespace YourBrand.Customers.Application.Customers.Queries;
 
-public record GetCustomers(int Page = 1, int PageSize = 10) : IRequest<ItemsResult<CustomerDto>>
+public record GetCustomers(int Page = 1, int PageSize = 10, string? SearchString = null) : IRequest<ItemsResult<CustomerDto>>
 {
     public class Handler : IRequestHandler<GetCustomers, ItemsResult<CustomerDto>>
     {
@@ -37,6 +37,16 @@ public record GetCustomers(int Page = 1, int PageSize = 10) : IRequest<ItemsResu
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
+
+            if(request.SearchString is not null) 
+            {
+                query = query.Where(x =>  x.Id.ToString().Contains(request.SearchString) 
+                    || x.Name.ToLower().Contains(request.SearchString.ToLower())
+                    || (x as Domain.Entities.Organization)!.OrganizationNo.ToLower().Contains(request.SearchString.ToLower())
+                    || (x as Domain.Entities.Person)!.FirstName.ToLower().Contains(request.SearchString.ToLower())
+                    || (x as Domain.Entities.Person)!.LastName.ToLower().Contains(request.SearchString.ToLower())
+                    || (x as Domain.Entities.Person)!.Ssn.ToLower().Contains(request.SearchString.ToLower()));
+            }
 
             int totalItems = await query.CountAsync(cancellationToken);
 

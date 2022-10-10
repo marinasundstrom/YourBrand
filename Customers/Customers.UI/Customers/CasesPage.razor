@@ -1,0 +1,120 @@
+@*
+@attribute [Authorize]
+@inject ICasesClient CasesClient
+@inject IOrganizationsClient OrganizationsClient
+@inject ICompetenceAreasClient CompetenceAreasClient
+@inject NavigationManager NavigationManager
+
+<MudText Typo="Typo.h3" Class="mb-4">Cases</MudText>
+
+<MudButton Link="/cases/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+    New case
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="CaseDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="CaseDto" SortLabel="Id">Id</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CaseDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="CaseDto" SortLabel="Status">Status</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="Status">@context.Status</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    MudTable<CaseDto> table; 
+    string? searchString;
+
+    public OrganizationDto? Organization { get; set; }
+    public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    private async Task<TableData<CaseDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await CasesClient.GetCasesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            return new TableData<CaseDto> { Items = results.Items, TotalItems = results.TotalCount };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<CaseDto> ev)
+    {
+        var item = ev.Item;
+
+        NavigationManager.NavigateTo($"/Cases/{item.Id}");
+    }
+
+    async Task<IEnumerable<OrganizationDto>> SearchOrganizations(string text)
+    {
+        try
+        {
+            var results = await OrganizationsClient.GetOrganizationsAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task<IEnumerable<CompetenceAreaDto>> SearchCompetenceAreas(string text)
+    {
+        try
+        {
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnOrganizationChanged(OrganizationDto o)
+    {
+        Organization = o;
+        table.ReloadServerData();
+    }
+
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
+    {
+        CompetenceArea = ca;
+        table.ReloadServerData();
+    }
+}
+*@

@@ -1,0 +1,65 @@
+@inject IOrganizationsClient OrganizationsClient
+@inject NavigationManager NavigationManager
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Name" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Name" For="() => Name"></MudTextField>
+                </MudItem>
+        
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="OrganizationNo" Variant="Variant.Outlined" Class="mb-4" @bind-Value="OrganizationNo" For="() => OrganizationNo"></MudTextField>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Phone" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Phone" For="() => Phone"></MudTextField>
+                </MudItem>
+
+                    <MudItem xs="12" md="6">
+                    <MudTextField Label="Phone (Mobile)" Variant="Variant.Outlined" Class="mb-4" @bind-Value="PhoneMobile" For="() => PhoneMobile"></MudTextField>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Email" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Email" For="() => Email"></MudTextField>
+                </MudItem>
+            </MudGrid>
+
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">Register</MudButton>
+    </EditForm>
+
+
+@code {
+    [Required]
+    public string Name { get; set; } = null!;
+
+    [Required]
+    public string OrganizationNo { get; set; }
+
+    public string? Phone { get; set; }
+
+    [Required]
+    public string PhoneMobile { get; set; } = null!;
+
+    [Required]
+    public string Email { get; set; } = null!;
+
+    private async Task Submit()
+    {
+        var dto = await OrganizationsClient.CreateOrganizationAsync(new CreateOrganizationDto 
+        {   
+            Name = Name, 
+            OrgNo = OrganizationNo,
+            Phone = Phone,
+            PhoneMobile = PhoneMobile,
+            Email = Email
+        });
+
+        NavigationManager.NavigateTo($"/Customers/Organizations/{dto.Id}");
+    }
+}

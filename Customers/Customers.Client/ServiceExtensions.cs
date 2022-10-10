@@ -10,7 +10,8 @@ public static class ServiceExtensions
     {
         services
             .AddCustomersClient(configureClient, builder)
-            .AddPersonsClient(configureClient, builder);
+            .AddPersonsClient(configureClient, builder)
+            .AddOrganizationsClient(configureClient, builder);
             //.AddAddressesClient(configureClient, builder);
 
         return services;
@@ -21,6 +22,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(PersonsClient) + "HR", configureClient)
             .AddTypedClient<IPersonsClient>((http, sp) => new PersonsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddOrganizationsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(OrganizationsClient) + "HR", configureClient)
+            .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http));
 
         builder?.Invoke(b);
 

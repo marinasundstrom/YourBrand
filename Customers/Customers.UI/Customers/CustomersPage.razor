@@ -1,7 +1,5 @@
-﻿@using Microsoft.AspNetCore.SignalR.Client;
-
-@page "/customers"
-
+﻿@page "/customers"
+@attribute [Authorize]
 @inject ICustomersClient CustomersClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -11,19 +9,26 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Customers</MudText>
 
-@* <MudButton Variant="Variant.Filled" OnClick="NewCustomer" Class="mb-2">New transaction</MudButton> *@
+<MudButton Link="/customers/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+    New customer
+</MudButton>
 
 <MudTable T="CustomerDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
-    Loading="@loading" LoadingProgressColor="Color.Info">
+    Loading="@loading" LoadingProgressColor="Color.Info" Striped="true" OnRowClick="ItemOnClick">
+    <ToolBarContent>
+        <MudSpacer />
+
+        <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search (Customer No, Name, SSN, Org No)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+    </ToolBarContent>
     
      <HeaderContent>
-         <MudTh>Id</MudTh>
+         <MudTh>Customer No</MudTh>
          <MudTh>Name</MudTh>
          <MudTh>SSN</MudTh>
          <MudTh>Organization No</MudTh>
      </HeaderContent>
      <RowTemplate Context="customer">
-         <MudTd DataLabel="Id">@customer.Id</MudTd>
+         <MudTd DataLabel="Customer No">@customer.Id</MudTd>
          <MudTd DataLabel="Name">@customer.Name</MudTd>
          <MudTd DataLabel="SSN">@customer.Ssn</MudTd>
          <MudTd DataLabel="Organization No">@customer.OrgNo</MudTd>
@@ -40,6 +45,7 @@
 {
     MudTable<CustomerDto> table = null!;
     bool loading = false;
+    string? searchString;
 
     private async Task<TableData<CustomerDto>> ServerReload(TableState state)
     {
@@ -47,7 +53,7 @@
 
         try
         {
-            var result = await CustomersClient.GetCustomersAsync(state.Page, state.PageSize);
+            var result = await CustomersClient.GetCustomersAsync(state.Page, state.PageSize, searchString);
 
             return new TableData<CustomerDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -63,5 +69,26 @@
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);
+    }
+
+
+    private async Task ItemOnClick(TableRowClickEventArgs<CustomerDto> ev)
+    {
+        var item = ev.Item;
+
+        if(item.CustomerType == CustomerType.Individual) 
+        {
+            NavigationManager.NavigateTo($"/Customers/Persons/{item.Id}");
+        }
+        else if(item.CustomerType == CustomerType.Organization) 
+        {
+            NavigationManager.NavigateTo($"/Customers/Organizations/{item.Id}");
+        }
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
     }
 }

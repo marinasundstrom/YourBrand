@@ -14,6 +14,8 @@ public class Person : Customer
         LastName = lastName;
         Ssn = ssn;
 
+        Name = $"{FirstName} {LastName}";
+
         //AddDomainEvent(new PersonCreated(Id));
     }
 

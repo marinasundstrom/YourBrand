@@ -1,0 +1,44 @@
+@page "/Customers/create"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [Authorize]
+
+<MudText Typo="Typo.h3" Class="mb-4">New Customer</MudText>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudText>Customer type</MudText>
+
+    <MudRadioGroup @bind-SelectedOption="IsPerson" Class="mb-4">
+        <MudRadio Option="true" Color="Color.Primary" Dense="true">Person</MudRadio>
+        <MudRadio Option="false" Color="Color.Secondary" Dense="false">Organization</MudRadio>
+    </MudRadioGroup>
+
+    @if(IsPerson) 
+    {
+        <CreatePersonForm />
+    }
+    else 
+    {
+        <CreateOrganizationForm />
+    }
+</MudPaper>
+
+@code {
+    [Required]
+    public string Name { get; set; } = null!;
+
+    public string? DisplayName { get; set; }
+
+    public bool IsPerson { get; set; } = true;
+
+    private async Task Submit()
+    {
+        /*
+        var dto = await CustomersClient.CreateCustomerAsync(new CreateCustomerDto {
+            Description = Description
+        });
+
+       NavigationManager.NavigateTo($"/Customers/{dto.Id}");
+       */
+    }
+}

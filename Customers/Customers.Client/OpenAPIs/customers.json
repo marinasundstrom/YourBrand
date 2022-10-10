@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Customers API",
@@ -113,42 +113,6 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/PersonDto"
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Persons"
-        ],
-        "operationId": "Persons_GetPersons2",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ItemsResultOfPersonDto"
             }
           }
         }
@@ -324,6 +288,12 @@
             "in": "query",
             "format": "int32",
             "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -333,6 +303,330 @@
             "schema": {
               "$ref": "#/definitions/ItemsResultOfCustomerDto"
             }
+          }
+        }
+      }
+    },
+    "/Customers/Organizations": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "operationId": "Organizations_GetOrganizations",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfOrganizationDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Organizations"
+        ],
+        "operationId": "Organizations_CreateOrganization",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateOrganizationDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          },
+          "201": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OrganizationDto"
+            }
+          }
+        }
+      }
+    },
+    "/Customers/Organizations/{id}": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "operationId": "Organizations_GetOrganization",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OrganizationDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Organizations"
+        ],
+        "operationId": "Organizations_UpdateOrganization",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateOrganizationDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Organizations"
+        ],
+        "operationId": "Organizations_DeleteOrganization",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Customers/Persons": {
+      "get": {
+        "tags": [
+          "Persons"
+        ],
+        "operationId": "Persons_GetPersons2",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfPersonDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Persons"
+        ],
+        "operationId": "Persons_CreatePerson",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePersonDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          },
+          "201": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/PersonDto"
+            }
+          }
+        }
+      }
+    },
+    "/Customers/Persons/{id}": {
+      "get": {
+        "tags": [
+          "Persons"
+        ],
+        "operationId": "Persons_GetPerson",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/PersonDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Persons"
+        ],
+        "operationId": "Persons_UpdatePerson",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePersonDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Persons"
+        ],
+        "operationId": "Persons_DeletePerson2",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -346,7 +640,7 @@
         "firstName",
         "lastName",
         "ssn",
-        "email",
+        "isDeceased",
         "addresses"
       ],
       "properties": {
@@ -363,7 +657,10 @@
         "ssn": {
           "type": "string"
         },
-        "phoneHome": {
+        "isDeceased": {
+          "type": "boolean"
+        },
+        "phone": {
           "type": "string"
         },
         "phoneMobile": {
@@ -456,6 +753,15 @@
           "type": "string"
         },
         "ssn": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneMobile": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         }
       }
@@ -558,6 +864,113 @@
         2
       ]
     },
+    "ItemsResultOfOrganizationDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrganizationDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "OrganizationDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "orgNo",
+        "hasCeased",
+        "addresses"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orgNo": {
+          "type": "string"
+        },
+        "hasCeased": {
+          "type": "boolean"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneMobile": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AddressDto"
+          }
+        }
+      }
+    },
+    "CreateOrganizationDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "orgNo"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "orgNo": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneMobile": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateOrganizationDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "orgNo"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "orgNo": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneMobile": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
     "ItemsResultOfPersonDto": {
       "type": "object",
       "required": [
@@ -574,6 +987,62 @@
         "totalItems": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "CreatePersonDto": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "ssn"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneMobile": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdatePersonDto": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "ssn"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneMobile": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
         }
       }
     }
