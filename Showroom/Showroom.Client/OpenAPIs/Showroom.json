@@ -2815,6 +2815,9 @@
             "type": "string",
             "nullable": true
           },
+          "industry": {
+            "$ref": "#/components/schemas/IndustryDto"
+          },
           "organization": {
             "$ref": "#/components/schemas/OrganizationDto"
           },
@@ -2850,6 +2853,19 @@
           "phoneNumber": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "IndustryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
           }
         }
       },
@@ -3008,19 +3024,6 @@
           },
           "industry": {
             "$ref": "#/components/schemas/IndustryDto"
-          }
-        }
-      },
-      "IndustryDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },
@@ -3191,6 +3194,10 @@
           "organizationId": {
             "type": "string"
           },
+          "industryId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "competenceAreaId": {
             "type": "string"
           },
@@ -3285,6 +3292,16 @@
           "location": {
             "type": "string",
             "nullable": true
+          },
+          "industryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "competenceAreaId": {
+            "type": "string"
           }
         }
       },

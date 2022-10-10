@@ -36,6 +36,7 @@ public record GetConsultantProfileQuery(string Id) : IRequest<ConsultantProfileD
         {
             var consultantProfile = await _context
                .ConsultantProfiles
+               .Include(x => x.Industry)
                .Include(x => x.Organization)
                .Include(c => c.CompetenceArea)
                //.Include(c => c.Manager)

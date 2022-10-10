@@ -33,6 +33,7 @@
                 <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
                 @*<MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="Headline">Headline</MudTableSortLabel></MudTh>*@
+                <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="CompetenceArea">Competence Area</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel T="ConsultantProfileDto" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
             </HeaderContent>
@@ -44,6 +45,7 @@
                 <MudTd DataLabel="Last Name">@context.LastName</MudTd>
                 <MudTd DataLabel="Display Name">@context.DisplayName</MudTd>
                 @*<MudTd DataLabel="Headline">@context.Headline</MudTd>*@
+                <MudTd DataLabel="Industry">@context.Industry?.Name</MudTd>
                 <MudTd DataLabel="Competence Area">@context.CompetenceArea?.Name</MudTd>
                 <MudTd DataLabel="Organization">@context.Organization?.Name</MudTd>
             </RowTemplate>

@@ -80,6 +80,7 @@ public record GetConsultantProfilesQuery(int Page = 0, int PageSize = 10, string
             }
 
             var items = await result
+                .Include(x => x.Industry)
                 .Include(x => x.Organization)
                 .Include(c => c.CompetenceArea)
                 //.Include(c => c.Manager)

@@ -23,6 +23,10 @@ public class ConsultantProfile : AuditableEntity, ISoftDelete
 
     public string? UserId { get; set; }
 
+    public Industry Industry { get; set; } = null!;
+
+    public int IndustryId { get; set; }
+
     public Organization Organization { get; set; } = null!;
 
     public string OrganizationId { get; set; } = null!;

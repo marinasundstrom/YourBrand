@@ -100,6 +100,7 @@ public record FindConsultantsQuery(ConsultantQuery Query, int Page = 0, int Page
             }
 
             var items = await result
+                .Include(x => x.Industry)
                 .Include(x => x.Organization)
                 .Include(c => c.CompetenceArea)
                 //.Include(c => c.Manager)

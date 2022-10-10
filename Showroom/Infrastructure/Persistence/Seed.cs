@@ -19,6 +19,8 @@ public static class Seed
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
+        await LoadIndustries(context);
+
         if (!context.Languages.Any())
         {
             var language = new Language
@@ -188,6 +190,7 @@ public static class Seed
             LastName = "Sundström",
             DisplayName = null,
             BirthDate = new DateTime(1990, 1, 5),
+            Industry = await context.Industries.FirstAsync(x => x.Name.Contains("Software Development")),
             Organization = await context.Organizations.FirstAsync(),
             CompetenceArea = await context.CompetenceAreas.FirstAsync(x => x.Name.Contains("Software")),
             Headline = "Senior Software Developer",
@@ -201,8 +204,6 @@ My career began back in 2014, when I was working as a software developer for a l
         };
 
         context.ConsultantProfiles.Add(consultantProfile);
-
-        await LoadIndustries(context);
 
         await LoadTestData(context, consultantProfile);
 
@@ -226,7 +227,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 Id = Guid.NewGuid().ToString(),
                 Name = skillGroup.Key,
                 Slug = NewMethod(skillGroup.Key),
-                Industry = await context.Industries.FirstAsync(x => x.Name == "Computer Software"),
+                Industry = await context.Industries.FirstAsync(x => x.Name == "Software Development"),
             };
 
             foreach (var skillPair in skillGroup.Value)
@@ -378,7 +379,7 @@ My career began back in 2014, when I was working as a software developer for a l
         {
             var sk = new Industry()
             {
-                Name = i.GetProperty("Name").GetString()!
+                Name = i.GetProperty("Label").GetString()!
             };
 
             context.Industries.Add(sk);

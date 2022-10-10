@@ -41,6 +41,7 @@ public record CreateConsultantProfileCommand(CreateConsultantProfileDto Consulta
                 Headline = request.ConsultantProfile.Headline,
                 ShortPresentation = "",
                 Presentation = "",
+                IndustryId = request.ConsultantProfile.IndustryId
                 //ManagerId = ""
             };
 
@@ -64,6 +65,7 @@ public record CreateConsultantProfileCommand(CreateConsultantProfileDto Consulta
             await _context.SaveChangesAsync(cancellationToken);
 
             consultantProfile = await _context.ConsultantProfiles
+                .Include(x => x.Industry)
                 .Include(x => x.Organization)
                 .Include(x => x.CompetenceArea)
                 .FirstOrDefaultAsync(x => x.Id == consultantProfile.Id);

@@ -27,6 +27,10 @@
 
             <MudGrid>
                 <MudItem xs="12" md="6">
+                    <IndustrySelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Industry" For="() => Industry" />
+                </MudItem>
+
+                <MudItem xs="12" md="6">
                     <OrganizationSelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" />
                 </MudItem>
 
@@ -49,6 +53,9 @@
     public string? DisplayName { get; set; }
 
     [Required]
+    public IndustryDto? Industry { get; set; }
+
+    [Required]
     public OrganizationDto? Organization { get; set; }
 
     [Required]
@@ -61,6 +68,7 @@
             LastName = LastName,
             DisplayName = DisplayName,
             Headline = "",
+            IndustryId = Industry.Id,
             OrganizationId = Organization!.Id,
             CompetenceAreaId = CompetenceArea!.Id,
             ShortPresentation = "",

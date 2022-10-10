@@ -10,6 +10,8 @@ public class CreateConsultantProfileDto
 
     public string OrganizationId { get; set; }
 
+    public int IndustryId  { get; set; }
+
     public string CompetenceAreaId { get; set; }
 
     public string ManagerId { get; set; }

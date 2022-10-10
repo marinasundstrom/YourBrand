@@ -22,6 +22,8 @@
                 <MudTextField Label="Location" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="Location"
                               For="@(() => Location)" />
      
+                <IndustrySelector Class="mb-2" Variant="Variant.Outlined" @bind-Value="Industry" For="() => Industry" />
+
                 <OrganizationSelector Class="mb-2" Variant="Variant.Outlined" @bind-Value="Organization" For="() => Organization" />
         
                 <CompetenceAreaSelector Class="mb-2" Variant="Variant.Outlined" @bind-Value="CompetenceArea" For="() => CompetenceArea" />
@@ -60,6 +62,8 @@
 
     public string? Location { get; set; } = null!;
 
+    public IndustryDto? Industry { get; set; } = null!;
+
     public OrganizationDto? Organization { get; set; } = null!;
 
     public CompetenceAreaDto? CompetenceArea { get; set; } = null!;
@@ -73,6 +77,7 @@
             DisplayName = ConsultantProfile.DisplayName;
             BirthDate = ConsultantProfile.BirthDate?.Date;
             Location = ConsultantProfile.Location;
+            Industry = ConsultantProfile.Industry;
             Organization = ConsultantProfile.Organization;
             CompetenceArea = ConsultantProfile.CompetenceArea;
         }
@@ -88,9 +93,10 @@
                 LastName = LastName,
                 DisplayName = DisplayName,
                 BirthDate = BirthDate,
-                Location = Location
-
-                // Add Organization, ComepetenceArea
+                Location = Location,
+                IndustryId = Industry.Id,
+                OrganizationId = Organization.Id,
+                CompetenceAreaId = CompetenceArea.Id
             });
 
             ConsultantProfile.FirstName = FirstName;
@@ -98,6 +104,7 @@
             ConsultantProfile.DisplayName = DisplayName;
             ConsultantProfile.BirthDate = BirthDate;
             ConsultantProfile.Location = Location;
+            ConsultantProfile.Industry = Industry;
             ConsultantProfile.Organization = Organization;
             ConsultantProfile.CompetenceArea = CompetenceArea;
 
