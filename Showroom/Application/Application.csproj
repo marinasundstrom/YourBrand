@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0-rc.1.22426.10" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-rc.1.22426.10" />
     <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+    <PackageReference Include="LinqKit" Version="1.2.2" />
   </ItemGroup>
 
   <ItemGroup>

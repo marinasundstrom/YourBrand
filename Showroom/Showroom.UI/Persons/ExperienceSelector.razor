@@ -3,10 +3,12 @@
 <EditForm Model="@Model" OnValidSubmit="AddIndustry">
                 <DataAnnotationsValidator></DataAnnotationsValidator>
 
-                <IndustrySelector Variant="Variant.Outlined" @bind-Value="Model.Industry" For="() => Model.Industry" />
+                <IndustrySelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Model.Industry" For="() => Model.Industry" />
+
+                <MudNumericField Label="Min. Years" Variant="Variant.Outlined" @bind-Value="Model.Years" For="() => Model.Years" />
 
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
-                    Add industry
+                    Add experience
                 </MudButton>
             </EditForm>
 
@@ -25,7 +27,7 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public IndustrySelectorVm Model { get; set; }
+    public ExperienceSelectorVm Model { get; set; }
 
     [Parameter]
     public EventCallback OnUpdated { get; set; }

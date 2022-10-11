@@ -59,12 +59,16 @@
         
         <MudItem sm="12" md="3">
             <MudExpansionPanels Class="mb-10" Elevation="25" MultiExpansion="true">
+                <MudExpansionPanel Text="Industry" Class="pa-2" @bind-IsExpanded="industryVisible">
+                    <IndustrySelector Label="Industry" Variant="Variant.Outlined" Value="Industry" ValueChanged="async (i) => { Industry = i; await OnSelectorUpdate(); }"  />
+                </MudExpansionPanel>
+            
                 <MudExpansionPanel Text="Skills" Class="pa-2" @bind-IsExpanded="skillsVisible">
                     <SkillsSelector Model="Model" OnUpdated="OnSelectorUpdate" />
                 </MudExpansionPanel>
 
-                <MudExpansionPanel Text="Industries" Class="pa-2" @bind-IsExpanded="industriesVisible">
-                    <IndustriesSelector Model="Model2" OnUpdated="OnSelectorUpdate" />
+                <MudExpansionPanel Text="Experiences" Class="pa-2" @bind-IsExpanded="experiencesVisible">
+                    <ExperienceSelector Model="Model2" OnUpdated="OnSelectorUpdate" />
                 </MudExpansionPanel>
             
             </MudExpansionPanels>
@@ -74,18 +78,20 @@
 </MudContainer>
 
 @code {
+    bool industryVisible = true;
     bool skillsVisible = true;
-    bool industriesVisible = true;
+    bool experiencesVisible = true;
 
     MudTable<PersonProfileDto> table; 
     string? searchString;
 
+    public IndustryDto? Industry { get; set; }
     public OrganizationDto? Organization { get; set; }
     public CompetenceAreaDto? CompetenceArea { get; set; }
 
     public SkillSelectorVm Model { get; set; } = new SkillSelectorVm();
 
-    public IndustrySelectorVm Model2 { get; set; } = new IndustrySelectorVm();
+    public ExperienceSelectorVm Model2 { get; set; } = new ExperienceSelectorVm();
 
     async Task OnSelectorUpdate() 
     {
@@ -100,11 +106,13 @@
                 OrganizationId = Organization?.Id,
                 CompetenceAreaId = CompetenceArea?.Id,
                 SearchString = searchString,
+                IndustryId = Industry?.Id,
                 Skills = Model.Skills.Where(x => x.Selected).Select(s => new QuerySkill {
                     SkillId = s.Skill.Id,
                     Level = s.Level
                 }).ToList(),
-                Industries = Model2.Industries.Where(x => x.Selected).Select(s => new QueryIndustry {
+                Experiences = Model2.Industries.Where(x => x.Selected).Select(s => new QueryExperience {
+                    Condition = ConditionalOperator.And,
                     IndustryId = s.Industry.Id,
                     Years = s.Years.GetValueOrDefault()
                 }).ToList()

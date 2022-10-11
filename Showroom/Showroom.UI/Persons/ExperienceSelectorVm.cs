@@ -5,13 +5,13 @@ using YourBrand.Showroom.Client;
 namespace YourBrand.Showroom.Persons;
 
 
-    public class IndustrySelectorVm 
+    public class ExperienceSelectorVm 
     {
         [Required]
         public IndustryDto? Industry { get; set; }
 
         //[Required]
-        public int? Years { get; set; }
+        public int? Years { get; set; } = 1;
 
         public List<IndustryVM> Industries { get; set; } = new List<IndustryVM>();
 

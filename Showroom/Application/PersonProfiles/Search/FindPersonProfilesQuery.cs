@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Application.PersonProfiles.Search.Queries;
 using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
@@ -47,6 +48,11 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
             {
                 var query = request.Query;
 
+                if (query.IndustryId is not null)
+                {
+                    result = result.Where(p => p.IndustryId == query.IndustryId);
+                }
+
                 if (query.OrganizationId is not null)
                 {
                     result = result.Where(p => p.OrganizationId == query.OrganizationId);
@@ -65,9 +71,9 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
                     }
                 }
 
-                if(query.Industries?.Any() ?? false) 
+                if(query.Experiences?.Any() ?? false) 
                 {
-                    foreach(var industry in request.Query.Industries) 
+                    foreach(var industry in request.Query.Experiences) 
                     {
                         result = result.Where(p => 
                             p.Experience.Where(x => x.Company.Industry.Id == industry.IndustryId)

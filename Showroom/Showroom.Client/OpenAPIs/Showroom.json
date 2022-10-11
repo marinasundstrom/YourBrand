@@ -3182,6 +3182,16 @@
             "type": "string",
             "nullable": true
           },
+          "industryId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "titleId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "organizationId": {
             "type": "string",
             "nullable": true
@@ -3196,10 +3206,10 @@
               "$ref": "#/components/schemas/QuerySkill"
             }
           },
-          "industries": {
+          "experiences": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/QueryIndustry"
+              "$ref": "#/components/schemas/QueryExperience"
             }
           }
         }
@@ -3234,10 +3244,13 @@
           5
         ]
       },
-      "QueryIndustry": {
+      "QueryExperience": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "condition": {
+            "$ref": "#/components/schemas/ConditionalOperator"
+          },
           "industryId": {
             "type": "integer",
             "format": "int32"
@@ -3247,6 +3260,18 @@
             "format": "int32"
           }
         }
+      },
+      "ConditionalOperator": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "And",
+          "Or"
+        ],
+        "enum": [
+          1,
+          2
+        ]
       },
       "CreatePersonProfileDto": {
         "type": "object",

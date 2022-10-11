@@ -12,6 +12,7 @@ using YourBrand.Showroom.Application.PersonProfiles.Experiences;
 using YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 using YourBrand.Showroom.Application.PersonProfiles.Experiences.Queries;
 using YourBrand.Showroom.Application.PersonProfiles.Queries;
+using YourBrand.Showroom.Application.PersonProfiles.Search.Queries;
 using YourBrand.Showroom.Application.PersonProfiles.Skills.Commands;
 using YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 using YourBrand.Showroom.Domain.Enums;
