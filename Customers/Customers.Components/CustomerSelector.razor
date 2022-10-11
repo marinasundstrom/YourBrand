@@ -5,12 +5,11 @@
     For="For" SearchFunc="SearchCustomers" ToStringFunc="(x) => x.Name"
     ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
     <ItemTemplate Context="context2">
-        <MudText Typo="Typo.body1">@context2.Name</MudText>
-        <MudText Typo="Typo.body2">@context2.Id</MudText>
+        <MudText Typo="Typo.body1">@context2.Name (@(context2.OrgNo ?? context2.Ssn))</MudText>
     </ItemTemplate>
 
     <ItemSelectedTemplate Context="context2">
-        <MudText Typo="Typo.body1">@context2.Name</MudText>
+        <MudText Typo="Typo.body1">@context2.Name (@(context2.OrgNo ?? context2.Ssn))</MudText>
     </ItemSelectedTemplate>
 </MudAutocomplete>
 
