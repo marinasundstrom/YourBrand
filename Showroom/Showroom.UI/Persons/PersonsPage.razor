@@ -1,0 +1,114 @@
+@page "/profiles/list"
+@attribute [Authorize]
+@using YourBrand.Showroom.Persons.Profile
+@inject IPersonProfilesClient PersonProfilesClient
+@inject NavigationManager NavigationManager
+
+<MudText Typo="Typo.h3" Class="mb-4">Profiles</MudText>
+
+<MudButton Link="/profiles" Variant="Variant.Filled" StartIcon="@Icons.Filled.Dashboard" Color="Color.Default" Class="mb-2 me-2">Profiles</MudButton>
+
+<MudButton Link="/profiles/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New profile
+</MudButton>
+
+<MudButton Link="/profiles/find" Variant="Variant.Filled" StartIcon="@Icons.Filled.Search" Color="Color.Default" Class="mb-2">
+    Find profile
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="PersonProfileDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+            <OrganizationSelector Value="Organization" ValueChanged="OnOrganizationChanged" For="() => Organization" />
+
+            <MudSpacer />
+
+            <CompetenceAreaSelector Value="CompetenceArea" ValueChanged="OnCompetenceAreaChanged" For="() => CompetenceArea" />
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+            @*<MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Headline">Headline</MudTableSortLabel></MudTh>*@
+            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="CompetenceArea">Competence Area</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>
+                <ProfileImage PersonProfile="context" Height="50" Width="50" />
+            </MudTd>
+            <MudTd DataLabel="First Name">@context.FirstName</MudTd>
+            <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+            <MudTd DataLabel="Display Name">@context.DisplayName</MudTd>
+            @*<MudTd DataLabel="Headline">@context.Headline</MudTd>*@
+            <MudTd DataLabel="Industry">@context.Industry?.Name</MudTd>
+            <MudTd DataLabel="Competence Area">@context.CompetenceArea?.Name</MudTd>
+            <MudTd DataLabel="Organization">@context.Organization?.Name</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    MudTable<PersonProfileDto> table; 
+    string? searchString;
+
+    public OrganizationDto? Organization { get; set; }
+    public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    private async Task<TableData<PersonProfileDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await PersonProfilesClient.GetPersonProfilesAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            return new TableData<PersonProfileDto> { Items = results.Items, TotalItems = results.TotalCount };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<PersonProfileDto> ev)
+    {
+        var item = ev.Item;
+
+        NavigationManager.NavigateTo($"/Profiles/{item.Id}");
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnOrganizationChanged(OrganizationDto o)
+    {
+        Organization = o;
+        table.ReloadServerData();
+    }
+
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
+    {
+        CompetenceArea = ca;
+        table.ReloadServerData();
+    }
+}

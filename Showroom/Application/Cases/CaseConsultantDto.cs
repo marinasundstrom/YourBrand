@@ -1,11 +1,11 @@
 
-using YourBrand.Showroom.Application.ConsultantProfiles;
+using YourBrand.Showroom.Application.PersonProfiles;
 
 namespace YourBrand.Showroom.Application.Cases;
 
-public record CaseConsultantDto
+public record CaseProfileDto
 (
     string Id,
-    ConsultantProfileDto Consultant,
+    PersonProfileDto Profile,
     string? Presentation
 );

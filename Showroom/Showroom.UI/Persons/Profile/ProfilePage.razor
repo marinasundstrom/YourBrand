@@ -1,0 +1,192 @@
+@page "/profiles/{Id}"
+@attribute [Authorize]
+@using Humanizer
+@using YourBrand.Showroom.Persons.Profile.Experiences
+@using YourBrand.Showroom.Persons.Profile.Skills
+@inject IPersonProfilesClient PersonProfilesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+@if (profile is null)
+{
+    @if (loadingFailed)
+    {
+        <MudText Typo="Typo.h3" Class="mb-4">Error when loading profile.</MudText>
+    }
+    else
+    {
+        <LoadingIndicator />
+    }
+}
+else
+{
+    <div class="d-flex justify-center mb-4">
+        <ProfileImage PersonProfile="profile" IsEditable="true" />
+    </div>
+    <div class="d-flex justify-center">
+        <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-4">
+            @if (!string.IsNullOrEmpty(profile.DisplayName))
+            {@profile.DisplayName }
+        else
+        { <text>@profile.FirstName @profile.LastName</text>}
+        </MudText>
+    </div>
+    <div class="d-flex justify-center mb-6">
+        <HeadlineSection PersonProfile="profile" />
+    </div>
+
+    <MudGrid Spacing="3">
+        @if (!string.IsNullOrEmpty(profile.ProfileVideo))
+        {
+            <MudItem xs="12" sm="12" md="6">
+
+                <MudCard Class="mb-8" Elevation="25">
+                    <MudCardContent>
+
+                        <video style="width: 100%" controls>
+                            <source src="@profile.ProfileVideo" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary">Contact @profile.FirstName</MudButton>
+                    </MudCardActions>
+                </MudCard>
+
+            </MudItem>
+        }
+
+        <MudItem xs="12" sm="12" md="8">
+            <AboutSection PersonProfile="profile" />
+
+            <ExperienceSection PersonProfileId="@Id" />
+
+            <div style="page-break-inside: avoid;">
+                <SkillsSection PersonProfileId="@profile.Id" />
+            </div>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="4">
+            <MudCard Elevation="25">
+                <MudCardContent>
+                    <div class="d-flex justify-space-between align-center mb-4">
+                        <MudText Typo="Typo.h5">
+                            Information
+                        </MudText>
+
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateDetails" />
+                    </div>
+
+                    <dl class="dl-horizontal">
+                        <dt>First Name</dt>
+                        <dd>@profile.FirstName</dd>
+
+                        <dt>Last Name</dt>
+                        <dd>@profile.LastName</dd>
+
+                        @if (!string.IsNullOrEmpty(profile.DisplayName))
+                        {
+                            <dt>Display Name</dt>
+                            <dd>@profile.DisplayName</dd>
+                        }
+
+                        @if (profile.BirthDate is not null)
+                        {
+                            <dt>Birth Date</dt>
+                            <dd>@profile.BirthDate?.ToString("yyyy/MM/dd") (@(Span.Humanize(minUnit: Humanizer.Localisation.TimeUnit.Year, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2)))</dd>
+                        }
+
+                        @if (!string.IsNullOrEmpty(profile.Location))
+                        {
+                            <dt>Location</dt>
+                            <dd>@profile.Location</dd>
+                        }
+
+                        <dt>Industry</dt>
+                        <dd>@profile.Industry.Name</dd>
+
+                        <dt>Organization</dt>
+                        <dd>@profile.Organization.Name</dd>
+
+                        <dt>Competence Area</dt>
+                        <dd>@profile.CompetenceArea.Name</dd>
+
+                        @if (profile.AvailableFromDate is not null)
+                        {
+                            <dt>Available</dt>
+                            <dd>
+                                @if (profile.AvailableFromDate?.DateTime.Date > DateTime.Now.Date)
+                                {
+                                    <span>@profile.AvailableFromDate?.DateTime.Date.ToString("yyyy/MM/dd")</span>
+                                }
+                                else
+                                {
+                                    <span>Immediately</span>
+                                }
+                            </dd>
+                        }
+                        @if (!string.IsNullOrEmpty(profile.PhoneNumber))
+                        {
+                            <dt>Phone</dt>
+                            <dd><a href="tel:@profile.PhoneNumber">@profile.PhoneNumber</a></dd>
+                        }
+                        @if (!string.IsNullOrEmpty(profile.Email))
+                        {
+                            <dt>Email</dt>
+                            <dd><MudLink Href="@("mailto:" + profile.Email)">@profile.Email</MudLink></dd>
+                        }
+                    </dl>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    private PersonProfileDto? profile;
+    private bool loadingFailed = false;
+
+    [Parameter]
+    public string Id { get; set; } = null!;
+
+    public TimeSpan Span => DateTime.Now - profile!.BirthDate.GetValueOrDefault();
+
+    protected override async Task OnInitializedAsync()
+    {
+        loadingFailed = false;
+
+        try
+        {
+            profile = await PersonProfilesClient.GetPersonProfileAsync(Id);
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            loadingFailed = true;
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task UpdateDetails()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(DetailsDialog.PersonProfile), profile);
+
+        var dialogReference = DialogService.Show<DetailsDialog>("Update details", parameters);
+        var result = await dialogReference.Result;
+
+        if (result.Cancelled)
+            return;
+
+        Snackbar.Add("Details updated.", Severity.Success);
+    }
+}

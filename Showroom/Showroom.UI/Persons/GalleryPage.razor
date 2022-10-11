@@ -1,0 +1,156 @@
+@page "/profiles"
+@attribute [Authorize]
+@inject IPersonProfilesClient PersonProfilesClient
+@inject NavigationManager NavigationManager
+
+<MudText Typo="Typo.h3" Align="Align.Center" Class="mb-14">Profiles</MudText>
+
+<MudButton Link="/profiles/list" Variant="Variant.Filled" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">List</MudButton>
+
+<MudButton Link="/profiles/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New profile
+</MudButton>
+
+<MudButton Link="/profiles/find" Variant="Variant.Filled" StartIcon="@Icons.Filled.Search" Color="Color.Default" Class="mb-2">
+    Find profile
+</MudButton>
+
+<MudExpansionPanels Class="mb-10" Elevation="25">
+    <MudExpansionPanel Text="Find profile" Class="pa-4" @bind-IsExpanded="isExpanded">
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <OrganizationSelector Variant="Variant.Outlined" Value="Organization" ValueChanged="OnOrganizationChanged" For="() => Organization" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <CompetenceAreaSelector Variant="Variant.Outlined" Value="CompetenceArea" ValueChanged="OnCompetenceAreaChanged" For="() => CompetenceArea" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudDatePicker Label="Available from" Date="AvailableFromDate" HelperText="Select a date"
+                    Variant="Variant.Outlined"
+                    DateChanged="async x => { AvailableFromDate = x.GetValueOrDefault(); await Search(); }" />
+            </MudItem>
+        </MudGrid>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+
+@if (profiles is null)
+{
+    <YourBrand.Portal.LoadingIndicator />
+}
+else 
+{
+    <MudGrid Spacing="6">
+    @foreach (var profile in profiles)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <a href="/profiles/@profile.Id">
+
+                    <div class="d-flex justify-center">
+                        <img src="@(profile.ProfileImage ?? "/placeholder.jpeg")" alt="Profile picuture"
+                    style="height: 220px; width: 220px; margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;"
+                    class="rounded-circle" />
+                    </div>
+                    <MudText Typo="Typo.h4" Align="Align.Center" Class="mt-4 mb-2" Style="text-align: center;">
+                        @if (!string.IsNullOrEmpty(profile.DisplayName))
+                        {
+                            @profile.DisplayName
+                        }
+                        else
+                        { 
+                            <text>@profile.FirstName @profile.LastName</text>
+                        }
+                    </MudText>
+                    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-4" Style="color: #9E9E9E;">@profile.Headline
+                    </MudText>
+                </a>
+            </MudItem>
+        }
+        </MudGrid>
+
+    @if (profiles.Count() < total)
+    {
+        <div Class="d-flex justify-center flex-grow-1 mt-8">
+    @if (isLoading)
+            {
+                <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+            }
+            else
+            {
+                <MudButton Variant="Variant.Outlined" OnClick="LoadMore" Disabled="isLoading">
+
+                    <text>Ladda fler (@(total - profiles.Count()))</text>
+
+                </MudButton>
+            }
+        </div>
+    }
+}
+
+@code {
+    private List<PersonProfileDto>? profiles;
+    private Task? task;
+
+    bool isExpanded = true;
+    bool isLoading = false;
+
+    public OrganizationDto? Organization { get; set; }
+    public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    public DateTime AvailableFromDate { get; set; } = DateTime.Today;
+
+    int page = 1;
+    int total = 0;
+
+    private async Task Search()
+    {
+        page = 1;
+        var results = (await PersonProfilesClient.GetPersonProfilesAsync(page++, 12, Organization?.Id, CompetenceArea?.Id,
+        AvailableFromDate, null, null, null));
+        profiles = results.Items.ToList();
+        total = results.TotalCount;
+
+        StateHasChanged();
+    }
+
+    private async Task LoadMore()
+    {
+        if (total == profiles.Count())
+        {
+            return;
+        }
+
+        isLoading = true;
+
+        var results = (await PersonProfilesClient.GetPersonProfilesAsync(page++, 12, Organization?.Id, CompetenceArea?.Id,
+        AvailableFromDate, null, null, null));
+        profiles.AddRange(results.Items);
+
+        isLoading = false;
+
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        task = Search();
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<PersonProfileDto> ev)
+    {
+        var item = ev.Item;
+
+        NavigationManager.NavigateTo($"/Profiles/{item.Id}");
+    }
+
+    private async Task OnOrganizationChanged(OrganizationDto o)
+    {
+        Organization = o;
+        await Search();
+    }
+
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
+    {
+        CompetenceArea = ca;
+        await Search();
+    }
+}

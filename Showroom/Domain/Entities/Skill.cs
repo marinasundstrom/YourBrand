@@ -17,7 +17,7 @@ public class Skill : AuditableEntity, ISoftDelete
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 
-    public List<ConsultantProfile> ConsultantProfiles { get; set; } = new List<ConsultantProfile>();
+    public List<PersonProfile> PersonProfiles { get; set; } = new List<PersonProfile>();
 
-    public List<ConsultantProfileSkill> ConsultantProfileSkills { get; set; } = new List<ConsultantProfileSkill>();
+    public List<PersonProfileSkill> PersonProfileSkills { get; set; } = new List<PersonProfileSkill>();
 }

@@ -32,7 +32,7 @@
 
 
                 <MudItem xs="12" md="6">
-                    <ConsultantProfileSelector Variant="Variant.Outlined" @bind-Value="Consultant" For="() => Consultant" />
+                    <PersonProfileSelector Variant="Variant.Outlined" @bind-Value="Profile" For="() => Profile" />
                 </MudItem>
             </MudGrid>
 
@@ -57,7 +57,7 @@
     //[Required]
     public CompetenceAreaDto? CompetenceArea { get; set; }
 
-    public ConsultantProfileDto? Consultant { get; set; }
+    public PersonProfileDto? Profile { get; set; }
 
     private async Task Submit()
     {

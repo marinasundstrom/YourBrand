@@ -9,7 +9,7 @@ using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Companies;
 using YourBrand.Showroom.Application.Companies.Commands;
 using YourBrand.Showroom.Application.Companies.Queries;
-using YourBrand.Showroom.Application.ConsultantProfiles.Queries;
+using YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 

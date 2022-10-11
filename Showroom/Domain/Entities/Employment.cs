@@ -4,7 +4,7 @@ public class Employment
 {
     public string Id { get; set; } = null!;
 
-    public ConsultantProfile ConsultantProfile { get; set; } = null!;
+    public PersonProfile PersonProfile { get; set; } = null!;
 
     public Company Employer { get; set; } = null!;
 

@@ -9,8 +9,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddShowroomClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder> builder)
     {
         builder(
-            services.AddHttpClient(nameof(IConsultantsClient), configureClient)
-            .AddTypedClient<IConsultantsClient>((http, sp) => new ConsultantsClient(http)));
+            services.AddHttpClient(nameof(IPersonProfilesClient), configureClient)
+            .AddTypedClient<IPersonProfilesClient>((http, sp) => new PersonProfilesClient(http)));
 
         builder(
             services.AddHttpClient(nameof(IOrganizationsClient), configureClient)

@@ -7,5 +7,5 @@ public record CaseDto
     string Id,
     string Status,
     string? Description,
-    IEnumerable<CaseConsultantDto> Consultants
+    IEnumerable<CaseProfileDto> CaseProfiles
 );

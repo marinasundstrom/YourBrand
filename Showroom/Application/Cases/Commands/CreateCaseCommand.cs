@@ -32,7 +32,7 @@ public record CreateCaseCommand(string? Description) : IRequest<CaseDto>
             await context.SaveChangesAsync(cancellationToken);
 
             @case = await context.Cases          
-                .Include(c => c.Consultants)
+                .Include(c => c.CaseProfiles)
                 .Include(c => c.CreatedBy)
                 .Include(c => c.LastModifiedBy)
                 .FirstOrDefaultAsync(x => x.Id == @case.Id);

@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 
 using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Application.ConsultantProfiles.Queries;
+using YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 using MediatR;
 
@@ -17,7 +17,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(typeof(GetConsultantProfilesQuery));
+        services.AddMediatR(typeof(GetPersonProfilesAsync));
         
         services.AddScoped<Handler>();
 

@@ -43,14 +43,14 @@ public class ShowroomContext : DbContext, IShowroomContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.ConsultantProfilCaseConfigurationConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.PersonProfilCaseConfigurationConfiguration).Assembly);
     }
 
 #nullable disable
 
     public DbSet<Company> Companies { get; set; } = null!;
 
-    public DbSet<ConsultantProfile> ConsultantProfiles { get; set; } = null!;
+    public DbSet<PersonProfile> PersonProfiles { get; set; } = null!;
 
     public DbSet<CompetenceArea> CompetenceAreas { get; set; } = null!;
 
@@ -62,21 +62,21 @@ public class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<Case> Cases { get; set; } = null!;
 
-    public DbSet<CaseConsultant> CaseConsultants { get; set; } = null!;
+    public DbSet<CaseProfile> CaseProfiles { get; set; } = null!;
 
     public DbSet<SkillArea> SkillAreas { get; set; } = null!;
 
     public DbSet<Skill> Skills { get; set; } = null!;
 
-    public DbSet<ConsultantProfileSkill> ConsultantProfileSkills { get;  set; } = null!;
+    public DbSet<PersonProfileSkill> PersonProfileSkills { get;  set; } = null!;
 
-    public DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get;  set; } = null!;
+    public DbSet<PersonProfileExperience> PersonProfileExperiences { get;  set; } = null!;
 
-    public DbSet<ConsultantProfileExperienceSkill> ConsultantProfileExperienceSkills { get;  set; } = null!;
+    public DbSet<PersonProfileExperienceSkill> PersonProfileExperienceSkills { get;  set; } = null!;
 
-    public DbSet<ConsultantProfileEducation> ConsultantProfileEducation { get;  set; } = null!;
+    public DbSet<PersonProfileEducation> PersonProfileEducation { get;  set; } = null!;
 
-    public DbSet<ConsultantProfileLanguage> ConsultantProfileLanguages { get;  set; } = null!;
+    public DbSet<PersonProfileLanguage> PersonProfileLanguages { get;  set; } = null!;
 
     public DbSet<Language> Languages { get;  set; } = null!;
 

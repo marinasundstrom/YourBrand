@@ -183,7 +183,7 @@ public static class Seed
         }
         */
 
-        ConsultantProfile consultantProfile = new ConsultantProfile()
+        PersonProfile personProfile = new PersonProfile()
         {
             Id = Guid.NewGuid().ToString(),
             FirstName = "Marina",
@@ -203,21 +203,21 @@ I have been programming since 2007. My interest back then was to figure out how 
 My career began back in 2014, when I was working as a software developer for a local company that provided Internet and IT services. After that I went into consulting, where I got to experience software development at various companies and in many fields. I have maninly been working with technologies such as .NET and Web.",
         };
 
-        context.ConsultantProfiles.Add(consultantProfile);
+        context.PersonProfiles.Add(personProfile);
 
-        await LoadTestData(context, consultantProfile);
+        await LoadTestData(context, personProfile);
 
         await context.SaveChangesAsync();
 
         /*
-        consultantProfile.Languages.Add(new LanguageSkill {
+        personProfile.Languages.Add(new LanguageSkill {
             Language = context.Languages.FirstOrDefault(l => l.ISO639 == "sv"),
             SkillLevel = SkillLevel.Native
         });
         */
     }
 
-    private static async Task LoadTestData(ShowroomContext context, ConsultantProfile consultantProfile)
+    private static async Task LoadTestData(ShowroomContext context, PersonProfile personProfile)
     {
         var skillGroups = Skills2.FromJson(await File.ReadAllTextAsync("../TestData/skills.json"));
         foreach (var skillGroup in skillGroups)
@@ -244,7 +244,7 @@ My career began back in 2014, when I was working as a software developer for a l
 
                 skillArea.Skills.Add(skill);
 
-                consultantProfile.ConsultantProfileSkills.Add(new ConsultantProfileSkill
+                personProfile.PersonProfileSkills.Add(new PersonProfileSkill
                 {
                     Id = Guid.NewGuid().ToString(),
                     Skill = skill,
@@ -297,7 +297,7 @@ My career began back in 2014, when I was working as a software developer for a l
                     EndDate = resume.Experience.OrderBy(x => x.StartDate).Last(x => x.Company == experience.Company).EndDate
                 };
 
-                consultantProfile.Employments.Add(employment);
+                personProfile.Employments.Add(employment);
 
                 await context.SaveChangesAsync();
             }
@@ -309,10 +309,10 @@ My career began back in 2014, when I was working as a software developer for a l
 
             var employment = await context.Employments.FirstOrDefaultAsync(x => x.Employer.Name == experience.Employer);
 
-            var experience2 = new Domain.Entities.ConsultantProfileExperience()
+            var experience2 = new Domain.Entities.PersonProfileExperience()
             {
                 Id = Guid.NewGuid().ToString(),
-                ConsultantProfile = consultantProfile,
+                PersonProfile = personProfile,
                 Current = experience.Current,
                 Highlight = experience.Highlight,
                 Company = company,
@@ -329,7 +329,7 @@ My career began back in 2014, when I was working as a software developer for a l
             {
                 var name = NewMethod(skill);
 
-                var sk = await context.ConsultantProfileSkills.FirstOrDefaultAsync(x => x.Skill.Slug == name);
+                var sk = await context.PersonProfileSkills.FirstOrDefaultAsync(x => x.Skill.Slug == name);
 
                 if (sk is null)
                 {
@@ -337,25 +337,25 @@ My career began back in 2014, when I was working as a software developer for a l
 
                     if (sk2 is null) continue;
 
-                    sk = new ConsultantProfileSkill()
+                    sk = new PersonProfileSkill()
                     {
                         Id = Guid.NewGuid().ToString(),
-                        ConsultantProfile = consultantProfile,
+                        PersonProfile = personProfile,
                         Skill = sk2!
                     };
 
-                    consultantProfile.ConsultantProfileSkills.Add(sk);
+                    personProfile.PersonProfileSkills.Add(sk);
                 }
 
-                experience2.Skills.Add(new ConsultantProfileExperienceSkill()
+                experience2.Skills.Add(new PersonProfileExperienceSkill()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    ConsultantProfileExperience = experience2,
-                    ConsultantProfileSkill = sk
+                    PersonProfileExperience = experience2,
+                    PersonProfileSkill = sk
                 });
             }
 
-            consultantProfile.Experience.Add(experience2);
+            personProfile.Experience.Add(experience2);
         }
 
         await context.SaveChangesAsync();

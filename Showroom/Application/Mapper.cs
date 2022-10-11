@@ -2,14 +2,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Application.ConsultantProfiles;
+using YourBrand.Showroom.Application.PersonProfiles;
 using YourBrand.Showroom.Application.CompetenceAreas;
 using YourBrand.Showroom.Application.Users;
 using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Organizations;
-using YourBrand.Showroom.Application.ConsultantProfiles.Experiences;
+using YourBrand.Showroom.Application.PersonProfiles.Experiences;
 using YourBrand.Showroom.Application.Skills;
-using YourBrand.Showroom.Application.ConsultantProfiles.Skills.Queries;
+using YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 using YourBrand.Showroom.Application.Cases;
 using YourBrand.Showroom.Application.Companies;
 using YourBrand.Showroom.Application.Industries;
@@ -23,26 +23,26 @@ public static class Mapper
         return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.Deleted);
     }
 
-    public static ConsultantProfileDto ToDto(this Domain.Entities.ConsultantProfile consultantProfile, IUrlHelper urlHelper)
+    public static PersonProfileDto ToDto(this Domain.Entities.PersonProfile personProfile, IUrlHelper urlHelper)
     {
-        return new ConsultantProfileDto(
-            consultantProfile.Id,
-            consultantProfile.FirstName,
-            consultantProfile.LastName,
-            consultantProfile.DisplayName,
-            consultantProfile.BirthDate,
-            consultantProfile.Location,
-            consultantProfile.Industry.ToDto(),
-            consultantProfile.Organization.ToDto(),
-            consultantProfile.CompetenceArea.ToDto(),
-            urlHelper.CreateImageUrl(consultantProfile.ProfileImage),
-            consultantProfile.Headline,
-            consultantProfile.ShortPresentation,
-            consultantProfile.Presentation,
-            consultantProfile.ProfileVideo,
-            consultantProfile.AvailableFromDate,
-            consultantProfile.Email,
-            consultantProfile.PhoneNumber);
+        return new PersonProfileDto(
+            personProfile.Id,
+            personProfile.FirstName,
+            personProfile.LastName,
+            personProfile.DisplayName,
+            personProfile.BirthDate,
+            personProfile.Location,
+            personProfile.Industry.ToDto(),
+            personProfile.Organization.ToDto(),
+            personProfile.CompetenceArea.ToDto(),
+            urlHelper.CreateImageUrl(personProfile.ProfileImage),
+            personProfile.Headline,
+            personProfile.ShortPresentation,
+            personProfile.Presentation,
+            personProfile.ProfileVideo,
+            personProfile.AvailableFromDate,
+            personProfile.Email,
+            personProfile.PhoneNumber);
     }
 
     public static CompetenceAreaDto ToDto(this Domain.Entities.CompetenceArea competenceArea)
@@ -62,10 +62,10 @@ public static class Mapper
         return new AddressDto(address.Address1, address.Address2, address.PostalCode, address.Locality, address.SubAdminArea, address.AdminArea, address.Country);
     }
 
-    public static ExperienceDto ToDto(this Domain.Entities.ConsultantProfileExperience experience)
+    public static ExperienceDto ToDto(this Domain.Entities.PersonProfileExperience experience)
     {
         return new ExperienceDto(experience.Id, experience.Employment?.Employer?.Name, experience.Title, experience.Company.ToDto(), experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description, 
-            experience.Skills.OrderBy(s => s.ConsultantProfileSkill.Skill.Name).Select(x => x.ConsultantProfileSkill.ToDto()));
+            experience.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
     }
 
     public static SkillDto ToDto(this Domain.Entities.Skill skill)
@@ -78,9 +78,9 @@ public static class Mapper
         return new SkillAreaDto(skillArea.Id, skillArea.Name, skillArea.Industry.ToDto());
     }
 
-    public static ConsultantProfileSkillDto ToDto(this Domain.Entities.ConsultantProfileSkill consultantProfileSkill)
+    public static PersonProfileSkillDto ToDto(this Domain.Entities.PersonProfileSkill personProfileSkill)
     {
-        return new ConsultantProfileSkillDto(consultantProfileSkill.Id, consultantProfileSkill.Skill.ToDto(), consultantProfileSkill.Level, consultantProfileSkill.Comment, consultantProfileSkill.Link?.ToDto());
+        return new PersonProfileSkillDto(personProfileSkill.Id, personProfileSkill.Skill.ToDto(), personProfileSkill.Level, personProfileSkill.Comment, personProfileSkill.Link?.ToDto());
     }
 
     public static LinkDto ToDto(this Domain.ValueObjects.Link link)
@@ -90,12 +90,12 @@ public static class Mapper
 
     public static CaseDto ToDto(this Domain.Entities.Case @case, IUrlHelper urlHelper)
     {
-        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.Consultants.Select(x => x.ToDto(urlHelper)));
+        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.CaseProfiles.Select(x => x.ToDto(urlHelper)));
     }
 
-    public static CaseConsultantDto ToDto(this Domain.Entities.CaseConsultant caseConsultant, IUrlHelper urlHelper)
+    public static CaseProfileDto ToDto(this Domain.Entities.CaseProfile caseProfile, IUrlHelper urlHelper)
     {
-        return new CaseConsultantDto(caseConsultant.Id, caseConsultant.ConsultantProfile.ToDto(urlHelper), caseConsultant.Presentation);
+        return new CaseProfileDto(caseProfile.Id, caseProfile.PersonProfile.ToDto(urlHelper), caseProfile.Presentation);
     }
     
     public static CompanyDto ToDto(this Domain.Entities.Company company)

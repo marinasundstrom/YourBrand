@@ -9,7 +9,7 @@ public interface IShowroomContext
 {
     DbSet<Company> Companies { get; } 
 
-    DbSet<ConsultantProfile> ConsultantProfiles { get; }
+    DbSet<PersonProfile> PersonProfiles { get; }
 
     DbSet<CompetenceArea> CompetenceAreas { get; }
 
@@ -21,21 +21,21 @@ public interface IShowroomContext
 
     DbSet<Case> Cases { get; }
 
-    DbSet<CaseConsultant> CaseConsultants { get; }
+    DbSet<CaseProfile> CaseProfiles { get; }
 
     DbSet<SkillArea> SkillAreas { get; }
 
     DbSet<Skill> Skills { get; }
 
-    DbSet<ConsultantProfileSkill> ConsultantProfileSkills { get; }
+    DbSet<PersonProfileSkill> PersonProfileSkills { get; }
 
-    DbSet<ConsultantProfileExperience> ConsultantProfileExperiences { get; }
+    DbSet<PersonProfileExperience> PersonProfileExperiences { get; }
 
-    DbSet<ConsultantProfileExperienceSkill> ConsultantProfileExperienceSkills { get; }
+    DbSet<PersonProfileExperienceSkill> PersonProfileExperienceSkills { get; }
 
-    DbSet<ConsultantProfileEducation> ConsultantProfileEducation { get; }
+    DbSet<PersonProfileEducation> PersonProfileEducation { get; }
 
-    DbSet<ConsultantProfileLanguage> ConsultantProfileLanguages { get; }
+    DbSet<PersonProfileLanguage> PersonProfileLanguages { get; }
 
     DbSet<Language> Languages { get; }
 

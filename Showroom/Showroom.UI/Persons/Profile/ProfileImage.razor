@@ -1,0 +1,107 @@
+﻿@inject ISnackbar Snackbar
+@inject IPersonProfilesClient PersonProfilesClient
+
+@if (IsEditable)
+{
+    <InputFile id="fileInput" OnChange="UploadFiles" Class="mt-3" hidden accept=".jpg, .jpeg, .png" />
+
+    <label for="fileInput">
+        <MudBadge Color="Color.Primary" Visible="IsEditable" Icon="@Icons.Filled.CloudUpload">
+            @if(isUploading) 
+            {
+                <div style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle">
+                    <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                </div>
+            }
+            else 
+            {
+                <img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+            }
+        </MudBadge>
+    </label>
+}
+else
+{
+    <img src="@Image()" alt="Profile picuture" style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle" />
+}
+
+
+@code {
+    InputFile fileInput;
+    byte[] imageBytes;
+    Stream Stream;
+    bool isUploading = false;
+
+    [Parameter]
+    public PersonProfileDto PersonProfile { get; set; } = null!;
+
+    [Parameter]
+    public bool IsEditable { get; set; }
+
+    [Parameter]
+    public int Height { get; set; } = 220;
+
+    [Parameter]
+    public int Width { get; set; } = 220;
+
+    string Image()
+    {
+        if (imageBytes is not null)
+        {
+            return $"data:image/png;base64,{Convert.ToBase64String(imageBytes)}";
+        }
+
+        return PersonProfile.ProfileImage ?? "/placeholder.jpeg";
+    }
+
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        if (e.File.Size > Constants.FileMaxSize)
+        {
+            Snackbar.Add("Image is too big.", Severity.Error);
+            return;
+        }
+
+        var stream = e.File.OpenReadStream(Constants.FileMaxSize);
+        await Process(stream);
+    }
+
+    private async Task Process(Stream stream)
+    {
+        var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+
+        memoryStream.Seek(0, SeekOrigin.Begin);
+        var bytes = await GetBytes(memoryStream);
+
+        memoryStream.Seek(0, SeekOrigin.Begin);
+
+        Stream = memoryStream;
+
+        isUploading = true;
+
+        try
+        {
+            await PersonProfilesClient.UpdatePictureAsync(PersonProfile.Id, new FileParameter(Stream));
+
+            imageBytes = bytes;
+
+            Snackbar.Add("Profile image updated.", Severity.Success);
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Failed to upload image", Severity.Error);
+        }
+        finally 
+        {
+            isUploading = false;
+        }
+    }
+
+    private async Task<byte[]> GetBytes(MemoryStream memoryStream)
+    {
+        var imageBytes = memoryStream.ToArray();
+        return imageBytes;
+    }
+}
+

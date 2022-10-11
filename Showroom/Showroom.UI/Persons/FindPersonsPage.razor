@@ -1,0 +1,154 @@
+@page "/profiles/find"
+@attribute [Authorize]
+@layout BaseLayout
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Showroom.Persons.Profile
+@inject IPersonProfilesClient PersonProfilesClient
+@inject NavigationManager NavigationManager
+
+<MudContainer Class="mt-16 mb-16" MaxWidth="MaxWidth.ExtraLarge">
+    <MudText Typo="Typo.h3" Class="mb-4">Find People</MudText>
+
+    <MudGrid>
+
+        <MudItem sm="12" md="9">
+
+    <MudPaper Class="pa-4" Elevation="25">
+        <MudTable @ref="table" T="PersonProfileDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+                Striped="true" OnRowClick="ItemOnClick">
+            <ToolBarContent>
+                <OrganizationSelector Value="Organization" ValueChanged="OnOrganizationChanged" For="() => Organization" />
+
+                <MudSpacer />
+
+                <CompetenceAreaSelector Value="CompetenceArea" ValueChanged="OnCompetenceAreaChanged" For="() => CompetenceArea" />
+
+                <MudSpacer />
+
+                <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh></MudTh>
+                <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+                @*<MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Headline">Headline</MudTableSortLabel></MudTh>*@
+                <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="CompetenceArea">Competence Area</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>
+                    <ProfileImage PersonProfile="context" Height="50" Width="50" />
+                </MudTd>
+                <MudTd DataLabel="First Name">@context.FirstName</MudTd>
+                <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+                <MudTd DataLabel="Display Name">@context.DisplayName</MudTd>
+                @*<MudTd DataLabel="Headline">@context.Headline</MudTd>*@
+                <MudTd DataLabel="Industry">@context.Industry?.Name</MudTd>
+                <MudTd DataLabel="Competence Area">@context.CompetenceArea?.Name</MudTd>
+                <MudTd DataLabel="Organization">@context.Organization?.Name</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    </MudPaper>
+
+    </MudItem>
+        
+        <MudItem sm="12" md="3">
+            <MudExpansionPanels Class="mb-10" Elevation="25" MultiExpansion="true">
+                <MudExpansionPanel Text="Skills" Class="pa-2" @bind-IsExpanded="skillsVisible">
+                    <SkillsSelector Model="Model" OnUpdated="OnSelectorUpdate" />
+                </MudExpansionPanel>
+
+                <MudExpansionPanel Text="Industries" Class="pa-2" @bind-IsExpanded="industriesVisible">
+                    <IndustriesSelector Model="Model2" OnUpdated="OnSelectorUpdate" />
+                </MudExpansionPanel>
+            
+            </MudExpansionPanels>
+
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    bool skillsVisible = true;
+    bool industriesVisible = true;
+
+    MudTable<PersonProfileDto> table; 
+    string? searchString;
+
+    public OrganizationDto? Organization { get; set; }
+    public CompetenceAreaDto? CompetenceArea { get; set; }
+
+    public SkillSelectorVm Model { get; set; } = new SkillSelectorVm();
+
+    public IndustrySelectorVm Model2 { get; set; } = new IndustrySelectorVm();
+
+    async Task OnSelectorUpdate() 
+    {
+        await table.ReloadServerData();
+    }
+
+    private async Task<TableData<PersonProfileDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var query = new PersonProfileQuery {
+                OrganizationId = Organization?.Id,
+                CompetenceAreaId = CompetenceArea?.Id,
+                SearchString = searchString,
+                Skills = Model.Skills.Where(x => x.Selected).Select(s => new QuerySkill {
+                    SkillId = s.Skill.Id,
+                    Level = s.Level
+                }).ToList(),
+                Industries = Model2.Industries.Where(x => x.Selected).Select(s => new QueryIndustry {
+                    IndustryId = s.Industry.Id,
+                    Years = s.Years.GetValueOrDefault()
+                }).ToList()
+            };
+
+            var results = await PersonProfilesClient.FindPersonProfilesAsync(state.Page + 1, state.PageSize, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc), query);
+            return new TableData<PersonProfileDto> { Items = results.Items, TotalItems = results.TotalCount };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            Console.WriteLine(exc.Message);
+        }
+
+        return new TableData<PersonProfileDto> { Items = Enumerable.Empty<PersonProfileDto>(), TotalItems = 0 };
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<PersonProfileDto> ev)
+    {
+        var item = ev.Item;
+
+        NavigationManager.NavigateTo($"/Profiles/{item.Id}");
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnOrganizationChanged(OrganizationDto o)
+    {
+        Organization = o;
+        table.ReloadServerData();
+    }
+
+    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
+    {
+        CompetenceArea = ca;
+        table.ReloadServerData();
+    }
+}

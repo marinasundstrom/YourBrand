@@ -1,0 +1,119 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IPersonProfilesClient PersonProfilesClient
+@inject ISnackbar Snackbar
+
+<div style="width: 350px; max-width: 350px;">
+    <EditForm Model="@this" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudDialog>
+            <DialogContent>
+                <MudTextField Label="First Name" Variant="Variant.Outlined" @bind-Value="FirstName"
+                              For="@(() => FirstName)" />
+
+                <MudTextField Label="Last Name" Class="mb-2" Variant="Variant.Outlined" @bind-Value="LastName"
+                              For="@(() => LastName)" />
+
+                <MudTextField Label="Display Name" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="DisplayName"
+                              For="@(() => DisplayName)" />
+
+                <MudDatePicker Label="Birth Date" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Date="BirthDate"
+                              For="@(() => BirthDate)" />
+
+                <MudTextField Label="Location" HelperText="Optional" Class="mb-2" Variant="Variant.Outlined" @bind-Value="Location"
+                              For="@(() => Location)" />
+     
+                <IndustrySelector Class="mb-2" Variant="Variant.Outlined" @bind-Value="Industry" For="() => Industry" />
+
+                <OrganizationSelector Class="mb-2" Variant="Variant.Outlined" @bind-Value="Organization" For="() => Organization" />
+        
+                <CompetenceAreaSelector Class="mb-2" Variant="Variant.Outlined" @bind-Value="CompetenceArea" For="() => CompetenceArea" />
+
+            </DialogContent>
+            <DialogActions>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">
+                    Cancel
+                </MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                    Update
+                </MudButton>
+            </DialogActions>
+        </MudDialog>
+
+    </EditForm>
+</div>
+
+@code
+{
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public PersonProfileDto? PersonProfile { get; set; }
+
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+
+    public string? DisplayName { get; set; } = null!;
+
+    public DateTime? BirthDate { get; set; } = null!;
+
+    public string? Location { get; set; } = null!;
+
+    public IndustryDto? Industry { get; set; } = null!;
+
+    public OrganizationDto? Organization { get; set; } = null!;
+
+    public CompetenceAreaDto? CompetenceArea { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        if (PersonProfile is not null)
+        {
+            FirstName = PersonProfile.FirstName;
+            LastName = PersonProfile.LastName;
+            DisplayName = PersonProfile.DisplayName;
+            BirthDate = PersonProfile.BirthDate?.Date;
+            Location = PersonProfile.Location;
+            Industry = PersonProfile.Industry;
+            Organization = PersonProfile.Organization;
+            CompetenceArea = PersonProfile.CompetenceArea;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        try
+        {
+            await PersonProfilesClient.UpdateDetailsAsync(PersonProfile.Id, new PersonProfileDetailsDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                DisplayName = DisplayName,
+                BirthDate = BirthDate,
+                Location = Location,
+                IndustryId = Industry.Id,
+                OrganizationId = Organization.Id,
+                CompetenceAreaId = CompetenceArea.Id
+            });
+
+            PersonProfile.FirstName = FirstName;
+            PersonProfile.LastName = LastName;
+            PersonProfile.DisplayName = DisplayName;
+            PersonProfile.BirthDate = BirthDate;
+            PersonProfile.Location = Location;
+            PersonProfile.Industry = Industry;
+            PersonProfile.Organization = Organization;
+            PersonProfile.CompetenceArea = CompetenceArea;
+
+            Dialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add("Failed to update details.", Severity.Error);
+        }
+    }
+
+}

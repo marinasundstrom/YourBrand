@@ -37,11 +37,11 @@ using var scope = provider.CreateScope();
 
 var context = scope.ServiceProvider.GetRequiredService<IShowroomContext>();
 
-var experiences = await context.ConsultantProfileExperiences
+var experiences = await context.PersonProfileExperiences
     .Include(x => x.Employment)
     .Include(x => x.Company)
     .Include(x => x.Skills)
-    .ThenInclude(x => x.ConsultantProfileSkill)
+    .ThenInclude(x => x.PersonProfileSkill)
     .ThenInclude(x => x.Skill)
     .ToArrayAsync();
 
@@ -63,7 +63,7 @@ var experiences2 = experiences
         StartDate = experience.StartDate,
         EndDate = experience.EndDate,
         Description = experience.Description,
-        Skills = experience.Skills.Select(x => x.ConsultantProfileSkill.Skill.Name)
+        Skills = experience.Skills.Select(x => x.PersonProfileSkill.Skill.Name)
     });
 
 Console.WriteLine(JsonSerializer.Serialize(experiences2, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true }));

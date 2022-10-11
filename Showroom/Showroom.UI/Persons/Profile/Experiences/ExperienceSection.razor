@@ -1,0 +1,141 @@
+﻿@using Humanizer
+@using Experiences
+@inject IPersonProfilesClient PersonProfilesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudCard Class="pa-md-8 mb-4" Elevation="25">
+    <MudCardHeader>
+        <div class="d-flex justify-space-between align-center" style="width: 100%;">
+            <MudText Typo="Typo.h4">
+                Experience
+            </MudText>
+
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="async () => await AddOrEditExperience(null)" />
+        </div>
+    </MudCardHeader>
+
+    <MudCardContent>
+        @{
+            var groups = experiences
+                   .OrderByDescending(x => x.Highlight)
+                   .ThenByDescending(x => Default(x.EndDate))
+                   .GroupBy(e => e.Company.Name);
+        }
+
+        <ExperienceList Groups="groups" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience"  />
+
+        @if (experiences.Count() < total)
+        {
+            <div Class="d-flex justify-center flex-grow-1 mt-8">
+                    @if(isLoading) 
+                    {
+                        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                    } 
+                    else 
+                    {
+                        <MudButton Variant="Variant.Text" OnClick="LoadMore" Disabled="isLoading">
+                            Ladda fler (@(total - experiences.Count()))
+                        </MudButton>
+                    }
+            </div>
+        }
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<ExperienceDto>? experiences = new List<ExperienceDto>();
+
+    bool isLoading = false;
+
+    int page = 1;
+    int total = 0;
+
+    [Parameter]
+    public string PersonProfileId { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            page = 1;
+
+            var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
+            experiences = experiencesResult.Items.ToList();
+            total = experiencesResult.TotalCount;
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+    }
+
+    private async Task LoadMore()
+    {
+        if (total == experiences.Count())
+        {
+            return;
+        }
+
+        isLoading = true;
+
+        var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
+        experiences.AddRange(experiencesResult.Items);
+
+        isLoading = false;
+
+        StateHasChanged();
+    }
+
+    private async Task AddOrEditExperience(ExperienceDto? experience)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(ExperienceDialog.PersonProfileId), PersonProfileId);
+        parameters.Add(nameof(ExperienceDialog.Experience), experience);
+
+        var dialogReference = DialogService.Show<ExperienceDialog>(experience is null ? "New experience" : "Update experience", parameters);
+        var result = await dialogReference.Result;
+
+        if (result.Cancelled)
+            return;
+
+        page = 1;
+
+        var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
+        experiences = experiencesResult.Items.ToList();
+        total = experiencesResult.TotalCount;
+    }
+
+    async Task DeleteExperience(ExperienceDto experience)
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBox($"Delete experience at {experience.Company.Name}?", "Are you sure?", "Yes", "No");
+            if (result.GetValueOrDefault())
+            {
+                await PersonProfilesClient.RemoveExperienceAsync(PersonProfileId, experience.Id);
+            }
+
+            page = 1;
+
+            var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
+            experiences = experiencesResult.Items.ToList();
+            total = experiencesResult.TotalCount;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    DateTimeOffset Default(DateTimeOffset? date)
+    {
+        return date ?? DateTimeOffset.Now;
+    }
+}

@@ -11,7 +11,7 @@ public class Case : AuditableEntity, ISoftDelete
 
     public CaseStatus Status { get; set; }
 
-    public ICollection<CaseConsultant> Consultants { get; set; } = null!;
+    public ICollection<CaseProfile> CaseProfiles { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
