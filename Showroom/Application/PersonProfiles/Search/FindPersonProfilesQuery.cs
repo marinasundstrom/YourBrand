@@ -76,9 +76,9 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
                     foreach(var industry in request.Query.Experiences) 
                     {
                         result = result.Where(p => 
-                            p.Experience.Where(x => x.Company.Industry.Id == industry.IndustryId)
-                            .OrderBy(x => x.StartDate)
-                            .Any());
+                            p.IndustryExperience
+                            .Where(x => x.Industry.Id == industry.IndustryId)
+                            .Where(x => x.Years >= industry.Years).Any());
                     }
                 }
 

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Showroom.TestData;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using YourBrand.Showroom.Events.Enums;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -305,7 +306,9 @@ My career began back in 2014, when I was working as a software developer for a l
 
         foreach (var experience in resume.Experience)
         {
-            var company = await context.Companies.FirstAsync(x => x.Name == experience.Company);
+            var company = await context.Companies
+                .Include(x => x.Industry)
+                .FirstAsync(x => x.Name == experience.Company);
 
             var employment = await context.Employments.FirstOrDefaultAsync(x => x.Employer.Name == experience.Employer);
 
@@ -324,6 +327,8 @@ My career began back in 2014, when I was working as a software developer for a l
                 EndDate = experience.EndDate,
                 Description = experience.Description
             };
+
+            experience2.AddDomainEvent(new ExperienceAdded(experience2.Id, personProfile.Id, company.Industry.Id));
 
             foreach (var skill in experience.Skills)
             {

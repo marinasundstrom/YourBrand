@@ -9,6 +9,7 @@ using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Domain.Exceptions;
+using YourBrand.Showroom.Events.Enums;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 
@@ -29,13 +30,21 @@ public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequ
 
         public async Task<Unit> Handle(RemoveExperienceCommand request, CancellationToken cancellationToken)
         {
-            var experience = await _context.PersonProfileExperiences.FirstAsync(x => x.Id == request.Id, cancellationToken);
+            var experience = await _context.PersonProfileExperiences
+                .Include(x => x.PersonProfile)
+                .Include(x => x.Company)
+                .ThenInclude(x => x.Industry)
+                .FirstAsync(x => x.Id == request.Id, cancellationToken);
+
             if (experience is null)
             {
                 throw new Exception("Not found");
             }
 
             _context.PersonProfileExperiences.Remove(experience);
+
+            experience.AddDomainEvent(new ExperienceUpdated(experience.PersonProfile.Id, experience.PersonProfile.Id, experience.Company.Industry.Id));
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

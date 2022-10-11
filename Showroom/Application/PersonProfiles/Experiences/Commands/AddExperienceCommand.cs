@@ -9,6 +9,7 @@ using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Domain.Exceptions;
+using YourBrand.Showroom.Events.Enums;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 
@@ -39,6 +40,10 @@ public record AddExperienceCommand(
         {
             var personProfile = await _context.PersonProfiles.FirstAsync(cp => cp.Id == request.PersonProfileId, cancellationToken);
 
+            var company = await _context.Companies
+                .Include(x => x.Industry)
+                .FirstAsync(cp => cp.Id == request.CompanyId, cancellationToken);
+
             var experience = new PersonProfileExperience
             {
                 Id = Guid.NewGuid().ToString(),
@@ -53,6 +58,8 @@ public record AddExperienceCommand(
             };
 
             _context.PersonProfileExperiences.Add(experience);
+
+            experience.AddDomainEvent(new ExperienceUpdated(experience.PersonProfile.Id, personProfile.Id, company.Industry.Id));
 
             await _context.SaveChangesAsync(cancellationToken);
 

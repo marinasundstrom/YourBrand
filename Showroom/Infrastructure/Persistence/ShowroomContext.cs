@@ -78,6 +78,8 @@ public class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<PersonProfileLanguage> PersonProfileLanguages { get;  set; } = null!;
 
+    public DbSet<PersonProfileIndustryExperiences> PersonProfileIndustryExperiences { get;  set; } = null!;
+
     public DbSet<Language> Languages { get;  set; } = null!;
 
     public DbSet<Industry> Industries { get; set; } = null!;

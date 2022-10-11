@@ -36,6 +36,8 @@ public interface IShowroomContext
     DbSet<PersonProfileEducation> PersonProfileEducation { get; }
 
     DbSet<PersonProfileLanguage> PersonProfileLanguages { get; }
+    
+    DbSet<PersonProfileIndustryExperiences> PersonProfileIndustryExperiences { get; }
 
     DbSet<Language> Languages { get; }
 

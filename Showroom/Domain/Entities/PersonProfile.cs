@@ -59,6 +59,8 @@ public class PersonProfile : AuditableEntity, ISoftDelete
 
     public List<PersonProfileExperience> Experience { get; set; } = new List<PersonProfileExperience>();
 
+    public List<PersonProfileIndustryExperiences> IndustryExperience { get; set; } = new List<PersonProfileIndustryExperiences>();
+
     public List<Skill> Skills { get; set; } = new List<Skill>();
 
     public List<PersonProfileSkill> PersonProfileSkills { get; set; } = new List<PersonProfileSkill>();
