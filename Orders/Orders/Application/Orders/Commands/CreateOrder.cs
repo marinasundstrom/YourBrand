@@ -220,7 +220,7 @@ public record CreateOrderCommand(CreateOrderDto? Dto = null) : IRequest<OrderDto
                 }
             }
 
-            order.Items.Add(orderItem);
+            order.AddItem(orderItem);
 
             AddCustomFields(orderItem, dto);
 

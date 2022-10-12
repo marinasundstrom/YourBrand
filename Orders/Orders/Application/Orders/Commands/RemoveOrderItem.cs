@@ -45,7 +45,7 @@ public record RemoveOrderItemCommand(int OrderNo, Guid OrderItemId) : IRequest
 
             item.Clear();
 
-            order.Items.Remove(item);
+            order.RemoveItem(item);
 
             order.Update();
 

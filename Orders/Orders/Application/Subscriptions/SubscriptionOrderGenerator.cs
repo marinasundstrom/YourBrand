@@ -52,7 +52,7 @@ namespace YourBrand.Orders.Application.Subscriptions
                                 .CreateOrderFromOrderItem(orderItem)
                                 .SetPlannedDates(date.Start, date.End);
 
-                            subOrder2.Items.Add(
+                            subOrder2.AddItem(
                                 orderFactory.CreateOrderItem(orderItem));
 
                             yield return subOrder2;
@@ -100,7 +100,7 @@ namespace YourBrand.Orders.Application.Subscriptions
                               .CreateOrderFromOrderItem(orderItem)
                               .SetPlannedDates(date.Start, date.End);
 
-                            subOrder2.Items.Add(
+                            subOrder2.AddItem(
                                 orderFactory.CreateOrderItem(orderItem));
 
                             yield return subOrder2;
@@ -111,7 +111,7 @@ namespace YourBrand.Orders.Application.Subscriptions
 
                             var targetOrderItem = orderFactory.CreateOrderItem(orderItem);
 
-                            subOrder.Items.Add(targetOrderItem);
+                            subOrder.AddItem(targetOrderItem);
                         }
                     }
 

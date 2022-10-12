@@ -54,7 +54,7 @@ public record AddOrderItemCommand(int OrderNo, string? Description, string? Item
                 VatRate = 0.25 //product.VatRate
             };
 
-            order.Items.Add(orderItem);
+            order.AddItem(orderItem);
             context.OrderItems.Add(orderItem);
 
             order.Update();

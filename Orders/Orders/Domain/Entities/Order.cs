@@ -16,6 +16,8 @@ namespace YourBrand.Orders.Domain.Entities
     [Index(nameof(OrderNo))]
     public class Order : AuditableEntity, IOrder2WithTotals, IOrder2WithTotalsInternals
     {
+        private readonly HashSet<OrderItem> _items = new HashSet<OrderItem>();
+
         public Guid Id { get; set; }
 
         public int OrderNo { get; set; }
@@ -30,8 +32,7 @@ namespace YourBrand.Orders.Domain.Entities
 
         public DateTime StatusDate { get; set; }
 
-        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
-
+        public IReadOnlyCollection<OrderItem> Items => _items;
         public decimal? SubTotal { get; set; }
         public double? VatRate { get; set; }
         public decimal? Vat { get; set; }
@@ -70,16 +71,18 @@ namespace YourBrand.Orders.Domain.Entities
             return this;
         }
 
-        /*
-        public void AddItem(string itemId, double quantity)
+        public void AddItem(OrderItem item)
         {
-            Items.Add(new OrderItem(itemId, quantity));
-        }
-        */
+            _items.Add(item);
 
-        public void DeleteItem(OrderItem item)
+            AddDomainEvent(new OrderItemAddedEvent(OrderNo, item.Id));
+        }
+
+        public void RemoveItem(OrderItem item)
         {
-            Items.Remove(item);
+            _items.Remove(item);
+
+            AddDomainEvent(new OrderItemRemovedEvent(OrderNo, item.Id));
         }
 
         public void UpdateOrderStatus(string? orderStatusId)
@@ -107,7 +110,7 @@ namespace YourBrand.Orders.Domain.Entities
                 item.Discounts.Clear();
             }
 
-            Items.Clear();
+            _items.Clear();
             Charges.Clear();
             Discounts.Clear();
 
