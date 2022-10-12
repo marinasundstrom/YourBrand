@@ -2,7 +2,7 @@
 
 namespace YourBrand.Orders.Domain.Common;
 
-public abstract class DomainEvent : INotification
+public abstract record DomainEvent : INotification
 {
     public Guid Id { get; } = Guid.NewGuid();
 }
