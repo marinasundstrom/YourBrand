@@ -1,18 +1,6 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using YourBrand.Catalog.Client;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
-using OrderPriceCalculator;
-
-using YourBrand.Orders.Contracts;
-using YourBrand.Orders.Domain.Entities;
 
 using YourBrand.Orders.Infrastructure.Persistence;
 
@@ -66,11 +54,4 @@ namespace YourBrand.Orders.Application.OrderStatuses
             }
         }
     }
-}
-
-public class GetOrderStatusesQueryResponse
-{
-    public IEnumerable<OrderStatusDto> OrderStatuses { get; set; } = null!;
-
-    public int Total { get; set; }
 }

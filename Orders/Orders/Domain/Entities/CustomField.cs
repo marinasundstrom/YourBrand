@@ -18,19 +18,4 @@ namespace YourBrand.Orders.Domain.Entities
 
         public string Value { get; set; } = null!;
     }
-
-    public class CustomFieldDefinition : AuditableEntity
-    {
-        public string Id { get; set; } = null!;
-
-        public string Name { get; set; } = null!;
-
-        public CustomFieldType Type { get; set; }
-    }
-
-    public enum CustomFieldType
-    {
-        String,
-        Integer
-    }
 }
