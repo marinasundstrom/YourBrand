@@ -33,6 +33,8 @@ public class CreateOrderItemDto
 
     public string ItemId { get; set; } = null!;
 
+    public decimal Price { get; set; }
+
     public double Quantity { get; set; }
 
     public IEnumerable<OrderChargeDto>? Charges { get; set; }

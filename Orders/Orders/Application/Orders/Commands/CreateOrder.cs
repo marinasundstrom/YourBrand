@@ -28,16 +28,13 @@ public class CreateOrderCommand : IRequest<OrderDto>
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, OrderDto>
     {
         private readonly ILogger<CreateOrderCommandHandler> _logger;
-        private readonly IProductsClient productsClient;
         private readonly OrdersContext context;
  
         public CreateOrderCommandHandler(
             ILogger<CreateOrderCommandHandler> logger,
-            IProductsClient productsClient,
             OrdersContext context)
         {
             _logger = logger;
-            this.productsClient = productsClient;
             this.context = context;
         }
 
@@ -207,11 +204,6 @@ public class CreateOrderCommand : IRequest<OrderDto>
         {
             ProductDto? product = null;
 
-            if (dto.ItemId is not null)
-            {
-                product = await productsClient.GetProductAsync(dto.ItemId);
-            }
-
             var orderItem = new OrderItem()
             {
                 Id = Guid.NewGuid(),
@@ -219,7 +211,7 @@ public class CreateOrderCommand : IRequest<OrderDto>
                 Description = dto.Description ?? product!.Name,
                 //Unit = product!.Unit.Name,
                 Quantity = dto.Quantity,
-                Price = product.Price.GetValueOrDefault(), //Price = product!.VatIncluded ? product.Price : product.Price.AddVat(product.VatRate),
+                Price = dto.Price, //Price = product!.VatIncluded ? product.Price : product.Price.AddVat(product.VatRate),
                 VatRate = 0.25 //product!.VatRate
             };
 

@@ -299,7 +299,9 @@
                 {
                     Id = item.Id,
                     Item = await ProductsClient.GetProductAsync(item.ItemId),
+                    Price = item.Price,
                     Quantity = (int)item.Quantity
+                    
                 };
 
                 Items.Add(i);
@@ -370,6 +372,7 @@
         {
             Id = ((OrderItemVM)item).Id,
             Item = ((OrderItemVM)item).Item,
+            Price =  ((OrderItemVM)item).Price,
             Quantity = ((OrderItemVM)item).Quantity
         };
 
@@ -391,6 +394,7 @@
                  dto.Item!.Description,
                  dto.Item!.Id,
                  "pcs", //dto.Item!.Unit,
+                 dto.Item.Price,
                  dto.Quantity
                  );
 

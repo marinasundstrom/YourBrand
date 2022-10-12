@@ -171,14 +171,15 @@ namespace YourBrand.Orders.Controllers
         /// Add Order Item
         /// </summary>
         [HttpPost("{orderNo}/Items")]
-        public async Task<OrderItemDto> AddItem([FromServices] IRequestClient<AddOrderItemCommand> client,
+        public async Task<OrderItemDto> AddItem(
             int orderNo,
             string? description,
             string? itemId,
             string? unit,
+            decimal price,
             double quantity = 1)
         {
-            return await _mediator.Send(new AddOrderItemCommand(orderNo, description, itemId, unit, quantity));
+            return await _mediator.Send(new AddOrderItemCommand(orderNo, description, itemId, unit, price, quantity));
         }
 
         /// <summary>

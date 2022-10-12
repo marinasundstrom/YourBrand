@@ -22,6 +22,8 @@ public class OrderItemVM
     [Required]
     public ProductDto? Item { get; set; }
 
+    public decimal Price { get; set; }
+
     public int Quantity { get; set; }
 
     public List<ChargeVM> Charges { get; set; } = new List<ChargeVM>();

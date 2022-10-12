@@ -7,7 +7,7 @@
     {
         "Name": "Catalog",
         "Assembly": "Catalog.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Orders",
