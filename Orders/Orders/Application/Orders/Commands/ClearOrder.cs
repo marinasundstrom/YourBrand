@@ -9,15 +9,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class ClearOrderCommand : IRequest
+public record ClearOrderCommand(int OrderNo) : IRequest
 {
-    public ClearOrderCommand(int orderNo)
-    {
-        OrderNo = orderNo;
-    }
-
-    public int OrderNo { get; }
-
     public class ClearOrderCommandHandler : IRequestHandler<ClearOrderCommand>
     {
         private readonly ILogger<ClearOrderCommandHandler> _logger;

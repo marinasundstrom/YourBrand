@@ -24,18 +24,8 @@ public class DiscountDetails
     public Guid? DiscountId { get; set; }
 }
 
-public class AddDiscountToOrderCommand : IRequest
+public record AddDiscountToOrderCommand(int OrderNo, DiscountDetails DiscountDetails) : IRequest
 {
-    public AddDiscountToOrderCommand(int orderNo, DiscountDetails discountDetails)
-    {
-        OrderNo = orderNo;
-        DiscountDetails = discountDetails;
-    }
-
-    public int OrderNo { get; }
-
-    public DiscountDetails DiscountDetails { get; }
-
     public class AddDiscountToOrderCommandHandler : IRequestHandler<AddDiscountToOrderCommand>
     {
         private readonly ILogger<AddDiscountToOrderCommandHandler> _logger;

@@ -9,25 +9,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveDiscountFromOrderItemCommand : IRequest
+public record RemoveDiscountFromOrderItemCommand(int OrderNo, Guid OrderItemId, Guid DiscountId) : IRequest
 {
-    public RemoveDiscountFromOrderItemCommand(
-        int orderNo,
-        Guid orderItemId,
-        Guid discountId
-    )
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        DiscountId = discountId;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public Guid DiscountId { get; }
-
     public class RemoveDiscountFromOrderItemCommandHandler : IRequestHandler<RemoveDiscountFromOrderItemCommand>
     {
         private readonly ILogger<RemoveDiscountFromOrderItemCommandHandler> _logger;

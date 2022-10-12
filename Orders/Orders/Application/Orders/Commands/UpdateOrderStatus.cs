@@ -8,18 +8,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class UpdateOrderStatusCommand : IRequest
+public record UpdateOrderStatusCommand(int OrderNo, string OrderStatusId) : IRequest
 {
-    public UpdateOrderStatusCommand(int orderNo, string orderStatusId)
-    {
-        OrderNo = orderNo;
-        OrderStatusId = orderStatusId;
-    }
-
-    public int OrderNo { get; }
-
-    public string OrderStatusId { get; }
-    
     public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatusCommand>
     {
         private readonly ILogger<UpdateOrderStatusCommandHandler> _logger;

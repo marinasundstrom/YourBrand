@@ -7,18 +7,8 @@ using YourBrand.Orders.Domain.Events;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveOrderItemCommand : IRequest
+public record RemoveOrderItemCommand(int OrderNo, Guid OrderItemId) : IRequest
 {
-    public RemoveOrderItemCommand(int orderNo, Guid orderItemId)
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
     public class RemoveOrderItemCommandHandler : IRequestHandler<RemoveOrderItemCommand>
     {
         private readonly ILogger<RemoveOrderItemCommandHandler> _logger;

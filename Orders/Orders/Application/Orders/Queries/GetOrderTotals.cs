@@ -10,10 +10,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderTotalsQuery : IRequest<OrderTotalsDto>
+public record GetOrderTotalsQuery(int OrderNo) : IRequest<OrderTotalsDto>
 {
-    public int OrderNo { get; set; }
-
     public class GetOrderTotalsQueryHandler : IRequestHandler<GetOrderTotalsQuery, OrderTotalsDto>
     {
         private readonly ILogger<GetOrderTotalsQueryHandler> _logger;

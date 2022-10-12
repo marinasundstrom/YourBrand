@@ -10,21 +10,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class AddChargeToOrderItemCommand : IRequest
+public record AddChargeToOrderItemCommand(int OrderNo, Guid OrderItemId, ChargeDetails ChargeDetails) : IRequest
 {
-    public AddChargeToOrderItemCommand(int orderNo, Guid orderItemId, ChargeDetails chargeDetails)
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        ChargeDetails = chargeDetails;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public ChargeDetails ChargeDetails { get; }
-
     public class AddChargeToOrderItemCommandHandler : IRequestHandler<AddChargeToOrderItemCommand>
     {
         private readonly ILogger<AddChargeToOrderItemCommandHandler> _logger;

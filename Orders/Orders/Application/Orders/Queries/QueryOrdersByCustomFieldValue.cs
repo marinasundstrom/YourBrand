@@ -15,12 +15,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class QueryOrdersByCustomFieldValueQuery : IRequest<QueryOrdersByCustomFieldValueQueryResponse>
+public record QueryOrdersByCustomFieldValueQuery(string CustomFieldId, string? Value) : IRequest<QueryOrdersByCustomFieldValueQueryResponse>
 {
-    public string CustomFieldId { get; set; } = null!;
-
-    public string? Value { get; set; }
-
     public class QueryOrdersByCustomFieldValueQueryHandler : IRequestHandler<QueryOrdersByCustomFieldValueQuery, QueryOrdersByCustomFieldValueQueryResponse>
     {
         private readonly ILogger<QueryOrdersByCustomFieldValueQueryHandler> _logger;

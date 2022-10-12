@@ -8,25 +8,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders;
 
-public class RemoveCustomFieldFromOrderItemCommand : IRequest
+public record RemoveCustomFieldFromOrderItemCommand(int OrderNo, Guid OrderItemId, string CustomFieldId) : IRequest
 {
-    public RemoveCustomFieldFromOrderItemCommand(
-        int orderNo,
-        Guid orderItemId,
-        string customFieldId
-    )
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        CustomFieldId = customFieldId;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public string CustomFieldId { get; }
-
     public class RemoveCustomFieldFromOrderItemCommandHandler : IRequestHandler<RemoveCustomFieldFromOrderItemCommand>
     {
         private readonly ILogger<RemoveCustomFieldFromOrderItemCommandHandler> _logger;

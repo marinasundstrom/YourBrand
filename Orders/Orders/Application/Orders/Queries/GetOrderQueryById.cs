@@ -8,10 +8,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderByIdQuery : IRequest<OrderDto>
+public record GetOrderByIdQuery(Guid Id) : IRequest<OrderDto>
 {
-    public Guid Id { get; set; }
-
     public class GetOrderQueryByIdHandler : IRequestHandler<GetOrderByIdQuery, OrderDto>
     {
         private readonly ILogger<GetOrderQueryByIdHandler> _logger;

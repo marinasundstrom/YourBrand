@@ -10,21 +10,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class AddDiscountToOrderItemCommand : IRequest
+public record AddDiscountToOrderItemCommand(int OrderNo, Guid OrderItemId, DiscountDetails DiscountDetails) : IRequest
 {
-    public AddDiscountToOrderItemCommand(int orderNo, Guid orderItemId, DiscountDetails discountDetails)
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        DiscountDetails = discountDetails;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public DiscountDetails DiscountDetails { get; }
-
     public class AddDiscountToOrderItemCommandHandler : IRequestHandler<AddDiscountToOrderItemCommand>
     {
         private readonly ILogger<AddDiscountToOrderItemCommandHandler> _logger;

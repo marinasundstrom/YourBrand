@@ -12,30 +12,8 @@ using YourBrand.Orders.Domain.Events;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class AddOrderItemCommand : IRequest<OrderItemDto>
+public record AddOrderItemCommand(int OrderNo, string? Description, string? ItemId, string? Unit, decimal Price, double Quantity) : IRequest<OrderItemDto>
 {
-    public AddOrderItemCommand(int orderNo, string? description, string? itemId, string? unit, decimal price, double quantity)
-    {
-        OrderNo = orderNo;
-        Description = description;
-        ItemId = itemId;
-        Unit = unit;
-        Price = price;
-        Quantity = quantity;
-    }
-
-    public int OrderNo { get; }
-
-    public string? Description { get; }
-
-    public string? ItemId { get; }
-
-    public string? Unit { get; }
-    
-    public decimal Price { get; }
-
-    public double Quantity { get; }
-
     public class AddOrderItemCommandHandler : IRequestHandler<AddOrderItemCommand, OrderItemDto>
     {
         private readonly ILogger<AddOrderItemCommandHandler> _logger;

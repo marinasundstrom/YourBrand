@@ -9,21 +9,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders;
 
-public class AddCustomFieldToOrderItemCommand : IRequest
+public record AddCustomFieldToOrderItemCommand(int OrderNo, Guid OrderItemId, CreateCustomFieldDetails CreateCustomFieldDetails) : IRequest
 {
-    public AddCustomFieldToOrderItemCommand(int orderNo, Guid orderItemId, CreateCustomFieldDetails customFieldDetails)
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        CreateCustomFieldDetails = customFieldDetails;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public CreateCustomFieldDetails CreateCustomFieldDetails { get; }
-
     public class AddCustomFieldToOrderItemCommandHandler : IRequestHandler<AddCustomFieldToOrderItemCommand>
     {
         private readonly ILogger<AddCustomFieldToOrderItemCommandHandler> _logger;

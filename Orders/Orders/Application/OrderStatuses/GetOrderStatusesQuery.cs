@@ -6,7 +6,7 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.OrderStatuses
 {
-    public class GetOrderStatusesQuery : IRequest<GetOrderStatusesQueryResponse>
+    public record GetOrderStatusesQuery : IRequest<GetOrderStatusesQueryResponse>
     {
         public int Skip { get; set; }
 

@@ -13,15 +13,8 @@ using static YourBrand.Orders.Application.Subscriptions.Mappings;
 
 namespace YourBrand.Orders.Application.Subscriptions
 {
-    public class UpdateSubscriptionCommand : IRequest
+    public record UpdateSubscriptionCommand(Guid SubscriptionId) : IRequest
     {
-        public UpdateSubscriptionCommand(Guid subscriptionId)
-        {
-            SubscriptionId = subscriptionId;
-        }
-
-        public Guid SubscriptionId { get; }
-
         public class UpdateSubscriptionCommandHandler : IRequestHandler<UpdateSubscriptionCommand>
         {
             private readonly OrdersContext salesContext;

@@ -23,25 +23,8 @@ public class ChargeDetails
     public Guid? ChargeId { get; set; }
 }
 
-public class RemoveChargeFromOrderItemCommand : IRequest
+public record RemoveChargeFromOrderItemCommand(int OrderNo, Guid OrderItemId, Guid ChargeId) : IRequest
 {
-    public RemoveChargeFromOrderItemCommand(
-        int orderNo,
-        Guid orderItemId,
-        Guid chargeId
-    )
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        ChargeId = chargeId;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public Guid ChargeId { get; }
-
     public class RemoveChargeFromOrderItemCommandHandler : IRequestHandler<RemoveChargeFromOrderItemCommand>
     {
         private readonly ILogger<RemoveChargeFromOrderItemCommandHandler> _logger;

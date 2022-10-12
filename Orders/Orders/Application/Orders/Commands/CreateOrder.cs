@@ -12,19 +12,8 @@ using YourBrand.Orders.Domain.Events;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class CreateOrderCommand : IRequest<OrderDto>
+public record CreateOrderCommand(CreateOrderDto? Dto = null) : IRequest<OrderDto>
 {
-    public CreateOrderCommand()
-    {
-    }
-
-    public CreateOrderCommand(CreateOrderDto? dto)
-    {
-        Dto = dto;
-    }
-
-    public CreateOrderDto? Dto { get; set; }
-
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, OrderDto>
     {
         private readonly ILogger<CreateOrderCommandHandler> _logger;

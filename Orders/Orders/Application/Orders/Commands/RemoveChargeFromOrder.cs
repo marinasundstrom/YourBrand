@@ -9,21 +9,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveChargeFromOrderCommand : IRequest
+public record RemoveChargeFromOrderCommand(int OrderNo, Guid ChargeId) : IRequest
 {
-    public RemoveChargeFromOrderCommand(
-        int orderNo,
-        Guid chargeId
-    )
-    {
-        OrderNo = orderNo;
-        ChargeId = chargeId;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid ChargeId { get; }
-
     public class RemoveChargeFromOrderCommandHandler : IRequestHandler<RemoveChargeFromOrderCommand>
     {
         private readonly ILogger<RemoveChargeFromOrderCommandHandler> _logger;

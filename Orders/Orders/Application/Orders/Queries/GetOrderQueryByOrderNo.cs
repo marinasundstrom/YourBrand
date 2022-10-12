@@ -8,10 +8,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderByOrderNoQuery : IRequest<OrderDto>
+public record GetOrderByOrderNoQuery(int OrderNo) : IRequest<OrderDto>
 {
-    public int? OrderNo { get; set; }
-
     public bool IncludeItems { get; set; } = true;
 
     public bool IncludeDiscounts { get; set; } = true;

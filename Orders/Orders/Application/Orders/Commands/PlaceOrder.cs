@@ -10,15 +10,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class PlaceOrderCommand : IRequest
+public record PlaceOrderCommand(int OrderNo) : IRequest
 {
-    public PlaceOrderCommand(int orderNo)
-    {
-        OrderNo = orderNo;
-    }
-
-    public int OrderNo { get; }
-
     public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand>
     {
         private readonly ILogger<PlaceOrderCommandHandler> _logger;

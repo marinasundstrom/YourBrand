@@ -15,7 +15,7 @@ using static YourBrand.Orders.Application.Subscriptions.Mappings;
 
 namespace YourBrand.Orders.Application.Subscriptions
 {
-    public class GetSubscriptionsQuery : IRequest<GetSubscriptionsQueryResponse>
+    public record GetSubscriptionsQuery : IRequest<GetSubscriptionsQueryResponse>
     {
         public class GetSubscriptionsQueryHandler : IRequestHandler<GetSubscriptionsQuery, GetSubscriptionsQueryResponse>
         {

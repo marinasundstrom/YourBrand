@@ -7,21 +7,8 @@ using YourBrand.Orders.Domain.Events;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class UpdateOrderItemQuantityCommand : IRequest
+public record UpdateOrderItemQuantityCommand(int OrderNo, Guid OrderItemId, double Quantity) : IRequest
 {
-    public UpdateOrderItemQuantityCommand(int orderNo, Guid orderItemId, double quantity)
-    {
-        OrderNo = orderNo;
-        OrderItemId = orderItemId;
-        Quantity = quantity;
-    }
-
-    public int OrderNo { get; }
-
-    public Guid OrderItemId { get; }
-
-    public double Quantity { get; }
-
     public class UpdateOrderItemQuantityCommandHandler : IRequestHandler<UpdateOrderItemQuantityCommand>
     {
         private readonly ILogger<UpdateOrderItemQuantityCommandHandler> _logger;

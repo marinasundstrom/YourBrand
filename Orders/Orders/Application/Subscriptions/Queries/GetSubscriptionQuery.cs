@@ -6,14 +6,8 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Subscriptions
 {
-    public class GetSubscriptionQuery : IRequest
+    public record GetSubscriptionQuery(Guid SubscriptionId) : IRequest
     {
-        public GetSubscriptionQuery(Guid subscriptionId)
-        {
-            SubscriptionId = subscriptionId;
-        }
-
-        public Guid SubscriptionId { get; }
 
         public class GetSubscriptionQueryHandler : IRequestHandler<GetSubscriptionQuery>
         {

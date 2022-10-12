@@ -8,7 +8,7 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrdersQuery : IRequest<GetOrdersQueryResponse>
+public record GetOrdersQuery : IRequest<GetOrdersQueryResponse>
 {
     public int Skip { get; set; }
 

@@ -121,15 +121,14 @@ namespace YourBrand.Orders.Controllers
         [HttpGet("{orderNo}/Totals")]
         public async Task<OrderTotalsDto> GetOrderTotals(int orderNo)
         {
-            return await _mediator.Send(new GetOrderTotalsQuery() { OrderNo = orderNo });
+            return await _mediator.Send(new GetOrderTotalsQuery(orderNo));
         }
 
         /// <summary>
         /// Create Order
         /// </summary>
         [HttpPost]
-        public async Task<OrderDto> CreateOrder(
-            [FromBody] CreateOrderDto? dto)
+        public async Task<OrderDto> CreateOrder([FromBody] CreateOrderDto? dto)
         {
             //var response = await client.GetResponse<CreateOrderCommandResponse>(new CreateOrderCommand(dto));
             //return response.Message.OrderNo;
@@ -188,7 +187,7 @@ namespace YourBrand.Orders.Controllers
         [HttpGet("{orderNo}/Items")]
         public async Task<IEnumerable<OrderItemDto>> GetOrderItems(int orderNo)
         {
-            return await _mediator.Send(new GetOrderItemsQuery { OrderNo = orderNo });
+            return await _mediator.Send(new GetOrderItemsQuery(orderNo));
         }
 
         /// <summary>
@@ -197,7 +196,7 @@ namespace YourBrand.Orders.Controllers
         [HttpGet("{orderNo}/Items/{orderItemId}")]
         public async Task<OrderItemDto> GetItem(int orderNo, Guid orderItemId)
         {
-            return await _mediator.Send(new GetOrderItemQuery() { OrderNo = orderNo, OrderItemId = orderItemId });
+            return await _mediator.Send(new GetOrderItemQuery(orderNo, orderItemId));
         }
 
         /// <summary>
@@ -342,11 +341,7 @@ namespace YourBrand.Orders.Controllers
         [HttpGet("QueryOrdersByCustomField")]
         public async Task<IEnumerable<OrderDto>> QueryOrdersByCustomField([FromQuery] string customFieldId, [FromQuery] string? value)
         {
-            var r = await _mediator.Send(new QueryOrdersByCustomFieldValueQuery()
-            {
-                CustomFieldId = customFieldId,
-                Value = value
-            });
+            var r = await _mediator.Send(new QueryOrdersByCustomFieldValueQuery(customFieldId, value));
             return r.Orders;
         }
     }
