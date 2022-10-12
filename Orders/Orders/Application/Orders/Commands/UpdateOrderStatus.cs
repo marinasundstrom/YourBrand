@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,41 +8,51 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class UpdateOrderStatusCommandHandler : IConsumer<UpdateOrderStatusCommand>
+public class UpdateOrderStatusCommand : IRequest
 {
-    private readonly ILogger<UpdateOrderStatusCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public UpdateOrderStatusCommandHandler(
-        ILogger<UpdateOrderStatusCommandHandler> logger,
-        OrdersContext context,
-        IBus bus,
-        SubscriptionOrderGenerator subscriptionOrderGenerator)
+    public UpdateOrderStatusCommand(int orderNo, string orderStatusId)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        OrderStatusId = orderStatusId;
     }
 
-    public async Task Consume(ConsumeContext<UpdateOrderStatusCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public string OrderStatusId { get; }
+    
+    public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatusCommand>
     {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
-
-        if (order is null)
+        private readonly ILogger<UpdateOrderStatusCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public UpdateOrderStatusCommandHandler(
+            ILogger<UpdateOrderStatusCommandHandler> logger,
+            OrdersContext context,
+            SubscriptionOrderGenerator subscriptionOrderGenerator)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        order.UpdateOrderStatus(message.OrderStatusId);
+        public async Task<Unit> Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
+        {
+            var message = request;
+
+            var order = await context.Orders
+                .IncludeAll()
+                .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            order.UpdateOrderStatus(message.OrderStatusId);
 
 
-        await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
-        await consumeContext.RespondAsync<UpdateOrderStatusCommandResponse>(new UpdateOrderStatusCommandResponse());
+            return Unit.Value;
+        }
     }
 }

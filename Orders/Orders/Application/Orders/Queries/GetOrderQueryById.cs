@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,35 +8,38 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderQueryByIdHandler : IConsumer<GetOrderByIdQuery>
+public class GetOrderByIdQuery : IRequest<OrderDto>
 {
-    private readonly ILogger<GetOrderQueryByIdHandler> _logger;
-    private readonly OrdersContext context;
+    public Guid Id { get; set; }
 
-    public GetOrderQueryByIdHandler(
-        ILogger<GetOrderQueryByIdHandler> logger,
-        OrdersContext context)
+    public class GetOrderQueryByIdHandler : IRequestHandler<GetOrderByIdQuery, OrderDto>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<GetOrderQueryByIdHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<GetOrderByIdQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == message.Id);
-
-        if (order is null)
+        public GetOrderQueryByIdHandler(
+            ILogger<GetOrderQueryByIdHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var dto = Mappings.CreateOrderDto(order);
+        public async Task<OrderDto> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
+        {
+            var message = request;
 
-        await consumeContext.RespondAsync<OrderDto>(dto);
+            var order = await context.Orders
+                .IncludeAll()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == message.Id);
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            return Mappings.CreateOrderDto(order);
+        }
     }
 }

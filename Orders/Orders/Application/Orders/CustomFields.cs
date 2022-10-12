@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using YourBrand.Catalog.Client;
 
-using MassTransit;
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,216 +18,276 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders;
 
-public class AddCustomFieldToOrderCommandHandler : IConsumer<AddCustomFieldToOrderCommand>
+public class CreateCustomFieldDetails
 {
-    private readonly ILogger<AddCustomFieldToOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
+    public string CustomFieldId { get; set; } = null!;
 
-    public AddCustomFieldToOrderCommandHandler(
-        ILogger<AddCustomFieldToOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public string Value { get; set; } = null!;
+}
+
+public class AddCustomFieldToOrderCommand : IRequest
+{
+    public AddCustomFieldToOrderCommand(int orderNo, CreateCustomFieldDetails customFieldDetails)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        CreateCustomFieldDetails = customFieldDetails;
     }
 
-    public async Task Consume(ConsumeContext<AddCustomFieldToOrderCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public CreateCustomFieldDetails CreateCustomFieldDetails { get; }
+
+    public class AddCustomFieldToOrderCommandHandler : IRequestHandler<AddCustomFieldToOrderCommand>
     {
-        var message = consumeContext.Message;
+        private readonly ILogger<AddCustomFieldToOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public AddCustomFieldToOrderCommandHandler(
+            ILogger<AddCustomFieldToOrderCommandHandler> logger,
+            OrdersContext context)
+        {
+            _logger = logger;
+            this.context = context;
+        }
 
-        var details = message.CreateCustomFieldDetails;
+        public async Task<Unit> Handle(AddCustomFieldToOrderCommand request, CancellationToken cancellationToken)
+        {
+            var message = request;
 
-        var order = await context.Orders
+            var details = message.CreateCustomFieldDetails;
+
+            var order = await context.Orders
+                 .IncludeAll()
+                 .Where(c => c.OrderNo == message.OrderNo)
+                 .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var customField = new CustomField
+            {
+                Id = Guid.NewGuid(),
+                CustomFieldId = details.CustomFieldId,
+                Value = details.Value
+            };
+
+            order.CustomFields.Add(customField);
+
+            context.CustomFields.Add(customField);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
+        }
+    }
+}
+
+public class RemoveCustomFieldFromOrderCommand : IRequest
+{
+    public RemoveCustomFieldFromOrderCommand(
+        int orderNo,
+        string customFieldId
+    )
+    {
+        OrderNo = orderNo;
+        CustomFieldId = customFieldId;
+    }
+
+    public int OrderNo { get; }
+
+    public string CustomFieldId { get; }
+
+    public class RemoveCustomFieldFromOrderCommandHandler : IRequestHandler<RemoveCustomFieldFromOrderCommand>
+    {
+        private readonly ILogger<RemoveCustomFieldFromOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public RemoveCustomFieldFromOrderCommandHandler(
+            ILogger<RemoveCustomFieldFromOrderCommandHandler> logger,
+            OrdersContext context)
+        {
+            _logger = logger;
+            this.context = context;
+        }
+
+        public async Task<Unit> Handle(RemoveCustomFieldFromOrderCommand request, CancellationToken cancellationToken)
+        {
+            var message = request;
+
+            var order = await context.Orders
+                .IncludeAll()
+                .Where(c => c.OrderNo == message.OrderNo)
+                .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var customField = order.CustomFields.FirstOrDefault(x => x.CustomFieldId == message.CustomFieldId);
+
+            if (customField is null)
+            {
+                throw new Exception();
+            }
+
+            order.CustomFields.Remove(customField);
+
+            context.CustomFields.Remove(customField);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
+        }
+    }
+}
+
+public class AddCustomFieldToOrderItemCommand : IRequest
+{
+    public AddCustomFieldToOrderItemCommand(int orderNo, Guid orderItemId, CreateCustomFieldDetails customFieldDetails)
+    {
+        OrderNo = orderNo;
+        OrderItemId = orderItemId;
+        CreateCustomFieldDetails = customFieldDetails;
+    }
+
+    public int OrderNo { get; }
+
+    public Guid OrderItemId { get; }
+
+    public CreateCustomFieldDetails CreateCustomFieldDetails { get; }
+
+    public class AddCustomFieldToOrderItemCommandHandler : IRequestHandler<AddCustomFieldToOrderItemCommand>
+    {
+        private readonly ILogger<AddCustomFieldToOrderItemCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public AddCustomFieldToOrderItemCommandHandler(
+            ILogger<AddCustomFieldToOrderItemCommandHandler> logger,
+            OrdersContext context)
+        {
+            _logger = logger;
+            this.context = context;
+        }
+
+        public async Task<Unit> Handle(AddCustomFieldToOrderItemCommand request, CancellationToken cancellationToken)
+        {
+            var message = request;
+
+            var details = message.CreateCustomFieldDetails;
+
+            var order = await context.Orders
+                            .IncludeAll()
+                            .Where(c => c.OrderNo == message.OrderNo)
+                            .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (orderItem is null)
+            {
+                throw new Exception();
+            }
+
+            var customField = new CustomField
+            {
+                Id = Guid.NewGuid(),
+                CustomFieldId = details.CustomFieldId,
+                Value = details.Value
+            };
+
+            orderItem.CustomFields.Add(customField);
+
+            context.CustomFields.Add(customField);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
+        }
+    }
+}
+
+public class RemoveCustomFieldFromOrderItemCommand : IRequest
+{
+    public RemoveCustomFieldFromOrderItemCommand(
+        int orderNo,
+        Guid orderItemId,
+        string customFieldId
+    )
+    {
+        OrderNo = orderNo;
+        OrderItemId = orderItemId;
+        CustomFieldId = customFieldId;
+    }
+
+    public int OrderNo { get; }
+
+    public Guid OrderItemId { get; }
+
+    public string CustomFieldId { get; }
+
+    public class RemoveCustomFieldFromOrderItemCommandHandler : IRequestHandler<RemoveCustomFieldFromOrderItemCommand>
+    {
+        private readonly ILogger<RemoveCustomFieldFromOrderItemCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public RemoveCustomFieldFromOrderItemCommandHandler(
+            ILogger<RemoveCustomFieldFromOrderItemCommandHandler> logger,
+            OrdersContext context)
+        {
+            _logger = logger;
+            this.context = context;
+        }
+
+        public async Task<Unit> Handle(RemoveCustomFieldFromOrderItemCommand request, CancellationToken cancellationToken)
+        {
+            var message = request;
+
+            var order = await context.Orders
              .IncludeAll()
              .Where(c => c.OrderNo == message.OrderNo)
              .FirstOrDefaultAsync();
 
-        if (order is null)
-        {
-            throw new Exception();
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (orderItem is null)
+            {
+                throw new Exception();
+            }
+
+            var customField = orderItem.CustomFields.FirstOrDefault(x => x.CustomFieldId == message.CustomFieldId);
+
+            if (customField is null)
+            {
+                throw new Exception();
+            }
+
+            orderItem.CustomFields.Remove(customField);
+
+            context.CustomFields.Remove(customField);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
         }
-
-        var customField = new CustomField
-        {
-            Id = Guid.NewGuid(),
-            CustomFieldId = details.CustomFieldId,
-            Value = details.Value
-        };
-
-        order.CustomFields.Add(customField);
-
-        context.CustomFields.Add(customField);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<AddCustomFieldToOrderCommandResponse>(new AddCustomFieldToOrderCommandResponse());
-    }
-}
-
-public class RemoveCustomFieldFromOrderCommandHandler : IConsumer<RemoveCustomFieldFromOrderCommand>
-{
-    private readonly ILogger<RemoveCustomFieldFromOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public RemoveCustomFieldFromOrderCommandHandler(
-        ILogger<RemoveCustomFieldFromOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
-    {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
-    }
-
-    public async Task Consume(ConsumeContext<RemoveCustomFieldFromOrderCommand> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .Where(c => c.OrderNo == message.OrderNo)
-            .FirstOrDefaultAsync();
-
-        if (order is null)
-        {
-            throw new Exception();
-        }
-
-        var customField = order.CustomFields.FirstOrDefault(x => x.CustomFieldId == message.CustomFieldId);
-
-        if (customField is null)
-        {
-            throw new Exception();
-        }
-
-        order.CustomFields.Remove(customField);
-
-        context.CustomFields.Remove(customField);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<RemoveCustomFieldFromOrderCommandResponse>(new RemoveCustomFieldFromOrderCommandResponse());
-    }
-}
-
-public class AddCustomFieldToOrderItemCommandHandler : IConsumer<AddCustomFieldToOrderItemCommand>
-{
-    private readonly ILogger<AddCustomFieldToOrderItemCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public AddCustomFieldToOrderItemCommandHandler(
-        ILogger<AddCustomFieldToOrderItemCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
-    {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
-    }
-
-    public async Task Consume(ConsumeContext<AddCustomFieldToOrderItemCommand> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var details = message.CreateCustomFieldDetails;
-
-        var order = await context.Orders
-                        .IncludeAll()
-                        .Where(c => c.OrderNo == message.OrderNo)
-                        .FirstOrDefaultAsync();
-
-        if (order is null)
-        {
-            throw new Exception();
-        }
-
-        var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (orderItem is null)
-        {
-            throw new Exception();
-        }
-
-        var customField = new CustomField
-        {
-            Id = Guid.NewGuid(),
-            CustomFieldId = details.CustomFieldId,
-            Value = details.Value
-        };
-
-        orderItem.CustomFields.Add(customField);
-
-        context.CustomFields.Add(customField);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<AddCustomFieldToOrderItemCommandResponse>(new AddCustomFieldToOrderItemCommandResponse());
-    }
-}
-
-public class RemoveCustomFieldFromOrderItemCommandHandler : IConsumer<RemoveCustomFieldFromOrderItemCommand>
-{
-    private readonly ILogger<RemoveCustomFieldFromOrderItemCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public RemoveCustomFieldFromOrderItemCommandHandler(
-        ILogger<RemoveCustomFieldFromOrderItemCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
-    {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
-    }
-
-    public async Task Consume(ConsumeContext<RemoveCustomFieldFromOrderItemCommand> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-         .IncludeAll()
-         .Where(c => c.OrderNo == message.OrderNo)
-         .FirstOrDefaultAsync();
-
-        if (order is null)
-        {
-            throw new Exception();
-        }
-
-        var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (orderItem is null)
-        {
-            throw new Exception();
-        }
-
-        var customField = orderItem.CustomFields.FirstOrDefault(x => x.CustomFieldId == message.CustomFieldId);
-
-        if (customField is null)
-        {
-            throw new Exception();
-        }
-
-        orderItem.CustomFields.Remove(customField);
-
-        context.CustomFields.Remove(customField);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<RemoveCustomFieldFromOrderItemCommandResponse>(new RemoveCustomFieldFromOrderItemCommandResponse());
     }
 }

@@ -12,7 +12,7 @@
     {
         "Name": "Orders",
         "Assembly": "Orders.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Marketing",

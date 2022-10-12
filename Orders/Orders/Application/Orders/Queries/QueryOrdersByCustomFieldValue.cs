@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using YourBrand.Catalog.Client;
 
-using MassTransit;
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,34 +15,44 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class QueryOrdersByCustomFieldValueQueryHandler : IConsumer<QueryOrdersByCustomFieldValueQuery>
+public class QueryOrdersByCustomFieldValueQuery : IRequest<QueryOrdersByCustomFieldValueQueryResponse>
 {
-    private readonly ILogger<QueryOrdersByCustomFieldValueQueryHandler> _logger;
-    private readonly OrdersContext context;
+    public string CustomFieldId { get; set; } = null!;
 
-    public QueryOrdersByCustomFieldValueQueryHandler(
-        ILogger<QueryOrdersByCustomFieldValueQueryHandler> logger,
-        OrdersContext context)
+    public string? Value { get; set; }
+
+    public class QueryOrdersByCustomFieldValueQueryHandler : IRequestHandler<QueryOrdersByCustomFieldValueQuery, QueryOrdersByCustomFieldValueQueryResponse>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<QueryOrdersByCustomFieldValueQueryHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<QueryOrdersByCustomFieldValueQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var orders = await context.Orders
-            .IncludeAll()
-            .Where(c => c.CustomFields.Any(m => m.CustomFieldId == message.CustomFieldId && m.Value == message.Value))
-            .AsNoTracking()
-            .ToArrayAsync();
-
-        var dtos = orders.Select(Mappings.CreateOrderDto);
-
-        await consumeContext.RespondAsync<QueryOrdersByCustomFieldValueQueryResponse>(new QueryOrdersByCustomFieldValueQueryResponse
+        public QueryOrdersByCustomFieldValueQueryHandler(
+            ILogger<QueryOrdersByCustomFieldValueQueryHandler> logger,
+            OrdersContext context)
         {
-            Orders = dtos
-        });
+            _logger = logger;
+            this.context = context;
+        }
+
+        public async Task<QueryOrdersByCustomFieldValueQueryResponse> Handle(QueryOrdersByCustomFieldValueQuery request, CancellationToken cancellationToken)
+        {
+            var message = request;
+
+            var orders = await context.Orders
+                .IncludeAll()
+                .Where(c => c.CustomFields.Any(m => m.CustomFieldId == message.CustomFieldId && m.Value == message.Value))
+                .AsNoTracking()
+                .ToArrayAsync();
+
+            return new QueryOrdersByCustomFieldValueQueryResponse
+            {
+                Orders = orders.Select(Mappings.CreateOrderDto)
+            };
+        }
     }
+}
+
+public class QueryOrdersByCustomFieldValueQueryResponse
+{
+    public IEnumerable<OrderDto> Orders { get; set; } = null!;
 }

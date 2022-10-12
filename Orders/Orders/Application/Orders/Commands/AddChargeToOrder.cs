@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,76 +10,84 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-// ---
-
-public class AddChargeToOrderCommandHandler : IConsumer<AddChargeToOrderCommand>
+public class AddChargeToOrderCommand : IRequest
 {
-    private readonly ILogger<AddChargeToOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public AddChargeToOrderCommandHandler(
-        ILogger<AddChargeToOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public AddChargeToOrderCommand(int orderNo, ChargeDetails chargeDetails)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        ChargeDetails = chargeDetails;
     }
 
-    public async Task Consume(ConsumeContext<AddChargeToOrderCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public ChargeDetails ChargeDetails { get; }
+
+    public class AddChargeToOrderCommandHandler : IRequestHandler<AddChargeToOrderCommand>
     {
-        var message = consumeContext.Message;
-
-        var details = message.ChargeDetails;
-
-        var order = await context.Orders
-             .IncludeAll()
-             .Where(c => c.OrderNo == message.OrderNo)
-             .FirstOrDefaultAsync();
-
-        if (order is null)
+        private readonly ILogger<AddChargeToOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public AddChargeToOrderCommandHandler(
+            ILogger<AddChargeToOrderCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        if (details.Percent is not null)
+        public async Task<Unit> Handle(AddChargeToOrderCommand request, CancellationToken cancellationToken)
         {
-            if (order.Charges.Any(x => x.Percent is null))
+            var message = request;
+
+            var details = message.ChargeDetails;
+
+            var order = await context.Orders
+                 .IncludeAll()
+                 .Where(c => c.OrderNo == message.OrderNo)
+                 .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            if (details.Percent is not null)
+            {
+                if (order.Charges.Any(x => x.Percent is null))
+                {
+                    throw new Exception("Cannot combine different Charge types.");
+                }
+
+                if (order.Charges.Any(x => x.Percent is not null))
+                {
+                    throw new Exception("Cannot add another Charge based on percenOrderNoe.");
+                }
+            }
+
+            if (details.Percent is null && order.Charges.Any(x => x.Percent is not null))
             {
                 throw new Exception("Cannot combine different Charge types.");
             }
 
-            if (order.Charges.Any(x => x.Percent is not null))
+            var Charge = new OrderCharge
             {
-                throw new Exception("Cannot add another Charge based on percenOrderNoe.");
-            }
+                Id = Guid.NewGuid(),
+                Order = order,
+                Amount = details.Amount,
+                Percent = details.Percent,
+                Description = details.Description!,
+                ChargeId = details.ChargeId
+            };
+
+            order.Charges.Add(Charge);
+
+            context.OrderCharges.Add(Charge);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
         }
-
-        if (details.Percent is null && order.Charges.Any(x => x.Percent is not null))
-        {
-            throw new Exception("Cannot combine different Charge types.");
-        }
-
-        var Charge = new OrderCharge
-        {
-            Id = Guid.NewGuid(),
-            Order = order,
-            Amount = details.Amount,
-            Percent = details.Percent,
-            Description = details.Description!,
-            ChargeId = details.ChargeId
-        };
-
-        order.Charges.Add(Charge);
-
-        context.OrderCharges.Add(Charge);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<AddChargeToOrderCommandResponse>(new AddChargeToOrderCommandResponse());
     }
 }

@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,37 +8,37 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderItemsQueryHandler : IConsumer<GetOrderItemsQuery>
+public class GetOrderItemsQuery : IRequest<IEnumerable<OrderItemDto>>
 {
-    private readonly ILogger<GetOrderItemsQueryHandler> _logger;
-    private readonly OrdersContext context;
-
-    public GetOrderItemsQueryHandler(
-        ILogger<GetOrderItemsQueryHandler> logger,
-        OrdersContext context)
+    public int OrderNo { get; set; }
+    
+    public class GetOrderItemsQueryHandler : IRequestHandler<GetOrderItemsQuery, IEnumerable<OrderItemDto>>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<GetOrderItemsQueryHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<GetOrderItemsQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-        var order = await context.Orders
-            .IncludeAll()
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
-
-        if (order is null)
+        public GetOrderItemsQueryHandler(
+            ILogger<GetOrderItemsQueryHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var dto = new GetOrderItemsQueryResponse
+        public async Task<IEnumerable<OrderItemDto>> Handle(GetOrderItemsQuery request, CancellationToken cancellationToken)
         {
-            OrderItems = order.Items.Select(Mappings.CreateOrderItemDto)
-        };
+            var message = request;
+            var order = await context.Orders
+                .IncludeAll()
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
-        await consumeContext.RespondAsync<GetOrderItemsQueryResponse>(dto);
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            return order.Items.Select(Mappings.CreateOrderItemDto);
+        }
     }
 }

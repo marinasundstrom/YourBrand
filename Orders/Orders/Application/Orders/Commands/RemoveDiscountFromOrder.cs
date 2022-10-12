@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,51 +9,64 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveDiscountFromOrderCommandHandler : IConsumer<RemoveDiscountFromOrderCommand>
+public class RemoveDiscountFromOrderCommand : IRequest
 {
-    private readonly ILogger<RemoveDiscountFromOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public RemoveDiscountFromOrderCommandHandler(
-        ILogger<RemoveDiscountFromOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public RemoveDiscountFromOrderCommand(
+        int orderNo,
+        Guid discountId
+    )
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        DiscountId = discountId;
     }
 
-    public async Task Consume(ConsumeContext<RemoveDiscountFromOrderCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public Guid DiscountId { get; }
+
+    public class RemoveDiscountFromOrderCommandHandler : IRequestHandler<RemoveDiscountFromOrderCommand>
     {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .Where(c => c.OrderNo == message.OrderNo)
-            .FirstOrDefaultAsync();
-
-        if (order is null)
+        private readonly ILogger<RemoveDiscountFromOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public RemoveDiscountFromOrderCommandHandler(
+            ILogger<RemoveDiscountFromOrderCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var discount = order.Discounts.FirstOrDefault(x => x.Id == message.DiscountId);
-
-        if (discount is null)
+        public async Task<Unit> Handle(RemoveDiscountFromOrderCommand request, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            var message = request;
+
+            var order = await context.Orders
+                .IncludeAll()
+                .Where(c => c.OrderNo == message.OrderNo)
+                .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var discount = order.Discounts.FirstOrDefault(x => x.Id == message.DiscountId);
+
+            if (discount is null)
+            {
+                throw new Exception();
+            }
+
+            order.Discounts.Remove(discount);
+
+            context.OrderDiscounts.Remove(discount);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
         }
-
-        order.Discounts.Remove(discount);
-
-        context.OrderDiscounts.Remove(discount);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<RemoveDiscountFromOrderCommandResponse>(new RemoveDiscountFromOrderCommandResponse());
     }
 }

@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,42 +9,47 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderItemQueryHandler : IConsumer<GetOrderItemQuery>
+public class GetOrderItemQuery : IRequest<OrderItemDto>
 {
-    private readonly ILogger<GetOrderItemQueryHandler> _logger;
-    private readonly OrdersContext context;
+    public int OrderNo { get; set; }
 
-    public GetOrderItemQueryHandler(
-        ILogger<GetOrderItemQueryHandler> logger,
-        OrdersContext context)
+    public Guid OrderItemId { get; set; }
+
+    public class GetOrderItemQueryHandler : IRequestHandler<GetOrderItemQuery, OrderItemDto>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<GetOrderItemQueryHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<GetOrderItemQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
-
-        if (order is null)
+        public GetOrderItemQueryHandler(
+            ILogger<GetOrderItemQueryHandler> logger,
+            OrdersContext context)
         {
-            order = new Order();
+            _logger = logger;
+            this.context = context;
         }
 
-        var item = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (item is null)
+        public async Task<OrderItemDto> Handle(GetOrderItemQuery request, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            var message = request;
+
+            var order = await context.Orders
+                .IncludeAll()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
+
+            if (order is null)
+            {
+                order = new Order();
+            }
+
+            var item = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (item is null)
+            {
+                throw new Exception();
+            }
+
+            return Mappings.CreateOrderItemDto(item);
         }
-
-        var dto = Mappings.CreateOrderItemDto(item);
-
-        await consumeContext.RespondAsync<OrderItemDto>(dto);
     }
 }

@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,41 +9,48 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class ClearOrderCommandHandler : IConsumer<ClearOrderCommand>
+public class ClearOrderCommand : IRequest
 {
-    private readonly ILogger<ClearOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public ClearOrderCommandHandler(
-        ILogger<ClearOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public ClearOrderCommand(int orderNo)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
     }
 
-    public async Task Consume(ConsumeContext<ClearOrderCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public class ClearOrderCommandHandler : IRequestHandler<ClearOrderCommand>
     {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
-
-        if (order is null)
+        private readonly ILogger<ClearOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public ClearOrderCommandHandler(
+            ILogger<ClearOrderCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        order.Clear();
+        public async Task<Unit> Handle(ClearOrderCommand request, CancellationToken cancellationToken)
+        {
+            var message = request;
 
-        order.Update();
+            var order = await context.Orders
+                .IncludeAll()
+                .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
 
-        await context.SaveChangesAsync();
+            if (order is null)
+            {
+                throw new Exception();
+            }
 
-        await consumeContext.RespondAsync<ClearOrderCommandResponse>(new ClearOrderCommandResponse(order.OrderNo));
+            order.Clear();
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
+        }
     }
 }

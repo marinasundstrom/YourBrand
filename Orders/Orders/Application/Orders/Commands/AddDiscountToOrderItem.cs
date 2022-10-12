@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,81 +10,94 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class AddDiscountToOrderItemCommandHandler : IConsumer<AddDiscountToOrderItemCommand>
+public class AddDiscountToOrderItemCommand : IRequest
 {
-    private readonly ILogger<AddDiscountToOrderItemCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public AddDiscountToOrderItemCommandHandler(
-        ILogger<AddDiscountToOrderItemCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public AddDiscountToOrderItemCommand(int orderNo, Guid orderItemId, DiscountDetails discountDetails)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        OrderItemId = orderItemId;
+        DiscountDetails = discountDetails;
     }
 
-    public async Task Consume(ConsumeContext<AddDiscountToOrderItemCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public Guid OrderItemId { get; }
+
+    public DiscountDetails DiscountDetails { get; }
+
+    public class AddDiscountToOrderItemCommandHandler : IRequestHandler<AddDiscountToOrderItemCommand>
     {
-        var message = consumeContext.Message;
-
-        var details = message.DiscountDetails;
-
-        var order = await context.Orders
-                        .IncludeAll()
-                        .Where(c => c.OrderNo == message.OrderNo)
-                        .FirstOrDefaultAsync();
-
-        if (order is null)
+        private readonly ILogger<AddDiscountToOrderItemCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public AddDiscountToOrderItemCommandHandler(
+            ILogger<AddDiscountToOrderItemCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (orderItem is null)
+        public async Task<Unit> Handle(AddDiscountToOrderItemCommand request, CancellationToken cancellationToken)
         {
-            throw new Exception();
-        }
+            var message = request;
 
-        if (details.Percent is not null)
-        {
-            if (orderItem.Discounts.Any(x => x.Percent is null))
+            var details = message.DiscountDetails;
+
+            var order = await context.Orders
+                            .IncludeAll()
+                            .Where(c => c.OrderNo == message.OrderNo)
+                            .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (orderItem is null)
+            {
+                throw new Exception();
+            }
+
+            if (details.Percent is not null)
+            {
+                if (orderItem.Discounts.Any(x => x.Percent is null))
+                {
+                    throw new Exception("Cannot combine different discount types.");
+                }
+
+                if (orderItem.Discounts.Any(x => x.Percent is not null))
+                {
+                    throw new Exception("Cannot add another discount based on percenOrderNoe.");
+                }
+            }
+
+            if (details.Percent is null && orderItem.Discounts.Any(x => x.Percent is not null))
             {
                 throw new Exception("Cannot combine different discount types.");
             }
 
-            if (orderItem.Discounts.Any(x => x.Percent is not null))
+            var discount = new OrderDiscount
             {
-                throw new Exception("Cannot add another discount based on percenOrderNoe.");
-            }
+                Id = Guid.NewGuid(),
+                OrderItem = orderItem,
+                Amount = details.Amount * -1,
+                Percent = details.Percent * -1,
+                Description = details.Description!,
+                DiscountId = details.DiscountId
+            };
+
+            orderItem.Discounts.Add(discount);
+
+            context.OrderDiscounts.Add(discount);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
         }
-
-        if (details.Percent is null && orderItem.Discounts.Any(x => x.Percent is not null))
-        {
-            throw new Exception("Cannot combine different discount types.");
-        }
-
-        var discount = new OrderDiscount
-        {
-            Id = Guid.NewGuid(),
-            OrderItem = orderItem,
-            Amount = details.Amount * -1,
-            Percent = details.Percent * -1,
-            Description = details.Description!,
-            DiscountId = details.DiscountId
-        };
-
-        orderItem.Discounts.Add(discount);
-
-        context.OrderDiscounts.Add(discount);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<AddDiscountToOrderItemCommandResponse>(new AddDiscountToOrderItemCommandResponse());
     }
 }

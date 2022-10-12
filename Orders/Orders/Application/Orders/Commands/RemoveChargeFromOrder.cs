@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,51 +9,64 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveChargeFromOrderCommandHandler : IConsumer<RemoveChargeFromOrderCommand>
+public class RemoveChargeFromOrderCommand : IRequest
 {
-    private readonly ILogger<RemoveChargeFromOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public RemoveChargeFromOrderCommandHandler(
-        ILogger<RemoveChargeFromOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public RemoveChargeFromOrderCommand(
+        int orderNo,
+        Guid chargeId
+    )
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        ChargeId = chargeId;
     }
 
-    public async Task Consume(ConsumeContext<RemoveChargeFromOrderCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public Guid ChargeId { get; }
+
+    public class RemoveChargeFromOrderCommandHandler : IRequestHandler<RemoveChargeFromOrderCommand>
     {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .Where(c => c.OrderNo == message.OrderNo)
-            .FirstOrDefaultAsync();
-
-        if (order is null)
+        private readonly ILogger<RemoveChargeFromOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public RemoveChargeFromOrderCommandHandler(
+            ILogger<RemoveChargeFromOrderCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var Charge = order.Charges.FirstOrDefault(x => x.Id == message.ChargeId);
-
-        if (Charge is null)
+        public async Task<Unit> Handle(RemoveChargeFromOrderCommand request, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            var message = request;
+
+            var order = await context.Orders
+                .IncludeAll()
+                .Where(c => c.OrderNo == message.OrderNo)
+                .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var Charge = order.Charges.FirstOrDefault(x => x.Id == message.ChargeId);
+
+            if (Charge is null)
+            {
+                throw new Exception();
+            }
+
+            order.Charges.Remove(Charge);
+
+            context.OrderCharges.Remove(Charge);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
         }
-
-        order.Charges.Remove(Charge);
-
-        context.OrderCharges.Remove(Charge);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<RemoveChargeFromOrderCommandResponse>(new RemoveChargeFromOrderCommandResponse());
     }
 }

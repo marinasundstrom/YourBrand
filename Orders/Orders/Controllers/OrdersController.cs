@@ -5,12 +5,18 @@ using System.Threading.Tasks;
 
 using MassTransit;
 
+using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using OrderPriceCalculator;
 
+using YourBrand.Orders.Application.Orders;
+using YourBrand.Orders.Application.Orders.Commands;
+using YourBrand.Orders.Application.Orders.Queries;
 using YourBrand.Orders.Contracts;
 using YourBrand.Orders.Domain.Entities;
 using YourBrand.Orders.Infrastructure.Persistence;
@@ -19,17 +25,21 @@ namespace YourBrand.Orders.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ILogger<OrdersController> _logger;
         private readonly OrdersContext context;
+        private readonly IMediator _mediator;
 
         public OrdersController(
             ILogger<OrdersController> logger,
-            OrdersContext context)
+            OrdersContext context,
+            IMediator mediator)
         {
             _logger = logger;
             this.context = context;
+            _mediator = mediator;
         }
 
         /*
@@ -109,53 +119,52 @@ namespace YourBrand.Orders.Controllers
         /// Get Order totals
         /// </summary>
         [HttpGet("{orderNo}/Totals")]
-        public async Task<OrderTotalsDto> GetOrderTotals(
-            [FromServices] IRequestClient<GetOrderTotalsQuery> client,
-            int orderNo)
+        public async Task<OrderTotalsDto> GetOrderTotals(int orderNo)
         {
-            var response = await client.GetResponse<OrderTotalsDto>(new GetOrderTotalsQuery() { OrderNo = orderNo });
-            return response.Message;
+            return await _mediator.Send(new GetOrderTotalsQuery() { OrderNo = orderNo });
         }
 
         /// <summary>
         /// Create Order
         /// </summary>
         [HttpPost]
-        public async Task<int> CreateOrder(
-            [FromServices] IRequestClient<CreateOrderCommand> client, [FromBody] CreateOrderDto? dto)
+        public async Task<OrderDto> CreateOrder(
+            [FromBody] CreateOrderDto? dto)
         {
-            var response = await client.GetResponse<CreateOrderCommandResponse>(new CreateOrderCommand(dto));
-            return response.Message.OrderNo;
+            //var response = await client.GetResponse<CreateOrderCommandResponse>(new CreateOrderCommand(dto));
+            //return response.Message.OrderNo;
+
+            return await _mediator.Send(new CreateOrderCommand(dto));
         }
 
         /// <summary>
         /// Create Order
         /// </summary>
         [HttpPost("Create")]
-        public async Task<int> CreateOrder2(
-            [FromServices] IRequestClient<CreateOrderCommand> client)
+        public async Task<OrderDto> CreateOrder2()
         {
-            var response = await client.GetResponse<CreateOrderCommandResponse>(new CreateOrderCommand(null));
-            return response.Message.OrderNo;
+                //var response = await client.GetResponse<CreateOrderCommandResponse>(new CreateOrderCommand(dto));
+            //return response.Message.OrderNo;
+
+            return await _mediator.Send(new CreateOrderCommand());
         }
 
         /// <summary>
         /// Place Order
         /// </summary>
         [HttpPost("{orderNo}/Place")]
-        public async Task PlaceOrder(
-            [FromServices] IRequestClient<PlaceOrderCommand> client, int orderNo)
+        public async Task PlaceOrder(int orderNo)
         {
-            var response = await client.GetResponse<PlaceOrderCommandResponse>(new PlaceOrderCommand(orderNo));
+            await _mediator.Send(new PlaceOrderCommand(orderNo));
         }
 
         /// <summary>
         /// Update Order Status
         /// </summary>
         [HttpPut("{orderNo}/Status")]
-        public async Task UpdateOrderStatus([FromServices] IRequestClient<UpdateOrderStatusCommand> client, int orderNo, string orderStatusId)
+        public async Task UpdateOrderStatus(int orderNo, string orderStatusId)
         {
-            await client.GetResponse<UpdateOrderStatusCommandResponse>(new UpdateOrderStatusCommand(orderNo, orderStatusId));
+            await _mediator.Send(new UpdateOrderStatusCommand(orderNo, orderStatusId));
         }
 
         /// <summary>
@@ -169,70 +178,61 @@ namespace YourBrand.Orders.Controllers
             string? unit,
             double quantity = 1)
         {
-            var response = await client.GetResponse<OrderItemDto>(new AddOrderItemCommand(orderNo, description, itemId, unit, quantity));
-            return response.Message;
+            return await _mediator.Send(new AddOrderItemCommand(orderNo, description, itemId, unit, quantity));
         }
 
         /// <summary>
         /// Get Order Items
         /// </summary>
         [HttpGet("{orderNo}/Items")]
-        public async Task<IEnumerable<OrderItemDto>> GetOrderItems(
-            [FromServices] IRequestClient<GetOrderItemsQuery> client,
-            int orderNo)
+        public async Task<IEnumerable<OrderItemDto>> GetOrderItems(int orderNo)
         {
-            var response = await client.GetResponse<GetOrderItemsQueryResponse>(new GetOrderItemsQuery() { OrderNo = orderNo });
-            return response.Message.OrderItems;
+            return await _mediator.Send(new GetOrderItemsQuery { OrderNo = orderNo });
         }
 
         /// <summary>
         /// Get Order Item by Id
         /// </summary>
         [HttpGet("{orderNo}/Items/{orderItemId}")]
-        public async Task<OrderItemDto> GetItem(
-            [FromServices] IRequestClient<GetOrderItemQuery> client,
-            int orderNo, Guid orderItemId)
+        public async Task<OrderItemDto> GetItem(int orderNo, Guid orderItemId)
         {
-            var response = await client.GetResponse<OrderItemDto>(new GetOrderItemQuery() { OrderNo = orderNo, OrderItemId = orderItemId });
-            return response.Message;
+            return await _mediator.Send(new GetOrderItemQuery() { OrderNo = orderNo, OrderItemId = orderItemId });
         }
 
         /// <summary>
         /// Remove Order Item
         /// </summary>
         [HttpDelete("{orderNo}/Items/{orderItemId}")]
-        public async Task RemoveItem(
-            [FromServices] IRequestClient<RemoveOrderItemCommand> client,
-            int orderNo, Guid orderItemId)
+        public async Task RemoveItem(int orderNo, Guid orderItemId)
         {
-            await client.GetResponse<RemoveOrderItemCommandResponse>(new RemoveOrderItemCommand(orderNo, orderItemId));
+            await _mediator.Send(new RemoveOrderItemCommand(orderNo, orderItemId));
         }
 
         /// <summary>
         /// Update Order Item quantity
         /// </summary>
         [HttpPut("{orderNo}/Items/{orderItemId}/Quantity")]
-        public async Task UpdateItemQuantity([FromServices] IRequestClient<UpdateOrderItemQuantityCommand> client, int orderNo, Guid orderItemId, [FromBody] double quantity)
+        public async Task UpdateItemQuantity(int orderNo, Guid orderItemId, [FromBody] double quantity)
         {
-            await client.GetResponse<UpdateOrderItemQuantityCommandResponse>(new UpdateOrderItemQuantityCommand(orderNo, orderItemId, quantity));
+            await _mediator.Send(new UpdateOrderItemQuantityCommand(orderNo, orderItemId, quantity));
         }
 
         /// <summary>
         /// Remove all Order Items
         /// </summary>
         [HttpDelete("{orderNo}/Items")]
-        public async Task ClearOrder([FromServices] IRequestClient<ClearOrderCommand> client, int orderNo)
+        public async Task ClearOrder(int orderNo)
         {
-            await client.GetResponse<ClearOrderCommandResponse>(new ClearOrderCommand(orderNo));
+            await _mediator.Send(new ClearOrderCommand(orderNo));
         }
 
         /// <summary>
         /// Add Discount to Order
         /// </summary>
         [HttpPost("{orderNo}/Discounts")]
-        public async Task AddDiscountToOrder([FromServices] IRequestClient<AddDiscountToOrderCommand> client, int orderNo, [FromBody] DiscountDetails details)
+        public async Task AddDiscountToOrder(int orderNo, [FromBody] DiscountDetails details)
         {
-            await client.GetResponse<AddDiscountToOrderCommandResponse>(
+            await _mediator.Send(
                 new AddDiscountToOrderCommand(orderNo, details)
             );
         }
@@ -241,20 +241,18 @@ namespace YourBrand.Orders.Controllers
         /// Remove Discount from Order
         /// </summary>
         [HttpDelete("{orderNo}/Discounts/{discountId}")]
-        public async Task RemoveDiscountFromItem(
-            [FromServices] IRequestClient<RemoveDiscountFromOrderCommand> client,
-            int orderNo, Guid discountId)
+        public async Task RemoveDiscountFromItem(int orderNo, Guid discountId)
         {
-            await client.GetResponse<RemoveDiscountFromOrderCommandResponse>(new RemoveDiscountFromOrderCommand(orderNo, discountId));
+            await _mediator.Send(new RemoveDiscountFromOrderCommand(orderNo, discountId));
         }
 
         /// <summary>
         /// Add Discount to Order Item
         /// </summary>
         [HttpPost("{orderNo}/Items/{orderItemId}/Discounts")]
-        public async Task AddDiscountToOrderItem([FromServices] IRequestClient<AddDiscountToOrderItemCommand> client, int orderNo, Guid orderItemId, [FromBody] DiscountDetails details)
+        public async Task AddDiscountToOrderItem(int orderNo, Guid orderItemId, [FromBody] DiscountDetails details)
         {
-            await client.GetResponse<AddDiscountToOrderItemCommandResponse>(
+            await _mediator.Send(
                 new AddDiscountToOrderItemCommand(orderNo, orderItemId, details)
             );
         }
@@ -263,110 +261,92 @@ namespace YourBrand.Orders.Controllers
         /// Remove Discount from Order Item
         /// </summary>
         [HttpDelete("{orderNo}/Items/{orderItemId}/Discounts/{discountId}")]
-        public async Task RemoveDiscountFromOrderItem(
-            [FromServices] IRequestClient<RemoveDiscountFromOrderItemCommand> client,
-            int orderNo, Guid orderItemId, Guid discountId)
+        public async Task RemoveDiscountFromOrderItem(int orderNo, Guid orderItemId, Guid discountId)
         {
-            await client.GetResponse<RemoveDiscountFromOrderItemCommandResponse>(new RemoveDiscountFromOrderItemCommand(orderNo, orderItemId, discountId));
+            await _mediator.Send(new RemoveDiscountFromOrderItemCommand(orderNo, orderItemId, discountId));
         }
 
         /// <summary>
         /// Add Charge to Order
         /// </summary>
         [HttpPost("{orderNo}/Charges")]
-        public async Task AddChargeToOrder([FromServices] IRequestClient<AddChargeToOrderCommand> client, int orderNo, [FromBody] ChargeDetails details)
+        public async Task AddChargeToOrder(int orderNo, [FromBody] ChargeDetails details)
         {
-            await client.GetResponse<AddChargeToOrderCommandResponse>(
-                new AddChargeToOrderCommand(orderNo, details)
-            );
+            await _mediator.Send(new AddChargeToOrderCommand(orderNo, details));
         }
 
         /// <summary>
         /// Remove Charge from Order
         /// </summary>
         [HttpDelete("{orderNo}/Charges/{chargeId}")]
-        public async Task RemoveChargeFromItem(
-            [FromServices] IRequestClient<RemoveChargeFromOrderCommand> client,
-            int orderNo, Guid chargeId)
+        public async Task RemoveChargeFromItem(int orderNo, Guid chargeId)
         {
-            await client.GetResponse<RemoveChargeFromOrderCommandResponse>(new RemoveChargeFromOrderCommand(orderNo, chargeId));
+            await _mediator.Send(new RemoveChargeFromOrderCommand(orderNo, chargeId));
         }
 
         /// <summary>
         /// Add Charge to Order Item
         /// </summary>
         [HttpPost("{orderNo}/Items/{orderItemId}/Charges")]
-        public async Task AddChargeToOrderItem([FromServices] IRequestClient<AddChargeToOrderItemCommand> client, int orderNo, Guid orderItemId, [FromBody] ChargeDetails details)
+        public async Task AddChargeToOrderItem(int orderNo, Guid orderItemId, [FromBody] ChargeDetails details)
         {
-            await client.GetResponse<AddChargeToOrderItemCommandResponse>(
-                new AddChargeToOrderItemCommand(orderNo, orderItemId, details)
-            );
+            await _mediator.Send(new AddChargeToOrderItemCommand(orderNo, orderItemId, details));
         }
 
         /// <summary>
         /// Remove Charge from Order Item
         /// </summary>
         [HttpDelete("{orderNo}/Items/{orderItemId}/Charges/{chargeId}")]
-        public async Task RemoveChargeFromOrderItem(
-            [FromServices] IRequestClient<RemoveChargeFromOrderItemCommand> client,
-            int orderNo, Guid orderItemId, Guid chargeId)
+        public async Task RemoveChargeFromOrderItem(int orderNo, Guid orderItemId, Guid chargeId)
         {
-            await client.GetResponse<RemoveChargeFromOrderItemCommandResponse>(new RemoveChargeFromOrderItemCommand(orderNo, orderItemId, chargeId));
+            await _mediator.Send(new RemoveChargeFromOrderItemCommand(orderNo, orderItemId, chargeId));
         }
 
         /// <summary>
         /// Add Custom Field to Order
         /// </summary>
         [HttpPost("{orderNo}/CustomFields")]
-        public async Task AddCustomFieldToOrder([FromServices] IRequestClient<AddCustomFieldToOrderCommand> client, int orderNo, [FromBody] CreateCustomFieldDetails details)
+        public async Task AddCustomFieldToOrder(int orderNo, [FromBody] CreateCustomFieldDetails details)
         {
-            await client.GetResponse<AddCustomFieldToOrderCommandResponse>(
-                new AddCustomFieldToOrderCommand(orderNo, details)
-            );
+            await _mediator.Send(new AddCustomFieldToOrderCommand(orderNo, details));
         }
 
         /// <summary>
         /// Remove Custom Field from Order
         /// </summary>
         [HttpDelete("{orderNo}/CustomFields/{customFieldId}")]
-        public async Task RemoveCustomFieldFromItem(
-            [FromServices] IRequestClient<RemoveCustomFieldFromOrderCommand> client,
-            int orderNo, string customFieldId)
+        public async Task RemoveCustomFieldFromItem(int orderNo, string customFieldId)
         {
-            await client.GetResponse<RemoveCustomFieldFromOrderCommandResponse>(new RemoveCustomFieldFromOrderCommand(orderNo, customFieldId));
+            await _mediator.Send(new RemoveCustomFieldFromOrderCommand(orderNo, customFieldId));
         }
 
         /// <summary>
         /// Add Custom Field to Order Item
         /// </summary>
         [HttpPost("{orderNo}/Items/{orderItemId}/CustomFields")]
-        public async Task AddCustomFieldToOrderItem([FromServices] IRequestClient<AddCustomFieldToOrderItemCommand> client, int orderNo, Guid orderItemId, [FromBody] CreateCustomFieldDetails details)
+        public async Task AddCustomFieldToOrderItem(int orderNo, Guid orderItemId, [FromBody] CreateCustomFieldDetails details)
         {
-            await client.GetResponse<AddCustomFieldToOrderItemCommandResponse>(
-                new AddCustomFieldToOrderItemCommand(orderNo, orderItemId, details)
-            );
+            await _mediator.Send(new AddCustomFieldToOrderItemCommand(orderNo, orderItemId, details));
         }
 
         /// <summary>
         /// Remove Custom Field from Order Item
         /// </summary>
         [HttpDelete("{orderNo}/Items/{orderItemId}/CustomFields/{customFieldId}")]
-        public async Task RemoveCustomFieldFromOrderItem(
-            [FromServices] IRequestClient<RemoveCustomFieldFromOrderItemCommand> client,
-            int orderNo, Guid orderItemId, string customFieldId)
+        public async Task RemoveCustomFieldFromOrderItem(int orderNo, Guid orderItemId, string customFieldId)
         {
-            await client.GetResponse<RemoveCustomFieldFromOrderItemCommandResponse>(new RemoveCustomFieldFromOrderItemCommand(orderNo, orderItemId, customFieldId));
+            await _mediator.Send(new RemoveCustomFieldFromOrderItemCommand(orderNo, orderItemId, customFieldId));
         }
 
         [HttpGet("QueryOrdersByCustomField")]
-        public async Task<IEnumerable<OrderDto>> QueryOrdersByCustomField([FromServices] IRequestClient<QueryOrdersByCustomFieldValueQuery> client, [FromQuery] string customFieldId, [FromQuery] string? value)
+        public async Task<IEnumerable<OrderDto>> QueryOrdersByCustomField([FromQuery] string customFieldId, [FromQuery] string? value)
         {
-            var r = await client.GetResponse<QueryOrdersByCustomFieldValueQueryResponse>(new QueryOrdersByCustomFieldValueQuery()
+            var r = await _mediator.Send(new QueryOrdersByCustomFieldValueQuery()
             {
                 CustomFieldId = customFieldId,
                 Value = value
             });
-            return r.Message.Orders;
+            return r.Orders;
         }
     }
 }

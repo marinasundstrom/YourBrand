@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using OrderPriceCalculator;
 using YourBrand.Orders.Contracts;
@@ -7,53 +7,63 @@ using YourBrand.Orders.Domain.Events;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveOrderItemCommandHandler : IConsumer<RemoveOrderItemCommand>
+public class RemoveOrderItemCommand : IRequest
 {
-    private readonly ILogger<RemoveOrderItemCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public RemoveOrderItemCommandHandler(
-        ILogger<RemoveOrderItemCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public RemoveOrderItemCommand(int orderNo, Guid orderItemId)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        OrderItemId = orderItemId;
     }
 
-    public async Task Consume(ConsumeContext<RemoveOrderItemCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public Guid OrderItemId { get; }
+
+    public class RemoveOrderItemCommandHandler : IRequestHandler<RemoveOrderItemCommand>
     {
-        var message = consumeContext.Message;
-
-        var order = context.Orders
-            .Where(c => c.OrderNo == message.OrderNo)
-            .IncludeAll()
-            .FirstOrDefault();
-
-        if (order is null)
+        private readonly ILogger<RemoveOrderItemCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public RemoveOrderItemCommandHandler(
+            ILogger<RemoveOrderItemCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var item = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (item is null)
+        public async Task<Unit> Handle(RemoveOrderItemCommand request, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            var message = request;
+
+            var order = context.Orders
+                .Where(c => c.OrderNo == message.OrderNo)
+                .IncludeAll()
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var item = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (item is null)
+            {
+                throw new Exception();
+            }
+
+            item.Clear();
+
+            order.Items.Remove(item);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            item.AddDomainEvent(new OrderItemRemovedEvent(order.OrderNo, item.Id));
+
+            return Unit.Value;
         }
-
-        item.Clear();
-
-        order.Items.Remove(item);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        item.AddDomainEvent(new OrderItemRemovedEvent(order.OrderNo, item.Id));
-
-        await consumeContext.RespondAsync<RemoveOrderItemCommandResponse>(new RemoveOrderItemCommandResponse(order.OrderNo, item.Id));
     }
 }

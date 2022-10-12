@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,58 +9,89 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class RemoveChargeFromOrderItemCommandHandler : IConsumer<RemoveChargeFromOrderItemCommand>
+public class ChargeDetails
 {
-    private readonly ILogger<RemoveChargeFromOrderItemCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
 
-    public RemoveChargeFromOrderItemCommandHandler(
-        ILogger<RemoveChargeFromOrderItemCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public decimal? Amount { get; set; }
+
+    public double? Percent { get; set; }
+
+    public decimal? Total { get; set; }
+
+    public string? Description { get; set; }
+
+    public Guid? ChargeId { get; set; }
+}
+
+public class RemoveChargeFromOrderItemCommand : IRequest
+{
+    public RemoveChargeFromOrderItemCommand(
+        int orderNo,
+        Guid orderItemId,
+        Guid chargeId
+    )
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        OrderItemId = orderItemId;
+        ChargeId = chargeId;
     }
 
-    public async Task Consume(ConsumeContext<RemoveChargeFromOrderItemCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public Guid OrderItemId { get; }
+
+    public Guid ChargeId { get; }
+
+    public class RemoveChargeFromOrderItemCommandHandler : IRequestHandler<RemoveChargeFromOrderItemCommand>
     {
-        var message = consumeContext.Message;
+        private readonly ILogger<RemoveChargeFromOrderItemCommandHandler> _logger;
+        private readonly OrdersContext context;
 
-        var order = await context.Orders
-         .IncludeAll()
-         .Where(c => c.OrderNo == message.OrderNo)
-         .FirstOrDefaultAsync();
-
-        if (order is null)
+        public RemoveChargeFromOrderItemCommandHandler(
+            ILogger<RemoveChargeFromOrderItemCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (orderItem is null)
+        public async Task<Unit> Handle(RemoveChargeFromOrderItemCommand request, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            var message = request;
+
+            var order = await context.Orders
+             .IncludeAll()
+             .Where(c => c.OrderNo == message.OrderNo)
+             .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var orderItem = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (orderItem is null)
+            {
+                throw new Exception();
+            }
+
+            var Charge = orderItem.Charges.FirstOrDefault(x => x.Id == message.ChargeId);
+
+            if (Charge is null)
+            {
+                throw new Exception();
+            }
+
+            orderItem.Charges.Remove(Charge);
+
+            context.OrderCharges.Remove(Charge);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            return Unit.Value;
         }
-
-        var Charge = orderItem.Charges.FirstOrDefault(x => x.Id == message.ChargeId);
-
-        if (Charge is null)
-        {
-            throw new Exception();
-        }
-
-        orderItem.Charges.Remove(Charge);
-
-        context.OrderCharges.Remove(Charge);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await consumeContext.RespondAsync<RemoveChargeFromOrderItemCommandResponse>(new RemoveChargeFromOrderItemCommandResponse());
     }
 }

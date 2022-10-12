@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using OrderPriceCalculator;
 using YourBrand.Orders.Contracts;
@@ -7,53 +7,66 @@ using YourBrand.Orders.Domain.Events;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class UpdateOrderItemQuantityCommandHandler : IConsumer<UpdateOrderItemQuantityCommand>
+public class UpdateOrderItemQuantityCommand : IRequest
 {
-    private readonly ILogger<UpdateOrderItemQuantityCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-
-    public UpdateOrderItemQuantityCommandHandler(
-        ILogger<UpdateOrderItemQuantityCommandHandler> logger,
-        OrdersContext context,
-        IBus bus)
+    public UpdateOrderItemQuantityCommand(int orderNo, Guid orderItemId, double quantity)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
+        OrderNo = orderNo;
+        OrderItemId = orderItemId;
+        Quantity = quantity;
     }
 
-    public async Task Consume(ConsumeContext<UpdateOrderItemQuantityCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public Guid OrderItemId { get; }
+
+    public double Quantity { get; }
+
+    public class UpdateOrderItemQuantityCommandHandler : IRequestHandler<UpdateOrderItemQuantityCommand>
     {
-        var message = consumeContext.Message;
-
-        var order = context.Orders
-            .Where(c => c.OrderNo == message.OrderNo)
-            .IncludeAll()
-            .FirstOrDefault();
-
-        if (order is null)
+        private readonly ILogger<UpdateOrderItemQuantityCommandHandler> _logger;
+        private readonly OrdersContext context;
+ 
+        public UpdateOrderItemQuantityCommandHandler(
+            ILogger<UpdateOrderItemQuantityCommandHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var item = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
-
-        if (item is null)
+        public async Task<Unit> Handle(UpdateOrderItemQuantityCommand request, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            var message = request;
+
+            var order = context.Orders
+                .Where(c => c.OrderNo == message.OrderNo)
+                .IncludeAll()
+                .FirstOrDefault();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            var item = order.Items.FirstOrDefault(i => i.Id == message.OrderItemId);
+
+            if (item is null)
+            {
+                throw new Exception();
+            }
+
+            var oldQuantity = item.Quantity;
+
+            item.UpdateQuantity(message.Quantity);
+
+            order.Update();
+
+            await context.SaveChangesAsync();
+
+            //await bus.Publish(new OrderItemQuantityUpdatedEvent(order.OrderNo, item.Id, oldQuantity, item.Quantity));
+
+            return Unit.Value;
         }
-
-        var oldQuantity = item.Quantity;
-
-        item.UpdateQuantity(message.Quantity);
-
-        order.Update();
-
-        await context.SaveChangesAsync();
-
-        await bus.Publish(new OrderItemQuantityUpdatedEvent(order.OrderNo, item.Id, oldQuantity, item.Quantity));
-
-        await consumeContext.RespondAsync<UpdateOrderItemQuantityCommandResponse>(new UpdateOrderItemQuantityCommandResponse(order.OrderNo, item.Id));
     }
 }

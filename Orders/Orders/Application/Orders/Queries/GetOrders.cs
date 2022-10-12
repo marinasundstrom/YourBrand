@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,46 +8,64 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrdersQueryHandler : IConsumer<GetOrdersQuery>
+public class GetOrdersQuery : IRequest<GetOrdersQueryResponse>
 {
-    private readonly ILogger<GetOrdersQueryHandler> _logger;
-    private readonly OrdersContext context;
+    public int Skip { get; set; }
 
-    public GetOrdersQueryHandler(
-        ILogger<GetOrdersQueryHandler> logger,
-        OrdersContext context)
+    public int Limit { get; set; } = 10;
+
+    public bool IncludeItems { get; set; } = true;
+
+    public bool IncludeDiscounts { get; set; } = true;
+
+    public bool IncludeCharges { get; set; } = true;
+
+    public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, GetOrdersQueryResponse>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<GetOrdersQueryHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<GetOrdersQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var query = context.Orders
-            .IncludeAll(
-                includeItems: message.IncludeItems,
-                includeDiscounts: message.IncludeDiscounts,
-                includeCharges: message.IncludeCharges
-            )
-            .OrderBy(o => o.OrderNo)
-            .AsSplitQuery()
-            .AsNoTracking();
-
-        var total = await query.CountAsync();
-
-        var orders = await query
-            .Skip(message.Skip)
-            .Take(message.Limit)
-            .ToArrayAsync();
-
-        var response = new GetOrdersQueryResponse()
+        public GetOrdersQueryHandler(
+            ILogger<GetOrdersQueryHandler> logger,
+            OrdersContext context)
         {
-            Orders = orders.Select(Mappings.CreateOrderDto),
-            Total = total
-        };
+            _logger = logger;
+            this.context = context;
+        }
 
-        await consumeContext.RespondAsync<GetOrdersQueryResponse>(response);
+        public async Task<GetOrdersQueryResponse> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
+        {
+            var message = request;
+
+            var query = context.Orders
+                .IncludeAll(
+                    includeItems: message.IncludeItems,
+                    includeDiscounts: message.IncludeDiscounts,
+                    includeCharges: message.IncludeCharges
+                )
+                .OrderBy(o => o.OrderNo)
+                .AsSplitQuery()
+                .AsNoTracking();
+
+            var total = await query.CountAsync();
+
+            var orders = await query
+                .Skip(message.Skip)
+                .Take(message.Limit)
+                .ToArrayAsync();
+
+            return new GetOrdersQueryResponse()
+            {
+                Orders = orders.Select(Mappings.CreateOrderDto),
+                Total = total
+            };
+        }
     }
+}
+
+public class GetOrdersQueryResponse
+{
+    public IEnumerable<OrderDto> Orders { get; set; } = null!;
+
+    public int Total { get; set; }
 }

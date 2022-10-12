@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-using MassTransit;
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -13,30 +13,40 @@ using static YourBrand.Orders.Application.Subscriptions.Mappings;
 
 namespace YourBrand.Orders.Application.Subscriptions
 {
-    public class UpdateSubscriptionCommandHandler : IConsumer<UpdateSubscriptionCommand>
+    public class UpdateSubscriptionCommand : IRequest
     {
-        private readonly OrdersContext salesContext;
-
-        public UpdateSubscriptionCommandHandler(OrdersContext salesContext)
+        public UpdateSubscriptionCommand(Guid subscriptionId)
         {
-            this.salesContext = salesContext;
+            SubscriptionId = subscriptionId;
         }
 
-        public async Task Consume(ConsumeContext<UpdateSubscriptionCommand> consumeContext)
+        public Guid SubscriptionId { get; }
+
+        public class UpdateSubscriptionCommandHandler : IRequestHandler<UpdateSubscriptionCommand>
         {
-            var request = consumeContext.Message;
+            private readonly OrdersContext salesContext;
 
-            var subscription = await salesContext.Subscriptions
-                .FirstOrDefaultAsync(c => c.Id == request.SubscriptionId);
-
-            if (subscription is null)
+            public UpdateSubscriptionCommandHandler(OrdersContext salesContext)
             {
-                throw new System.Exception();
+                this.salesContext = salesContext;
             }
 
-            // TODO: Update
+            public async Task<Unit> Handle(UpdateSubscriptionCommand request, CancellationToken cancellationToken)
+            {
+                var subscription = await salesContext.Subscriptions
+                    .FirstOrDefaultAsync(c => c.Id == request.SubscriptionId);
 
-            await salesContext.SaveChangesAsync();
+                if (subscription is null)
+                {
+                    throw new System.Exception();
+                }
+
+                // TODO: Update
+
+                await salesContext.SaveChangesAsync();
+
+                return Unit.Value;
+            }
         }
     }
 }

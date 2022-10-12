@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,44 +10,47 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderTotalsQueryHandler : IConsumer<GetOrderTotalsQuery>
+public class GetOrderTotalsQuery : IRequest<OrderTotalsDto>
 {
-    private readonly ILogger<GetOrderTotalsQueryHandler> _logger;
-    private readonly OrdersContext context;
+    public int OrderNo { get; set; }
 
-    public GetOrderTotalsQueryHandler(
-        ILogger<GetOrderTotalsQueryHandler> logger,
-        OrdersContext context)
+    public class GetOrderTotalsQueryHandler : IRequestHandler<GetOrderTotalsQuery, OrderTotalsDto>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<GetOrderTotalsQueryHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<GetOrderTotalsQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll()
-            .Where(c => c.OrderNo == message.OrderNo)
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
-
-        if (order is null)
+        public GetOrderTotalsQueryHandler(
+            ILogger<GetOrderTotalsQueryHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var dto = new OrderTotalsDto()
+        public async Task<OrderTotalsDto> Handle(GetOrderTotalsQuery request, CancellationToken cancellationToken)
         {
-            Totals = order.Vat(),
-            SubTotal = order.Items.Sum(i => i.SubTotal()),
-            Vat = order.Items.Sum(i => i.Vat() * (decimal)i.Quantity),
-            Discounts = order.Discounts.Select(Mappings.CreateOrderDiscountDto),
-            Rounding = order.Rounding(),
-            Total = order.Total(true)
-        };
+            var message = request;
 
-        await consumeContext.RespondAsync<OrderTotalsDto>(dto);
+            var order = await context.Orders
+                .IncludeAll()
+                .Where(c => c.OrderNo == message.OrderNo)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            return new OrderTotalsDto()
+            {
+                Totals = order.Vat(),
+                SubTotal = order.Items.Sum(i => i.SubTotal()),
+                Vat = order.Items.Sum(i => i.Vat() * (decimal)i.Quantity),
+                Discounts = order.Discounts.Select(Mappings.CreateOrderDiscountDto),
+                Rounding = order.Rounding(),
+                Total = order.Total(true)
+            };
+        }
     }
 }

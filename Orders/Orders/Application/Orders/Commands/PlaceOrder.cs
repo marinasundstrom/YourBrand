@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,51 +10,58 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Commands;
 
-public class PlaceOrderCommandHandler : IConsumer<PlaceOrderCommand>
+public class PlaceOrderCommand : IRequest
 {
-    private readonly ILogger<PlaceOrderCommandHandler> _logger;
-    private readonly OrdersContext context;
-    private readonly IBus bus;
-    private readonly SubscriptionOrderGenerator subscriptionOrderGenerator;
-
-    public PlaceOrderCommandHandler(
-        ILogger<PlaceOrderCommandHandler> logger,
-        OrdersContext context,
-        IBus bus,
-        SubscriptionOrderGenerator subscriptionOrderGenerator)
+    public PlaceOrderCommand(int orderNo)
     {
-        _logger = logger;
-        this.context = context;
-        this.bus = bus;
-        this.subscriptionOrderGenerator = subscriptionOrderGenerator;
+        OrderNo = orderNo;
     }
 
-    public async Task Consume(ConsumeContext<PlaceOrderCommand> consumeContext)
+    public int OrderNo { get; }
+
+    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand>
     {
-        var message = consumeContext.Message;
+        private readonly ILogger<PlaceOrderCommandHandler> _logger;
+        private readonly OrdersContext context;
+         private readonly SubscriptionOrderGenerator subscriptionOrderGenerator;
 
-        var order = await context.Orders
-            .IncludeAll()
-            .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
-
-        if (order is null)
+        public PlaceOrderCommandHandler(
+            ILogger<PlaceOrderCommandHandler> logger,
+            OrdersContext context,
+            SubscriptionOrderGenerator subscriptionOrderGenerator)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
+            this.subscriptionOrderGenerator = subscriptionOrderGenerator;
         }
 
-        var orders = subscriptionOrderGenerator.GetOrders(order);
-
-        if (orders.Any())
+        public async Task<Unit> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
-            foreach (var o in orders)
+            var message = request;
+
+            var order = await context.Orders
+                .IncludeAll()
+                .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
+
+            if (order is null)
             {
-                o.Update();
-                context.Orders.Add(o);
+                throw new Exception();
             }
 
-            await context.SaveChangesAsync();
-        }
+            var orders = subscriptionOrderGenerator.GetOrders(order);
 
-        await consumeContext.RespondAsync<PlaceOrderCommandResponse>(new PlaceOrderCommandResponse());
+            if (orders.Any())
+            {
+                foreach (var o in orders)
+                {
+                    o.Update();
+                    context.Orders.Add(o);
+                }
+
+                await context.SaveChangesAsync();
+            }
+
+            return Unit.Value;
+        }
     }
 }

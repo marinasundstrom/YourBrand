@@ -1,4 +1,4 @@
-﻿using MassTransit;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,40 +8,49 @@ using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Application.Orders.Queries;
 
-public class GetOrderQueryByOrderNoHandler : IConsumer<GetOrderByOrderNoQuery>
+public class GetOrderByOrderNoQuery : IRequest<OrderDto>
 {
-    private readonly ILogger<GetOrderQueryByOrderNoHandler> _logger;
-    private readonly OrdersContext context;
+    public int? OrderNo { get; set; }
 
-    public GetOrderQueryByOrderNoHandler(
-        ILogger<GetOrderQueryByOrderNoHandler> logger,
-        OrdersContext context)
+    public bool IncludeItems { get; set; } = true;
+
+    public bool IncludeDiscounts { get; set; } = true;
+
+    public bool IncludeCharges { get; set; } = true;
+
+    public class GetOrderQueryByOrderNoHandler : IRequestHandler<GetOrderByOrderNoQuery, OrderDto>
     {
-        _logger = logger;
-        this.context = context;
-    }
+        private readonly ILogger<GetOrderQueryByOrderNoHandler> _logger;
+        private readonly OrdersContext context;
 
-    public async Task Consume(ConsumeContext<GetOrderByOrderNoQuery> consumeContext)
-    {
-        var message = consumeContext.Message;
-
-        var order = await context.Orders
-            .IncludeAll(
-                includeItems: message.IncludeItems,
-                includeDiscounts: message.IncludeDiscounts,
-                includeCharges: message.IncludeCharges
-            )
-            .AsSplitQuery()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
-
-        if (order is null)
+        public GetOrderQueryByOrderNoHandler(
+            ILogger<GetOrderQueryByOrderNoHandler> logger,
+            OrdersContext context)
         {
-            throw new Exception();
+            _logger = logger;
+            this.context = context;
         }
 
-        var dto = Mappings.CreateOrderDto(order);
+        public async Task<OrderDto> Handle(GetOrderByOrderNoQuery request, CancellationToken cancellationToken)
+        {
+            var message = request;
 
-        await consumeContext.RespondAsync<OrderDto>(dto);
+            var order = await context.Orders
+                .IncludeAll(
+                    includeItems: message.IncludeItems,
+                    includeDiscounts: message.IncludeDiscounts,
+                    includeCharges: message.IncludeCharges
+                )
+                .AsSplitQuery()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.OrderNo == message.OrderNo);
+
+            if (order is null)
+            {
+                throw new Exception();
+            }
+
+            return Mappings.CreateOrderDto(order);
+        }
     }
 }

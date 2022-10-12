@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using MassTransit;
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -15,52 +15,68 @@ using static YourBrand.Orders.Application.Subscriptions.Mappings;
 
 namespace YourBrand.Orders.Application.Subscriptions
 {
-    public class GetSubscriptionsQueryHandler : IConsumer<GetSubscriptionsQuery>
+    public class GetSubscriptionsQuery : IRequest<GetSubscriptionsQueryResponse>
     {
-        private readonly OrdersContext salesContext;
-
-        public GetSubscriptionsQueryHandler(OrdersContext salesContext)
+        public class GetSubscriptionsQueryHandler : IRequestHandler<GetSubscriptionsQuery, GetSubscriptionsQueryResponse>
         {
-            this.salesContext = salesContext;
-        }
+            private readonly OrdersContext salesContext;
 
-        public async Task Consume(ConsumeContext<GetSubscriptionsQuery> consumeContext)
-        {
-            var subscriptions = await salesContext.Subscriptions
-                .AsNoTracking()
-                .ToListAsync();
-
-            var response = new GetSubscriptionsQueryResponse
+            public GetSubscriptionsQueryHandler(OrdersContext salesContext)
             {
-                Subscriptions = subscriptions.Select(Map)
-            };
+                this.salesContext = salesContext;
+            }
 
-            await consumeContext.RespondAsync<GetSubscriptionsQueryResponse>(response);
+            public async Task<GetSubscriptionsQueryResponse> Handle(GetSubscriptionsQuery request, CancellationToken cancellationToken)
+            {
+                var subscriptions = await salesContext.Subscriptions
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                return new GetSubscriptionsQueryResponse
+                {
+                    Subscriptions = subscriptions.Select(Map)
+                };
+            }
         }
     }
 
-    public class GetSubscriptionQueryHandler : IConsumer<GetSubscriptionQuery>
+    public class GetSubscriptionsQueryResponse
     {
-        private readonly OrdersContext salesContext;
+        public IEnumerable<SubscriptionDto> Subscriptions { get; set; } = null!;
+    }
 
-        public GetSubscriptionQueryHandler(OrdersContext salesContext)
+    public class GetSubscriptionQuery : IRequest
+    {
+        public GetSubscriptionQuery(Guid subscriptionId)
         {
-            this.salesContext = salesContext;
+            SubscriptionId = subscriptionId;
         }
 
-        public async Task Consume(ConsumeContext<GetSubscriptionQuery> consumeContext)
+        public Guid SubscriptionId { get; }
+
+        public class GetSubscriptionQueryHandler : IRequestHandler<GetSubscriptionQuery>
         {
-            var request = consumeContext.Message;
+            private readonly OrdersContext salesContext;
 
-            var subscription = await salesContext.Subscriptions
-                .FirstOrDefaultAsync(c => c.Id == request.SubscriptionId);
-
-            if (subscription is null)
+            public GetSubscriptionQueryHandler(OrdersContext salesContext)
             {
-                throw new Exception();
+                this.salesContext = salesContext;
             }
 
-            await consumeContext.RespondAsync<SubscriptionDto>(Map(subscription));
+            public async Task<Unit> Handle(GetSubscriptionQuery request, CancellationToken cancellationToken)
+            {
+
+
+                var subscription = await salesContext.Subscriptions
+                    .FirstOrDefaultAsync(c => c.Id == request.SubscriptionId);
+
+                if (subscription is null)
+                {
+                    throw new Exception();
+                }
+
+                return Unit.Value;
+            }
         }
     }
 }
