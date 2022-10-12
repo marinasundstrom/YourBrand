@@ -167,16 +167,7 @@
         </ChildRowContent>
         <RowEditingTemplate Context="orderItem">
             <MudTd DataLabel="Item">
-                <MudAutocomplete T="ProductDto" Required
-                                 @bind-Value="orderItem.Item"
-                                 Disabled="@(orderItem.Id != null)"
-                                 SearchFunc="@SearchItems"
-                                 Margin="Margin.Dense"
-                                 ResetValueOnEmptyText="@true"
-                                 CoerceText="@true"
-                                 ToStringFunc="(ci) => ci.Name"
-                                 CoerceValue="false">
-                </MudAutocomplete>
+                <YourBrand.Catalog.ProductsSelector @bind-Value="orderItem.Item" />
             </MudTd>
             <MudTd DataLabel="Price">@orderItem.Item?.Price?.ToString("c")</MudTd>
             @* <MudTd DataLabel="VAT Rate">@(orderItem.Item?.VatRate * 100)%</MudTd> *@

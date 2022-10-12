@@ -1,0 +1,98 @@
+@using System.Linq.Expressions
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="ProductDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchProducts" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                @*<MudText Typo="Typo.body2">@context2.Ca</MudText> *@
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProduct" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Product";
+
+    [Parameter]
+    public ProductDto Value { get; set; }
+
+    [Parameter]
+    public EventCallback<ProductDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<ProductDto>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string ProductGroupId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async Task<IEnumerable<ProductDto>> SearchProducts(string text)
+    {
+        try
+        {
+            var results = await ProductsClient.GetProductsAsync(false, ProductGroupId, 0, 10, null, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task AddProduct() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Showroom.UI")
+                .GetType("YourBrand.Showroom.Products.ProductDialog");
+
+            var dialogReference = DialogService.Show(type, "New Product", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (ProductDto)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

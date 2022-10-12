@@ -1,0 +1,98 @@
+@using System.Linq.Expressions
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="ProductVariantDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchProductVariants" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                @*<MudText Typo="Typo.body2">@context2.Ca</MudText> *@
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProductVariant" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "ProductVariant";
+
+    [Parameter]
+    public ProductVariantDto Value { get; set; }
+
+    [Parameter]
+    public EventCallback<ProductVariantDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<ProductVariantDto>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string ProductId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async Task<IEnumerable<ProductVariantDto>> SearchProductVariants(string text)
+    {
+        try
+        {
+            var results = await ProductsClient.GetVariantsAsync(ProductId, 0, 10, null, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task AddProductVariant() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Showroom.UI")
+                .GetType("YourBrand.Showroom.ProductVariants.ProductVariantDialog");
+
+            var dialogReference = DialogService.Show(type, "New ProductVariant", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (ProductVariantDto)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
