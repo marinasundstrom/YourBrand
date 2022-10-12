@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
-using OrderPriceCalculator;
 
 using YourBrand.Orders.Application.Orders;
 using YourBrand.Orders.Application.Orders.Commands;
 using YourBrand.Orders.Application.Orders.Queries;
 using YourBrand.Orders.Contracts;
-using YourBrand.Orders.Domain.Entities;
 using YourBrand.Orders.Infrastructure.Persistence;
 
 namespace YourBrand.Orders.Controllers
