@@ -14,12 +14,17 @@
 <MudTable T="TimeSheetDto" ServerData="@(new Func<TableState, Task<TableData<TimeSheetDto>>>(ServerReload))" Elevation="25"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTimeSheet(e.Item)" GroupBy="@_groupDefinition">
     <ToolBarContent>
+        @*
         <MudAutocomplete T="UserDto" Label="User" Variant="Variant.Text" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
                          For="() => User"
                          ToStringFunc="u => u?.GetDisplayName()"
                          ResetValueOnEmptyText="true"
                          CoerceText="true" CoerceValue="true"
-                         AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+                         AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" /> *@
+
+        <UserSelector Label="User" Variant="Variant.Text" Value="User" ValueChanged="OnUserChanged"
+                         For="() => User" />
+
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -122,13 +127,6 @@
     {
         searchString = text;
         table.ReloadServerData();
-    }
-
-    private async Task<IEnumerable<UserDto>> Search1(string value)
-    {
-        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
-
-        return page.Items;
     }
 
     void OnUserChanged(UserDto user)

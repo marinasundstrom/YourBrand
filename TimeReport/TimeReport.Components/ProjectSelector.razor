@@ -1,11 +1,11 @@
 @using System.Linq.Expressions
-@inject IProductsClient ProductsClient
+@inject IProjectsClient ProjectsClient
 @inject IDialogService DialogService
 
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
-        <MudAutocomplete T="ProductDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-            For="For" SearchFunc="SearchProducts" ToStringFunc="(x) => x.Name"
+        <MudAutocomplete T="ProjectDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchProjects" ToStringFunc="(x) => x.Name"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
                 <MudText Typo="Typo.body1">@context2.Name</MudText>
@@ -20,22 +20,22 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProduct" />
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProject" />
     }
 </div>
 
 @code {
     [Parameter]
-    public string Label { get; set; } = "Product";
+    public string Label { get; set; } = "Project";
 
     [Parameter]
-    public ProductDto Value { get; set; }
+    public ProjectDto Value { get; set; }
 
     [Parameter]
-    public EventCallback<ProductDto> ValueChanged { get; set; }
+    public EventCallback<ProjectDto> ValueChanged { get; set; }
 
     [Parameter]
-    public Expression<Func<ProductDto>> For { get; set; }
+    public Expression<Func<ProjectDto>> For { get; set; }
 
     [Parameter]
     public string Style { get; set; }
@@ -47,16 +47,16 @@
     public Variant Variant { get; set; }
 
     [Parameter]
-    public string ProductGroupId { get; set; }
+    public string UserId { get; set; }
 
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<ProductDto>> SearchProducts(string text)
+    async Task<IEnumerable<ProjectDto>> SearchProjects(string text)
     {
         try
         {
-            var results = await ProductsClient.GetProductsAsync(false, ProductGroupId, 0, 10, text, null, null);
+            var results = await ProjectsClient.GetProjectsAsync(0, 10, UserId, text, null, null);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -67,16 +67,16 @@
         return null;
     }
 
-    async Task AddProduct() 
+    async Task AddProject() 
     {
         try
         {
             var parameters = new DialogParameters();
 
             var type = System.Reflection.Assembly.Load("Showroom.UI")
-                .GetType("YourBrand.Showroom.Products.ProductDialog");
+                .GetType("YourBrand.Showroom.Projects.ProjectDialog");
 
-            var dialogReference = DialogService.Show(type, "New Product", parameters, new DialogOptions {
+            var dialogReference = DialogService.Show(type, "New Project", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });
@@ -86,7 +86,7 @@
             if(result.Cancelled)
                 return;
 
-            Value = (ProductDto)result.Data;
+            Value = (ProjectDto)result.Data;
 
             await ValueChanged.InvokeAsync(Value);
         }

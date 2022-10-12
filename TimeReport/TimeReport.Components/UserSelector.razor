@@ -1,41 +1,41 @@
 @using System.Linq.Expressions
-@inject IProductsClient ProductsClient
+@inject IUsersClient UsersClient
 @inject IDialogService DialogService
 
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
-        <MudAutocomplete T="ProductDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-            For="For" SearchFunc="SearchProducts" ToStringFunc="(x) => x.Name"
+        <MudAutocomplete T="UserDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchUsers" ToStringFunc="(x) => x?.GetDisplayName()"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                <MudText Typo="Typo.body1">@context2?.GetDisplayName()</MudText>
                 @*<MudText Typo="Typo.body2">@context2.Ca</MudText> *@
             </ItemTemplate>
 
             <ItemSelectedTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                <MudText Typo="Typo.body1">@context2?.GetDisplayName()</MudText>
             </ItemSelectedTemplate>
         </MudAutocomplete>
     </div>
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProduct" />
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddUser" />
     }
 </div>
 
 @code {
     [Parameter]
-    public string Label { get; set; } = "Product";
+    public string Label { get; set; } = "User";
 
     [Parameter]
-    public ProductDto Value { get; set; }
+    public UserDto Value { get; set; }
 
     [Parameter]
-    public EventCallback<ProductDto> ValueChanged { get; set; }
+    public EventCallback<UserDto> ValueChanged { get; set; }
 
     [Parameter]
-    public Expression<Func<ProductDto>> For { get; set; }
+    public Expression<Func<UserDto>> For { get; set; }
 
     [Parameter]
     public string Style { get; set; }
@@ -47,16 +47,13 @@
     public Variant Variant { get; set; }
 
     [Parameter]
-    public string ProductGroupId { get; set; }
-
-    [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<ProductDto>> SearchProducts(string text)
+    async Task<IEnumerable<UserDto>> SearchUsers(string text)
     {
         try
         {
-            var results = await ProductsClient.GetProductsAsync(false, ProductGroupId, 0, 10, text, null, null);
+            var results = await UsersClient.GetUsersAsync(0, 10, text, null, null);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -67,16 +64,16 @@
         return null;
     }
 
-    async Task AddProduct() 
+    async Task AddUser() 
     {
         try
         {
             var parameters = new DialogParameters();
 
             var type = System.Reflection.Assembly.Load("Showroom.UI")
-                .GetType("YourBrand.Showroom.Products.ProductDialog");
+                .GetType("YourBrand.Showroom.Users.UserDialog");
 
-            var dialogReference = DialogService.Show(type, "New Product", parameters, new DialogOptions {
+            var dialogReference = DialogService.Show(type, "New User", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });
@@ -86,7 +83,7 @@
             if(result.Cancelled)
                 return;
 
-            Value = (ProductDto)result.Data;
+            Value = (UserDto)result.Data;
 
             await ValueChanged.InvokeAsync(Value);
         }

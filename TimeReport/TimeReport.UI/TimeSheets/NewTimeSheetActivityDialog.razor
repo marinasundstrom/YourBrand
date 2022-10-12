@@ -8,13 +8,9 @@
 
     <MudDialog>
         <DialogContent>
-            <MudAutocomplete T="ProjectDto" Label="Project" Class="mb-6" Variant="Variant.Outlined" Value="Project" ValueChanged="OnProjectChanged" SearchFunc="@Search"
-                             For="() => Project"
-                             ToStringFunc="p => p?.Name"
-                             ResetValueOnEmptyText="true"
-                             CoerceText="true" CoerceValue="true"
-                             AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
 
+            <ProjectSelector Class="mb-6" Variant="Variant.Outlined" Value="Project" ValueChanged="OnProjectChanged" For="() => Project" />
+            
             @if (Activities is not null)
             {
                 <MudSelect T="ActivityDto" Label="Activity" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Activity" ToStringFunc="x => x?.Name"
@@ -98,12 +94,5 @@
             {
                 Date = date
             });
-    }
-
-    private async Task<IEnumerable<ProjectDto>> Search(string value)
-    {
-        var page = await ProjectsClient.GetProjectsAsync(0, 10, UserId, value, null, null);
-
-        return page.Items;
     }
 }

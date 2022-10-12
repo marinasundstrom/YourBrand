@@ -22,5 +22,6 @@
 		<ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
 		<ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj" />
 		<ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
+        <ProjectReference Include="..\TimeReport.Components\TimeReport.Components.csproj" />
 	</ItemGroup>
 </Project>

@@ -56,7 +56,7 @@
     {
         try
         {
-            var results = await ProductsClient.GetVariantsAsync(ProductId, 0, 10, null, null, null);
+            var results = await ProductsClient.GetVariantsAsync(ProductId, 0, 10, text, null, null);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
