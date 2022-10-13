@@ -46,6 +46,12 @@ public class ItemsController : ControllerBase
         await _mediator.Send(new UpdateItem(id, dto.Name, dto.SKU), cancellationToken);
     }
 
+    [HttpPut("{id}/QuantityOnHand")]
+    public async Task AdjustQuantityOnHand(string id, [FromBody] int quantityOnHand, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new AdjustQuantityOnHand(id, quantityOnHand), cancellationToken);
+    }
+
     [HttpDelete("{id}")]
     public async Task DeleteItem(string id, CancellationToken cancellationToken)
     {

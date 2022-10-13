@@ -32,7 +32,7 @@
             <MudTd DataLabel="Id">@item.Id</MudTd>
             <MudTd DataLabel="SKU">@item.Sku</MudTd>
             <MudTd DataLabel="Name">@item.Name</MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityOnHand</MudTd>
+            <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
             <MudTd DataLabel="Qt on hand">@item.QuantityPicked</MudTd>
             <MudTd DataLabel="Qt on hand">@item.QuantityReserved</MudTd>
             <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
@@ -112,5 +112,46 @@
         {
             exception.Redirect();
         }
+    }
+
+    async Task OnItemAdjustQuantityOnHand(ItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
+
+            var dialogReference = DialogService.Show<AdjustQuantityOnHandDialog>("Adjust Quantity on Hand", parameters, new DialogOptions {
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+           var tableData = GetTableData();
+           var item = tableData.Items.First(x => x.Id == dto.Id);
+
+           var item2 = await ItemsClient.GetItemAsync(dto.Id);
+
+            item.QuantityAvailable = item2.QuantityAvailable;
+            item.QuantityOnHand = item2.QuantityOnHand;
+            item.QuantityPicked = item2.QuantityPicked;
+            item.QuantityReserved = item2.QuantityReserved;
+
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private TableData<ItemDto>? GetTableData()
+    {
+        return (TableData<ItemDto>?)table?.GetType()?
+            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
+                         System.Reflection.BindingFlags.Instance)?
+            .GetValue(table);
     }
 }

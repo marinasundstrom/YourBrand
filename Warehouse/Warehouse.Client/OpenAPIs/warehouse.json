@@ -278,7 +278,7 @@
           }
         ],
         "responses": {
-          "204": {
+          "200": {
             "description": ""
           }
         }
@@ -295,6 +295,43 @@
             "in": "path",
             "required": true,
             "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/warehouse/Items/{id}/QuantityOnHand": {
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_AdjustQuantityOnHand",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "quantityOnHand",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-nullable": false
           }
         ],
         "responses": {
