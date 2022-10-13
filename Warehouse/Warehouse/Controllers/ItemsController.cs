@@ -10,7 +10,7 @@ using YourBrand.Warehouse.Application.Items.Commands;
 
 namespace YourBrand.Warehouse.Controllers;
 
-[Route("warehouse/[controller]")]
+[Route("Warehouse/[controller]")]
 [ApiController]
 [Authorize]
 public class ItemsController : ControllerBase
@@ -47,21 +47,33 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPut("{id}/QuantityOnHand")]
-    public async Task AdjustQuantityOnHand(string id, [FromBody] int quantityOnHand, CancellationToken cancellationToken)
+    public async Task AdjustQuantityOnHand(string id, AdjustQuantityOnHandDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new AdjustQuantityOnHand(id, quantityOnHand), cancellationToken);
-    }
-
-    [HttpPut("{id}/Pick")]
-    public async Task PickItems(string id, [FromBody] int quantity, CancellationToken cancellationToken)
-    {
-        await _mediator.Send(new PickItems(id, quantity), cancellationToken);
+        await _mediator.Send(new AdjustQuantityOnHand(id, dto.Quantity), cancellationToken);
     }
 
     [HttpPut("{id}/Reserve")]
-    public async Task ReserveItems(string id, [FromBody] int quantity, CancellationToken cancellationToken)
+    public async Task ReserveItems(string id, ReserveItemsDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new ReserveItems(id, quantity), cancellationToken);
+        await _mediator.Send(new ReserveItems(id, dto.Quantity), cancellationToken);
+    }
+
+    [HttpPut("{id}/Pick")]
+    public async Task PickItems(string id, PickItemsDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new PickItems(id, dto.Quantity, dto.FromReserved), cancellationToken);
+    }
+
+    [HttpPut("{id}/Ship")]
+    public async Task ShipItems(string id, ShipItemsDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new ShipItems(id, dto.Quantity, dto.FromPicked), cancellationToken);
+    }
+
+    [HttpPut("{id}/Receive")]
+    public async Task ReceiveItems(string id, ReceiveItemsDto dto, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new ReceiveItems(id, dto.Quantity), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -70,6 +82,16 @@ public class ItemsController : ControllerBase
         await _mediator.Send(new DeleteItem(id), cancellationToken);
     }
 }
+
+public record AdjustQuantityOnHandDto(int Quantity);
+
+public record ReserveItemsDto(int Quantity);
+
+public record PickItemsDto(int Quantity, bool FromReserved = false);
+
+public record ShipItemsDto(int Quantity, bool FromPicked = false);
+
+public record ReceiveItemsDto(int Quantity);
 
 public record CreateItemDto(string Name, string SKU);
 

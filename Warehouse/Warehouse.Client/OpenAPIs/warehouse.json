@@ -118,7 +118,7 @@
         }
       }
     },
-    "/warehouse/Items": {
+    "/Warehouse/Items": {
       "get": {
         "tags": [
           "Items"
@@ -219,7 +219,7 @@
         }
       }
     },
-    "/warehouse/Items/{id}": {
+    "/Warehouse/Items/{id}": {
       "get": {
         "tags": [
           "Items"
@@ -304,7 +304,7 @@
         }
       }
     },
-    "/warehouse/Items/{id}/QuantityOnHand": {
+    "/Warehouse/Items/{id}/QuantityOnHand": {
       "put": {
         "tags": [
           "Items"
@@ -324,12 +324,11 @@
             "x-nullable": true
           },
           {
-            "name": "quantityOnHand",
+            "name": "dto",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/definitions/AdjustQuantityOnHandDto"
             },
             "x-nullable": false
           }
@@ -341,44 +340,7 @@
         }
       }
     },
-    "/warehouse/Items/{id}/Pick": {
-      "put": {
-        "tags": [
-          "Items"
-        ],
-        "operationId": "Items_PickItems",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "name": "quantity",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/warehouse/Items/{id}/Reserve": {
+    "/Warehouse/Items/{id}/Reserve": {
       "put": {
         "tags": [
           "Items"
@@ -398,12 +360,119 @@
             "x-nullable": true
           },
           {
-            "name": "quantity",
+            "name": "dto",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/definitions/ReserveItemsDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Warehouse/Items/{id}/Pick": {
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_PickItems",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PickItemsDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Warehouse/Items/{id}/Ship": {
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_ShipItems",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ShipItemsDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Warehouse/Items/{id}/Receive": {
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_ReceiveItems",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReceiveItemsDto"
             },
             "x-nullable": false
           }
@@ -533,6 +602,74 @@
         },
         "sku": {
           "type": "string"
+        }
+      }
+    },
+    "AdjustQuantityOnHandDto": {
+      "type": "object",
+      "required": [
+        "quantity"
+      ],
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ReserveItemsDto": {
+      "type": "object",
+      "required": [
+        "quantity"
+      ],
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "PickItemsDto": {
+      "type": "object",
+      "required": [
+        "quantity",
+        "fromReserved"
+      ],
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fromReserved": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ShipItemsDto": {
+      "type": "object",
+      "required": [
+        "quantity",
+        "fromPicked"
+      ],
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fromPicked": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ReceiveItemsDto": {
+      "type": "object",
+      "required": [
+        "quantity"
+      ],
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     }

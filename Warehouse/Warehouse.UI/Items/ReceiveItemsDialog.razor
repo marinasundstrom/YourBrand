@@ -7,7 +7,7 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudNumericField Label="Quantity" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
+                <MudNumericField Label="Quantity received" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
                               For="@(() => Quantity)" />
             </MudContainer>
         </DialogContent>
@@ -15,7 +15,7 @@
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
-                Adjust
+                Register
             </MudButton>
         </DialogActions>
     </MudDialog>
@@ -42,7 +42,6 @@
         if (ItemId is not null) 
         {
             var item = await ItemsClient.GetItemAsync(ItemId);
-            Quantity = item.QuantityOnHand;
         }
     }
 
@@ -50,7 +49,7 @@
     {
         if (context.IsModified())
         {
-            await ItemsClient.AdjustQuantityOnHandAsync(ItemId, new AdjustQuantityOnHandDto {
+            await ItemsClient.ReceiveItemsAsync(ItemId, new ReceiveItemsDto {
                 Quantity = Quantity
             });
         }

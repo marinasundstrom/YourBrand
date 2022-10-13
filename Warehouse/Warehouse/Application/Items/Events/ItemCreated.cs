@@ -9,7 +9,12 @@ using YourBrand.Warehouse.Application.Common.Interfaces;
 
 namespace YourBrand.Warehouse.Application.Items.Events;
 
-public class ItemCreatedHandler : IDomainEventHandler<ItemCreated>
+public class ItemCreatedHandler 
+: IDomainEventHandler<ItemCreated>, 
+  IDomainEventHandler<ItemQuantityOnHandUpdated>, 
+  IDomainEventHandler<ItemsPicked>,
+  IDomainEventHandler<ItemsReserved>,
+  IDomainEventHandler<ItemQuantityAvailableUpdated>
 {
     private readonly IWarehouseContext _context;
 
@@ -29,5 +34,22 @@ public class ItemCreatedHandler : IDomainEventHandler<ItemCreated>
            
         }
         */
+    }
+
+    public async Task Handle(ItemQuantityOnHandUpdated notification, CancellationToken cancellationToken)
+    {
+
+    }
+
+    public async Task Handle(ItemsPicked notification, CancellationToken cancellationToken)
+    {
+    }
+
+    public async Task Handle(ItemsReserved notification, CancellationToken cancellationToken)
+    {
+    }
+
+    public async Task Handle(ItemQuantityAvailableUpdated notification, CancellationToken cancellationToken)
+    {
     }
 }

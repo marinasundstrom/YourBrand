@@ -7,8 +7,11 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudNumericField Label="Quantity" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
+                <MudNumericField Label="Quantity to ship" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
                               For="@(() => Quantity)" />
+
+                <MudCheckBox Label="Remove from picked" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="FromPicked"
+                              For="@(() => FromPicked)" />
             </MudContainer>
         </DialogContent>
 
@@ -35,6 +38,9 @@
     [Required]
     public int Quantity { get; set; }
 
+    [Required]
+    public bool FromPicked { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         context = new EditContext(this);
@@ -42,7 +48,6 @@
         if (ItemId is not null) 
         {
             var item = await ItemsClient.GetItemAsync(ItemId);
-            Quantity = item.QuantityOnHand;
         }
     }
 
@@ -50,8 +55,9 @@
     {
         if (context.IsModified())
         {
-            await ItemsClient.AdjustQuantityOnHandAsync(ItemId, new AdjustQuantityOnHandDto {
-                Quantity = Quantity
+            await ItemsClient.ShipItemsAsync(ItemId, new ShipItemsDto {
+                Quantity = Quantity,
+                FromPicked = FromPicked
             });
         }
 

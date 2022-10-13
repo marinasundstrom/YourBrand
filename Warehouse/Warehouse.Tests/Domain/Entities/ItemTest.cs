@@ -36,7 +36,7 @@ public class ItemTest
     {
         var item = new Item("ts-b-l", "T-Shirt Blue Large", 50);
         item.Pick(20);
-        item.Ship(20);
+        item.Ship(20, true);
 
         item.QuantityPicked.ShouldBe(0);
     }

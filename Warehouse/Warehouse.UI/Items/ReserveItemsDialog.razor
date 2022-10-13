@@ -49,7 +49,9 @@
     {
         if (context.IsModified())
         {
-            await ItemsClient.ReserveItemsAsync(ItemId, Quantity);
+            await ItemsClient.ReserveItemsAsync(ItemId, new ReserveItemsDto {
+                Quantity = Quantity
+            });
         }
 
         Dialog.Close(Quantity);

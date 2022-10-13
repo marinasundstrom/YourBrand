@@ -31,11 +31,17 @@ public class Item : AuditableEntity
     public void AdjustQuantityOnHand(int quantity)
     {
         QuantityOnHand = quantity;
+
+        AddDomainEvent(new ItemQuantityOnHandUpdated(Id, QuantityOnHand));
+        AddDomainEvent(new ItemQuantityAvailableUpdated(Id, QuantityAvailable));
     }
 
     public void Receive(int quantity)
     {
         QuantityOnHand += quantity;
+
+        AddDomainEvent(new ItemQuantityOnHandUpdated(Id, QuantityOnHand));
+        AddDomainEvent(new ItemQuantityAvailableUpdated(Id, QuantityAvailable));
     }
 
     /// <summary>
@@ -44,15 +50,34 @@ public class Item : AuditableEntity
     /// </summary>
     public int QuantityPicked { get; private set; }
 
-    public void Pick(int quantity)
+    public void Pick(int quantity, bool fromReserved = false)
     {
         QuantityPicked += quantity;
         QuantityOnHand -= quantity;
+
+        if(fromReserved) 
+        {
+            QuantityReserved -= quantity;
+            //AddDomainEvent(new ItemQuantityReservedUpdated(Id, quantity));
+        }
+
+        AddDomainEvent(new ItemsPicked(Id, quantity));
+        AddDomainEvent(new ItemQuantityOnHandUpdated(Id, QuantityOnHand));
+        AddDomainEvent(new ItemQuantityAvailableUpdated(Id, QuantityAvailable));
     }
 
-    public void Ship(int quantity)
+    public void Ship(int quantity, bool fromPicked = false)
     {
-        QuantityPicked -= quantity;
+        //QuantityOnHand -= quantity;
+
+        if(fromPicked) 
+        {
+            QuantityPicked -= quantity;
+            AddDomainEvent(new ItemsPicked(Id, quantity));
+        }
+
+        //AddDomainEvent(new ItemQuantityOnHandUpdated(Id, QuantityOnHand));
+        AddDomainEvent(new ItemQuantityAvailableUpdated(Id, QuantityAvailable));
     }
 
     /// <summary>
@@ -64,11 +89,14 @@ public class Item : AuditableEntity
     public void Reserve(int quantity)
     {
         QuantityReserved += quantity;
+
+        AddDomainEvent(new ItemsReserved(Id, quantity));
+        AddDomainEvent(new ItemQuantityAvailableUpdated(Id, QuantityAvailable));
     }
 
     /// <summary>
     /// This number is how many of the item you have left if you fulfill all open sales orders and is therefore equal to Qty on Hand – Qty Reserved.
     /// (i.e. what’s left after you’ve shipped all your current orders).
     /// </summary>
-    public int QuantityAvailable => QuantityOnHand- QuantityReserved;
+    public int QuantityAvailable => QuantityOnHand - QuantityReserved;
 }

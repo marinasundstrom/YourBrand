@@ -2,12 +2,12 @@ using YourBrand.Warehouse.Domain.Common;
 
 namespace YourBrand.Warehouse.Domain.Events;
 
-public class ItemCreated : DomainEvent
-{
-    public ItemCreated(string personId)
-    {
-        ItemId = personId;
-    }
+public record ItemCreated(string ItemsId) : DomainEvent;
 
-    public string ItemId { get; }
-}
+public record ItemQuantityOnHandUpdated(string ItemId, int Quantity) : DomainEvent;
+
+public record ItemsPicked(string ItemId, int Quantity) : DomainEvent;
+
+public record ItemsReserved(string ItemId, int Quantity) : DomainEvent;
+
+public record ItemQuantityAvailableUpdated(string ItemId, int Quantity) : DomainEvent;
