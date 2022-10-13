@@ -52,6 +52,18 @@ public class ItemsController : ControllerBase
         await _mediator.Send(new AdjustQuantityOnHand(id, quantityOnHand), cancellationToken);
     }
 
+    [HttpPut("{id}/Pick")]
+    public async Task PickItems(string id, [FromBody] int quantity, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new PickItems(id, quantity), cancellationToken);
+    }
+
+    [HttpPut("{id}/Reserve")]
+    public async Task ReserveItems(string id, [FromBody] int quantity, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new ReserveItems(id, quantity), cancellationToken);
+    }
+
     [HttpDelete("{id}")]
     public async Task DeleteItem(string id, CancellationToken cancellationToken)
     {
