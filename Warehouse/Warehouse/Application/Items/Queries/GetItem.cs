@@ -20,9 +20,7 @@ public record GetItem(string ItemId) : IRequest<ItemDto?>
 
         public async Task<ItemDto?> Handle(GetItem request, CancellationToken cancellationToken)
         {
-            /*
             var person = await _context.Items
-                .Include(i => i.Addresses)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.ItemId, cancellationToken);
@@ -30,9 +28,6 @@ public record GetItem(string ItemId) : IRequest<ItemDto?>
             return person is null
                 ? null
                 : person.ToDto();
-            */
-
-            return null;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Warehouse API",
@@ -116,7 +116,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/warehouse/Items": {
       "get": {
         "tags": [
           "Items"
@@ -133,6 +135,7 @@
             "name": "page",
             "in": "query",
             "format": "int32",
+            "default": 1,
             "x-nullable": false
           },
           {
@@ -140,7 +143,33 @@
             "name": "pageSize",
             "in": "query",
             "format": "int32",
+            "default": 10,
             "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
           }
         ],
         "responses": {
@@ -150,6 +179,127 @@
             "schema": {
               "$ref": "#/definitions/ItemsResultOfItemDto"
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_CreateItem",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateItemDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemDto"
+            }
+          }
+        }
+      }
+    },
+    "/warehouse/Items/{id}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_GetItem",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_UpdateItem",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateItemDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Items"
+        ],
+        "operationId": "Items_DeleteItem2",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -202,18 +352,14 @@
     "CreateItem": {
       "type": "object",
       "required": [
-        "firstName",
-        "lastName",
-        "ssn"
+        "name",
+        "sku"
       ],
       "properties": {
-        "firstName": {
+        "name": {
           "type": "string"
         },
-        "lastName": {
-          "type": "string"
-        },
-        "ssn": {
+        "sku": {
           "type": "string"
         }
       }
@@ -234,6 +380,48 @@
         "totalItems": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "SortDirection": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Desc",
+        "Asc"
+      ],
+      "enum": [
+        "Desc",
+        "Asc"
+      ]
+    },
+    "CreateItemDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "sku"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateItemDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "sku"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "sku": {
+          "type": "string"
         }
       }
     }

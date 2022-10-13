@@ -3,10 +3,11 @@ using YourBrand.Warehouse.Domain;
 
 using MediatR;
 using YourBrand.Warehouse.Application.Items;
+using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Warehouse.Application.Items.Commands;
 
-public record CreateItem(string FirstName, string LastName, string SSN) : IRequest<ItemDto>
+public record CreateItem(string Name, string SKU) : IRequest<ItemDto>
 {
     public class Handler : IRequestHandler<CreateItem, ItemDto>
     {
@@ -19,17 +20,22 @@ public record CreateItem(string FirstName, string LastName, string SSN) : IReque
 
         public async Task<ItemDto> Handle(CreateItem request, CancellationToken cancellationToken)
         {
-            /*
-            var person = new Domain.Entities.Item(request.FirstName, request.LastName, request.SSN);
+            var item = await _context.Items.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
-            _context.Items.Add(person);
+            if (item is not null) throw new Exception();
+
+            item = new Domain.Entities.Item(request.SKU, request.Name, 0);;
+
+            _context.Items.Add(item);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return person.ToDto();
-            */
+            item = await _context
+               .Items
+               .AsNoTracking()
+               .FirstAsync(c => c.Id == item.Id);
 
-            return null!;
+            return item.ToDto();
         }
     }
 }

@@ -19,7 +19,7 @@ public class ModuleInitializer : IModuleInitializer
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             httpClient.BaseAddress = new Uri($"{ServiceUrls.WarehouseServiceUrl}/");
         }, builder => {
-            //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+            builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }
 

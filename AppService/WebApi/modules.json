@@ -17,7 +17,7 @@
     {
         "Name": "Marketing",
         "Assembly": "Marketing.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "TimeReport",
@@ -27,37 +27,37 @@
     {
         "Name": "Invoicing",
         "Assembly": "Invoicing.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Transactions",
         "Assembly": "Transactions.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Payments",
         "Assembly": "Payments.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Accounting",
         "Assembly": "Accounting.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Documents",
         "Assembly": "Documents.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Messenger",
         "Assembly": "Messenger.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "RotRutService",
         "Assembly": "RotRutService.UI",
-        "Enabled": false
+        "Enabled": true
     },
     {
         "Name": "Customers",
@@ -72,6 +72,6 @@
     {
         "Name": "Warehouse",
         "Assembly": "Warehouse.UI",
-        "Enabled": false
+        "Enabled": true
     }
 ]

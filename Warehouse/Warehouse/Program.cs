@@ -14,6 +14,10 @@ using YourBrand.Warehouse.Application.Items;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
 using YourBrand.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +67,46 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                    {
+                        options.Authority = "https://identity.local";
+                        options.Audience = "myapi";
+
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            NameClaimType = "name"
+                            
+                        };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnTokenValidated = context =>
+                            {
+                                // Add the access_token as a claim, as we may actually need it
+                                var accessToken = context.SecurityToken as JwtSecurityToken;
+                                if (accessToken != null)
+                                {
+                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
+                                    if (identity != null)
+                                    {
+                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                                    }
+                                }
+
+                                return Task.CompletedTask;
+                            }
+                        };
+
+                        //options.TokenValidationParameters.ValidateAudience = false;
+
+                        //options.Audience = "openid";
+
+                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    });
+
+        //builder.Services.AddApiKeyAuthentication("https://localhost/api/apikeys/");
+
 builder.Services.AddDocumentsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/documents/");
@@ -87,6 +131,9 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!");
 
