@@ -42,5 +42,5 @@ public static class ServiceUrls
 
     public const string TimeReportServiceUrl = $"{RootUrl}/timereport";
 
-    public const string WarehouseServiceUrl = $"{RootUrl}/warehouse";
+    public const string InventoryServiceUrl = $"{RootUrl}/inventory";
 }

@@ -269,17 +269,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketing.Contracts", "Mark
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketing.UI", "Marketing\Marketing.UI\Marketing.UI.csproj", "{427631F6-BA12-4640-A173-8030261D2241}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warehouse", "Warehouse", "{9ACD5CF7-ABFB-4ADE-B309-202B8E165C96}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{9ACD5CF7-ABFB-4ADE-B309-202B8E165C96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse", "Warehouse\Warehouse\Warehouse.csproj", "{3D398152-B0B9-4042-A236-874AD29668E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory", "Inventory\Inventory\Inventory.csproj", "{3D398152-B0B9-4042-A236-874AD29668E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse.Client", "Warehouse\Warehouse.Client\Warehouse.Client.csproj", "{5C81A618-8CF0-4077-A676-54CBDC222E88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Client", "Inventory\Inventory.Client\Inventory.Client.csproj", "{5C81A618-8CF0-4077-A676-54CBDC222E88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse.Contracts", "Warehouse\Warehouse.Contracts\Warehouse.Contracts.csproj", "{92BCE8FC-E655-4AD9-8DA1-1848A0BDAA70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Contracts", "Inventory\Inventory.Contracts\Inventory.Contracts.csproj", "{92BCE8FC-E655-4AD9-8DA1-1848A0BDAA70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse.UI", "Warehouse\Warehouse.UI\Warehouse.UI.csproj", "{2CDA897F-3A24-4B89-81A0-19E091A14B2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.UI", "Inventory\Inventory.UI\Inventory.UI.csproj", "{2CDA897F-3A24-4B89-81A0-19E091A14B2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse.Tests", "Warehouse\Warehouse.Tests\Warehouse.Tests.csproj", "{EF0BCC74-C6CA-43F4-84B0-7384F706DF2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Tests", "Inventory\Inventory.Tests\Inventory.Tests.csproj", "{EF0BCC74-C6CA-43F4-84B0-7384F706DF2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenancy.AspNetCore", "Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj", "{A0230371-E94B-4C85-BA4C-4057C73C2397}"
 EndProject

@@ -21,7 +21,7 @@ cd ./Messenger; sh seed.sh; cd ..;
 cd ./Catalog; sh seed.sh; cd ..;
 cd ./Orders; sh seed.sh; cd ..;
 cd ./Marketing; sh seed.sh; cd ..;
-cd ./Warehouse; sh seed.sh; cd ..;
+cd ./Inventory; sh seed.sh; cd ..;
 
 # Finance
 

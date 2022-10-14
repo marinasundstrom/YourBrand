@@ -31,7 +31,7 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
                 ServiceUrls.OrdersServiceUrl,
                 ServiceUrls.ShowroomServiceUrl,
                 ServiceUrls.TimeReportServiceUrl,
-                ServiceUrls.WarehouseServiceUrl
+                ServiceUrls.InventoryServiceUrl
             },
             scopes: new[] { Scopes.MyApi });
     }

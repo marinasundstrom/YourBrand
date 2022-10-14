@@ -70,8 +70,8 @@
         "Enabled": true
     },
     {
-        "Name": "Warehouse",
-        "Assembly": "Warehouse.UI",
+        "Name": "Inventory",
+        "Assembly": "Inventory.UI",
         "Enabled": true
     }
 ]

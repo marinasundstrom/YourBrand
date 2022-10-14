@@ -156,8 +156,8 @@ services:
       - protocol: https
         port: 5140
 
-  - name: warehouse
-    project: Warehouse/Warehouse/Warehouse.csproj
+  - name: inventory
+    project: Inventory/Inventory/Inventory.csproj
     bindings:
       - protocol: https
         port: 5150
