@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>YourBrand.Inventory</RootNamespace>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0-rc.2.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.0-rc.2.*" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-rc.2.*" />
+    <PackageReference Include="MudBlazor" Version="6.0.16" />
+    <PackageReference Include="Humanizer" Version="2.14.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-rc.2.*" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="7.0.0-rc.2.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Inventory.Client\Inventory.Client.csproj" />
+  </ItemGroup>
+</Project>

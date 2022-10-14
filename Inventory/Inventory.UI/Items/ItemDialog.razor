@@ -12,6 +12,12 @@
 
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
+
+                <ItemGroupSelector Label="Group" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Group" For="@(() => Group)" />
+
+                <MudTextField Label="Unit" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Unit"
+                              For="@(() => Unit)" />
+
             </MudContainer>
         </DialogContent>
 
@@ -40,14 +46,19 @@
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
-    public string? ItemId { get; set; } = null!;
+    public string? ItemId { get; set; }
 
     [Required]
     public string Id { get; set; }
 
-
     [Required]
     public string Name { get; set; }
+
+    [Required]
+    public ItemGroupDto Group { get; set; }
+
+    [Required]
+    public string Unit { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,7 +66,7 @@
 
         if (ItemId is not null) 
         {
-            var item = await ItemsClient.GetItemAsync(ItemId);
+            var item = await ItemsClient.GetItemAsync(Id);
             Id = item.Id;
             Name = item.Name;
         }
@@ -67,7 +78,9 @@
         {
             var item = await ItemsClient.CreateItemAsync(new CreateItemDto {
                 Id = Id,
-                Name = Name
+                Name = Name,
+                GroupId = Group.Id,
+                Unit = Unit
             });
 
             Dialog.Close(item);
@@ -78,8 +91,8 @@
             {
                 await ItemsClient.UpdateItemAsync(ItemId, new UpdateItemDto
                 {
-                    //Id = Id,
-                    Name = Name
+                    Name = Name,
+                    Unit = Unit
                 });
             }
 

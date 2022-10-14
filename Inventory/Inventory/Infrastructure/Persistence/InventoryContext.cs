@@ -41,10 +41,11 @@ public class InventoryContext : DbContext, IInventoryContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(InventoryContext).Assembly);
     }
 
-    public DbSet<Site> Sites { get; } = null!;
-    public DbSet<Warehouse> Warehouse { get; } = null!;
-    public DbSet<Location> Locations { get; } = null!;
-    public DbSet<ItemGroup> ItemGroups { get; } = null!;
+    public DbSet<Site> Sites { get; set; } = null!;
+    public DbSet<Warehouse> Warehouses { get; set; } = null!;
+    public DbSet<WarehouseItem> WarehouseItems { get; set; } = null!;
+    public DbSet<Location> Locations { get; set; } = null!;
+    public DbSet<ItemGroup> ItemGroups { get; set; } = null!;
 
     public DbSet<Item> Items { get; set; } = null!;
 

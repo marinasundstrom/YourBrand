@@ -4,11 +4,11 @@ using YourBrand.Inventory.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Inventory.Application.Items.Commands;
+namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
-public record ShipItems(string Id, int Quantity, bool FromPicked = false) : IRequest
+public record ShipWarehouseItems(string Id, int Quantity, bool FromPicked = false) : IRequest
 {
-    public class Handler : IRequestHandler<ShipItems>
+    public class Handler : IRequestHandler<ShipWarehouseItems>
     {
         private readonly IInventoryContext _context;
 
@@ -17,9 +17,9 @@ public record ShipItems(string Id, int Quantity, bool FromPicked = false) : IReq
             _context = context;
         }
 
-        public async Task<Unit> Handle(ShipItems request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ShipWarehouseItems request, CancellationToken cancellationToken)
         {
-            var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (item is null) throw new Exception();
 

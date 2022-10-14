@@ -14,6 +14,7 @@ public class Warehouse : AuditableEntity
     }
 
     public string Id { get; set; }
-    public string Name { get; } = null!;
-    public string SiteId { get; } = null!;
+    public string Name { get; set; } = null!;
+    public string SiteId { get; set; } = null!;
+    public Site Site { get; set; } = null!;
 }

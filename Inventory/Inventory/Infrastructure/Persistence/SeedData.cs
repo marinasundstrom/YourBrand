@@ -17,7 +17,7 @@ public class SeedData
 
             if (!context.Items.Any())
             {
-                var person = new Item("TS-B-L", "T-Short Blue Larger", 50);
+                var person = new Item("TS-B-L", "T-Short Blue Larger", string.Empty, string.Empty);
 
                 context.Items.Add(person);
 

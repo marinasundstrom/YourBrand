@@ -13,5 +13,5 @@ public class Site : AuditableEntity
     }
 
     public string Id { get; set; }
-    public string Name { get; } = null!;
+    public string Name { get; set; } = null!;
 }

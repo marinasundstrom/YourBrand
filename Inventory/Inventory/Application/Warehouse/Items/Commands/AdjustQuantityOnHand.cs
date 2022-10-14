@@ -4,7 +4,7 @@ using YourBrand.Inventory.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Inventory.Application.Items.Commands;
+namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
 public record AdjustQuantityOnHand(string Id, int NewQuantityOnHand) : IRequest
 {
@@ -19,7 +19,7 @@ public record AdjustQuantityOnHand(string Id, int NewQuantityOnHand) : IRequest
 
         public async Task<Unit> Handle(AdjustQuantityOnHand request, CancellationToken cancellationToken)
         {
-            var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (item is null) throw new Exception();
 

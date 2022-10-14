@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Items.Commands;
 
-public record UpdateItem(string Id, string Name) : IRequest
+public record UpdateItem(string Id, string Name, string Unit) : IRequest
 {
     public class Handler : IRequestHandler<UpdateItem>
     {
@@ -25,10 +25,11 @@ public record UpdateItem(string Id, string Name) : IRequest
             if (item is null) throw new Exception();
 
             item.Name = request.Name;
+            item.Unit = request.Unit;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return MediatR.Unit.Value;
         }
     }
 }

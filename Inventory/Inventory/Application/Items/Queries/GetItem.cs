@@ -21,6 +21,7 @@ public record GetItem(string ItemId) : IRequest<ItemDto?>
         public async Task<ItemDto?> Handle(GetItem request, CancellationToken cancellationToken)
         {
             var person = await _context.Items
+                .Include(x => x.Group)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.ItemId, cancellationToken);

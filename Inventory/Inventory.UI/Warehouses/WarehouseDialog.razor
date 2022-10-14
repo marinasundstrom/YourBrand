@@ -1,0 +1,87 @@
+@using System.ComponentModel.DataAnnotations
+@inject IWarehousesClient WarehousesClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
+
+                <SiteSelector Label="Site" Class="mt-4" Variant="Variant.Outlined" @bind-Value="Site" For="() => Site" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(WarehouseId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? WarehouseId { get; set; } = null!;
+
+    [Required]
+    public SiteDto Site { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (WarehouseId is not null) 
+        {
+            var warehouse = await WarehousesClient.GetWarehouseAsync(WarehouseId);
+            Site = warehouse.Site;
+            Name = warehouse.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(WarehouseId is null) 
+        {
+            var warehouse = await WarehousesClient.CreateWarehouseAsync(new CreateWarehouseDto {
+                SiteId = Site.Id,
+                Name = Name
+            });
+
+            Dialog.Close(warehouse);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await WarehousesClient.UpdateWarehouseAsync(WarehouseId, new UpdateWarehouseDto
+                {
+                    //SiteId = Site.Id,
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

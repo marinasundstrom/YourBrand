@@ -7,7 +7,8 @@ namespace YourBrand.Inventory.Domain;
 public interface IInventoryContext
 {
     DbSet<Site> Sites { get; }
-    DbSet<Warehouse> Warehouse { get; }
+    DbSet<Warehouse> Warehouses { get; }
+    DbSet<WarehouseItem> WarehouseItems { get; }
     DbSet<Location> Locations { get; }
     DbSet<ItemGroup> ItemGroups { get; }
     DbSet<Item> Items { get; }

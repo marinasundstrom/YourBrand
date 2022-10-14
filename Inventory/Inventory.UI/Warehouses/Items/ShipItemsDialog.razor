@@ -1,5 +1,5 @@
 @using System.ComponentModel.DataAnnotations
-@inject IItemsClient ItemsClient
+@inject IWarehouseItemsClient WarehouseItemsClient
 @inject ISnackbar Snackbar
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
@@ -7,8 +7,11 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudNumericField Label="Quantity to reserve" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
+                <MudNumericField Label="Quantity to ship" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
                               For="@(() => Quantity)" />
+
+                <MudCheckBox Label="Remove from picked" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="FromPicked"
+                              For="@(() => FromPicked)" />
             </MudContainer>
         </DialogContent>
 
@@ -30,10 +33,17 @@
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
-    public string? ItemId { get; set; } = null!;
+    public string WarehouseId { get; set; } = null!;
+
+    [Parameter]
+    public string? ItemId { get; set; }
+
 
     [Required]
     public int Quantity { get; set; }
+
+    [Required]
+    public bool FromPicked { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,7 +51,7 @@
 
         if (ItemId is not null) 
         {
-            var item = await ItemsClient.GetItemAsync(ItemId);
+            var item = await WarehouseItemsClient.GetItemAsync(WarehouseId, ItemId);
         }
     }
 
@@ -49,8 +59,9 @@
     {
         if (context.IsModified())
         {
-            await ItemsClient.ReserveItemsAsync(ItemId, new ReserveItemsDto {
-                Quantity = Quantity
+            await WarehouseItemsClient.ShipItemsAsync(WarehouseId, ItemId, new ShipItemsDto {
+                Quantity = Quantity,
+                FromPicked = FromPicked
             });
         }
 

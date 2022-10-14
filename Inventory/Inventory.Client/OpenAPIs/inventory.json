@@ -102,7 +102,7 @@
             "required": true,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/CreateItem"
+              "$ref": "#/definitions/AddItem"
             },
             "x-nullable": false
           }
@@ -114,6 +114,192 @@
             "schema": {
               "$ref": "#/definitions/ItemDto"
             }
+          }
+        }
+      }
+    },
+    "/Inventory/Groups": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "Groups_GetGroups",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfItemGroupDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "Groups_CreateGroup",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateGroupDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemGroupDto"
+            }
+          }
+        }
+      }
+    },
+    "/Inventory/Groups/{id}": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "Groups_GetGroup",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemGroupDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "Groups_UpdateGroup",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateGroupDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "Groups_DeleteGroup",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -145,6 +331,12 @@
             "format": "int32",
             "default": 10,
             "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "query",
+            "x-nullable": true
           },
           {
             "type": "string",
@@ -304,18 +496,708 @@
         }
       }
     },
-    "/Inventory/Items/{id}/QuantityOnHand": {
-      "put": {
+    "/Inventory/Items/{id}/Warehouse": {
+      "get": {
         "tags": [
           "Items"
         ],
-        "operationId": "Items_AdjustQuantityOnHand",
+        "operationId": "Items_GetWarehouseItems",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfWarehouseItemDto"
+            }
+          }
+        }
+      }
+    },
+    "/Inventory/Sites": {
+      "get": {
+        "tags": [
+          "Sites"
+        ],
+        "operationId": "Sites_GetSites",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfSiteDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sites"
+        ],
+        "operationId": "Sites_CreateSite",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSiteDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SiteDto"
+            }
+          }
+        }
+      }
+    },
+    "/Inventory/Sites/{id}": {
+      "get": {
+        "tags": [
+          "Sites"
+        ],
+        "operationId": "Sites_GetSite",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SiteDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sites"
+        ],
+        "operationId": "Sites_UpdateSite",
         "consumes": [
           "application/json",
           "text/json",
           "application/*+json"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateSiteDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sites"
+        ],
+        "operationId": "Sites_DeleteSite",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Inventory/Warehouses": {
+      "get": {
+        "tags": [
+          "Warehouses"
+        ],
+        "operationId": "Warehouses_GetWarehouses",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "siteId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfWarehouseDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Warehouses"
+        ],
+        "operationId": "Warehouses_CreateWarehouse",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateWarehouseDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseDto"
+            }
+          }
+        }
+      }
+    },
+    "/Inventory/Warehouses/{id}": {
+      "get": {
+        "tags": [
+          "Warehouses"
+        ],
+        "operationId": "Warehouses_GetWarehouse",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Warehouses"
+        ],
+        "operationId": "Warehouses_UpdateWarehouse",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateWarehouseDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Warehouses"
+        ],
+        "operationId": "Warehouses_DeleteWarehouse",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems": {
+      "get": {
+        "tags": [
+          "WarehouseItems"
+        ],
+        "operationId": "WarehouseItems_GetItems",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "itemId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfWarehouseItemDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "WarehouseItems"
+        ],
+        "operationId": "WarehouseItems_CreateItem",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateWarehouseItemDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseItemDto"
+            }
+          }
+        }
+      }
+    },
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems/{id}": {
+      "get": {
+        "tags": [
+          "WarehouseItems"
+        ],
+        "operationId": "WarehouseItems_GetItem",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseItemDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "WarehouseItems"
+        ],
+        "operationId": "WarehouseItems_UpdateItem",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateWarehouseItemDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "WarehouseItems"
+        ],
+        "operationId": "WarehouseItems_DeleteItem",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems/{id}/QuantityOnHand": {
+      "put": {
+        "tags": [
+          "WarehouseItems"
+        ],
+        "operationId": "WarehouseItems_AdjustQuantityOnHand",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
           {
             "type": "string",
             "name": "id",
@@ -340,18 +1222,25 @@
         }
       }
     },
-    "/Inventory/Items/{id}/Reserve": {
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems/{id}/Reserve": {
       "put": {
         "tags": [
-          "Items"
+          "WarehouseItems"
         ],
-        "operationId": "Items_ReserveItems",
+        "operationId": "WarehouseItems_ReserveItems",
         "consumes": [
           "application/json",
           "text/json",
           "application/*+json"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
           {
             "type": "string",
             "name": "id",
@@ -376,18 +1265,25 @@
         }
       }
     },
-    "/Inventory/Items/{id}/Pick": {
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems/{id}/Pick": {
       "put": {
         "tags": [
-          "Items"
+          "WarehouseItems"
         ],
-        "operationId": "Items_PickItems",
+        "operationId": "WarehouseItems_PickItems",
         "consumes": [
           "application/json",
           "text/json",
           "application/*+json"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
           {
             "type": "string",
             "name": "id",
@@ -412,18 +1308,25 @@
         }
       }
     },
-    "/Inventory/Items/{id}/Ship": {
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems/{id}/Ship": {
       "put": {
         "tags": [
-          "Items"
+          "WarehouseItems"
         ],
-        "operationId": "Items_ShipItems",
+        "operationId": "WarehouseItems_ShipItems",
         "consumes": [
           "application/json",
           "text/json",
           "application/*+json"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
           {
             "type": "string",
             "name": "id",
@@ -448,18 +1351,25 @@
         }
       }
     },
-    "/Inventory/Items/{id}/Receive": {
+    "/Inventory/Warehouses/{warehouseId}/WarehouseItems/{id}/Receive": {
       "put": {
         "tags": [
-          "Items"
+          "WarehouseItems"
         ],
-        "operationId": "Items_ReceiveItems",
+        "operationId": "WarehouseItems_ReceiveItems",
         "consumes": [
           "application/json",
           "text/json",
           "application/*+json"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
           {
             "type": "string",
             "name": "id",
@@ -491,10 +1401,7 @@
       "required": [
         "id",
         "name",
-        "quantityOnHand",
-        "quantityPicked",
-        "quantityReserved",
-        "quantityAvailable"
+        "group"
       ],
       "properties": {
         "id": {
@@ -503,29 +1410,12 @@
         "name": {
           "type": "string"
         },
-        "quantityOnHand": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "quantityPicked": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "quantityReserved": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "quantityAvailable": {
-          "type": "integer",
-          "format": "int32"
+        "group": {
+          "$ref": "#/definitions/ItemGroupDto"
         }
       }
     },
-    "Unit": {
-      "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
-    },
-    "CreateItem": {
+    "ItemGroupDto": {
       "type": "object",
       "required": [
         "id",
@@ -535,6 +1425,86 @@
         "id": {
           "type": "string"
         },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Unit": {
+      "type": "object",
+      "description": "Represents a void type, since Void is not a valid return type in C#."
+    },
+    "AddItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "groupId",
+        "unit"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "ItemsResultOfItemGroupDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ItemGroupDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "SortDirection": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Desc",
+        "Asc"
+      ],
+      "enum": [
+        "Desc",
+        "Asc"
+      ]
+    },
+    "CreateGroupDto": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateGroupDto": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
         "name": {
           "type": "string"
         }
@@ -559,19 +1529,88 @@
         }
       }
     },
-    "SortDirection": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Desc",
-        "Asc"
+    "ItemsResultOfWarehouseItemDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
       ],
-      "enum": [
-        "Desc",
-        "Asc"
-      ]
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WarehouseItemDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     },
-    "CreateItemDto": {
+    "WarehouseItemDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "item",
+        "warehouse",
+        "location",
+        "quantityOnHand",
+        "quantityPicked",
+        "quantityReserved",
+        "quantityAvailable"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "item": {
+          "$ref": "#/definitions/ItemDto"
+        },
+        "warehouse": {
+          "$ref": "#/definitions/WarehouseDto"
+        },
+        "location": {
+          "type": "string"
+        },
+        "quantityOnHand": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantityPicked": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantityReserved": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantityAvailable": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "WarehouseDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "site"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "site": {
+          "$ref": "#/definitions/SiteDto"
+        }
+      }
+    },
+    "SiteDto": {
       "type": "object",
       "required": [
         "id",
@@ -586,13 +1625,156 @@
         }
       }
     },
+    "CreateItemDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "groupId",
+        "unit"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
     "UpdateItemDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "unit"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "ItemsResultOfSiteDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SiteDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CreateSiteDto": {
       "type": "object",
       "required": [
         "name"
       ],
       "properties": {
         "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateSiteDto": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ItemsResultOfWarehouseDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WarehouseDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CreateWarehouseDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "siteId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "siteId": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateWarehouseDto": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateWarehouseItemDto": {
+      "type": "object",
+      "required": [
+        "itemId",
+        "warehouseId",
+        "location"
+      ],
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "warehouseId": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateWarehouseItemDto": {
+      "type": "object",
+      "required": [
+        "location"
+      ],
+      "properties": {
+        "location": {
           "type": "string"
         }
       }

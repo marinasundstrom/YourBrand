@@ -1,0 +1,331 @@
+@page "/inventory/items/{id}" 
+@attribute [Authorize]
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal
+@inject IItemsClient ItemsClient
+@inject ISnackbar Snackbar
+@inject IWarehouseItemsClient WarehouseItemsClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+
+@if (Item is null)
+{
+    @if (loadingFailed)
+    {
+        <MudText Typo="Typo.h3" Class="mb-4">Error when loading profile.</MudText>
+    }
+    else
+    {
+        <LoadingIndicator />
+    }
+}
+else 
+{
+    <MudText Typo="Typo.h3" Class="mb-4">@Item?.Id - @Item?.Name</MudText>
+
+    <MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+        Add item to warehouse
+    </MudButton>
+
+    <MudPaper Class="pa-4" Elevation="25">
+        <MudTable @ref="table" T="WarehouseItemDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+                Striped="true" OnRowClick="ItemOnClick">
+            <ToolBarContent>
+
+                <WarehouseSelector Value="Warehouse" ValueChanged="OnWarehouseChanged" For="() => Warehouse" />
+
+                <MudSpacer />
+
+                <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            </ToolBarContent>
+        <HeaderContent>
+                <MudTh>Warehouse</MudTh>
+                <MudTh>Location</MudTh>
+                <MudTh>Qt on hand</MudTh>
+                <MudTh>Qt picked</MudTh>
+                <MudTh>Qt reserved</MudTh>
+                <MudTh>Qt available</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate Context="item">
+                <MudTd DataLabel="Warehouse">@item.Warehouse.Name</MudTd>
+                <MudTd DataLabel="Warehouse">@item.Location</MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityPicked <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityReserved <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
+                <MudTd>
+                    <MudIconButton Size="Size.Small" Icon="@Icons.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
+                    <MudIconButton Size="Size.Small" Icon="@Icons.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    </MudPaper>
+}
+
+@code {
+    MudTable<WarehouseItemDto> table; 
+    string? searchString;
+    bool loadingFailed = false;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    public ItemDto Item { get; set; }
+
+    public WarehouseDto? Warehouse { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Item = await ItemsClient.GetItemAsync(Id);
+    }
+
+    private async Task<TableData<WarehouseItemDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await ItemsClient.GetWarehouseItemsAsync(Id, state.Page + 1, state.PageSize, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            return new TableData<WarehouseItemDto> { Items = results.Items, TotalItems = results.TotalItems };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            loadingFailed = true;
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<WarehouseItemDto> ev)
+    {
+        var item = ev.Item;
+
+        await OnItemClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnWarehouseChanged(WarehouseDto w)
+    {
+        Warehouse = w;
+        table.ReloadServerData();
+    }
+
+    async Task OnItemClicked(WarehouseItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(Inventory.Warehouses.Items.ItemDialog.Id), dto?.Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.ItemDialog.ItemId), Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.ItemDialog.WarehouseId), dto?.Warehouse?.Id);
+
+            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ItemDialog>(dto is null ? "New Item" : $"Update {dto.Item.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task OnItemAdjustQuantityOnHand(WarehouseItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(Inventory.Warehouses.Items.AdjustQuantityOnHandDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.AdjustQuantityOnHandDialog.WarehouseId), dto?.Warehouse?.Id);
+
+            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.AdjustQuantityOnHandDialog>("Adjust Quantity on Hand", parameters, new DialogOptions {
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+           var tableData = GetTableData();
+           var item = tableData.Items.First(x => x.Id == dto.Id);
+
+           var item2 = await WarehouseItemsClient.GetItemAsync(dto?.Warehouse?.Id, dto.Id);
+
+            item.QuantityAvailable = item2.QuantityAvailable;
+            item.QuantityOnHand = item2.QuantityOnHand;
+            item.QuantityPicked = item2.QuantityPicked;
+            item.QuantityReserved = item2.QuantityReserved;
+
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task OnPickItems(WarehouseItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(Inventory.Warehouses.Items.PickItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.PickItemsDialog.WarehouseId), dto?.Warehouse?.Id);
+
+            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.PickItemsDialog>("Pick items", parameters, new DialogOptions {
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+           var tableData = GetTableData();
+           var item = tableData.Items.First(x => x.Id == dto.Id);
+
+           var item2 = await WarehouseItemsClient.GetItemAsync(dto?.Warehouse?.Id, dto.Id);
+
+            item.QuantityAvailable = item2.QuantityAvailable;
+            item.QuantityOnHand = item2.QuantityOnHand;
+            item.QuantityPicked = item2.QuantityPicked;
+            item.QuantityReserved = item2.QuantityReserved;
+
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task OnReserveItems(WarehouseItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(Inventory.Warehouses.Items.ReserveItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.ReserveItemsDialog.WarehouseId), dto?.Warehouse?.Id);
+
+            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ReserveItemsDialog>("Reserve items", parameters, new DialogOptions {
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+           var tableData = GetTableData();
+           var item = tableData.Items.First(x => x.Id == dto.Id);
+
+           var item2 = await WarehouseItemsClient.GetItemAsync(dto?.Warehouse?.Id, dto.Id);
+
+            item.QuantityAvailable = item2.QuantityAvailable;
+            item.QuantityOnHand = item2.QuantityOnHand;
+            item.QuantityPicked = item2.QuantityPicked;
+            item.QuantityReserved = item2.QuantityReserved;
+
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task OnShipItems(WarehouseItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(Inventory.Warehouses.Items.ShipItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.ShipItemsDialog.WarehouseId), dto?.Warehouse?.Id);
+
+            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ShipItemsDialog>("Ship items", parameters, new DialogOptions {
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+           var tableData = GetTableData();
+           var item = tableData.Items.First(x => x.Id == dto.Id);
+
+           var item2 = await WarehouseItemsClient.GetItemAsync(dto?.Warehouse?.Id, dto.Id);
+
+            item.QuantityAvailable = item2.QuantityAvailable;
+            item.QuantityOnHand = item2.QuantityOnHand;
+            item.QuantityPicked = item2.QuantityPicked;
+            item.QuantityReserved = item2.QuantityReserved;
+
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task OnReceiveItems(WarehouseItemDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(Inventory.Warehouses.Items.ReceiveItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(Inventory.Warehouses.Items.ReceiveItemsDialog.WarehouseId), dto?.Warehouse?.Id);
+
+            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ReceiveItemsDialog>("Receive items", parameters, new DialogOptions {
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+           var tableData = GetTableData();
+           var item = tableData.Items.First(x => x.Id == dto.Id);
+
+           var item2 = await WarehouseItemsClient.GetItemAsync(dto?.Warehouse?.Id, dto.Id);
+
+            item.QuantityAvailable = item2.QuantityAvailable;
+            item.QuantityOnHand = item2.QuantityOnHand;
+            item.QuantityPicked = item2.QuantityPicked;
+            item.QuantityReserved = item2.QuantityReserved;
+
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private TableData<WarehouseItemDto>? GetTableData()
+    {
+        return (TableData<WarehouseItemDto>?)table?.GetType()?
+            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
+                         System.Reflection.BindingFlags.Instance)?
+            .GetValue(table);
+    }
+}

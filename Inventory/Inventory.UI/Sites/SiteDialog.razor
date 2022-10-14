@@ -1,0 +1,81 @@
+@using System.ComponentModel.DataAnnotations
+@inject ISitesClient SitesClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(SiteId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? SiteId { get; set; } = null!;
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (SiteId is not null) 
+        {
+            var site = await SitesClient.GetSiteAsync(SiteId);
+            Name = site.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(SiteId is null) 
+        {
+            await SitesClient.CreateSiteAsync(new CreateSiteDto {
+                Name = Name
+            });
+
+            //Dialog.Close(site);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await SitesClient.UpdateSiteAsync(SiteId, new UpdateSiteDto
+                {
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+
+        Dialog.Close();
+    }
+}

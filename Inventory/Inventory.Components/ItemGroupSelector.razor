@@ -1,0 +1,52 @@
+@using System.Linq.Expressions
+@inject IGroupsClient ItemGroupsClient
+
+<MudAutocomplete T="ItemGroupDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+    For="For" SearchFunc="SearchItemGroups" ToStringFunc="(x) => x.Name"
+    ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+    <ItemTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemTemplate>
+
+    <ItemSelectedTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Group";
+
+    [Parameter]
+    public ItemGroupDto Value { get; set; }
+
+    [Parameter]
+    public EventCallback<ItemGroupDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<ItemGroupDto>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    async Task<IEnumerable<ItemGroupDto>> SearchItemGroups(string text)
+    {
+        try
+        {
+            var results = await ItemGroupsClient.GetGroupsAsync(1, 10, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

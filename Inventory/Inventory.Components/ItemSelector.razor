@@ -1,0 +1,55 @@
+@using System.Linq.Expressions
+@inject IItemsClient ItemsClient
+
+<MudAutocomplete T="ItemDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+    For="For" SearchFunc="SearchItems" ToStringFunc="(x) => x.Name"
+    ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+    <ItemTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemTemplate>
+
+    <ItemSelectedTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Item";
+
+    [Parameter]
+    public ItemDto Value { get; set; }
+
+    [Parameter]
+    public EventCallback<ItemDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<ItemDto>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string? WarehouseId { get; set; }
+
+    async Task<IEnumerable<ItemDto>> SearchItems(string text)
+    {
+        try
+        {
+            var results = await ItemsClient.GetItems2Async(1, 10, WarehouseId, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

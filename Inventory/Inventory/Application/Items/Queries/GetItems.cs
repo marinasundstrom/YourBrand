@@ -10,7 +10,7 @@ using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Application.Items.Queries;
 
-public record GetItems(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ItemDto>>
+public record GetItems(int Page = 0, int PageSize = 10, string? WarehouseId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ItemDto>>
 {
     public class Handler : IRequestHandler<GetItems, ItemsResult<ItemDto>>
     {
@@ -39,10 +39,9 @@ public record GetItems(int Page = 0, int PageSize = 10, string? SearchString = n
                     .AsQueryable();
 
             /*
-            if (request.IndustryId is not null)
+            if (request.WarehouseId is not null)
             {
-                result = result.Where(p =>
-                    p.Industry.Id  == request.IndustryId);
+                result = result.Where(o => o.WarehouseId == request.WarehouseId);
             }
             */
 
@@ -64,6 +63,7 @@ public record GetItems(int Page = 0, int PageSize = 10, string? SearchString = n
             }
 
             var items = await result
+                .Include(x => x.Group)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

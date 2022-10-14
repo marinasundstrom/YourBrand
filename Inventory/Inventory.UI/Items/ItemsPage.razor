@@ -10,10 +10,16 @@
     New Item
 </MudButton>
 
+<MudButton Variant="Variant.Filled" Href="/inventory/items/groups" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">
+    Groups
+</MudButton>
+
 <MudPaper Class="pa-4" Elevation="25">
     <MudTable @ref="table" T="ItemDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
+
+            @*<WarehouseSelector Value="Warehouse" ValueChanged="OnWarehouseChanged" For="() => Warehouse" /> *@
 
             <MudSpacer />
 
@@ -22,23 +28,12 @@
        <HeaderContent>
             <MudTh>Id</MudTh>
             <MudTh>Name</MudTh>
-            <MudTh>Qt on hand</MudTh>
-            <MudTh>Qt picked</MudTh>
-            <MudTh>Qt reserved</MudTh>
-            <MudTh>Qt available</MudTh>
-            <MudTh></MudTh>
+            <MudTh>Group</MudTh>
         </HeaderContent>
         <RowTemplate Context="item">
             <MudTd DataLabel="Id">@item.Id</MudTd>
             <MudTd DataLabel="Name">@item.Name</MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityPicked <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityReserved <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
-            <MudTd>
-                <MudIconButton Size="Size.Small" Icon="@Icons.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
-                <MudIconButton Size="Size.Small" Icon="@Icons.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />
-            </MudTd>
+            <MudTd DataLabel="Group">@item.Group.Name</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
@@ -51,13 +46,13 @@
     MudTable<ItemDto> table; 
     string? searchString;
 
-    public ItemDto Item { get; set; }
+    public WarehouseDto Warehouse { get; set; }
 
     private async Task<TableData<ItemDto>> LoadData(TableState state)
     {
         try
         {
-            var results = await ItemsClient.GetItems2Async(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            var results = await ItemsClient.GetItems2Async(state.Page + 1, state.PageSize, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
             return new TableData<ItemDto> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -87,9 +82,9 @@
         table.ReloadServerData();
     }
 
-    private async Task OnItemChanged(ItemDto sa)
+    private async Task OnWarehouseChanged(WarehouseDto w)
     {
-        Item = sa;
+        Warehouse = w;
         table.ReloadServerData();
     }
 
@@ -97,6 +92,12 @@
     {
         try
         {
+            if(dto?.Id is not null)
+            {
+                NavigationManager.NavigateTo($"/inventory/items/{dto.Id}");
+                return;
+            }
+
             var parameters = new DialogParameters();
             parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
 
@@ -110,171 +111,6 @@
                 return;
 
             await table.ReloadServerData();
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    async Task OnItemAdjustQuantityOnHand(ItemDto? dto)
-    {
-        try
-        {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
-
-            var dialogReference = DialogService.Show<AdjustQuantityOnHandDialog>("Adjust Quantity on Hand", parameters, new DialogOptions {
-                MaxWidth = MaxWidth.ExtraLarge
-            });
-            var result = await dialogReference.Result;
-
-            if(result.Cancelled)
-                return;
-
-           var tableData = GetTableData();
-           var item = tableData.Items.First(x => x.Id == dto.Id);
-
-           var item2 = await ItemsClient.GetItemAsync(dto.Id);
-
-            item.QuantityAvailable = item2.QuantityAvailable;
-            item.QuantityOnHand = item2.QuantityOnHand;
-            item.QuantityPicked = item2.QuantityPicked;
-            item.QuantityReserved = item2.QuantityReserved;
-
-            StateHasChanged();
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    async Task OnPickItems(ItemDto? dto)
-    {
-        try
-        {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
-
-            var dialogReference = DialogService.Show<PickItemsDialog>("Pick items", parameters, new DialogOptions {
-                MaxWidth = MaxWidth.ExtraLarge
-            });
-            var result = await dialogReference.Result;
-
-            if(result.Cancelled)
-                return;
-
-           var tableData = GetTableData();
-           var item = tableData.Items.First(x => x.Id == dto.Id);
-
-           var item2 = await ItemsClient.GetItemAsync(dto.Id);
-
-            item.QuantityAvailable = item2.QuantityAvailable;
-            item.QuantityOnHand = item2.QuantityOnHand;
-            item.QuantityPicked = item2.QuantityPicked;
-            item.QuantityReserved = item2.QuantityReserved;
-
-            StateHasChanged();
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    async Task OnReserveItems(ItemDto? dto)
-    {
-        try
-        {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
-
-            var dialogReference = DialogService.Show<ReserveItemsDialog>("Reserve items", parameters, new DialogOptions {
-                MaxWidth = MaxWidth.ExtraLarge
-            });
-            var result = await dialogReference.Result;
-
-            if(result.Cancelled)
-                return;
-
-           var tableData = GetTableData();
-           var item = tableData.Items.First(x => x.Id == dto.Id);
-
-           var item2 = await ItemsClient.GetItemAsync(dto.Id);
-
-            item.QuantityAvailable = item2.QuantityAvailable;
-            item.QuantityOnHand = item2.QuantityOnHand;
-            item.QuantityPicked = item2.QuantityPicked;
-            item.QuantityReserved = item2.QuantityReserved;
-
-            StateHasChanged();
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    async Task OnShipItems(ItemDto? dto)
-    {
-        try
-        {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
-
-            var dialogReference = DialogService.Show<ShipItemsDialog>("Ship items", parameters, new DialogOptions {
-                MaxWidth = MaxWidth.ExtraLarge
-            });
-            var result = await dialogReference.Result;
-
-            if(result.Cancelled)
-                return;
-
-           var tableData = GetTableData();
-           var item = tableData.Items.First(x => x.Id == dto.Id);
-
-           var item2 = await ItemsClient.GetItemAsync(dto.Id);
-
-            item.QuantityAvailable = item2.QuantityAvailable;
-            item.QuantityOnHand = item2.QuantityOnHand;
-            item.QuantityPicked = item2.QuantityPicked;
-            item.QuantityReserved = item2.QuantityReserved;
-
-            StateHasChanged();
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-    }
-
-    async Task OnReceiveItems(ItemDto? dto)
-    {
-        try
-        {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
-
-            var dialogReference = DialogService.Show<ReceiveItemsDialog>("Receive items", parameters, new DialogOptions {
-                MaxWidth = MaxWidth.ExtraLarge
-            });
-            var result = await dialogReference.Result;
-
-            if(result.Cancelled)
-                return;
-
-           var tableData = GetTableData();
-           var item = tableData.Items.First(x => x.Id == dto.Id);
-
-           var item2 = await ItemsClient.GetItemAsync(dto.Id);
-
-            item.QuantityAvailable = item2.QuantityAvailable;
-            item.QuantityOnHand = item2.QuantityOnHand;
-            item.QuantityPicked = item2.QuantityPicked;
-            item.QuantityReserved = item2.QuantityReserved;
-
-            StateHasChanged();
         }
         catch (AccessTokenNotAvailableException exception)
         {

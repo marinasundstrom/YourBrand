@@ -149,7 +149,7 @@ app.MapDelete("/Items/{personId}", async (string personId, IMediator mediator, C
     .WithTags("Items")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPost("/Items", async (CreateItem createItem, IMediator mediator, CancellationToken cancellationToken)
+app.MapPost("/Items", async (AddItem createItem, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(createItem, cancellationToken))
     .WithName("Items_CreateItems")
     .WithTags("Items")

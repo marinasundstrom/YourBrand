@@ -1,0 +1,111 @@
+@page "/inventory/warehouses"
+@attribute [Authorize]
+@inject IWarehousesClient WarehousesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudText Typo="Typo.h3" Class="mb-4">Warehouses</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnWarehouseClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New warehouse
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Href="/inventory/sites" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">
+    Sites
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="WarehouseDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+            <SiteSelector Label="Site" Value="Site" ValueChanged="OnSiteChanged" For="() => Site" />
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="WarehouseDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="WarehouseDto" SortLabel="Site">Site</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Name">@context.Site.Name</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    MudTable<WarehouseDto> table; 
+    string? searchString;
+
+    public SiteDto Site { get; set; }
+
+    private async Task<TableData<WarehouseDto>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await WarehousesClient.GetWarehousesAsync(state.Page + 1, state.PageSize, Site?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            return new TableData<WarehouseDto> { Items = results.Items, TotalItems = results.TotalItems };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<WarehouseDto> ev)
+    {
+        var item = ev.Item;
+
+        await OnWarehouseClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnSiteChanged(SiteDto sa)
+    {
+        Site = sa;
+        table.ReloadServerData();
+    }
+
+    async Task OnWarehouseClicked(WarehouseDto? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(WarehouseDialog.WarehouseId), dto?.Id);
+
+            var dialogReference = DialogService.Show<WarehouseDialog>(dto is null ? "New Warehouse" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            }); 
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

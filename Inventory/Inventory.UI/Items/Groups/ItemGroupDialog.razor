@@ -1,5 +1,5 @@
 @using System.ComponentModel.DataAnnotations
-@inject IItemsClient ItemsClient
+@inject IGroupsClient GroupsClient
 @inject ISnackbar Snackbar
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
@@ -7,18 +7,22 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudNumericField Label="Quantity to pick" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
-                              For="@(() => Quantity)" />
-
-                <MudCheckBox Label="Pick from reserved" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="FromReserved"
-                              For="@(() => FromReserved)" />
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
             </MudContainer>
         </DialogContent>
 
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
-                Adjust
+                @if(Id is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
             </MudButton>
         </DialogActions>
     </MudDialog>
@@ -33,34 +37,43 @@
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
-    public string? ItemId { get; set; } = null!;
+    public string Id { get; set; }
 
     [Required]
-    public int Quantity { get; set; }
-
-    [Required]
-    public bool FromReserved { get; set; } = true;
+    public string Name { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         context = new EditContext(this);
 
-        if (ItemId is not null) 
+        if (Id is not null) 
         {
-            var item = await ItemsClient.GetItemAsync(ItemId);
+            var item = await GroupsClient.GetGroupAsync(Id);
+            Name = item.Name;
         }
     }
 
     public async Task OnValidSubmit()
     {
-        if (context.IsModified())
+        if(Id is null) 
         {
-            await ItemsClient.PickItemsAsync(ItemId, new PickItemsDto {
-                Quantity = Quantity,
-                FromReserved = FromReserved
+            var item = await GroupsClient.CreateGroupAsync(new CreateGroupDto {
+                Name = Name
             });
-        }
 
-        Dialog.Close(Quantity);
+            Dialog.Close(item);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await GroupsClient.UpdateGroupAsync(Id, new UpdateGroupDto
+                {
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
     }
 }

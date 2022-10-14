@@ -1,0 +1,69 @@
+@using System.ComponentModel.DataAnnotations
+@inject IWarehouseItemsClient WarehouseItemsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudNumericField Label="Quantity to pick" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
+                              For="@(() => Quantity)" />
+
+                <MudCheckBox Label="Pick from reserved" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="FromReserved"
+                              For="@(() => FromReserved)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                Adjust
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string WarehouseId { get; set; } = null!;
+
+    [Parameter]
+    public string? ItemId { get; set; }
+
+    [Required]
+    public int Quantity { get; set; }
+
+    [Required]
+    public bool FromReserved { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (ItemId is not null) 
+        {
+            var item = await WarehouseItemsClient.GetItemAsync(WarehouseId, ItemId);
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if (context.IsModified())
+        {
+            await WarehouseItemsClient.PickItemsAsync(WarehouseId, ItemId, new PickItemsDto {
+                Quantity = Quantity,
+                FromReserved = FromReserved
+            });
+        }
+
+        Dialog.Close(Quantity);
+    }
+}
