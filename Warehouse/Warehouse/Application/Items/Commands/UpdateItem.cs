@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Warehouse.Application.Items.Commands;
 
-public record UpdateItem(string Id, string Name, string SKU) : IRequest
+public record UpdateItem(string Id, string Name) : IRequest
 {
     public class Handler : IRequestHandler<UpdateItem>
     {

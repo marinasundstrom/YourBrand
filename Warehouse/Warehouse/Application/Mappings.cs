@@ -9,7 +9,6 @@ public static class Mappings
     {
         return new ItemDto(
             item.Id,
-            item.SKU,
             item.Name,
             item.QuantityOnHand,
             item.QuantityPicked,

@@ -21,7 +21,6 @@
         </ToolBarContent>
        <HeaderContent>
             <MudTh>Id</MudTh>
-            <MudTh>SKU</MudTh>
             <MudTh>Name</MudTh>
             <MudTh>Qt on hand</MudTh>
             <MudTh>Qt picked</MudTh>
@@ -31,7 +30,6 @@
         </HeaderContent>
         <RowTemplate Context="item">
             <MudTd DataLabel="Id">@item.Id</MudTd>
-            <MudTd DataLabel="SKU">@item.Sku</MudTd>
             <MudTd DataLabel="Name">@item.Name</MudTd>
             <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
             <MudTd DataLabel="Qt on hand">@item.QuantityPicked <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>

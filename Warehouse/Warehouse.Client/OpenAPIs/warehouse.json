@@ -490,7 +490,6 @@
       "type": "object",
       "required": [
         "id",
-        "sku",
         "name",
         "quantityOnHand",
         "quantityPicked",
@@ -499,9 +498,6 @@
       ],
       "properties": {
         "id": {
-          "type": "string"
-        },
-        "sku": {
           "type": "string"
         },
         "name": {
@@ -532,14 +528,14 @@
     "CreateItem": {
       "type": "object",
       "required": [
-        "name",
-        "sku"
+        "id",
+        "name"
       ],
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
-        "sku": {
+        "name": {
           "type": "string"
         }
       }
@@ -578,14 +574,14 @@
     "CreateItemDto": {
       "type": "object",
       "required": [
-        "name",
-        "sku"
+        "id",
+        "name"
       ],
       "properties": {
-        "name": {
+        "id": {
           "type": "string"
         },
-        "sku": {
+        "name": {
           "type": "string"
         }
       }
@@ -593,14 +589,10 @@
     "UpdateItemDto": {
       "type": "object",
       "required": [
-        "name",
-        "sku"
+        "name"
       ],
       "properties": {
         "name": {
-          "type": "string"
-        },
-        "sku": {
           "type": "string"
         }
       }

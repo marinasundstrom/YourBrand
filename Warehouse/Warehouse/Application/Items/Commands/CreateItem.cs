@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Warehouse.Application.Items.Commands;
 
-public record CreateItem(string Name, string SKU) : IRequest<ItemDto>
+public record CreateItem(string Id, string Name) : IRequest<ItemDto>
 {
     public class Handler : IRequestHandler<CreateItem, ItemDto>
     {
@@ -24,7 +24,7 @@ public record CreateItem(string Name, string SKU) : IRequest<ItemDto>
 
             if (item is not null) throw new Exception();
 
-            item = new Domain.Entities.Item(request.SKU, request.Name, 0);;
+            item = new Domain.Entities.Item(request.Id, request.Name, 0);;
 
             _context.Items.Add(item);
 

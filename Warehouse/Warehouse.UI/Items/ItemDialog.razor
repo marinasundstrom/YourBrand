@@ -7,8 +7,8 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudTextField Label="SKU" Variant="Variant.Outlined" Class="mt-4" @bind-Value="SKU"
-                              For="@(() => SKU)" />
+                <MudTextField Label="Id" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Id"
+                              For="@(() => Id)" />
 
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
@@ -42,11 +42,8 @@
     [Parameter]
     public string? ItemId { get; set; } = null!;
 
-    //[Required]
-    //public ItemDto Area { get; set; }
-
     [Required]
-    public string SKU { get; set; }
+    public string Id { get; set; }
 
 
     [Required]
@@ -59,8 +56,7 @@
         if (ItemId is not null) 
         {
             var item = await ItemsClient.GetItemAsync(ItemId);
-            //Area = item.Area;
-            SKU = item.Sku;
+            Id = item.Id;
             Name = item.Name;
         }
     }
@@ -70,8 +66,7 @@
         if(ItemId is null) 
         {
             var item = await ItemsClient.CreateItemAsync(new CreateItemDto {
-                //ItemId = Area.Id,
-                Sku = SKU,
+                Id = Id,
                 Name = Name
             });
 
@@ -83,8 +78,7 @@
             {
                 await ItemsClient.UpdateItemAsync(ItemId, new UpdateItemDto
                 {
-                    //ItemId = Area.Id,
-                    Sku = SKU,
+                    //Id = Id,
                     Name = Name
                 });
             }

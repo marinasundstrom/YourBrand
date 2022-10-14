@@ -39,7 +39,7 @@
     public int Quantity { get; set; }
 
     [Required]
-    public bool FromPicked { get; set; }
+    public bool FromPicked { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {

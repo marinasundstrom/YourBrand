@@ -9,16 +9,14 @@ public class Item : AuditableEntity
 {
     protected Item() { }
 
-    public Item(string sku, string name, int quantityOnHand)
+    public Item(string id, string name, int quantityOnHand)
     {
-        SKU = sku;
+        Id = id;
         Name = name;
         QuantityOnHand = quantityOnHand;
     }
 
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-
-    public string SKU { get; set; } = null!;
+    public string Id { get; set; }
 
     public string Name { get; set; } = null!;
 
