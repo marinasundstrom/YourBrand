@@ -34,11 +34,8 @@
 		<ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="Infrastructure\Persistence\Interceptors\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Infrastructure\Persistence\Interceptors\" />
+        <ProjectReference Include="..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
 	</ItemGroup>
 </Project>
