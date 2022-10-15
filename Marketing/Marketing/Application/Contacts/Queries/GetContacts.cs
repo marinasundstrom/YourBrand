@@ -9,7 +9,7 @@ using YourBrand.Marketing.Application.Contacts;
 
 namespace YourBrand.Marketing.Application.Contacts.Queries;
 
-public record GetContacts(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ContactDto>>
+public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ContactDto>>
 {
     public class Handler : IRequestHandler<GetContacts, ItemsResult<ContactDto>>
     {
@@ -36,6 +36,11 @@ public record GetContacts(int Page = 0, int PageSize = 10, string? SearchString 
                 .AsSplitQuery()
                 .AsNoTracking()
                 .AsQueryable();
+
+            if (request.CampaignId is not null)
+            {
+                query = query.Where(o => o.Campaign!.Id == request.CampaignId);
+            }
 
             if (request.SearchString is not null)
             {

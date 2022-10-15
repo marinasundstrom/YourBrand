@@ -20,6 +20,8 @@
     Loading="@loading" LoadingProgressColor="Color.Info" Striped="true" OnRowClick="ItemOnClick">
     
         <ToolBarContent>
+            <CampaignsSelector Label="Campaign" Value="Campaign" ValueChanged="OnCampaignChanged" For="() => Campaign"  />
+
             <MudSpacer />
 
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
@@ -60,13 +62,15 @@
     bool loading = false;
     string? searchString;
 
+    CampaignDto Campaign { get; set; }
+
     private async Task<TableData<ContactDto>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await ContactsClient.GetContactsAsync(state.Page, state.PageSize, null, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc));
+            var result = await ContactsClient.GetContactsAsync(state.Page, state.PageSize, Campaign?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc));
 
             return new TableData<ContactDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -79,6 +83,12 @@
     private void OnSearch(string text)
     {
         searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnCampaignChanged(CampaignDto sa)
+    {
+        Campaign = sa;
         table.ReloadServerData();
     }
 

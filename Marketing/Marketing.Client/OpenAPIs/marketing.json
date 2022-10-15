@@ -293,13 +293,7 @@
           },
           {
             "type": "string",
-            "name": "groupId",
-            "in": "query",
-            "x-nullable": true
-          },
-          {
-            "type": "string",
-            "name": "warehouseId",
+            "name": "campaignId",
             "in": "query",
             "x-nullable": true
           },

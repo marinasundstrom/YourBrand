@@ -23,9 +23,9 @@ public class ContactsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ItemsResult<ContactDto>> GetContacts(int page = 1, int pageSize = 10, string? groupId = null, string? warehouseId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<ContactDto>> GetContacts(int page = 1, int pageSize = 10, string? campaignId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetContacts(page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await _mediator.Send(new GetContacts(page, pageSize, campaignId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
