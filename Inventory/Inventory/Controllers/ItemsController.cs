@@ -25,9 +25,9 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ItemsResult<ItemDto>> GetItems(int page = 1, int pageSize = 10, string? warehouseId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<ItemDto>> GetItems(int page = 1, int pageSize = 10, string? groupId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetItems(page - 1, pageSize, warehouseId, searchString, sortBy, sortDirection), cancellationToken);
+        return await _mediator.Send(new GetItems(page - 1, pageSize, groupId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]

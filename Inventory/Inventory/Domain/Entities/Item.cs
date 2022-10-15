@@ -29,5 +29,7 @@ public class Item : AuditableEntity
 
     public string Unit { get; set; } = null!;
 
+    public int QuantityAvailable => WarehouseItems.Sum(x => x.QuantityAvailable);
+
     public IReadOnlyCollection<WarehouseItem> WarehouseItems { get; } = new HashSet<WarehouseItem>();
 }

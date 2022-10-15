@@ -7,4 +7,6 @@ namespace YourBrand.Inventory.Application.Items;
 public record ItemDto(
     string Id,
     string Name,
-    ItemGroupDto Group);
+    ItemGroupDto Group,
+    string Unit,
+    int QuantityAvailable);

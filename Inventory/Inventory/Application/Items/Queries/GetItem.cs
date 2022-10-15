@@ -22,6 +22,7 @@ public record GetItem(string ItemId) : IRequest<ItemDto?>
         {
             var person = await _context.Items
                 .Include(x => x.Group)
+                .Include(x => x.WarehouseItems)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.ItemId, cancellationToken);

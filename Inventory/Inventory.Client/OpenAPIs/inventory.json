@@ -334,7 +334,7 @@
           },
           {
             "type": "string",
-            "name": "warehouseId",
+            "name": "groupId",
             "in": "query",
             "x-nullable": true
           },
@@ -1401,7 +1401,9 @@
       "required": [
         "id",
         "name",
-        "group"
+        "group",
+        "unit",
+        "quantityAvailable"
       ],
       "properties": {
         "id": {
@@ -1412,6 +1414,13 @@
         },
         "group": {
           "$ref": "#/definitions/ItemGroupDto"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "quantityAvailable": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

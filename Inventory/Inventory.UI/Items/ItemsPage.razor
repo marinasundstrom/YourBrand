@@ -19,7 +19,7 @@
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
 
-            @*<WarehouseSelector Value="Warehouse" ValueChanged="OnWarehouseChanged" For="() => Warehouse" /> *@
+            <ItemGroupSelector Value="ItemGroup" ValueChanged="OnItemGroupChanged" For="() => ItemGroup" />
 
             <MudSpacer />
 
@@ -29,11 +29,15 @@
             <MudTh>Id</MudTh>
             <MudTh>Name</MudTh>
             <MudTh>Group</MudTh>
+            <MudTh>Unit</MudTh>
+            <MudTh>Qt available</MudTh>
         </HeaderContent>
         <RowTemplate Context="item">
             <MudTd DataLabel="Id">@item.Id</MudTd>
             <MudTd DataLabel="Name">@item.Name</MudTd>
             <MudTd DataLabel="Group">@item.Group.Name</MudTd>
+            <MudTd DataLabel="Unit">@item.Unit</MudTd>
+            <MudTd DataLabel="QuantityAvailable">@item.QuantityAvailable</MudTd>    
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
@@ -46,13 +50,13 @@
     MudTable<ItemDto> table; 
     string? searchString;
 
-    public WarehouseDto Warehouse { get; set; }
+    public ItemGroupDto ItemGroup { get; set; }
 
     private async Task<TableData<ItemDto>> LoadData(TableState state)
     {
         try
         {
-            var results = await ItemsClient.GetItems2Async(state.Page + 1, state.PageSize, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            var results = await ItemsClient.GetItems2Async(state.Page + 1, state.PageSize, ItemGroup?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
             return new TableData<ItemDto> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -82,9 +86,9 @@
         table.ReloadServerData();
     }
 
-    private async Task OnWarehouseChanged(WarehouseDto w)
+    private async Task OnItemGroupChanged(ItemGroupDto w)
     {
-        Warehouse = w;
+        ItemGroup = w;
         table.ReloadServerData();
     }
 
@@ -99,7 +103,7 @@
             }
 
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(ItemDialog.Id), dto?.Id);
 
             var dialogReference = DialogService.Show<ItemDialog>(dto is null ? "New Item" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,

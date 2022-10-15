@@ -14,7 +14,9 @@ public static class Mappings
         return new ItemDto(
             item.Id,
             item.Name,
-            item.Group.ToDto());
+            item.Group.ToDto(),
+            item.Unit,
+            item.QuantityAvailable);
     }
 
     public static ItemGroupDto ToDto(this ItemGroup itemGroup) 

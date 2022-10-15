@@ -61,6 +61,7 @@
         {
             var item = await WarehouseItemsClient.GetItemAsync(WarehouseId, Id);
             Id = item.Id;
+            Warehouse = item.Warehouse;
             Location = item.Location;
         }
     }

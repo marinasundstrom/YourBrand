@@ -24,9 +24,19 @@ else
 {
     <MudText Typo="Typo.h3" Class="mb-4">@Item?.Id - @Item?.Name</MudText>
 
+    <MudButton Variant="Variant.Filled" OnClick="UpdateItem" StartIcon="@Icons.Filled.Edit" Color="Color.Default" Class="mb-2 me-2">
+        Edit details
+    </MudButton>
+
     <MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
         Add item to warehouse
     </MudButton>
+
+    <MudPaper Class="pa-4 mb-4" Elevation="25">
+        @Item.Unit
+
+        @Item.Group.Name
+    </MudPaper>
 
     <MudPaper Class="pa-4" Elevation="25">
         <MudTable @ref="table" T="WarehouseItemDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
@@ -51,9 +61,9 @@ else
             <RowTemplate Context="item">
                 <MudTd DataLabel="Warehouse">@item.Warehouse.Name</MudTd>
                 <MudTd DataLabel="Warehouse">@item.Location</MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityPicked <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityReserved <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityOnHand<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityPicked<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
+                <MudTd DataLabel="Qt on hand">@item.QuantityReserved<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
                 <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
                 <MudTd>
                     <MudIconButton Size="Size.Small" Icon="@Icons.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
@@ -123,6 +133,30 @@ else
     {
         Warehouse = w;
         table.ReloadServerData();
+    }
+
+    async Task UpdateItem()
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(ItemDialog.Id), Id);
+
+            var dialogReference = DialogService.Show<ItemDialog>($"Update {Item.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Item = await ItemsClient.GetItemAsync(Id);   
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 
     async Task OnItemClicked(WarehouseItemDto? dto)

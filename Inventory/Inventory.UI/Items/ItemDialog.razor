@@ -24,7 +24,7 @@
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
-                @if(ItemId is null) 
+                @if(Id is null) 
                 {
                     <text>Add</text>
                 }
@@ -45,9 +45,8 @@
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = null!;
 
-    [Parameter]
-    public string? ItemId { get; set; }
 
+    [Parameter]
     [Required]
     public string Id { get; set; }
 
@@ -64,17 +63,19 @@
     {
         context = new EditContext(this);
 
-        if (ItemId is not null) 
+        if (Id is not null) 
         {
             var item = await ItemsClient.GetItemAsync(Id);
             Id = item.Id;
             Name = item.Name;
+            Group = item.Group;
+            Unit = item.Unit;
         }
     }
 
     public async Task OnValidSubmit()
     {
-        if(ItemId is null) 
+        if(Id is null) 
         {
             var item = await ItemsClient.CreateItemAsync(new CreateItemDto {
                 Id = Id,
@@ -89,7 +90,7 @@
         {
             if (context.IsModified())
             {
-                await ItemsClient.UpdateItemAsync(ItemId, new UpdateItemDto
+                await ItemsClient.UpdateItemAsync(Id, new UpdateItemDto
                 {
                     Name = Name,
                     Unit = Unit
