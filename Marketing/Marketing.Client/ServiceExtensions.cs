@@ -10,7 +10,9 @@ public static class ServiceExtensions
     {
         services
             .AddMarketingClient(configureClient, builder)
-            .AddContactsClient(configureClient, builder);
+            .AddContactsClient(configureClient, builder)
+            .AddCampaignsClient(configureClient, builder)
+            .AddDiscountsClient(configureClient, builder);
             //.AddAddressesClient(configureClient, builder);
 
         return services;
@@ -21,6 +23,28 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(ContactsClient) + "M", configureClient)
             .AddTypedClient<IContactsClient>((http, sp) => new ContactsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddCampaignsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(CampaignsClient) + "M", configureClient)
+            .AddTypedClient<ICampaignsClient>((http, sp) => new CampaignsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddDiscountsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(DiscountsClient) + "M", configureClient)
+            .AddTypedClient<IDiscountsClient>((http, sp) => new DiscountsClient(http));
 
         builder?.Invoke(b);
 

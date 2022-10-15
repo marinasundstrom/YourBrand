@@ -25,7 +25,7 @@ public class Contact : AuditableEntity
 
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    public Campaign? Campaign { get; private set; } = null!;
+    public Campaign? Campaign { get; set; } = null!;
 
     public ContactStatus Status { get; private set; }
 

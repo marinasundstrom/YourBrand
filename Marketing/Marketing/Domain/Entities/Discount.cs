@@ -9,7 +9,7 @@ public class Discount : AuditableEntity
 
     }
 
-    public Discount(string productId, string productName, string? productDescription, decimal ordinaryPrice, decimal percent)
+    public Discount(string productId, string productName, string? productDescription, decimal ordinaryPrice, double percent)
     {
         Id = Guid.NewGuid().ToString();
         ProductId = productId;
@@ -28,7 +28,7 @@ public class Discount : AuditableEntity
     public string? ProductDescription1 { get; }
     public decimal? ProductDescription { get; set; }
 
-    public decimal Percent { get; set; }
+    public double Percent { get; set; }
     public decimal OrdinaryPrice { get; set; }
     public decimal DiscountedPrice { get; set; }
 }

@@ -7,7 +7,7 @@ using YourBrand.Marketing.Application.Contacts;
 
 namespace YourBrand.Marketing.Application.Contacts.Commands;
 
-public record UpdateContact(string Id, string FirstName, string LastName, string SSN) : IRequest<ContactDto>
+public record UpdateContact(string Id, string FirstName, string LastName, string SSN, string CampaignId) : IRequest<ContactDto>
 {
     public class Handler : IRequestHandler<UpdateContact, ContactDto>
     {
@@ -27,6 +27,7 @@ public record UpdateContact(string Id, string FirstName, string LastName, string
             contact.FirstName = request.FirstName;
             contact.LastName = request.LastName;
             contact.Ssn = request.SSN;
+            contact.Campaign = await _context.Campaigns.FirstOrDefaultAsync(x => x.Id == request.CampaignId, cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
 

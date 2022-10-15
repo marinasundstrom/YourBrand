@@ -1,0 +1,52 @@
+@using System.Linq.Expressions
+@inject ICampaignsClient CampaignsClient
+
+<MudAutocomplete T="CampaignDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+    For="For" SearchFunc="SearchCampaigns" ToStringFunc="(x) => x.Name"
+    ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+    <ItemTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemTemplate>
+
+    <ItemSelectedTemplate Context="context2">
+        <MudText Typo="Typo.body1">@context2.Name</MudText>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Campaign";
+
+    [Parameter]
+    public CampaignDto Value { get; set; }
+
+    [Parameter]
+    public EventCallback<CampaignDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<CampaignDto>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    async Task<IEnumerable<CampaignDto>> SearchCampaigns(string text)
+    {
+        try
+        {
+            var results = await CampaignsClient.GetCampaignsAsync(0, 10, null, null, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

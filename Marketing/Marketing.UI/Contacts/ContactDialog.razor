@@ -7,6 +7,9 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <CampaignsSelector Label="Campaign" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Campaign"
+                              For="@(() => Campaign)" />
+
                 <MudTextField Label="First Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="FirstName"
                               For="@(() => FirstName)" />
 
@@ -46,6 +49,9 @@
     public string Id { get; set; }
 
     [Required]
+    public CampaignDto Campaign { get; set; }
+
+    [Required]
     public string FirstName { get; set; }
 
     [Required]
@@ -64,6 +70,7 @@
             FirstName = item.FirstName;
             LastName = item.LastName;
             SSN = item.Ssn;
+            Campaign = item.Campaign;
         }
     }
 
@@ -74,7 +81,8 @@
             var item = await ContactsClient.CreateContactAsync(new CreateContactDto {
                 FirstName = FirstName,
                 LastName = LastName,
-                Ssn = SSN
+                Ssn = SSN,
+                CampaignId = Campaign?.Id
             });
 
             Dialog.Close(item);
@@ -87,7 +95,8 @@
                 {
                     FirstName = FirstName,
                     LastName = LastName,
-                    Ssn = SSN
+                    Ssn = SSN,
+                    CampaignId = Campaign?.Id
                 });
             }
 

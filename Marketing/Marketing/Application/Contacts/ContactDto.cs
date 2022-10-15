@@ -1,7 +1,7 @@
 ﻿using System;
 
-using YourBrand.Marketing.Application.Addresses;
+using YourBrand.Marketing.Application.Campaigns;
 
 namespace YourBrand.Marketing.Application.Contacts;
 
-public record ContactDto(string Id, string FirstName, string LastName, string SSN, string? Phone, string? PhoneMobile, string? Email, ContactAddressDto? Address);
+public record ContactDto(string Id, CampaignDto? Campaign, string FirstName, string LastName, string SSN, string? Phone, string? PhoneMobile, string? Email, ContactAddressDto? Address);

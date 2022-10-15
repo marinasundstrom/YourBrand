@@ -36,5 +36,7 @@ public class ModuleInitializer : IModuleInitializer
         });
 
         group.CreateItem("contacts", () => resources["Contacts"], MudBlazor.Icons.Material.Filled.Person, "/contacts");
+
+        group.CreateItem("campaigns", () => resources["Campaigns"], MudBlazor.Icons.Material.Filled.ListAlt, "/campaigns");
     }
 }

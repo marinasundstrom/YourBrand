@@ -37,13 +37,13 @@ public class ContactsController : ControllerBase
     [HttpPost]
     public async Task<ContactDto> CreateContact(CreateContactDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateContact(dto.FirstName, dto.LastName, dto.SSN), cancellationToken);
+        return await _mediator.Send(new CreateContact(dto.FirstName, dto.LastName, dto.SSN, dto.CampaignId), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateContact(string id, UpdateContactDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateContact(id, dto.FirstName, dto.LastName, dto.SSN), cancellationToken);
+        await _mediator.Send(new UpdateContact(id, dto.FirstName, dto.LastName, dto.SSN, dto.CampaignId), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -53,7 +53,7 @@ public class ContactsController : ControllerBase
     }
 }
 
-public record CreateContactDto(string FirstName, string LastName, string SSN);
+public record CreateContactDto(string FirstName, string LastName, string SSN, string CampaignId);
 
-public record UpdateContactDto(string FirstName, string LastName, string SSN);
+public record UpdateContactDto(string FirstName, string LastName, string SSN, string CampaignId);
 
