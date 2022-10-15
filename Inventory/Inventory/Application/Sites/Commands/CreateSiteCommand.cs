@@ -5,7 +5,7 @@ using YourBrand.Inventory.Domain;
 
 namespace YourBrand.Inventory.Application.Sites.Commands;
 
-public record CreateSiteCommand(string Name) : IRequest<SiteDto>
+public record CreateSiteCommand(string Name, bool CreateWarehouse) : IRequest<SiteDto>
 {
     public class CreateSiteCommandHandler : IRequestHandler<CreateSiteCommand, SiteDto>
     {
@@ -26,6 +26,13 @@ public record CreateSiteCommand(string Name) : IRequest<SiteDto>
 
             context.Sites.Add(site);
 
+            if(request.CreateWarehouse) 
+            {
+                var warehouse = new Domain.Entities.Warehouse(Guid.NewGuid().ToString(), "Main", site.Id);
+
+                context.Warehouses.Add(warehouse);
+            }
+            
             await context.SaveChangesAsync(cancellationToken);
 
             return site.ToDto();

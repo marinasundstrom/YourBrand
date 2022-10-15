@@ -30,10 +30,10 @@ public class SeedData
 
                 await context.SaveChangesAsync();
 
-                var site = new Site("main-site", "Main site");
+                var site = new Site("main-site", "Main Site");
                 context.Sites.Add(site);
 
-                var warehouse = new Warehouse("main-warehouse", "Main warehouse", site.Id);
+                var warehouse = new Warehouse("main-warehouse", "Main Warehouse", site.Id);
                 context.Warehouses.Add(warehouse);
 
                 await context.SaveChangesAsync();
@@ -45,6 +45,20 @@ public class SeedData
                 context.WarehouseItems.Add(wt1);
                 context.WarehouseItems.Add(wt2);
                 context.WarehouseItems.Add(wt3);
+
+                await context.SaveChangesAsync();
+
+                var shop1site = new Site("shop-1", "Shop 1");
+                context.Sites.Add(shop1site);
+
+                var shop1warehouse = new Warehouse("shop-1-main", "Main", site.Id);
+                context.Warehouses.Add(shop1warehouse);
+
+                var shop2site = new Site("shop-2", "Shop 2");
+                context.Sites.Add(shop2site);
+
+                var shop2warehouse = new Warehouse("shop-2-main", "Main", site.Id);
+                context.Warehouses.Add(shop2warehouse);
 
                 await context.SaveChangesAsync();
             }

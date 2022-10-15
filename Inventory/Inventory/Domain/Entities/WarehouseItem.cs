@@ -38,18 +38,24 @@ public class WarehouseItem : AuditableEntity
 
     public void AdjustQuantityOnHand(int quantity)
     {
+        var oldQuantityOnHand = QuantityOnHand;
+        var oldQuantityAvailable = QuantityAvailable;
+
         QuantityOnHand = quantity;
 
-        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand));
-        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable));
+        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
     }
 
     public void Receive(int quantity)
     {
+        var oldQuantityOnHand = QuantityOnHand;
+        var oldQuantityAvailable = QuantityAvailable;
+
         QuantityOnHand += quantity;
 
-        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand));
-        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable));
+        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
     }
 
     /// <summary>
@@ -60,6 +66,9 @@ public class WarehouseItem : AuditableEntity
 
     public void Pick(int quantity, bool fromReserved = false)
     {
+        var oldQuantityOnHand = QuantityOnHand;
+        var oldQuantityAvailable = QuantityAvailable;
+
         QuantityPicked += quantity;
         QuantityOnHand -= quantity;
 
@@ -70,13 +79,14 @@ public class WarehouseItem : AuditableEntity
         }
 
         AddDomainEvent(new WarehouseItemsPicked(Id, WarehouseId, quantity));
-        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand));
-        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable));
+        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
     }
 
     public void Ship(int quantity, bool fromPicked = false)
     {
-        //QuantityOnHand -= quantity;
+        var oldQuantityOnHand = QuantityOnHand;
+        var oldQuantityAvailable = QuantityAvailable;
 
         if(fromPicked) 
         {
@@ -84,8 +94,7 @@ public class WarehouseItem : AuditableEntity
             AddDomainEvent(new WarehouseItemsPicked(Id, WarehouseId, quantity));
         }
 
-        //AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand));
-        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
     }
 
     /// <summary>
@@ -96,10 +105,12 @@ public class WarehouseItem : AuditableEntity
 
     public void Reserve(int quantity)
     {
+        var oldQuantityAvailable = QuantityAvailable;
+
         QuantityReserved += quantity;
 
         AddDomainEvent(new WarehouseItemsReserved(Id, WarehouseId, quantity));
-        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
     }
 
     /// <summary>
@@ -107,4 +118,6 @@ public class WarehouseItem : AuditableEntity
     /// (i.e. what’s left after you’ve shipped all your current orders).
     /// </summary>
     public int QuantityAvailable => QuantityOnHand - QuantityReserved;
+
+    public int QuantityThreshold { get; set; } = 10;
 }

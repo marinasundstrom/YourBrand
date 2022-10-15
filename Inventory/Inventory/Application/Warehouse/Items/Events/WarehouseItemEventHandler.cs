@@ -9,7 +9,7 @@ using YourBrand.Inventory.Application.Common.Interfaces;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
-public class WarehouseItemCreatedHandler 
+public class WarehouseItemEventHandler 
 : IDomainEventHandler<WarehouseItemCreated>, 
   IDomainEventHandler<WarehouseItemQuantityOnHandUpdated>, 
   IDomainEventHandler<WarehouseItemsPicked>,
@@ -18,27 +18,28 @@ public class WarehouseItemCreatedHandler
 {
     private readonly IInventoryContext _context;
 
-    public WarehouseItemCreatedHandler(IInventoryContext context)
+    public WarehouseItemEventHandler(IInventoryContext context)
     {
         _context = context;
     }
 
     public async Task Handle(WarehouseItemCreated notification, CancellationToken cancellationToken)
     {
-        /*
-        var person = await _context.WarehouseItems
-            .FirstOrDefaultAsync(i => i.Id == notification.WarehouseItemId);
-
-        if(person is not null) 
-        {
-           
-        }
-        */
     }
 
     public async Task Handle(WarehouseItemQuantityOnHandUpdated notification, CancellationToken cancellationToken)
     {
+        var item = await _context.WarehouseItems
+            .FirstOrDefaultAsync(i => i.Id == notification.ItemId);
 
+        if(item is not null) 
+        {
+            if(notification.Quantity <= item.QuantityThreshold  
+                && notification.OldQuantity > item.QuantityThreshold) 
+            {
+                // Ha fallen below threshold
+            }
+        }
     }
 
     public async Task Handle(WarehouseItemsPicked notification, CancellationToken cancellationToken)

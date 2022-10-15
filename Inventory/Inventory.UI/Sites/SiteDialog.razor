@@ -9,6 +9,11 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
+                @if(SiteId is null) 
+                {
+                    <MudCheckBox Label="Create warehouse" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="CreateWarehouse"
+                                For="@(() => CreateWarehouse)" />
+                }
             </MudContainer>
         </DialogContent>
 
@@ -42,6 +47,8 @@
     [Required]
     public string Name { get; set; }
 
+    public bool CreateWarehouse { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         context = new EditContext(this);
@@ -58,12 +65,13 @@
         if(SiteId is null) 
         {
             await SitesClient.CreateSiteAsync(new CreateSiteDto {
-                Name = Name
+                Name = Name,
+                CreateWarehouse = CreateWarehouse
             });
 
             //Dialog.Close(site);
         }
-        else 
+        else
         {
             if (context.IsModified())
             {

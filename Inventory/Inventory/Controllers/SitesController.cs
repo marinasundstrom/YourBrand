@@ -37,7 +37,7 @@ public class SitesController : ControllerBase
     [HttpPost]
     public async Task<SiteDto> CreateSite(CreateSiteDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateSiteCommand(dto.Name), cancellationToken);
+        return await _mediator.Send(new CreateSiteCommand(dto.Name, dto.CreateWarehouse), cancellationToken);
     }
 
     [HttpPut("{id}")]
@@ -53,7 +53,7 @@ public class SitesController : ControllerBase
     }
 }
 
-public record CreateSiteDto(string Name);
+public record CreateSiteDto(string Name, bool CreateWarehouse);
 
 public record UpdateSiteDto(string Name);
 

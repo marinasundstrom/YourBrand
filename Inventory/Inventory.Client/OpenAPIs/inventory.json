@@ -1708,11 +1708,15 @@
     "CreateSiteDto": {
       "type": "object",
       "required": [
-        "name"
+        "name",
+        "createWarehouse"
       ],
       "properties": {
         "name": {
           "type": "string"
+        },
+        "createWarehouse": {
+          "type": "boolean"
         }
       }
     },
