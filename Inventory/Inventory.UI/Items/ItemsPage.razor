@@ -29,10 +29,10 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
        <HeaderContent>
-            <MudTh>Id</MudTh>
-            <MudTh>Name</MudTh>
-            <MudTh>Group</MudTh>
-            <MudTh>Unit</MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Id">Id</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Group">Group</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemDto" SortLabel="Unit">Unit</MudTableSortLabel></MudTh>
             <MudTh>Qt available</MudTh>
         </HeaderContent>
         <RowTemplate Context="item">
@@ -40,7 +40,7 @@
             <MudTd DataLabel="Name">@item.Name</MudTd>
             <MudTd DataLabel="Group">@item.Group.Name</MudTd>
             <MudTd DataLabel="Unit">@item.Unit</MudTd>
-            <MudTd DataLabel="QuantityAvailable">@item.QuantityAvailable</MudTd>    
+            <MudTd DataLabel="Qt available">@item.QuantityAvailable</MudTd>    
         </RowTemplate>
         <PagerContent>
             <MudTablePager />

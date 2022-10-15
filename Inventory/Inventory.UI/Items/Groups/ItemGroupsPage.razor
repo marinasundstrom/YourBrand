@@ -22,8 +22,8 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
        <HeaderContent>
-            <MudTh>Id</MudTh>
-            <MudTh>Name</MudTh>
+            <MudTh><MudTableSortLabel T="ItemGroupDto" SortLabel="Id">Id</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemGroupDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate Context="item">
             <MudTd DataLabel="Id">@item.Id</MudTd>

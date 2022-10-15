@@ -50,13 +50,13 @@ else
                 <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
             </ToolBarContent>
         <HeaderContent>
-                <MudTh>Site</MudTh>
-                <MudTh>Warehouse</MudTh>
-                <MudTh>Location</MudTh>
-                <MudTh>Qt on hand</MudTh>
-                <MudTh>Qt picked</MudTh>
-                <MudTh>Qt reserved</MudTh>
-                <MudTh>Qt available</MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Warehouse.Site">Site</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Warehouse">Warehouse</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Location">Location</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityOnHand">Qt on hand</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityPicked">Qt picked</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityReserved">Qt reserved</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityAvailable">Qt available</MudTableSortLabel></MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
