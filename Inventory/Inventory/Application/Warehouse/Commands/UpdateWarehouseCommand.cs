@@ -5,7 +5,7 @@ using YourBrand.Inventory.Domain;
 
 namespace YourBrand.Inventory.Application.Warehouses.Commands;
 
-public record UpdateWarehouseCommand(string Id, string Name) : IRequest
+public record UpdateWarehouseCommand(string Id, string Name, string SiteId) : IRequest
 {
     public class UpdateWarehouseCommandHandler : IRequestHandler<UpdateWarehouseCommand>
     {
@@ -23,6 +23,7 @@ public record UpdateWarehouseCommand(string Id, string Name) : IRequest
             if (warehouse is null) throw new Exception();
 
             warehouse.Name = request.Name;
+            warehouse.SiteId = request.SiteId;
 
             await context.SaveChangesAsync(cancellationToken);
 

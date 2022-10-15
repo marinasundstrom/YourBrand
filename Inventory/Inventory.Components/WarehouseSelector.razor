@@ -6,10 +6,12 @@
     ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
     <ItemTemplate Context="context2">
         <MudText Typo="Typo.body1">@context2.Name</MudText>
+        <MudText Typo="Typo.body2">@context2.Site.Name</MudText>
     </ItemTemplate>
 
     <ItemSelectedTemplate Context="context2">
         <MudText Typo="Typo.body1">@context2.Name</MudText>
+        <MudText Typo="Typo.body2">@context2.Site.Name</MudText>
     </ItemSelectedTemplate>
 </MudAutocomplete>
 

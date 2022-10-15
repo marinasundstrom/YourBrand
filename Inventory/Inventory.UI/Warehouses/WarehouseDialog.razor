@@ -64,8 +64,8 @@
         if(WarehouseId is null) 
         {
             var warehouse = await WarehousesClient.CreateWarehouseAsync(new CreateWarehouseDto {
-                SiteId = Site.Id,
-                Name = Name
+                Name = Name,
+                SiteId = Site.Id
             });
 
             Dialog.Close(warehouse);
@@ -76,8 +76,8 @@
             {
                 await WarehousesClient.UpdateWarehouseAsync(WarehouseId, new UpdateWarehouseDto
                 {
-                    //SiteId = Site.Id,
-                    Name = Name
+                    Name = Name,
+                    SiteId = Site.Id
                 });
             }
 

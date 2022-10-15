@@ -36,13 +36,16 @@
     public Variant Variant { get; set; }
 
     [Parameter]
+    public string? GroupId { get; set; }
+
+    [Parameter]
     public string? WarehouseId { get; set; }
 
     async Task<IEnumerable<ItemDto>> SearchItems(string text)
     {
         try
         {
-            var results = await ItemsClient.GetItems2Async(1, 10, WarehouseId, text, null, null);
+            var results = await ItemsClient.GetItems2Async(1, 10, GroupId, WarehouseId, text, null, null);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

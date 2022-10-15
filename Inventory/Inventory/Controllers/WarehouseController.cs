@@ -43,7 +43,7 @@ public class WarehousesController : ControllerBase
     [HttpPut("{id}")]
     public async Task UpdateWarehouse(string id, UpdateWarehouseDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateWarehouseCommand(id, dto.Name), cancellationToken);
+        await _mediator.Send(new UpdateWarehouseCommand(id, dto.Name, dto.SiteId), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -55,5 +55,5 @@ public class WarehousesController : ControllerBase
 
 public record CreateWarehouseDto(string Name, string SiteId);
 
-public record UpdateWarehouseDto(string Name);
+public record UpdateWarehouseDto(string Name, string SiteId);
 

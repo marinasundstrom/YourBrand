@@ -10,7 +10,7 @@ using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Application.Items.Queries;
 
-public record GetItems(int Page = 0, int PageSize = 10, string? GroupId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ItemDto>>
+public record GetItems(int Page = 0, int PageSize = 10, string? GroupId = null, string? WarehouseId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ItemDto>>
 {
     public class Handler : IRequestHandler<GetItems, ItemsResult<ItemDto>>
     {
@@ -38,6 +38,11 @@ public record GetItems(int Page = 0, int PageSize = 10, string? GroupId = null, 
                     .AsNoTracking()
                     .AsQueryable();
 
+            if (request.WarehouseId is not null)
+            {
+                result = result.Where(o => o.WarehouseItems.Any(x => x.WarehouseId == request.WarehouseId));
+            }
+
             if (request.GroupId is not null)
             {
                 result = result.Where(o => o.GroupId == request.GroupId);
@@ -62,7 +67,8 @@ public record GetItems(int Page = 0, int PageSize = 10, string? GroupId = null, 
 
             var items = await result
                 .Include(x => x.Group)
-                .Include(x => x.WarehouseItems)
+                .Include(x => x.WarehouseItems.Where(x => request.WarehouseId == null || x.WarehouseId == request.WarehouseId))
+                .AsSingleQuery()
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

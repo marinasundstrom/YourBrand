@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Items.Commands;
 
-public record UpdateItem(string Id, string Name, string Unit) : IRequest
+public record UpdateItem(string Id, string NewId, string Name, string GroupId, string Unit) : IRequest
 {
     public class Handler : IRequestHandler<UpdateItem>
     {
@@ -24,7 +24,9 @@ public record UpdateItem(string Id, string Name, string Unit) : IRequest
 
             if (item is null) throw new Exception();
 
+            item.Id = request.NewId;
             item.Name = request.Name;
+            item.GroupId = request.GroupId;
             item.Unit = request.Unit;
 
             await _context.SaveChangesAsync(cancellationToken);

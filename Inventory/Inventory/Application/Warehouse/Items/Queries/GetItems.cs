@@ -62,7 +62,11 @@ public record GetWarehouseItems(int Page = 0, int PageSize = 10, string? Warehou
             }
             else 
             {
-                result = result.OrderBy(x => x.Id);
+                // TODO: Revisit this. Should this be the default?
+
+                result = result
+                    .OrderByDescending(x => x.Warehouse.Site)
+                    .ThenByDescending(x => x.Warehouse);
             }
 
             var items = await result

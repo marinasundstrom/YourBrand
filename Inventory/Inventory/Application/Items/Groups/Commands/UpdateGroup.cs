@@ -24,7 +24,7 @@ public record UpdateItemGroup(string Id, string Name) : IRequest
 
             if (item is null) throw new Exception();
 
-            //item.Name = request.Name;
+            item.Name = request.Name;
 
             await _context.SaveChangesAsync(cancellationToken);
 

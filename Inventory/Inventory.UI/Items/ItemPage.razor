@@ -50,6 +50,7 @@ else
                 <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
             </ToolBarContent>
         <HeaderContent>
+                <MudTh>Site</MudTh>
                 <MudTh>Warehouse</MudTh>
                 <MudTh>Location</MudTh>
                 <MudTh>Qt on hand</MudTh>
@@ -59,8 +60,9 @@ else
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
+                <MudTd DataLabel="Site">@item.Warehouse.Site.Name</MudTd>
                 <MudTd DataLabel="Warehouse">@item.Warehouse.Name</MudTd>
-                <MudTd DataLabel="Warehouse">@item.Location</MudTd>
+                <MudTd DataLabel="Location">@item.Location</MudTd>
                 <MudTd DataLabel="Qt on hand">@item.QuantityOnHand<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
                 <MudTd DataLabel="Qt on hand">@item.QuantityPicked<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
                 <MudTd DataLabel="Qt on hand">@item.QuantityReserved<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>

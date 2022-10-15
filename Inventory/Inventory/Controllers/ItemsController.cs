@@ -25,9 +25,9 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ItemsResult<ItemDto>> GetItems(int page = 1, int pageSize = 10, string? groupId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<ItemDto>> GetItems(int page = 1, int pageSize = 10, string? groupId = null, string? warehouseId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetItems(page - 1, pageSize, groupId, searchString, sortBy, sortDirection), cancellationToken);
+        return await _mediator.Send(new GetItems(page - 1, pageSize, groupId, warehouseId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
@@ -52,7 +52,7 @@ public class ItemsController : ControllerBase
     [HttpPut("{id}")]
     public async Task UpdateItem(string id, UpdateItemDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateItem(id, dto.Name, dto.Unit), cancellationToken);
+        await _mediator.Send(new UpdateItem(id, dto.Id, dto.Name, dto.GroupId, dto.Unit), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -64,5 +64,5 @@ public class ItemsController : ControllerBase
 
 public record CreateItemDto(string Id, string Name, string GroupId, string Unit);
 
-public record UpdateItemDto(string Name, string Unit);
+public record UpdateItemDto(string Id, string Name, string GroupId, string Unit);
 

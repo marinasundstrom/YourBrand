@@ -340,6 +340,12 @@
           },
           {
             "type": "string",
+            "name": "warehouseId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
             "name": "searchString",
             "in": "query",
             "x-nullable": true
@@ -1660,11 +1666,19 @@
     "UpdateItemDto": {
       "type": "object",
       "required": [
+        "id",
         "name",
+        "groupId",
         "unit"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
+          "type": "string"
+        },
+        "groupId": {
           "type": "string"
         },
         "unit": {
@@ -1750,10 +1764,14 @@
     "UpdateWarehouseDto": {
       "type": "object",
       "required": [
-        "name"
+        "name",
+        "siteId"
       ],
       "properties": {
         "name": {
+          "type": "string"
+        },
+        "siteId": {
           "type": "string"
         }
       }
