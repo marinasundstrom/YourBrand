@@ -47,7 +47,6 @@
 
 
     [Parameter]
-    [Required]
     public string Id { get; set; }
 
     [Required]
@@ -69,7 +68,6 @@
         if (Id is not null) 
         {
             var item = await ItemsClient.GetItemAsync(Id);
-            Id = item.Id;
             NewId = item.Id;
             Name = item.Name;
             Group = item.Group;
@@ -82,7 +80,7 @@
         if(Id is null) 
         {
             var item = await ItemsClient.CreateItemAsync(new CreateItemDto {
-                Id = Id,
+                Id = NewId,
                 Name = Name,
                 GroupId = Group.Id,
                 Unit = Unit

@@ -9,13 +9,14 @@ public class WarehouseItem : AuditableEntity
 {
     protected WarehouseItem() { }
 
-    public WarehouseItem(string itemId, string warehouseId, string location, int quantityOnHand)
+    public WarehouseItem(string itemId, string warehouseId, string location, int quantityOnHand, int quantityThreshold = 10)
     {
         Id = Guid.NewGuid().ToString();
         ItemId = itemId;
         WarehouseId = warehouseId;
         Location = location;
         QuantityOnHand = quantityOnHand;
+        QuantityThreshold = quantityThreshold;
     }
 
     public string Id { get; set; }

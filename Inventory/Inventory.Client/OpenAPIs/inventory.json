@@ -1573,7 +1573,8 @@
         "quantityOnHand",
         "quantityPicked",
         "quantityReserved",
-        "quantityAvailable"
+        "quantityAvailable",
+        "quantityThreshold"
       ],
       "properties": {
         "id": {
@@ -1601,6 +1602,10 @@
           "format": "int32"
         },
         "quantityAvailable": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantityThreshold": {
           "type": "integer",
           "format": "int32"
         }
@@ -1785,7 +1790,9 @@
       "required": [
         "itemId",
         "warehouseId",
-        "location"
+        "location",
+        "quantityOnHand",
+        "quantityThreshold"
       ],
       "properties": {
         "itemId": {
@@ -1796,6 +1803,14 @@
         },
         "location": {
           "type": "string"
+        },
+        "quantityOnHand": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantityThreshold": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

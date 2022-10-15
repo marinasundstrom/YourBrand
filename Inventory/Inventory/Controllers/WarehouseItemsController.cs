@@ -37,7 +37,7 @@ public class WarehouseItemsController : ControllerBase
     [HttpPost]
     public async Task<WarehouseItemDto> CreateItem(string warehouseId, CreateWarehouseItemDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new AddWarehouseItem(dto.ItemId, dto.WarehouseId, dto.Location), cancellationToken);
+        return await _mediator.Send(new AddWarehouseItem(dto.ItemId, dto.WarehouseId, dto.Location, dto.QuantityOnHand, dto.QuantityThreshold), cancellationToken);
     }
 
     [HttpPut("{id}")]
@@ -93,7 +93,7 @@ public record ShipItemsDto(int Quantity, bool FromPicked = false);
 
 public record ReceiveItemsDto(int Quantity);
 
-public record CreateWarehouseItemDto(string ItemId, string WarehouseId, string Location);
+public record CreateWarehouseItemDto(string ItemId, string WarehouseId, string Location, int QuantityOnHand, int QuantityThreshold);
 
 public record UpdateWarehouseItemDto(string Location);
 

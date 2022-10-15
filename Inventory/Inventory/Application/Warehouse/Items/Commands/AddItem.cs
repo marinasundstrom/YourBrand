@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
-public record AddWarehouseItem(string ItemId, string WarehouseId, string Location) : IRequest<WarehouseItemDto>
+public record AddWarehouseItem(string ItemId, string WarehouseId, string Location, int QuantityOnHand, int QuantityThreshold) : IRequest<WarehouseItemDto>
 {
     public class Handler : IRequestHandler<AddWarehouseItem, WarehouseItemDto>
     {
@@ -24,7 +24,7 @@ public record AddWarehouseItem(string ItemId, string WarehouseId, string Locatio
 
             if (item is not null) throw new Exception();
 
-            item = new Domain.Entities.WarehouseItem(request.ItemId, request.WarehouseId, request.Location, 0);;
+            item = new Domain.Entities.WarehouseItem(request.ItemId, request.WarehouseId, request.Location, request.QuantityOnHand, request.QuantityThreshold);;
 
             _context.WarehouseItems.Add(item);
 

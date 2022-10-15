@@ -44,7 +44,8 @@ public static class Mappings
             item.QuantityOnHand,
             item.QuantityPicked,
             item.QuantityReserved,
-            item.QuantityAvailable);
+            item.QuantityAvailable,
+            item.QuantityThreshold);
     }
 
     public static SiteDto ToDto(this Site item) 

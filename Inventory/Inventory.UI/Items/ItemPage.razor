@@ -53,20 +53,22 @@ else
                 <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Warehouse.Site">Site</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Warehouse">Warehouse</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Location">Location</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityOnHand">Qt on hand</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityPicked">Qt picked</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityReserved">Qt reserved</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityAvailable">Qt available</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityOnHand">Qty on hand</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityPicked">Qty picked</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityReserved">Qty reserved</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityAvailable">Qty available</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityThreshold">Qty threshold</MudTableSortLabel></MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
                 <MudTd DataLabel="Site">@item.Warehouse.Site.Name</MudTd>
                 <MudTd DataLabel="Warehouse">@item.Warehouse.Name</MudTd>
                 <MudTd DataLabel="Location">@item.Location</MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityOnHand<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityPicked<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityReserved<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
-                <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
+                <MudTd DataLabel="Qty on hand">@item.QuantityOnHand<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
+                <MudTd DataLabel="Qty picked">@item.QuantityPicked<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
+                <MudTd DataLabel="Qty reserved">@item.QuantityReserved<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
+                <MudTd DataLabel="Qty available">@item.QuantityAvailable</MudTd>
+                <MudTd DataLabel="Qty threshold">@item.QuantityThreshold</MudTd>
                 <MudTd>
                     <MudIconButton Size="Size.Small" Icon="@Icons.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
                     <MudIconButton Size="Size.Small" Icon="@Icons.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />

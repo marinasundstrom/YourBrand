@@ -11,6 +11,15 @@
 
                 <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
                               For="@(() => Location)" />
+
+                @if(Id is null) 
+                {
+                    <MudNumericField Label="Quantity on Hand" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="QuantityOnHand"
+                              For="@(() => QuantityOnHand)" />
+
+                    <MudNumericField Label="Quantity Threshold" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="QuantityThreshold"
+                              For="@(() => QuantityThreshold)" />
+                }
             </MudContainer>
         </DialogContent>
 
@@ -53,6 +62,13 @@
     [Required]
     public WarehouseDto Warehouse { get; set; }
 
+    [Required]
+    public int QuantityOnHand { get; set; } 
+
+    [Required]
+    public int QuantityThreshold { get; set; } 
+
+
     protected override async Task OnInitializedAsync()
     {
         context = new EditContext(this);
@@ -73,7 +89,9 @@
             var item = await WarehouseItemsClient.CreateItemAsync(Warehouse?.Id, new CreateWarehouseItemDto {
                 ItemId = ItemId,
                 WarehouseId = Warehouse.Id,
-                Location = Location
+                Location = Location,
+                QuantityOnHand = QuantityOnHand,
+                QuantityThreshold = QuantityThreshold
             });
 
             Dialog.Close(item);

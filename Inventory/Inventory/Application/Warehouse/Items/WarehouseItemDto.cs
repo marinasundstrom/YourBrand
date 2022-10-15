@@ -13,4 +13,5 @@ public record WarehouseItemDto(
     int QuantityOnHand,
     int QuantityPicked,
     int QuantityReserved,
-    int QuantityAvailable);
+    int QuantityAvailable,
+    int QuantityThreshold);

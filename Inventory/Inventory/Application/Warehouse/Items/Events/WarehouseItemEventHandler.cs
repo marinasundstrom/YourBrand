@@ -53,7 +53,7 @@ public class WarehouseItemEventHandler
             if(notification.Quantity <= item.QuantityThreshold  
                 && notification.OldQuantity > item.QuantityThreshold) 
             {
-                var subject = $"Quantity available threshold for {item.Item.Name} ({item.Item.Id})";
+                var subject = $"Quantity available is below threshold for {item.Item.Name} ({item.Item.Id})";
 
                 var body = @$"
                 Quantity available is below threshold.<br />
