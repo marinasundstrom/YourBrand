@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Marketing API",
@@ -22,240 +22,6 @@
             "description": "",
             "schema": {
               "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "/Contacts/{personId}": {
-      "get": {
-        "tags": [
-          "Contacts"
-        ],
-        "operationId": "Contacts_GetContacts",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ContactDto"
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Contacts"
-        ],
-        "operationId": "Contacts_DeleteContact",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
-          }
-        }
-      }
-    },
-    "/Contacts": {
-      "post": {
-        "tags": [
-          "Contacts"
-        ],
-        "operationId": "Contacts_CreateContacts",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "createContact",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/CreateContact"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ContactDto"
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Contacts"
-        ],
-        "operationId": "Contacts_GetContacts2",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ItemsResultOfContactDto"
-            }
-          }
-        }
-      }
-    },
-    "/Contacts/{personId}/Addresses": {
-      "get": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_GetAddress",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "string",
-            "name": "foo",
-            "in": "query",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/AddressDto"
-            }
-          }
-        }
-      }
-    },
-    "/Contacts/Addresses": {
-      "post": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_CreateAddress",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "createAddress",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/CreateAddress"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/AddressDto"
-            }
-          }
-        }
-      }
-    },
-    "/Contacts/{personId}/Addresses/{addressId}": {
-      "delete": {
-        "tags": [
-          "Addresses"
-        ],
-        "operationId": "Addresses_DeleteAddress",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "type": "string",
-            "name": "addressId",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
             }
           }
         }
@@ -298,9 +64,302 @@
           }
         }
       }
+    },
+    "/Contacts": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "Contacts_GetContacts",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "groupId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "warehouseId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "searchString",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortBy",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "sortDirection",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/SortDirection"
+            },
+            "x-nullable": true,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfContactDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "Contacts_CreateContact",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateContactDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ContactDto"
+            }
+          }
+        }
+      }
+    },
+    "/Contacts/{id}": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "Contacts_GetContact",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ContactDto"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "Contacts_UpdateContact",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateContactDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "Contacts_DeleteContact",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "ItemsResultOfAddressDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AddressDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "AddressDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "thoroughfare",
+        "postalCode",
+        "locality",
+        "subAdministrativeArea",
+        "administrativeArea",
+        "country"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/AddressType"
+        },
+        "thoroughfare": {
+          "type": "string"
+        },
+        "premises": {
+          "type": "string"
+        },
+        "subPremises": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "locality": {
+          "type": "string"
+        },
+        "subAdministrativeArea": {
+          "type": "string"
+        },
+        "administrativeArea": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "AddressType": {
+      "type": "integer",
+      "description": "",
+      "x-enumNames": [
+        "Delivery",
+        "Billing"
+      ],
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "ItemsResultOfContactDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContactDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "ContactDto": {
       "type": "object",
       "required": [
@@ -373,87 +432,19 @@
         }
       }
     },
-    "Unit": {
-      "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
-    },
-    "CreateContact": {
-      "type": "object",
-      "required": [
-        "firstName",
-        "lastName",
-        "ssn"
-      ],
-      "properties": {
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "ssn": {
-          "type": "string"
-        }
-      }
-    },
-    "AddressDto": {
-      "type": "object",
-      "required": [
-        "id",
-        "type",
-        "thoroughfare",
-        "postalCode",
-        "locality",
-        "subAdministrativeArea",
-        "administrativeArea",
-        "country"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "type": {
-          "$ref": "#/definitions/AddressType"
-        },
-        "thoroughfare": {
-          "type": "string"
-        },
-        "premises": {
-          "type": "string"
-        },
-        "subPremises": {
-          "type": "string"
-        },
-        "postalCode": {
-          "type": "string"
-        },
-        "locality": {
-          "type": "string"
-        },
-        "subAdministrativeArea": {
-          "type": "string"
-        },
-        "administrativeArea": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        }
-      }
-    },
-    "AddressType": {
-      "type": "integer",
+    "SortDirection": {
+      "type": "string",
       "description": "",
       "x-enumNames": [
-        "Delivery",
-        "Billing"
+        "Desc",
+        "Asc"
       ],
       "enum": [
-        1,
-        2
+        "Desc",
+        "Asc"
       ]
     },
-    "CreateAddress": {
+    "CreateContactDto": {
       "type": "object",
       "required": [
         "firstName",
@@ -472,41 +463,22 @@
         }
       }
     },
-    "ItemsResultOfAddressDto": {
+    "UpdateContactDto": {
       "type": "object",
       "required": [
-        "items",
-        "totalItems"
+        "firstName",
+        "lastName",
+        "ssn"
       ],
       "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AddressDto"
-          }
+        "firstName": {
+          "type": "string"
         },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "ItemsResultOfContactDto": {
-      "type": "object",
-      "required": [
-        "items",
-        "totalItems"
-      ],
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ContactDto"
-          }
+        "lastName": {
+          "type": "string"
         },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
+        "ssn": {
+          "type": "string"
         }
       }
     }

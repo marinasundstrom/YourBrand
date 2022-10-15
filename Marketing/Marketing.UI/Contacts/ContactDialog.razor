@@ -1,0 +1,97 @@
+@using System.ComponentModel.DataAnnotations
+@inject IContactsClient ContactsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="First Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="FirstName"
+                              For="@(() => FirstName)" />
+
+                <MudTextField Label="Last Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="LastName"
+                              For="@(() => LastName)" />
+
+                <MudTextField Label="SSN" Variant="Variant.Outlined" Class="mt-4" @bind-Value="SSN"
+                              For="@(() => SSN)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(Id is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Required]
+    public string FirstName { get; set; }
+
+    [Required]
+    public string LastName { get; set; }
+
+    [Required]
+    public string SSN { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (Id is not null) 
+        {
+            var item = await ContactsClient.GetContactAsync(Id);
+            FirstName = item.FirstName;
+            LastName = item.LastName;
+            SSN = item.Ssn;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(Id is null) 
+        {
+            var item = await ContactsClient.CreateContactAsync(new CreateContactDto {
+                FirstName = FirstName,
+                LastName = LastName,
+                Ssn = SSN
+            });
+
+            Dialog.Close(item);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await ContactsClient.UpdateContactAsync(Id, new UpdateContactDto
+                {
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    Ssn = SSN
+                });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

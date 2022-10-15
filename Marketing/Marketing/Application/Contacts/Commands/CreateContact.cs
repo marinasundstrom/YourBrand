@@ -19,17 +19,13 @@ public record CreateContact(string FirstName, string LastName, string SSN) : IRe
 
         public async Task<ContactDto> Handle(CreateContact request, CancellationToken cancellationToken)
         {
-            /*
-            var person = new Domain.Entities.Contact(request.FirstName, request.LastName, request.SSN);
+            var contact = new Domain.Entities.Contact(request.FirstName, request.LastName, request.SSN);
 
-            _context.Contacts.Add(person);
+            _context.Contacts.Add(contact);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return person.ToDto();
-            */
-
-            return null!;
+            return contact.ToDto();
         }
     }
 }

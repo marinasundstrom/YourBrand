@@ -9,7 +9,7 @@ using YourBrand.Marketing.Application.Contacts;
 
 namespace YourBrand.Marketing.Application.Contacts.Queries;
 
-public record GetContacts(int Page = 1, int PageSize = 10) : IRequest<ItemsResult<ContactDto>>
+public record GetContacts(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ContactDto>>
 {
     public class Handler : IRequestHandler<GetContacts, ItemsResult<ContactDto>>
     {
@@ -35,13 +35,29 @@ public record GetContacts(int Page = 1, int PageSize = 10) : IRequest<ItemsResul
             var query = _context.Contacts
                 .AsSplitQuery()
                 .AsNoTracking()
-                .OrderByDescending(x => x.Id)
                 .AsQueryable();
+
+            if (request.SearchString is not null)
+            {
+                query = query.Where(o => 
+                    o.FirstName.ToLower().Contains(request.SearchString.ToLower())
+                    || o.LastName.ToLower().Contains(request.SearchString.ToLower())
+                    || o.Ssn.ToLower().Contains(request.SearchString.ToLower()));
+            }
 
             int totalItems = await query.CountAsync(cancellationToken);
 
-            query = query         
-                //.Include(i => i.Addresses)
+            if (request.SortBy is not null)
+            {
+                query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Marketing.Application.SortDirection.Descending : Marketing.Application.SortDirection.Ascending);
+            }
+            else 
+            {
+                query = query.OrderBy(x => x.Id);
+            }
+
+            query = query
+                .Include(i => i.Campaign)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);
 

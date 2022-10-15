@@ -17,6 +17,10 @@ using YourBrand.Marketing.Application.Contacts;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
 using YourBrand.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +70,45 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                    {
+                        options.Authority = "https://identity.local";
+                        options.Audience = "myapi";
+
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            NameClaimType = "name"
+                            
+                        };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnTokenValidated = context =>
+                            {
+                                // Add the access_token as a claim, as we may actually need it
+                                var accessToken = context.SecurityToken as JwtSecurityToken;
+                                if (accessToken != null)
+                                {
+                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
+                                    if (identity != null)
+                                    {
+                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                                    }
+                                }
+
+                                return Task.CompletedTask;
+                            }
+                        };
+
+                        //options.TokenValidationParameters.ValidateAudience = false;
+
+                        //options.Audience = "openid";
+
+                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    });
+
+
 builder.Services.AddDocumentsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/documents/");
@@ -91,43 +134,10 @@ else
     app.UseHsts();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/Contacts/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetContact(personId), cancellationToken))
-    .WithName("Contacts_GetContacts")
-    .WithTags("Contacts")
-    .Produces<ContactDto>(StatusCodes.Status200OK);
-
-app.MapDelete("/Contacts/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeleteContact(personId), cancellationToken))
-    .WithName("Contacts_DeleteContact")
-    .WithTags("Contacts")
-    .Produces(StatusCodes.Status200OK);
-
-app.MapPost("/Contacts", async (CreateContact createContact, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(createContact, cancellationToken))
-    .WithName("Contacts_CreateContacts")
-    .WithTags("Contacts")
-    .Produces<ContactDto>(StatusCodes.Status200OK);
-
-app.MapGet("/Contacts/{personId}/Addresses", async (string personId, string foo, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetAddress(personId), cancellationToken))
-    .WithName("Addresses_GetAddress")
-    .WithTags("Addresses")
-    .Produces<AddressDto>(StatusCodes.Status200OK);
-
-app.MapPost("/Contacts/{personId}/Addresses", async (CreateAddress createAddress, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(createAddress, cancellationToken))
-    .WithName("Addresses_CreateAddress")
-    .WithTags("Addresses")
-    .Produces<AddressDto>(StatusCodes.Status200OK);
-
-app.MapDelete("/Contacts/{personId}/Addresses/{addressId}", async (string personId, string addressId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeleteAddress(addressId), cancellationToken))
-    .WithName("Addresses_DeleteAddress")
-    .WithTags("Addresses")
-    .Produces(StatusCodes.Status200OK);
 
 app.MapControllers();
 

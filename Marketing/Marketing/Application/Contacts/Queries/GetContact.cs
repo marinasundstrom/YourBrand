@@ -20,19 +20,13 @@ public record GetContact(string ContactId) : IRequest<ContactDto?>
 
         public async Task<ContactDto?> Handle(GetContact request, CancellationToken cancellationToken)
         {
-            /*
             var person = await _context.Contacts
-                .Include(i => i.Addresses)
+                .Include(i => i.Campaign)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.ContactId, cancellationToken);
 
-            return person is null
-                ? null
-                : person.ToDto();
-            */
-
-            return null;
+            return person?.ToDto();
         }
     }
 }

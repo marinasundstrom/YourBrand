@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Marketing.Application.Contacts.Commands;
 
-public record DeleteContact(string ContactId) : IRequest
+public record DeleteContact(string Id) : IRequest
 {
     public class Handler : IRequestHandler<DeleteContact>
     {
@@ -16,25 +16,15 @@ public record DeleteContact(string ContactId) : IRequest
         {
             _context = context;
         }
-
         public async Task<Unit> Handle(DeleteContact request, CancellationToken cancellationToken)
         {
-            /*
-            var invoice = await _context.Contacts
-                //.Include(i => i.Addresses)
-                .AsSplitQuery()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.ContactId, cancellationToken);
+            var contact = await _context.Contacts
+                .Include(i => i.Campaign)
+                .FirstAsync(x => x.Id == request.Id, cancellationToken);
 
-            if(invoice is null)
-            {
-                throw new Exception();
-            }
-
-            _context.Contacts.Remove(invoice);
+            _context.Contacts.Remove(contact);
 
             await _context.SaveChangesAsync(cancellationToken);
-            */
 
             return Unit.Value;
         }
