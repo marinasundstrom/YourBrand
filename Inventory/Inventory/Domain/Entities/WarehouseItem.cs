@@ -2,6 +2,7 @@
 
 using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Events;
+using YourBrand.Inventory.Domain.Enums;
 
 namespace YourBrand.Inventory.Domain.Entities;
 
@@ -30,6 +31,8 @@ public class WarehouseItem : AuditableEntity
     public Warehouse Warehouse { get; set; } = null!;
 
     public string Location { get; set; }
+
+    public WarehouseItemAvailability Availability { get; set; }
     
     /// <summary>
     /// This number is the total you have physically available (including Qty Reserved),

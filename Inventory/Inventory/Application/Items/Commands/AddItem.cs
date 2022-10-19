@@ -3,11 +3,12 @@ using YourBrand.Inventory.Domain;
 
 using MediatR;
 using YourBrand.Inventory.Application.Items;
+using YourBrand.Inventory.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Items.Commands;
 
-public record AddItem(string Id, string Name, string GroupId, string Unit) : IRequest<ItemDto>
+public record AddItem(string Id, string Name, ItemTypeDto Type, string GroupId, string Unit) : IRequest<ItemDto>
 {
     public class Handler : IRequestHandler<AddItem, ItemDto>
     {
@@ -24,7 +25,7 @@ public record AddItem(string Id, string Name, string GroupId, string Unit) : IRe
 
             if (item is not null) throw new Exception();
 
-            item = new Domain.Entities.Item(request.Id, request.Name, request.GroupId, request.Unit);
+            item = new Domain.Entities.Item(request.Id, request.Name, (ItemType)request.Type, "Foo", request.GroupId, request.Unit);
 
             _context.Items.Add(item);
 

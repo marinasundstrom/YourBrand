@@ -1407,6 +1407,7 @@
       "required": [
         "id",
         "name",
+        "type",
         "group",
         "unit",
         "quantityAvailable"
@@ -1418,6 +1419,12 @@
         "name": {
           "type": "string"
         },
+        "type": {
+          "$ref": "#/definitions/ItemTypeDto"
+        },
+        "gtin": {
+          "type": "string"
+        },
         "group": {
           "$ref": "#/definitions/ItemGroupDto"
         },
@@ -1427,8 +1434,25 @@
         "quantityAvailable": {
           "type": "integer",
           "format": "int32"
+        },
+        "discontinued": {
+          "type": "boolean"
         }
       }
+    },
+    "ItemTypeDto": {
+      "type": "integer",
+      "description": "",
+      "x-enumNames": [
+        "Inventory",
+        "NonInventory",
+        "Service"
+      ],
+      "enum": [
+        1,
+        2,
+        3
+      ]
     },
     "ItemGroupDto": {
       "type": "object",
@@ -1454,6 +1478,7 @@
       "required": [
         "id",
         "name",
+        "type",
         "groupId",
         "unit"
       ],
@@ -1463,6 +1488,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/ItemTypeDto"
         },
         "groupId": {
           "type": "string"
@@ -1650,6 +1678,7 @@
       "required": [
         "id",
         "name",
+        "type",
         "groupId",
         "unit"
       ],
@@ -1659,6 +1688,9 @@
         },
         "name": {
           "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/ItemTypeDto"
         },
         "groupId": {
           "type": "string"

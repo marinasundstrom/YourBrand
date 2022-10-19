@@ -20,9 +20,9 @@ public class SeedData
                 var clothes = new ItemGroup("Clothes");
                 context.ItemGroups.Add(clothes);
 
-                var t1 = new Item("TS-B-S", "T-Shirt Blue Small", clothes.Id, "pc");
-                var t2 = new Item("TS-B-M", "T-Shirt Blue Medium", clothes.Id, "pc");
-                var t3 = new Item("TS-B-L", "T-Shirt Blue Large", clothes.Id, "pc");
+                var t1 = new Item("TS-B-S", "T-Shirt Blue Small", Domain.Enums.ItemType.Inventory, "Foo1", clothes.Id, "pc");
+                var t2 = new Item("TS-B-M", "T-Shirt Blue Medium", Domain.Enums.ItemType.Inventory, "Foo2", clothes.Id, "pc");
+                var t3 = new Item("TS-B-L", "T-Shirt Blue Large", Domain.Enums.ItemType.Inventory, "Foo3",clothes.Id, "pc");
 
                 context.Items.Add(t1);
                 context.Items.Add(t2);

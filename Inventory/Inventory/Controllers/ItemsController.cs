@@ -46,7 +46,7 @@ public class ItemsController : ControllerBase
     [HttpPost]
     public async Task<ItemDto> CreateItem(CreateItemDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new AddItem(dto.Id, dto.Name, dto.GroupId, dto.Unit), cancellationToken);
+        return await _mediator.Send(new AddItem(dto.Id, dto.Name, dto.Type, dto.GroupId, dto.Unit), cancellationToken);
     }
 
     [HttpPut("{id}")]
@@ -62,7 +62,7 @@ public class ItemsController : ControllerBase
     }
 }
 
-public record CreateItemDto(string Id, string Name, string GroupId, string Unit);
+public record CreateItemDto(string Id, string Name, ItemTypeDto Type, string GroupId, string Unit);
 
 public record UpdateItemDto(string Id, string Name, string GroupId, string Unit);
 

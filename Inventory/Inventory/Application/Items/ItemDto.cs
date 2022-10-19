@@ -7,6 +7,9 @@ namespace YourBrand.Inventory.Application.Items;
 public record ItemDto(
     string Id,
     string Name,
+    ItemTypeDto Type,
+    string? GTIN,
     ItemGroupDto Group,
     string Unit,
-    int QuantityAvailable);
+    int QuantityAvailable,
+    bool? Discontinued);
