@@ -1,11 +1,7 @@
 <div class="input-group mb-2 mr-sm-2">
-    <div class="input-group-prepend">
-        <button class="btn btn-outline-secondary" @onclick="async () => await SetValue(Value - 1)">-</button>
-    </div>
+    <button class="btn btn-outline-secondary" @onclick="async () => await SetValue(Value - 1)">-</button>
     <input type="number" min="@MinValue" max="@MaxValue" class="form-control" style="width: 50px; border: 1px solid; border-radius: 0;" value="@Value" @onchange="async (e) => await SetValue(int.Parse(e.Value.ToString()))" />
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" @onclick="async () => await SetValue(Value + 1)">+</button>
-    </div>
+    <button class="btn btn-outline-secondary" @onclick="async () => await SetValue(Value + 1)">+</button>
 </div>
 
 @code {

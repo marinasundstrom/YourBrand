@@ -222,3 +222,8 @@ header.main {
     opacity: 1;
   }
 }
+
+.no-toggle:after {
+  display: none !important;
+  content: '';
+}
