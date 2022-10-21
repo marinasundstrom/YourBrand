@@ -1,0 +1,85 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-brand px-3">
+    <div class="container">
+        <NavLink class="navbar-brand mr-auto mr-lg-0" href="" Match=@NavLinkMatch.All>Joe's Place</NavLink>
+        @*<img src="/images/profile.jpeg" alt="Profile Image" class="rounded-circle profile"
+            style="margin-right: 10px; height: 32px;" /> *@
+            
+            <div>
+                <a class="nav-link menu-link me-3 text-decoration-none text-uppercase d-inline-block d-md-none" 
+                    href="#" target="_blank">
+                    <span class="fa fa-2x fa-shopping-basket"></span>
+                    <span class="badge bg-light text-dark">1</span>
+                </a>
+        
+                <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas" @onclick="ToggleOpen">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+    <div class="navbar-collapse offcanvas-collapse bg-brand @(isOpen ? "open" : null)" id="navbarsExampleDefault" @onclick="ToggleOpen">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <NavLink class="nav-link" href="" Match=@NavLinkMatch.All>Start</NavLink>
+            </li>
+            @*
+            <li class="nav-item">
+                <NavLink class="nav-link" href="products">Products</NavLink>
+            </li>
+            *@
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="products" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Products
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="products">Clothes</a></li>
+                    <li><a class="dropdown-item" href="products">Apparel</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ol class="navbar-nav flex-row flex-wrap ms-md-auto list-inline list-unstyled" style="margin: 0;">
+            @*
+            <li class="nav-item list-inline-item">
+                <a class="nav-link menu-link me-0 py-2 text-decoration-none text-uppercase"
+                    href="#" title="Twitter" target="_blank">
+                    <i class="fab fa-2x fa-facebook"></i>
+                </a>
+            </li>
+            
+            <li class="nav-item list-inline-item">
+                <a class="nav-link menu-link me-0 py-2 text-decoration-none text-uppercase"
+                    href="#" target="_blank">
+                    <i class="fab fa-2x fa-youtube"></i>
+                </a>
+            </li>
+            *@
+
+            <li class="nav-item list-inline-item d-none d-md-block">
+                <a class="nav-link menu-link me-0 py-2 text-decoration-none text-uppercase"
+                    href="#" target="_blank">
+                    <span class="fa fa-2x fa-shopping-basket"></span>
+                    <span class="badge bg-light text-dark">1</span>
+                </a>
+            </li>
+        </ol>
+    </div>
+    </div>
+</nav>
+
+@code {
+    bool isOpen = false;
+
+    void ToggleOpen() => isOpen = !isOpen;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync(
+                "initDropDown");
+        }
+    }
+}

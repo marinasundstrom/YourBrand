@@ -132,6 +132,12 @@ services:
       - protocol: https
         port: 5090
 
+  - name: commerce
+    project: Commerce/Server/Commerce.Server.csproj
+    bindings:
+      - protocol: https
+        port: 6001
+
   - name: humanresources
     project: HumanResources/HumanResources/HumanResources.csproj
     bindings:

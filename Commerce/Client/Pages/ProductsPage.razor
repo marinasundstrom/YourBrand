@@ -1,0 +1,115 @@
+﻿@page "/products"
+@implements IDisposable
+@inject IProductsClient ProductsClient
+@inject PersistentComponentState ApplicationState
+@inject NavigationManager NavigationManager
+
+<SitePageTitle>Products</SitePageTitle>
+
+<div class="container">
+    <h1>Products</h1>
+
+    @if (productResults is not null)
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            @foreach (var product in productResults.Items)
+            {
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <a href="/products/@product.Id">
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="@product.Image"
+                        style="object-fit: contain;" />
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-outline-secondary" href="/products/@product.Id">View</a>
+                                </div>
+                                <small class="text-muted">
+                                    @if (product.HasVariants)
+                                    {
+                                        <text>Har flera varianter</text>
+                                    }
+                                    else
+                                    {
+                                        @product.Price?.ToString("c")
+                                    }
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <Pagination Class="mt-4" Page="@Page.GetValueOrDefault()" PageCount="@totalPages" PageChanged="OnPageChanged"
+        Href="/blog" />
+    }
+</div>
+
+@code {
+    ItemsResultOfProductDto? productResults;
+
+    int pageSize = 10;
+    int totalPages = 0;
+
+    private PersistingComponentStateSubscription persistingSubscription;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int? Page { get; set; } = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Page is null)
+        {
+            Page = 1;
+        }
+
+        persistingSubscription =
+        ApplicationState.RegisterOnPersisting(PersistProducts);
+
+        if (!ApplicationState.TryTakeFromJson<ItemsResultOfProductDto>(
+        "productResults", out var restored))
+        {
+            string productGroupId = "cbac50ee-95de-41a7-88d1-f758634cd9fd";
+
+            productResults = await ProductsClient.GetProductsAsync(productGroupId, Page.GetValueOrDefault(), pageSize, null, null, null);
+        }
+        else
+        {
+            productResults = restored!;
+        }
+
+        if (productResults.TotalItems < pageSize)
+        {
+            totalPages = 1;
+            return;
+        }
+        totalPages = (int)Math.Ceiling((double)(productResults.TotalItems / pageSize));
+    }
+
+    private Task PersistProducts()
+    {
+        ApplicationState.PersistAsJson("productResults", productResults);
+
+        return Task.CompletedTask;
+    }
+
+    void IDisposable.Dispose()
+    {
+        persistingSubscription.Dispose();
+    }
+
+    async Task OnPageChanged(int page)
+    {
+        /*
+        Page = page;
+        await LoadData();
+        StateHasChanged();
+        */
+    }
+
+}
