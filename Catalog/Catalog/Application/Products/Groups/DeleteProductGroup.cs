@@ -17,7 +17,7 @@ public record DeleteProductGroup(string ProductGroupId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProductGroup request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProductGroup request, CancellationToken cancellationToken)
         {
             var productGroup = await _context.ProductGroups
                 .Include(x => x.Products)
@@ -29,7 +29,6 @@ public record DeleteProductGroup(string ProductGroupId) : IRequest
 
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

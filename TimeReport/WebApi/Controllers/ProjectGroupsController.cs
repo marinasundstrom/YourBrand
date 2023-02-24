@@ -85,7 +85,7 @@ public class ProjectGroupsController : ControllerBase
     {
         try
         {
-            var expense = await _mediator.Send(new DeleteProjectGroupCommand(id), cancellationToken);
+            await _mediator.Send(new DeleteProjectGroupCommand(id), cancellationToken);
 
             return Ok();
         }

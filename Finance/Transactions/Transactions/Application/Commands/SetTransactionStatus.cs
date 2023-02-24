@@ -18,7 +18,7 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetTransactionStatus request, CancellationToken cancellationToken)
+        public async Task Handle(SetTransactionStatus request, CancellationToken cancellationToken)
         {
             var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
@@ -26,7 +26,6 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

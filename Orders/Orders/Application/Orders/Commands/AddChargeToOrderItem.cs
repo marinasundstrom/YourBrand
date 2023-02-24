@@ -25,7 +25,7 @@ public record AddChargeToOrderItemCommand(int OrderNo, Guid OrderItemId, ChargeD
             this.context = context;
         }
 
-        public async Task<Unit> Handle(AddChargeToOrderItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddChargeToOrderItemCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -84,7 +84,6 @@ public record AddChargeToOrderItemCommand(int OrderNo, Guid OrderItemId, ChargeD
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

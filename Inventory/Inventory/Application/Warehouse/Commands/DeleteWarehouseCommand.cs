@@ -17,7 +17,7 @@ public record DeleteWarehouseCommand(string Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteWarehouseCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteWarehouseCommand request, CancellationToken cancellationToken)
         {
             var warehouse = await context.Warehouses
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -28,7 +28,6 @@ public record DeleteWarehouseCommand(string Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

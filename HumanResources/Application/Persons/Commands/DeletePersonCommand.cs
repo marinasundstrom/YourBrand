@@ -26,7 +26,7 @@ public record DeletePersonCommand(string PersonId) : IRequest
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<Unit> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeletePersonCommand request, CancellationToken cancellationToken)
         {
             var person = await _context.Persons
                 .Include(p => p.Roles)
@@ -43,7 +43,6 @@ public record DeletePersonCommand(string PersonId) : IRequest
 
             await _eventPublisher.PublishEvent(new PersonDeleted(person.Id, _currentPersonService.UserId));
 
-            return Unit.Value;
         }
     }
 }

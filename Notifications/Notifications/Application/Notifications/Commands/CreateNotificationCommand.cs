@@ -20,7 +20,7 @@ public record CreateNotificationCommand(string Title, string? Text, string? Link
             this.context = context;
         }
 
-        public async Task<Unit> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
             if (request.UserId is not null)
             {
@@ -33,7 +33,6 @@ public record CreateNotificationCommand(string Title, string? Text, string? Link
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
 
         private void CreateNotification(CreateNotificationCommand request)

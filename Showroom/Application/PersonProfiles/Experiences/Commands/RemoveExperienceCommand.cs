@@ -28,7 +28,7 @@ public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequ
             this.currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(RemoveExperienceCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveExperienceCommand request, CancellationToken cancellationToken)
         {
             var experience = await _context.PersonProfileExperiences
                 .Include(x => x.PersonProfile)
@@ -47,7 +47,6 @@ public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequ
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

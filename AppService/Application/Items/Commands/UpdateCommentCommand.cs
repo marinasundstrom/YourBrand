@@ -18,7 +18,7 @@ public record UpdateCommentCommand(string CommentId, string Text) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
         {
             var comment = await context.Comments.FirstOrDefaultAsync(i => i.Id == request.CommentId, cancellationToken);
 
@@ -28,7 +28,6 @@ public record UpdateCommentCommand(string CommentId, string Text) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

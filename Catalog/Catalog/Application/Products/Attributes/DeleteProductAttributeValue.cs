@@ -17,7 +17,7 @@ public record DeleteProductAttributeValue(string ProductId, string AttributeId, 
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProductAttributeValue request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProductAttributeValue request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
              .AsSplitQuery()
@@ -34,7 +34,6 @@ public record DeleteProductAttributeValue(string ProductId, string AttributeId, 
 
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

@@ -26,7 +26,7 @@ public record UpdateMessageCommand(string ConversationId, string MessageId, stri
             _bus = bus;
         }
 
-        public async Task<Unit> Handle(UpdateMessageCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateMessageCommand request, CancellationToken cancellationToken)
         {
             var message = await context.Messages.FirstOrDefaultAsync(i => i.Id == request.MessageId, cancellationToken);
 
@@ -43,7 +43,6 @@ public record UpdateMessageCommand(string ConversationId, string MessageId, stri
 
             await _bus.Publish(new MessageUpdated(null!, message.Id, message.Text, DateTime.Now));
 
-            return Unit.Value;
         }
 
         private bool IsAuthorizedToEdit(Domain.Entities.Message message) => _currentUserService.IsCurrentUser(message.CreatedById!) || _currentUserService.IsUserInRole(Roles.Administrator);

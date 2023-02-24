@@ -21,7 +21,7 @@ public record UpdateDiscountCommand(string Id,
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateDiscountCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateDiscountCommand request, CancellationToken cancellationToken)
         {
             var discount = await context.Discounts.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -31,7 +31,6 @@ public record UpdateDiscountCommand(string Id,
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

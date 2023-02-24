@@ -2,7 +2,7 @@ using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Events.Enums;
 
-public class ExperienceAdded : DomainEvent
+public record ExperienceAdded : DomainEvent
 {
     public ExperienceAdded(string personProfileExperienceId, string personProfileId, int industryId)
     {
@@ -16,7 +16,7 @@ public class ExperienceAdded : DomainEvent
     public int IndustryId { get; }
 }
 
-public class ExperienceRemoved : DomainEvent
+public record ExperienceRemoved : DomainEvent
 {
     public ExperienceRemoved(string personProfileExperienceId, string personProfileId, int industryId)
     {
@@ -30,7 +30,7 @@ public class ExperienceRemoved : DomainEvent
     public int IndustryId { get; }
 }
 
-public class ExperienceUpdated : DomainEvent
+public record ExperienceUpdated : DomainEvent
 {
     public ExperienceUpdated(string personProfileExperienceId, string personProfileId, int industryId)
     {

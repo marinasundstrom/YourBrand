@@ -16,7 +16,7 @@ public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<Unit> Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams
                 .Include(x => x.Memberships)
@@ -35,7 +35,6 @@ public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
 
             await _eventPublisher.PublishEvent(new Contracts.TeamMemberAdded(team.Id, user.Id));
             
-            return Unit.Value;
         }
     }
 } 

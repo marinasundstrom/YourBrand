@@ -17,7 +17,7 @@ public record PickWarehouseItems(string Id, int Quantity, bool FromReserved = fa
             _context = context;
         }
 
-        public async Task<Unit> Handle(PickWarehouseItems request, CancellationToken cancellationToken)
+        public async Task Handle(PickWarehouseItems request, CancellationToken cancellationToken)
         {
             var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -27,7 +27,6 @@ public record PickWarehouseItems(string Id, int Quantity, bool FromReserved = fa
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

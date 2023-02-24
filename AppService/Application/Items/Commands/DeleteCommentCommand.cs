@@ -18,7 +18,7 @@ public record DeleteCommentCommand(string CommentId) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
         {
             var comment = await context.Comments
                 .Include(x => x.Item)
@@ -32,7 +32,6 @@ public record DeleteCommentCommand(string CommentId) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

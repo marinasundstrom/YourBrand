@@ -19,7 +19,7 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<Unit> Handle(PostTransactions request, CancellationToken cancellationToken)
+        public async Task Handle(PostTransactions request, CancellationToken cancellationToken)
         {
             foreach (var transaction in request.Transactions)
             {
@@ -38,7 +38,6 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
             await _publishEndpoint.Publish(
                 new Contracts.IncomingTransactionBatch(request.Transactions.Select(t => new Contracts.Transaction(t.Id, t.Date.GetValueOrDefault(), (Contracts.TransactionStatus)t.Status, t.From, t.Reference, t.Currency, t.Amount))));
 
-            return Unit.Value;
         }
     }
 }

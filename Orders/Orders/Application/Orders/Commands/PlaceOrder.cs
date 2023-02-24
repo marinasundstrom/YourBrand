@@ -28,7 +28,7 @@ public record PlaceOrderCommand(int OrderNo) : IRequest
             this.subscriptionOrderGenerator = subscriptionOrderGenerator;
         }
 
-        public async Task<Unit> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -54,7 +54,6 @@ public record PlaceOrderCommand(int OrderNo) : IRequest
                 await context.SaveChangesAsync();
             }
 
-            return Unit.Value;
         }
     }
 }

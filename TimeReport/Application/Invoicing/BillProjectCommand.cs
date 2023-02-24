@@ -22,7 +22,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
             _invoicesClient = invoicesClient;
         }
 
-        public async Task<MediatR.Unit> Handle(BillProjectCommand request, CancellationToken cancellationToken)
+        public async Task Handle(BillProjectCommand request, CancellationToken cancellationToken)
         {
             var from = DateOnly.FromDateTime(request.From);
             var to = DateOnly.FromDateTime(request.To);
@@ -40,7 +40,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
             if (!entries.Any())
             {
-                return MediatR.Unit.Value;
+                return;
             }
 
             var invoice = await _invoicesClient.CreateInvoiceAsync(new CreateInvoice()
@@ -70,7 +70,6 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
             // TODO: Mark TimeSheets as billed.
 
-            return MediatR.Unit.Value;
         }
     }
 }

@@ -11,7 +11,7 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(typeof(GetMessagesIncrQuery));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetMessagesIncrQuery)));
 
         /*
         services.AddHttpClient(nameof(INotificationsClient), (sp, http) =>

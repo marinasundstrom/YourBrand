@@ -18,7 +18,7 @@ public record UpdateItemGroup(string Id, string Name) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateItemGroup request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateItemGroup request, CancellationToken cancellationToken)
         {
             var item = await _context.ItemGroups.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -28,7 +28,6 @@ public record UpdateItemGroup(string Id, string Name) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

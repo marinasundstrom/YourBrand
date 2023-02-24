@@ -85,7 +85,7 @@ public class ActivityTypesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new DeleteActivityTypeCommand(id), cancellationToken);
+            await _mediator.Send(new DeleteActivityTypeCommand(id), cancellationToken);
 
             return Ok();
         }

@@ -19,7 +19,7 @@ public record DeleteProjectCommand(string ProjectId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
                 .AsSplitQuery()
@@ -34,7 +34,6 @@ public record DeleteProjectCommand(string ProjectId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -20,7 +20,7 @@ public record UploadImageCommand(string Id, Stream Stream) : IRequest
             this._fileUploaderService = fileUploaderService;
         }
 
-        public async Task<Unit> Handle(UploadImageCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UploadImageCommand request, CancellationToken cancellationToken)
         {
             var item = await context.PersonProfiles.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -36,7 +36,6 @@ public record UploadImageCommand(string Id, Stream Stream) : IRequest
             item.ProfileImage = imageId;
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

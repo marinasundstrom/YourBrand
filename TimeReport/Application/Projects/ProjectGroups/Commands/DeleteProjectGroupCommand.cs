@@ -18,7 +18,7 @@ public record DeleteProjectGroupCommand(string ExpenseId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProjectGroupCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProjectGroupCommand request, CancellationToken cancellationToken)
         {
             var projectGroup = await _context.ProjectGroups
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record DeleteProjectGroupCommand(string ExpenseId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

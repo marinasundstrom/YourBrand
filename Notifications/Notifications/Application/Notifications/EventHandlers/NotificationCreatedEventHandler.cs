@@ -14,10 +14,10 @@ namespace YourBrand.Notifications.Application.Notifications.EventHandlers;
 public class NotificationCreatedEventHandler : IDomainEventHandler<NotificationCreatedEvent>
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly INotificationPublisher _notficationPublisher;
+    private readonly Common.Interfaces.INotificationPublisher _notficationPublisher;
     private readonly IBackgroundJobClient _recurringJobManager;
 
-    public NotificationCreatedEventHandler(IServiceProvider serviceProvider, INotificationPublisher notficationSender, IBackgroundJobClient recurringJobManager)
+    public NotificationCreatedEventHandler(IServiceProvider serviceProvider, Common.Interfaces.INotificationPublisher notficationSender, IBackgroundJobClient recurringJobManager)
     {
         _serviceProvider = serviceProvider;
         _notficationPublisher = notficationSender;
@@ -58,7 +58,7 @@ public class NotificationCreatedEventHandler : IDomainEventHandler<NotificationC
     {
         var delay = notification.ScheduledFor.GetValueOrDefault() - DateTime.UtcNow;
 
-        var jobId = _recurringJobManager.Schedule<INotificationPublisher>(
+        var jobId = _recurringJobManager.Schedule<Common.Interfaces.INotificationPublisher>(
             (sender) => sender.PublishNotification(notification),
                 delay);
 

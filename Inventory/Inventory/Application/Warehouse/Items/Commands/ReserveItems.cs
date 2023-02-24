@@ -17,7 +17,7 @@ public record ReserveWarehouseItems(string Id, int Quantity) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(ReserveWarehouseItems request, CancellationToken cancellationToken)
+        public async Task Handle(ReserveWarehouseItems request, CancellationToken cancellationToken)
         {
             var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -27,7 +27,6 @@ public record ReserveWarehouseItems(string Id, int Quantity) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

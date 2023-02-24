@@ -25,7 +25,7 @@ var builder = new ConfigurationBuilder()
 var configuration = builder.Build();
 
 ServiceCollection services = new ();
-services.AddMediatR(typeof(Program));
+services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
 services.AddLogging();
 services.AddInfrastructure(configuration);
 services.AddScoped<IApiApplicationContext>(sp => Substitute.For<IApiApplicationContext>());

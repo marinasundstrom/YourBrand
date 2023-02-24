@@ -19,7 +19,7 @@ public record AddTeamMemberCommand(string Id, string UserId) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams
                 .Include(x => x.Memberships)
@@ -36,7 +36,6 @@ public record AddTeamMemberCommand(string Id, string UserId) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -17,7 +17,7 @@ public record DeleteItemGroup(string ItemGroupId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteItemGroup request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteItemGroup request, CancellationToken cancellationToken)
         {
             /*
             var invoice = await _context.ItemGroups
@@ -36,7 +36,6 @@ public record DeleteItemGroup(string ItemGroupId) : IRequest
             await _context.SaveChangesAsync(cancellationToken);
             */
 
-            return Unit.Value;
         }
     }
 }

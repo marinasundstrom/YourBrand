@@ -54,7 +54,7 @@ public class TimeReportPersonDeletedConsumer : IConsumer<PersonDeleted>
 
         _currentUserService.SetCurrentUser(message.DeletedById);
 
-        var result = await _mediator.Send(new DeleteUserCommand(message.PersonId));
+        await _mediator.Send(new DeleteUserCommand(message.PersonId));
     }
 }
 

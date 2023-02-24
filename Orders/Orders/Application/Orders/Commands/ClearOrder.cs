@@ -24,7 +24,7 @@ public record ClearOrderCommand(int OrderNo) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(ClearOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ClearOrderCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -43,7 +43,6 @@ public record ClearOrderCommand(int OrderNo) : IRequest
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

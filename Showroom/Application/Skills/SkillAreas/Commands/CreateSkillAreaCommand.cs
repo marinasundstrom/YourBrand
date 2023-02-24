@@ -16,7 +16,7 @@ public record CreateSkillAreaCommand(string Name, int? IndustryId) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(CreateSkillAreaCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateSkillAreaCommand request, CancellationToken cancellationToken)
         {
             var skillArea = await context.SkillAreas.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
@@ -34,7 +34,6 @@ public record CreateSkillAreaCommand(string Name, int? IndustryId) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

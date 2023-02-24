@@ -2,7 +2,7 @@
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DirectoryDeleted : DomainEvent
+public record DirectoryDeleted : DomainEvent
 {
     public DirectoryDeleted(string documentId, string? cause)
     {

@@ -85,7 +85,7 @@ public class ExpenseTypesController : ControllerBase
     {
         try
         {
-            var expense = await _mediator.Send(new DeleteExpenseTypeCommand(id), cancellationToken);
+            await _mediator.Send(new DeleteExpenseTypeCommand(id), cancellationToken);
 
             return Ok();
         }

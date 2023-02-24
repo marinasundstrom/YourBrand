@@ -32,7 +32,7 @@ public record DeleteMessageCommand(string ConversationId, string MessageId) : IR
             _bus = bus;
         }
 
-        public async Task<Unit> Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
         {
             var conversation = await _conversationRepository.GetConversation(request.ConversationId, cancellationToken);
 
@@ -55,7 +55,6 @@ public record DeleteMessageCommand(string ConversationId, string MessageId) : IR
 
             await _bus.Publish(new MessageDeleted(null!, message.Id));
 
-            return Unit.Value;
         }
 
         private bool IsAuthorizedToDelete(Domain.Entities.Message message) => _currentUserService.IsCurrentUser(message.CreatedById!) || _currentUserService.IsUserInRole(Roles.Administrator);

@@ -13,7 +13,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(typeof(GetExpensesQuery));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetExpensesQuery)));
 
         return services;
     }

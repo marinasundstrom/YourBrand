@@ -17,7 +17,7 @@ public record DeleteSiteCommand(string Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteSiteCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteSiteCommand request, CancellationToken cancellationToken)
         {
             var site = await context.Sites
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -28,7 +28,6 @@ public record DeleteSiteCommand(string Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -2,7 +2,7 @@ using YourBrand.Documents.Domain.Common;
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DocumentDeleted : DomainEvent
+public record DocumentDeleted : DomainEvent
 {
     public DocumentDeleted(string documentId, string? cause)
     {

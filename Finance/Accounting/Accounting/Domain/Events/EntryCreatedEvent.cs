@@ -3,7 +3,7 @@ using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Domain.Events;
 
-public class EntryCreatedEvent : DomainEvent
+public record EntryCreatedEvent : DomainEvent
 {
     public EntryCreatedEvent(int entryId)
     {

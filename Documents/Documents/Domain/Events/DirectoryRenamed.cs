@@ -2,7 +2,7 @@
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DirectoryRenamed : DomainEvent
+public record DirectoryRenamed : DomainEvent
 {
     public DirectoryRenamed(string documentId, string newName, string oldName)
     {

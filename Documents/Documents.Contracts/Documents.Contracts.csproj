@@ -13,6 +13,6 @@
   </ItemGroup>
   <ItemGroup>
 	  <PackageReference Include="MassTransit" Version="8.0.7-develop.591" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 </Project>

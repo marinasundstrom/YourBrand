@@ -18,7 +18,7 @@ public record MarkAllNotificationsAsReadCommand : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(MarkAllNotificationsAsReadCommand request, CancellationToken cancellationToken)
+        public async Task Handle(MarkAllNotificationsAsReadCommand request, CancellationToken cancellationToken)
         {
             var notifications = await context.Notifications
                 .Where(n => n.Published != null)
@@ -32,7 +32,6 @@ public record MarkAllNotificationsAsReadCommand : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

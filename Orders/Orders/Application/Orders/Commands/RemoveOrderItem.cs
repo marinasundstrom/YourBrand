@@ -22,7 +22,7 @@ public record RemoveOrderItemCommand(int OrderNo, Guid OrderItemId) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(RemoveOrderItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveOrderItemCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -53,7 +53,6 @@ public record RemoveOrderItemCommand(int OrderNo, Guid OrderItemId) : IRequest
 
             item.AddDomainEvent(new OrderItemRemovedEvent(order.OrderNo, item.Id));
 
-            return Unit.Value;
         }
     }
 }

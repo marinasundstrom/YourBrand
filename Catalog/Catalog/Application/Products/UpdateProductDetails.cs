@@ -17,7 +17,7 @@ public record UpdateProductDetails(string ProductId, ApiUpdateProductDetails Det
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateProductDetails request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateProductDetails request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
             .FirstAsync(x => x.Id == request.ProductId);
@@ -33,7 +33,6 @@ public record UpdateProductDetails(string ProductId, ApiUpdateProductDetails Det
 
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
         }
 
         private static string? GetImageUrl(string? name)

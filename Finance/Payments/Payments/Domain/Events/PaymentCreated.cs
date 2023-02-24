@@ -2,7 +2,7 @@ using YourBrand.Payments.Domain.Common;
 
 namespace YourBrand.Payments.Domain.Events;
 
-public class PaymentCreated : DomainEvent
+public record PaymentCreated : DomainEvent
 {
     public PaymentCreated(string paymentId)
     {

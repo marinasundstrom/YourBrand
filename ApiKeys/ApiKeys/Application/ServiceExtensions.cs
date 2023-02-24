@@ -9,7 +9,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(typeof(CheckApiKeyCommand));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(CheckApiKeyCommand)));
 
         return services;
     }

@@ -50,7 +50,7 @@ public class TimeReportTeamDeletedConsumer : IConsumer<TeamDeleted>
 
         _currentTeamService.SetCurrentUser(message.DeletedById);
 
-        var result = await _mediator.Send(new DeleteTeamCommand(message.TeamId));
+        await _mediator.Send(new DeleteTeamCommand(message.TeamId));
     }
 }
 
@@ -99,6 +99,6 @@ public class TimeReportTeamMemberAddedConsumer : IConsumer<TeamMemberAdded>
 
         //_currentTeamService.SetCurrentUser(message.UpdatedById);
 
-        var result = await _mediator.Send(new AddTeamMemberCommand(message.TeamId, message.PersonId));
+        await _mediator.Send(new AddTeamMemberCommand(message.TeamId, message.PersonId));
     }
 }

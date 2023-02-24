@@ -17,7 +17,7 @@ public record DeleteDiscountCommand(string Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteDiscountCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteDiscountCommand request, CancellationToken cancellationToken)
         {
             var discount = await context.Discounts
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -28,7 +28,6 @@ public record DeleteDiscountCommand(string Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

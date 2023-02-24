@@ -17,7 +17,7 @@ public record DeletePerson(string PersonId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeletePerson request, CancellationToken cancellationToken)
+        public async Task Handle(DeletePerson request, CancellationToken cancellationToken)
         {
             /*
             var invoice = await _context.Persons
@@ -36,7 +36,6 @@ public record DeletePerson(string PersonId) : IRequest
             await _context.SaveChangesAsync(cancellationToken);
             */
 
-            return Unit.Value;
         }
     }
 }

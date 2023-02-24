@@ -24,7 +24,7 @@ namespace YourBrand.Orders.Application.Subscriptions
                 this.salesContext = salesContext;
             }
 
-            public async Task<Unit> Handle(UpdateSubscriptionCommand request, CancellationToken cancellationToken)
+            public async Task Handle(UpdateSubscriptionCommand request, CancellationToken cancellationToken)
             {
                 var subscription = await salesContext.Subscriptions
                     .FirstOrDefaultAsync(c => c.Id == request.SubscriptionId);
@@ -38,7 +38,6 @@ namespace YourBrand.Orders.Application.Subscriptions
 
                 await salesContext.SaveChangesAsync();
 
-                return Unit.Value;
             }
         }
     }

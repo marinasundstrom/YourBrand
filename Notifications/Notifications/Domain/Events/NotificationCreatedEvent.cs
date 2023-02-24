@@ -2,7 +2,7 @@
 
 namespace YourBrand.Notifications.Domain.Events;
 
-public class NotificationCreatedEvent : DomainEvent
+public record NotificationCreatedEvent : DomainEvent
 {
     public NotificationCreatedEvent(string notificationId)
     {

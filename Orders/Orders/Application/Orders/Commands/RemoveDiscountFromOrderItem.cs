@@ -24,7 +24,7 @@ public record RemoveDiscountFromOrderItemCommand(int OrderNo, Guid OrderItemId, 
             this.context = context;
         }
 
-        public async Task<Unit> Handle(RemoveDiscountFromOrderItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveDiscountFromOrderItemCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -60,7 +60,6 @@ public record RemoveDiscountFromOrderItemCommand(int OrderNo, Guid OrderItemId, 
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

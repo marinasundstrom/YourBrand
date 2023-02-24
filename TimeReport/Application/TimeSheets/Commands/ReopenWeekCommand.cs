@@ -26,7 +26,7 @@ public record ReopenWeekCommand(string TimeSheetId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(ReopenWeekCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ReopenWeekCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
@@ -39,7 +39,6 @@ public record ReopenWeekCommand(string TimeSheetId) : IRequest
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

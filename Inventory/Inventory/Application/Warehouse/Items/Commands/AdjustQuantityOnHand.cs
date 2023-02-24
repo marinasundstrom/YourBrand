@@ -17,7 +17,7 @@ public record AdjustQuantityOnHand(string Id, int NewQuantityOnHand) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(AdjustQuantityOnHand request, CancellationToken cancellationToken)
+        public async Task Handle(AdjustQuantityOnHand request, CancellationToken cancellationToken)
         {
             var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -27,7 +27,6 @@ public record AdjustQuantityOnHand(string Id, int NewQuantityOnHand) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

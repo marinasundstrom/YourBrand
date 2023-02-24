@@ -24,7 +24,7 @@ public record RemoveChargeFromOrderCommand(int OrderNo, Guid ChargeId) : IReques
             this.context = context;
         }
 
-        public async Task<Unit> Handle(RemoveChargeFromOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveChargeFromOrderCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -53,7 +53,6 @@ public record RemoveChargeFromOrderCommand(int OrderNo, Guid ChargeId) : IReques
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

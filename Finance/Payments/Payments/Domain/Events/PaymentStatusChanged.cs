@@ -3,7 +3,7 @@ using YourBrand.Payments.Domain.Enums;
 
 namespace YourBrand.Payments.Domain.Events;
 
-public class PaymentStatusChanged : DomainEvent
+public record PaymentStatusChanged : DomainEvent
 {
     public PaymentStatusChanged(string paymentId, PaymentStatus status)
     {

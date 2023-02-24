@@ -17,7 +17,7 @@ public record UpdateUserRoleCommand(string UserId, string Role) : IRequest
             _userManager = userManager;
         }
 
-        public async Task<Unit> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
 
@@ -28,7 +28,6 @@ public record UpdateUserRoleCommand(string UserId, string Role) : IRequest
                 throw new Exception(result.Errors.First().Description);
             }
 
-            return Unit.Value;
         }
     }
 }

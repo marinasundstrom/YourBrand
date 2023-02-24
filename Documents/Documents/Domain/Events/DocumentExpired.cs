@@ -2,7 +2,7 @@
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DocumentExpired : DomainEvent
+public record DocumentExpired : DomainEvent
 {
     public DocumentExpired(string documentId)
     {

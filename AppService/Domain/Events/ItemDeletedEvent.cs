@@ -2,7 +2,7 @@
 
 namespace YourBrand.Domain.Events;
 
-public class ItemDeletedEvent : DomainEvent
+public record ItemDeletedEvent : DomainEvent
 {
     public ItemDeletedEvent(string id, string name)
     {

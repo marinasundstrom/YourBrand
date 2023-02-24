@@ -27,7 +27,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
             _transactionsClient = transactionsClient;
         }
 
-        public async Task<Unit> Handle(ReadRotRutResponse request, CancellationToken cancellationToken)
+        public async Task Handle(ReadRotRutResponse request, CancellationToken cancellationToken)
         {
             foreach(var beslut in request.BeslutJson.Beslut) 
             {
@@ -78,7 +78,6 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
             
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
 
             //await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
         }

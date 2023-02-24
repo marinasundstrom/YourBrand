@@ -2,7 +2,7 @@ using YourBrand.Transactions.Domain.Common;
 
 namespace YourBrand.Transactions.Domain.Events;
 
-public class TransactionReferenceUpdated : DomainEvent
+public record TransactionReferenceUpdated : DomainEvent
 {
     public TransactionReferenceUpdated(string transactionId, string reference)
     {

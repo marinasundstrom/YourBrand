@@ -18,7 +18,7 @@ public record RenameDocument(string DocumentId, string NewName) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(RenameDocument request, CancellationToken cancellationToken)
+        public async Task Handle(RenameDocument request, CancellationToken cancellationToken)
         {
             var document = await _context.Documents
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record RenameDocument(string DocumentId, string NewName) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

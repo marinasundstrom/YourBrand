@@ -18,7 +18,7 @@ public record UpdateItem(string Id, string NewId, string Name, string GroupId, s
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateItem request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateItem request, CancellationToken cancellationToken)
         {
             var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -31,7 +31,6 @@ public record UpdateItem(string Id, string NewId, string Name, string GroupId, s
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return MediatR.Unit.Value;
         }
     }
 }

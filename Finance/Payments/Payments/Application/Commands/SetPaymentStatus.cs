@@ -18,7 +18,7 @@ public record SetPaymentStatus(string PaymentId, PaymentStatus Status) : IReques
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetPaymentStatus request, CancellationToken cancellationToken)
+        public async Task Handle(SetPaymentStatus request, CancellationToken cancellationToken)
         {
             var payment = await _context.Payments.FirstAsync(x => x.Id == request.PaymentId, cancellationToken);
 
@@ -26,7 +26,6 @@ public record SetPaymentStatus(string PaymentId, PaymentStatus Status) : IReques
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

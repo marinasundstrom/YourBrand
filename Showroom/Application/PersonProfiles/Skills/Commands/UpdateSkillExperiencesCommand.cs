@@ -17,7 +17,7 @@ public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkill
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateSkillExperiencesCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateSkillExperiencesCommand request, CancellationToken cancellationToken)
         {
             foreach (var experience in request.Experiences)
             {
@@ -52,7 +52,6 @@ public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkill
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

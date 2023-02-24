@@ -25,7 +25,7 @@ public record UpdateHeadlineCommand(string Id, string Text) : IRequest
             this.currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(UpdateHeadlineCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateHeadlineCommand request, CancellationToken cancellationToken)
         {
             var personProfile = await _context.PersonProfiles.FindAsync(request.Id);
             if (personProfile is null)
@@ -37,7 +37,6 @@ public record UpdateHeadlineCommand(string Id, string Text) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

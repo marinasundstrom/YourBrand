@@ -17,7 +17,7 @@ public record DeleteCampaignCommand(string Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteCampaignCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteCampaignCommand request, CancellationToken cancellationToken)
         {
             var campaigns = await context.Campaigns
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -28,7 +28,6 @@ public record DeleteCampaignCommand(string Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

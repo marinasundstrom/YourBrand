@@ -24,7 +24,7 @@ public record UpdateOrderStatusCommand(int OrderNo, string OrderStatusId) : IReq
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -42,7 +42,6 @@ public record UpdateOrderStatusCommand(int OrderNo, string OrderStatusId) : IReq
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

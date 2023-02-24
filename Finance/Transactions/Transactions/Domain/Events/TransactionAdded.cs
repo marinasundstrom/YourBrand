@@ -2,7 +2,7 @@ using YourBrand.Transactions.Domain.Common;
 
 namespace YourBrand.Transactions.Domain.Events;
 
-public class TransactionRegistered : DomainEvent
+public record TransactionRegistered : DomainEvent
 {
     public TransactionRegistered(string transactionId)
     {

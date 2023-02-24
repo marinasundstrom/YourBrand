@@ -3,7 +3,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public class MonthLocked : DomainEvent
+public record MonthLocked : DomainEvent
 {
     public MonthLocked(int year, int month)
     {

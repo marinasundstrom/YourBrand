@@ -2,7 +2,7 @@ using YourBrand.HumanResources.Domain.Common;
 
 namespace YourBrand.HumanResources.Domain.Events;
 
-public class TeamMemberRemoved : DomainEvent
+public record TeamMemberRemoved : DomainEvent
 {
     public string TeamId { get; set; }
 

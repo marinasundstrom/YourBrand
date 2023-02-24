@@ -3,7 +3,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Domain.Events;
 
-public class InvoiceStatusChanged : DomainEvent
+public record InvoiceStatusChanged : DomainEvent
 {
     public InvoiceStatusChanged(string invoiceId, InvoiceStatus status)
     {

@@ -24,7 +24,7 @@ public record AddItemCommand(string Name, string Description) : IRequest
             this.client = client;
         }
 
-        public async Task<Unit> Handle(AddItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddItemCommand request, CancellationToken cancellationToken)
         {
             var item = new Item(request.Name, request.Description);
 
@@ -34,7 +34,6 @@ public record AddItemCommand(string Name, string Description) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

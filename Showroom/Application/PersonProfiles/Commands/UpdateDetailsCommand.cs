@@ -25,7 +25,7 @@ public record UpdateDetailsCommand(string Id, PersonProfileDetailsDto Details) :
             this.currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(UpdateDetailsCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateDetailsCommand request, CancellationToken cancellationToken)
         {
             var personProfile = await _context.PersonProfiles.FindAsync(request.Id);
             if (personProfile is null)
@@ -44,7 +44,6 @@ public record UpdateDetailsCommand(string Id, PersonProfileDetailsDto Details) :
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

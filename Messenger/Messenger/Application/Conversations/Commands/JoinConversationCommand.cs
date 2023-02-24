@@ -32,7 +32,7 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
             _bus = bus;
         }
 
-        public async Task<Unit> Handle(JoinConversationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(JoinConversationCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUserService.UserId;
 
@@ -54,7 +54,6 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -28,7 +28,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(LockMonthCommand request, CancellationToken cancellationToken)
+        public async Task Handle(LockMonthCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
@@ -89,7 +89,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
                               statusCode: StatusCodes.Status403Forbidden);
                     */
 
-                    return Unit.Value;
+                    return;
                 }
 
                 // Cannot lock month with open Timesheets
@@ -114,7 +114,6 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
                 await _unitOfWork.SaveChangesAsync();
             }
 
-            return Unit.Value;
         }
     }
 }

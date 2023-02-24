@@ -3,7 +3,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public class TimeSheetActivityDeletedEvent : DomainEvent
+public record TimeSheetActivityDeletedEvent : DomainEvent
 {
     public TimeSheetActivityDeletedEvent(string timeSheetId, string timeSheetActivityId, string activityId)
     {

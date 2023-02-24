@@ -2,7 +2,7 @@
 
 namespace YourBrand.Domain.Events;
 
-public class ItemCreatedEvent : DomainEvent
+public record ItemCreatedEvent : DomainEvent
 {
     public ItemCreatedEvent(string itemId)
     {

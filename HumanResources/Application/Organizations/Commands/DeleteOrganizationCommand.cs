@@ -26,7 +26,7 @@ public record DeleteOrganizationCommand(string OrganizationId) : IRequest
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<Unit> Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = await _context.Organizations
                 .FirstOrDefaultAsync(p => p.Id == request.OrganizationId);
@@ -42,7 +42,6 @@ public record DeleteOrganizationCommand(string OrganizationId) : IRequest
 
             await _eventPublisher.PublishEvent(new OrganizationDeleted(organization.Id, _currentPersonService.UserId));
 
-            return Unit.Value;
         }
     }
 }

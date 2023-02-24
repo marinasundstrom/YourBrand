@@ -24,7 +24,7 @@ public record RemoveDiscountFromOrderCommand(int OrderNo, Guid DiscountId) : IRe
             this.context = context;
         }
 
-        public async Task<Unit> Handle(RemoveDiscountFromOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveDiscountFromOrderCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -53,7 +53,6 @@ public record RemoveDiscountFromOrderCommand(int OrderNo, Guid DiscountId) : IRe
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

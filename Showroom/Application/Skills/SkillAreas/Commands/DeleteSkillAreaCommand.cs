@@ -16,7 +16,7 @@ public record DeleteSkillAreaCommand(string Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteSkillAreaCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteSkillAreaCommand request, CancellationToken cancellationToken)
         {
             var skillArea = await context.SkillAreas
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -27,7 +27,6 @@ public record DeleteSkillAreaCommand(string Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -23,7 +23,7 @@ public record SetInvoiceStatus(string InvoiceId, InvoiceStatus Status) : IReques
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetInvoiceStatus request, CancellationToken cancellationToken)
+        public async Task Handle(SetInvoiceStatus request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -31,7 +31,6 @@ public record SetInvoiceStatus(string InvoiceId, InvoiceStatus Status) : IReques
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

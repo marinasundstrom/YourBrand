@@ -48,7 +48,7 @@ public class TimeReportOrganizationDeletedConsumer : IConsumer<OrganizationDelet
 
         _currentOrganizationService.SetCurrentUser(message.DeletedById);
 
-        var result = await _mediator.Send(new DeleteOrganizationCommand(message.OrganizationId));
+        await _mediator.Send(new DeleteOrganizationCommand(message.OrganizationId));
     }
 }
 

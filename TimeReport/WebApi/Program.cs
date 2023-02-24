@@ -125,7 +125,7 @@ static class Program
 
         services.AddSignalR();
 
-        services.AddMediatR(typeof(Program));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
 
         var app = builder.Build();
 

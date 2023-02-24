@@ -2,7 +2,7 @@ using YourBrand.Invoicing.Domain.Common;
 
 namespace YourBrand.Invoicing.Domain.Events;
 
-public class InvoiceAmountPaidChanged : DomainEvent
+public record InvoiceAmountPaidChanged : DomainEvent
 {
     public InvoiceAmountPaidChanged(string invoiceId, decimal? amountPaid)
     {

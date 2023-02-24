@@ -23,7 +23,7 @@ public record DeleteNotificationCommand(string NotificationId) : IRequest
             _backgroundJobClient = backgroundJobClient;
         }
 
-        public async Task<Unit> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
         {
             var notification = await context.Notifications
                 .FirstOrDefaultAsync(i => i.Id == request.NotificationId, cancellationToken);
@@ -42,7 +42,6 @@ public record DeleteNotificationCommand(string NotificationId) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

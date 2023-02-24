@@ -16,7 +16,7 @@ public record UpdateWarehouseCommand(string Id, string Name, string SiteId) : IR
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
             var warehouse = await context.Warehouses.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -27,7 +27,6 @@ public record UpdateWarehouseCommand(string Id, string Name, string SiteId) : IR
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

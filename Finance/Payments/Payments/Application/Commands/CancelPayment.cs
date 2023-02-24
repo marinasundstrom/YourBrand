@@ -22,7 +22,7 @@ public record CancelPayment(string PaymentId) : IRequest
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<Unit> Handle(CancelPayment request, CancellationToken cancellationToken)
+        public async Task Handle(CancelPayment request, CancellationToken cancellationToken)
         {
             var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Id == request.PaymentId);
 
@@ -35,7 +35,6 @@ public record CancelPayment(string PaymentId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

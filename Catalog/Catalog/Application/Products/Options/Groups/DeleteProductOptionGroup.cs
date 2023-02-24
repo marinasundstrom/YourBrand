@@ -17,7 +17,7 @@ public record DeleteProductOptionGroup(string ProductId, string OptionGroupId) :
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProductOptionGroup request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProductOptionGroup request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
                 .Include(x => x.OptionGroups)
@@ -34,7 +34,6 @@ public record DeleteProductOptionGroup(string ProductId, string OptionGroupId) :
 
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

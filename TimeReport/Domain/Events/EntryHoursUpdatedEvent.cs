@@ -4,7 +4,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public class EntryHoursUpdatedEvent : DomainEvent
+public record EntryHoursUpdatedEvent : DomainEvent
 {
     public EntryHoursUpdatedEvent(string projectId, string timeSheetId, string activityId, string entryId, double? hours)
     {

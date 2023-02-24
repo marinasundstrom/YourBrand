@@ -11,7 +11,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(typeof(GetAccountQuery));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetAccountQuery)));
 
         return services;
     }

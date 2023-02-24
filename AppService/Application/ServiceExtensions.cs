@@ -17,7 +17,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(typeof(GetItemsQuery));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetItemsQuery)));
 
         services.AddScoped<Handler>();
 

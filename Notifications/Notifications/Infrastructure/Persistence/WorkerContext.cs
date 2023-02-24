@@ -58,6 +58,7 @@ public class WorkerContext : DbContext, IWorkerContext
 
         var domainEvents = entities
             .SelectMany(e => e.DomainEvents)
+            .OrderBy(e => e.Timestamp)
             .ToList();
 
         var outboxMessages = domainEvents.Select(domainEvent =>

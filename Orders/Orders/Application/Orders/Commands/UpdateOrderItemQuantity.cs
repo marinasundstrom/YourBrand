@@ -22,7 +22,7 @@ public record UpdateOrderItemQuantityCommand(int OrderNo, Guid OrderItemId, doub
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateOrderItemQuantityCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateOrderItemQuantityCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -53,7 +53,6 @@ public record UpdateOrderItemQuantityCommand(int OrderNo, Guid OrderItemId, doub
 
             //await bus.Publish(new OrderItemQuantityUpdatedEvent(order.OrderNo, item.Id, oldQuantity, item.Quantity));
 
-            return Unit.Value;
         }
     }
 }

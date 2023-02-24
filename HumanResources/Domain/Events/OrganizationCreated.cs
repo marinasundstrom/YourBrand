@@ -2,7 +2,7 @@ using YourBrand.HumanResources.Domain.Common;
 
 namespace YourBrand.HumanResources.Domain.Events;
 
-public class OrganizationCreated : DomainEvent
+public record OrganizationCreated : DomainEvent
 {
     public string OrganizationId { get; set; }
 

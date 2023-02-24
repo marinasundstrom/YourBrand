@@ -4,7 +4,7 @@ using YourBrand.Domain.Common;
 
 namespace YourBrand.Domain.Events;
 
-public class ItemImageUploadedEvent : DomainEvent
+public record ItemImageUploadedEvent : DomainEvent
 {
     public ItemImageUploadedEvent(string id)
     {

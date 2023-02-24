@@ -18,7 +18,7 @@ public record DeleteExpenseTypeCommand(string ExpenseId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteExpenseTypeCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteExpenseTypeCommand request, CancellationToken cancellationToken)
         {
             var expenseType = await _context.ExpenseTypes
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record DeleteExpenseTypeCommand(string ExpenseId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -18,7 +18,7 @@ public record DeleteInvoice(string InvoiceId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteInvoice request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteInvoice request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
@@ -40,7 +40,6 @@ public record DeleteInvoice(string InvoiceId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

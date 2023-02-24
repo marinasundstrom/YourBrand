@@ -2,7 +2,7 @@ using YourBrand.Documents.Domain.Common;
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DocumentRenamed : DomainEvent
+public record DocumentRenamed : DomainEvent
 {
     public DocumentRenamed(string documentId, string newName, string oldName)
     {

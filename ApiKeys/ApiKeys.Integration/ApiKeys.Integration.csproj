@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AspNetCore.Authentication.ApiKey" Version="6.0.1" />
+		<PackageReference Include="AspNetCore.Authentication.ApiKey" Version="7.0.0" />
 		<PackageReference Include="IdentityModel" Version="6.1.0-preview.1" />
     </ItemGroup>
 

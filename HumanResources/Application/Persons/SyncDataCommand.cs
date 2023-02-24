@@ -23,7 +23,7 @@ public record SyncDataCommand() : IRequest
             _currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(SyncDataCommand request, CancellationToken cancellationToken)
+        public async Task Handle(SyncDataCommand request, CancellationToken cancellationToken)
         {
             var organizations = await _context.Organizations
                 .OrderBy(p => p.Created)
@@ -47,7 +47,6 @@ public record SyncDataCommand() : IRequest
                 await _eventPublisher.PublishEvent(new PersonCreated(user.Id, _currentUserService.UserId));
             }
 
-            return Unit.Value;
         }
     }
 }

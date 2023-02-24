@@ -18,7 +18,7 @@ public record DeleteAbsenceCommand(string AbsenceId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteAbsenceCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteAbsenceCommand request, CancellationToken cancellationToken)
         {
             var absence = await _context.Absence
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record DeleteAbsenceCommand(string AbsenceId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

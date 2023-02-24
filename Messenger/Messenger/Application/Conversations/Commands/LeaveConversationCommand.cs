@@ -29,7 +29,7 @@ public record LeaveConversationCommand(string? ConversationId) : IRequest
             _bus = bus;
         }
 
-        public async Task<Unit> Handle(LeaveConversationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(LeaveConversationCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUserService.UserId;
 
@@ -51,7 +51,6 @@ public record LeaveConversationCommand(string? ConversationId) : IRequest
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

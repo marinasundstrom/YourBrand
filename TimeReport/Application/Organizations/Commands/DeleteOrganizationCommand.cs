@@ -21,7 +21,7 @@ public record DeleteOrganizationCommand(string Id) : IRequest
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Unit> Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = await _organizationRepository.GetOrganizationById(request.Id, cancellationToken);
 
@@ -31,7 +31,6 @@ public record DeleteOrganizationCommand(string Id) : IRequest
            
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

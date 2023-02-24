@@ -93,7 +93,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new DeleteExpenseCommand(id), cancellationToken);
+            await _mediator.Send(new DeleteExpenseCommand(id), cancellationToken);
 
             return Ok();
         }

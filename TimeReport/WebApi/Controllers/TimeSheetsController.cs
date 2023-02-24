@@ -170,7 +170,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            var newDto = await _mediator.Send(new DeleteActivityCommand(timeSheetId, activityId), cancellationToken);
+            await _mediator.Send(new DeleteActivityCommand(timeSheetId, activityId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)

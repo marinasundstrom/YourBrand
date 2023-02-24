@@ -17,7 +17,7 @@ public record DeleteOrganization(string OrganizationId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteOrganization request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteOrganization request, CancellationToken cancellationToken)
         {
             /*
             var invoice = await _context.Organizations
@@ -36,7 +36,6 @@ public record DeleteOrganization(string OrganizationId) : IRequest
             await _context.SaveChangesAsync(cancellationToken);
             */
 
-            return Unit.Value;
         }
     }
 }

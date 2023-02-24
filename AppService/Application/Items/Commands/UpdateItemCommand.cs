@@ -18,7 +18,7 @@ public record UpdateItemCommand(string Id, string Name, string Description) : IR
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateItemCommand request, CancellationToken cancellationToken)
         {
             var item = await context.Items.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -29,7 +29,6 @@ public record UpdateItemCommand(string Id, string Name, string Description) : IR
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

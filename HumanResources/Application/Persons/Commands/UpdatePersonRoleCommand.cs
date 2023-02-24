@@ -20,7 +20,7 @@ public record UpdatePersonRoleCommand(string PersonId, string Role) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdatePersonRoleCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdatePersonRoleCommand request, CancellationToken cancellationToken)
         {
             var person = await _context.Persons
                 .Include(p => p.Roles)
@@ -38,7 +38,6 @@ public record UpdatePersonRoleCommand(string PersonId, string Role) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

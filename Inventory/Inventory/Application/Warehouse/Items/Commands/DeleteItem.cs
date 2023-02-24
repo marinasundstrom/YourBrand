@@ -17,7 +17,7 @@ public record DeleteWarehouseItem(string WarehouseItemId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteWarehouseItem request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteWarehouseItem request, CancellationToken cancellationToken)
         {
             /*
             var invoice = await _context.WarehouseItems
@@ -36,7 +36,6 @@ public record DeleteWarehouseItem(string WarehouseItemId) : IRequest
             await _context.SaveChangesAsync(cancellationToken);
             */
 
-            return Unit.Value;
         }
     }
 }

@@ -26,7 +26,7 @@ public class DeleteUserCommand : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                         .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
@@ -40,7 +40,6 @@ public class DeleteUserCommand : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

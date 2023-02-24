@@ -2,7 +2,7 @@
 
 namespace YourBrand.Domain.Events;
 
-public class CommentPostedEvent : DomainEvent
+public record CommentPostedEvent : DomainEvent
 {
     public CommentPostedEvent(string itemId, string commentId)
     {

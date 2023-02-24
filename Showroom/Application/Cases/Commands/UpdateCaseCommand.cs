@@ -16,7 +16,7 @@ public record UpdateCaseCommand(string Id, string? Description) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateCaseCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateCaseCommand request, CancellationToken cancellationToken)
         {
             var @case = await context.Cases.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -26,7 +26,6 @@ public record UpdateCaseCommand(string Id, string? Description) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -63,6 +63,7 @@ public class ApplicationDbContext : IdentityDbContext<Person, Role, string, Iden
 
         var domainEvents = entities
             .SelectMany(e => e.DomainEvents)
+            .OrderBy(e => e.Timestamp)
             .ToList();
 
         var outboxMessages = domainEvents.Select(domainEvent =>

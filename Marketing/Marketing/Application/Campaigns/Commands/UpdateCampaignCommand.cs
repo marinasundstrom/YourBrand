@@ -16,7 +16,7 @@ public record UpdateCampaignCommand(string Id, string Name) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
         {
             var campaigns = await context.Campaigns.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -26,7 +26,6 @@ public record UpdateCampaignCommand(string Id, string Name) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

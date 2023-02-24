@@ -2,7 +2,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public class EntryCreatedEvent : DomainEvent
+public record EntryCreatedEvent : DomainEvent
 {
     public EntryCreatedEvent(string projectId, string timeSheetId, string activityId, string entryId, double? hours)
     {

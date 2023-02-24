@@ -16,7 +16,7 @@ public record UpdateSkillAreaCommand(string Id, string Name, int IndustryId) : I
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateSkillAreaCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateSkillAreaCommand request, CancellationToken cancellationToken)
         {
             var skillArea = await context.SkillAreas.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -27,7 +27,6 @@ public record UpdateSkillAreaCommand(string Id, string Name, int IndustryId) : I
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

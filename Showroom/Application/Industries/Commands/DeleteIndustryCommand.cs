@@ -16,7 +16,7 @@ public record DeleteIndustryCommand(int Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteIndustryCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteIndustryCommand request, CancellationToken cancellationToken)
         {
             var industry = await context.Industries
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -27,7 +27,6 @@ public record DeleteIndustryCommand(int Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

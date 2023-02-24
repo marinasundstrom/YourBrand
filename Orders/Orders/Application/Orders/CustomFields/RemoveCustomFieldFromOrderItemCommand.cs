@@ -23,7 +23,7 @@ public record RemoveCustomFieldFromOrderItemCommand(int OrderNo, Guid OrderItemI
             this.context = context;
         }
 
-        public async Task<Unit> Handle(RemoveCustomFieldFromOrderItemCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveCustomFieldFromOrderItemCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -59,7 +59,6 @@ public record RemoveCustomFieldFromOrderItemCommand(int OrderNo, Guid OrderItemI
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

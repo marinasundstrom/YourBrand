@@ -20,11 +20,10 @@ public record MarkAllNotificationsAsReadCommand : IRequest
             _notificationsClient = notificationsClient;
         }
 
-        public async Task<Unit> Handle(MarkAllNotificationsAsReadCommand request, CancellationToken cancellationToken)
+        public async Task Handle(MarkAllNotificationsAsReadCommand request, CancellationToken cancellationToken)
         {
             await _notificationsClient.MarkAllNotificationsAsReadAsync();
 
-            return Unit.Value;
         }
     }
 }

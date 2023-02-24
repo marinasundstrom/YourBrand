@@ -20,7 +20,7 @@ public record CreatePayment(string InvoiceId, string Currency, decimal Amount, D
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<Unit> Handle(CreatePayment request, CancellationToken cancellationToken)
+        public async Task Handle(CreatePayment request, CancellationToken cancellationToken)
         {
             _context.Payments.Add(new Domain.Entities.Payment(
                     request.InvoiceId,
@@ -35,7 +35,6 @@ public record CreatePayment(string InvoiceId, string Currency, decimal Amount, D
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

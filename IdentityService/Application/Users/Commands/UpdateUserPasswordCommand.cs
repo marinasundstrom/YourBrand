@@ -17,7 +17,7 @@ public record UpdateUserPasswordCommand(string UserId, string CurrentPassword, s
             _userManager = userManager;
         }
 
-        public async Task<Unit> Handle(UpdateUserPasswordCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateUserPasswordCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
 
@@ -28,7 +28,6 @@ public record UpdateUserPasswordCommand(string UserId, string CurrentPassword, s
                 throw new Exception(result.Errors.First().Description);
             }
 
-            return Unit.Value;
         }
     }
 }

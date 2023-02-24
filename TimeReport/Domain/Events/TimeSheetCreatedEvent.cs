@@ -3,7 +3,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public class TimeSheetCreatedEvent : DomainEvent
+public record TimeSheetCreatedEvent : DomainEvent
 {
     public TimeSheetCreatedEvent(string timeSheetId)
     {

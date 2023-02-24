@@ -24,7 +24,7 @@ public record ApproveWeekCommand(string TimeSheetId) : IRequest
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Unit> Handle(ApproveWeekCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ApproveWeekCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
@@ -37,7 +37,6 @@ public record ApproveWeekCommand(string TimeSheetId) : IRequest
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

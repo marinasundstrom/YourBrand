@@ -53,7 +53,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddMediatR(typeof(Program));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
 
 builder.Services.AddHttpContextAccessor();
 

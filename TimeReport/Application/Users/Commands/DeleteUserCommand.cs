@@ -19,7 +19,7 @@ public record DeleteUserCommand(string UserId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                         .AsSplitQuery()
@@ -34,7 +34,6 @@ public record DeleteUserCommand(string UserId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

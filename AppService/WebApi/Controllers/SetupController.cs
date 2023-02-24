@@ -26,7 +26,8 @@ public class SetupController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Setup(SetupRequest request, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new SetupCommand(request.OrganizationName, request.Email, request.Password), cancellationToken));
+        await _mediator.Send(new SetupCommand(request.OrganizationName, request.Email, request.Password), cancellationToken);
+        return Ok();
     }
 }
 

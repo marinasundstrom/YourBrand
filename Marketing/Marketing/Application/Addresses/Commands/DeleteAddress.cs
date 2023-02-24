@@ -17,7 +17,7 @@ public record DeleteAddress(string AddressId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteAddress request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteAddress request, CancellationToken cancellationToken)
         {
             var address = await _context.Addresses
                 //.Include(i => i.Addresses)
@@ -34,7 +34,6 @@ public record DeleteAddress(string AddressId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

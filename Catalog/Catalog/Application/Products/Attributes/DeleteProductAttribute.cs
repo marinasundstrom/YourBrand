@@ -17,7 +17,7 @@ public record DeleteProductAttribute(string ProductId, string AttributeId) : IRe
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProductAttribute request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProductAttribute request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
                 .Include(x => x.Attributes)
@@ -31,7 +31,6 @@ public record DeleteProductAttribute(string ProductId, string AttributeId) : IRe
 
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

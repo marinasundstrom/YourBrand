@@ -23,7 +23,7 @@ public record RemoveTeamMemberCommand(string TeamId, string PersonId) : IRequest
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<Unit> Handle(RemoveTeamMemberCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await _context.Teams
                 .AsSplitQuery()
@@ -49,7 +49,6 @@ public record RemoveTeamMemberCommand(string TeamId, string PersonId) : IRequest
 
             await _eventPublisher.PublishEvent(new Contracts.TeamMemberRemoved(team.Id, person.Id));
 
-            return Unit.Value;
         }
     }
 }

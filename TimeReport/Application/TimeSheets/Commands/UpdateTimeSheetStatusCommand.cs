@@ -24,7 +24,7 @@ public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateTimeSheetStatusCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateTimeSheetStatusCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
@@ -37,7 +37,6 @@ public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
 
             await _unitOfWork.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace YourBrand.Documents.Domain.Events;
 
-public class DirectoryCreated : DomainEvent
+public record DirectoryCreated : DomainEvent
 {
     public DirectoryCreated(string documentId)
     {

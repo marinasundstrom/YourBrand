@@ -3,7 +3,7 @@ using YourBrand.Transactions.Domain.Enums;
 
 namespace YourBrand.Transactions.Domain.Events;
 
-public class TransactionStatusChanged : DomainEvent
+public record TransactionStatusChanged : DomainEvent
 {
     public TransactionStatusChanged(string transactionId, TransactionStatus status)
     {

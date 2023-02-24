@@ -18,7 +18,7 @@ public record UpdateDescription(string DocumentId, string Description) : IReques
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateDescription request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateDescription request, CancellationToken cancellationToken)
         {
             var document = await _context.Documents
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record UpdateDescription(string DocumentId, string Description) : IReques
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

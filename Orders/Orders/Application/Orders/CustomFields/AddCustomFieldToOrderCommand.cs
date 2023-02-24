@@ -25,7 +25,7 @@ public record AddCustomFieldToOrderCommand(int OrderNo, CreateCustomFieldDetails
             this.context = context;
         }
 
-        public async Task<Unit> Handle(AddCustomFieldToOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddCustomFieldToOrderCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -56,7 +56,6 @@ public record AddCustomFieldToOrderCommand(int OrderNo, CreateCustomFieldDetails
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

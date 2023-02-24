@@ -16,7 +16,7 @@ public record CreateOrganizationCommand(string Id, string Name) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = await context.Organizations.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
@@ -32,7 +32,6 @@ public record CreateOrganizationCommand(string Id, string Name) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace YourBrand.Orders.Application.Subscriptions
                 this.salesContext = salesContext;
             }
 
-            public async Task<Unit> Handle(GetSubscriptionQuery request, CancellationToken cancellationToken)
+            public async Task Handle(GetSubscriptionQuery request, CancellationToken cancellationToken)
             {
 
 
@@ -30,7 +30,6 @@ namespace YourBrand.Orders.Application.Subscriptions
                     throw new Exception();
                 }
 
-                return Unit.Value;
             }
         }
     }

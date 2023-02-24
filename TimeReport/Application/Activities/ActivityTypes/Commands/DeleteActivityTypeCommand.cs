@@ -18,7 +18,7 @@ public record DeleteActivityTypeCommand(string ActivityId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteActivityTypeCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteActivityTypeCommand request, CancellationToken cancellationToken)
         {
             var activityType = await _context.ActivityTypes
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record DeleteActivityTypeCommand(string ActivityId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

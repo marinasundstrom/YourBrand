@@ -22,7 +22,7 @@ public record UpdateTransactionReference(string TransactionId, string Reference)
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<Unit> Handle(UpdateTransactionReference request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateTransactionReference request, CancellationToken cancellationToken)
         {
             var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
@@ -36,7 +36,6 @@ public record UpdateTransactionReference(string TransactionId, string Reference)
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

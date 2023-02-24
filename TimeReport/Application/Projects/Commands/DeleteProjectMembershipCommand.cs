@@ -19,7 +19,7 @@ public record DeleteProjectMembershipCommand(string ProjectId, string Membership
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteProjectMembershipCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
                 .Include(p => p.Organization)
@@ -44,7 +44,6 @@ public record DeleteProjectMembershipCommand(string ProjectId, string Membership
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

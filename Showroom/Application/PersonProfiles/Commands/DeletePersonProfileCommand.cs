@@ -25,7 +25,7 @@ public record DeletePersonProfileCommand(string Id) : IRequest
             this.currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(DeletePersonProfileCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeletePersonProfileCommand request, CancellationToken cancellationToken)
         {
             var personProfile = await _context.PersonProfiles.FindAsync(request.Id);
             if (personProfile == null)
@@ -36,7 +36,6 @@ public record DeletePersonProfileCommand(string Id) : IRequest
             _context.PersonProfiles.Remove(personProfile);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

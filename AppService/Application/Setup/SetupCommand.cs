@@ -27,7 +27,7 @@ public record SetupCommand(string OrganizationName, string Email, string Passwor
             _createPersonClient = createPersonClient;
         }
 
-        public async Task<Unit> Handle(SetupCommand request, CancellationToken cancellationToken)
+        public async Task Handle(SetupCommand request, CancellationToken cancellationToken)
         {
             var res = await _createOrgClient.GetResponse<CreateOrganizationResponse>(new CreateOrganization {
                 Name = request.OrganizationName, 
@@ -47,8 +47,7 @@ public record SetupCommand(string OrganizationName, string Email, string Passwor
                 ReportsTo = null, 
                 Password = request.Password
             });
-
-            return Unit.Value; 
+ 
         }
     }
 }

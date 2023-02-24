@@ -2,7 +2,7 @@ using YourBrand.Invoicing.Domain.Common;
 
 namespace YourBrand.Invoicing.Domain.Events;
 
-public class InvoiceDateChanged : DomainEvent
+public record InvoiceDateChanged : DomainEvent
 {
     public InvoiceDateChanged(string invoiceId, DateTime? date)
     {

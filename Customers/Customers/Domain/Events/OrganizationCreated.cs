@@ -2,7 +2,7 @@ using YourBrand.Customers.Domain.Common;
 
 namespace YourBrand.Customers.Domain.Events;
 
-public class OrganizationCreated : DomainEvent
+public record OrganizationCreated : DomainEvent
 {
     public OrganizationCreated(string organizationId)
     {

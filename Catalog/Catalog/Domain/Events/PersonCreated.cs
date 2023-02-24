@@ -2,7 +2,7 @@ using YourBrand.Catalog.Domain.Common;
 
 namespace YourBrand.Catalog.Domain.Events;
 
-public class PersonCreated : DomainEvent
+public record PersonCreated : DomainEvent
 {
     public PersonCreated(string personId)
     {

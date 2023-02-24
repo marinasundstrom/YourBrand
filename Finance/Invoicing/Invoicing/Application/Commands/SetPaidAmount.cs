@@ -18,7 +18,7 @@ public record SetPaidAmount(string InvoiceId, decimal Amount) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetPaidAmount request, CancellationToken cancellationToken)
+        public async Task Handle(SetPaidAmount request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -26,7 +26,6 @@ public record SetPaidAmount(string InvoiceId, decimal Amount) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }
@@ -42,7 +41,7 @@ public record SetDate(string InvoiceId, DateTime Date) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetDate request, CancellationToken cancellationToken)
+        public async Task Handle(SetDate request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -50,7 +49,6 @@ public record SetDate(string InvoiceId, DateTime Date) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }
@@ -66,7 +64,7 @@ public record SetType(string InvoiceId, InvoiceType Type) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetType request, CancellationToken cancellationToken)
+        public async Task Handle(SetType request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -74,7 +72,6 @@ public record SetType(string InvoiceId, InvoiceType Type) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }
@@ -90,7 +87,7 @@ public record SetDueDate(string InvoiceId, DateTime DueDate) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetDueDate request, CancellationToken cancellationToken)
+        public async Task Handle(SetDueDate request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -98,7 +95,6 @@ public record SetDueDate(string InvoiceId, DateTime DueDate) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }
@@ -114,7 +110,7 @@ public record SetReference(string InvoiceId, string? Reference) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetReference request, CancellationToken cancellationToken)
+        public async Task Handle(SetReference request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -122,7 +118,6 @@ public record SetReference(string InvoiceId, string? Reference) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }
@@ -138,7 +133,7 @@ public record SetNote(string InvoiceId, string? Note) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetNote request, CancellationToken cancellationToken)
+        public async Task Handle(SetNote request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -146,7 +141,6 @@ public record SetNote(string InvoiceId, string? Note) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

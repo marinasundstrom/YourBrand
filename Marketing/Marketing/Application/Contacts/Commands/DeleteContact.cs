@@ -16,7 +16,7 @@ public record DeleteContact(string Id) : IRequest
         {
             _context = context;
         }
-        public async Task<Unit> Handle(DeleteContact request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteContact request, CancellationToken cancellationToken)
         {
             var contact = await _context.Contacts
                 .Include(i => i.Campaign)
@@ -26,7 +26,6 @@ public record DeleteContact(string Id) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

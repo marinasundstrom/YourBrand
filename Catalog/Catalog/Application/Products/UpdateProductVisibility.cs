@@ -17,7 +17,7 @@ public record UpdateProductVisibility(string ProductId, ProductVisibility Visibi
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateProductVisibility request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateProductVisibility request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
                 .FirstAsync(x => x.Id == request.ProductId);
@@ -26,7 +26,6 @@ public record UpdateProductVisibility(string ProductId, ProductVisibility Visibi
 
             await _context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

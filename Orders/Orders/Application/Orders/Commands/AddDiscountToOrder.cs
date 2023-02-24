@@ -39,7 +39,7 @@ public record AddDiscountToOrderCommand(int OrderNo, DiscountDetails DiscountDet
             this.context = context;
         }
 
-        public async Task<Unit> Handle(AddDiscountToOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddDiscountToOrderCommand request, CancellationToken cancellationToken)
         {
             var message = request;
 
@@ -91,7 +91,6 @@ public record AddDiscountToOrderCommand(int OrderNo, DiscountDetails DiscountDet
 
             await context.SaveChangesAsync();
 
-            return Unit.Value;
         }
     }
 }

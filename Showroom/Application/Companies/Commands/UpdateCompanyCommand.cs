@@ -16,7 +16,7 @@ public record UpdateCompanyCommand(string Id, string Name, int IndustryId) : IRe
             this.context = context;
         }
 
-        public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
             var company = await context.Companies.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
@@ -27,7 +27,6 @@ public record UpdateCompanyCommand(string Id, string Name, int IndustryId) : IRe
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

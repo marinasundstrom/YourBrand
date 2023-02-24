@@ -16,7 +16,7 @@ public record DeleteCaseCommand(string Id) : IRequest
             this.context = context;
         }
 
-        public async Task<Unit> Handle(DeleteCaseCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteCaseCommand request, CancellationToken cancellationToken)
         {
             var comepetenceArea = await context.Cases
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
@@ -27,7 +27,6 @@ public record DeleteCaseCommand(string Id) : IRequest
            
             await context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

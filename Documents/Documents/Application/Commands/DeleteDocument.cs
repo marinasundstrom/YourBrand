@@ -18,7 +18,7 @@ public record DeleteDocument(string DocumentId) : IRequest
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteDocument request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteDocument request, CancellationToken cancellationToken)
         {
             var document = await _context.Documents
                 .AsSplitQuery()
@@ -33,7 +33,6 @@ public record DeleteDocument(string DocumentId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }

@@ -26,7 +26,7 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
             _context = context;
         }
 
-        public async Task<Unit> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
@@ -61,7 +61,6 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
         }
     }
 }
