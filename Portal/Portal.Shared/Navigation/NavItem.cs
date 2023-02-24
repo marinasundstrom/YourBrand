@@ -1,25 +1,25 @@
 namespace YourBrand.Portal.Navigation;
 
-public class NavItem
+public class NavItem : INavItem
 {
     private string? name;
 
     public string Id { get; set; } = null!;
 
-    public string Name 
-    { 
+    public string Name
+    {
         get => name ?? NameFunc?.Invoke() ?? throw new Exception();
         set => name = value;
     }
 
     public Func<string>? NameFunc { get; set; }
 
-    public void SetName(string name) 
+    public void SetName(string name)
     {
         Name = name;
     }
 
-    public void SetName(Func<string> nameFunc) 
+    public void SetName(Func<string> nameFunc)
     {
         NameFunc = nameFunc;
     }

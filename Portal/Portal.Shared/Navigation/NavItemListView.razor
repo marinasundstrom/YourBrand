@@ -1,0 +1,66 @@
+@using Navigation
+@inject YourBrand.Portal.Services.ICurrentUserService CurrentUserService
+
+@foreach(var item in Items) 
+{
+    if (item.RequiresAuthorization)
+    {
+        if (item.Roles is null || IsInAnyRole(item.Roles))
+        {
+            if (item.Visible)
+            {
+                <AuthorizeView Roles="@(item.Roles == null ? null : string.Join(",", item.Roles))">
+                    @if(item is NavItem item1) 
+                    {
+                        <NavItemView Item="item1" />
+                        
+                    }
+                    else if(item is NavGroup group) 
+                    {
+                        <NavGroupView Group="group" SaveCallback="@SaveCallback" />
+                    }               
+                </AuthorizeView>
+            }
+        }
+    }
+    else
+    {
+        if (item.Visible)
+        {             
+            if(item is NavItem item1) 
+            {
+                <NavItemView Item="item1" />                    
+            }
+            else if(item is NavGroup group) 
+            {
+                <NavGroupView Group="group" SaveCallback="@SaveCallback" />
+            }
+        }
+    }
+}
+
+@code 
+{
+    IEnumerable<string>? roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await CurrentUserService.GetRoles();
+    }
+
+    [Parameter]
+    public IEnumerable<INavItem> Items { get; set; }
+
+    [Parameter] public Func<bool, NavGroup, bool>? SaveCallback { get; set; }
+
+    private bool IsInAnyRole(IEnumerable<string> desiredRoles)
+    {
+        foreach(var desiredRole in desiredRoles)
+        {
+            bool isInRole = roles.Any(r => r == desiredRole);
+            if (isInRole) return true;
+        }
+
+        return false;
+    }
+}

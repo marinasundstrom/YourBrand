@@ -1,0 +1,12 @@
+<MudNavGroup Title="@Group.Name" Icon="@Group.Icon" Expanded="Group.Expanded" ExpandedChanged="(v) =>  {  SaveCallback?.Invoke(v, Group); }">
+    <NavItemListView Items="@Group.Items" SaveCallback="SaveCallback" />
+</MudNavGroup>
+
+@code 
+{
+    [Parameter]
+    public NavGroup Group { get; set; }
+
+    [Parameter] 
+    public Func<bool, NavGroup, bool>? SaveCallback { get; set; }
+}

@@ -9,28 +9,7 @@
 <MudNavMenu>
     <MudSpacer />
 
-    @foreach (var navGroup in NavManager.Groups)
-    {
-        @if (navGroup.Visible)
-        {
-            if (navGroup.RequiresAuthorization)
-            {
-                if (navGroup.Roles == null || IsInAnyRole(navGroup.Roles))
-                {
-                    if (navGroup.Visible)
-                    {
-                        <AuthorizeView Roles="@(navGroup.Roles == null ? null : string.Join(",", navGroup.Roles))">
-                            <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
-                        </AuthorizeView>
-                    }
-                }
-            }
-            else
-            {
-                <NavGroupView NavGroup="navGroup" SaveCallback="Save" />
-            }
-        }
-    }
+     <YourBrand.Portal.Navigation.NavItemListView Items="NavManager.Items" SaveCallback="Save" />
 </MudNavMenu>
 
 @code {
@@ -40,7 +19,7 @@
     {
         roles = await CurrentUserService.GetRoles();
 
-        foreach (var navGroup in NavManager.Groups)
+        foreach (var navGroup in NavManager.GetGroupsRecursive())
         {
             navGroup.Expanded = LocalStorageService.GetItem<bool>($"navmenu.{navGroup.Id.ToLower()}");
         }

@@ -33,6 +33,8 @@ public class ModuleInitializer : IModuleInitializer
         var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", () => resources["Finance"]);
         group.RequiresAuthorization = true;
 
-        group.CreateItem("rotrut", () => resources["Rot & Rut ärenden"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/rotrut");
+        var group2 = group.GetGroup("accounting") ?? group.CreateGroup("accounting", () => resources["Accounting"]);
+
+        group2.CreateItem("rotrut", () => resources["Rot & Rut ärenden"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/rotrut");
     }
 }
