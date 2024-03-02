@@ -52,10 +52,10 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
                 RequireClientSecret = false,
-                AllowedCorsOrigins = { "https://localhost" },
+                AllowedCorsOrigins = { "https://localhost:5174" },
                 AllowedScopes = { "openid", "profile", "email", "myapi" },
-                RedirectUris = { "https://localhost/authentication/login-callback" },
-                PostLogoutRedirectUris = { "https://localhost/" },
+                RedirectUris = { "https://localhost:5174/authentication/login-callback" },
+                PostLogoutRedirectUris = { "https://localhost:5174/" },
                 Enabled = true
             }
         };

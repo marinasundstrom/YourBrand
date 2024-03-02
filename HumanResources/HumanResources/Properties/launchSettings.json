@@ -1,17 +1,9 @@
 {
   "profiles": {
-    "SelfHost": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "YourBrand.HumanResources": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:47965;http://localhost:49930",
+      "applicationUrl": "https://localhost:5110",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

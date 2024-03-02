@@ -13,12 +13,14 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddScoped<CustomAuthorizationMessageHandler>();
+        services.AddTransient<CustomAuthorizationMessageHandler>();
 
-        services.AddDocumentsClients((sp, httpClient) => {
+        services.AddDocumentsClients((sp, httpClient) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             httpClient.BaseAddress = new Uri($"{ServiceUrls.DocumentsServiceUrl}/");
-        }, builder => {
+        }, builder =>
+        {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }

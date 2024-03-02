@@ -31,7 +31,7 @@ public static class ServiceExtensions
 
         services.AddSingleton<IFilePickerService, FilePickerService>();
 
-        services.AddScoped<CustomAuthorizationMessageHandler>();
+        services.AddTransient<CustomAuthorizationMessageHandler>();
 
         services.AddClients();
 
@@ -42,25 +42,30 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddClients(this IServiceCollection services) 
+    public static IServiceCollection AddClients(this IServiceCollection services)
     {
-        services.AddAppServiceClients((sp, http) => {
+        services.AddAppServiceClients((sp, http) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/appservice/");
-        }, (builder) => {
+        }, (builder) =>
+        {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
 
-        services.AddSetupClient((sp, http) => {
+        services.AddSetupClient((sp, http) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/appservice/");
         });
 
-        services.AddIdentityServiceClients((sp, http) => {
+        services.AddIdentityServiceClients((sp, http) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            http.BaseAddress = new Uri($"https://identity.local/");
-        }, (builder) => {
-               builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+            http.BaseAddress = new Uri($"https://localhost:5040/");
+        }, (builder) =>
+        {
+            builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
 
         return services;

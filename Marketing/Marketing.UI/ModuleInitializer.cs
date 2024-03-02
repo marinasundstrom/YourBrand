@@ -13,12 +13,14 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddScoped<CustomAuthorizationMessageHandler>();
+        services.AddTransient<CustomAuthorizationMessageHandler>();
 
-        services.AddMarketingClients((sp, httpClient) => {
+        services.AddMarketingClients((sp, httpClient) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             httpClient.BaseAddress = new Uri($"{ServiceUrls.MarketingServiceUrl}/");
-        }, builder => {
+        }, builder =>
+        {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }
@@ -30,7 +32,8 @@ public class ModuleInitializer : IModuleInitializer
 
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        var group = navManager.GetGroup("marketing") ?? navManager.CreateGroup("marketing", options => {
+        var group = navManager.GetGroup("marketing") ?? navManager.CreateGroup("marketing", options =>
+        {
             options.SetName(() => resources["Marketing"]);
             options.RequiresAuthorization = true;
         });

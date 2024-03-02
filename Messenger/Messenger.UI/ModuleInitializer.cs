@@ -15,7 +15,7 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddScoped<CustomAuthorizationMessageHandler>();
+        services.AddTransient<CustomAuthorizationMessageHandler>();
 
         services.AddMessengerClients((sp, http) =>
         {

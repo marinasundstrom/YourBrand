@@ -63,7 +63,7 @@ static class Program
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
-                        options.Authority = "https://identity.local";
+                        options.Authority = "https://localhost:5040";
                         options.Audience = "myapi";
 
                         options.TokenValidationParameters = new TokenValidationParameters()

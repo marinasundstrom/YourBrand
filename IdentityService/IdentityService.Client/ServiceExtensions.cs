@@ -7,7 +7,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddIdentityServiceClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         services
-            .AddUsersClient(configureClient, builder);
+            .AddUsersClient(configureClient, builder)
+            .AddRolesClient(configureClient, builder);
 
         return services;
     }

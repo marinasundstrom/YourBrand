@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.WebApi;
 
 public static class ServiceExtensions
 {
-    public  static IServiceCollection AddServices(this IServiceCollection services)
+    public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddIdentityServices();
         services.AddScoped<IUrlHelper, UrlHelper>();
@@ -33,7 +33,7 @@ public static class ServiceExtensions
 
         services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>
         {
-            http.BaseAddress = new Uri($"https://identity.local/");
+            http.BaseAddress = new Uri($"https://localhost:5040/");
             http.DefaultRequestHeaders.Add("X-API-KEY", "foobar");
         })
         .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http));

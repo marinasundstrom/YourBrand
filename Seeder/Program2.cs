@@ -127,19 +127,19 @@ static IServiceProvider BuildServiceProvider()
 
     services.AddIdentityServiceClients((sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://identity.local/");
+        http.BaseAddress = new Uri($"https://localhost:5040/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     }, (builder) => { });
 
     services.AddHumanResourcesClients((sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/api/humanresources/");
+        http.BaseAddress = new Uri($"https://localhost:5174/api/humanresources/");
         //http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     }, (builder) => { });
 
     services.AddTimeReportClients((sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
+        http.BaseAddress = new Uri($"https://localhost:5174/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     }, (builder) => { });
 

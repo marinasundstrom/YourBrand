@@ -20,7 +20,10 @@ static class Program
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+            if (connectionString is not null)
+            {
+                builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+            }
 
             builder.Host.UseSerilog((ctx, lc) => lc
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")

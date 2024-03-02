@@ -111,7 +111,7 @@ internal static class HostingExtensions
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://identity.local";
+                options.Authority = "https://localhost:5040";
                 options.Audience = "myapi";
             })
             .AddGoogle(options =>
@@ -176,7 +176,7 @@ public class ApiKeyProvider : IApiKeyProvider
     {
         try
         {
-            if(key != "foobar") 
+            if (key != "foobar")
             {
                 throw new UnauthorizedAccessException();
             }

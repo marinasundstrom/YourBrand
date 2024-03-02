@@ -454,6 +454,8 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 certs
-.data
+/data
+/grafana
+/prometheus
 Server/IdentityService/keys
 IdentityService/IdentityService/keys/is-signing-key-4FCFA6535026623A459259428DD7FCEC.json

@@ -105,7 +105,7 @@ Read this [guide](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edi
 
 ### Conclusion
 
-Provided that the service has been started, you should now be able to reach the IdentityService site in your browser by navigating to [```https://identity.local```](https://identity.local).
+Provided that the service has been started, you should now be able to reach the IdentityService site in your browser by navigating to [```https://localhost:5040```](https://localhost:5040).
 
 Please be aware that you have to configure the certs.
 

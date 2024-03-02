@@ -1,8 +1,8 @@
 namespace YourBrand.Portal;
 
-public static class ServiceUrls 
+public static class ServiceUrls
 {
-    public const string RootUrl = "https://localhost/api";
+    public const string RootUrl = "https://localhost:5174/api";
 
     public const string ApiKeysServiceUrl = $"{RootUrl}/apikeys";
 
@@ -28,7 +28,7 @@ public static class ServiceUrls
 
     public const string HumanResourcesServiceUrl = $"{RootUrl}/humanresources";
 
-    public const string IdentityServiceUrl = "https://identity.local";
+    public const string IdentityServiceUrl = "https://localhost:5040";
 
     public const string MarketingServiceUrl = $"{RootUrl}/marketing";
 

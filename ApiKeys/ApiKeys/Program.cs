@@ -19,7 +19,10 @@ static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        if (connectionString is not null)
+        {
+            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        }
 
         var Configuration = builder.Configuration;
 

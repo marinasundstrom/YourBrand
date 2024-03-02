@@ -1,0 +1,277 @@
+{
+    "editor.formatOnSave": true,
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "Main",
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Proxy",
+                    "commands": [
+                        "dotnet run --project Proxy/Proxy.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Portal",
+                    "commands": [
+                        "dotnet run --project Portal/Portal/Portal.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Identity",
+                    "commands": [
+                        "dotnet run --project IdentityService/IdentityService/IdentityService.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "AppService",
+                    "commands": [
+                        "dotnet run --project AppService/WebApi/WebApi.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "ApiKeys",
+                    "commands": [
+                        "dotnet run --project ApiKeys/ApiKeys/ApiKeys.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Customers",
+                    "commands": [
+                        "dotnet run --project Customers/Customers/Customers.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Commerce",
+                    "commands": [
+                        "dotnet run --project Commerce/Server/Commerce.Server.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "HumanResources",
+                    "commands": [
+                        "dotnet run --project HumanResources/HumanResources/HumanResources.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Catalog",
+                    "commands": [
+                        "dotnet run --project Catalog/Catalog/Catalog.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Orders",
+                    "commands": [
+                        "dotnet run --project Orders/Orders/Orders.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Marketing",
+                    "commands": [
+                        "dotnet run --project Marketing/Marketing/Marketing.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Inventory",
+                    "commands": [
+                        "dotnet run --project Inventory/Inventory/Inventory.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Accounting",
+                    "commands": [
+                        "dotnet run --project Finance/Accounting/Accounting/WebApi/WebApi.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Accountant",
+                    "commands": [
+                        "dotnet run --project Finance/Accounting/Accountant/Accountant/Accountant.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Transactions",
+                    "commands": [
+                        "dotnet run --project Finance/Transactions/Transactions/Transactions.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Payments",
+                    "commands": [
+                        "dotnet run --project Finance/Payments/Payments/Payments.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Invoicing",
+                    "commands": [
+                        "dotnet run --project Finance/Invoicing/Invoicing/Invoicing.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "RotRutService",
+                    "commands": [
+                        "dotnet run --project Finance/RotRutService/RotRutService/RotRutService.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Documents",
+                    "commands": [
+                        "dotnet run --project Documents/Documents/Documents.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Email",
+                    "commands": [
+                        "dotnet run --project EmailService/EmailService/EmailService.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Messenger",
+                    "commands": [
+                        "dotnet run --project Messenger/Messenger/Messenger.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Showroom",
+                    "commands": [
+                        "dotnet run --project Showroom/WebApi/WebApi.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "TimeReport",
+                    "commands": [
+                        "dotnet run --project TimeReport/WebApi/WebApi.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Notifications",
+                    "commands": [
+                        "dotnet run --project Notifications/Notifications/Notifications.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        }
+    ]
+}

@@ -25,7 +25,7 @@ services:
         containerPort: 10002
         protocol: http
     volumes:
-      - source: .data/azurite
+      - source: data/azurite
         target: /data
 
   - name: mssql
@@ -41,7 +41,7 @@ services:
       - port: 1433
         connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD};Encrypt=false
     volumes:
-      - source: .data/sql-edge
+      - source: data/sql-edge
         target: /var/opt/mssql/data
 
   - name: redis

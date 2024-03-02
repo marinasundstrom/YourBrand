@@ -26,7 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
 
-if(args.Contains("--connection-string")) 
+if (args.Contains("--connection-string"))
 {
     builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
 }
@@ -70,43 +70,43 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
- builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://identity.local";
-                        options.Audience = "myapi";
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                   {
+                       options.Authority = "https://localhost:5040";
+                       options.Audience = "myapi";
 
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-                            
-                        };
+                       options.TokenValidationParameters = new TokenValidationParameters()
+                       {
+                           NameClaimType = "name"
 
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnTokenValidated = context =>
-                            {
-                                // Add the access_token as a claim, as we may actually need it
-                                var accessToken = context.SecurityToken as JwtSecurityToken;
-                                if (accessToken != null)
-                                {
-                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
-                                    if (identity != null)
-                                    {
-                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                    }
-                                }
+                       };
 
-                                return Task.CompletedTask;
-                            }
-                        };
+                       options.Events = new JwtBearerEvents
+                       {
+                           OnTokenValidated = context =>
+                           {
+                               // Add the access_token as a claim, as we may actually need it
+                               var accessToken = context.SecurityToken as JwtSecurityToken;
+                               if (accessToken != null)
+                               {
+                                   ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
+                                   if (identity != null)
+                                   {
+                                       identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                                   }
+                               }
 
-                        //options.TokenValidationParameters.ValidateAudience = false;
+                               return Task.CompletedTask;
+                           }
+                       };
 
-                        //options.Audience = "openid";
+                       //options.TokenValidationParameters.ValidateAudience = false;
 
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
+                       //options.Audience = "openid";
+
+                       //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                   });
 
 
 builder.Services.AddDocumentsClients((sp, http) =>
@@ -141,7 +141,7 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

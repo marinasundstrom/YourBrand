@@ -13,12 +13,14 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddScoped<CustomAuthorizationMessageHandler>();
+        services.AddTransient<CustomAuthorizationMessageHandler>();
 
-        services.AddCatalogClients((sp, httpClient) => {
+        services.AddCatalogClients((sp, httpClient) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             httpClient.BaseAddress = new Uri($"{ServiceUrls.CatalogServiceUrl}/");
-        }, builder => {
+        }, builder =>
+        {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }
@@ -32,7 +34,7 @@ public class ModuleInitializer : IModuleInitializer
 
         var group = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", () => resources["Sales"]);
         group.RequiresAuthorization = true;
-        
+
         group.CreateItem("products", () => resources["Products"], MudBlazor.Icons.Material.Filled.FormatListBulleted, "/products");
     }
 }

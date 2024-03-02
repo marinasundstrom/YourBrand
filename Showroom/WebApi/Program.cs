@@ -37,7 +37,10 @@ static class Program
 
         var Configuration = builder.Configuration;
 
-        builder.Configuration["ConnectionStrings:DefaultConnection"] =  connectionString;
+        if (connectionString is not null)
+        {
+            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        }
 
         services.AddApplication(Configuration);
         services.AddInfrastructure(Configuration);
@@ -110,13 +113,13 @@ static class Program
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
-                        options.Authority = "https://identity.local";
+                        options.Authority = "https://localhost:5040";
                         options.Audience = "myapi";
 
                         options.TokenValidationParameters = new TokenValidationParameters()
                         {
                             NameClaimType = "name"
-                            
+
                         };
 
                         options.Events = new JwtBearerEvents
@@ -178,7 +181,7 @@ static class Program
 
         app.MapControllers();
 
-        if(seed)
+        if (seed)
         {
             await app.Services.SeedAsync();
 

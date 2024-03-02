@@ -33,7 +33,7 @@ public static class Seed
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "IdentityService",
-                Url = "https://identity.local/",
+                Url = "https://localhost:5040/",
                 Secret = "dfEKJnHVikyDT9em6QQZAg"
             };
 
@@ -74,15 +74,18 @@ public static class Seed
                 Key = "asdsr34#34rswert35234aedae?2!",
             };
 
-            apiKey.ApiKeyServices.Add(new ApiKeyService {
+            apiKey.ApiKeyServices.Add(new ApiKeyService
+            {
                 Service = service
             });
 
-            apiKey.ApiKeyServices.Add(new ApiKeyService {
+            apiKey.ApiKeyServices.Add(new ApiKeyService
+            {
                 Service = service2
             });
 
-            apiKey.ApiKeyServices.Add(new ApiKeyService {
+            apiKey.ApiKeyServices.Add(new ApiKeyService
+            {
                 Service = service3
             });
 

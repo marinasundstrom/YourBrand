@@ -20,7 +20,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddPersistence(configuration);
-        
+
         services.AddQuartz(configure =>
             {
                 var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
@@ -35,13 +35,17 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
+        var str = configuration.GetConnectionString("DefaultConnection");
+
+        Console.WriteLine("Foo: " + str);
+
         services.AddSqlServer<CatalogContext>(
             configuration.GetConnectionString("mssql", "AppService") ?? configuration.GetConnectionString("DefaultConnection"),
             options => options.EnableRetryOnFailure());
@@ -52,11 +56,11 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }

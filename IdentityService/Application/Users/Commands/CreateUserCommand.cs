@@ -37,7 +37,7 @@ public record CreateUserCommand(string Id, string OrganizationId, string FirstNa
         {
             var user = new Person
             {
-                Id = request.Id,
+                Id = request.Id ?? Guid.NewGuid().ToString(),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DisplayName = request.DisplayName,
@@ -49,7 +49,7 @@ public record CreateUserCommand(string Id, string OrganizationId, string FirstNa
 
             var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == request.Role);
 
-            if(role is null)
+            if (role is null)
             {
                 throw new Exception("Role not found");
             }

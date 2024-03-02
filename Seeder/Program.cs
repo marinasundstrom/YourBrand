@@ -24,13 +24,13 @@ static IServiceProvider BuildServiceProvider()
 
     services.AddHumanResourcesClients((sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/api/humanresources/");
+        http.BaseAddress = new Uri($"https://localhost:5174/api/humanresources/");
         //http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     }, (builder) => { });
 
     services.AddTimeReportClients((sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost/api/timereport/");
+        http.BaseAddress = new Uri($"https://localhost:5174/api/timereport/");
         http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
     }, (builder) => { });
 

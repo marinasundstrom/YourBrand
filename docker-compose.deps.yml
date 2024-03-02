@@ -1,0 +1,132 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+name: yourbrand
+
+services:
+  mssql:
+    container_name: mssql
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    cap_add: [ 'SYS_PTRACE' ]
+    environment:
+      - "MSSQL_SA_PASSWORD=P@ssw0rd"
+      - "MSSQL_PID=Developer"
+      - "ACCEPT_EULA=1"
+    ports:
+      - "1433:1433"
+    hostname: mssql
+    volumes:
+      - "./data/sql-edge:/var/opt/mssql"
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SomeRandomStringHere
+    volumes:
+      - "./data/rabbitmq:/var/lib/rabbitmq"
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    hostname: azurite
+    restart: always
+    command: "azurite --loose --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001 -l /data --debug /data/debug.log"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+    volumes:
+      - "./data/azurite:/data"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      - JAVA_OPTS=-Xms1g -Xmx1g -XX:+ExitOnOutOfMemoryError
+    ports:
+      - 9411:9411
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.local.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./grafana/datasource:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboard/dashboard.yml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on: 
+      - loki
+      - prometheus
+
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  consul-server:
+    image: hashicorp/consul:latest
+    container_name: consul-server
+    restart: always
+  #  volumes:
+  #   - ./server1.json:/consul/config/server1.json:ro
+  #   - ./certs/:/consul/config/certs/:ro
+    ports:
+      - "8500:8500"
+      - "8600:8600/tcp"
+      - "8600:8600/udp"
+
+  smtp4dev:
+    image: rnwood/smtp4dev:prerelease
+    container_name: smtp4dev
+    ports:
+      - "3002:80"
+      - "25:25"
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  redis-cli:
+    image: redis
+    container_name: redis-cli
+    command: redis-cli -h redis MONITOR
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 34623:80
+      - 34624:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./certs:/etc/nginx/certs
+
+volumes:
+  prom_data:
+  orders_data:
+  redis_data:
+    driver: local

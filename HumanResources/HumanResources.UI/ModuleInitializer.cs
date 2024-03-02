@@ -13,12 +13,14 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddScoped<CustomAuthorizationMessageHandler>();
+        services.AddTransient<CustomAuthorizationMessageHandler>();
 
-        services.AddHumanResourcesClients((sp, httpClient) => {
+        services.AddHumanResourcesClients((sp, httpClient) =>
+        {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             httpClient.BaseAddress = new Uri($"{ServiceUrls.HumanResourcesServiceUrl}/");
-        }, builder => {
+        }, builder =>
+        {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }

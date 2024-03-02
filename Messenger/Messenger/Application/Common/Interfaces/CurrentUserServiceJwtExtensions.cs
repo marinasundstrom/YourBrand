@@ -14,15 +14,15 @@ public static class CurrentUserServiceJwtExtensions
 {
     private static DiscoveryDocumentResponse? discoveryDocumentResponse;
 
-    public static async Task SetCurrentUserFromAccessTokenAsync(this ICurrentUserService currentUserService, string accessToken) 
+    public static async Task SetCurrentUserFromAccessTokenAsync(this ICurrentUserService currentUserService, string accessToken)
     {
         var httpClient = new HttpClient();
 
         if (discoveryDocumentResponse is null)
         {
-            discoveryDocumentResponse = await httpClient.GetDiscoveryDocumentAsync("https://identity.local");
+            discoveryDocumentResponse = await httpClient.GetDiscoveryDocumentAsync("https://localhost:5040");
         }
-        
+
         var issuerSigningKeys = new List<SecurityKey>();
 
         foreach (var webKey in discoveryDocumentResponse.KeySet.Keys)
@@ -31,19 +31,19 @@ public static class CurrentUserServiceJwtExtensions
             var n = Base64Url.Decode(webKey.N);
 
             var key = new RsaSecurityKey(new RSAParameters
-                { Exponent = e, Modulus = n })
-                        {
-                                KeyId = webKey.Kid
-                        };
+            { Exponent = e, Modulus = n })
+            {
+                KeyId = webKey.Kid
+            };
 
             issuerSigningKeys.Add(key);
         }
 
         var tokenValidationParameters = new TokenValidationParameters()
         {
-                ValidAudience = "myapi",
-                ValidIssuer = "https://identity.local",
-                IssuerSigningKeys = issuerSigningKeys        
+            ValidAudience = "myapi",
+            ValidIssuer = "https://localhost:5040",
+            IssuerSigningKeys = issuerSigningKeys
         };
 
         var claimsPrincipal = new JwtSecurityTokenHandler().ValidateToken(accessToken,

@@ -76,7 +76,7 @@ async Task LoadModules(IServiceCollection services)
 
     var entries = await http.GetFromJsonAsync<IEnumerable<ModuleDefinition>>($"{ServiceUrls.AppServiceUrl}/Modules");
 
-    entries!.Where(x => x.Enabled).ToList().ForEach(x => 
+    entries!.Where(x => x.Enabled).ToList().ForEach(x =>
         ModuleLoader.LoadModule(x.Name, Assembly.Load(x.Assembly), x.Enabled));
 
     ModuleLoader.AddServices(builder.Services);

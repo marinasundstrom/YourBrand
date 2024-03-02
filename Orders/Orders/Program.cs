@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
 
-if(args.Contains("--connection-string")) 
+if (args.Contains("--connection-string"))
 {
     builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
 }
@@ -32,7 +32,7 @@ builder.Services
 
 builder.Services
     .AddControllers();
-    //.AddNewtonsoftJson();
+//.AddNewtonsoftJson();
 
 // Set the JSON serializer options
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
@@ -56,13 +56,13 @@ builder.Services.AddSwaggerDocument(c =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
-                        options.Authority = "https://identity.local";
+                        options.Authority = "https://localhost:5040";
                         options.Audience = "myapi";
 
                         options.TokenValidationParameters = new TokenValidationParameters()
                         {
                             NameClaimType = "name"
-                            
+
                         };
 
                         options.Events = new JwtBearerEvents
@@ -137,7 +137,7 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

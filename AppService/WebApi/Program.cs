@@ -21,12 +21,14 @@ using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using YourBrand.HumanResources.Contracts; 
+using YourBrand.HumanResources.Contracts;
 
 using YourBrand.Consumers;
 
 static class Program
 {
+    static readonly string MyAllowSpecificOrigins = "MyPolicy";
+
     /// <param name="seed">Seed the database</param>
     /// <param name="connectionString">The connection string of the database to act on</param>
     /// <param name="args">The rest of the arguments</param>
@@ -40,9 +42,12 @@ static class Program
 
         var Configuration = builder.Configuration;
 
-        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        if (connectionString is not null)
+        {
+            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
-        Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+            Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+        }
 
         services.AddApplication(Configuration);
         services.AddInfrastructure(Configuration);
@@ -88,6 +93,18 @@ static class Program
 
         services.AddSignalR();
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                            builder =>
+                            {
+                                builder
+                                    .AllowAnyOrigin()
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                            });
+        });
+
         services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
 
         services.AddMassTransit(x =>
@@ -115,13 +132,13 @@ static class Program
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
-                        options.Authority = "https://identity.local";
+                        options.Authority = "https://localhost:5040";
                         options.Audience = "myapi";
 
                         options.TokenValidationParameters = new TokenValidationParameters()
                         {
                             NameClaimType = "name"
-                            
+
                         };
 
                         options.Events = new JwtBearerEvents
@@ -167,6 +184,8 @@ static class Program
 
         app.UseRouting();
 
+        app.UseCors(MyAllowSpecificOrigins);
+
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -187,7 +206,7 @@ static class Program
         app.MapHub<WorkerHub>("/hubs/worker");
         app.MapHub<NotificationHub>("/hubs/notifications");
 
-        if(seed)
+        if (seed)
         {
             await app.Services.SeedAsync();
 

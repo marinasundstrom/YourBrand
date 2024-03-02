@@ -1,5 +1,7 @@
 # YourBrand
 
+Check [Instructions](/Instructions.md) to run.
+
 App for managing a consultancy business - from sales to running a project - A private business network.
 
 _**Info**: Parts of this project are used by the [eShop](https://github.com/marinasundstrom/eShop) project. So some projects here are outdated._

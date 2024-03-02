@@ -26,6 +26,8 @@ public class UrlHelper : IUrlHelper
 
         var host = GetHostUrl();
 
-        return $"{host}/content/images/{id}";
+        //return $"{host}/content/images/{id}";
+
+        return $"https://localhost:5174/content/images/{id}";
     }
 }

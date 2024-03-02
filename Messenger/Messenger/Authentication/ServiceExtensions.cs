@@ -17,7 +17,7 @@ public static class ServiceExtensions
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
-                        options.Authority = "https://identity.local";
+                        options.Authority = "https://localhost:5040";
                         options.Audience = "myapi";
 
                         options.TokenValidationParameters = new TokenValidationParameters()
@@ -27,23 +27,23 @@ public static class ServiceExtensions
 
                         options.Events = new JwtBearerEvents
                         {
-                                OnTokenValidated = context =>
+                            OnTokenValidated = context =>
+                            {
+                                // Add the access_token as a claim, as we may actually need it
+                                var accessToken = context.SecurityToken as JwtSecurityToken;
+                                if (accessToken != null)
                                 {
-                                    // Add the access_token as a claim, as we may actually need it
-                                    var accessToken = context.SecurityToken as JwtSecurityToken;
-                                    if (accessToken != null)
+                                    ClaimsIdentity? identity = context?.Principal?.Identity as ClaimsIdentity;
+                                    if (identity != null)
                                     {
-                                        ClaimsIdentity? identity = context?.Principal?.Identity as ClaimsIdentity;
-                                        if (identity != null)
-                                        {
-                                            identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                        }
+                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
                                     }
-
-                                    return Task.CompletedTask;
                                 }
+
+                                return Task.CompletedTask;
+                            }
                         };
-                        
+
                         //options.TokenValidationParameters.ValidateAudience = false;
 
                         //options.Audience = "openid";
@@ -56,7 +56,7 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddAuthWithApiKey(this IServiceCollection services)
     {
-        services.AddApiKeyAuthentication("https://localhost/apikeys/");
+        services.AddApiKeyAuthentication("https://localhost:5174/apikeys/");
 
         return services;
     }
