@@ -148,7 +148,7 @@ static class Program
                         //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                     });
 
-        services.AddApiKeyAuthentication("https://localhost/api/apikeys/");
+        services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
         var app = builder.Build();
 

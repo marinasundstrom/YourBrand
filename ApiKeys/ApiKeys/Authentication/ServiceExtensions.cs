@@ -33,7 +33,7 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddAuthWithApiKey(this IServiceCollection services)
     {
-        services.AddApiKeyAuthentication("https://localhost/api/apikeys/");
+        services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
         return services;
     }

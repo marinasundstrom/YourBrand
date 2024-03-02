@@ -43,7 +43,7 @@ public static class Seed
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "TimeReport",
-                Url = "https://localhost/api/timereport/",
+                Url = "https://localhost:5174/api/timereport/",
                 Secret = "r9qkLo5BikSwPdhMKNx4EA"
             };
 
@@ -53,7 +53,7 @@ public static class Seed
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "Showroom",
-                Url = "https://localhost/api/showroom/",
+                Url = "https://localhost:5174/api/showroom/",
                 Secret = "ai9JxJ0Cck+VQPSeoLewlQ"
             };
 

@@ -105,7 +105,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                    });
 
-//builder.Services.AddApiKeyAuthentication("https://localhost/api/apikeys/");
+//builder.Services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {

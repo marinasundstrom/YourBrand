@@ -18,21 +18,24 @@ builder.Services.AddSwaggerDocument(c =>
     c.Version = "0.1";
 });
 
-const string RootUrl = "https://localhost/api";
+const string RootUrl = "https://localhost:5174/api";
 const string CatalogServiceUrl = $"{RootUrl}/catalog";
 
-builder.Services.AddCatalogClients((sp, httpClient) => {
-            httpClient.BaseAddress = new Uri($"{CatalogServiceUrl}/");
-        }, builder => {
-            //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-        });
+builder.Services.AddCatalogClients((sp, httpClient) =>
+{
+    httpClient.BaseAddress = new Uri($"{CatalogServiceUrl}/");
+}, builder =>
+{
+    //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+});
 
 var descriptorDbContext = builder.Services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(YourBrand.Commerce.Client.IProductsClient));
 builder.Services.Remove(descriptorDbContext);
 
-builder.Services.AddHttpClient(nameof(YourBrand.Commerce.Client.ProductsClient) + "C", (sp, http) => {
-                http.BaseAddress = new Uri("https://localhost:6001/");
-            })
+builder.Services.AddHttpClient(nameof(YourBrand.Commerce.Client.ProductsClient) + "C", (sp, http) =>
+{
+    http.BaseAddress = new Uri("https://localhost:6001/");
+})
             .AddTypedClient<YourBrand.Commerce.Client.IProductsClient>((http, sp) => new YourBrand.Commerce.Client.ProductsClient(http));
 
 CultureInfo? culture = new("sv-SE");
