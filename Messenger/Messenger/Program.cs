@@ -82,7 +82,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
     app.UseOpenApi();
-    app.UseSwaggerUi3(c =>
+    app.UseSwaggerUi(c =>
     {
         c.DocumentTitle = "Messenger API v1";
     });

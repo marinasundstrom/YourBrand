@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>preview</LangVersion>
@@ -9,7 +9,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.591" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,7 +8,7 @@ using NJsonSchema.Converters;
 
 //using YourBrand.Orders.Models;
 
-[JsonConverter(typeof(JsonInheritanceConverter), "_type")]
+[JsonConverter(typeof(JsonInheritanceConverter<>), "_type")]
 [KnownType(typeof(Resource<>))]
 public abstract class Resource
 {

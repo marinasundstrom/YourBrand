@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 using Hangfire;
 using Hangfire.SqlServer;
@@ -111,7 +111,7 @@ static class Program
             app.UseDeveloperExceptionPage();
 
             app.UseOpenApi();
-            app.UseSwaggerUi3(c =>
+            app.UseSwaggerUi(c =>
             {
                 c.DocumentTitle = "Worker API v1";
             });

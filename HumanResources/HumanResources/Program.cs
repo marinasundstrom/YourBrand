@@ -161,7 +161,7 @@ static class Program
             app.UseDeveloperExceptionPage();
 
             app.UseOpenApi();
-            app.UseSwaggerUi3(c =>
+            app.UseSwaggerUi(c =>
             {
                 c.DocumentTitle = "Web API v1";
             });
