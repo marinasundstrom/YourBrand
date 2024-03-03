@@ -51,11 +51,6 @@ Projects
 
 Products
 
-<a href="/Screenshots/Catalog - Product 2.png">
-<img src="/Screenshots/Catalog - Product 2.png" height="250"  alt="Product"  /></a>
-
-Product
-
 ## Architecture
 
 <a href="/docs/overview.png">
