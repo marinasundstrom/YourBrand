@@ -1,3 +1,5 @@
+This will be updated: Tye is not used anymore.
+
 # Getting Started
 
 This guide is intended to be run from top-down.
@@ -16,7 +18,7 @@ Download it from [here](https://www.docker.com/products/docker-desktop).
 
 ### Install Tye CLI tools
 
-Check the [instructions](https://github.com/dotnet/tye/blob/main/docs/getting_started.md) to install the tools.
+~~Check the [instructions](https://github.com/dotnet/tye/blob/main/docs/getting_started.md) to install the tools.~~
 
 ## Create SSL certificates
 

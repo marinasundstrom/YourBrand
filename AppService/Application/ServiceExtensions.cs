@@ -23,7 +23,7 @@ public static class ServiceExtensions
 
         services.AddNotificationsClients((sp, http) =>
         {
-            http.BaseAddress = configuration.GetServiceUri("notifications");
+            http.BaseAddress = new Uri("https://localhost:5174/api/notifications");
         },
         builder =>
         {

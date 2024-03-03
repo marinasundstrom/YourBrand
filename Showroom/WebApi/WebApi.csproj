@@ -23,7 +23,6 @@
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
