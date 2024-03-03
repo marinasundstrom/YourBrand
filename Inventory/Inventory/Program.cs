@@ -109,12 +109,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/documents/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/documents/");
 });
 
 builder.Services.AddPaymentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/payments/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/payments/");
 });
 
 var app = builder.Build();

@@ -67,7 +67,7 @@ builder.Services.AddSwaggerDocument(c =>
 
 builder.Services.AddTransactionsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/transactions/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/transactions/");
 });
 
 builder.Services.AddMassTransit(x =>

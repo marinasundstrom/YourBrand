@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "TimeReport API",
@@ -3074,7 +3074,7 @@
               }
             }
           },
-          "403": {
+          "400": {
             "description": "",
             "content": {
               "application/json": {
@@ -3084,7 +3084,7 @@
               }
             }
           },
-          "400": {
+          "403": {
             "description": "",
             "content": {
               "application/json": {
@@ -3153,7 +3153,7 @@
               }
             }
           },
-          "403": {
+          "400": {
             "description": "",
             "content": {
               "application/json": {
@@ -3163,7 +3163,7 @@
               }
             }
           },
-          "400": {
+          "403": {
             "description": "",
             "content": {
               "application/json": {
@@ -3232,7 +3232,7 @@
               }
             }
           },
-          "403": {
+          "400": {
             "description": "",
             "content": {
               "application/json": {
@@ -3242,7 +3242,7 @@
               }
             }
           },
-          "400": {
+          "403": {
             "description": "",
             "content": {
               "application/json": {

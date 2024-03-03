@@ -74,22 +74,22 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddTransactionsClient((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/transactions/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/transactions/");
 });
 
 builder.Services.AddInvoicesClient((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/invoicing/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/invoicing/");
 });
 
 builder.Services.AddPaymentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/payments/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/payments/");
 });
 
 builder.Services.AddAccountingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/accounting/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/accounting/");
 });
 
 var app = builder.Build();

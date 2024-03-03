@@ -44,22 +44,22 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddAccountingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/accounting/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/accounting/");
 });
 
 builder.Services.AddInvoicingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/invoicing/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/invoicing/");
 });
 
 builder.Services.AddPaymentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/payments/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/payments/");
 });
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx", "https")}/api/documents/");
+    http.BaseAddress = new Uri($"https://localhost:5174/api/documents/");
 });
 
 // Add Hangfire services.
@@ -67,7 +67,7 @@ builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(Configuration.GetConnectionString2("mssql", "HangfireDB"), new SqlServerStorageOptions
+    .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
     {
         CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
         SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
@@ -92,7 +92,7 @@ app.UseRouting();
 
 app.MapHangfireDashboard();
 
-using (var connection = new SqlConnection(Configuration.GetConnectionString2("mssql", "HangfireDB")))
+using (var connection = new SqlConnection(Configuration.GetConnectionString("HangfireConnection")))
 {
     connection.Open();
 

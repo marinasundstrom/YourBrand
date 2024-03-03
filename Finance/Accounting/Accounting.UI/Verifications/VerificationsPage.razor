@@ -1,19 +1,19 @@
-﻿@page "/verifications"
+﻿@page "/journal"
 @using YourBrand.Accounting
 @inject NavigationManager NavigationManager
 @inject IVerificationsClient VerificationsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-<PageTitle>Verifications</PageTitle>
+<PageTitle>Journal</PageTitle>
 
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Verifications</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Journal</MudText>
 
-<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/verifications/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/journal/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
     Create verification
 </MudButton>
 
-<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/verifications/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/journal/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
     Register sale
 </MudButton>
 
@@ -80,7 +80,7 @@
         Snackbar.Add("The reactor is running at optimum temperature", Severity.Success);
         */
 
-        NavigationManager.NavigateTo("/verifications/new");
+        NavigationManager.NavigateTo("/journal/new");
     }
 
     class VerificationViewModel

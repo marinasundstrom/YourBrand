@@ -16,7 +16,7 @@ public static class ServiceExtensions
 
         services.AddInvoicingClients((sp, http) =>
         {
-            http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx", "https")}/api/invoicing/");
+            http.BaseAddress = new Uri($"https://localhost:5174/api/invoicing/");
         });
 
         return services;

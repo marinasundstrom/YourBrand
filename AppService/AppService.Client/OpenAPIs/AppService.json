@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Web API",
@@ -547,6 +547,39 @@
         }
       }
     },
+    "/Modules": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "operationId": "Modules_GetModules",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModuleDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Notifications": {
       "get": {
         "tags": [
@@ -797,12 +830,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/DoSomething": {
@@ -1112,6 +1140,21 @@
           "text": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "ModuleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "assembly": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
           }
         }
       },

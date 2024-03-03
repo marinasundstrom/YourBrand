@@ -84,7 +84,13 @@
 
         dto.RequestedAmount = -dto.RequestedAmount; // TODO: Fix
 
-        MudDialog.Close(DialogResult.Ok(dto));
+        MudDialog.Close(DialogResult.Ok(
+            new InvoiceDomesticServiceViewModel {
+                Kind = dto.Kind,
+                Description = dto.Description,
+                Buyer = dto.Buyer,
+                RequestedAmount = dto.RequestedAmount
+            }));
     }
 
     void Cancel() => MudDialog.Cancel();

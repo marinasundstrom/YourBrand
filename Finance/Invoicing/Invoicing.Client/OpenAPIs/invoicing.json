@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Invoices API",
@@ -60,9 +60,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_DeleteInvoice",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -74,11 +71,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -249,9 +242,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_DeleteInvoiceItem",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -270,11 +260,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -382,9 +368,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetInvoiceStatus",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -417,11 +400,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -432,9 +411,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetPaidAmount",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -454,11 +430,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -469,9 +441,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetDate",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -491,11 +460,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -506,9 +471,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetType",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -535,11 +497,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -550,9 +508,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetDueDate",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -572,11 +527,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -587,9 +538,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetReference",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -607,11 +555,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -622,9 +566,6 @@
           "Invoices"
         ],
         "operationId": "Invoices_SetNote",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -642,11 +583,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -1049,10 +986,6 @@
           "type": "string"
         }
       }
-    },
-    "Unit": {
-      "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
     },
     "ItemsResultOfInvoiceDto": {
       "type": "object",

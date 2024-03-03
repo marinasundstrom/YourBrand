@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "x-generator": "NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Transactions API",
@@ -36,12 +36,9 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "name": "TransactionDto[]",
+            "name": "transactions",
             "in": "body",
             "required": true,
             "description": "",
@@ -56,11 +53,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -71,9 +64,6 @@
           "Transactions"
         ],
         "operationId": "Transactions_SetTransactionStatus",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -101,11 +91,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -116,9 +102,6 @@
           "Transactions"
         ],
         "operationId": "Transactions_SetTransactionReference",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
@@ -137,11 +120,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -196,10 +175,6 @@
     }
   },
   "definitions": {
-    "Unit": {
-      "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
-    },
     "TransactionDto": {
       "type": "object",
       "required": [

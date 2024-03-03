@@ -38,7 +38,7 @@ public class ModuleInitializer : IModuleInitializer
         var group2 = group.GetGroup("accounting") ?? group.CreateGroup("accounting", () => resources["Accounting"], MudBlazor.Icons.Material.Filled.List);
 
         group2.CreateItem("accounts", () => resources["Accounts"], MudBlazor.Icons.Material.Filled.List, "/accounts");
-        group2.CreateItem("ledger", () => resources["Ledger"], MudBlazor.Icons.Material.Filled.List, "/ledger");
-        group2.CreateItem("verifications", () => resources["Verifications"], MudBlazor.Icons.Material.Filled.List, "/verifications");
+        group2.CreateItem("ledger", () => resources["General ledger"], MudBlazor.Icons.Material.Filled.List, "/ledger");
+        group2.CreateItem("journal", () => resources["Journal"], MudBlazor.Icons.Material.Filled.List, "/journal");
     }
 }

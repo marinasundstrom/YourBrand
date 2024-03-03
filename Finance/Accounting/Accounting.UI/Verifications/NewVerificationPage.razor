@@ -1,4 +1,4 @@
-﻿@page "/verifications/new"
+﻿@page "/journal/new"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
 @inject IAccountsClient AccountsClient
@@ -229,7 +229,7 @@
                 * 10000), file.Name));
             }
 
-            NavigationManager.NavigateTo("/verifications");
+            NavigationManager.NavigateTo("/journal");
         }
 
         private Task<IEnumerable<AccountDto>> Search(string value)

@@ -115,16 +115,6 @@ services:
     container_name: redis-cli
     command: redis-cli -h redis MONITOR
 
-  nginx:
-    image: nginx
-    container_name: nginx
-    ports:
-      - 34623:80
-      - 34624:443
-    volumes:
-      - ./nginx.conf:/etc/nginx/templates/default.conf.template
-      - ./certs:/etc/nginx/certs
-
 volumes:
   prom_data:
   orders_data:
