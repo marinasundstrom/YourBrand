@@ -307,6 +307,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exporter", "Showroom\Export
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestData", "Showroom\TestData\TestData.csproj", "{DCE29DCE-8F41-4DA5-84D6-456AEF4FDF34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxy", "Proxy\Proxy.csproj", "{7395918D-C00A-4310-993E-8D150DD46CBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -793,6 +795,10 @@ Global
 		{DCE29DCE-8F41-4DA5-84D6-456AEF4FDF34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCE29DCE-8F41-4DA5-84D6-456AEF4FDF34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCE29DCE-8F41-4DA5-84D6-456AEF4FDF34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7395918D-C00A-4310-993E-8D150DD46CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7395918D-C00A-4310-993E-8D150DD46CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7395918D-C00A-4310-993E-8D150DD46CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7395918D-C00A-4310-993E-8D150DD46CBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

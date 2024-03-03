@@ -9,6 +9,8 @@
     URL.revokeObjectURL(url);
 }
 
+window.downloadFileFromStream = downloadFileFromStream;
+
 function triggerFileDownload(fileName, url) {
     const anchorElement = document.createElement('a');
     anchorElement.href = url;
