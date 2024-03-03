@@ -22,7 +22,15 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note)
         public async Task<InvoiceDto> Handle(CreateInvoice request, CancellationToken cancellationToken)
         {
             var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note);
-            invoice.Id = (await _context.Invoices.MaxAsync(x => x.Id)) + 1;
+
+            try 
+            {
+                invoice.Id = (_context.Invoices.Select(x => x.Id).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
+            }
+            catch 
+            {
+                invoice.Id = "1";
+            }
 
             _context.Invoices.Add(invoice);
 
