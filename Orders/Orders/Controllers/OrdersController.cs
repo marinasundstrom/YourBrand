@@ -71,9 +71,11 @@ namespace YourBrand.Orders.Controllers
         [HttpGet]
         public async Task<YourBrand.Orders.Models.Orders> GetOrders(int skip = 0, int limit = 10, [FromQuery] string[] embed = null!)
         {
+            embed ??= Array.Empty<string>();
+
             var query = context.Orders
                 .AsQueryable()
-                .IncludeAll(includeItems: embed.Contains("items"), includeSubscriptions: false, includeCustomFields: true /* embed.Contains("customFields") */)
+                .IncludeAll(includeItems: embed.Contains("items"),  includeSubscriptions: false, includeCustomFields: true /* embed.Contains("customFields") */)
                 .OrderBy(c => c.Created)
                 .AsNoTracking();
 
