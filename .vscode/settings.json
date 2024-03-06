@@ -13,6 +13,17 @@
         {
             "splitTerminals": [
                 {
+                    "name": "Docker",
+                    "commands": [
+                        "docker compose -f docker-compose.deps.yml up -d"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
                     "name": "Proxy",
                     "commands": [
                         "dotnet run --project Proxy/Proxy.csproj"
