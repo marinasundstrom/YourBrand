@@ -5,7 +5,7 @@ namespace YourBrand.Accountant.Domain;
 
 public class EntriesFactory
 {
-    public IEnumerable<CreateEntry> GetEntries(InvoiceDto invoice)
+    public IEnumerable<CreateEntry> CreateEntriesFromInvoice(InvoiceDto invoice)
     {
         var itemsGroupedByTypeAndVatRate = invoice.Items.GroupBy(item => new { item.ProductType, item.VatRate });
 

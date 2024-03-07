@@ -14,7 +14,7 @@ public class EntriesFactoryTest
         InvoiceDto invoice = GetInvoice();
 
         var cls = new EntriesFactory();
-        var entries = cls.GetEntries(invoice);
+        var entries = cls.CreateEntriesFromInvoice(invoice);
 
         var debit = entries.Sum(x => x.Debit.GetValueOrDefault());
         var credit = entries.Sum(x => x.Credit.GetValueOrDefault());
@@ -28,7 +28,7 @@ public class EntriesFactoryTest
         InvoiceDto invoice = GetInvoiceRut();
 
         var cls = new EntriesFactory();
-        var entries = cls.GetEntries(invoice);
+        var entries = cls.CreateEntriesFromInvoice(invoice);
 
         var debit = entries.Sum(x => x.Debit.GetValueOrDefault());
         var credit = entries.Sum(x => x.Credit.GetValueOrDefault());
@@ -42,7 +42,7 @@ public class EntriesFactoryTest
         InvoiceDto invoice = GetInvoiceRut2();
 
         var cls = new EntriesFactory();
-        var entries = cls.GetEntries(invoice);
+        var entries = cls.CreateEntriesFromInvoice(invoice);
 
         var debit = entries.Sum(x => x.Debit.GetValueOrDefault());
         var credit = entries.Sum(x => x.Credit.GetValueOrDefault());

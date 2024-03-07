@@ -15,15 +15,15 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
     private readonly IVerificationsClient _verificationsClient;
     private readonly IInvoicesClient _invoicesClient;
     private readonly IDocumentsClient _documentsClient;
-    private readonly EntriesFactory _cls;
+    private readonly EntriesFactory _entriesFactory;
 
     public InvoicesBatchConsumer(IVerificationsClient verificationsClient,
-        IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory cls)
+        IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory)
     {
         _verificationsClient = verificationsClient;
         _invoicesClient = invoicesClient;
         _documentsClient = documentsClient;
-        _cls = cls;
+        _entriesFactory = entriesFactory;
     }
 
     public async Task Consume(ConsumeContext<InvoicesBatch> context)
@@ -34,6 +34,8 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         {
             await HandleInvoice(invoice, context.CancellationToken);
         }
+
+        //await Task.WhenAll(batch.Invoices.Select(x => HandleInvoice(x, context.CancellationToken)));
     }
 
     private async Task HandleInvoice(Invoice i, CancellationToken cancellationToken)
@@ -48,14 +50,26 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             return;
         }
 
-        var entries = _cls.GetEntries(invoice);
+        await CreateVerificationFromInvoice(invoice, cancellationToken);
+    }
+
+    private async Task CreateVerificationFromInvoice(InvoiceDto invoice, CancellationToken cancellationToken)
+    {
+        var entries = _entriesFactory.CreateEntriesFromInvoice(invoice);
 
         var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
-            Description = $"Skickade ut faktura #{i.Id}",
+            Description = $"Skickade ut faktura #{invoice.Id}",
             InvoiceId = int.Parse(invoice.Id),
             Entries = entries.ToList(),
         }, cancellationToken);
+
+        await UploadDocuments(invoice, verificationId);
+    }
+
+    private async Task UploadDocuments(InvoiceDto invoice, int verificationId)
+    {
+        MemoryStream stream, stream2;
 
         var file = await _invoicesClient.GetInvoiceFileAsync(invoice.Id);
 
@@ -64,13 +78,11 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         var fileExt = Path.GetExtension(filename);
 
         string contentType = GetContentType(file);
-
-        using var stream = new MemoryStream();
+        stream = new MemoryStream();
         file.Stream.CopyTo(stream);
 
         stream.Seek(0, SeekOrigin.Begin);
-
-        using var stream2 = new MemoryStream();
+        stream2 = new MemoryStream();
         stream.CopyTo(stream2);
 
         stream2.Seek(0, SeekOrigin.Begin);
@@ -80,12 +92,12 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             verificationId, null, int.Parse(invoice.Id),
             new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 
-        try 
-        {            
+        try
+        {
             await _documentsClient.UploadDocumentAsync("invoices",
                 new Documents.Client.FileParameter(stream2, $"invoice-{invoice.Id}{fileExt}", contentType));
         }
-        catch(Exception exc) 
+        catch (Exception exc)
         {
             Console.WriteLine($"Failed to upload document: {exc}");
         }
