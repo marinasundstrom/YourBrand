@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Customers API",
@@ -42,7 +42,7 @@
             "name": "personId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -60,25 +60,18 @@
           "Persons"
         ],
         "operationId": "Persons_DeletePerson",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
             "name": "personId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -100,7 +93,6 @@
             "name": "createPerson",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/CreatePerson"
             },
@@ -133,14 +125,14 @@
             "name": "personId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
             "name": "foo",
             "in": "query",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -171,7 +163,6 @@
             "name": "createAddress",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/CreateAddress"
             },
@@ -195,32 +186,25 @@
           "Addresses"
         ],
         "operationId": "Addresses_DeleteAddress",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
             "name": "personId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
             "name": "addressId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -371,15 +355,15 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
-          },
           "201": {
             "x-nullable": false,
             "description": "",
             "schema": {
               "$ref": "#/definitions/OrganizationDto"
             }
+          },
+          "default": {
+            "description": ""
           }
         }
       }
@@ -401,7 +385,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -430,7 +414,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "name": "dto",
@@ -459,7 +443,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -533,15 +517,15 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
-          },
           "201": {
             "x-nullable": false,
             "description": "",
             "schema": {
               "$ref": "#/definitions/PersonDto"
             }
+          },
+          "default": {
+            "description": ""
           }
         }
       }
@@ -563,7 +547,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -592,7 +576,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "name": "dto",
@@ -621,7 +605,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -733,10 +717,6 @@
         1,
         2
       ]
-    },
-    "Unit": {
-      "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
     },
     "CreatePerson": {
       "type": "object",

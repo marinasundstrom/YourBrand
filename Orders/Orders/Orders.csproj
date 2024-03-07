@@ -21,6 +21,7 @@
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
 		<PackageReference Include="Scrutor" Version="4.2.0" />
+        <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="11.0.0" />
     </ItemGroup>
 
 	<ItemGroup>

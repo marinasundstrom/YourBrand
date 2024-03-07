@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Payments API",
@@ -36,15 +36,11 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "payment",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/CreatePayment"
             },
@@ -53,11 +49,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       },
@@ -129,7 +121,7 @@
             "name": "paymentId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -147,25 +139,18 @@
           "Payments"
         ],
         "operationId": "Payments_CancelPayment",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
             "name": "paymentId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
@@ -185,7 +170,7 @@
             "name": "reference",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -205,16 +190,13 @@
           "Payments"
         ],
         "operationId": "Payments_SetPaymentStatus",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "string",
             "name": "paymentId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -237,21 +219,13 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Unit"
-            }
+            "description": ""
           }
         }
       }
     }
   },
   "definitions": {
-    "Unit": {
-      "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
-    },
     "CreatePayment": {
       "type": "object",
       "required": [
