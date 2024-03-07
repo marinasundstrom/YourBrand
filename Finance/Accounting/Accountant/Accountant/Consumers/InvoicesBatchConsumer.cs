@@ -65,20 +65,29 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 
         string contentType = GetContentType(file);
 
+        using var stream = new MemoryStream();
+        file.Stream.CopyTo(stream);
+
+        stream.Seek(0, SeekOrigin.Begin);
+
+        using var stream2 = new MemoryStream();
+        stream.CopyTo(stream2);
+
+        stream2.Seek(0, SeekOrigin.Begin);
+        stream.Seek(0, SeekOrigin.Begin);
+
         await _verificationsClient.AddFileAttachmentToVerificationAsync(
             verificationId, null, int.Parse(invoice.Id),
-            new Accounting.Client.FileParameter(file.Stream, $"invoice-{invoice.Id}{fileExt}", contentType));
+            new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 
         try 
-        {
-            file.Stream.Seek(0, SeekOrigin.Begin);
-            
+        {            
             await _documentsClient.UploadDocumentAsync("invoices",
-                new Documents.Client.FileParameter(file.Stream, $"invoice-{invoice.Id}{fileExt}", contentType));
+                new Documents.Client.FileParameter(stream2, $"invoice-{invoice.Id}{fileExt}", contentType));
         }
-        catch(Exception) 
+        catch(Exception exc) 
         {
-            Console.WriteLine("Failed to upload document");
+            Console.WriteLine($"Failed to upload document: {exc}");
         }
     }
 
