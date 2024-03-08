@@ -15,8 +15,31 @@
     <data name="Sales">
       <value>Sales</value>
     </data>
+    <data name="Consultants">
+        <value>Consultants</value>
+    </data>
     <data name="CVs">
       <value>CVs</value>
     </data>
+    <data name="Search">
+        <value>Search</value>
+    </data>
+    <data name="Profiles">
+        <value>Profiles</value>
+    </data>
+    <data name="Cases">
+        <value>Cases</value>
+    </data>
+    <data name="Skills">
+        <value>Kompetenser</value>
+    </data>
+    <data name="CompetenceAreas">
+        <value>Competence areas</value>
+    </data>
+    <data name="Companies">
+        <value>Companies</value>
+    </data>
+    <data name="Industries">
+        <value>Industries</value>
+    </data>
 </root>
-

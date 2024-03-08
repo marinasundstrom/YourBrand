@@ -32,9 +32,11 @@ public class ModuleInitializer : IModuleInitializer
 
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        var group = navManager.GetGroup("showroom") ?? navManager.CreateGroup("showroom", () => resources["Showroom"]);
-        group.RequiresAuthorization = true;
+        var group2 = navManager.GetGroup("sales") ?? navManager.CreateGroup("sales", () => resources["Sales"]);
+        group2.RequiresAuthorization = true;
 
+        var group = group2.CreateGroup("showroom", () => resources["Consultants"], MudBlazor.Icons.Material.Filled.People);
+        
         group.CreateItem("search", () => resources["Search"], MudBlazor.Icons.Material.Filled.Search, "/profiles/find");
         group.CreateItem("profiles", () => resources["Profiles"], MudBlazor.Icons.Material.Filled.Person, "/profiles");
         group.CreateItem("cases", () => resources["Cases"], MudBlazor.Icons.Material.Filled.Task, "/cases");

@@ -15,7 +15,31 @@
     <data name="Sales">
       <value>Sälj</value>
     </data>
+    <data name="Consultants">
+        <value>Konsulter</value>
+    </data>
     <data name="CVs">
       <value>CV</value>
+    </data>
+    <data name="Search">
+        <value>Sök</value>
+    </data>
+    <data name="Profiles">
+        <value>Profiler</value>
+    </data>
+    <data name="Cases">
+        <value>Ärenden</value>
+    </data>
+    <data name="Skills">
+        <value>Färdigheter</value>
+    </data>
+    <data name="CompetenceAreas">
+        <value>Komepetensområden</value>
+    </data>
+    <data name="Companies">
+        <value>Företag</value>
+    </data>
+    <data name="Industries">
+        <value>Branscher</value>
     </data>
 </root>
