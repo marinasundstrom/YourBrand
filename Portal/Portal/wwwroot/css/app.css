@@ -113,3 +113,7 @@ h1:focus {
 .loading-progress-text:after {
     content: var(--blazor-load-percentage-text, "Loading");
 }
+
+.notification-button .mud-badge.mud-badge-top.right.mud-badge-overlap {
+    inset: auto auto calc(100% - 22px) calc(100% - 22px);
+}
