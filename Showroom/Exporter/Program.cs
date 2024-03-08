@@ -40,6 +40,7 @@ var context = scope.ServiceProvider.GetRequiredService<IShowroomContext>();
 var experiences = await context.PersonProfileExperiences
     .Include(x => x.Employment)
     .Include(x => x.Company)
+    .ThenInclude(x => x.Industry)
     .Include(x => x.Skills)
     .ThenInclude(x => x.PersonProfileSkill)
     .ThenInclude(x => x.Skill)
@@ -57,6 +58,7 @@ var experiences2 = experiences
         Highlight = experience.Highlight,
         Company = experience.Company.Name,
         CompanyLogo = experience.Company.Logo,
+        Industry = experience.Company.Industry.Name,
         Link = experience.Company.Link,
         Location = experience.Location,
         Current = experience.Current,
@@ -67,3 +69,6 @@ var experiences2 = experiences
     });
 
 Console.WriteLine(JsonSerializer.Serialize(experiences2, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true }));
+
+
+Console.WriteLine(JsonSerializer.Serialize(experiences3, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true }));

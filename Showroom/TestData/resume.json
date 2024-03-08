@@ -2,6 +2,59 @@
     "experience": [
         {
             "title": "Software Developer",
+            "employer": "Telavox",
+            "employmentType": "FullTime",
+            "highlight": true,
+            "company": "Telavox",
+            "companyLogo": "/assets/logos/telavox.jpg",
+            "industry": "Telecommunications",
+            "link": "https://www.telavox.com/",
+            "location": "Malm\u00F6, Sweden",
+            "current": true,
+            "startDate": "2023-03-27T00:00:00",
+            "endDate": "2023-12-27T00:00:00",
+            "description": "Part of a team that developed system in the core business domain for telecommunication. Among our responsibilities were integrations with other domains, and customer management, and branding.\n\nExperimenting with containerization with Docker and Kubernetes. RabbitMQ for one project.",
+            "skills": [
+                "Frontend development",
+                "Kubernetes",
+                "Software development",
+                "Java",
+                "Docker",
+                "Kanban",
+                "Service Oriented Applications (SOA)",
+                "Web",
+                "Backend development"
+            ]
+        },
+        {
+            "title": "Software Developer",
+            "employer": "CDON",
+            "employmentType": "FullTime",
+            "highlight": false,
+            "company": "CDON",
+            "companyLogo": "/assets/logos/cdon.jpg",
+            "industry": "Online and Mail Order Retail",
+            "link": "https://www.cdon.se/",
+            "location": "Malm\u00F6, Sweden",
+            "current": false,
+            "startDate": "2022-11-20T00:00:00",
+            "endDate": "2023-01-12T00:00:00",
+            "description": "Developing the biggest online marketplace in the Nordics. Focus on product page experience. Frontend and backend. \n\nAzure Functions were used extensively for data-processing and enrichment.\n\nHad to leave due to company-wide lay-offs in December 2022.",
+            "skills": [
+                "Microsoft Azure",
+                ".NET",
+                "Web",
+                "Service Oriented Applications (SOA)",
+                "Software development",
+                "Backend development",
+                "Kanban",
+                "C#",
+                "ASP.NET Core",
+                "Frontend development"
+            ]
+        },
+        {
+            "title": "Software Developer",
             "employer": "Nexer Group",
             "employmentType": "Contract",
             "highlight": false,
@@ -10,37 +63,39 @@
             "industry": "Real Estate",
             "link": "https://www.hsb.se/",
             "location": "Malm\u00F6, Sweden",
-            "current": true,
+            "current": false,
             "startDate": "2022-04-20T00:00:00",
-            "endDate": null,
+            "endDate": "2022-09-01T00:00:00",
             "description": "Digitalizing housing cooperative business. Focus on backend.",
             "skills": [
-                "Distributed Applications",
-                "Service Oriented Applications (SOA)",
-                "Housing cooperative",
-                "Microservices",
-                "Agile software development",
-                "Backend development",
-                "Microsoft SQL Server",
-                ".NET",
                 "C#",
+                "Microsoft Azure",
+                "Software development",
                 "ASP.NET Core",
-                "Software development"
+                "Housing cooperative",
+                "Microsoft SQL Server",
+                "Service Oriented Applications (SOA)",
+                "Backend development",
+                "Microservices",
+                "Web",
+                ".NET",
+                "Agile software development",
+                "Distributed Applications"
             ]
         },
         {
             "title": "Software Developer",
             "employer": "Nexer Group",
-            "employmentType": "Full-time",
-            "highlight": true,
+            "employmentType": "FullTime",
+            "highlight": false,
             "company": "Nexer Group",
             "companyLogo": "/assets/logos/nexer.jpg",
             "industry": "Information Technology and Services",
             "link": "https://www.nexergroup.com/",
             "location": "Malm\u00F6, Sweden",
-            "current": true,
+            "current": false,
             "startDate": "2022-04-04T00:00:00",
-            "endDate": null,
+            "endDate": "2022-09-01T00:00:00",
             "description": "Consulting as part of Nexer Group (previously Sigma IT Consulting) in the Malm\u00F6 area.",
             "skills": [
                 "Software development"
@@ -61,22 +116,22 @@
             "endDate": "2022-03-20T00:00:00",
             "description": "Working on Line of Business (LOB) tools for handling insurance policy claims.",
             "skills": [
-                "Frontend development",
                 "Microsoft SQL Server",
-                "Service Oriented Applications (SOA)",
-                "Backend development",
                 ".NET",
                 "C#",
-                "Insurance",
+                "Backend development",
+                "Frontend development",
+                "Service Oriented Applications (SOA)",
+                "WPF",
                 "Agile software development",
-                "Software development",
-                "WPF"
+                "Insurance",
+                "Software development"
             ]
         },
         {
             "title": "Software Engineer",
             "employer": "Skymill",
-            "employmentType": "Full-time",
+            "employmentType": "FullTime",
             "highlight": false,
             "company": "Skymill",
             "companyLogo": "/assets/logos/skymill.jpg",
@@ -94,7 +149,7 @@
         {
             "title": "Senior Software Developer",
             "employer": "Nordengren AI",
-            "employmentType": "Full-time",
+            "employmentType": "FullTime",
             "highlight": false,
             "company": "Nordengren AI",
             "companyLogo": null,
@@ -107,21 +162,22 @@
             "description": "Developing Web-based e-Commerce solution from the ground up in customer-focused business. Providing functionality that supported the customer\u0027s entire business flow - from ordering to invoicing.\n\nWorking on both backend and frontend development. Responsible for Software design and Architecture\n\nOne of our customers was a company providing cleaning services.\n\nMaking proof-of-concept commerce site for well-known chef selling kitchen utensils and presenting food recipes.",
             "skills": [
                 "TypeScript",
+                "JavaScript",
                 "Blazor",
-                "ASP.NET Core",
-                "Domain-driven design (DDD)",
-                ".NET",
-                "User experience (UX)",
-                "Enterprise Resource Planning (ERP)",
-                "Software design",
-                "C#",
-                "Software development",
+                "Web",
                 "Service Oriented Applications (SOA)",
+                "ASP.NET Core",
+                "User experience (UX)",
                 "PHP",
                 "Microsoft SQL Server",
-                "JavaScript",
+                "Software development",
+                "Domain-driven design (DDD)",
+                "Enterprise Resource Planning (ERP)",
+                "C#",
+                "Backend development",
                 "Frontend development",
-                "Backend development"
+                "Software design",
+                ".NET"
             ]
         },
         {
@@ -140,20 +196,21 @@
             "description": "Developing e-Commerce site for customer.\n\nProject for insurance firm.",
             "skills": [
                 "JavaScript",
-                "Service Oriented Applications (SOA)",
-                "TypeScript",
-                "ASP.NET Core",
-                "Frontend development",
-                ".NET",
-                "Software design",
-                "User experience (UX)",
-                "Backend development",
                 "Domain-driven design (DDD)",
                 "Software development",
-                "C#",
-                "Microsoft SQL Server",
+                "ASP.NET Core",
                 "Blazor",
-                "Enterprise Resource Planning (ERP)"
+                "C#",
+                "Frontend development",
+                "Software design",
+                "Web",
+                "TypeScript",
+                "User experience (UX)",
+                "Enterprise Resource Planning (ERP)",
+                "Service Oriented Applications (SOA)",
+                ".NET",
+                "Microsoft SQL Server",
+                "Backend development"
             ]
         },
         {
@@ -171,17 +228,36 @@
             "endDate": "2019-12-30T00:00:00",
             "description": "Developing current Manufacturing Execution System (MES) for running customer production facilities in the area of Processing and Packaging.\n\nModular solution with backend service.\n\nBeing part of a fresh and diverse team. In close collaboration with other individuals and teams both on site and in other places around the world.\n\nInitiative to make refactoring in project structure in order to facilitate cross-team development.",
             "skills": [
-                "Frontend development",
-                "Backend development",
-                "C#",
-                "JavaScript",
                 "Agile software development",
-                "React",
-                "WPF",
-                ".NET",
-                "TypeScript",
                 "Software development",
-                "Microsoft SQL Server"
+                "React",
+                "Frontend development",
+                "WPF",
+                "TypeScript",
+                "Backend development",
+                ".NET",
+                "Web",
+                "JavaScript",
+                "Microsoft SQL Server",
+                "C#"
+            ]
+        },
+        {
+            "title": "Software Engineering Consultant",
+            "employer": "ESSIQ AB",
+            "employmentType": "FullTime",
+            "highlight": false,
+            "company": "ESSIQ AB",
+            "companyLogo": "/assets/logos/essiq.jpg",
+            "industry": "Information Technology and Services",
+            "link": "https://www.essiq.se/",
+            "location": "Malm\u00F6, Sweden",
+            "current": false,
+            "startDate": "2018-04-01T00:00:00",
+            "endDate": "2020-05-01T00:00:00",
+            "description": "Consulting work as part of ESSIQ Syd",
+            "skills": [
+                "Software development"
             ]
         },
         {
@@ -199,30 +275,12 @@
             "endDate": "2018-11-30T00:00:00",
             "description": "Developing Video Management Software (VMS) targeting small businesses.",
             "skills": [
+                "Service Oriented Applications (SOA)",
                 "Agile software development",
-                ".NET",
                 "Video Management (VMS)",
-                "C#",
                 "Software development",
-                "Service Oriented Applications (SOA)"
-            ]
-        },
-        {
-            "title": "Software Engineering Consultant",
-            "employer": "ESSIQ AB",
-            "employmentType": "Full-time",
-            "highlight": false,
-            "company": "ESSIQ AB",
-            "companyLogo": "/assets/logos/essiq.jpg",
-            "industry": "Information Technology and Services",
-            "link": "https://www.essiq.se/",
-            "location": "Malm\u00F6, Sweden",
-            "current": false,
-            "startDate": "2018-04-01T00:00:00",
-            "endDate": "2020-05-01T00:00:00",
-            "description": "Consulting work as part of ESSIQ Syd",
-            "skills": [
-                "Software development"
+                "C#",
+                ".NET"
             ]
         },
         {
@@ -240,13 +298,14 @@
             "endDate": "2018-04-01T00:00:00",
             "description": "Building UX for Audio and Access Control products, as part of the New Business (NB) division.\n\nFrontend development for firmware on cameras and other devices.\n\nWorking closely with backend-developers and testers.",
             "skills": [
+                "React",
                 "Software development",
-                "JavaScript",
-                "Frontend development",
                 "Agile software development",
+                "JavaScript",
+                "Kanban",
                 "Web",
-                "Physical Access Control",
-                "React"
+                "Frontend development",
+                "Physical Access Control"
             ]
         },
         {
@@ -264,13 +323,13 @@
             "endDate": "2017-05-01T00:00:00",
             "description": "Search integration for global enterprise intranet based on the .NET platform.\n\nFor Tedsys, through Sigma Society.",
             "skills": [
-                "Backend development",
-                "Frontend development",
-                "Software development",
-                ".NET",
-                "Web",
                 "JavaScript",
-                "C#"
+                "Frontend development",
+                ".NET",
+                "Backend development",
+                "Software development",
+                "C#",
+                "Web"
             ]
         },
         {
@@ -288,13 +347,13 @@
             "endDate": "2017-02-01T00:00:00",
             "description": "Developing medical system for microscopic analysis in the field of hematology.\n\nWorking on client software with native components. Educational web app for training hematologists written in Silverlight.",
             "skills": [
-                "TypeScript",
-                "Backend development",
-                "WPF",
-                ".NET",
-                "Software development",
                 "C\u002B\u002B",
+                "Backend development",
+                "Software development",
+                ".NET",
                 "C#",
+                "TypeScript",
+                "WPF",
                 "JavaScript"
             ]
         },
@@ -313,17 +372,17 @@
             "endDate": "2016-07-01T00:00:00",
             "description": "Work on internal charter booking system.\nKnowledge gained in the domain of aviation and charter flights.",
             "skills": [
-                "Software development",
-                "Backend development",
                 ".NET",
                 "Microsoft SQL Server",
-                "C#"
+                "Backend development",
+                "C#",
+                "Software development"
             ]
         },
         {
             "title": "Software Developer",
             "employer": "Tedsys AB",
-            "employmentType": "Full-time",
+            "employmentType": "FullTime",
             "highlight": false,
             "company": "Tedsys AB",
             "companyLogo": "/assets/logos/tedsys.jpg",
@@ -341,7 +400,7 @@
         {
             "title": "System Developer",
             "employer": "Teleservice Sk\u00E5ne AB",
-            "employmentType": "Full-time",
+            "employmentType": "FullTime",
             "highlight": false,
             "company": "Teleservice Sk\u00E5ne AB",
             "companyLogo": "/assets/logos/teleservice.jpg",
@@ -353,21 +412,21 @@
             "endDate": "2016-03-01T00:00:00",
             "description": "Developed systems in the company\u0027s business areas: broadband/fiber, IT-management, and radio communication (alarming and automation services for rescue organizations and industries)\n\nWorking on system for provisioning and managing fiber and broadband. Also working on system for the handling of IT support incidents reported by customers. Both integrating with other systems.",
             "skills": [
-                "C\u002B\u002B",
-                "Microsoft SQL Server",
+                "Software development",
                 "Backend development",
-                "Frontend development",
-                "NodeJS",
                 "C#",
+                "Frontend development",
                 "PHP",
-                "Service Oriented Applications (SOA)",
-                ".NET",
-                "Web",
-                "TypeScript",
                 "MySQL",
-                "JavaScript",
                 "WPF",
-                "Software development"
+                "TypeScript",
+                "Microsoft SQL Server",
+                "Web",
+                "Service Oriented Applications (SOA)",
+                "C\u002B\u002B",
+                ".NET",
+                "JavaScript",
+                "NodeJS"
             ]
         },
         {
@@ -385,14 +444,14 @@
             "endDate": "2014-08-01T00:00:00",
             "description": "Developed app for the company\u0027s alarm and automation platform - used by rescue organisations all around Sweden.\n\nAlso developed software for programming the hardware.",
             "skills": [
-                "Software development",
                 "WPF",
                 "C#",
-                "Internet of things (IoT)",
+                "Software development",
                 "Service Oriented Applications (SOA)",
-                "Frontend development",
                 "Microsoft SQL Server",
-                ".NET"
+                ".NET",
+                "Frontend development",
+                "Internet of things (IoT)"
             ]
         },
         {
@@ -410,8 +469,8 @@
             "endDate": "2012-08-01T00:00:00",
             "description": "Developed smartphone apps and working a bit on web portal. (Continuation of student internship)",
             "skills": [
-                "JavaScript",
-                "Software development"
+                "Software development",
+                "JavaScript"
             ]
         },
         {
@@ -436,7 +495,7 @@
         {
             "title": "Software Developer",
             "employer": "BTH Innovation",
-            "employmentType": "Part-time",
+            "employmentType": "PartTime",
             "highlight": false,
             "company": "BTH Innovation",
             "companyLogo": "/assets/logos/bth.jpg",
@@ -449,58 +508,9 @@
             "description": "Developed proof-of-concept system for healthcare. Web development.",
             "skills": [
                 "Frontend development",
-                "JavaScript",
-                "Software development"
+                "Software development",
+                "JavaScript"
             ]
-        }
-    ],
-    "education": [
-        {
-            "school": "Blekinge Institute of Technology",
-            "logo": "/assets/logos/bth.jpg",
-            "location": "Karlskrona, Sweden",
-            "degree": null,
-            "fieldOfStudy": "Software Engineering",
-            "startDate": "2009-09-01",
-            "endDate": "2012-05-01",
-            "activities": null,
-            "description": "Studied Software engineering, gaining broad knowledge and experience from student project towards industry.",
-            "courses": [
-                "Programming",
-                "Operating Systems",
-                "Computer Networking",
-                "Compiler Construction",
-                "Software Design",
-                "Project courses"
-            ],
-            "link": "https://www.bth.se/"
-        },
-        {
-            "school": "John Bauergymnasiet",
-            "logo": "/assets/logos/jb-gymnasiet.jpg",
-            "location": "Ystad, Sweden",
-            "degree": "null",
-            "fieldOfStudy": "IT programme",
-            "startDate": "2006-08-01",
-            "endDate": "2009-05-01",
-            "activities": [
-                "European Rural Youth Forum",
-                "JB Abroad"
-            ],
-            "description": "Studied IT with focus on programming.\n\nJB Ystad provided upper-secondary education in the areas of IT, digital media, and entrepreneurship.\n\nParticipated in European Rural Youth Forum (ERYF) in Serbia (2007), Poland (2009), Hungary (2010), and Sweden (2012).\n\nAs a participant in JB Abroad, studied in Jerez de la Frontera, Spain, fall 2008.",
-            "courses": [
-                "Computer Management",
-                "Computer Networking",
-                "Programming",
-                "Project and Entrepreneurship",
-                "Web Design",
-                "Windows Server",
-                "Linux",
-                "English",
-                "German",
-                "Spanish"
-            ],
-            "link": null
         }
     ]
 }
