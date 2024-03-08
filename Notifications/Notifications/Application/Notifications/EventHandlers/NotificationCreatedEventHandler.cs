@@ -56,7 +56,7 @@ public class NotificationCreatedEventHandler : IDomainEventHandler<NotificationC
 
     private async Task ScheduleNotification(IWorkerContext context, Domain.Entities.Notification notification)
     {
-        var delay = notification.ScheduledFor.GetValueOrDefault() - DateTime.UtcNow;
+        var delay = notification.ScheduledFor.GetValueOrDefault() - DateTime.Now;
 
         var jobId = _recurringJobManager.Schedule<Common.Interfaces.INotificationPublisher>(
             (sender) => sender.PublishNotification(notification),
