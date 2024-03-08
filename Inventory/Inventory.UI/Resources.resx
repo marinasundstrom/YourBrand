@@ -18,4 +18,10 @@
     <data name="Items">
       <value>Items</value>
     </data>
+    <data name="Warehouses">
+        <value>Warehouses</value>
+    </data>
+    <data name="Sites">
+        <value>Sites</value>
+    </data>
 </root>

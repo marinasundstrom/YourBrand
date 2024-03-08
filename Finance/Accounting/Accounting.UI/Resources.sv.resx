@@ -18,4 +18,13 @@
     <data name="Accounting">
       <value>Bokföring</value>
     </data>
+    <data name="Accounts">
+        <value>Konton</value>
+    </data>
+    <data name="General ledger">
+        <value>Huvudbok</value>
+    </data>
+    <data name="Journal">
+        <value>Journal</value>
+    </data>
 </root>

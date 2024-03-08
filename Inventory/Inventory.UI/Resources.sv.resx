@@ -18,4 +18,10 @@
     <data name="Items">
       <value>Artiklar</value>
     </data>
+    <data name="Warehouses">
+        <value>Lagerlokaler</value>
+    </data>
+    <data name="Sites">
+        <value>Platser</value>
+    </data>
 </root>

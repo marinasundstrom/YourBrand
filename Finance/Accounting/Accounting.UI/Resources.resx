@@ -18,5 +18,13 @@
     <data name="Accounting">
       <value>Accounting</value>
     </data>
+    <data name="Accounts">
+        <value>Accounts</value>
+    </data>
+    <data name="General ledger">
+        <value>General ledger</value>
+    </data>
+    <data name="Journal">
+        <value>Journal</value>
+    </data>
 </root>
-
