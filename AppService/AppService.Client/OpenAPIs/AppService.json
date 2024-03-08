@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "Web API",
@@ -23,7 +23,8 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 0
             },
             "x-position": 1
           },
@@ -32,7 +33,8 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 10
             },
             "x-position": 2
           },
@@ -49,7 +51,12 @@
             "name": "sortDirection",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/SortDirection"
+              "default": "Desc",
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SortDirection"
+                }
+              ]
             },
             "x-position": 4
           }
@@ -79,7 +86,6 @@
         "operationId": "Items_AddItem",
         "requestBody": {
           "x-name": "dto",
-          "description": "",
           "content": {
             "application/json": {
               "schema": {
@@ -124,8 +130,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           }
@@ -162,15 +167,13 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           }
         ],
         "requestBody": {
           "x-name": "dto",
-          "description": "",
           "content": {
             "application/json": {
               "schema": {
@@ -203,8 +206,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           }
@@ -236,8 +238,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           },
@@ -246,7 +247,8 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 0
             },
             "x-position": 2
           },
@@ -255,7 +257,8 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 10
             },
             "x-position": 3
           },
@@ -272,7 +275,12 @@
             "name": "sortDirection",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/SortDirection"
+              "default": "Desc",
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SortDirection"
+                }
+              ]
             },
             "x-position": 5
           }
@@ -306,15 +314,13 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           }
         ],
         "requestBody": {
           "x-name": "dto",
-          "description": "",
           "content": {
             "application/json": {
               "schema": {
@@ -349,8 +355,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           },
@@ -359,8 +364,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 2
           }
@@ -397,8 +401,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           },
@@ -407,15 +410,13 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 2
           }
         ],
         "requestBody": {
           "x-name": "dto",
-          "description": "",
           "content": {
             "application/json": {
               "schema": {
@@ -448,8 +449,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           },
@@ -458,8 +458,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 2
           }
@@ -508,8 +507,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           }
@@ -674,8 +672,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           }
@@ -737,8 +734,7 @@
             "name": "searchText",
             "in": "query",
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             },
             "x-position": 1
           },

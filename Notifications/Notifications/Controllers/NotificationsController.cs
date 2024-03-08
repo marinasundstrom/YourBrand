@@ -16,7 +16,7 @@ namespace YourBrand.Notifications.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class NotificationsController : Controller
 {
     private readonly IMediator _mediator;

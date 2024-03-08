@@ -107,7 +107,7 @@
             isLoading = false;
 
             hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{NavigationManager.BaseUri}api/hubs/notifications", options =>
+                .WithUrl($"{NavigationManager.BaseUri}api/appservice/hubs/notifications", options =>
                 {
                     options.AccessTokenProvider = async () =>
                     {
@@ -157,6 +157,8 @@
         catch (Exception exc)
         {
             Snackbar.Add(exc.Message.ToString(), Severity.Error);
+
+            Console.WriteLine(exc);
         }
     }
 

@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/orders.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true /DateType:System.DateTime /DateTimeType:System.DateTime" Namespace="YourBrand.Orders.Client">
+		<OpenApiReference Include="OpenAPIs/orders.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime" Namespace="YourBrand.Orders.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>OrdersClient.cs</OutputPath>

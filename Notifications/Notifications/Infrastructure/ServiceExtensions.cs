@@ -37,8 +37,7 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<WorkerContext>(
-            configuration.GetConnectionString("mssql", "Worker") ?? configuration.GetConnectionString("DefaultConnection"),
+        services.AddSqlServer<WorkerContext>(configuration.GetConnectionString("DefaultConnection"),
         options => options.EnableRetryOnFailure());
 
         services.AddScoped<IWorkerContext>(sp => sp.GetRequiredService<WorkerContext>());
@@ -47,7 +46,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        RemoveFaultyDomainEventHandlerRegistrations(services);
+
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
@@ -59,5 +60,23 @@ public static class ServiceExtensions
         services.AddTransient<IDateTime, DateTimeService>();
 
         return services;
+    }
+
+    private static void RemoveFaultyDomainEventHandlerRegistrations(IServiceCollection services)
+    {
+        // This removes registrations between INotificationHandler<T> to IdempotentDomainEventHandler<T>. This was not a problem before MediatR 12.0.
+        // An alternative would be to put IdempotentDomainEventHandler in a library separate from Application logic, so that MediatR doesn't register that implementation as a real handler.
+
+        foreach (var reg in services.Where(reg => reg.ServiceType.Name.Contains("INotificationHandler")).ToList())
+        {
+            var notificationHandlerType = reg.ServiceType!;
+            var notificationHandlerImplType = reg.ImplementationType!;
+
+            var requestType = notificationHandlerType.GetGenericArguments().FirstOrDefault();
+
+            if (!notificationHandlerImplType.Name.Contains("IdempotentDomainEventHandler")) continue;
+
+            services.Remove(reg);
+        }
     }
 }

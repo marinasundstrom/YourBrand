@@ -46,19 +46,19 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = _currentUserService.UserId;
+                entry.Entity.CreatedBy = _currentUserService.UserId ?? "Foo";
                 entry.Entity.Created = _dateTime.Now;
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                entry.Entity.LastModifiedBy = _currentUserService.UserId ?? "Foo";
                 entry.Entity.LastModified = _dateTime.Now;
             }
             else if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDelete softDelete)
                 {
-                    softDelete.DeletedBy = _currentUserService.UserId;
+                    softDelete.DeletedBy = _currentUserService.UserId ?? "Foo";
                     softDelete.Deleted = _dateTime.Now;
 
                     entry.State = EntityState.Modified;

@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-		<OpenApiReference Include="OpenAPIs/commerce.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true /DateType:System.DateTime /DateTimeType:System.DateTime" Namespace="YourBrand.Commerce.Client">
+		<OpenApiReference Include="OpenAPIs/commerce.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime" Namespace="YourBrand.Commerce.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>CommerceClient.cs</OutputPath>

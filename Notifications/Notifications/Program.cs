@@ -25,7 +25,10 @@ static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        if (args.Contains("--connection-string"))
+        {
+            builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
+        }
 
         var Configuration = builder.Configuration;
 
