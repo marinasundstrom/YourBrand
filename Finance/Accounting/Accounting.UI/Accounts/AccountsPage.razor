@@ -37,12 +37,13 @@
         <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
         <MudTd DataLabel="Name">@account.Name</MudTd>
         <MudTd DataLabel="Description">@account.Description</MudTd>
-        <MudTd DataLabel="Balance">@account.Balance.ToString("c")</MudTd>
+        <MudTd DataLabel="Balance">@account.Balance.FormatCurrency(currency)</MudTd>
     </RowTemplate>
 </MudTable>
 
 @code
 {
+    string currency = "SEK";
     IEnumerable<AccountClassDto>? accountClasses = null;
     IEnumerable<AccountDto>? accounts = null;
     bool includeBlankAccounts = false;

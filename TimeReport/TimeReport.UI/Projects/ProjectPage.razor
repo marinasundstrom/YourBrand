@@ -42,7 +42,7 @@ else
             <MudTd DataLabel="Name">@activity.Name</MudTd>
             <MudTd DataLabel="Description">@activity.Description</MudTd>
             <MudTd DataLabel="Type">@activity.ActivityType.Name</MudTd>
-            <MudTd DataLabel="Hourly Rate">@activity.HourlyRate?.ToString("c")</MudTd>
+            <MudTd DataLabel="Hourly Rate">@activity.HourlyRate?.FormatCurrency(currency)</MudTd>
             <MudTd>
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditActivityClicked(activity)" />
                 @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
@@ -75,7 +75,7 @@ else
         <RowTemplate Context="expense">
             <MudTd DataLabel="Name">@expense.Date.Date.ToShortDateString()</MudTd>
             <MudTd DataLabel="Description">@expense.Description</MudTd>
-            <MudTd DataLabel="Amount">@expense.Amount.ToString("c")</MudTd>
+            <MudTd DataLabel="Amount">@expense.Amount.FormatCurrency(currency)</MudTd>
             <MudTd DataLabel="Attachment">
                 @if (expense.Attachment is not null)
                 {
@@ -141,6 +141,7 @@ else
 }
 
 @code {
+    string currency = "SEK";
     ProjectDto? project;
     Data? data;
     MudTable<ActivityDto> table;

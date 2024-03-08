@@ -35,11 +35,11 @@
         <MudTd DataLabel="Order No">@context.OrderNo</MudTd>
         <MudTd DataLabel="Date">@context.Date.Date.ToShortDateString()</MudTd>
         <MudTd DataLabel="Status">@context.Status</MudTd>
-        <MudTd DataLabel="Sub Total">@context.SubTotal?.ToString("c")</MudTd>
-        <MudTd DataLabel="VAT">@context.Vat?.ToString("c")</MudTd>
-        <MudTd DataLabel="Discount">@context.Discount?.ToString("c")</MudTd>
-        <MudTd DataLabel="Charges">@context.Charge?.ToString("c")</MudTd>
-        <MudTd DataLabel="Total">@context.Total.ToString("c")</MudTd>
+        <MudTd DataLabel="Sub Total">@context.SubTotal?.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="VAT">@context.Vat?.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Discount">@context.Discount?.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Charges">@context.Charge?.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Total">@context.Total.FormatCurrency(currency)</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         <MudText>No matching records found</MudText>
@@ -53,6 +53,7 @@
 </MudTable>
 
 @code {
+    string currency = "SEK";
     private bool loading;
     private Orders? items;
 

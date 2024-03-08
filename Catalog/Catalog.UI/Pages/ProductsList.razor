@@ -69,7 +69,7 @@
         <MudTd DataLabel="Group">@context.Group?.Name</MudTd>
         <MudTd DataLabel="SKU">@context.Sku</MudTd>
         <MudTd DataLabel="Has variants">@(context.HasVariants ? "Yes" : "No")</MudTd>
-        <MudTd DataLabel="Price">@context.Price?.ToString("c")</MudTd>
+        <MudTd DataLabel="Price">@context.Price?.FormatCurrency(currency)</MudTd>
         <MudTd DataLabel="Visibility">@context.Visibility</MudTd>
         <MudTd>
             <MudIconButton Icon="@Icons.Material.Filled.Edit" Link="@($"/products/{context.Id}/edit")" />
@@ -88,6 +88,7 @@
 
 @code
 {
+    string currency = "SEK";
 
     MudTable<ProductDto> table;
 

@@ -46,7 +46,7 @@
                                     <MudText Typo="Typo.body2">@product.Description</MudText>
                                 </MudCardContent>
                                 <MudCardActions>
-                                    <MudText Typo="Typo.body2">@product.Price?.ToString("c")</MudText>
+                                    <MudText Typo="Typo.body2">@product.Price?.FormatCurrency(currency)</MudText>
                                     <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/products/{product.Id}")">Learn More</MudButton>
                                 </MudCardActions>
                             </MudCard>
@@ -61,6 +61,8 @@
 
 @code
 {
+    string currency = "SEK";
+
     int pageSize = 9;
     int pages = 0;
     int page = 1;

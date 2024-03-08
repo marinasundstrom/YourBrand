@@ -56,10 +56,10 @@
         <MudTd DataLabel="Account No"><MudLink Href="@($"/accounts/{entry.Account.AccountNo}")">@entry.Account.AccountNo</MudLink></MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
         @*
-        <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
-        <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
+        <MudTd DataLabel="Debit">@entry.Debit?.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Credit">@entry.Credit?.FormatCurrency(currency)</MudTd>
         *@
-        <MudTd DataLabel="Amount">@((entry.Debit.GetValueOrDefault() - entry.Credit.GetValueOrDefault()).ToString("c"))</MudTd>
+        <MudTd DataLabel="Amount">@((entry.Debit.GetValueOrDefault() - entry.Credit.GetValueOrDefault()).FormatCurrency(currency))</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
@@ -71,6 +71,8 @@
 
 @code
 {
+    string currency = "SEK";
+
     MudTable<EntryDto>? table = null!;
     VerificationDto? verification;
 

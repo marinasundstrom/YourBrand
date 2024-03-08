@@ -16,7 +16,7 @@
         <MudTd><MudIconButton Icon="@(context.IsExpanded ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)" OnClick="@(async () => await ToggleItem(context.AccountClass.Id))" /></MudTd>
         <MudTd DataLabel="Class">@context.AccountClass.Id</MudTd>
         <MudTd DataLabel="Name">@context.AccountClass.Name</MudTd>
-        <MudTd DataLabel="Balance">@context.AccountClass.Balance.ToString("c")</MudTd>
+        <MudTd DataLabel="Balance">@context.AccountClass.Balance.FormatCurrency(currency)</MudTd>
     </RowTemplate>
 
     <ChildRowContent Context="context">
@@ -36,7 +36,7 @@
                             <MudTh></MudTh>
                             <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
                             <MudTd DataLabel="Name">@account.Name</MudTd>
-                            <MudTd DataLabel="Balance">@account.Balance.ToString("c")</MudTd>
+                            <MudTd DataLabel="Balance">@account.Balance.FormatCurrency(currency)</MudTd>
                         </RowTemplate>
                     </MudTable>
                 </td>
@@ -51,6 +51,8 @@
 <MudChart Class="mt-8" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 
 @code {
+    string currency = "SEK";
+
     private int[] accounts = new[] { 1510, 1930, 2013, 2018, 2440, 4000,
         3000, 3001, 3002, 3003, 3040, 3041, 3042, 3043, 3050, 3051, 3052, 3053 };
 

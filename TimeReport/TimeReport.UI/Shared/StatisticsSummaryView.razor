@@ -9,7 +9,7 @@
                     {
                         @if (entry.Unit == "currency")
                         {
-                            @entry.Value2?.ToString("c")
+                            @entry.Value2?.FormatCurrency(currency)
                         }
                         else
                         {
@@ -33,6 +33,8 @@
 
 
 @code {
+    string currency = "SEK";
+    
     [Parameter]
     public IEnumerable<StatisticsSummaryEntry> Entries { get; set; }
 }

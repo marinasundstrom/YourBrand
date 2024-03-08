@@ -46,12 +46,12 @@
 
                     @if (vm.Price is not null)
     {
-                        <p class="mb-4"> @vm.Price?.ToString("c")</p>
+                        <p class="mb-4"> @vm.Price?.FormatCurrency(currency)</p>
     }
 
                     @if (vm.Total > 0)
     {
-                        <p class="mb-4"> @vm.Total.ToString("c")</p>
+                        <p class="mb-4"> @vm.Total.FormatCurrency(currency)</p>
     }
 
                     @if (variant is not null)
@@ -63,7 +63,7 @@
                             <p class="mb-4">SKU: @variant.Sku</p>
     }
 
-                        <p class="mb-4"> @variant.Price.GetValueOrDefault().ToString("c")</p>
+                        <p class="mb-4"> @variant.Price.GetValueOrDefault().FormatCurrency(currency)</p>
     }
 
                     <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" Link="@($"/products/{ProductId}/edit")" Class="my-2">Edit</MudButton>
@@ -204,7 +204,7 @@
                                                             @item.Name
                                                             @if (item.Price is not null)
     {
-                                                                <text> (+ @item.Price?.ToString("c"))</text>
+                                                                <text> (+ @item.Price?.FormatCurrency(currency))</text>
     }
                                                         </MudSelectItem>
     }
@@ -216,7 +216,7 @@
                                                     <MudCheckBox Label="@option.Name" @bind-Checked="option.IsSelected" Disabled="@(optionGroup.Max != null && !option.IsSelected && optionGroup.Options.Count(x => x.IsSelected) == optionGroup.Max)" />
                                                     @if (option.Price is not null)
                                                     {
-                                                        <text> (+ @option.Price?.ToString("c"))</text>
+                                                        <text> (+ @option.Price?.FormatCurrency(currency))</text>
     }
                                                 </div>
     }
@@ -285,8 +285,10 @@
 
     string Selector(OptionValueVM optionValue)
     {
-        return $"{optionValue.Name}{(optionValue.Price is null ? null : $" + {optionValue.Price?.ToString("c")}")}";
+        return $"{optionValue.Name}{(optionValue.Price is null ? null : $" + {optionValue.Price?.FormatCurrency(currency)}")}";
     }
+
+    string currency = "SEK";
 
     ProductVM? vm = null;
 

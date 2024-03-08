@@ -207,7 +207,7 @@ else
                     </MudTd>
                     <MudTd DataLabel="Name">@variant.Name</MudTd>
                     <MudTd DataLabel="SKU">@variant.Sku</MudTd>
-                    <MudTd DataLabel="Price">@variant.Price?.ToString("c")</MudTd>
+                    <MudTd DataLabel="Price">@variant.Price?.FormatCurrency(currency)</MudTd>
 
                     @if (variant.Attributes is not null)
                     {
@@ -276,7 +276,7 @@ else
                     <MudTd DataLabel="Name">@option.Name</MudTd>
                     <MudTd DataLabel="Type">@option.OptionType</MudTd>
                     <MudTd DataLabel="SKU">@option.Sku</MudTd>
-                    <MudTd DataLabel="Price">@option.Price?.ToString("c")</MudTd>
+                    <MudTd DataLabel="Price">@option.Price?.FormatCurrency(currency)</MudTd>
                     <MudTd DataLabel="Values">@string.Join(", ", option.Values.Select(x => x.Name))</MudTd>
                     <MudTd DataLabel="Default value">@option.DefaultValue?.Name</MudTd>
                     <MudTd>
@@ -300,6 +300,8 @@ else
 
 @code
 {
+    string currency = "SEK";
+
     MudTable<OptionDto> table;
     MudTable<AttributeDto> table2;
     MudTable<ProductVariantDto> table3;

@@ -41,17 +41,17 @@
         <MudItem xs="12" sm="6" md="3">
             <MudCard Elevation="25">
                 <MudCardContent>
-                    <MudField Label="Sub Total" Class="mb-8">@order.SubTotal?.ToString("c")</MudField>
+                    <MudField Label="Sub Total" Class="mb-8">@order.SubTotal?.FormatCurrency(currency)</MudField>
 
-                    <MudField Label="VAT" Class="mb-8">@order.Vat?.ToString("c")</MudField>
+                    <MudField Label="VAT" Class="mb-8">@order.Vat?.FormatCurrency(currency)</MudField>
 
-                    <MudField Label="Charge" Class="mb-8">@order.Charge?.ToString("c")</MudField>
+                    <MudField Label="Charge" Class="mb-8">@order.Charge?.FormatCurrency(currency)</MudField>
 
-                    <MudField Label="Discount" Class="mb-8">@order.Discount?.ToString("c")</MudField>
+                    <MudField Label="Discount" Class="mb-8">@order.Discount?.FormatCurrency(currency)</MudField>
 
-                    <MudField Label="Rounding" Class="mb-8">@order.Rounding?.ToString("c")</MudField>
+                    <MudField Label="Rounding" Class="mb-8">@order.Rounding?.FormatCurrency(currency)</MudField>
 
-                    <MudField Label="Total" Class="mb-8">@order.Total.ToString("c")</MudField>
+                    <MudField Label="Total" Class="mb-8">@order.Total.FormatCurrency(currency)</MudField>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -67,9 +67,9 @@
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd DataLabel="VAT%">@total.VatRate%</MudTd>
-                            <MudTd DataLabel="Sub Total">@total.SubTotal.ToString("c")</MudTd>
-                            <MudTd DataLabel="VAT">@total.Vat.ToString("c")</MudTd>
-                            <MudTd DataLabel="Total">@total.Total.ToString("c")</MudTd>
+                            <MudTd DataLabel="Sub Total">@total.SubTotal.FormatCurrency(currency)</MudTd>
+                            <MudTd DataLabel="VAT">@total.Vat.FormatCurrency(currency)</MudTd>
+                            <MudTd DataLabel="Total">@total.Total.FormatCurrency(currency)</MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudCardContent>
@@ -93,10 +93,10 @@
         </HeaderContent>
         <RowTemplate Context="orderItem">
             <MudTd DataLabel="Item">@orderItem.Item?.Name</MudTd>
-            <MudTd DataLabel="Price">@orderItem.Item?.Price?.ToString("c")</MudTd>
+            <MudTd DataLabel="Price">@orderItem.Item?.Price?.FormatCurrency(currency)</MudTd>
             @* <MudTd DataLabel="VAT Rate">@(orderItem.Item?.VatRate * 100)%</MudTd> *@
             <MudTd DataLabel="Quantity">@orderItem.Quantity</MudTd>
-            <MudTd DataLabel="Total" Style="text-align:right">@((orderItem.Item?.Price * orderItem.Quantity)?.ToString("c"))</MudTd>
+            <MudTd DataLabel="Total" Style="text-align:right">@((orderItem.Item?.Price * orderItem.Quantity)?.FormatCurrency(currency))</MudTd>
             <MudTd>
                 <MudIconButton Icon="@Icons.Material.Filled.Star" aria-label="delete" OnClick="() => {}"></MudIconButton>
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => RemoveItem(orderItem)"></MudIconButton>
@@ -123,7 +123,7 @@
                                         </HeaderContent> *@
                                     <RowTemplate>
                                         <MudTd colspan="6" DataLabel="Description" Style="padding-left: 35px;">@charge.Description</MudTd>
-                                        <MudTd DataLabel="Total" Style="text-align:right">+@charge.Total.ToString("c")</MudTd>
+                                        <MudTd DataLabel="Total" Style="text-align:right">+@charge.Total.FormatCurrency(currency)</MudTd>
                                         <MudTd>
                                             <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => {}"></MudIconButton>
                                         </MudTd>
@@ -153,7 +153,7 @@
                                         </HeaderContent> *@
                                     <RowTemplate>
                                         <MudTd colspan="6" DataLabel="Description" Style="padding-left: 35px;">@discount.Description</MudTd>
-                                        <MudTd DataLabel="Total" Style="text-align:right">@discount.Total.ToString("c")</MudTd>
+                                        <MudTd DataLabel="Total" Style="text-align:right">@discount.Total.FormatCurrency(currency)</MudTd>
                                         <MudTd>
                                             <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="() => {}"></MudIconButton>
                                         </MudTd>
@@ -169,7 +169,7 @@
             <MudTd DataLabel="Item">
                 <YourBrand.Catalog.ProductsSelector @bind-Value="orderItem.Item" />
             </MudTd>
-            <MudTd DataLabel="Price">@orderItem.Item?.Price?.ToString("c")</MudTd>
+            <MudTd DataLabel="Price">@orderItem.Item?.Price?.FormatCurrency(currency)</MudTd>
             @* <MudTd DataLabel="VAT Rate">@(orderItem.Item?.VatRate * 100)%</MudTd> *@
             <MudTd DataLabel="Quantity">
                 <MudNumericField T="int"
@@ -178,7 +178,7 @@
                                  Margin="Margin.Dense" />
                 @* @orderItem.Item?.Unit *@
             </MudTd>
-            <MudTd DataLabel="Total" Style="text-align:right">@((orderItem.Item?.Price * orderItem.Quantity)?.ToString("c"))</MudTd>
+            <MudTd DataLabel="Total" Style="text-align:right">@((orderItem.Item?.Price * orderItem.Quantity)?.FormatCurrency(currency))</MudTd>
             <MudTd></MudTd>
         </RowEditingTemplate>
     </MudTable>
@@ -191,6 +191,8 @@
 }
 
 @code {
+    string currency = "SEK";
+
     private bool loading;
     private Order? order;
     private OrderItemVM? backupItem;
