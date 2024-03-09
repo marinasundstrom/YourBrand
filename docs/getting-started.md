@@ -4,137 +4,32 @@ This will be updated: Tye is not used anymore.
 
 This guide is intended to be run from top-down.
 
-All the necessary services have been configured in the ```tye.yaml``` file.
+All the necessary services have been configured in the ```docker-compose.deps.yml``` file.
 
 ## Prerequisites
 
-### Install the .NET 6 SDK
+### Install the .NET 8 SDK
 
-Download and run the [installer](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
+Download and run the [installer](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 
 ### Install Docker Desktop
 
 Download it from [here](https://www.docker.com/products/docker-desktop).
 
-### Install Tye CLI tools
+### Run and seed projects
 
-~~Check the [instructions](https://github.com/dotnet/tye/blob/main/docs/getting_started.md) to install the tools.~~
+Each project has to be seeded  
 
-## Create SSL certificates
-
-This will require you to have OpenSSL installed.
-
-Certificates should be placed in a folder called ```certs```, situated in the root folder. They are used by Nginx.
-
-### For Web Client & App Service
-
-We will extract and use the ASP.NET Core Dev certificate.
-
-```
-dotnet dev-certs https -ep aspnetapp.pfx -p crypticpassword
-dotnet dev-certs https --trust
-```
-
-Extract private key
-
-```
-openssl pkcs12 -in aspnetapp.pfx -nocerts -out localhost.key
-```
-
-
-Extract certificate
-
-```
-openssl pkcs12 -in aspnetapp.pfx -clcerts -nokeys -out localhost.crt
-```
-
-Remove passphrase from key
-
-```
-cp localhost.key localhost.key.bak
-openssl rsa -in localhost.key.bak -out localhost.key
-```
-
-### For IdentityService
-
-Let's create a self-signed certificate from scratch for identity.local!
-
-Generate the public private keypair:
-
-```sh
-openssl genrsa -aes256 -passout pass:Abc123! -out server.pass.key 4096
-openssl rsa -passin pass:Abc123! -in server.pass.key -out server.key
-rm server.pass.key
-openssl req -new -key server.key -out server.csr -config <(cat ../server.cnf)
-```
-
-Sign the SSL certificate:
-
-```sh
-openssl x509 -req -extensions v3_req -sha256 -days 365 -in server.csr -signkey server.key -out server.crt -extfile ../server.cnf
-```
-
-On macOS, trust the cert:
-
-```sh
-sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain <<certificate>>
-```
-
-## Update ```hosts``` file
-
-In order for the host to recognize the ```ìdentity.local``` domain, to map it to the right IP address, you have to add it to the ```hosts``` file:
-
-### On macOS:
-
-Edit the ```/etc/hosts``` file using your favorite editor. Sudo required on macOS.
-
-Add this line to the end of the file:
-```
-127.0.0.1   identity.local
-```
-
-Save the changes.
-
-Then restart the DNS:
-
-```sh
-sudo killall -HUP mDNSResponder 
-```
-
-### Other platforms
-
-Read this [guide](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/) for configuring on Windows and Linux.
-
-### Conclusion
-
-Provided that the service has been started, you should now be able to reach the IdentityService site in your browser by navigating to [```https://localhost:5040```](https://localhost:5040).
-
-Please be aware that you have to configure the certs.
-
-
-## Run the projects
+## Run the Docker services
 
 Open a terminal and navigate to the root/solution folder. 
 
 Run the following command:
 
 ```sh
-tye run
+docker-compose up docker-compose.deps.yml
 ```
 
-### Other useful commands:
-
-Runs the projects, **watch** for changes, and automatically recompile:
-
-```sh
-tye run --watch
-```
-
-Watch and Debug messages:
-
-```sh
-tye run --watch -v Debug
-```
 
 ## Create the app databases
 

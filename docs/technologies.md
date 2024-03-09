@@ -1,7 +1,7 @@
 # Technologies
 
 ## Framework
-* .NET 6
+* .NET 8
 * ASP.NET Core
 * SignalR
 * Blazor
