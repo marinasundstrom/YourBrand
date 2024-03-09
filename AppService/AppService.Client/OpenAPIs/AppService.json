@@ -658,6 +658,42 @@
             "JWT": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "Notifications_CreateNotification",
+        "requestBody": {
+          "x-name": "createNotificationDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/Notifications/{id}/MarkAsRead": {
@@ -1212,6 +1248,31 @@
           },
           "isRead": {
             "type": "boolean"
+          }
+        }
+      },
+      "CreateNotificationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "scheduledFor": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

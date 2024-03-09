@@ -9,7 +9,7 @@ using YourBrand.Notifications.Client;
 
 namespace YourBrand.Application.Notifications.Commands;
 
-public record MarkAllNotificationsAsReadCommand : IRequest
+public sealed record MarkAllNotificationsAsReadCommand : IRequest
 {
     public class MarkAllNotificationsAsReadCommandHandler : IRequestHandler<MarkAllNotificationsAsReadCommand>
     {
@@ -22,8 +22,7 @@ public record MarkAllNotificationsAsReadCommand : IRequest
 
         public async Task Handle(MarkAllNotificationsAsReadCommand request, CancellationToken cancellationToken)
         {
-            await _notificationsClient.MarkAllNotificationsAsReadAsync();
-
+            await _notificationsClient.MarkAllNotificationsAsReadAsync(cancellationToken);
         }
     }
 }

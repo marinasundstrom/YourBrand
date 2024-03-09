@@ -64,6 +64,21 @@ group.CreateItem("setup", options =>
     options.Href = "/setup";
 });
 
+var notificationsGroup = group.CreateGroup("notifications", options =>
+{
+    options.NameFunc = () => resources["Notifications"];
+    options.Icon = MudBlazor.Icons.Material.Filled.Notifications;
+    options.Href = "/notifications";
+});
+
+notificationsGroup.CreateItem("send-notification", options =>
+{
+    options.NameFunc = () => resources["Send notification"];
+    options.Icon = MudBlazor.Icons.Material.Filled.NotificationAdd;
+    options.Href = "/notifications/create";
+});
+
+
 await app.Services.Localize();
 
 await app.RunAsync();
