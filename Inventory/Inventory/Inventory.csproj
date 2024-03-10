@@ -36,5 +36,9 @@
         <ProjectReference Include="..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
+        <ProjectReference
+            Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
 	</ItemGroup>
 </Project>

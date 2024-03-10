@@ -13,11 +13,13 @@ using YourBrand.Inventory.Infrastructure.Persistence;
 using YourBrand.Inventory.Application.Items;
 using YourBrand.Documents.Client;
 using YourBrand.Payments.Client;
+using YourBrand.Notifications.Client;
 using YourBrand.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using ItemDto = YourBrand.Inventory.Application.Items.ItemDto;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +118,11 @@ builder.Services.AddPaymentsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/payments/");
 });
+
+builder.Services.AddNotificationsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"https://localhost:5174/api/notifications/");
+}, b => {});
 
 var app = builder.Build();
 

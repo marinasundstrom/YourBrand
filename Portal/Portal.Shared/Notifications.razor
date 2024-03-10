@@ -189,7 +189,7 @@
         StateHasChanged();
     }
 
-    Task OnNotificationReceived(NotificationDto notification)
+    async Task OnNotificationReceived(NotificationDto notification)
     {
         notifications.Insert(0, notification);
 
@@ -203,15 +203,14 @@
 
         Snackbar.Add($"<h6>{notification.Title}</h6><p>{notification.Text}</p>", Severity.Info, options =>
         {
+            //options.Icon = "";
             options.VisibleStateDuration = 5000;
             options.Onclick = async (snackbar) => await OnNotificationClicked(notification);
         });
 
         StateHasChanged();
 
-        PlaySound();
-
-        return Task.CompletedTask;
+        await PlaySound();
     }
 
     public async ValueTask DisposeAsync()

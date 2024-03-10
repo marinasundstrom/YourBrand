@@ -21,6 +21,8 @@
 
         <MudTextField Label="Text" Lines="5" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Text" For="() => Text" />
 
+        <MudTextField Label="Link" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Link" For="() => Link" />
+
         <MudTextField Label="User Id" Class="mb-6" Variant="Variant.Outlined" @bind-Value="UserId" For="() => UserId" />
 
         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
@@ -38,7 +40,7 @@
 
     public string? UserId { get; set; }
 
-    public string? Link { get; set; } = null;
+    public string? Link { get; set; }
 
     protected async override Task OnInitializedAsync() 
     {

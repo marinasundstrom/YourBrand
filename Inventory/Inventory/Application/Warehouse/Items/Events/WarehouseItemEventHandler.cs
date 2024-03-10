@@ -5,6 +5,7 @@ using YourBrand.Notifications.Contracts;
 using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Notifications.Client;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
@@ -17,11 +18,17 @@ public class WarehouseItemEventHandler
 {
     private readonly IInventoryContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly INotificationsClient _notificationsClient;
+    private readonly ILogger<WarehouseItemEventHandler> _logger;
 
-    public WarehouseItemEventHandler(IInventoryContext context, IPublishEndpoint publishEndpoint)
+    public WarehouseItemEventHandler(
+        IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient, 
+        ILogger<WarehouseItemEventHandler> logger)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
+        _notificationsClient = notificationsClient;
+        _logger = logger;
     }
 
     public async Task Handle(WarehouseItemCreated notification, CancellationToken cancellationToken)
@@ -64,6 +71,21 @@ public class WarehouseItemEventHandler
                 <b>Quantity available:</b>  {item.QuantityAvailable}<br />
                 ";
                 await _publishEndpoint.Publish(new SendEmail("test@email.com", subject, body));
+
+                try 
+                {
+                    await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+                    {
+                        Title = "Inventory",
+                        Text = $"Quantity available of {item.Item.Name} is below threshold.",
+                        UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
+                        //Link = Link
+                    });
+                }
+                catch(Exception exc) 
+                {
+                    _logger.LogError(exc, "Failed to post notification.");
+                }
             }
         }
     }
