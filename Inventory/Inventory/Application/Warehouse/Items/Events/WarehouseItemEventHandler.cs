@@ -6,6 +6,7 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Notifications.Client;
+using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
@@ -58,11 +59,20 @@ public class WarehouseItemEventHandler
         if(item is not null) 
         {
             if(notification.Quantity <= item.QuantityThreshold  
-                && notification.OldQuantity > item.QuantityThreshold) 
+                && notification.OldQuantity > item.QuantityThreshold)
             {
-                var subject = $"Quantity available is below threshold for {item.Item.Name} ({item.Item.Id})";
+                await SendEmail(item);
 
-                var body = @$"
+                await PostNotification(item);
+            }
+        }
+    }
+
+    private async Task SendEmail(WarehouseItem? item)
+    {
+        var subject = $"Quantity available is below threshold for {item.Item.Name} ({item.Item.Id})";
+
+        var body = @$"
                 Quantity available is below threshold.<br />
                 <br />
                 <b>Item:</b> {item.Item.Name} ({item.Item.Id})<br />
@@ -70,23 +80,24 @@ public class WarehouseItemEventHandler
                 <b>Site:</b>  {item.Warehouse.Site.Name}<br />
                 <b>Quantity available:</b>  {item.QuantityAvailable}<br />
                 ";
-                await _publishEndpoint.Publish(new SendEmail("test@email.com", subject, body));
+        await _publishEndpoint.Publish(new SendEmail("test@email.com", subject, body));
+    }
 
-                try 
-                {
-                    await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto
-                    {
-                        Title = "Inventory",
-                        Text = $"Quantity available of {item.Item.Name} is below threshold.",
-                        UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
-                        //Link = Link
-                    });
-                }
-                catch(Exception exc) 
-                {
-                    _logger.LogError(exc, "Failed to post notification.");
-                }
-            }
+    private async Task PostNotification(WarehouseItem? item)
+    {
+        try
+        {
+            await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+            {
+                Title = "Inventory",
+                Text = $"Quantity available of {item.Item.Name} is below threshold.",
+                UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
+                //Link = Link
+            });
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, "Failed to post notification.");
         }
     }
 }
