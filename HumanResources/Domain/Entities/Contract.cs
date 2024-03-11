@@ -34,6 +34,8 @@ public class Contract
     //public PaymentTerms Terms { get; private set; } = null!;
 
     public CurrencyAmount Salary { get; set; }
+
+    //public PayFrequency Salary { get; set; }
 }
 
 public class PaymentTerms

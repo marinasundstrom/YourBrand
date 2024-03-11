@@ -30,9 +30,29 @@
                     <CompetenceAreaSelector Variant="Variant.Outlined" @bind-Value="CompetenceArea" For="() => CompetenceArea" />
                 </MudItem>
 
-
                 <MudItem xs="12" md="6">
                     <PersonProfileSelector Variant="Variant.Outlined" @bind-Value="Profile" For="() => Profile" />
+                </MudItem>
+
+            </MudGrid>
+
+            <MudText Typo="Typo.h4" Class="mt-8 mb-4">Pricing</MudText>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudNumericField Label="Hourly price" Variant="Variant.Outlined" Class="mb-4" @bind-Value="HourlyPrice"
+                        For="() => HourlyPrice"></MudNumericField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudNumericField Label="Hours" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Hours"
+                        For="() => Hours"></MudNumericField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                <MudField Label="Total" Variant="Variant.Outlined" Class="mb-4">@Total.FormatCurrency(Currency)
+                </MudField>
                 </MudItem>
             </MudGrid>
 
@@ -41,6 +61,8 @@
 </MudPaper>
 
 @code {
+    string Currency = "SEK";
+
     [Required]
     public string Description { get; set; } = null!;
 
@@ -59,10 +81,20 @@
 
     public PersonProfileDto? Profile { get; set; }
 
+    public decimal? HourlyPrice { get; set; }
+
+    public double? Hours { get; set; }
+
+    public decimal Total => HourlyPrice.GetValueOrDefault() * (decimal)Hours.GetValueOrDefault();
+
     private async Task Submit()
     {
         var dto = await CasesClient.CreateCaseAsync(new CreateCaseDto {
-            Description = Description
+            Description = Description,
+            Pricing = new UpdatePricingDto {
+                HourlyPrice = HourlyPrice,
+                Hours = Hours
+            }
         });
 
        NavigationManager.NavigateTo($"/Cases/{dto.Id}");

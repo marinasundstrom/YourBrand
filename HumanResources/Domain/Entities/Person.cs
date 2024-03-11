@@ -3,6 +3,7 @@
 using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Events;
+using YourBrand.HumanResources.Domain.ValueObjects;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
@@ -49,6 +50,8 @@ public class Person : AuditableEntity, ISoftDelete
     public Person? ReportsTo { get; set; }
 
     public Department? Department { get; /* private */ set; }
+
+    //public CurrencyAmount Salary { get; set; }
 
     public IReadOnlyCollection<Team> Teams => _teams;
 

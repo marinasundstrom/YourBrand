@@ -14,6 +14,8 @@ class CaseConfiguration : IEntityTypeConfiguration<Case>
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.OwnsOne(x => x.Pricing);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

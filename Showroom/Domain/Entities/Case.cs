@@ -13,6 +13,8 @@ public class Case : AuditableEntity, ISoftDelete
 
     public ICollection<CaseProfile> CaseProfiles { get; set; } = null!;
 
+    public CasePricing Pricing { get; set; }
+
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
@@ -24,9 +26,16 @@ public class Location : AuditableEntity, ISoftDelete
 
     public string? CityOrDistrict { get; set; }
 
-    public string? Cou { get; set; }
+    public string? Country { get; set; }
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
+}
+
+public class CasePricing 
+{
+    public decimal? HourlyPrice { get; set; }
+    public double? Hours { get; set; }
+    public decimal? Total { get; set; }
 }

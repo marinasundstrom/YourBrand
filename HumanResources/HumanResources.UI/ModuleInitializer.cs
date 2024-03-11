@@ -39,5 +39,7 @@ public class ModuleInitializer : IModuleInitializer
         group.CreateItem("organization", () => resources["Organization"], MudBlazor.Icons.Material.Filled.House, "/hr/organization");
         group.CreateItem("persons", () => resources["Persons"], MudBlazor.Icons.Material.Filled.Person, "/hr/persons");
         group.CreateItem("teams", () => resources["Teams"], MudBlazor.Icons.Material.Filled.People, "/hr/teams");
+        group.CreateItem("salary", () => resources["Calculate salary"], MudBlazor.Icons.Material.Filled.Money, "/hr/salary");
+
     }
 }

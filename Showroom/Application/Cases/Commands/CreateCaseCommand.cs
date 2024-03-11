@@ -5,7 +5,9 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Cases.Commands;
 
-public record CreateCaseCommand(string? Description) : IRequest<CaseDto>
+public record CasePricing(decimal? HourlyPrice, double? Hours);
+
+public record CreateCaseCommand(string? Description, CasePricing? Pricing) : IRequest<CaseDto>
 {
     public class CreateCaseCommandHandler : IRequestHandler<CreateCaseCommand, CaseDto>
     {
@@ -26,6 +28,18 @@ public record CreateCaseCommand(string? Description) : IRequest<CaseDto>
                 Status = Domain.Enums.CaseStatus.Created,
                 Description = request.Description
             };
+
+            var pricing = request.Pricing;
+
+            if(pricing is not null) 
+            {
+                @case.Pricing = new Domain.Entities.CasePricing 
+                {
+                    HourlyPrice = pricing.HourlyPrice,
+                    Hours = pricing.Hours,
+                    Total = pricing.HourlyPrice * (decimal?)pricing.Hours
+                };
+            }
 
             context.Cases.Add(@case);
 

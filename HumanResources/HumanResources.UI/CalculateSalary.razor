@@ -1,0 +1,68 @@
+@page "/hr/salary"
+
+<PageTitle>Calculate salary</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Calculate salary</MudText>
+
+<EditForm Model="@this">
+    <DataAnnotationsValidator />
+
+    @*
+
+    <MudNumericField Label="Hourly wage" Immediate="true" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money"
+        HelperText="" Variant="Variant.Filled" @bind-Value="HourlyWage" Step=".2M"></MudNumericField>
+
+    <MudNumericField Label="Hours" Immediate="true" Class="mb-4" HelperText="" Variant="Variant.Filled"
+        @bind-Value="Hours">
+    </MudNumericField>
+
+    <MudField Label="Customer pays" Class="mb-16" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@CustomerPays</MudField>
+
+    <MudField Label="Employer earns" Class="mb-16" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@EmployerEarns</MudField>
+
+    *@
+
+    <MudField Label="Employer pays" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@EmployerPays.FormatCurrency(Currency)</MudField>
+
+    <MudField Label="Employer contributions" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@EmployerContributions.FormatCurrency(Currency)</MudField>
+
+    <MudNumericField Label="Gross Salary" Immediate="true" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money"
+        HelperText="" Variant="Variant.Filled" @bind-Value="GrossSalary" Step=".2M"></MudNumericField>
+
+    <MudField Label="Municipal tax" Class="mb-16" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@MunicipalTax.FormatCurrency(Currency)</MudField>
+
+    <MudField Label="Net Salary" Class="mb-16" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@NetSalary.FormatCurrency(Currency)</MudField>
+
+    <MudField Label="Total taxes" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">@TaxesTotal.FormatCurrency(Currency)</MudField>
+</EditForm>
+
+@code {
+    string Currency = "SEK";
+
+    public decimal HourlyWage { get; set; } = 780m;
+
+    public double Hours { get; set; } = 160;
+
+    public decimal CustomerPays => HourlyWage * (decimal)Hours;
+
+    public decimal EmployerEarns => CustomerPays - EmployerPays;
+
+    public decimal EmployerPays => GrossSalary + EmployerContributions;
+
+    public decimal GrossSalary { get; set; } = 51000m;
+
+    public decimal EmployerContributions => GrossSalary * (decimal)(31.42 / 100);
+
+    public decimal MunicipalTax => GrossSalary * (decimal)(32.42 / 100);
+
+    public decimal NetSalary => GrossSalary - MunicipalTax;
+
+    public decimal TaxesTotal => EmployerContributions + MunicipalTax;
+}

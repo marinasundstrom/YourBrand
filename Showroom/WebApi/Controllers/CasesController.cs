@@ -41,7 +41,7 @@ public class CasesController : ControllerBase
     [ProducesResponseType(typeof(CaseDto), StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateCase(CreateCaseDto dto, CancellationToken cancellationToken)
     {
-        var dto2 = await _mediator.Send(new CreateCaseCommand(dto.Description), cancellationToken);
+        var dto2 = await _mediator.Send(new CreateCaseCommand(dto.Description, new CasePricing(dto.Pricing.HourlyPrice, dto.Pricing.Hours)), cancellationToken);
         return CreatedAtAction(nameof(GetCase), new { id = dto2.Id }, dto2);
     }
 
@@ -58,6 +58,8 @@ public class CasesController : ControllerBase
     }
 }
 
-public record CreateCaseDto(string? Description);
+public record UpdatePricingDto(decimal? HourlyPrice, double? Hours);
+
+public record CreateCaseDto(string? Description, UpdatePricingDto Pricing);
 
 public record UpdateCaseDto(string? Description);

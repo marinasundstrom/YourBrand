@@ -90,7 +90,8 @@ public static class Mapper
 
     public static CaseDto ToDto(this Domain.Entities.Case @case, IUrlHelper urlHelper)
     {
-        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.CaseProfiles.Select(x => x.ToDto(urlHelper)));
+        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.CaseProfiles.Select(x => x.ToDto(urlHelper)), 
+            new CasePricingDto(@case.Pricing.HourlyPrice, @case.Pricing.Hours, @case.Pricing.Total));
     }
 
     public static CaseProfileDto ToDto(this Domain.Entities.CaseProfile caseProfile, IUrlHelper urlHelper)

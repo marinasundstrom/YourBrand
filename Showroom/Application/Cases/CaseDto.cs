@@ -7,5 +7,8 @@ public record CaseDto
     string Id,
     string Status,
     string? Description,
-    IEnumerable<CaseProfileDto> CaseProfiles
+    IEnumerable<CaseProfileDto> CaseProfiles,
+    CasePricingDto Pricing
 );
+
+public record CasePricingDto(decimal? HourlyPrice, double? Hours, decimal? Total);
