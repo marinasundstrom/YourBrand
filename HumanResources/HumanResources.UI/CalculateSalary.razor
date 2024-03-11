@@ -24,23 +24,23 @@
 
     *@
 
-    <MudField Label="Employer pays" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
-        Variant="Variant.Filled">@EmployerPays.FormatCurrency(Currency)</MudField>
+    <MudField Label="Employer pays" Class="mb-8" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
+        Variant="Variant.Filled">-@EmployerPays.FormatCurrency(Currency)</MudField>
 
     <MudField Label="Employer contributions" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
-        Variant="Variant.Filled">@EmployerContributions.FormatCurrency(Currency)</MudField>
+        Variant="Variant.Filled">-@EmployerContributions.FormatCurrency(Currency)</MudField>
 
     <MudNumericField Label="Gross Salary" Immediate="true" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money"
         HelperText="" Variant="Variant.Filled" @bind-Value="GrossSalary" Step=".2M"></MudNumericField>
 
     <MudField Label="Municipal tax" Class="mb-16" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
-        Variant="Variant.Filled">@MunicipalTax.FormatCurrency(Currency)</MudField>
+        Variant="Variant.Filled">-@MunicipalTax.FormatCurrency(Currency)</MudField>
 
     <MudField Label="Net Salary" Class="mb-16" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
         Variant="Variant.Filled">@NetSalary.FormatCurrency(Currency)</MudField>
 
     <MudField Label="Total taxes" Class="mb-4" AdornmentIcon="@Icons.Material.Filled.Money" HelperText=""
-        Variant="Variant.Filled">@TaxesTotal.FormatCurrency(Currency)</MudField>
+        Variant="Variant.Filled">-@TaxesTotal.FormatCurrency(Currency)</MudField>
 </EditForm>
 
 @code {
