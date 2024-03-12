@@ -14,7 +14,7 @@ public static class Mapper
         {
             Id = dto.Id,
             Status = dto.Status,
-            Date = dto.Date.GetValueOrDefault().Date.Date,
+            Date = dto.IssueDate.GetValueOrDefault().Date.Date,
             DueDate = dto.DueDate.GetValueOrDefault().Date.Date,
             Reference = dto.Reference,
             Note = dto.Note,
@@ -23,7 +23,7 @@ public static class Mapper
 
         foreach (var item in dto.Items)
         {
-            model.Items.Add(item.ToModel());
+            model.AddItem(item.ToModel());
         }
 
         model.DomesticService = dto.DomesticService?.ToModel();
@@ -38,7 +38,7 @@ public static class Mapper
             Id = dto.Id,
             Description = dto.Description,
             ProductType = dto.ProductType,
-            UnitPrice = dto.UnitPrice,
+            UnitPrice = dto.Price,
             Unit = dto.Unit,
             Quantity = dto.Quantity,
             VatRate = dto.VatRate,

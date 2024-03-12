@@ -14,7 +14,9 @@ public class Invoice : Entity
 
     public Invoice(DateTime? date, InvoiceType type = InvoiceType.Invoice, InvoiceStatus status = InvoiceStatus.Draft, string currency = "SEK", string? note = null)
     {
-        Date = date ?? DateTime.Now;
+        Id = Guid.NewGuid().ToString();
+
+        IssueDate = date ?? DateTime.Now;
         Type = type;
         Status = status;
         Currency = currency;
@@ -25,28 +27,20 @@ public class Invoice : Entity
 
     public string Id { get; set; }
 
-    public DateTime? Date { get; set; }
+    public string InvoiceNo { get; set; }
 
-    public void SetDate(DateTime? date)
+    public DateTime? IssueDate { get; set; }
+
+    public void SetIssueDate(DateTime? date)
     {
-        if (Date != date)
+        if (IssueDate != date)
         {
-            Date = date;
-            AddDomainEvent(new InvoiceDateChanged(Id, Date));
+            IssueDate = date;
+            AddDomainEvent(new InvoiceDateChanged(Id, IssueDate));
         }
     }
 
     public InvoiceType Type { get; private set; }
-
-    public void DeleteItem(InvoiceItem item)
-    {
-        if (Status != InvoiceStatus.Draft)
-        {
-            throw new Exception();
-        }
-
-        _items.Remove(item);
-    }
 
     public void SetType(InvoiceType type)
     {
@@ -65,6 +59,17 @@ public class Invoice : Entity
         {
             Status = status;
             AddDomainEvent(new InvoiceStatusChanged(Id, Status));
+        }
+    }
+
+    public DateTime? DeliveryDate { get; private set; }
+
+    public void SetDeliveryDate(DateTime deliveryDate)
+    {
+        if (DeliveryDate != deliveryDate)
+        {
+            DeliveryDate = deliveryDate;
+            //AddDomainEvent(new InvoiceDueDateChanged(Id, DeliveryDate));
         }
     }
 
@@ -101,13 +106,26 @@ public class Invoice : Entity
         }
     }
 
+    //public bool IsVatIncluded { get; set; }
+
     public decimal SubTotal { get; private set; }
 
     public decimal Vat { get; private set; }
 
+    public List<InvoiceVatAmount> VatAmounts { get; set; } = new List<InvoiceVatAmount>();
+
+
+    public bool Rounding { get; set; }
+
+    public decimal? Rounded { get; set; }
+
     public decimal Total { get; private set; }
 
     public decimal? Paid { get; private set; }
+
+    public BillingDetails? BillingDetails { get; set; }
+
+    public ShippingDetails? ShippingDetails { get; set; }
 
     public void SetPaid(decimal amount)
     {
@@ -151,26 +169,95 @@ public class Invoice : Entity
         var invoiceItem = new InvoiceItem(this, productType, description, unitPrice, unit, vatRate, quantity);
         _items.Add(invoiceItem);
 
-        UpdateTotals();
+        Update();
 
         return invoiceItem;
     }
 
-    public void UpdateTotals()
+    public void DeleteItem(InvoiceItem item)
     {
-        SubTotal = Items.Sum(item => item.LineTotal);
-        Vat = 0;
-
-        foreach(var item in Items)
+        if (Status != InvoiceStatus.Draft)
         {
-            Vat += item.LineTotal.GetVatFromSubTotal(item.VatRate);
+            throw new Exception();
         }
 
-        Total = Items.Sum(item => item.LineTotal.AddVat(item.VatRate));
+        _items.Remove(item);
+
+        Update();
+    }
+
+    public void Update()
+    {
+        UpdateVatAmounts();
+
+        //VatRate = 0.25;
+        Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
+        Total = Items.Sum(x => x.Total);
+        SubTotal = Total - Vat;
+        //Discount = Items.Sum(x => x.Discount.GetValueOrDefault());
+
+        Rounded = null;
+        if (Rounding) 
+        {
+            Rounded = Math.Round(0m, MidpointRounding.AwayFromZero);
+        }
+
         Total -= DomesticService?.RequestedAmount ?? 0;
     }
 
+    private void UpdateVatAmounts()
+    {
+        VatAmounts.ForEach(x =>
+        {
+            x.Vat = 0;
+            x.SubTotal = 0;
+            x.Total = 0;
+        });
+
+        foreach (var item in Items)
+        {
+            item.Update();
+
+            var vatAmount = VatAmounts.FirstOrDefault(x => x.VatRate == item.VatRate);
+            if (vatAmount is null)
+            {
+                vatAmount = new InvoiceVatAmount()
+                {
+                    VatRate = item.VatRate.GetValueOrDefault(),
+                    Name = $"{item.VatRate * 100}%"
+                };
+
+                VatAmounts.Add(vatAmount);
+            }
+
+            vatAmount.Vat += item.Vat.GetValueOrDefault();
+            vatAmount.SubTotal += item.Total - item.Vat.GetValueOrDefault();
+            vatAmount.Total += item.Total;
+        }
+
+        VatAmounts.ToList().ForEach(x =>
+        {
+            if (x.Vat == 0 && x.VatRate != 0)
+            {
+                VatAmounts.Remove(x);
+            }
+        });
+    }
+
     public InvoiceDomesticService? DomesticService { get; set; }
+}
+
+public class InvoiceVatAmount
+{
+    public double VatRate { get; set; }
+
+    public string Name { get; set; }
+
+    public decimal SubTotal { get; set; }
+
+    public decimal Vat { get; set; }
+
+    public decimal Total { get; set; }
 }
 
 public record InvoiceDomesticService(

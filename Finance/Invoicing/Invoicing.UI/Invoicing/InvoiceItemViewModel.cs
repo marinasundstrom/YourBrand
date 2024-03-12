@@ -25,6 +25,10 @@ public class InvoiceItemViewModel
 
     public double VatRate { get; set; } = 0.25;
 
+    public decimal SubTotal => LineTotal.GetSubTotal(VatRate);
+
+    public decimal Vat => LineTotal.GetVatFromTotal(VatRate);
+
     public decimal LineTotal => UnitPrice * (decimal)Quantity;
 
     public bool IsTaxDeductibleService { get; set; }

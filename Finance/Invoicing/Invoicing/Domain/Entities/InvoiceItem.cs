@@ -63,38 +63,46 @@ public class InvoiceItem
     {
         Quantity = quantity;
 
-        LineTotal = UnitPrice * (decimal)Quantity;
+        Total = Price * (decimal)Quantity;
 
-        Invoice?.UpdateTotals();
+        Invoice?.Update();
     }
     
-    public decimal UnitPrice { get; private set; }
+    public decimal Price { get; private set; }
 
     public void UpdateUnitPrice(decimal unitPrice)
     {
-        if (unitPrice != UnitPrice)
+        if (unitPrice != Price)
         {
-            UnitPrice = unitPrice;
+            Price = unitPrice;
         }
     }
 
-    public double VatRate { get; private set; }
+    public double? VatRate { get; private set; }
+
+    public decimal? Vat { get; private set; }
 
     public void UpdateVatRate(decimal unitPrice, double vatRate) 
     {
-        UnitPrice = unitPrice;
+        Price = unitPrice;
         VatRate = vatRate;
 
-        LineTotal = UnitPrice * (decimal)Quantity;
+        Total = Price * (decimal)Quantity;
 
-        Invoice?.UpdateTotals();
+        Invoice?.Update();
     }
 
-    public decimal LineTotal { get; private set; }
+    public decimal Total { get; private set; }
 
     public bool IsTaxDeductibleService { get; set; }
 
     public InvoiceItemDomesticService? DomesticService { get; set; }
+
+    public void Update()
+    {
+        Total = Price * (decimal)Quantity;
+        Vat = Math.Round(Total.GetVatFromTotal(VatRate.GetValueOrDefault()), 2, MidpointRounding.ToEven);
+    }
 }
 
 public record InvoiceItemDomesticService(DomesticServiceKind Kind, HomeRepairAndMaintenanceServiceType? HomeRepairAndMaintenanceServiceType, HouseholdServiceType? HouseholdServiceType);

@@ -115,7 +115,7 @@ public class PaymentCapturedConsumer : IConsumer<PaymentCaptured>
         var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
             Description = $"Betalade faktura #{invoice.Id}",
-            InvoiceId = int.Parse(invoice.Id),
+            InvoiceId = int.Parse(invoice.InvoiceNo),
             Entries = entries
         }, cancellationToken);
 

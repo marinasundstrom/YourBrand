@@ -48,7 +48,7 @@ public class InvoiceStatusChangedHandler : IDomainEventHandler<InvoiceStatusChan
 
                 var dueDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddDays(30), TimeZoneInfo.Local);
 
-                invoice.UpdateTotals();
+                invoice.Update();
 
                 await _paymentsClient.CreatePaymentAsync(new CreatePayment()
                 {

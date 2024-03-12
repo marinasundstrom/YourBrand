@@ -23,13 +23,15 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note)
         {
             var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note);
 
+            invoice.Id = Guid.NewGuid().ToString();
+
             try 
             {
-                invoice.Id = (_context.Invoices.Select(x => x.Id).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
+                invoice.InvoiceNo = (_context.Invoices.Select(x => x.Id).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
             }
             catch 
             {
-                invoice.Id = "1";
+                invoice.InvoiceNo = "1";
             }
 
             _context.Invoices.Add(invoice);

@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Invoices API",
@@ -42,7 +42,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -66,7 +66,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -94,13 +94,12 @@
             "name": "invoiceId",
             "in": "query",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "name": "dto",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/InvoiceDomesticServiceDto"
             },
@@ -133,7 +132,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -165,13 +164,12 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "name": "dto",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/AddInvoiceItem"
             },
@@ -207,20 +205,19 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
             "name": "invoiceItemId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "name": "dto",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/UpdateInvoiceItem"
             },
@@ -248,14 +245,14 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
             "name": "invoiceItemId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -282,7 +279,6 @@
             "name": "command",
             "in": "body",
             "required": true,
-            "description": "",
             "schema": {
               "$ref": "#/definitions/CreateInvoice"
             },
@@ -374,7 +370,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -417,7 +413,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "number",
@@ -447,7 +443,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -477,7 +473,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -514,7 +510,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -544,7 +540,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -572,7 +568,7 @@
             "name": "invoiceId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "x-nullable": false
           },
           {
             "type": "string",
@@ -599,6 +595,7 @@
         "currency",
         "items",
         "subTotal",
+        "vatAmounts",
         "vat",
         "total"
       ],
@@ -606,7 +603,10 @@
         "id": {
           "type": "string"
         },
-        "date": {
+        "invoiceNo": {
+          "type": "string"
+        },
+        "issueDate": {
           "type": "string",
           "format": "date-time"
         },
@@ -629,6 +629,12 @@
         "note": {
           "type": "string"
         },
+        "billingDetails": {
+          "$ref": "#/definitions/BillingDetailsDto"
+        },
+        "shippingDetails": {
+          "$ref": "#/definitions/ShippingDetailsDto"
+        },
         "items": {
           "type": "array",
           "items": {
@@ -638,6 +644,12 @@
         "subTotal": {
           "type": "number",
           "format": "decimal"
+        },
+        "vatAmounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InvoiceVatAmountDto"
+          }
         },
         "vat": {
           "type": "number",
@@ -696,17 +708,107 @@
         "Void"
       ]
     },
+    "BillingDetailsDto": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "phoneNumber",
+        "email",
+        "address"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/AddressDto"
+        }
+      }
+    },
+    "AddressDto": {
+      "type": "object",
+      "required": [
+        "thoroughfare",
+        "postalCode",
+        "locality",
+        "subAdministrativeArea",
+        "administrativeArea",
+        "country"
+      ],
+      "properties": {
+        "thoroughfare": {
+          "type": "string"
+        },
+        "premises": {
+          "type": "string"
+        },
+        "subPremises": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "locality": {
+          "type": "string"
+        },
+        "subAdministrativeArea": {
+          "type": "string"
+        },
+        "administrativeArea": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "ShippingDetailsDto": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "address"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "careOf": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/AddressDto"
+        }
+      }
+    },
     "InvoiceItemDto": {
       "type": "object",
       "required": [
         "id",
         "productType",
         "description",
-        "unitPrice",
+        "price",
         "unit",
         "vatRate",
         "quantity",
-        "lineTotal",
+        "vat",
+        "total",
         "isTaxDeductibleService"
       ],
       "properties": {
@@ -719,7 +821,7 @@
         "description": {
           "type": "string"
         },
-        "unitPrice": {
+        "price": {
           "type": "number",
           "format": "decimal"
         },
@@ -734,7 +836,11 @@
           "type": "number",
           "format": "double"
         },
-        "lineTotal": {
+        "vat": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "total": {
           "type": "number",
           "format": "decimal"
         },
@@ -834,6 +940,36 @@
         "Cleaning",
         "Gardening"
       ]
+    },
+    "InvoiceVatAmountDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "vatRate",
+        "subTotal",
+        "total"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "vatRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "vat": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "total": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
     },
     "InvoiceDomesticServiceDto": {
       "type": "object",

@@ -7,19 +7,26 @@ namespace YourBrand.Invoicing.Application;
 
 public record InvoiceDto(
     string Id, 
-    DateTime? Date, 
+    string? InvoiceNo,
+    DateTime? IssueDate, 
     Domain.Enums.InvoiceType Type, 
     Domain.Enums.InvoiceStatus Status, 
     DateTime? DueDate, 
     string Currency, 
     string? Reference, 
-    string? Note, 
-    IEnumerable<InvoiceItemDto> Items, 
-    decimal SubTotal, 
+    string? Note,
+    BillingDetailsDto? BillingDetails, 
+    ShippingDetailsDto? ShippingDetails,
+    IEnumerable<InvoiceItemDto> Items,
+    decimal SubTotal,
+    IEnumerable<InvoiceVatAmountDto> VatAmounts,
     decimal Vat, 
     decimal Total, 
     decimal? Paid, 
     InvoiceDomesticServiceDto? DomesticService);
+
+public sealed record InvoiceVatAmountDto(string Name, double VatRate, decimal SubTotal, decimal? Vat, decimal Total);
+
 
 public record InvoiceDomesticServiceDto(
     Domain.Entities.DomesticServiceKind Kind, 
@@ -32,11 +39,12 @@ public record InvoiceItemDto(
     string Id, 
     ProductType ProductType, 
     string Description, 
-    decimal UnitPrice, 
+    decimal Price, 
     string Unit, 
     double VatRate, 
-    double Quantity, 
-    decimal LineTotal,
+    double Quantity,
+    decimal Vat,
+    decimal Total,
     bool IsTaxDeductibleService,
     InvoiceItemDomesticServiceDto? DomesticService);
 

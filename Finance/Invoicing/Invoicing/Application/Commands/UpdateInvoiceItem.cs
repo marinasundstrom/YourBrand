@@ -50,6 +50,8 @@ public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductT
 
             item.IsTaxDeductibleService = request.IsTaxDeductibleService;
 
+            invoice.Update();
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return item.ToDto();

@@ -52,7 +52,7 @@ public record ActivateRotAndRut(string InvoiceId, InvoiceDomesticServiceDto? Dom
                         ) : null;
             }
 
-            invoice.UpdateTotals();
+            invoice.Update();
 
             await _context.SaveChangesAsync(cancellationToken);
 

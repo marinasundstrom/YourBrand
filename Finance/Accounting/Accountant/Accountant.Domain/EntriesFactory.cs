@@ -23,8 +23,8 @@ public class EntriesFactory
             var productType = group.Key.ProductType;
             var vatRate = group.Key.VatRate;
 
-            var vat = group.Sum(i => i.LineTotal.GetVatFromSubTotal(i.VatRate));
-            var subTotal = group.Sum(i => i.LineTotal);
+            var vat = group.Sum(i => i.Total.GetVatFromSubTotal(i.VatRate));
+            var subTotal = group.Sum(i => i.Total);
              
             entries.AddRange(new[] {
                         new CreateEntry

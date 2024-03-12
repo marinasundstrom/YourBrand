@@ -45,7 +45,7 @@ public record SetDate(string InvoiceId, DateTime Date) : IRequest
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            invoice.SetDate(request.Date);
+            invoice.SetIssueDate(request.Date);
 
             await _context.SaveChangesAsync(cancellationToken);
 
