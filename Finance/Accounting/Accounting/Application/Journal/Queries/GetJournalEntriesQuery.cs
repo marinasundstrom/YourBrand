@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Accounting.Application.Journal.Queries;
 
-public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10) : IRequest<JournalEntryResult>
+public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10, int? InvoiceNo = null) : IRequest<JournalEntryResult>
 {
     public class GetJournalEntriesQueryHandler : IRequestHandler<GetJournalEntriesQuery, JournalEntryResult>
     {
@@ -36,6 +36,11 @@ public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10) : IRequest
                 .AsNoTracking()
                 .AsSplitQuery()
                 .AsQueryable();
+
+            if(request.InvoiceNo is not null) 
+            {
+                query = query.Where(x => x.InvoiceNo == request.InvoiceNo);
+            }
 
             var totalItems = await query.CountAsync();
 

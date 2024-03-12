@@ -190,6 +190,13 @@
             "format": "int32",
             "default": 10,
             "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "invoiceNo",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
           }
         ],
         "responses": {

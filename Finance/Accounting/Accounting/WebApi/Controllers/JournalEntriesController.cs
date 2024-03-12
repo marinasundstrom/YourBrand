@@ -27,9 +27,9 @@ namespace YourBrand.Accounting.Controllers
 
         // GET: api/values
         [HttpGet]
-        public async Task<JournalEntryResult> GetJournalEntriesAsync(int page = 0, int pageSize = 10, CancellationToken cancellationToken = default)
+        public async Task<JournalEntryResult> GetJournalEntriesAsync(int page = 0, int pageSize = 10, int? invoiceNo = null, CancellationToken cancellationToken = default)
         {
-            return await mediator.Send(new GetJournalEntriesQuery(page, pageSize), cancellationToken);
+            return await mediator.Send(new GetJournalEntriesQuery(page, pageSize, invoiceNo), cancellationToken);
         }
 
         [HttpGet("{id}")]

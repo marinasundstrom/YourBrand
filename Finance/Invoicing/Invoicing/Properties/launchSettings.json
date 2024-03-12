@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Documents": {
+    "Invoicing": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5096",
