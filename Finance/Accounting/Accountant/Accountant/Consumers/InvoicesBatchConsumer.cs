@@ -16,14 +16,17 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
     private readonly IInvoicesClient _invoicesClient;
     private readonly IDocumentsClient _documentsClient;
     private readonly EntriesFactory _entriesFactory;
+    private readonly ILogger<InvoicesBatchConsumer> _logger;
 
     public InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
-        IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory)
+        IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory,
+        ILogger<InvoicesBatchConsumer> logger)
     {
         _journalEntriesClient = verificationsClient;
         _invoicesClient = invoicesClient;
         _documentsClient = documentsClient;
         _entriesFactory = entriesFactory;
+        _logger = logger;
     }
 
     public async Task Consume(ConsumeContext<InvoicesBatch> context)
@@ -64,7 +67,14 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             Entries = entries.ToList(),
         }, cancellationToken);
 
-        await UploadDocuments(invoice, journalEntryId);
+        try 
+        {
+            await UploadDocuments(invoice, journalEntryId);
+        }
+        catch(Exception e) 
+        {
+            _logger.LogError(e, "Failed to add verification to journal entry,");
+        }
     }
 
     private async Task UploadDocuments(InvoiceDto invoice, int journalEntryId)
