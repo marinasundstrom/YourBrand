@@ -4,20 +4,20 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Accounting.Application.Verifications.Queries;
+namespace YourBrand.Accounting.Application.Journal.Queries;
 
-public record GetVerificationsQuery(int Page = 0, int PageSize = 10) : IRequest<VerificationsResult>
+public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10) : IRequest<JournalEntryResult>
 {
-    public class GetVerificationsQueryHandler : IRequestHandler<GetVerificationsQuery, VerificationsResult>
+    public class GetJournalEntriesQueryHandler : IRequestHandler<GetJournalEntriesQuery, JournalEntryResult>
     {
         private readonly IAccountingContext context;
 
-        public GetVerificationsQueryHandler(IAccountingContext context)
+        public GetJournalEntriesQueryHandler(IAccountingContext context)
         {
             this.context = context;
         }
 
-        public async Task<VerificationsResult> Handle(GetVerificationsQuery request, CancellationToken cancellationToken)
+        public async Task<JournalEntryResult> Handle(GetJournalEntriesQuery request, CancellationToken cancellationToken)
         {
             if(request.PageSize < 0) 
             {
@@ -29,9 +29,9 @@ public record GetVerificationsQuery(int Page = 0, int PageSize = 10) : IRequest<
                 throw new Exception("Page Size must not be greater than 100.");
             }
             
-            var query = context.Verifications
+            var query = context.JournalEntries
                 .Include(x => x.Entries)
-                .Include(x => x.Attachments)
+                .Include(x => x.Verifications)
                 .OrderBy(x => x.Date)
                 .AsNoTracking()
                 .AsSplitQuery()
@@ -44,11 +44,11 @@ public record GetVerificationsQuery(int Page = 0, int PageSize = 10) : IRequest<
                .Take(request.PageSize)
                .ToListAsync(cancellationToken);
 
-            var vms = new List<VerificationDto>();
+            var vms = new List<JournalEntryDto>();
 
             vms.AddRange(r.Select(v => v.ToDto()));
 
-            return new VerificationsResult(vms, totalItems);
+            return new JournalEntryResult(vms, totalItems);
         }
     }
 }

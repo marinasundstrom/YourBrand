@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
 @inject IAccountsClient AccountsClient
-@inject IVerificationsClient VerificationsClient
+@inject IJournalEntriesClient JournalEntriesClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -178,7 +178,7 @@
             }
         }
 
-        var verification = new CreateVerification
+        var createJournalEntry = new CreateJournalEntry
             {
                 Description = formModel.Description ?? String.Empty
             };
@@ -265,13 +265,13 @@
             }
         }
 
-        verification.Entries = entries;
+        createJournalEntry.Entries = entries;
 
-        var verificationId = await VerificationsClient.CreateVerificationAsync(verification);
+        var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(createJournalEntry);
 
         if (file is not null)
         {
-            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, string.Empty, null, new
+            await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(journalEntryId, string.Empty, null, new
             FileParameter(file.OpenReadStream(10 * 10000), file.Name));
         }
 

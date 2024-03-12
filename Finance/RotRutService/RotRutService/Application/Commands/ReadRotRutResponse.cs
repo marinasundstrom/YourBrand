@@ -17,10 +17,10 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
     public class Handler : IRequestHandler<ReadRotRutResponse>
     {
         private readonly IRotRutContext _context;
-        private readonly IVerificationsClient _verificationsClient;
+        private readonly IJournalEntriesClient _verificationsClient;
         private ITransactionsClient _transactionsClient;
 
-        public Handler(IRotRutContext context, IVerificationsClient verificationsClient, ITransactionsClient transactionsClient)
+        public Handler(IRotRutContext context, IJournalEntriesClient verificationsClient, ITransactionsClient transactionsClient)
         {
             _context = context;
             _verificationsClient = verificationsClient;
@@ -35,7 +35,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                 {
                     var rotRutCase = await _context.RotRutCases
                         .Where(x => x.Status ==  RotRutCaseStatus.RequestSent)
-                        .FirstOrDefaultAsync(x => x.InvoiceId == arende.Fakturanummer, cancellationToken);
+                        .FirstOrDefaultAsync(x => x.InvoiceNo == arende.Fakturanummer, cancellationToken);
 
                     if(rotRutCase is null) 
                     {
@@ -59,10 +59,10 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                         Credit = rotRutCase.RequestedAmount
                     });
 
-                    var verificationId2 = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+                    var verificationId2 = await _verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
                     {
                         Description = $"Utbetalning RUT/RUT",
-                        InvoiceId = rotRutCase.InvoiceId,
+                        InvoiceNo = rotRutCase.InvoiceNo,
                         Entries = entries2
                     }, cancellationToken);
                     

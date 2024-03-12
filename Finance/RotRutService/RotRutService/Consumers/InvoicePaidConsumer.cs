@@ -13,11 +13,11 @@ namespace YourBrand.RotRutService.Consumers;
 public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 {
     private readonly IRotRutContext _context;
-    private readonly IVerificationsClient _verificationsClient;
+    private readonly IJournalEntriesClient _verificationsClient;
     private readonly IInvoicesClient _invoicesClient;
     private readonly RotRutCaseFactory _rotRutCaseFactory;
 
-    public InvoicePaidConsumer(IRotRutContext context, IVerificationsClient verificationsClient,
+    public InvoicePaidConsumer(IRotRutContext context, IJournalEntriesClient verificationsClient,
         IInvoicesClient invoicesClient, RotRutCaseFactory rotRutCaseFactory)
     {
         _context = context;

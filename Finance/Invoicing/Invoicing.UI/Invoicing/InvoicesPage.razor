@@ -102,7 +102,7 @@
 
     public async Task GoTo(InvoiceDto invoice)
     {
-        NavigationManager.NavigateTo($"/invoices/{invoice.Id}");
+        NavigationManager.NavigateTo($"/invoices/{invoice.InvoiceNo}");
     }
 
     private async Task OnSelectedTypesChanged(IEnumerable<InvoiceType?> selectedTypes)

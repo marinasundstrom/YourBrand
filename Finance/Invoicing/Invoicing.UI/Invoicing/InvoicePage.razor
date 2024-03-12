@@ -1,5 +1,5 @@
 @page "/invoices/new"
-@page "/invoices/{Id}"
+@page "/invoices/{InvoiceNo}"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Invoicing.Invoicing
@@ -25,7 +25,7 @@
         <MudPaper Elevation="25" Class="pa-4">
 
             <div class="mb-4">
-                <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{Id}/file")">
+                <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.InvoiceNo}/file")">
                     Download
                 </MudButton>
 
@@ -265,16 +265,16 @@
     HubConnection hubConnection = null!;
 
     [Parameter]
-    public string? Id { get; set; }
+    public string? InvoiceNo { get; set; }
 
     [Required]
     public InvoiceViewModel Model { get; set;  }
 
     protected override async Task OnInitializedAsync()
     {
-        if (Id is not null)
+        if (InvoiceNo is not null)
         {
-            invoice = await InvoicesClient.GetInvoiceAsync(Id);
+            invoice = await InvoicesClient.GetInvoiceByNoAsync(InvoiceNo);
 
             Model = invoice.ToModel();
         }
@@ -289,7 +289,7 @@
 
             Model = invoice.ToModel();
 
-            NavigationManager.NavigateTo($"/invoices/{Model.Id}", replace: true);
+            NavigationManager.NavigateTo($"/invoices/{Model.InvoiceNo}", replace: true);
 
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
@@ -301,7 +301,7 @@
 
     public async Task Foo()
     {
-        var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, Id);
+        var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, invoice.Id);
         payment = paymentsResults.Items.FirstOrDefault();
 
         if (payment is null)
@@ -329,6 +329,8 @@
         }
 
         Model.DomesticService = (InvoiceDomesticServiceViewModel)result.Data;
+
+        StateHasChanged();
     }
 
     async Task InitPaymentHub(string paymentId)
@@ -397,7 +399,7 @@
         var model = new InvoiceItemViewModel();
 
         var dialogParameters = new DialogParameters();
-        dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), Id);
+        dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), invoice.Id);
 
         var dialogRef = DialogService.Show<InvoiceItemDialog>("New Item", dialogParameters);
 
@@ -419,7 +421,7 @@
         }
 
         var dialogParameters = new DialogParameters();
-        dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), Id);
+        dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), invoice.Id);
         dialogParameters.Add(nameof(InvoiceItemDialog.Model), model);
 
         var dialogRef = DialogService.Show<InvoiceItemDialog>("Update Item", dialogParameters);
@@ -432,7 +434,7 @@
 
     public async Task UpdateInvoiceStatus()
     {
-        string invoiceId = Id;
+        string invoiceId = invoice.Id;
 
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoiceId);
@@ -464,7 +466,7 @@
             {
                 date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
-                await InvoicesClient.SetDateAsync(Id,
+                await InvoicesClient.SetDateAsync(invoice.Id,
                 date.GetValueOrDefault().ToUniversalTime());
 
                 Model.Date = date;
@@ -484,7 +486,7 @@
             {
                 date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
-                await InvoicesClient.SetDueDateAsync(Id,
+                await InvoicesClient.SetDueDateAsync(invoice.Id,
                 date.GetValueOrDefault().ToUniversalTime());
 
                 Model.DueDate = date;
@@ -500,7 +502,7 @@
     {
         if (reference != Model.Reference)
         {
-            await InvoicesClient.SetReferenceAsync(Id, reference);
+            await InvoicesClient.SetReferenceAsync(invoice.Id, reference);
             Model.Reference = reference;
         }
     }
@@ -509,7 +511,7 @@
     {
         if (note != Model.Note)
         {
-            await InvoicesClient.SetNoteAsync(Id, note);
+            await InvoicesClient.SetNoteAsync(invoice.Id, note);
             Model.Note = note;
         }
     }
@@ -533,7 +535,7 @@
         if (!result.GetValueOrDefault())
             return;
 
-        await InvoicesClient.DeleteInvoiceItemAsync(Id, invoiceItem.Id);
+        await InvoicesClient.DeleteInvoiceItemAsync(invoice.Id, invoiceItem.Id);
 
         Model.RemoveItem(invoiceItem);
     }

@@ -1,4 +1,4 @@
-﻿using YourBrand.Accounting.Domain.Entities;
+using YourBrand.Accounting.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

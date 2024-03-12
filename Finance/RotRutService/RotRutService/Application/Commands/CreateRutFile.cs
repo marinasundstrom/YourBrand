@@ -41,7 +41,7 @@ public record CreateRutFile(string? NamnPaBegaran) : IRequest<string>
             {
                 var arende = new RotRut.Begaran.Rut.HushallBegaranArenden()
                 {
-                    FakturaNr = rotRutCase.InvoiceId.ToString(),
+                    FakturaNr = rotRutCase.InvoiceNo.ToString(),
                     BetalningsDatum = rotRutCase.PaymentDate,
                     Kopare = rotRutCase.Buyer,
                     PrisForArbete = (int)Math.Round(rotRutCase.LaborCost),

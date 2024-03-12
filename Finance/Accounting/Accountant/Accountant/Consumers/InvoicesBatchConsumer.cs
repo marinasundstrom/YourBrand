@@ -12,15 +12,15 @@ namespace YourBrand.Accountant.Consumers;
 
 public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 {
-    private readonly IVerificationsClient _verificationsClient;
+    private readonly IJournalEntriesClient _journalEntriesClient;
     private readonly IInvoicesClient _invoicesClient;
     private readonly IDocumentsClient _documentsClient;
     private readonly EntriesFactory _entriesFactory;
 
-    public InvoicesBatchConsumer(IVerificationsClient verificationsClient,
+    public InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
         IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory)
     {
-        _verificationsClient = verificationsClient;
+        _journalEntriesClient = verificationsClient;
         _invoicesClient = invoicesClient;
         _documentsClient = documentsClient;
         _entriesFactory = entriesFactory;
@@ -57,17 +57,17 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
     {
         var entries = _entriesFactory.CreateEntriesFromInvoice(invoice);
 
-        var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+        var journalEntryId = await _journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
         {
-            Description = $"Skickade ut faktura #{invoice.Id}",
-            InvoiceId = int.Parse(invoice.Id),
+            Description = $"Skickade ut faktura #{invoice.InvoiceNo}",
+            InvoiceNo = int.Parse(invoice.InvoiceNo),
             Entries = entries.ToList(),
         }, cancellationToken);
 
-        await UploadDocuments(invoice, verificationId);
+        await UploadDocuments(invoice, journalEntryId);
     }
 
-    private async Task UploadDocuments(InvoiceDto invoice, int verificationId)
+    private async Task UploadDocuments(InvoiceDto invoice, int journalEntryId)
     {
         MemoryStream stream, stream2;
 
@@ -88,8 +88,8 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         stream2.Seek(0, SeekOrigin.Begin);
         stream.Seek(0, SeekOrigin.Begin);
 
-        await _verificationsClient.AddFileAttachmentToVerificationAsync(
-            verificationId, null, int.Parse(invoice.Id),
+        await _journalEntriesClient.AddFileToJournalEntryAsVerificationAsync(
+            journalEntryId, null, int.Parse(invoice.Id),
             new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 
         try

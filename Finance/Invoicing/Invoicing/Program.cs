@@ -115,6 +115,12 @@ app.MapGet("/Invoices/{invoiceId}", async (string invoiceId, IMediator mediator,
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
+app.MapGet("/Invoices/ByNo/{invoiceNo}", async (string invoiceNo, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetInvoiceByNo(invoiceNo), cancellationToken))
+    .WithName("Invoices_GetInvoiceByNo")
+    .WithTags("Invoices")
+    .Produces<InvoiceDto>(StatusCodes.Status200OK);
+
 app.MapPost("/invoices/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
     => await mediator.Send(new ActivateRotAndRut(invoiceId, dto)))
     .WithName("Invoices_ActivateRotAndRut")

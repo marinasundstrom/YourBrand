@@ -1,33 +1,33 @@
 ﻿@page "/ledger"
 @using Accounting
 @inject NavigationManager NavigationManager
-@inject IEntriesClient EntriesClient
-@inject IVerificationsClient VerificationsClient 
+@inject ILedgerEntriesClient LedgerEntriesClient
+@inject IJournalEntriesClient JournalEntriesClient 
 
 <PageTitle>@title</PageTitle>
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@title</MudText>
 
-@if(verification is not null)
+@if(journalEntry is not null)
 {
     <MudCard Class="mb-4">
         <MudCardContent>
-            <MudText Typo="@Typo.subtitle1">@verification.Date.Date.ToShortDateString()</MudText>
-            <MudText Typo="@Typo.body1">@verification.Description</MudText>
+            <MudText Typo="@Typo.subtitle1">@journalEntry.Date.Date.ToShortDateString()</MudText>
+            <MudText Typo="@Typo.body1">@journalEntry.Description</MudText>
 
-            @if(verification.InvoiceId is not null) 
+            @if(journalEntry.InvoiceNo is not null) 
             {
                 <div class="mt-4">
                     <MudText Typo="@Typo.subtitle2">Invoice</MudText>
-                    <MudLink Typo="@Typo.body1" Href="@($"/invoices/{verification.InvoiceId}")" Class="mt-4">@verification.InvoiceId</MudLink>
+                    <MudLink Typo="@Typo.body1" Href="@($"/invoices/{journalEntry.InvoiceNo}")" Class="mt-4">@journalEntry.InvoiceNo</MudLink>
                 </div>
             }
 
             <div class="mt-4">
-                @if(verification.Attachments.Any()) 
+                @if (journalEntry.Verifications.Any())
                 {
                     <MudText Typo="@Typo.subtitle2">Attachment</MudText>
-                    @foreach (var attachment in verification.Attachments)
+                    @foreach (var attachment in journalEntry.Verifications)
                     {
                         <MudLink Typo="@Typo.body1" Href="@attachment.Url">@attachment.Name</MudLink>
                     }
@@ -37,10 +37,10 @@
     </MudCard>
 }
 
-<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<LedgerEntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Date</MudTh>
-        <MudTh>Verification No</MudTh>
+        <MudTh>Journal Entry</MudTh>
         <MudTh colspan="2">Account</MudTh>
         @*
         <MudTh>Debit</MudTh>
@@ -50,8 +50,8 @@
     </HeaderContent>
     <RowTemplate Context="entry">
         <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
-        <MudTd DataLabel="Verification No">
-            <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
+        <MudTd DataLabel="Journal Entry">
+            <MudLink Href="@($"/ledger?journalEntryId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
         </MudTd>
         <MudTd DataLabel="Account No"><MudLink Href="@($"/accounts/{entry.Account.AccountNo}")">@entry.Account.AccountNo</MudLink></MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
@@ -73,15 +73,15 @@
 {
     string currency = "SEK";
 
-    MudTable<EntryDto>? table = null!;
-    VerificationDto? verification;
+    MudTable<LedgerEntryDto>? table = null!;
+    JournalEntryDto? journalEntry;
 
     string title = "Ledger";
     bool loading = false;
 
     [SupplyParameterFromQuery]
     [Parameter]
-    public int? VerificationId { get; set; }
+    public int? JournalEntryId { get; set; }
 
     protected override void OnInitialized()
     {
@@ -104,33 +104,33 @@
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    private async Task<TableData<EntryDto>> ServerReload(TableState state)
+    private async Task<TableData<LedgerEntryDto>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await EntriesClient.GetEntriesAsync(null, VerificationId, state.Page, state.PageSize, ResultDirection.Desc);
+            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(null, JournalEntryId, state.Page, state.PageSize, ResultDirection.Desc);
 
-            Console.WriteLine($"VerificationId: {VerificationId}");
+            Console.WriteLine($"JournalEntryId: {JournalEntryId}");
 
-            if (VerificationId is not null)
+            if (JournalEntryId is not null)
             {
                 var description = result.Entries.First().Verification.Description;
 
-                title = (!string.IsNullOrEmpty(description) ? $"{VerificationId} - {description}" : VerificationId.ToString())!;
+                title = (!string.IsNullOrEmpty(description) ? $"{JournalEntryId} - {description}" : JournalEntryId.ToString())!;
 
-                verification = await VerificationsClient.GetVerificationAsync(VerificationId.GetValueOrDefault());
+                journalEntry = await JournalEntriesClient.GetJournalEntryAsync(JournalEntryId.GetValueOrDefault());
             }
             else
             {
                 title = $"Ledger";
-                verification = null;
+                journalEntry = null;
             }
 
             StateHasChanged();
 
-            return new TableData<EntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
+            return new TableData<LedgerEntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
         }
         finally
         {

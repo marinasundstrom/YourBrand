@@ -17,5 +17,5 @@ public class Account
 
     public string Description { get; set; } = null!;
 
-    public List<Entry> Entries { get; set; } = new List<Entry>();
+    public List<LedgerEntry> Entries { get; set; } = new List<LedgerEntry>();
 }

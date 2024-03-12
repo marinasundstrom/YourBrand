@@ -68,20 +68,20 @@ public static class Seed
 
     private static void InsertMoney(AccountingContext context)
     {
-        var verification = new Verification(
+        var verification = new JournalEntry(
             DateTime.Now.Subtract(TimeSpan.FromDays(19)), 
             "Du sätter in egna pengar på företagskontot");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
         
         verification.AddEntries(new[] {
-             new Entry
+             new LedgerEntry
              {
                  AccountNo = 2018,
                  Description = string.Empty,
                  Credit = 30000m
              },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1930,
                 Description = string.Empty,
@@ -94,24 +94,24 @@ public static class Seed
 
     private static void YouSendAnInvoiceToCustomer(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du skickar en faktura");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du skickar en faktura");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1510,
                 Description = string.Empty,
                 Debit = 10000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 2610,
                 Description = string.Empty,
                 Credit = 2000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 3001,
                 Description = string.Empty,
@@ -122,18 +122,18 @@ public static class Seed
 
     private static async void TheCustomerPaysTheInvoice(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Kunden betalar fakturan");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Kunden betalar fakturan");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1920,
                 Description = string.Empty,
                 Debit = 10000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1510,
                 Description = string.Empty,
@@ -144,24 +144,24 @@ public static class Seed
 
     private static void YouReceiveAInvoice(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar emot fakturan");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar emot fakturan");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 4000,
-                VerificationId = verificationId,
+                JournalEntryId = verificationId,
                 Description = string.Empty,
                 Debit = 4000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 2640,
                 Description = string.Empty,
                 Debit = 1000m
-            }, new Entry
+            }, new LedgerEntry
             {
                 AccountNo = 2440,
                 Description = string.Empty,
@@ -172,17 +172,17 @@ public static class Seed
 
     private static void YouPayForTheInvoice(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du betalar fakturan");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du betalar fakturan");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 2440,
                 Description = string.Empty,
                 Debit = 5000m
-            }, new Entry
+            }, new LedgerEntry
             {
                 AccountNo = 1930,
                 Description = string.Empty,
@@ -194,18 +194,18 @@ public static class Seed
 
     private static void YouWithdrawMoneyAsSalary(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar ut egen lön");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar ut egen lön");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 2013,
                 Description = string.Empty,
                 Debit = 30000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1930,
                 Description = string.Empty,
@@ -216,18 +216,18 @@ public static class Seed
 
     private static void YouTransferFromPlusGiroToCorporateAccount(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från PlusGiro till företagskonto");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från PlusGiro till företagskonto");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1920,
                 Description = string.Empty,
                 Credit = 10000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1930,
                 Description = string.Empty,
@@ -238,18 +238,18 @@ public static class Seed
 
     private static void YouTransferFromTaxAccountToCorporateAccount(AccountingContext context)
     {
-        var verification = new Verification(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från skattekonto till företagskonto");
+        var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från skattekonto till företagskonto");
 
-        context.Verifications.Add(verification);
+        context.JournalEntries.Add(verification);
 
         verification.AddEntries(new[] {
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1630,
                 Description = string.Empty,
                 Credit = 4000m
             },
-            new Entry
+            new LedgerEntry
             {
                 AccountNo = 1930,
                 Description = string.Empty,

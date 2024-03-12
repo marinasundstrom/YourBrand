@@ -31,7 +31,7 @@ public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceH
 
             var query = context.Accounts
                 .Include(a => a.Entries)
-                .ThenInclude(e => e.Verification)
+                .ThenInclude(e => e.JournalEntry)
                 .Where(a => a.Entries.Any())
                 .AsNoTracking()
                 .AsQueryable();
@@ -55,7 +55,7 @@ public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceH
                         series[account] = new List<decimal>();
                     }
 
-                    var entries = account.Entries.Where(x => x.Verification.Date.Year == month.Year && x.Verification.Date.Month == month.Month);
+                    var entries = account.Entries.Where(x => x.JournalEntry.Date.Year == month.Year && x.JournalEntry.Date.Month == month.Month);
                     var sum = entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum();
 
                     if (sum < 0)

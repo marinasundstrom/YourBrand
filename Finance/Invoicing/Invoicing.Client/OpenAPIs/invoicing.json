@@ -76,6 +76,35 @@
         }
       }
     },
+    "/Invoices/ByNo/{invoiceNo}": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoiceByNo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "invoiceNo",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceDto"
+            }
+          }
+        }
+      }
+    },
     "/invoices/activateRotAndRut": {
       "post": {
         "tags": [

@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Accounting
 @inject IAccountsClient AccountsClient
-@inject IEntriesClient EntriesClient
+@inject ILedgerEntriesClient LedgerEntriesClient
 
 @if (account is not null)
 {
@@ -27,7 +27,7 @@
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
 
-    <MudTable ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable ServerData="@(new Func<TableState, Task<TableData<LedgerEntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Date</MudTh>
             <MudTh>Verification No</MudTh>
@@ -89,15 +89,15 @@
         StateHasChanged();
     }
 
-    private async Task<TableData<EntryDto>> ServerReload(TableState state)
+    private async Task<TableData<LedgerEntryDto>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await EntriesClient.GetEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
+            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
 
-            return new TableData<EntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
+            return new TableData<LedgerEntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
         }
         finally
         {

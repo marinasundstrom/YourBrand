@@ -1,6 +1,6 @@
-﻿namespace YourBrand.Accounting.Application.Verifications;
+﻿namespace YourBrand.Accounting.Application.Journal;
 
-public class VerificationDto
+public class JournalEntryDto
 {
     public int Id { get; set; }
 
@@ -12,7 +12,7 @@ public class VerificationDto
 
     public decimal Credit { get; set; }
 
-    public int? InvoiceId { get; set; }
+    public int? InvoiceNo { get; set; }
 
-    public IEnumerable<AttachmentDto> Attachments { get; set; } = null!;
+    public IEnumerable<VerificationDto> Verifications { get; set; } = null!;
 }

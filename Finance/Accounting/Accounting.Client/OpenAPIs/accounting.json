@@ -1,11 +1,11 @@
 {
-  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Accounting API",
     "version": "0.1"
   },
-  "host": "localhost:5020",
+  "host": "localhost:5092",
   "schemes": [
     "https"
   ],
@@ -117,7 +117,7 @@
             "name": "accountNo",
             "in": "query",
             "collectionFormat": "multi",
-            "x-nullable": true,
+            "x-nullable": false,
             "items": {
               "type": "integer",
               "format": "int32"
@@ -150,7 +150,7 @@
             "name": "accountNo",
             "in": "query",
             "collectionFormat": "multi",
-            "x-nullable": true,
+            "x-nullable": false,
             "items": {
               "type": "integer",
               "format": "int32"
@@ -168,12 +168,161 @@
         }
       }
     },
-    "/Entries": {
+    "/JournalEntries": {
       "get": {
         "tags": [
-          "Entries"
+          "JournalEntries"
         ],
-        "operationId": "Entries_GetEntries",
+        "operationId": "JournalEntries_GetJournalEntries",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/JournalEntryResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "JournalEntries"
+        ],
+        "operationId": "JournalEntries_CreateJournalEntry",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateJournalEntry"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "/JournalEntries/{id}": {
+      "get": {
+        "tags": [
+          "JournalEntries"
+        ],
+        "operationId": "JournalEntries_GetJournalEntry",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/JournalEntryDto"
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/JournalEntries/{id}/Verifications": {
+      "post": {
+        "tags": [
+          "JournalEntries"
+        ],
+        "operationId": "JournalEntries_AddFileToJournalEntryAsVerification",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "description",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          },
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/LedgerEntries": {
+      "get": {
+        "tags": [
+          "LedgerEntries"
+        ],
+        "operationId": "LedgerEntries_GetLedgerEntries",
         "parameters": [
           {
             "type": "integer",
@@ -184,7 +333,7 @@
           },
           {
             "type": "integer",
-            "name": "verificationId",
+            "name": "journalEntryId",
             "in": "query",
             "format": "int32",
             "x-nullable": true
@@ -225,157 +374,8 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/EntriesResult"
+              "$ref": "#/definitions/LedgerEntriesResult"
             }
-          }
-        }
-      }
-    },
-    "/Verifications": {
-      "get": {
-        "tags": [
-          "Verifications"
-        ],
-        "operationId": "Verifications_GetVerifications",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "format": "int32",
-            "default": 0,
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "format": "int32",
-            "default": 10,
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/VerificationsResult"
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Verifications"
-        ],
-        "operationId": "Verifications_CreateVerification",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "dto",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CreateVerification"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      }
-    },
-    "/Verifications/{verificationId}": {
-      "get": {
-        "tags": [
-          "Verifications"
-        ],
-        "operationId": "Verifications_GetVerification",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "verificationId",
-            "in": "path",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/VerificationDto"
-            }
-          },
-          "404": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/{verificationId}/Attachment": {
-      "post": {
-        "tags": [
-          "Verifications"
-        ],
-        "operationId": "Verifications_AddFileAttachmentToVerification",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "verificationId",
-            "in": "path",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "string",
-            "name": "description",
-            "in": "query",
-            "x-nullable": true
-          },
-          {
-            "type": "integer",
-            "name": "invoiceId",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": true
-          },
-          {
-            "type": "file",
-            "name": "file",
-            "in": "formData",
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "type": "string"
-            }
-          },
-          "400": {
-            "description": ""
           }
         }
       }
@@ -488,7 +488,143 @@
         }
       }
     },
-    "EntriesResult": {
+    "JournalEntryResult": {
+      "type": "object",
+      "required": [
+        "verifications",
+        "totalItems"
+      ],
+      "properties": {
+        "verifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/JournalEntryDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "JournalEntryDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "description",
+        "debit",
+        "credit",
+        "verifications"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "debit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "credit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "invoiceNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "verifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VerificationDto"
+          }
+        }
+      }
+    },
+    "VerificationDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "contentType",
+        "url"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "invoiceNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateJournalEntry": {
+      "type": "object",
+      "required": [
+        "description",
+        "entries"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "invoiceNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateEntry"
+          }
+        }
+      }
+    },
+    "CreateEntry": {
+      "type": "object",
+      "required": [
+        "accountNo"
+      ],
+      "properties": {
+        "accountNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "type": "string"
+        },
+        "debit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "credit": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "LedgerEntriesResult": {
       "type": "object",
       "required": [
         "entries",
@@ -498,7 +634,7 @@
         "entries": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/EntryDto"
+            "$ref": "#/definitions/LedgerEntryDto"
           }
         },
         "totalItems": {
@@ -507,7 +643,7 @@
         }
       }
     },
-    "EntryDto": {
+    "LedgerEntryDto": {
       "type": "object",
       "required": [
         "id",
@@ -526,7 +662,7 @@
           "format": "date-time"
         },
         "verification": {
-          "$ref": "#/definitions/VerificationShort"
+          "$ref": "#/definitions/JournalEntryShort"
         },
         "account": {
           "$ref": "#/definitions/AccountShortDto"
@@ -544,7 +680,7 @@
         }
       }
     },
-    "VerificationShort": {
+    "JournalEntryShort": {
       "type": "object",
       "required": [
         "id",
@@ -592,142 +728,6 @@
         "Desc",
         "Asc"
       ]
-    },
-    "VerificationsResult": {
-      "type": "object",
-      "required": [
-        "verifications",
-        "totalItems"
-      ],
-      "properties": {
-        "verifications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/VerificationDto"
-          }
-        },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "VerificationDto": {
-      "type": "object",
-      "required": [
-        "id",
-        "date",
-        "description",
-        "debit",
-        "credit",
-        "attachments"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "description": {
-          "type": "string"
-        },
-        "debit": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "credit": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "invoiceId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "attachments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttachmentDto"
-          }
-        }
-      }
-    },
-    "AttachmentDto": {
-      "type": "object",
-      "required": [
-        "id",
-        "name",
-        "contentType",
-        "url"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "contentType": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "invoiceId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "url": {
-          "type": "string"
-        }
-      }
-    },
-    "CreateVerification": {
-      "type": "object",
-      "required": [
-        "description",
-        "entries"
-      ],
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "invoiceId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "entries": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CreateEntry"
-          }
-        }
-      }
-    },
-    "CreateEntry": {
-      "type": "object",
-      "required": [
-        "accountNo"
-      ],
-      "properties": {
-        "accountNo": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "description": {
-          "type": "string"
-        },
-        "debit": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "credit": {
-          "type": "number",
-          "format": "decimal"
-        }
-      }
     }
   }
 }

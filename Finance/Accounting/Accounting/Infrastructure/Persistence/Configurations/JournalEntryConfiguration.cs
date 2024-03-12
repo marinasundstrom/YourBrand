@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 
-public class EntryConfiguration : IEntityTypeConfiguration<Entry>
+public class JournalEntryConfiguration : IEntityTypeConfiguration<JournalEntry>
 {
-    public void Configure(EntityTypeBuilder<Entry> builder)
+    public void Configure(EntityTypeBuilder<JournalEntry> builder)
     {
-        builder.ToTable("Entries");
+        builder.ToTable("JournalEntries");
     }
 }

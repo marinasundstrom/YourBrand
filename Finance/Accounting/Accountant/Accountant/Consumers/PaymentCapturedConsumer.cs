@@ -11,11 +11,11 @@ namespace YourBrand.Accountant.Consumers;
 
 public class PaymentCapturedConsumer : IConsumer<PaymentCaptured>
 {
-    private readonly IVerificationsClient _verificationsClient;
+    private readonly IJournalEntriesClient _verificationsClient;
     private readonly IInvoicesClient _invoicesClient;
     private readonly IPaymentsClient _paymentsClient;
 
-    public PaymentCapturedConsumer(IVerificationsClient verificationsClient, IInvoicesClient invoicesClient, IPaymentsClient paymentsClient)
+    public PaymentCapturedConsumer(IJournalEntriesClient verificationsClient, IInvoicesClient invoicesClient, IPaymentsClient paymentsClient)
     {
         _verificationsClient = verificationsClient;
         _invoicesClient = invoicesClient;
@@ -112,10 +112,10 @@ public class PaymentCapturedConsumer : IConsumer<PaymentCaptured>
                     }
                 };
 
-        var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+        var journalEntryId = await _verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
         {
-            Description = $"Betalade faktura #{invoice.Id}",
-            InvoiceId = int.Parse(invoice.InvoiceNo),
+            Description = $"Betalade faktura #{invoice.InvoiceNo}",
+            InvoiceNo = int.Parse(invoice.InvoiceNo),
             Entries = entries
         }, cancellationToken);
 

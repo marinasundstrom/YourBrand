@@ -1,4 +1,3 @@
-﻿using YourBrand.Invoicing.Application.Queries;
 using YourBrand.Invoicing.Domain;
 
 using MediatR;
@@ -7,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Queries;
 
-public record GetInvoice(string InvoiceId) : IRequest<InvoiceDto?>
+public record GetInvoiceByNo(string InvoiceNo) : IRequest<InvoiceDto?>
 {
-    public class Handler : IRequestHandler<GetInvoice, InvoiceDto?>
+    public class Handler : IRequestHandler<GetInvoiceByNo, InvoiceDto?>
     {
         private readonly IInvoicingContext _context;
 
@@ -18,13 +17,13 @@ public record GetInvoice(string InvoiceId) : IRequest<InvoiceDto?>
             _context = context;
         }
 
-        public async Task<InvoiceDto?> Handle(GetInvoice request, CancellationToken cancellationToken)
+        public async Task<InvoiceDto?> Handle(GetInvoiceByNo request, CancellationToken cancellationToken)
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
                 .AsSplitQuery()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.InvoiceNo == request.InvoiceNo, cancellationToken);
 
             return invoice is null
                 ? null

@@ -7,14 +7,14 @@ using YourBrand.Accounting.Domain.Common;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Entry : Entity
+public class LedgerEntry : Entity
 {
-    public Entry()
+    public LedgerEntry()
     {
 
     }
 
-    public Entry(DateTime date, Account account, decimal? debit, decimal? credit, string? description)
+    public LedgerEntry(DateTime date, Account account, decimal? debit, decimal? credit, string? description)
     {
         Date = date;
         Account = account;
@@ -28,10 +28,10 @@ public class Entry : Entity
 
     public DateTime Date { get; set; } = DateTime.Now;
 
-    public int VerificationId { get; set; }
+    public int JournalEntryId { get; set; }
 
-    [ForeignKey(nameof(VerificationId))]
-    public Verification Verification { get; set; } = null!;
+    [ForeignKey(nameof(JournalEntryId))]
+    public JournalEntry JournalEntry { get; set; } = null!;
 
     public int AccountNo { get; set; }
 

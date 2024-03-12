@@ -4,24 +4,24 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Accounting.Application.Verifications.Queries;
+namespace YourBrand.Accounting.Application.Journal.Queries;
 
-public record GetVerificationQuery(int VerificationId) : IRequest<VerificationDto>
+public record GetJournalEntryQuery(int VerificationId) : IRequest<JournalEntryDto>
 {
-    public class GetVerificationQueryHandler : IRequestHandler<GetVerificationQuery, VerificationDto>
+    public class GetJournalEntryQueryHandler : IRequestHandler<GetJournalEntryQuery, JournalEntryDto>
     {
         private readonly IAccountingContext context;
 
-        public GetVerificationQueryHandler(IAccountingContext context)
+        public GetJournalEntryQueryHandler(IAccountingContext context)
         {
             this.context = context;
         }
 
-        public async Task<VerificationDto> Handle(GetVerificationQuery request, CancellationToken cancellationToken)
+        public async Task<JournalEntryDto> Handle(GetJournalEntryQuery request, CancellationToken cancellationToken)
         {
-            var v = await context.Verifications
+            var v = await context.JournalEntries
                 .Include(x => x.Entries)
-                .Include(x => x.Attachments)
+                .Include(x => x.Verifications)
                 .OrderBy(x => x.Date)
                 .AsNoTracking()
                 .AsSplitQuery()

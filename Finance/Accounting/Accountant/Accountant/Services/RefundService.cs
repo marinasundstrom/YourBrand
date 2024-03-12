@@ -7,10 +7,10 @@ namespace YourBrand.Accountant.Services
     public class RefundService : IRefundService
     {
         private readonly IInvoicesClient _invoicesClient;
-        private readonly IVerificationsClient _verificationsClient;
+        private readonly IJournalEntriesClient _verificationsClient;
         private readonly ILogger<RefundService> _logger;
 
-        public RefundService(IInvoicesClient invoicesClient, IVerificationsClient verificationsClient, ILogger<RefundService> logger)
+        public RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient verificationsClient, ILogger<RefundService> logger)
         {
             _invoicesClient = invoicesClient;
             _verificationsClient = verificationsClient;
@@ -35,9 +35,9 @@ namespace YourBrand.Accountant.Services
                     var subTotal = amountToRefund / (1m + (25m / 100m));
                     var vat = amountToRefund - subTotal;
 
-                    var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+                    var journalEntryId = await _verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
                     {
-                        Description = $"Betalade tillbaka för överbetalad faktura #{invoice.Id}",
+                        Description = $"Betalade tillbaka för överbetalad faktura #{invoice.InvoiceNo}",
                         Entries = new[]
                         {
                             new CreateEntry

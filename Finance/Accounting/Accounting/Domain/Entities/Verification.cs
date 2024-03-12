@@ -1,63 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+
+using YourBrand.Accounting.Domain.Enums;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
 public class Verification
 {
-    private readonly HashSet<Entry> _entries = new();
-    private readonly HashSet<Attachment> _attachments = new HashSet<Attachment>();
-
-    protected Verification()
-    {
-
-    }
-
-    public Verification(DateTime date, string description, int? invoiceId = null, int? receiptId = null)
-    {
-        Date = date;
-        Description = description;
-        InvoiceId = invoiceId;
-        ReceiptId = receiptId;
-    }
-
     [Key]
-    public int Id { get; private set; }
+    public string Id { get; set; } = null!;
 
-    public DateTime Date { get; private set; }
+    public string Name { get; set; } = null!;
 
-    public string Description { get; private set; } = null!;
+    public string ContentType { get; set; } = null!;
 
-    public int? InvoiceId { get; private set; }
+    public AttachmentType Type { get; set; }
 
-    public int? ReceiptId { get; private set; }
+    public JournalEntry JournalEntry { get; set; } = null!;
 
-    public IReadOnlyCollection<Entry> Entries => _entries;
+    public DateTime Date { get; set; }
 
-    public void AddEntries(IEnumerable<Entry> entries) => entries.ToList().ForEach(x => _entries.Add(x));
+    public string? Description { get; set; }
 
-    public Entry AddDebitEntry(Account account, decimal debit, string? description = null)
-    {
-        var entry = new Entry(Date, account, debit, null, description);
-        _entries.Add(entry);
-        return entry;
-    }
+    public int? InvoiceNo { get; set; }
 
-    public Entry AddCreditEntry(Account account, decimal credit, string? description = null)
-    {
-        var entry = new Entry(Date, account, null, credit, description);
-        _entries.Add(entry);
-        return entry;
-    }
-
-    public IReadOnlyCollection<Attachment> Attachments => _attachments;
-
-    public void AddAttachment(Attachment attachment)
-    {
-        _attachments.Add(attachment);
-    }
-
-    public decimal Sum => _entries.Sum(x => x.Debit.GetValueOrDefault() - x.Credit.GetValueOrDefault());
-
-    public bool IsValid => Sum == 0;
-
+    public int? ReceiptNo { get; set; }
 }

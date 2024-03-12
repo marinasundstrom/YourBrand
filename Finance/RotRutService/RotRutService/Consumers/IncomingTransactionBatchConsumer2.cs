@@ -13,10 +13,10 @@ namespace YourBrand.RotRutService.Consumers;
 public class IncomingTransactionBatchConsumer2 : IConsumer<IncomingTransactionBatch>
 {
     private readonly IRotRutContext _context;
-    private readonly IVerificationsClient _verificationsClient;
+    private readonly IJournalEntriesClient _verificationsClient;
     private readonly ITransactionsClient _transactionsClient;
 
-    public IncomingTransactionBatchConsumer2(IRotRutContext context, IVerificationsClient verificationsClient, ITransactionsClient transactionsClient)
+    public IncomingTransactionBatchConsumer2(IRotRutContext context, IJournalEntriesClient verificationsClient, ITransactionsClient transactionsClient)
     {
         _context = context;
         _verificationsClient = verificationsClient;

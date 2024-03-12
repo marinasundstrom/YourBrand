@@ -13,12 +13,12 @@ namespace YourBrand.Accountant.Services
     public class ReminderService : IReminderService
     {
         private readonly IInvoicesClient _invoicesClient;
-        private readonly IVerificationsClient _verificationsClient;
+        private readonly IJournalEntriesClient _verificationsClient;
         private readonly IDocumentsClient _documentsClient;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<RefundService> _logger;
 
-        public ReminderService(IInvoicesClient invoicesClient, IVerificationsClient verificationsClient,
+        public ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClient verificationsClient,
             IDocumentsClient documentsClient, IServiceScopeFactory serviceScopeFactory, ILogger<RefundService> logger)
         {
             _invoicesClient = invoicesClient;

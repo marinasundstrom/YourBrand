@@ -1,6 +1,6 @@
 ﻿using YourBrand.Accounting.Application.Accounts;
-using YourBrand.Accounting.Application.Entries;
-using YourBrand.Accounting.Application.Verifications;
+using YourBrand.Accounting.Application.Ledger;
+using YourBrand.Accounting.Application.Journal;
 using YourBrand.Accounting.Domain.Entities;
 
 using static YourBrand.Accounting.Application.Shared;
@@ -9,16 +9,16 @@ namespace YourBrand.Accounting.Application;
 
 public static class Mappings
 {
-    public static EntryDto ToDto(this Entry e)
+    public static LedgerEntryDto ToDto(this LedgerEntry e)
     {
-        return new EntryDto(
+        return new LedgerEntryDto(
                     e.Id,
                     e.Date,
-                    new VerificationShort
+                    new JournalEntryShort
                     {
-                        Id = e.Verification.Id,
-                        Date = e.Verification.Date,
-                        Description = e.Verification.Description,
+                        Id = e.JournalEntry.Id,
+                        Date = e.JournalEntry.Date,
+                        Description = e.JournalEntry.Description,
                     },
                     new AccountShortDto
                     {
@@ -31,29 +31,29 @@ public static class Mappings
                 );
     }
 
-    public static VerificationDto ToDto(this Verification v)
+    public static JournalEntryDto ToDto(this JournalEntry v)
     {
-        return new VerificationDto
+        return new JournalEntryDto
         {
             Id = v.Id,
             Date = v.Date,
             Description = v.Description,
             Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
             Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
-            InvoiceId = v.InvoiceId,
-            Attachments = v.Attachments.Select(e => e.ToDto())
+            InvoiceNo = v.InvoiceNo,
+            Verifications = v.Verifications.Select(e => e.ToDto())
         };
     }
 
-    public static AttachmentDto ToDto(this Attachment a)
+    public static VerificationDto ToDto(this Verification a)
     {
-        return new AttachmentDto
+        return new VerificationDto
         {
             Id = a.Id,
             Name = a.Name,
             ContentType = a.ContentType,
             Description = a.Description,
-            InvoiceId = a.InvoiceId,
+            InvoiceNo = a.InvoiceNo,
             Url = GetAttachmentUrl(a.Id)!
         };
     }

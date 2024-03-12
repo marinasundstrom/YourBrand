@@ -13,6 +13,7 @@ public static class Mapper
         var model = new InvoiceViewModel
         {
             Id = dto.Id,
+            InvoiceNo = dto.InvoiceNo,
             Status = dto.Status,
             Date = dto.IssueDate.GetValueOrDefault().Date.Date,
             DueDate = dto.DueDate.GetValueOrDefault().Date.Date,

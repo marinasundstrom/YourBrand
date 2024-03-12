@@ -1,6 +1,6 @@
-namespace YourBrand.Accounting.Application.Verifications;
+namespace YourBrand.Accounting.Application.Journal;
 
-public class AttachmentDto
+public class VerificationDto
 {
     public string Id { get; set; } = null!;
 
@@ -10,7 +10,7 @@ public class AttachmentDto
 
     public string? Description { get; set; }
 
-    public int? InvoiceId { get; set; }
+    public int? InvoiceNo { get; set; }
 
     public string Url { get; set; } = null!;
 }

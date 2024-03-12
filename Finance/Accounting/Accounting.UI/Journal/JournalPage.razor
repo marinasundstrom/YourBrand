@@ -1,7 +1,7 @@
 ﻿@page "/journal"
 @using YourBrand.Accounting
 @inject NavigationManager NavigationManager
-@inject IVerificationsClient VerificationsClient
+@inject IJournalEntriesClient JournalEntriesClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -10,7 +10,7 @@
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Journal</MudText>
 
 <MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/journal/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
-    Create verification
+    Create entry
 </MudButton>
 
 <MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/journal/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
@@ -19,7 +19,7 @@
 
 <MudTable ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
-        <MudTh>Verification No</MudTh>
+        <MudTh>Id</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Description</MudTh>
         @*
@@ -29,8 +29,8 @@
         <MudTh>Amount</MudTh>
     </HeaderContent>
     <RowTemplate Context="verification">
-        <MudTd DataLabel="Verification No">
-            <MudLink Href="@($"/ledger?verificationId={verification.Id}")">@verification.Id</MudLink>
+        <MudTd DataLabel="Id">
+            <MudLink Href="@($"/ledger?journalEntryId={verification.Id}")">@verification.Id</MudLink>
         </MudTd>
         <MudTd DataLabel="Date">@verification.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Description">@verification.Description</MudTd>
@@ -54,15 +54,15 @@
 
     bool loading = false;
 
-    private async Task<TableData<VerificationDto>> ServerReload(TableState state)
+    private async Task<TableData<JournalEntryDto>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await VerificationsClient.GetVerificationsAsync(state.Page, state.PageSize);
+            var result = await JournalEntriesClient.GetJournalEntriesAsync(state.Page, state.PageSize);
 
-            return new TableData<VerificationDto>() { TotalItems = result.TotalItems, Items = result.Verifications };
+            return new TableData<JournalEntryDto>() { TotalItems = result.TotalItems, Items = result.Verifications };
         }
         finally
         {
@@ -70,10 +70,10 @@
         }
     }
 
-    private async Task OpenNewVerificationDialog()
+    private async Task OpenNewJournalEntryDialog()
     {
         /*
-        var dialogReference = DialogService.Show<NewVerificationDialog>("New Verification");
+        var dialogReference = DialogService.Show<NewJournalEntryDialog>("New JournalEntry");
 
         var result = await dialogReference.Result;
 
@@ -85,9 +85,9 @@
         NavigationManager.NavigateTo("/journal/new");
     }
 
-    class VerificationViewModel
+    class JournalEntryViewModel
     {
-        public int VerificationId { get; set; }
+        public int JournalEntryId { get; set; }
 
         public DateTime Date { get; set; }
 

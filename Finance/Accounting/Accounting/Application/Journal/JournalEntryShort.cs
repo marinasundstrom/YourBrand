@@ -1,6 +1,6 @@
-﻿namespace YourBrand.Accounting.Application.Verifications;
+﻿namespace YourBrand.Accounting.Application.Journal;
 
-public class VerificationShort
+public class JournalEntryShort
 {
     public int Id { get; set; }
 

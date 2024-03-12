@@ -14,8 +14,8 @@ public class RotRutCaseFactory
         var goodsForService = invoice.Items.Where(x => x.ProductType == ProductType.Good && x.IsTaxDeductibleService);
 
         var hours = services.Sum(x => x.Quantity);
-        var laborCost = services.Sum(x => x.LineTotal.AddVat(x.VatRate));
-        var materialCost = goodsForService.Sum(x => x.LineTotal.AddVat(x.VatRate));
+        var laborCost = services.Sum(x => x.Total);
+        var materialCost = goodsForService.Sum(x => x.Total);
 
         decimal maxDeductibleAmount = 0;
 
@@ -34,7 +34,7 @@ public class RotRutCaseFactory
 
         DateTime paymentDate = DateTime.Now; // TODO: Add payment date to invoice
         decimal paidAmount = invoice.Total;
-        decimal otherCosts = itemsWithoutService.Sum(x => x.LineTotal);
+        decimal otherCosts = itemsWithoutService.Sum(x => x.Total);
 
         if (requestedAmount < 1)
         {
@@ -50,7 +50,7 @@ public class RotRutCaseFactory
             new Domain.Entities.RotRutCase(
                 (Domain.Enums.DomesticServiceKind)domesticServices.Kind,
                 invoice.DomesticService!.Buyer, paymentDate, laborCost,
-                paidAmount, requestedAmount, int.Parse(invoice.Id), otherCosts, hours, materialCost, null);
+                paidAmount, requestedAmount, int.Parse(invoice.InvoiceNo), otherCosts, hours, materialCost, null);
 
         if (domesticServices.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)
         {

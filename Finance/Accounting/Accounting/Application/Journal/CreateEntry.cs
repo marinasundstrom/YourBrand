@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YourBrand.Accounting.Application.Verifications;
+namespace YourBrand.Accounting.Application.Journal;
 
 public class CreateEntry
 {

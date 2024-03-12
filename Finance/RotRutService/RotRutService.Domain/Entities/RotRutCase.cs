@@ -20,7 +20,7 @@ public class RotRutCase : AuditableEntity
         LaborCost = laborCost;
         PaidAmount = paidAmount;
         RequestedAmount = requestedAmount;
-        InvoiceId = invoiceId;
+        InvoiceNo = invoiceId;
         OtherCosts = otherCosts;
         Hours = hours;
         MaterialCost = materialCost; 
@@ -45,7 +45,7 @@ public class RotRutCase : AuditableEntity
 
     public decimal RequestedAmount { get; private set; }
     
-    public int InvoiceId { get; private set; }
+    public int InvoiceNo { get; private set; }
     
     public decimal OtherCosts { get; private set; }
 

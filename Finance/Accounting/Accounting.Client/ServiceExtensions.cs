@@ -30,8 +30,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddVerifications(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(IVerificationsClient), configureClient)
-            .AddTypedClient<IVerificationsClient>((http, sp) => new VerificationsClient(http));
+            .AddHttpClient(nameof(IJournalEntriesClient), configureClient)
+            .AddTypedClient<IJournalEntriesClient>((http, sp) => new JournalEntriesClient(http));
 
         builder?.Invoke(b);
 
@@ -41,8 +41,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddEntries(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(IEntriesClient), configureClient)
-            .AddTypedClient<IEntriesClient>((http, sp) => new EntriesClient(http));
+            .AddHttpClient(nameof(ILedgerEntriesClient), configureClient)
+            .AddTypedClient<ILedgerEntriesClient>((http, sp) => new LedgerEntriesClient(http));
 
         builder?.Invoke(b);
 

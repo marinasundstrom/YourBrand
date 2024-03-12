@@ -485,7 +485,7 @@
         "entries": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/EntryDto"
+            "$ref": "#/definitions/LedgerEntryDto"
           }
         },
         "totalItems": {
@@ -494,7 +494,7 @@
         }
       }
     },
-    "EntryDto": {
+    "LedgerEntryDto": {
       "type": "object",
       "required": [
         "id",
