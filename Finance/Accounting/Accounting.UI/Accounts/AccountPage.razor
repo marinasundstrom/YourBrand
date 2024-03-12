@@ -30,7 +30,7 @@
     <MudTable ServerData="@(new Func<TableState, Task<TableData<LedgerEntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Date</MudTh>
-            <MudTh>Verification No</MudTh>
+            <MudTh>Journal Entry</MudTh>
             @*
         <MudTh>Debit</MudTh>
         <MudTh>Credit</MudTh>
