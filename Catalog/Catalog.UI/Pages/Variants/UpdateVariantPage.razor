@@ -4,7 +4,7 @@
 @inject IProductsClient ProductsClient
 @inject ISnackbar Snackbar
 
-<PageTitle>Variant</PageTitle>
+<AppPageTitle>Variant</AppPageTitle>
 
 @if (Variant is null)
 {
@@ -12,7 +12,7 @@
 }
 else
 {
-    <PageTitle>@Variant.Name (@Variant.Sku) @(modified ? "*" : string.Empty)</PageTitle>
+    <AppPageTitle>@Variant.Name (@Variant.Sku) @(modified ? "*" : string.Empty)</AppPageTitle>
 
     <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@Variant.Name @(modified ? "*" : string.Empty)</MudText>
 

@@ -2,7 +2,7 @@
 @inject IProductsClient ProductsClient
 @inject IDialogService DialogService
 
-<PageTitle>Product</PageTitle>
+<AppPageTitle>Product</AppPageTitle>
 
 @if (vm is null)
     {
@@ -10,7 +10,7 @@
     }
     else
     {
-    <PageTitle>@vm.Name (@vm.Sku)</PageTitle>
+    <AppPageTitle>@vm.Name (@vm.Sku)</AppPageTitle>
 
     <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@vm.Name</MudText>
 

@@ -4,12 +4,12 @@
 @inject PersistentComponentState ApplicationState
 @inject NavigationManager NavigationManager
 
-<SitePageTitle>Product</SitePageTitle>
+<SiteAppPageTitle>Product</SiteAppPageTitle>
 
 <article class="container">
     @if(product is not null) 
     {
-        <SitePageTitle>@product.Name</SitePageTitle>
+        <SiteAppPageTitle>@product.Name</SiteAppPageTitle>
 
         <HeadContent>
             <meta name="description" content="@product.Description">

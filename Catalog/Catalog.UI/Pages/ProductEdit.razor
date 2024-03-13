@@ -5,7 +5,7 @@
 @inject ISnackbar Snackbar
 @using System.ComponentModel.DataAnnotations
 
-<PageTitle>Product</PageTitle>
+<AppPageTitle>Product</AppPageTitle>
 
 @if (product is null)
 {
@@ -13,7 +13,7 @@
 }
 else
 {
-    <PageTitle>@product.Name (@product.Sku)</PageTitle>
+    <AppPageTitle>@product.Name (@product.Sku)</AppPageTitle>
 
     <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">@product.Name</MudText>
 
