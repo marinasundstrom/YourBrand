@@ -22,6 +22,8 @@
 }
 else 
 {
+    <AppPageTitle>@Item?.Id - @Item?.Name</AppPageTitle>
+
     <MudText Typo="Typo.h3" Class="mb-4">@Item?.Id - @Item?.Name</MudText>
 
     <MudButton Variant="Variant.Filled" OnClick="UpdateItem" StartIcon="@Icons.Filled.Edit" Color="Color.Default" Class="mb-2 me-2">
