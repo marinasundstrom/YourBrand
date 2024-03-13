@@ -1,0 +1,35 @@
+@inject IJSRuntime JS
+
+<div id="map"></div>
+
+@code {
+    IJSObjectReference module = null!;
+    IJSObjectReference map = null!;
+
+    [Parameter] public GeoCoordinates Coordinates { get; set; } = new GeoCoordinates(51.505, -0.09);
+
+    [Parameter] public int Zoom { get; set; } = 13;
+
+    protected override async Task OnInitializedAsync()
+    {
+        module = await JS.InvokeAsync<IJSObjectReference>(
+           "import", "./_content/Analytics.UI/Map.razor.js");
+
+        await InitMap();
+    }
+
+    async ValueTask InitMap()
+    {
+        map = await module.InvokeAsync<IJSObjectReference>("createMap", new[] { Coordinates.Latitude, Coordinates.Longitude }, Zoom);
+    }
+
+    public async ValueTask AddMarker(GeoCoordinates coordinates, string? text = null)
+    {
+        await module.InvokeVoidAsync("addMarker", map, new[] { coordinates.Latitude, coordinates.Longitude }, text);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await module.DisposeAsync();
+    }
+}

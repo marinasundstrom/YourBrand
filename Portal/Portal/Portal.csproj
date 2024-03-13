@@ -82,6 +82,9 @@
     <ProjectReference Include="..\..\Inventory\Inventory.UI\Inventory.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Analytics\Analytics.UI\Analytics.UI.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
     <ProjectReference Include="..\Portal.Modules.Loader\Portal.Modules.Loader.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

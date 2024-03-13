@@ -284,6 +284,17 @@
                     "shouldRunCommands": false
                 }
             ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Analytics",
+                    "commands": [
+                        "dotnet run --project Analytics/Analytics/Analytics.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
         }
     ]
 }

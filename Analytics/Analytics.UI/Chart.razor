@@ -1,0 +1,18 @@
+<MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+@code 
+{
+    Data? data;
+
+    private ChartOptions options = new ChartOptions()
+    {
+        YAxisFormat = "0 views",
+        YAxisTicks = 10
+    };
+
+    [Parameter]
+    public List<ChartSeries> Series { get; set; }
+
+    [Parameter]   
+    public string[] XAxisLabels { get; set; }
+}

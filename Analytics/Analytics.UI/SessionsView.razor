@@ -1,0 +1,38 @@
+@inject IStatisticsClient StatisticsClient
+
+<MudCheckBox Checked="DistinctByClient2" CheckedChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
+
+<Chart Series="@Series2" XAxisLabels="@XAxisLabels2" />
+
+@code 
+{
+    public List<ChartSeries> Series2 = new List<ChartSeries>();
+    public string[] XAxisLabels2 = new string[0];
+
+    public bool DistinctByClient2 { get; set;}
+
+    public async Task DistinctByClientChanged2(bool value)
+    {
+        DistinctByClient2 = value;
+        await LoadData2();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData2();
+    }
+
+    private async Task LoadData2()
+    {
+        var data = await StatisticsClient.GetSessionsCountAsync(null, null, DistinctByClient2);
+
+        XAxisLabels2 = data.Labels.ToArray();
+
+        if(Series2.Any()) Series2.Clear();
+
+        foreach (var d in data.Series)
+        {
+            Series2.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+    }
+}

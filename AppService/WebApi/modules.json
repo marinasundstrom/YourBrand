@@ -73,5 +73,10 @@
         "Name": "Inventory",
         "Assembly": "Inventory.UI",
         "Enabled": true
+    },
+    {
+        "Name": "Analytics",
+        "Assembly": "Analytics.UI",
+        "Enabled": true
     }
 ]
