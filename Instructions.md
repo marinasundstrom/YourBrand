@@ -5,6 +5,14 @@ Nginx has been replaced by YARP - the Proxy project.
 * Portal: https://localhost:5174/ (Actually the reverse proxy)
 * Identity server: https://localhost:5040/
 
+## Run dependencies in Docker
+
+To run dependencies, like database, in Docker:
+
+```
+docker compose -f docker-compose.deps.yml up -d
+```
+
 ## Seeding databases
 
 You need to seed the database for each service.
@@ -12,6 +20,8 @@ You need to seed the database for each service.
 ```
 dotnet run -- --seed
 ```
+
+If you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service. Each with a command already specified.
 
 ## Running services
 
@@ -21,7 +31,7 @@ Just run each service:
 dotnet run
 ```
 
-If you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service.
+Again, if you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service. Just add the ``--seed`` to the command.
 
 ### Important service
 
