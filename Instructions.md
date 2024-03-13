@@ -28,10 +28,10 @@ If you use VS Code, and you have the Restore Terminals extension installed, ther
 These services are essential for the function of YourBrand:
 
 * Proxy
-* ApiKeys
+* AppService (Portal)
 * IdentityService
-* AppService
 * HumanResources
+* ApiKeys
 
 ### Syncing user data
 
