@@ -21,6 +21,13 @@
 }
 else
 {
+    <AppPageTitle>
+                    @if (!string.IsNullOrEmpty(profile.DisplayName))
+            {@profile.DisplayName }
+        else
+        { <text>@profile.FirstName @profile.LastName</text>}
+    </AppPageTitle>
+
     <div class="d-flex justify-center mb-4">
         <ProfileImage PersonProfile="profile" IsEditable="true" />
     </div>
