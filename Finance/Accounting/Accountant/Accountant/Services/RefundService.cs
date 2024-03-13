@@ -32,12 +32,13 @@ namespace YourBrand.Accountant.Services
                     // TODO: Fix calculations with regards to VAT
 
                     var amountToRefund = invoice.Paid - invoice.Total;
-                    var subTotal = amountToRefund / (1m + (25m / 100m));
+                    var subTotal = amountToRefund / (1m + 0.25m);
                     var vat = amountToRefund - subTotal;
 
                     var journalEntryId = await _verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
                     {
                         Description = $"Betalade tillbaka för överbetalad faktura #{invoice.InvoiceNo}",
+                        InvoiceNo = int.Parse(invoice.InvoiceNo),
                         Entries = new[]
                         {
                             new CreateEntry
