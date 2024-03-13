@@ -138,7 +138,7 @@
                         </RowTemplate>
                     </MudTable>
 
-                    @* <MudField Label="Discount" Class="mt-4">@Model.Discount.FormatCurrency(order.Currency)</MudField> *@
+                    @* <MudField Label="Discount" Class="mt-4">@Model.Discount.FormatCurrency(invoice.Currency)</MudField> *@
                 }
             </MudPaper>
 
@@ -199,6 +199,54 @@
             }
             </MudItem>
         </MudGrid>
+
+         <MudExpansionPanels MultiExpansion="true" Class="mt-8">
+        <MudExpansionPanel Text="Billing detail">
+            <TitleContent>
+                  <div class="d-flex flex-grow-1 gap-1">
+                    <MudText Typo="Typo.h5" Class="mb-1">Billing details</MudText>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateBillingDetails" Size="Size.Small" Class="ms-4" />
+                </div>
+            </TitleContent>
+
+            <ChildContent>
+                @if (invoice?.BillingDetails is not null)
+                {
+                    var address = invoice.BillingDetails.Address;
+
+                    <MudText>@invoice.BillingDetails.FirstName @invoice.BillingDetails.LastName</MudText>
+                    <MudText>@invoice.BillingDetails.Ssn</MudText>
+
+                    <MudText Class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
+                    <MudText>@address.PostalCode @address.Locality</MudText>
+                    <MudText>@address.Country</MudText>
+
+                    <MudText Class="mt-2">@invoice.BillingDetails.PhoneNumber</MudText>
+                    <MudText>@invoice.BillingDetails.Email</MudText>
+                }
+            </ChildContent>
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Shipping details">
+            <TitleContent>
+                  <div class="d-flex flex-grow-1 gap-1">
+                    <MudText Typo="Typo.h5" Class="mb-1">Shipping details</MudText>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateShippingDetails" Size="Size.Small" Class="ms-4" />
+                </div>
+            </TitleContent>
+
+            <ChildContent>
+                @if (invoice.ShippingDetails is not null)
+                {
+                    var address = invoice.ShippingDetails.Address;
+
+                    <MudText>@invoice.ShippingDetails.FirstName @invoice.ShippingDetails.LastName</MudText>
+                    <MudText class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
+                    <MudText>@address.PostalCode @address.Locality</MudText>
+                    <MudText>@address.Country</MudText>
+                }
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
 
         <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
 
@@ -561,4 +609,34 @@
 
         await hubConnection.DisposeAsync();
     }
+
+    async Task UpdateBillingDetails()
+    {
+        var dialogParameters = new DialogParameters();
+        dialogParameters.Add(nameof(UpdateBillingDetailsDialog.InvoiceId), invoice.Id);
+        dialogParameters.Add(nameof(UpdateBillingDetailsDialog.Model), invoice.BillingDetails);
+
+        var dialogRef = DialogService.Show<UpdateBillingDetailsDialog>("Update billing details", dialogParameters);
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        invoice.BillingDetails = (BillingDetailsDto)result.Data;
     }
+
+    async Task UpdateShippingDetails()
+    {
+        var dialogParameters = new DialogParameters();
+        dialogParameters.Add(nameof(UpdateShippingDetailsDialog.InvoiceId), invoice.Id);
+        dialogParameters.Add(nameof(UpdateShippingDetailsDialog.Model), invoice.ShippingDetails);
+
+        var dialogRef = DialogService.Show<UpdateShippingDetailsDialog>("Update shipping details", dialogParameters);
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        invoice.ShippingDetails = (ShippingDetailsDto)result.Data;
+    }
+}

@@ -106,6 +106,8 @@ public class Invoice : Entity
         }
     }
 
+    //public string? CustomerId { get; private set; }
+
     //public bool IsVatIncluded { get; set; }
 
     public decimal SubTotal { get; private set; }

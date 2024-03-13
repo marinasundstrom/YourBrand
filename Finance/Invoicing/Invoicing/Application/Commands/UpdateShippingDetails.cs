@@ -1,32 +1,30 @@
-namespace YourBrand.Invoicing.Domain.Entities;
+using MediatR;
 
-/*
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Entities;
+
+namespace YourBrand.Invoicing.Application.Commands;
+
 public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto ShippingDetails) : IRequest<Result>
 {
-    public sealed class Validator : AbstractValidator<UpdateShippingDetails>
+    public sealed class Handler(IInvoicingContext context) : IRequestHandler<UpdateShippingDetails, Result>
     {
-        public Validator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-        }
-    }
-
-    public sealed class Handler(IOrderRepository orderRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateShippingDetails, Result>
-    {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUserRepository userRepository = userRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
+        private readonly IInvoicingContext _context = context;
 
         public async Task<Result> Handle(UpdateShippingDetails request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);
+            var invoice = await _context.Invoices
+                .Include(i => i.Items)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if (order is null)
+            if (invoice is null)
             {
-                return Errors.Orders.OrderNotFound;
+                return Errors.Invoices.InvoiceNotFound;
             }
 
-            var shippingDetails = order.ShippingDetails ??= new ShippingDetails();
+            var shippingDetails = invoice.ShippingDetails ??= new ShippingDetails();
 
             shippingDetails.FirstName = request.ShippingDetails.FirstName;
             shippingDetails.LastName = request.ShippingDetails.LastName;
@@ -35,12 +33,12 @@ public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto Shippin
             //PhoneNumber = request.ShippingDetails.PhoneNumber,
             shippingDetails.Address = Map(shippingDetails.Address ??= new Address(), request.ShippingDetails.Address);
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             return Results.Success;
         }
 
-        private Domain.ValueObjects.Address Map(Domain.ValueObjects.Address a, AddressDto address)
+        private Address Map(Address a, AddressDto address)
         {
             a.Thoroughfare = address.Thoroughfare;
             a.Premises = address.Premises;
@@ -55,4 +53,3 @@ public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto Shippin
         }
     }
 }
-*/

@@ -5,6 +5,7 @@ using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Application.Queries;
 using YourBrand.Invoicing.Application.Commands;
 using YourBrand.Invoicing.Domain.Enums;
+using YourBrand.Invoicing.Domain;
 using YourBrand.Invoicing.Infrastructure;
 
 using MassTransit;
@@ -17,6 +18,7 @@ using YourBrand.Invoicing.Infrastructure.Persistence;
 using System.Text.Json.Serialization;
 using YourBrand.Payments.Client;
 using YourBrand.Identity;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,7 +123,37 @@ app.MapGet("/Invoices/ByNo/{invoiceNo}", async (string invoiceNo, IMediator medi
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-app.MapPost("/invoices/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
+app.MapPut("/invoices/{invoiceNo}/billingDetails", async Task<Results<Ok, NotFound>> (string invoiceNo, BillingDetailsDto billingDetails, IMediator mediator = default!, CancellationToken cancellationToken = default!) =>
+    {
+        var result = await mediator.Send(new UpdateBillingDetails(invoiceNo, billingDetails), cancellationToken);
+
+        if (result.HasError(Errors.Invoices.InvoiceNotFound))
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok();
+    })
+    .WithName($"Invoices_{nameof(UpdateBillingDetails)}")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/invoices/{invoiceNo}/shippingDetails", async Task<Results<Ok, NotFound>> (string invoiceNo, ShippingDetailsDto shippingDetails, IMediator mediator = default!, CancellationToken cancellationToken = default!) =>
+    {
+        var result = await mediator.Send(new UpdateShippingDetails(invoiceNo, shippingDetails), cancellationToken);
+
+        if (result.HasError(Errors.Invoices.InvoiceNotFound))
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok();
+    })
+    .WithName($"Invoices_{nameof(UpdateShippingDetails)}")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPost("/invoices/{invoiceNo}/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
     => await mediator.Send(new ActivateRotAndRut(invoiceId, dto)))
     .WithName("Invoices_ActivateRotAndRut")
     .WithTags("Invoices")

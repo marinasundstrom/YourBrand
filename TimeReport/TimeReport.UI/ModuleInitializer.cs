@@ -36,6 +36,7 @@ public class ModuleInitializer : IModuleInitializer
 
         group.CreateItem("projects", () => resources["Projects"], MudBlazor.Icons.Material.Filled.List, "/projects");
         group.CreateItem("report-time", () => resources["Report time"], MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
-        group.CreateItem("reports", () => resources["Reports"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
+        group.CreateItem("timesheets", () => resources["Timesheets"], MudBlazor.Icons.Material.Filled.ListAlt, "/timesheets");
+        group.CreateItem("generate-reports", () => resources["GenerateReport"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
     }
 }

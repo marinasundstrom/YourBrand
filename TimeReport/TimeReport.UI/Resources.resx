@@ -21,8 +21,10 @@
     <data name="Report time">
       <value>Report time</value>
     </data>
-    <data name="Reports">
-      <value>Reports</value>
+    <data name="GenerateReport">
+      <value>Generate report</value>
+    </data>
+    <data name="Timesheets">
+      <value>Timesheets</value>
     </data>
 </root>
-

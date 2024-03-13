@@ -105,6 +105,80 @@
         }
       }
     },
+    "/invoices/{invoiceNo}/billingDetails": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_UpdateBillingDetails",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "invoiceNo",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "billingDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingDetailsDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/invoices/{invoiceNo}/shippingDetails": {
+      "put": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_UpdateShippingDetails",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "invoiceNo",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "shippingDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ShippingDetailsDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/invoices/activateRotAndRut": {
       "post": {
         "tags": [

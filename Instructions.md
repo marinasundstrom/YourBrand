@@ -30,3 +30,10 @@ Solution - will recreate everything:
 Individual projects - will recreate service and sync users:
 
     seed.sh --sync-users
+
+
+## DevTunnel
+
+```
+devtunnel host -p 5174 -a
+```

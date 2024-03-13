@@ -1,34 +1,31 @@
 using MediatR;
 
-namespace YourBrand.Invoicing.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
-/*
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Entities;
+
+namespace YourBrand.Invoicing.Application.Commands;
+
+
 public sealed record UpdateBillingDetails(string Id, BillingDetailsDto BillingDetails) : IRequest<Result>
 {
-    public sealed class Validator : AbstractValidator<UpdateBillingDetails>
+    public sealed class Handler(IInvoicingContext context) : IRequestHandler<UpdateBillingDetails, Result>
     {
-        public Validator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-        }
-    }
-
-    public sealed class Handler(IOrderRepository orderRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateBillingDetails, Result>
-    {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUserRepository userRepository = userRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
+        private readonly IInvoicingContext _context = context;
 
         public async Task<Result> Handle(UpdateBillingDetails request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);
+            var invoice = await _context.Invoices
+                .Include(i => i.Items)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if (order is null)
+            if (invoice is null)
             {
-                return Errors.Orders.OrderNotFound;
+                return Errors.Invoices.InvoiceNotFound;
             }
 
-            var billingDetails = order.BillingDetails ??= new BillingDetails();
+            var billingDetails = invoice.BillingDetails ??= new BillingDetails();
 
             billingDetails.FirstName = request.BillingDetails.FirstName;
             billingDetails.LastName = request.BillingDetails.LastName;
@@ -37,7 +34,7 @@ public sealed record UpdateBillingDetails(string Id, BillingDetailsDto BillingDe
             billingDetails.PhoneNumber = request.BillingDetails.PhoneNumber;
             billingDetails.Address = Map(billingDetails.Address ??= new Address(), request.BillingDetails.Address);
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             return Results.Success;
         }
@@ -57,4 +54,3 @@ public sealed record UpdateBillingDetails(string Id, BillingDetailsDto BillingDe
         }
     }
 }
-*/
