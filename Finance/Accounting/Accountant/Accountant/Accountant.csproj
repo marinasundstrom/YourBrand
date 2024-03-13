@@ -11,8 +11,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
   <ItemGroup>
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
-    <PackageReference Include="Microsoft.Tye.Extensions.Configuration"
-      Version="0.10.0-alpha.21420.1" />
+    <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.11" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.11" />
     <PackageReference Include="Hangfire" Version="1.8.11" />
@@ -50,6 +49,8 @@
     <ProjectReference Include="..\Accountant.Domain\Accountant.Domain.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\..\..\Diagnostics\Diagnostics.csproj" />
   </ItemGroup>
 
 </Project>

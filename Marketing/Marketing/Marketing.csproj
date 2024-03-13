@@ -23,7 +23,7 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Marketing.Contracts\Marketing.Contracts.csproj" />
+        <ProjectReference Include="..\Marketing.Contracts\Marketing.Contracts.csproj" />
 		<ProjectReference Include="..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
@@ -33,5 +33,7 @@
 		<ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
+        <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
 	</ItemGroup>
 </Project>

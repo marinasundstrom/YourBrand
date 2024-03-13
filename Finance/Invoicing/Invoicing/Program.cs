@@ -20,7 +20,32 @@ using YourBrand.Payments.Client;
 using YourBrand.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
+using YourBrand.Invoicing;
+
 var builder = WebApplication.CreateBuilder(args);
+
+string ServiceName = "Invoicing"
+;
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
+
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+builder.Services.AddProblemDetails();
 
 var Configuration = builder.Configuration;
 
@@ -84,7 +109,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
-    app.UseSwaggerUi();
 }
 else
 {
@@ -160,7 +184,7 @@ app.MapPost("/invoices/{invoiceNo}/activateRotAndRut", async (string invoiceId, 
     .Produces(StatusCodes.Status200OK);
 
 app.MapGet("/Invoices/{invoiceId}/File", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
-    => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
+    => Microsoft.AspNetCore.Http.Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);

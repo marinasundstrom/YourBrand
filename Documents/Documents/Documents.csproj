@@ -32,6 +32,8 @@
 		<ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
+		<ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
+		<ProjectReference Include="..\..\Extensions\Extensions.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Application\Events\" />

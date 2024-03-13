@@ -26,6 +26,11 @@ using YourBrand.TimeReport.Services;
 using YourBrand.Tenancy;
 using YourBrand.Identity;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
 static class Program
 {
     /// <param name="seed">Seed the database</param>
@@ -35,6 +40,24 @@ static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        string ServiceName = "TimeReport"
+;
+        string ServiceVersion = "1.0";
+
+        // Add services to container
+
+        builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                                .Enrich.WithProperty("Application", ServiceName)
+                                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+        builder.Services
+            .AddOpenApi(ServiceName, ApiVersions.All)
+            .AddApiVersioningServices();
+
+        builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+        builder.Services.AddProblemDetails();
+
         var services = builder.Services;
 
         var Configuration = builder.Configuration;
@@ -43,7 +66,6 @@ static class Program
         {
             builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
         }
-
 
         services
             .AddApplication(Configuration)
@@ -132,6 +154,10 @@ static class Program
         services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
 
         var app = builder.Build();
+
+        app.UseSerilogRequestLogging();
+
+        app.MapObservability();
 
         if (app.Environment.IsDevelopment())
         {

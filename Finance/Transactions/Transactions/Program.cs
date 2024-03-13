@@ -17,7 +17,32 @@ using YourBrand.Transactions.Hubs;
 using YourBrand.Transactions.Infrastructure;
 using YourBrand.Transactions.Infrastructure.Persistence;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
+using YourBrand.Transactions;
+
 var builder = WebApplication.CreateBuilder(args);
+
+string ServiceName = "Transactions"
+;
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
+
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+builder.Services.AddProblemDetails();
 
 var Configuration = builder.Configuration;
 
@@ -78,11 +103,14 @@ builder.Services.AddMassTransit(x =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
+app.MapObservability();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
-    app.UseSwaggerUi();
 }
 else
 {

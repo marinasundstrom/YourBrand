@@ -17,7 +17,32 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
+using YourBrand.Orders;
+
 var builder = WebApplication.CreateBuilder(args);
+
+string ServiceName = "Orders"
+;
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
+
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+builder.Services.AddProblemDetails();
 
 var Configuration = builder.Configuration;
 
@@ -117,11 +142,14 @@ builder.Services.AddCatalogClient((sp, http) =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
+app.MapObservability();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
-    app.UseSwaggerUi();
 }
 else
 {

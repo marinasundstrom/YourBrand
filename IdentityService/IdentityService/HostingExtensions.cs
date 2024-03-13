@@ -139,10 +139,6 @@ internal static class HostingExtensions
             app.UseDeveloperExceptionPage();
 
             app.UseOpenApi();
-            app.UseSwaggerUi(c =>
-            {
-                c.DocumentTitle = "Web API v1";
-            });
         }
 
         app.UseStaticFiles();

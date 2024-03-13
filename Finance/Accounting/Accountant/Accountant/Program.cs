@@ -17,9 +17,33 @@ using MassTransit;
 using YourBrand.Payments.Client;
 using YourBrand.Accountant.Domain;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
+
+string ServiceName = "Accountant"
+;
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
+
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+builder.Services.AddProblemDetails();
+
 
 builder.Services.AddDomain();
 
@@ -79,6 +103,10 @@ builder.Services.AddHangfire(configuration => configuration
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+
+app.MapObservability();
 
 app.MapGet("/", () => "Hello World!");
 

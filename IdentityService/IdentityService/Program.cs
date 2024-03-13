@@ -3,6 +3,11 @@
 using Serilog;
 using YourBrand.IdentityService.Infrastructure.Persistence;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
 static class Program
 {
     /// <param name="seed">Seed the database</param>
@@ -10,9 +15,9 @@ static class Program
     /// <returns></returns>
     static async Task Main(bool seed, string? connectionString, string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
+        /* Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
-            .CreateBootstrapLogger();
+            .CreateBootstrapLogger();*/
 
         Log.Information("Starting up");
 
@@ -20,19 +25,47 @@ static class Program
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            string ServiceName = "IdentityService"
+;
+            string ServiceVersion = "1.0";
+
+            // Add services to container
+
+            builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                                    .Enrich.WithProperty("Application", ServiceName)
+                                    .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+            builder.Services
+                .AddOpenApi(ServiceName, ApiVersions.All)
+                .AddApiVersioningServices();
+
+            builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+            builder.Services.AddProblemDetails();
+
             if (connectionString is not null)
             {
                 builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
             }
 
+            /*
             builder.Host.UseSerilog((ctx, lc) => lc
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
                 .Enrich.FromLogContext()
-                .ReadFrom.Configuration(ctx.Configuration));
+                .ReadFrom.Configuration(ctx.Configuration));*/
 
             var app = builder
                 .ConfigureServices()
                 .ConfigurePipeline();
+
+            app.UseSerilogRequestLogging();
+
+            app.MapObservability();
+
+            if(app.Environment.IsDevelopment()) 
+            {
+                app.UseOpenApi();
+            }
 
             //await SeedData.EnsureSeedData(app);
 

@@ -23,7 +23,7 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Inventory.Contracts\Inventory.Contracts.csproj" />
+        <ProjectReference Include="..\Inventory.Contracts\Inventory.Contracts.csproj" />
 		<ProjectReference Include="..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
@@ -40,5 +40,7 @@
             Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
+        <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
 	</ItemGroup>
 </Project>

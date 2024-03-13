@@ -3,7 +3,32 @@
 using YourBrand.Notifications.Consumers;
 using YourBrand.Notifications.Services;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
+using YourBrand.EmailService;
+
 var builder = WebApplication.CreateBuilder(args);
+
+string ServiceName = "EmailService"
+;
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
+
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+builder.Services.AddProblemDetails();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -22,6 +47,10 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+
+app.MapObservability();
 
 app.MapGet("/", () => "Hello World!");
 

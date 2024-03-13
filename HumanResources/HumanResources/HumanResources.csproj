@@ -12,7 +12,6 @@
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.1.5" />
 
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0-dev-00281" />
 
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
@@ -53,5 +52,7 @@
     <ProjectReference Include="..\HumanResources.Consumers\HumanResources.Consumers.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
   </ItemGroup>
 </Project>

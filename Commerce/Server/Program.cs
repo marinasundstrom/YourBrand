@@ -51,7 +51,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
     app.UseOpenApi();
-    app.UseSwaggerUi();
 }
 else
 {

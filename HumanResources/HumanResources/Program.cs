@@ -20,6 +20,11 @@ using NSwag.Generation.Processors.Security;
 using YourBrand.HumanResources.Consumers;
 using YourBrand.HumanResources;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
 static class Program
 {
     static readonly string MyAllowSpecificOrigins = "MyPolicy";
@@ -30,8 +35,25 @@ static class Program
     /// <returns></returns>
     static async Task Main(bool seed, string connectionString, string[] args)
     {
-
         var builder = WebApplication.CreateBuilder(args);
+
+        string ServiceName = "HumanResource"
+;
+        string ServiceVersion = "1.0";
+
+        // Add services to container
+
+        builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                                .Enrich.WithProperty("Application", ServiceName)
+                                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+        builder.Services
+            .AddOpenApi(ServiceName, ApiVersions.All)
+            .AddApiVersioningServices();
+
+        builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+        builder.Services.AddProblemDetails();
 
         var services = builder.Services;
 
@@ -156,15 +178,15 @@ static class Program
 
         var app = builder.Build();
 
+        app.UseSerilogRequestLogging();
+
+        app.MapObservability();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
 
             app.UseOpenApi();
-            app.UseSwaggerUi(c =>
-            {
-                c.DocumentTitle = "Web API v1";
-            });
         }
 
         app.UseHttpsRedirection();
