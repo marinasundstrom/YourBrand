@@ -29,6 +29,13 @@
     <AppBarTray />
 </MudAppBar>
 
+<MudDialog @bind-IsVisible="_searchDialogOpen" Options="_dialogOptions" Class="docs-gray-bg"
+    ClassContent="docs-mobile-dialog-search">
+    <DialogContent>
+        <SearchBox />
+    </DialogContent>
+</MudDialog>
+
 @code {
     ColorScheme? _currentColorScheme;
     private bool _searchDialogOpen;
