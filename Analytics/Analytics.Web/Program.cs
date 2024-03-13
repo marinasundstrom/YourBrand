@@ -26,20 +26,37 @@ using Azure.Storage.Blobs;
 using Azure.Identity;
 using Microsoft.Extensions.Caching.Memory;
 
+using Serilog;
+
+using YourBrand;
+using YourBrand.Extensions;
+
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 Activity.ForceDefaultIdFormat = true;
-
-// Define some important constants to initialize tracing with
-var serviceName = "YourBrand.Analytics";
-var serviceVersion = "1.0.0";
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
+string ServiceName = "Analytics"
+;
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
+
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
+
+var configuration = builder.Configuration;
 
 builder.Services.AddCors(options =>
 {
@@ -56,54 +73,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-builder.Services.AddApiVersioning(options =>
-        {
-            options.AssumeDefaultVersionWhenUnspecified = true;
-            options.DefaultApiVersion = new ApiVersion(1, 0);
-            options.ReportApiVersions = true;
-            options.ApiVersionReader = new UrlSegmentApiVersionReader();
-        });
-
-builder.Services.AddVersionedApiExplorer(option =>
-        {
-            option.GroupNameFormat = "VVV";
-            option.SubstituteApiVersionInUrl = true;
-        });
-
-// Register the Swagger services
-
-#pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
-var provider = builder.Services
-    .BuildServiceProvider()
-    .GetRequiredService<IApiVersionDescriptionProvider>();
-#pragma warning restore ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
-
-foreach (ApiVersionDescription description in provider.ApiVersionDescriptions)
-{
-    builder.Services.AddOpenApiDocument(config =>
-    {
-        config.DocumentName = $"v{description.ApiVersion}";
-        config.PostProcess = document =>
-        {
-            document.Info.Title = "Analytics API";
-            document.Info.Version = $"v{description.ApiVersion.ToString()}";
-        };
-        config.ApiGroupNames = new[] { description.ApiVersion.ToString() };
-
-        config.DefaultReferenceTypeNullHandling = NJsonSchema.Generation.ReferenceTypeNullHandling.NotNull;
-
-        config.AddSecurity("JWT", new OpenApiSecurityScheme
-        {
-            Type = OpenApiSecuritySchemeType.ApiKey,
-            Name = "Authorization",
-            In = OpenApiSecurityApiKeyLocation.Header,
-            Description = "Type into the textbox: Bearer {your JWT token}."
-        });
-
-        config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-    });
-}
 
 builder.Services.AddSignalR();
 
@@ -171,28 +140,6 @@ builder.Services.AddAzureClients(builder =>
 
 builder.Services.AddMassTransitForApp();
 
-// Configure important OpenTelemetry settings, the console exporter, and instrumentation library
-builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
-{
-    tracerProviderBuilder
-        .AddConsoleExporter()
-        .AddZipkinExporter(o =>
-        {
-            o.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
-            o.ExportProcessorType = OpenTelemetry.ExportProcessorType.Simple;
-        })
-        .AddSource(serviceName)
-        .AddSource("MassTransit")
-        .SetResourceBuilder(
-            ResourceBuilder.CreateDefault()
-                .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
-        .AddHttpClientInstrumentation()
-        .AddAspNetCoreInstrumentation()
-        .AddSqlClientInstrumentation()
-        .AddMassTransitInstrumentation();
-//        .AddRedisInstrumentation();
-});
-
 builder.Services.AddRateLimiter(options =>
 {
     options.OnRejected = (context, cancellationToken) =>
@@ -225,6 +172,10 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
+app.MapObservability();
+
 app.UseRouting();
 
 // Configure the HTTP request pipeline.
@@ -233,7 +184,6 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
     app.UseOpenApi();
-    app.UseSwaggerUi3();
 }
 
 app.UseCors(MyAllowSpecificOrigins);
@@ -267,7 +217,7 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     if (dbProviderName!.Contains("SqlServer"))
     {
-        await context.Database.EnsureDeletedAsync();
+        //await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync(); 
 
         try

@@ -24,7 +24,6 @@ namespace YourBrand.Analytics.Infrastructure.Persistence
 
 #if DEBUG
                 options
-                    .LogTo(Console.WriteLine)
                     .EnableSensitiveDataLogging();
 #endif
             });

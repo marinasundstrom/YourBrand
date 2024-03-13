@@ -15,7 +15,7 @@ public record RegisterGeoLocation(string ClientId, string SessionId, YourBrand.A
             this.context = context;
         }
 
-        public async Task<Unit> Handle(RegisterGeoLocation request, CancellationToken cancellationToken)
+        public async Task Handle(RegisterGeoLocation request, CancellationToken cancellationToken)
         {
             var session = await context.Sessions
                 .FirstAsync(x => x.Id == request.SessionId && x.ClientId == request.ClientId, cancellationToken);
@@ -23,7 +23,6 @@ public record RegisterGeoLocation(string ClientId, string SessionId, YourBrand.A
             session.Coordinates = request.Coordinates;
 
             await context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
     }
 }
