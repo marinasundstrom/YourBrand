@@ -83,8 +83,8 @@ public static class Mapper
             Quantity = vm.Quantity,
             VatRate = vm.VatRate,
             IsTaxDeductibleService = vm.IsTaxDeductibleService,
-            DomesticService = vm.DomesticService is null ? null
-             : vm.DomesticService.ToDto()
+            DomesticService = !vm.IsTaxDeductibleService? null
+             : vm.DomesticService?.ToDto()
         };
     }
 

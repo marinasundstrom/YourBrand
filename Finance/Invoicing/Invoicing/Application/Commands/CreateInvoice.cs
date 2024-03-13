@@ -27,7 +27,7 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note)
 
             try 
             {
-                invoice.InvoiceNo = (_context.Invoices.Select(x => x.Id).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
+                invoice.InvoiceNo = (_context.Invoices.Select(x => x.InvoiceNo).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
             }
             catch 
             {

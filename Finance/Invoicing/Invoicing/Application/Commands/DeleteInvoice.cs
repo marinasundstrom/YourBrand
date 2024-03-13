@@ -36,6 +36,8 @@ public record DeleteInvoice(string InvoiceId) : IRequest
                 throw new Exception();
             }
 
+            invoice.VatAmounts.Clear();
+
             _context.Invoices.Remove(invoice);
 
             await _context.SaveChangesAsync(cancellationToken);
