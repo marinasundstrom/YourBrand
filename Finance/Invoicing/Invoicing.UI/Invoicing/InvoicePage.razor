@@ -142,15 +142,11 @@
                 }
             </MudPaper>
 
+    @if (payment is not null)
+            {
             <MudPaper Elevation="25" Class="mt-8 pa-4">
 
                 <MudGrid>
-                  @if (Model.DomesticService?.RequestedAmount is not null)
-            {
-                        <MudItem xs="6" sm="6" md="6" lg="12">
-                            <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">-@invoice.DomesticService?.RequestedAmount.FormatCurrency(invoice.Currency)</MudField>
-                        </MudItem>
-            }
 
             @if (payment is not null)
             {
@@ -187,6 +183,20 @@
             }
             </MudGrid>
             </MudPaper>
+            }
+
+            @if (Model.DomesticService?.RequestedAmount is not null)
+            {
+                        <MudPaper Elevation="25" Class="mt-8 pa-4">
+                            <MudGrid>
+
+                            <MudItem xs="6" sm="6" md="6" lg="12">
+                                <MudField Label="@(Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType ? "Rot" : "Rut")">-@invoice.DomesticService?.RequestedAmount.FormatCurrency(invoice.Currency)</MudField>
+                            </MudItem>
+
+                            </MudGrid>
+                        </MudPaper>
+            }
             </MudItem>
         </MudGrid>
 
