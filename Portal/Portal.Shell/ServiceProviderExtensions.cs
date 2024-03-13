@@ -6,6 +6,7 @@ using YourBrand.Portal.Authentication;
 using YourBrand.Portal.Localization;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Theming;
+using YourBrand.Portal.Notifications;
 using YourBrand.Portal.Widgets;
 
 namespace YourBrand.Portal;
@@ -19,6 +20,7 @@ public static class ServiceProviderExtensions
         CreateDashboard(services);
 
         return services
+            .UseNotifications()
             .UseTheming()
             .UseLocalization()
             .UseAuthentication();
