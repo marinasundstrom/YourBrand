@@ -33,7 +33,7 @@
     <ProjectReference Include="..\..\TimeReport\TimeReport.UI\TimeReport.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\Portal.Shared\Portal.Shared.csproj">
+    <ProjectReference Include="..\Portal.Shell\Portal.Shell.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference

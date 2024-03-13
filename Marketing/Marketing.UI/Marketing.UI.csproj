@@ -24,7 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Marketing.Client\Marketing.Client.csproj" />
     <ProjectReference Include="..\..\Finance\Transactions\Transactions.UI\Transactions.UI.csproj" />
-    <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
     <ProjectReference Include="..\..\Finance\Transactions\Transactions.Client\Transactions.Client.csproj" />
     <ProjectReference Include="..\..\Finance\Payments\Payments.Client\Payments.Client.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />

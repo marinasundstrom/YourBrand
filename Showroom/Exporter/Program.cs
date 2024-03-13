@@ -69,6 +69,3 @@ var experiences2 = experiences
     });
 
 Console.WriteLine(JsonSerializer.Serialize(experiences2, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true }));
-
-
-Console.WriteLine(JsonSerializer.Serialize(experiences3, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true }));

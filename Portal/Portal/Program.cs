@@ -31,8 +31,7 @@ builder.Services.AddBlazoredLocalStorage();
 
 builder.Services
     .AddServices()
-    .AddThemeServices()
-    .AddNavigationServices()
+    .AddShellServices()
     .AddScoped<ModuleLoader>();
 
 await LoadModules(builder.Services);
@@ -42,44 +41,10 @@ var app = builder.Build();
 var moduleBuilder = app.Services.GetRequiredService<ModuleLoader>();
 moduleBuilder.ConfigureServices();
 
-var navManager = app.Services
-    .GetRequiredService<NavManager>();
-
-var resources = app.Services.GetRequiredService<IStringLocalizer<YourBrand.Portal.Resources>>();
-
-var group = navManager.GetGroup("administration") ?? navManager.CreateGroup("administration", () => resources["Administration"]);
-
-group.CreateItem("users", options =>
-{
-    options.NameFunc = () => resources["Users"];
-    options.Icon = MudBlazor.Icons.Material.Filled.Person;
-    options.Href = "/users";
-    options.RequiresAuthorization = true;
-});
-
-group.CreateItem("setup", options =>
-{
-    options.NameFunc = () => resources["SetUp"];
-    options.Icon = MudBlazor.Icons.Material.Filled.Settings;
-    options.Href = "/setup";
-});
-
-var notificationsGroup = group.CreateGroup("notifications", options =>
-{
-    options.NameFunc = () => resources["Notifications"];
-    options.Icon = MudBlazor.Icons.Material.Filled.Notifications;
-    options.Href = "/notifications";
-});
-
-notificationsGroup.CreateItem("send-notification", options =>
-{
-    options.NameFunc = () => resources["Send notification"];
-    options.Icon = MudBlazor.Icons.Material.Filled.NotificationAdd;
-    options.Href = "/notifications/create";
-});
-
+app.Services.UseShell();
 
 await app.Services.Localize();
+
 
 await app.RunAsync();
 

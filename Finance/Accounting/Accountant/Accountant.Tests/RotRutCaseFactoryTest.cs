@@ -57,11 +57,11 @@ public class EntriesFactoryTest
         {
             ProductType = ProductType.Service,
             Description = "Item 1",
-            UnitPrice = 560,
+            Price = 560,
             Unit = "pcs",
             VatRate = 0.25,
             Quantity = 2,
-            LineTotal = 1120
+            Total = 1120
         });
         invoice.SubTotal = 1120;
         invoice.Vat = 280;
@@ -77,11 +77,11 @@ public class EntriesFactoryTest
         {
             ProductType = ProductType.Service,
             Description = "Cleaning",
-            UnitPrice = 560,
+            Price = 560,
             Unit = "hours",
             VatRate = 0.25,
             Quantity = 2,
-            LineTotal = 1120,
+            Total = 1120,
             IsTaxDeductibleService = true,
             DomesticService = new InvoiceItemDomesticServiceDto
             {
@@ -109,11 +109,11 @@ public class EntriesFactoryTest
         {
             ProductType = ProductType.Service,
             Description = "Cleaning",
-            UnitPrice = 560,
+            Price = 560,
             Unit = "hours",
             VatRate = 0.25,
             Quantity = 2,
-            LineTotal = 1120,
+            Total = 1120,
             IsTaxDeductibleService = true,
             DomesticService = new InvoiceItemDomesticServiceDto
             {
@@ -125,11 +125,11 @@ public class EntriesFactoryTest
         {
             ProductType = ProductType.Good,
             Description = "Material",
-            UnitPrice = 100,
+            Price = 100,
             Unit = "pcs",
             VatRate = 0.25,
             Quantity = 1,
-            LineTotal = 100,
+            Total = 100,
             IsTaxDeductibleService = true
         });
         invoice.DomesticService = new InvoiceDomesticServiceDto

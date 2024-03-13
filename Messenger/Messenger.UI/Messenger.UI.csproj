@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Messenger.Client\Messenger.Client.csproj" />
-    <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Services\Portal.Services.csproj" />
     <ProjectReference Include="..\..\Portal\MudBlazor.Extensions\MudBlazor.Extensions.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />

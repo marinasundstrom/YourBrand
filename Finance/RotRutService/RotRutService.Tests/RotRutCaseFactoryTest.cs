@@ -13,11 +13,11 @@ public class RotRutCaseFactoryTest
         {
             ProductType = ProductType.Service,
             Description = "Cleaning",
-            UnitPrice = 560,
+            Price = 560,
             Unit = "hours",
             VatRate = 0.25,
             Quantity = 2,
-            LineTotal = 1120,
+            Total = 1120,
             IsTaxDeductibleService = true,
             DomesticService = new InvoiceItemDomesticServiceDto
             {

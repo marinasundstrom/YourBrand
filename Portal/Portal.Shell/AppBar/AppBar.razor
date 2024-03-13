@@ -1,0 +1,64 @@
+﻿@using YourBrand.Portal.Theming
+@using YourBrand.Portal.Search
+@using YourBrand.Portal.Authentication
+@implements IDisposable
+@inject IThemeManager ThemeManager
+@inject IStringLocalizer<AppBar> T
+
+<MudAppBar Elevation="25" Dense="true">
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+        OnClick="@(async (e) => await DrawerToggleCallback.InvokeAsync())" />
+    <a href="/">
+        <MudIcon Icon="@Icons.Filled.DataUsage" Color="@Color.Primary" Class="mt-1" />
+    </a>
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <MudText Typo="Typo.h5" Class="ms-2"><b>@T["AppTitle"]</b></MudText>
+    </MudHidden>
+    <MudSpacer />
+    <AuthorizeView>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <SearchBox />
+        </MudHidden>
+        <MudSpacer />
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="@Icons.Material.Filled.Search" Class="mx-1" Color="Color.Inherit" Edge="Edge.End"
+                OnClick="@(() => OpenSearchDialog())" />
+        </MudHidden>
+        <Notifications />
+    </AuthorizeView>
+    <AppBarTray />
+</MudAppBar>
+
+@code {
+    ColorScheme? _currentColorScheme;
+    private bool _searchDialogOpen;
+    private void OpenSearchDialog() => _searchDialogOpen = true;
+    private DialogOptions _dialogOptions = new()
+    {
+        Position = DialogPosition.TopCenter,
+        MaxWidth = MaxWidth.Medium,
+        NoHeader
+    = true
+    };
+
+    [Parameter]
+    public EventCallback DrawerToggleCallback { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+        _currentColorScheme = ThemeManager.CurrentColorScheme;
+    }
+
+    private void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs e)
+    {
+        _currentColorScheme = e.ColorScheme;
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+
+    }
+}

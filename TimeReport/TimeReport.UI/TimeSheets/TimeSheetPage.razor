@@ -2,6 +2,7 @@
 @page "/timesheet/{year:int}/{week:int}"
 @attribute [Authorize]
 
+@using YourBrand.Portal.Layouts
 @layout MainLayout2
 
 @using Microsoft.AspNetCore.Components.Authorization
@@ -21,6 +22,8 @@
 
 @if (timeSheet is not null && ActivitiesModels is not null && Year is not null && Week is not null)
 {
+    <AppPageTitle>Week @Week - @Year</AppPageTitle>
+
     <MudText Typo="Typo.h5">@timeSheet?.User?.GetDisplayName()</MudText>
 
     <MudText Typo="Typo.h3" GutterBottom="true">Week @Week - @Year</MudText>

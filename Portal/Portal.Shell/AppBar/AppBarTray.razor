@@ -1,0 +1,75 @@
+@using MudBlazor.Services
+@implements IAsyncDisposable
+@inject IAppBarTrayService AppBarTrayService
+@inject IBreakpointService BreakpointListener
+
+@foreach (var item in AppBarTrayService.Items)
+{
+    if(item.IsVisible) 
+    {
+        <AppBarTrayItemView @key="@item.GetHashCode()" Item="@item" />
+    }
+}
+
+@if(false) 
+{
+    <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+                PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+        <ActivatorContent>
+            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" Class="me-2" />
+        </ActivatorContent>
+        <ChildContent>
+            <MudMenuItem>
+                
+            </MudMenuItem>
+        </ChildContent>
+    </MudMenu>
+}
+
+@code 
+{
+    private Guid _subscriptionId;
+	private Breakpoint _start;
+
+    protected override void OnInitialized()
+    {
+        AppBarTrayService.ItemAdded += AppBarTrayUpdated;
+        AppBarTrayService.ItemRemoved += AppBarTrayUpdated;
+        AppBarTrayService.ItemUpdated += AppBarTrayUpdated;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			var subscriptionResult = await BreakpointListener.Subscribe((breakpoint) =>
+			{
+				InvokeAsync(StateHasChanged);
+			}, new ResizeOptions
+			{
+				ReportRate = 250,
+				NotifyOnBreakpointOnly = true,
+			});
+
+			_start = subscriptionResult.Breakpoint;
+			_subscriptionId = subscriptionResult.SubscriptionId;
+			StateHasChanged();
+		}
+
+		await base.OnAfterRenderAsync(firstRender);
+	}
+
+    private void AppBarTrayUpdated(object? sender, EventArgs e) 
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync() 
+    {
+        await BreakpointListener.Unsubscribe(_subscriptionId);
+        
+        AppBarTrayService.ItemAdded -= AppBarTrayUpdated;
+        AppBarTrayService.ItemRemoved -= AppBarTrayUpdated;
+        AppBarTrayService.ItemUpdated -= AppBarTrayUpdated;
+    }
+}

@@ -1,0 +1,95 @@
+@using MudBlazor.Services
+@implements IDisposable
+@inject IWidgetService WidgetService
+
+<style>
+    .widget-area {
+        display: grid;
+        /* grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); */
+        gap: 15px;
+        grid-auto-flow: dense;
+    }
+
+    @@media (max-width: 960px) {
+        .widget-area .widget-view {
+            grid-column: auto !important;
+            grid-row: auto !important;
+        }
+    }
+</style>
+
+<div class="widget-area">
+    @{
+        int maxWidth = 3;
+
+        int currentX = 1;
+        int currentY = 1;
+    }
+    @foreach (var widget in WidgetService.Widgets)
+    {
+        if(widget.IsVisible) 
+        {
+            int widgetWidth = GetWidthSpan(widget.Size);
+            int widgetHeight = GetHeightSpan(widget.Size);
+
+            if(currentX + (widgetWidth - 1) > maxWidth) 
+            {
+                currentX = 1;
+                currentY++;
+            }
+
+            int x = currentX;
+            int y = currentY;
+
+            <CascadingValue Value="@this">
+                <WidgetView @key="@widget.GetHashCode()" Widget="@widget" 
+                    Width="widgetWidth" Height="widgetHeight"
+                    X="x" Y="y" />
+            </CascadingValue>
+
+            currentX += widgetWidth;
+        }
+    }
+</div>
+
+@code 
+{
+    [Parameter]
+    public string WidgetAreaId { get; set; } = default!;
+
+    [Parameter]
+    public int Width { get; set; } = 3;
+
+    [Parameter]
+    public int Height { get; set; } = 3;
+
+    static int GetWidthSpan(WidgetSize size) => size switch {
+        WidgetSize.Small => 1,
+        WidgetSize.Medium => 2,
+        WidgetSize.Large => 3
+    };
+    static int GetHeightSpan(WidgetSize size) => size switch {
+        WidgetSize.Small => 1,
+        WidgetSize.Medium => 1,
+        WidgetSize.Large => 1
+    };
+
+    protected override void OnInitialized()
+    {
+        WidgetService.WidgetAdded += WidgetUpdated;
+        WidgetService.WidgetRemoved += WidgetUpdated;
+        WidgetService.WidgetUpdated += WidgetUpdated;
+    }
+
+    private async void WidgetUpdated(object? sender, EventArgs e) 
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose() 
+    {        
+        WidgetService.WidgetAdded -= WidgetUpdated;
+        WidgetService.WidgetRemoved -= WidgetUpdated;
+        WidgetService.WidgetUpdated -= WidgetUpdated;
+    }
+}

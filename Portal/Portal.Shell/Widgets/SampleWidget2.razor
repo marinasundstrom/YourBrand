@@ -1,0 +1,8 @@
+<p>Lorem ipsum</p>
+
+<MudButton Variant="@Variant.Filled" OnClick="() => Widget.Size = WidgetSize.Medium" Class="mt-2">OK</MudButton>
+
+@code {
+    [CascadingParameter]
+    public Widget Widget { get; set; } = default!;
+}

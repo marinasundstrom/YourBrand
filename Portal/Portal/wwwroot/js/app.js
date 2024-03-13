@@ -38,7 +38,7 @@ window.isDarkMode = () => {
 };
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', async event => {
-    await DotNet.invokeMethodAsync("Portal.Theming", "OnDarkModeChanged", event.matches);
+    await DotNet.invokeMethodAsync("Portal.Shell", "OnDarkModeChanged", event.matches);
 });
 
 function splashscreen() {

@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Portal\Portal.Shared\Portal.Shared.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
     <ProjectReference Include="..\Showroom.Client\Showroom.Client.csproj" />
     <ProjectReference Include="..\Showroom.Components\Showroom.Components.csproj" />
     <ProjectReference Include="..\..\Customers\Customers.Components\Customers.Components.csproj" />
