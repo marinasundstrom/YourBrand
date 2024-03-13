@@ -110,6 +110,13 @@ public static class Accounts
             },
             new Account
             {
+                AccountNo = 2420,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Förskott från kunder",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 2440,
                 Class = AccountClass.EquityAndLiabilites,
                 Name = "Leverantörsskulder",
