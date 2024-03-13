@@ -10,20 +10,32 @@
 
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@account.AccountNo - @account.Name</MudText>
 
-    <MudText Typo="Typo.body1" Class="mt-4 mb-8">@account.Description</MudText>
+    <MudPaper Elevation="25" Class="pa-8 mb-8">
 
-    <MudGrid Class="mt-4 mb-8">
-        <MudItem xs="6">
-            <MudField Label="Balance" Variant="Variant.Text" Class="px-16">@account.Balance.FormatCurrency(currency)</MudField>
-        </MudItem>
-        <MudItem xs="6">
-            
-        </MudItem>
-    </MudGrid>
+        @if (!string.IsNullOrEmpty(account.Description)) 
+        {
+            <MudText Typo="Typo.body1">@account.Description</MudText>
+        }
 
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
+        <MudGrid>
+            <MudItem xs="12" md="6" lg="3">
+                <MudField Label="Balance" Variant="Variant.Text">@account.Balance.FormatCurrency(currency)</MudField>
+            </MudItem>
 
-    <MudChart Class="mt-8 mb-16" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+            <MudItem xs="6">
+                
+            </MudItem>
+        </MudGrid>
+
+    </MudPaper>
+
+    <MudPaper Elevation="25" Class="pa-8 mb-8">
+
+        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
+
+        <MudChart Class="mt-8 mb-16" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+    </MudPaper>
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
 
