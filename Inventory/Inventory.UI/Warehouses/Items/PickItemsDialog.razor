@@ -58,7 +58,7 @@
     {
         if (context.IsModified())
         {
-            await WarehouseItemsClient.PickItemsAsync(WarehouseId, ItemId, new PickItemsDto {
+            await WarehouseItemsClient.PickItemsAsync(WarehouseId, ItemId, new PickItems {
                 Quantity = Quantity,
                 FromReserved = FromReserved
             });

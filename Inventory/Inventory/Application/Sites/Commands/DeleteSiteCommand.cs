@@ -25,7 +25,7 @@ public record DeleteSiteCommand(string Id) : IRequest
             if (site is null) throw new Exception();
 
             context.Sites.Remove(site);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

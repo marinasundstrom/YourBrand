@@ -57,7 +57,7 @@
     {
         if(Id is null) 
         {
-            var item = await GroupsClient.CreateGroupAsync(new CreateGroupDto {
+            var item = await GroupsClient.CreateGroupAsync(new CreateGroup {
                 Name = Name
             });
 
@@ -67,7 +67,7 @@
         {
             if (context.IsModified())
             {
-                await GroupsClient.UpdateGroupAsync(Id, new UpdateGroupDto
+                await GroupsClient.UpdateGroupAsync(Id, new UpdateGroup
                 {
                     Name = Name
                 });

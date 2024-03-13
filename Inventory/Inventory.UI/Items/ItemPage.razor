@@ -41,7 +41,7 @@ else
     </MudPaper>
 
     <MudPaper Class="pa-4" Elevation="25">
-        <MudTable @ref="table" T="WarehouseItemDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+        <MudTable @ref="table" T="WarehouseItem" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
                 Striped="true" OnRowClick="ItemOnClick">
             <ToolBarContent>
 
@@ -52,14 +52,14 @@ else
                 <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
             </ToolBarContent>
         <HeaderContent>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Warehouse.Site">Site</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Warehouse">Warehouse</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="Location">Location</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityOnHand">Qty on hand</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityPicked">Qty picked</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityReserved">Qty reserved</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityAvailable">Qty available</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel T="WarehouseItemDto" SortLabel="QuantityThreshold">Qty threshold</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="Warehouse.Site">Site</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="Warehouse">Warehouse</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="Location">Location</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="QuantityOnHand">Qty on hand</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="QuantityPicked">Qty picked</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="QuantityReserved">Qty reserved</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="QuantityAvailable">Qty available</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="QuantityThreshold">Qty threshold</MudTableSortLabel></MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
@@ -84,28 +84,28 @@ else
 }
 
 @code {
-    MudTable<WarehouseItemDto> table; 
+    MudTable<WarehouseItem> table; 
     string? searchString;
     bool loadingFailed = false;
 
     [Parameter]
     public string Id { get; set; }
 
-    public ItemDto Item { get; set; }
+    public Item Item { get; set; }
 
-    public WarehouseDto? Warehouse { get; set; }
+    public Warehouse? Warehouse { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Item = await ItemsClient.GetItemAsync(Id);
     }
 
-    private async Task<TableData<WarehouseItemDto>> LoadData(TableState state)
+    private async Task<TableData<WarehouseItem>> LoadData(TableState state)
     {
         try
         {
             var results = await ItemsClient.GetWarehouseItemsAsync(Id, state.Page + 1, state.PageSize, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
-            return new TableData<WarehouseItemDto> { Items = results.Items, TotalItems = results.TotalItems };
+            return new TableData<WarehouseItem> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
         {
@@ -122,7 +122,7 @@ else
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<WarehouseItemDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<WarehouseItem> ev)
     {
         var item = ev.Item;
 
@@ -135,7 +135,7 @@ else
         table.ReloadServerData();
     }
 
-    private async Task OnWarehouseChanged(WarehouseDto w)
+    private async Task OnWarehouseChanged(Warehouse w)
     {
         Warehouse = w;
         table.ReloadServerData();
@@ -165,7 +165,7 @@ else
         }
     }
 
-    async Task OnItemClicked(WarehouseItemDto? dto)
+    async Task OnItemClicked(WarehouseItem? dto)
     {
         try
         {
@@ -191,7 +191,7 @@ else
         }
     }
 
-    async Task OnItemAdjustQuantityOnHand(WarehouseItemDto? dto)
+    async Task OnItemAdjustQuantityOnHand(WarehouseItem? dto)
     {
         try
         {
@@ -225,7 +225,7 @@ else
         }
     }
 
-    async Task OnPickItems(WarehouseItemDto? dto)
+    async Task OnPickItems(WarehouseItem? dto)
     {
         try
         {
@@ -259,7 +259,7 @@ else
         }
     }
 
-    async Task OnReserveItems(WarehouseItemDto? dto)
+    async Task OnReserveItems(WarehouseItem? dto)
     {
         try
         {
@@ -293,7 +293,7 @@ else
         }
     }
 
-    async Task OnShipItems(WarehouseItemDto? dto)
+    async Task OnShipItems(WarehouseItem? dto)
     {
         try
         {
@@ -327,7 +327,7 @@ else
         }
     }
 
-    async Task OnReceiveItems(WarehouseItemDto? dto)
+    async Task OnReceiveItems(WarehouseItem? dto)
     {
         try
         {
@@ -361,9 +361,9 @@ else
         }
     }
 
-    private TableData<WarehouseItemDto>? GetTableData()
+    private TableData<WarehouseItem>? GetTableData()
     {
-        return (TableData<WarehouseItemDto>?)table?.GetType()?
+        return (TableData<WarehouseItem>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

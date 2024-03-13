@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Identity;
 using YourBrand.Inventory.Domain.Entities;
 using YourBrand.Inventory.Domain;
+using YourBrand.Inventory.Application.Common.Models;
+using MediatR;
+using YourBrand.Identity;
 
 namespace YourBrand.Inventory.Application.Warehouses.Queries;
 
@@ -53,7 +53,7 @@ public record GetWarehousesQuery(int Page = 0, int PageSize = 10, string? SiteId
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Inventory.Application.SortDirection.Descending : Inventory.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result.OrderBy(x => x.Name);
             }

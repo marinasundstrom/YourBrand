@@ -7,12 +7,14 @@ using YourBrand.Inventory.Application.Warehouses.Items.Queries;
 using Microsoft.AspNetCore.Authorization;
 using YourBrand.Inventory.Application.Warehouses.Items;
 using YourBrand.Inventory.Application.Warehouses.Items.Commands;
+using YourBrand.Inventory.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Inventory.Controllers;
+namespace YourBrand.Inventory.Application.Warehouses.Items;
 
-[Route("Inventory/Warehouses/{warehouseId}/[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class WarehouseItemsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -55,7 +57,7 @@ public class WarehouseItemsController : ControllerBase
     [HttpPut("{id}/Reserve")]
     public async Task ReserveItems(string warehouseId, string id, ReserveItemsDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new ReserveWarehouseItems(id, dto.Quantity), cancellationToken);
+        await _mediator.Send(new ReserveWarehouseItems2(warehouseId, id, dto.Quantity), cancellationToken);
     }
 
     [HttpPut("{id}/Pick")]

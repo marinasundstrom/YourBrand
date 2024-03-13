@@ -59,7 +59,7 @@
     //public string GTIN { get; set; }
 
     [Required]
-    public ItemGroupDto Group { get; set; }
+    public ItemGroup Group { get; set; }
 
     [Required]
     public string Unit { get; set; }
@@ -83,7 +83,7 @@
     {
         if(Id is null) 
         {
-            var item = await ItemsClient.CreateItemAsync(new CreateItemDto {
+            var item = await ItemsClient.CreateItemAsync(new CreateItem {
                 Id = NewId,
                 Name = Name,
                 //Gtin = GTIN,
@@ -97,7 +97,7 @@
         {
             if (context.IsModified())
             {
-                await ItemsClient.UpdateItemAsync(Id, new UpdateItemDto
+                await ItemsClient.UpdateItemAsync(Id, new UpdateItem
                 {
                     Id = NewId,
                     Name = Name,

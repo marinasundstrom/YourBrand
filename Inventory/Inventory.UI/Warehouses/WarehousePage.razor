@@ -17,7 +17,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="WarehouseDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="Warehouse" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
             <SiteSelector Label="Site" Value="Site" ValueChanged="OnSiteChanged" For="() => Site" />
@@ -27,8 +27,8 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="WarehouseDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="WarehouseDto" SortLabel="Site">Site</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Warehouse" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Warehouse" SortLabel="Site">Site</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -42,17 +42,17 @@
 
 
 @code {
-    MudTable<WarehouseDto> table; 
+    MudTable<Warehouse> table; 
     string? searchString;
 
-    public SiteDto Site { get; set; }
+    public Site Site { get; set; }
 
-    private async Task<TableData<WarehouseDto>> LoadData(TableState state)
+    private async Task<TableData<Warehouse>> LoadData(TableState state)
     {
         try
         {
             var results = await WarehousesClient.GetWarehousesAsync(state.Page + 1, state.PageSize, Site?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
-            return new TableData<WarehouseDto> { Items = results.Items, TotalItems = results.TotalItems };
+            return new TableData<Warehouse> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
         {
@@ -68,7 +68,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<WarehouseDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Warehouse> ev)
     {
         var item = ev.Item;
 
@@ -81,13 +81,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnSiteChanged(SiteDto sa)
+    private async Task OnSiteChanged(Site sa)
     {
         Site = sa;
         table.ReloadServerData();
     }
 
-    async Task OnWarehouseClicked(WarehouseDto? dto)
+    async Task OnWarehouseClicked(Warehouse? dto)
     {
         try
         {

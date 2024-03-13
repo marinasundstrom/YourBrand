@@ -6,11 +6,12 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Inventory.Application.Common.Interfaces;
+using YourBrand.Inventory.Application.Common;
 
 namespace YourBrand.Inventory.Application.Items.Events;
 
-public class ItemEventHandler 
-    : IDomainEventHandler<ItemCreated>  
+public class ItemEventHandler
+    : IDomainEventHandler<ItemCreated>
 {
     private readonly IInventoryContext _context;
 

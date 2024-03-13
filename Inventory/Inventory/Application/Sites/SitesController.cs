@@ -7,12 +7,14 @@ using YourBrand.Inventory.Application.Sites.Queries;
 using Microsoft.AspNetCore.Authorization;
 using YourBrand.Inventory.Application.Sites;
 using YourBrand.Inventory.Application.Sites.Commands;
+using YourBrand.Inventory.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Inventory.Controllers;
+namespace YourBrand.Inventory.Application.Sites;
 
-[Route("Inventory/[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class SitesController : ControllerBase
 {
     private readonly IMediator _mediator;

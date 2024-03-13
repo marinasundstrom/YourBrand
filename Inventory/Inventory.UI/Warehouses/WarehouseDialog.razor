@@ -42,7 +42,7 @@
     public string? WarehouseId { get; set; } = null!;
 
     [Required]
-    public SiteDto Site { get; set; }
+    public Site Site { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -63,7 +63,7 @@
     {
         if(WarehouseId is null) 
         {
-            var warehouse = await WarehousesClient.CreateWarehouseAsync(new CreateWarehouseDto {
+            var warehouse = await WarehousesClient.CreateWarehouseAsync(new CreateWarehouse {
                 Name = Name,
                 SiteId = Site.Id
             });
@@ -74,7 +74,7 @@
         {
             if (context.IsModified())
             {
-                await WarehousesClient.UpdateWarehouseAsync(WarehouseId, new UpdateWarehouseDto
+                await WarehousesClient.UpdateWarehouseAsync(WarehouseId, new UpdateWarehouse
                 {
                     Name = Name,
                     SiteId = Site.Id

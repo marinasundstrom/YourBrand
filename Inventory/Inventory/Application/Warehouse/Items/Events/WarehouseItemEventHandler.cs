@@ -1,18 +1,19 @@
 using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Domain.Events;
 using YourBrand.Inventory.Application.Common.Interfaces;
-using YourBrand.Notifications.Contracts;
-using MassTransit;
-
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Inventory.Application.Common;
+using YourBrand.Inventory.Contracts;
+using MassTransit;
 using YourBrand.Notifications.Client;
 using YourBrand.Inventory.Domain.Entities;
+using YourBrand.Notifications.Contracts;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
-public class WarehouseItemEventHandler 
-: IDomainEventHandler<WarehouseItemCreated>, 
-  IDomainEventHandler<WarehouseItemQuantityOnHandUpdated>, 
+public class WarehouseItemEventHandler
+: IDomainEventHandler<WarehouseItemCreated>,
+  IDomainEventHandler<WarehouseItemQuantityOnHandUpdated>,
   IDomainEventHandler<WarehouseItemsPicked>,
   IDomainEventHandler<WarehouseItemsReserved>,
   IDomainEventHandler<WarehouseItemQuantityAvailableUpdated>
@@ -23,7 +24,7 @@ public class WarehouseItemEventHandler
     private readonly ILogger<WarehouseItemEventHandler> _logger;
 
     public WarehouseItemEventHandler(
-        IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient, 
+        IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient,
         ILogger<WarehouseItemEventHandler> logger)
     {
         _context = context;
@@ -50,15 +51,17 @@ public class WarehouseItemEventHandler
 
     public async Task Handle(WarehouseItemQuantityAvailableUpdated notification, CancellationToken cancellationToken)
     {
-        var item = await _context.WarehouseItems
-            .Include(x => x.Item)
-            .Include(x => x.Warehouse)
-            .ThenInclude(x => x.Site)
-            .FirstOrDefaultAsync(i => i.Id == notification.ItemId);
+        await _publishEndpoint.Publish(new QuantityAvailableChanged(notification.ItemId, notification.WarehouseId, notification.Quantity));
 
-        if(item is not null) 
+        var item = await _context.WarehouseItems
+    .Include(x => x.Item)
+    .Include(x => x.Warehouse)
+    .ThenInclude(x => x.Site)
+    .FirstOrDefaultAsync(i => i.Id == notification.ItemId);
+
+        if (item is not null)
         {
-            if(notification.Quantity <= item.QuantityThreshold  
+            if (notification.Quantity <= item.QuantityThreshold
                 && notification.OldQuantity > item.QuantityThreshold)
             {
                 await SendEmail(item);

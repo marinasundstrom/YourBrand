@@ -31,7 +31,7 @@ public record AddItem(string Id, string Name, ItemTypeDto Type, string GroupId, 
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            item = await _context.Items       
+            item = await _context.Items
                .Include(x => x.Group)
                .AsNoTracking()
                .FirstAsync(c => c.Id == item.Id);

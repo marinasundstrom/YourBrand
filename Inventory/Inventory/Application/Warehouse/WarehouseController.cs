@@ -1,18 +1,15 @@
-using YourBrand.Inventory.Application;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 using YourBrand.Inventory.Application.Warehouses.Queries;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Inventory.Application.Warehouses;
 using YourBrand.Inventory.Application.Warehouses.Commands;
+using Asp.Versioning;
 
-namespace YourBrand.Inventory.Controllers;
+namespace YourBrand.Inventory.Application.Warehouses;
 
-[Route("Inventory/[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class WarehousesController : ControllerBase
 {
     private readonly IMediator _mediator;

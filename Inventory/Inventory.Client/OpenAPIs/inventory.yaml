@@ -1,0 +1,1150 @@
+﻿x-generator: NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Inventory
+  version: v1
+servers:
+- url: https://localhost:5150
+paths:
+  /v1/Warehouses:
+    get:
+      tags:
+      - Warehouses
+      operationId: Warehouses_GetWarehouses
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: siteId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfWarehouse'
+    post:
+      tags:
+      - Warehouses
+      operationId: Warehouses_CreateWarehouse
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWarehouse'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warehouse'
+  /v1/Warehouses/{id}:
+    get:
+      tags:
+      - Warehouses
+      operationId: Warehouses_GetWarehouse
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warehouse'
+    put:
+      tags:
+      - Warehouses
+      operationId: Warehouses_UpdateWarehouse
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWarehouse'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Warehouses
+      operationId: Warehouses_DeleteWarehouse
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /v1/WarehouseItems:
+    get:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_GetItems
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: itemId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfWarehouseItem'
+    post:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_CreateItem
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWarehouseItem'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseItem'
+  /v1/WarehouseItems/{id}:
+    get:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_GetItem
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseItem'
+    put:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_UpdateItem
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWarehouseItem'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_DeleteItem
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/WarehouseItems/{id}/QuantityOnHand:
+    put:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_AdjustQuantityOnHand
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustQuantityOnHand'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /v1/WarehouseItems/{id}/Reserve:
+    put:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_ReserveItems
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReserveItems'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /v1/WarehouseItems/{id}/Pick:
+    put:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_PickItems
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PickItems'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /v1/WarehouseItems/{id}/Ship:
+    put:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_ShipItems
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipItems'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /v1/WarehouseItems/{id}/Receive:
+    put:
+      tags:
+      - WarehouseItems
+      operationId: WarehouseItems_ReceiveItems
+      parameters:
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiveItems'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /v1/Sites:
+    get:
+      tags:
+      - Sites
+      operationId: Sites_GetSites
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfSite'
+    post:
+      tags:
+      - Sites
+      operationId: Sites_CreateSite
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSite'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+  /v1/Sites/{id}:
+    get:
+      tags:
+      - Sites
+      operationId: Sites_GetSite
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+    put:
+      tags:
+      - Sites
+      operationId: Sites_UpdateSite
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSite'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Sites
+      operationId: Sites_DeleteSite
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /v1/Items:
+    get:
+      tags:
+      - Items
+      operationId: Items_GetItems
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: groupId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfItem'
+    post:
+      tags:
+      - Items
+      operationId: Items_CreateItem
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /v1/Items/{id}:
+    get:
+      tags:
+      - Items
+      operationId: Items_GetItem
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+      - Items
+      operationId: Items_UpdateItem
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItem'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Items
+      operationId: Items_DeleteItem
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /v1/Items/{id}/Warehouse:
+    get:
+      tags:
+      - Items
+      operationId: Items_GetWarehouseItems
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: warehouseId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfWarehouseItem'
+  /v1/Groups:
+    get:
+      tags:
+      - Groups
+      operationId: Groups_GetGroups
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfItemGroup'
+    post:
+      tags:
+      - Groups
+      operationId: Groups_CreateGroup
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroup'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemGroup'
+  /v1/Groups/{id}:
+    get:
+      tags:
+      - Groups
+      operationId: Groups_GetGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemGroup'
+    put:
+      tags:
+      - Groups
+      operationId: Groups_UpdateGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGroup'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Groups
+      operationId: Groups_DeleteGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+components:
+  schemas:
+    ItemsResultOfWarehouse:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Warehouse'
+        totalItems:
+          type: integer
+          format: int32
+    Warehouse:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        site:
+          $ref: '#/components/schemas/Site'
+    Site:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    SortDirection:
+      type: string
+      description: ''
+      x-enumNames:
+      - Desc
+      - Asc
+      enum:
+      - Desc
+      - Asc
+    CreateWarehouse:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        siteId:
+          type: string
+    UpdateWarehouse:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        siteId:
+          type: string
+    ItemsResultOfWarehouseItem:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarehouseItem'
+        totalItems:
+          type: integer
+          format: int32
+    WarehouseItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        item:
+          $ref: '#/components/schemas/Item'
+        warehouse:
+          $ref: '#/components/schemas/Warehouse'
+        location:
+          type: string
+        quantityOnHand:
+          type: integer
+          format: int32
+        quantityPicked:
+          type: integer
+          format: int32
+        quantityReserved:
+          type: integer
+          format: int32
+        quantityAvailable:
+          type: integer
+          format: int32
+        quantityThreshold:
+          type: integer
+          format: int32
+    Item:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ItemType'
+        gtin:
+          type: string
+          nullable: true
+        group:
+          $ref: '#/components/schemas/ItemGroup'
+        unit:
+          type: string
+        quantityAvailable:
+          type: integer
+          format: int32
+        discontinued:
+          type: boolean
+          nullable: true
+    ItemType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Inventory
+      - NonInventory
+      - Service
+      enum:
+      - 1
+      - 2
+      - 3
+    ItemGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CreateWarehouseItem:
+      type: object
+      additionalProperties: false
+      properties:
+        itemId:
+          type: string
+        warehouseId:
+          type: string
+        location:
+          type: string
+        quantityOnHand:
+          type: integer
+          format: int32
+        quantityThreshold:
+          type: integer
+          format: int32
+    UpdateWarehouseItem:
+      type: object
+      additionalProperties: false
+      properties:
+        location:
+          type: string
+    AdjustQuantityOnHand:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+    ReserveItems:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+    PickItems:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+        fromReserved:
+          type: boolean
+    ShipItems:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+        fromPicked:
+          type: boolean
+    ReceiveItems:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+    ItemsResultOfSite:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Site'
+        totalItems:
+          type: integer
+          format: int32
+    CreateSite:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        createWarehouse:
+          type: boolean
+    UpdateSite:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    ItemsResultOfItem:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        totalItems:
+          type: integer
+          format: int32
+    CreateItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ItemType'
+        groupId:
+          type: string
+        unit:
+          type: string
+    UpdateItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        groupId:
+          type: string
+        unit:
+          type: string
+    ItemsResultOfItemGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemGroup'
+        totalItems:
+          type: integer
+          format: int32
+    CreateGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    UpdateGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

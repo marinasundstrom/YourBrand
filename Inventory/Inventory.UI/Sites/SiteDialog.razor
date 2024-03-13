@@ -64,7 +64,7 @@
     {
         if(SiteId is null) 
         {
-            await SitesClient.CreateSiteAsync(new CreateSiteDto {
+            await SitesClient.CreateSiteAsync(new CreateSite {
                 Name = Name,
                 CreateWarehouse = CreateWarehouse
             });
@@ -75,7 +75,7 @@
         {
             if (context.IsModified())
             {
-                await SitesClient.UpdateSiteAsync(SiteId, new UpdateSiteDto
+                await SitesClient.UpdateSiteAsync(SiteId, new UpdateSite
                 {
                     Name = Name
                 });

@@ -59,7 +59,7 @@
     {
         if (context.IsModified())
         {
-            await WarehouseItemsClient.ShipItemsAsync(WarehouseId, ItemId, new ShipItemsDto {
+            await WarehouseItemsClient.ShipItemsAsync(WarehouseId, ItemId, new ShipItems {
                 Quantity = Quantity,
                 FromPicked = FromPicked
             });

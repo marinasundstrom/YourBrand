@@ -13,7 +13,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="SiteDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="Site" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
 
@@ -23,7 +23,7 @@
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="SiteDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Site" SortLabel="Name">Name</MudTableSortLabel></MudTh>
         </HeaderContent>
 
         <RowTemplate>
@@ -38,15 +38,15 @@
 
 
 @code {
-    MudTable<SiteDto> table; 
+    MudTable<Site> table; 
     string? searchString;
 
-    private async Task<TableData<SiteDto>> LoadData(TableState state)
+    private async Task<TableData<Site>> LoadData(TableState state)
     {
         try
         {
             var results = await SitesClient.GetSitesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
-            return new TableData<SiteDto> { Items = results.Items, TotalItems = results.TotalItems };
+            return new TableData<Site> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
         {
@@ -62,7 +62,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<SiteDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Site> ev)
     {
         var item = ev.Item;
 
@@ -75,7 +75,7 @@
         table.ReloadServerData();
     }
 
-    async Task OnSiteClicked(SiteDto? dto)
+    async Task OnSiteClicked(Site? dto)
     {
         try
         {

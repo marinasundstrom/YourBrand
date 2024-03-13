@@ -9,12 +9,14 @@ using YourBrand.Inventory.Application.Items;
 using YourBrand.Inventory.Application.Items.Commands;
 using YourBrand.Inventory.Application.Warehouses.Items;
 using YourBrand.Inventory.Application.Warehouses.Items.Queries;
+using YourBrand.Inventory.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Inventory.Controllers;
+namespace YourBrand.Inventory.Application.Items;
 
-[Route("Inventory/[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class ItemsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -36,7 +38,7 @@ public class ItemsController : ControllerBase
         return await _mediator.Send(new GetItem(id), cancellationToken);
     }
 
-    
+
     [HttpGet("{id}/Warehouse")]
     public async Task<ItemsResult<WarehouseItemDto>> GetWarehouseItems(string? id = null, int page = 1, int pageSize = 10, string? warehouseId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {

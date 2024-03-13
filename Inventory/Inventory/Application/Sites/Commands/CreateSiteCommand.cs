@@ -26,13 +26,13 @@ public record CreateSiteCommand(string Name, bool CreateWarehouse) : IRequest<Si
 
             context.Sites.Add(site);
 
-            if(request.CreateWarehouse) 
+            if (request.CreateWarehouse)
             {
                 var warehouse = new Domain.Entities.Warehouse(Guid.NewGuid().ToString(), "Main", site.Id);
 
                 context.Warehouses.Add(warehouse);
             }
-            
+
             await context.SaveChangesAsync(cancellationToken);
 
             return site.ToDto();

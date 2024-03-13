@@ -25,7 +25,7 @@ public record DeleteWarehouseCommand(string Id) : IRequest
             if (warehouse is null) throw new Exception();
 
             context.Warehouses.Remove(warehouse);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

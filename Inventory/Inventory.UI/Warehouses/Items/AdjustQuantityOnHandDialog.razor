@@ -53,7 +53,7 @@
     {
         if (context.IsModified())
         {
-            await WarehouseItemsClient.AdjustQuantityOnHandAsync(WarehouseId, ItemId, new AdjustQuantityOnHandDto {
+            await WarehouseItemsClient.AdjustQuantityOnHandAsync(WarehouseId, ItemId, new AdjustQuantityOnHand {
                 Quantity = Quantity
             });
         }

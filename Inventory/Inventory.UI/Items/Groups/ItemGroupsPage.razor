@@ -13,7 +13,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="ItemGroupDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="ItemGroup" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
 
@@ -24,8 +24,8 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
        <HeaderContent>
-            <MudTh><MudTableSortLabel T="ItemGroupDto" SortLabel="Id">Id</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="ItemGroupDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemGroup" SortLabel="Id">Id</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="ItemGroup" SortLabel="Name">Name</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate Context="item">
             <MudTd DataLabel="Id">@item.Id</MudTd>
@@ -39,17 +39,17 @@
 
 
 @code {
-    MudTable<ItemGroupDto> table; 
+    MudTable<ItemGroup> table; 
     string? searchString;
 
-    public WarehouseDto Warehouse { get; set; }
+    public Warehouse Warehouse { get; set; }
 
-    private async Task<TableData<ItemGroupDto>> LoadData(TableState state)
+    private async Task<TableData<ItemGroup>> LoadData(TableState state)
     {
         try
         {
             var results = await GroupsClient.GetGroupsAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
-            return new TableData<ItemGroupDto> { Items = results.Items, TotalItems = results.TotalItems };
+            return new TableData<ItemGroup> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
         {
@@ -65,7 +65,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<ItemGroupDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<ItemGroup> ev)
     {
         var item = ev.Item;
 
@@ -78,13 +78,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnWarehouseChanged(WarehouseDto w)
+    private async Task OnWarehouseChanged(Warehouse w)
     {
         Warehouse = w;
         table.ReloadServerData();
     }
 
-    async Task OnItemClicked(ItemGroupDto? dto)
+    async Task OnItemClicked(ItemGroup? dto)
     {
         try
         {
@@ -108,9 +108,9 @@
         }
     }
 
-    private TableData<ItemGroupDto>? GetTableData()
+    private TableData<ItemGroup>? GetTableData()
     {
-        return (TableData<ItemGroupDto>?)table?.GetType()?
+        return (TableData<ItemGroup>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

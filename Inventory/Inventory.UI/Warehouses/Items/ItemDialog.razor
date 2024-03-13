@@ -60,7 +60,7 @@
     public string Location { get; set; } 
 
     [Required]
-    public WarehouseDto Warehouse { get; set; }
+    public Warehouse Warehouse { get; set; }
 
     [Required]
     public int QuantityOnHand { get; set; } 
@@ -86,7 +86,7 @@
     {
         if(Id is null) 
         {
-            var item = await WarehouseItemsClient.CreateItemAsync(Warehouse?.Id, new CreateWarehouseItemDto {
+            var item = await WarehouseItemsClient.CreateItemAsync(Warehouse?.Id, new CreateWarehouseItem {
                 ItemId = ItemId,
                 WarehouseId = Warehouse.Id,
                 Location = Location,
@@ -100,7 +100,7 @@
         {
             if (context.IsModified())
             {
-                await WarehouseItemsClient.UpdateItemAsync(Warehouse?.Id, Id, new UpdateWarehouseItemDto
+                await WarehouseItemsClient.UpdateItemAsync(Warehouse?.Id, Id, new UpdateWarehouseItem
                 {
                     //Id = Id,
                     Location = Location

@@ -53,7 +53,7 @@
     {
         if (context.IsModified())
         {
-            await WarehouseItemsClient.ReserveItemsAsync(WarehouseId, ItemId, new ReserveItemsDto {
+            await WarehouseItemsClient.ReserveItemsAsync(WarehouseId, ItemId, new ReserveItems {
                 Quantity = Quantity
             });
         }

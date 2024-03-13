@@ -24,7 +24,7 @@ public record AddWarehouseItem(string ItemId, string WarehouseId, string Locatio
 
             if (item is not null) throw new Exception();
 
-            item = new Domain.Entities.WarehouseItem(request.ItemId, request.WarehouseId, request.Location, request.QuantityOnHand, request.QuantityThreshold);;
+            item = new Domain.Entities.WarehouseItem(request.ItemId, request.WarehouseId, request.Location, request.QuantityOnHand, request.QuantityThreshold); ;
 
             _context.WarehouseItems.Add(item);
 

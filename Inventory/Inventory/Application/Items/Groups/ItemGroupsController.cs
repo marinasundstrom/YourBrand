@@ -7,12 +7,14 @@ using YourBrand.Inventory.Application.Items.Groups.Queries;
 using Microsoft.AspNetCore.Authorization;
 using YourBrand.Inventory.Application.Items.Groups;
 using YourBrand.Inventory.Application.Items.Groups.Commands;
+using YourBrand.Inventory.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Inventory.Controllers;
+namespace YourBrand.Inventory.Application.Items.Groups;
 
-[Route("Inventory/[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class GroupsController : ControllerBase
 {
     private readonly IMediator _mediator;
