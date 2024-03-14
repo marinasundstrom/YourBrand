@@ -27,161 +27,144 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-static class Program
-{
-    static readonly string MyAllowSpecificOrigins = "MyPolicy";
 
-    /// <param name="seed">Seed the database</param>
-    /// <param name="connectionString">The connection string of the database to act on</param>
-    /// <param name="args">The rest of the arguments</param>
-    /// <returns></returns>
-    static async Task Main(bool seed, string connectionString, string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-        string ServiceName = "AppService"
+string ServiceName = "AppService"
 ;
-        string ServiceVersion = "1.0";
+string ServiceVersion = "1.0";
 
-        // Add services to container
+// Add services to container
 
-        builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                                .Enrich.WithProperty("Application", ServiceName)
-                                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
-        builder.Services
-            .AddOpenApi(ServiceName, ApiVersions.All)
-            .AddApiVersioningServices();
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
 
-        builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
-        builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails();
 
-        var services = builder.Services;
+var services = builder.Services;
 
-        var Configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
-        if (connectionString is not null)
-        {
-            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+services.AddApplication(configuration);
+services.AddInfrastructure(configuration);
+services.AddServices();
 
-            Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
-        }
+services
+    .AddControllers()
+    .AddNewtonsoftJson();
 
-        services.AddApplication(Configuration);
-        services.AddInfrastructure(Configuration);
-        services.AddServices();
+services.AddHttpContextAccessor();
 
-        services
-            .AddControllers()
-            .AddNewtonsoftJson();
+services.AddEndpointsApiExplorer();
 
-        services.AddHttpContextAccessor();
+services.AddAzureClients(builder =>
+{
+    // Add a KeyVault client
+    //builder.AddSecretClient(keyVaultUrl);
 
-        services.AddEndpointsApiExplorer();
+    // Add a Storage account client
+    builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
+                    .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
 
-        services.AddAzureClients(builder =>
-        {
-            // Add a KeyVault client
-            //builder.AddSecretClient(keyVaultUrl);
+    // Use DefaultAzureCredential by default
+    builder.UseCredential(new DefaultAzureCredential());
+});
 
-            // Add a Storage account client
-            builder.AddBlobServiceClient(Configuration.GetConnectionString("Azure:Storage"))
-                            .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+services.AddSignalR();
 
-            // Use DefaultAzureCredential by default
-            builder.UseCredential(new DefaultAzureCredential());
-        });
+services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+});
 
-        services.AddSignalR();
+services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
 
-        services.AddCors(options =>
-        {
-            options.AddPolicy(name: MyAllowSpecificOrigins,
-                            builder =>
-                            {
-                                builder
-                                    .AllowAnyOrigin()
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod();
-                            });
-        });
+services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
 
-        services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
+    x.AddConsumers(typeof(Program).Assembly);
+    //x.AddConsumer(typeof(UserCreatedConsumer), typeof(UserCreatedConsumerDefinition));
 
-        services.AddMassTransit(x =>
-        {
-            x.SetKebabCaseEndpointNameFormatter();
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
-            x.AddConsumers(typeof(Program).Assembly);
-            //x.AddConsumer(typeof(UserCreatedConsumer), typeof(UserCreatedConsumerDefinition));
-
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.ConfigureEndpoints(context);
-            });
-        });
-
-        services.AddStackExchangeRedisCache(o =>
-        {
-            o.Configuration = Configuration.GetConnectionString("redis");
-        });
+services.AddStackExchangeRedisCache(o =>
+{
+    o.Configuration = configuration.GetConnectionString("redis");
+});
 
 #if DEBUG
-        IdentityModelEventSource.ShowPII = true;
+IdentityModelEventSource.ShowPII = true;
 #endif
 
-        services.AddAuthorization();
+services.AddAuthorization();
 
-        services.AddAuthenticationServices(Configuration);
+services.AddAuthenticationServices(configuration);
 
-        var app = builder.Build();
+var app = builder.Build();
 
-        app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
-        app.MapObservability();
+app.MapObservability();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 
-            app.UseOpenApiAndSwaggerUi();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseRouting();
-
-        app.UseCors(MyAllowSpecificOrigins);
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapApplicationRequests();
-
-        app.MapGet("/info", () =>
-        {
-            return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
-        })
-        .WithDisplayName("GetInfo")
-        .WithName("GetInfo")
-        .WithTags("Info")
-        .Produces<string>();
-
-        app.MapControllers();
-        app.MapHub<ItemsHub>("/hubs/items");
-        app.MapHub<SomethingHub>("/hubs/something");
-        app.MapHub<WorkerHub>("/hubs/worker");
-        app.MapHub<NotificationHub>("/hubs/notifications");
-
-        if (seed)
-        {
-            await app.Services.SeedAsync();
-
-            return;
-        }
-
-        app.Run();
-    }
+    app.UseOpenApiAndSwaggerUi();
 }
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapApplicationRequests();
+
+app.MapGet("/info", () =>
+{
+    return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
+})
+.WithDisplayName("GetInfo")
+.WithName("GetInfo")
+.WithTags("Info")
+.Produces<string>();
+
+app.MapControllers();
+app.MapHub<ItemsHub>("/hubs/items");
+app.MapHub<SomethingHub>("/hubs/something");
+app.MapHub<WorkerHub>("/hubs/worker");
+app.MapHub<NotificationHub>("/hubs/notifications");
+
+if (args.Contains("--seed"))
+{
+    await app.Services.SeedAsync();
+
+    return;
+}
+
+app.Run();

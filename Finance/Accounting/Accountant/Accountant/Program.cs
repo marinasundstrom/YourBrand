@@ -44,7 +44,6 @@ builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configura
 
 builder.Services.AddProblemDetails();
 
-
 builder.Services.AddDomain();
 
 builder.Services.AddSingleton<IRefundService, RefundService>();

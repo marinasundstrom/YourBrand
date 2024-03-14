@@ -49,11 +49,6 @@ builder.Services.AddProblemDetails();
 
 var configuration = builder.Configuration;
 
-if(args.Contains("--connection-string")) 
-{
-    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
-}
-
 builder.Services
     .AddApplication(configuration)
     .AddInfrastructure(configuration);

@@ -52,16 +52,11 @@ builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configura
 
 builder.Services.AddProblemDetails();
 
-var Configuration = builder.Configuration;
-
-if(args.Contains("--connection-string")) 
-{
-    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
-}
+var configuration = builder.Configuration;
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure(Configuration);
+    .AddInfrastructure(configuration);
 
 builder.Services.AddHttpContextAccessor();
 
@@ -85,7 +80,7 @@ builder.Services.AddEndpointsApiExplorer();
 // Add the reverse proxy capability to the server
 var proxyBuilder = builder.Services.AddReverseProxy();
 // Initialize the reverse proxy from the "ReverseProxy" section of configuration
-proxyBuilder.LoadFromConfig(Configuration.GetSection("ReverseProxy"));
+proxyBuilder.LoadFromConfig(configuration.GetSection("ReverseProxy"));
 
 // TODO: Switch out for Azure Storage later
 IMessageDataRepository messageDataRepository = new InMemoryMessageDataRepository();
@@ -126,7 +121,7 @@ builder.Services.AddAzureClients(builder =>
     //builder.AddSecretClient(keyVaultUrl);
 
     // Add a Storage account client
-    builder.AddBlobServiceClient(Configuration.GetConnectionString("Azure:Storage"))
+    builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
                     .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
 
     // Use DefaultAzureCredential by default

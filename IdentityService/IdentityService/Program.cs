@@ -8,81 +8,67 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 
-static class Program
+/* Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();*/
+
+Log.Information("Starting up");
+
+try
 {
-    /// <param name="seed">Seed the database</param>
-    /// <param name="args">The rest of the arguments</param>
-    /// <returns></returns>
-    static async Task Main(bool seed, string? connectionString, string[] args)
-    {
-        /* Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .CreateBootstrapLogger();*/
+    var builder = WebApplication.CreateBuilder(args);
 
-        Log.Information("Starting up");
-
-        try
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            string ServiceName = "IdentityService"
+    string ServiceName = "IdentityService"
 ;
-            string ServiceVersion = "1.0";
+    string ServiceVersion = "1.0";
 
-            // Add services to container
+    // Add services to container
 
-            builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                                    .Enrich.WithProperty("Application", ServiceName)
-                                    .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+    builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                            .Enrich.WithProperty("Application", ServiceName)
+                            .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
-            builder.Services
-                .AddOpenApi(ServiceName, ApiVersions.All)
-                .AddApiVersioningServices();
+    builder.Services
+        .AddOpenApi(ServiceName, ApiVersions.All)
+        .AddApiVersioningServices();
 
-            builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+    builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
-            builder.Services.AddProblemDetails();
+    builder.Services.AddProblemDetails();
 
-            if (connectionString is not null)
-            {
-                builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
-            }
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
 
-            var app = builder
-                .ConfigureServices()
-                .ConfigurePipeline();
+    app.UseSerilogRequestLogging();
 
-            app.UseSerilogRequestLogging();
+    app.MapObservability();
 
-            app.MapObservability();
-
-            if(app.Environment.IsDevelopment()) 
-            {
-                app.UseOpenApiAndSwaggerUi();
-            }
-
-            // this seeding is only for the template to bootstrap the DB and users.
-            // in production you will likely want a different approach.
-            if (seed)
-            {
-                Log.Information("Seeding database...");
-                await SeedData.EnsureSeedData(app.Services);
-                Log.Information("Done seeding database. Exiting.");
-
-                return;
-            }
-
-            app.Run();
-        }
-        catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException") // https://github.com/dotnet/runtime/issues/60600
-        {
-            Log.Fatal(ex, "Unhandled exception");
-        }
-        finally
-        {
-            Log.Information("Shut down complete");
-            Log.CloseAndFlush();
-
-        }
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseOpenApiAndSwaggerUi();
     }
+
+    // this seeding is only for the template to bootstrap the DB and users.
+    // in production you will likely want a different approach.
+    if (args.Contains("--seed"))
+    {
+        Log.Information("Seeding database...");
+        await SeedData.EnsureSeedData(app.Services);
+        Log.Information("Done seeding database. Exiting.");
+
+        return;
+    }
+
+    app.Run();
+}
+catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException") // https://github.com/dotnet/runtime/issues/60600
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+
 }

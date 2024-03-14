@@ -31,138 +31,124 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 
-static class Program
-{
-    /// <param name="seed">Seed the database</param>
-    /// <param name="args">The rest of the arguments</param>
-    /// <returns></returns>
-    static async Task Main(bool seed, string? connectionString, string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-        string ServiceName = "TimeReport"
+string ServiceName = "TimeReport"
 ;
-        string ServiceVersion = "1.0";
+string ServiceVersion = "1.0";
 
-        // Add services to container
+// Add services to container
 
-        builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                                .Enrich.WithProperty("Application", ServiceName)
-                                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
-        builder.Services
-            .AddOpenApi(ServiceName, ApiVersions.All)
-            .AddApiVersioningServices();
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
 
-        builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
-        builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails();
 
-        var services = builder.Services;
+var services = builder.Services;
 
-        var Configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
-        if (connectionString is not null)
-        {
-            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
-        }
+services
+    .AddApplication(configuration)
+    .AddInfrastructure(configuration)
+    .AddClients(configuration);
 
-        services
-            .AddApplication(Configuration)
-            .AddInfrastructure(Configuration)
-            .AddClients(Configuration);
+services
+    .AddControllers()
+    .AddNewtonsoftJson();
 
-        services
-            .AddControllers()
-            .AddNewtonsoftJson();
+services.AddHttpContextAccessor();
 
-        services.AddHttpContextAccessor();
+services.AddIdentityServices();
+services.AddTenantService();
 
-        services.AddIdentityServices();
-        services.AddTenantService();
+services.AddScoped<IBlobService, BlobService>();
 
-        services.AddScoped<IBlobService, BlobService>();
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
 
-        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
-        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
+services.AddEndpointsApiExplorer();
 
-        services.AddEndpointsApiExplorer();
+services.AddAuthorization();
 
-        services.AddAuthorization();
+services.AddAuthenticationServices(builder.Configuration);
 
-        services.AddAuthenticationServices(builder.Configuration);
+services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
-        services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
+services.AddAzureClients(builder =>
+{
+    // Add a KeyVault client
+    //builder.AddSecretClient(keyVaultUrl);
 
-        services.AddAzureClients(builder =>
-        {
-            // Add a KeyVault client
-            //builder.AddSecretClient(keyVaultUrl);
+    // Add a Storage account client
+    builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
+                    .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
 
-            // Add a Storage account client
-            builder.AddBlobServiceClient(Configuration.GetConnectionString("Azure:Storage"))
-                            .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+    // Use DefaultAzureCredential by default
+    builder.UseCredential(new DefaultAzureCredential());
+});
 
-            // Use DefaultAzureCredential by default
-            builder.UseCredential(new DefaultAzureCredential());
-        });
+services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumers(typeof(Program).Assembly);
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
-        services.AddMassTransit(x =>
-        {
-            x.SetKebabCaseEndpointNameFormatter();
-            x.AddConsumers(typeof(Program).Assembly);
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.ConfigureEndpoints(context);
-            });
-        });
+services.AddSignalR();
 
-        services.AddSignalR();
+services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
 
-        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
+var app = builder.Build();
 
-        var app = builder.Build();
+app.UseSerilogRequestLogging();
 
-        app.UseSerilogRequestLogging();
+app.MapObservability();
 
-        app.MapObservability();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-
-            app.UseOpenApiAndSwaggerUi();
-            app.UseSwaggerUi(c => c.DocumentTitle = "Web API v1");
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseRouting();
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        //app.MapApplicationRequests();
-
-        app.MapGet("/info", () =>
-        {
-            return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
-        })
-        .WithDisplayName("GetInfo")
-        .WithName("GetInfo")
-        .WithTags("Info")
-        .Produces<string>();
-
-        app.MapControllers();
-        app.MapHub<ItemsHub>("/hubs/items");
-
-        if (seed)
-        {
-            await app.Services.SeedAsync();
-
-            return;
-        }
-
-        app.Run();
-    }
+    app.UseOpenApiAndSwaggerUi();
+    app.UseSwaggerUi(c => c.DocumentTitle = "Web API v1");
 }
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+//app.MapApplicationRequests();
+
+app.MapGet("/info", () =>
+{
+    return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
+})
+.WithDisplayName("GetInfo")
+.WithName("GetInfo")
+.WithTags("Info")
+.Produces<string>();
+
+app.MapControllers();
+app.MapHub<ItemsHub>("/hubs/items");
+
+if (args.Contains("--seed"))
+{
+    await app.Services.SeedAsync();
+
+    return;
+}
+
+app.Run();

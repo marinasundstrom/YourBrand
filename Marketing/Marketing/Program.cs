@@ -48,16 +48,12 @@ builder.Services
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
-var Configuration = builder.Configuration;
 
-if (args.Contains("--connection-string"))
-{
-    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
-}
+var configuration = builder.Configuration;
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure(Configuration);
+    .AddInfrastructure(configuration);
 
 builder.Services.AddControllers();
 
@@ -90,7 +86,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddAuthenticationServices(Configuration);
+builder.Services.AddAuthenticationServices(configuration);
 
 builder.Services.AddDocumentsClients((sp, http) =>
 {

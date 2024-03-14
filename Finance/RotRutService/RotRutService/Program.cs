@@ -50,17 +50,12 @@ builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configura
 
 builder.Services.AddProblemDetails();
 
-var Configuration = builder.Configuration;
-
-if(args.Contains("--connection-string")) 
-{
-    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
-}
+var configuration = builder.Configuration;
 
 builder.Services
     .AddApplication()
     .AddDomain()
-    .AddInfrastructure(Configuration);
+    .AddInfrastructure(configuration);
 
 builder.Services.AddControllers();
 

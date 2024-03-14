@@ -15,12 +15,12 @@ using Azure.Storage.Blobs;
 using Azure.Identity;
 using YourBrand.Identity;
 
-
 using Serilog;
 
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Catalog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "Catalog"
@@ -42,16 +42,11 @@ builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configura
 builder.Services.AddProblemDetails();
 
 
-var Configuration = builder.Configuration;
-
-if (args.Contains("--connection-string"))
-{
-    builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
-}
+var configuration = builder.Configuration;
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure(Configuration);
+    .AddInfrastructure(configuration);
 
 builder.Services.AddControllers();
 
@@ -74,7 +69,7 @@ builder.Services.AddAzureClients(builder =>
             //builder.AddSecretClient(keyVaultUrl);
 
             // Add a Storage account client
-            builder.AddBlobServiceClient(Configuration.GetConnectionString("Azure:Storage"))
+            builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
                             .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
 
             // Use DefaultAzureCredential by default

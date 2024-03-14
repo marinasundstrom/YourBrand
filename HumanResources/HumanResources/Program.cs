@@ -25,126 +25,110 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 
-static class Program
-{
-    static readonly string MyAllowSpecificOrigins = "MyPolicy";
+string MyAllowSpecificOrigins = "MyPolicy";
 
-    /// <param name="seed">Seed the database</param>
-    /// <param name="connectionString">The connection string of the database to act on</param>
-    /// <param name="args">The rest of the arguments</param>
-    /// <returns></returns>
-    static async Task Main(bool seed, string connectionString, string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
 
-        string ServiceName = "HumanResource"
+var builder = WebApplication.CreateBuilder(args);
+
+string ServiceName = "HumanResource"
 ;
-        string ServiceVersion = "1.0";
+string ServiceVersion = "1.0";
 
-        // Add services to container
+// Add services to container
 
-        builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                                .Enrich.WithProperty("Application", ServiceName)
-                                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
-        builder.Services
-            .AddOpenApi(ServiceName, ApiVersions.All)
-            .AddApiVersioningServices();
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddApiVersioningServices();
 
-        builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
-        builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails();
 
-        var services = builder.Services;
+var services = builder.Services;
 
-        var Configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
-        if (connectionString is not null)
-        {
-            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+builder.Services
+           .AddApplication(builder.Configuration)
+           .AddInfrastructure(builder.Configuration)
+           .AddServices();
 
-            Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
-        }
+services
+    .AddControllers()
+    .AddNewtonsoftJson();
 
-        builder.Services
-                   .AddApplication(builder.Configuration)
-                   .AddInfrastructure(builder.Configuration)
-                   .AddServices();
+services.AddHttpContextAccessor();
 
-        services
-            .AddControllers()
-            .AddNewtonsoftJson();
+services.AddEndpointsApiExplorer();
 
-        services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder
+                              .AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                      });
+});
 
-        services.AddEndpointsApiExplorer();
+services.AddSignalR();
 
-        builder.Services.AddCors(options =>
-        {
-            options.AddPolicy(name: MyAllowSpecificOrigins,
-                              builder =>
-                              {
-                                  builder
-                                      .AllowAnyOrigin()
-                                      .AllowAnyHeader()
-                                      .AllowAnyMethod();
-                              });
-        });
+services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
 
-        services.AddSignalR();
+    x.AddAppConsumers();
 
-        services.AddMassTransit(x =>
-        {
-            x.SetKebabCaseEndpointNameFormatter();
+    //x.AddConsumer(typeof(PersonCreatedConsumer), typeof(PersonCreatedConsumerDefinition));
 
-            x.AddAppConsumers();
-
-            //x.AddConsumer(typeof(PersonCreatedConsumer), typeof(PersonCreatedConsumerDefinition));
-
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.ConfigureEndpoints(context);
-            });
-        });
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 
 #if DEBUG
-        IdentityModelEventSource.ShowPII = true;
+IdentityModelEventSource.ShowPII = true;
 #endif
 
-        services.AddAuthorization();
+services.AddAuthorization();
 
-        services.AddAuthenticationServices(Configuration);
+services.AddAuthenticationServices(configuration);
 
-        var app = builder.Build();
+var app = builder.Build();
 
-        app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
-        app.MapObservability();
+app.MapObservability();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 
-            app.UseOpenApiAndSwaggerUi();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseRouting();
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        if (seed)
-        {
-            await app.Services.SeedAsync();
-
-            return;
-        }
-
-        app.Run();
-    }
+    app.UseOpenApiAndSwaggerUi();
 }
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+if (args.Contains("--seed"))
+{
+    await app.Services.SeedAsync();
+
+    return;
+}
+
+app.Run();

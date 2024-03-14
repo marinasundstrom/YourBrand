@@ -15,101 +15,87 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 
-static class Program
-{
-    /// <param name="seed">Seed the database</param>
-    /// <param name="args">The rest of the arguments</param>
-    /// <returns></returns>
-    static async Task Main(bool seed, string? connectionString, string[] args)
+var builder = WebApplication.CreateBuilder(args);
+
+string ServiceName = "ApiKeys";
+string ServiceVersion = "1.0";
+
+// Add services to container
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", ServiceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+builder.Services
+    .AddOpenApi(ServiceName, ApiVersions.All, settings =>
     {
-        var builder = WebApplication.CreateBuilder(args);
+        settings
+            .AddApiKeySecurity()
+            .AddJwtSecurity();
+    })
+    .AddApiVersioningServices();
 
-        string ServiceName =  "ApiKeys";
-        string ServiceVersion = "1.0";
+builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
-        // Add services to container
+builder.Services.AddProblemDetails();
 
-        builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                                .Enrich.WithProperty("Application", ServiceName)
-                                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+var configuration = builder.Configuration;
 
-        builder.Services
-            .AddOpenApi(ServiceName, ApiVersions.All, settings =>
-            {
-                settings
-                    .AddApiKeySecurity()
-                    .AddJwtSecurity();
-            })
-            .AddApiVersioningServices();
+var services = builder.Services;
 
-        builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+services.AddApplication(configuration);
+services.AddInfrastructure(configuration);
+services.AddServices();
 
-        builder.Services.AddProblemDetails();
+services
+    .AddControllers()
+    .AddNewtonsoftJson();
 
-        if (connectionString is not null)
-        {
-            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
-        }
+builder.Services.AddHttpContextAccessor();
 
-        var Configuration = builder.Configuration;
+services.AddEndpointsApiExplorer();
 
-        var services = builder.Services;
+services.AddAuthWithJwt();
+services.AddAuthWithApiKey();
 
-        services.AddApplication(Configuration);
-        services.AddInfrastructure(Configuration);
-        services.AddServices();
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumers(typeof(Program).Assembly);
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
-        services
-            .AddControllers()
-            .AddNewtonsoftJson();
+var app = builder.Build();
 
-        builder.Services.AddHttpContextAccessor();
+app.UseSerilogRequestLogging();
 
-        services.AddEndpointsApiExplorer();
+app.MapObservability();
 
-        services.AddAuthWithJwt();
-        services.AddAuthWithApiKey();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 
-        builder.Services.AddMassTransit(x =>
-        {
-            x.SetKebabCaseEndpointNameFormatter();
-            x.AddConsumers(typeof(Program).Assembly);
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.ConfigureEndpoints(context);
-            });
-        });
-
-        var app = builder.Build();
-
-        app.UseSerilogRequestLogging();
-
-        app.MapObservability();
-
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-
-            app.UseOpenApiAndSwaggerUi();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseRouting();
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapGet("/", () => "Hello World!");
-
-        app.MapControllers();
-
-        if (seed)
-        {
-            await app.Services.SeedAsync();
-            return;
-        }
-
-        app.Run();
-    }
+    app.UseOpenApiAndSwaggerUi();
 }
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/", () => "Hello World!");
+
+app.MapControllers();
+
+if (args.Contains("--seed"))
+{
+    await app.Services.SeedAsync();
+    return;
+}
+
+app.Run();
