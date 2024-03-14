@@ -1,0 +1,30 @@
+<EditForm Model="@Model" OnValidSubmit="Model.UpdatePrice">
+    <DataAnnotationsValidator />
+
+    <MudNumericField Label="Price" @bind-Value="Model.Price" Variant="Variant.Outlined" For="() => Model.Price"
+        Adornment="Adornment.End" AdornmentText="sek"
+        HelperText="@(Model.RegularPrice is null ? null : $"-{Model.DiscountRate * 100}%")"></MudNumericField>
+    @if (Model.RegularPrice is not null)
+    {
+        <MudField Label="Regular Price" Variant="Variant.Outlined" Class="mt-4" Adornment="Adornment.End"
+            AdornmentText="sek">
+            @Model.RegularPrice</MudField>
+    }
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4">Update price</MudButton>
+</EditForm>
+
+@if (Model.RegularPrice is null)
+{
+    <MudButton Variant="Variant.Filled" Class="mt-4" OnClick="@Model.SetDiscountPrice">Set discount price</MudButton>
+}
+
+@if (Model.RegularPrice is not null)
+{
+    <MudButton Variant="Variant.Filled" Class="mt-4" OnClick="@Model.RestoreRegularPrice">Restore regular price</MudButton>
+}
+
+@code
+{
+    [Parameter]
+    public PriceUpdateViewModel Model { get; set; }
+}

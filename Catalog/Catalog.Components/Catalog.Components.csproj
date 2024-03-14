@@ -24,5 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Catalog.Client\Catalog.Client.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Services\Portal.Services.csproj" />
   </ItemGroup>
 </Project>

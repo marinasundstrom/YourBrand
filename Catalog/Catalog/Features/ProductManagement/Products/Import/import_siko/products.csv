@@ -1,0 +1,3 @@
+StoreIdOrHandle,Sku,Name,Handle,Description,Brand,CategoryId,CategoryName,ParentSku,Image,Price,RegularPrice,Listed
+siko,rullebor,Rullebör,rullebor,En rymlig skottkärra,,10002,Testgrupp,,wheelbarrow.jpg,10,,true
+siko,skruv-120pack,Skruv 120-pack,skruv-120pack,Fina skruvar för gipsskrivor,,10002,Testgrupp,,screw.jpeg,84.80,,true

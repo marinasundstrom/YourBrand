@@ -1,0 +1,262 @@
+﻿@page "/products/categories/{*path}"
+@implements IDisposable
+@attribute [Authorize]
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IStoreProvider StoreProvider
+@using YourBrand.Portal
+@using YourBrand.Portal.Services
+@using YourBrand.Catalog
+@using Store = YourBrand.Portal.Services.Store
+
+<AppPageTitle>@(productCategory is null ? "Product Categories" : productCategory?.Name)</AppPageTitle>
+
+@if (loading)
+{
+        <LoadingIndicator />
+}
+else
+{
+        <MudText Typo="Typo.h3" Class="mb-12">@(productCategory is null ? "Product Categories" : productCategory?.Name)</MudText>
+
+        <MudGrid Spacing="4" Class="mt-2">
+            <MudItem xs="12" sm="5" md="5" lg="3" xl="2">
+            @if (productCategoryTreeNodes is not null)
+            {
+                        <MudPaper Elevation="25" Class="pa-4">
+                            <MudTreeView T="ProductCategoryTreeNode"
+                            Items="(new HashSet<ProductCategoryTreeNode>(productCategoryTreeNodes))" Hover="true"
+                                SelectedValueChanged="async (e) => await SetCategory(e)">
+                                <ItemTemplate>
+                                    <MudTreeViewItem Items="@(new HashSet<ProductCategoryTreeNode>(context.SubCategories))" Value="@context"
+                                    Text="@context.Name" EndText="@context.ProductsCount.ToString()" EndTextTypo="@Typo.caption" />
+                                </ItemTemplate>
+                            </MudTreeView>
+
+                            <MudButton Class="mt-4" Size="@Size.Small" StartIcon="@Icons.Material.Filled.Clear"
+                            OnClick="async () => { productCategoryTreeNode = null; await SetCategory(productCategoryTreeNode); productCategory = null; Path = null; await LoadData(); }">Clear selection
+                            </MudButton>
+                        </MudPaper>
+            }
+            </MudItem>
+
+            <MudItem xs="12" sm="7" md="7" lg="9" xl="10">
+            @if (productCategory is not null)
+            {
+                        <MudPaper class="pa-4 mb-4" Elevation="25">
+                            <MudGrid>
+                                <MudItem xs="12" sm="12" md="3">
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async (e) => await UpdateCategory2(productCategory)" StartIcon="@Icons.Material.Filled.Edit" Class="my-2">Update details</MudButton> 
+                                </MudItem>
+
+                        @if (!string.IsNullOrEmpty(productCategory.Description))
+                        {
+                                        <MudItem xs="12" sm="12" md="9">
+                                            <MudText Typo="Typo.body1">@productCategory.Description</MudText>
+                                        </MudItem>
+                        }
+                            </MudGrid>
+                        </MudPaper>
+            }
+
+                <MudTable @ref="table" T="ProductCategory" ServerData="ServerReload"
+                        Dense="false" Hover="true" Elevation="25"
+                        OnRowClick="@((e) => NavigationManager.NavigateTo($"/products/categories/{e.Item.Path}"))">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Sub-categories</MudText>
+                        <MudSpacer />
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="CreateCategory" StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create category</MudButton>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh><MudTableSortLabel T="ProductCategory" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel T="ProductCategory" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel T="ProductCategory" SortLabel="ProductsCount">Products</MudTableSortLabel></MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="category">
+                            <MudTd DataLabel="Name">@category.Name</MudTd>
+                            <MudTd DataLabel="Description">@category.Description</MudTd>
+                            <MudTd DataLabel="Products">@category.ProductsCount</MudTd>
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async (e) => await UpdateCategory(category)" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteCategory(category)" />
+                            </MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <MudText>No matching records found</MudText>
+                    </NoRecordsContent>
+                    <LoadingContent>
+                        <MudText>Loading...</MudText>
+                    </LoadingContent>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+            </MudItem>
+        </MudGrid>
+}
+
+@code
+{
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: true);
+    MudTable<ProductCategory> table = default!;
+    IEnumerable<ProductCategoryTreeNode>? productCategoryTreeNodes;
+    ProductCategoryTreeNode? productCategoryTreeNode;
+    bool loading = false;
+
+
+    [Parameter]
+    public string? Path { get; set; }
+
+    Store? store;
+    ProductCategory productCategory;
+    List<ProductCategory>? productCategories;
+
+    [Parameter]
+    public long? ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        StoreProvider.CurrentStoreChanged += OnCurrentStoreChanged;
+
+        store = StoreProvider.CurrentStore;
+
+        NavigationManager.LocationChanged += OnLocationChanged;
+
+        await LoadData();
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs arg)
+    {
+        await LoadData();
+
+        StateHasChanged();
+    }
+
+    private async void OnCurrentStoreChanged(object? sender, EventArgs e)
+    {
+        store = StoreProvider.CurrentStore;
+
+        await LoadData();
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        StoreProvider.CurrentStoreChanged -= OnCurrentStoreChanged;
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    async Task LoadData()
+    {
+        var tree = await ProductCategoriesClient.GetProductCategoryTreeAsync(store?.Id, null);
+        productCategoryTreeNodes = tree.Categories;
+        productCategoryTreeNode = null;
+
+        if (Path is null)
+        {
+            await table.ReloadServerData();
+        }
+        else
+        {
+            productCategory = await ProductCategoriesClient.GetProductCategoryByIdAsync(Path);
+
+            await table.ReloadServerData();
+        }
+    }
+
+    async Task CreateCategory()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(CreateProductCategoryModal.ParentCategoryId), productCategory?.Id);
+
+        var modalRef = DialogService.Show<CreateProductCategoryModal>("Create Category", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        productCategories.Add((ProductCategory)result.Data);
+
+        await table.ReloadServerData();
+    }
+
+    async Task UpdateCategory(ProductCategory productCategory)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(UpdateProductCategoryModal.ProductCategory), productCategory);
+
+        var modalRef = DialogService.Show<UpdateProductCategoryModal>("Update Category", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var index = productCategories!.IndexOf(productCategory);
+
+        productCategories[index] = (ProductCategory)result.Data;
+    }
+
+    async Task UpdateCategory2(ProductCategory productCategory)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(UpdateProductCategoryModal.ProductCategory), productCategory);
+
+        var modalRef = DialogService.Show<UpdateProductCategoryModal>("Update Category", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        this.productCategory = (ProductCategory)result.Data;
+
+        StateHasChanged();
+    }
+
+    async Task DeleteCategory(ProductCategory productCategory)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the category?", "The category will be deleted, but the options will remain.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        await ProductCategoriesClient.DeleteProductCategoryAsync(productCategory.Id.ToString());
+
+        productCategories.Remove(productCategory);
+    }
+
+    async Task SetCategory(ProductCategoryTreeNode? productCategoryTreeNode)
+    {
+        if (productCategoryTreeNode is null)
+        {
+            NavigationManager.NavigateTo($"/products/categories", replace: true);
+            return;
+        }
+
+        this.productCategoryTreeNode = productCategoryTreeNode;
+
+        Path = productCategoryTreeNode.Path;
+
+        NavigationManager.NavigateTo($"/products/categories/{Path}", replace: true);
+    }
+
+    private async Task<TableData<ProductCategory>> ServerReload(TableState state)
+    {
+        store = StoreProvider.CurrentStore;
+
+        var result = await ProductCategoriesClient.GetProductCategoriesAsync(store.Id, productCategory?.Id, true, true,
+        state.Page + 1, state.PageSize, null, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
+        YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);
+
+        return new TableData<ProductCategory>() { TotalItems = result.Total, Items = result.Items };
+    }
+}
+

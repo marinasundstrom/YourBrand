@@ -1,0 +1,13 @@
+<EditForm Model="@Model" OnValidSubmit="Model.UpdateHandle">
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="Handle" @bind-Value="Model.Handle" Variant="Variant.Outlined" For="() => Model.Handle">
+    </MudTextField>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4">Update handle</MudButton>
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public HandleUpdateViewModel Model { get; set; }
+}

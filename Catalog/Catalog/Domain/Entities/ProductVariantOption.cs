@@ -1,16 +1,14 @@
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductVariantOption
+public class ProductVariantOption : Entity<int>
 {
-    public int Id { get; set; }
+    public long ProductId { get; set; }
 
-    public string ProductId { get; set; } = null!;
-
-    public Product Product{ get; set; } = null!;
+    public Product Product { get; set; } = null!;
 
     public string ProductVariantId { get; set; } = null!;
 
-    public ProductVariant ProductVariant { get; set; } = null!;
+    public Product ProductVariant { get; set; } = null!;
 
     public string OptionId { get; set; } = null!;
 

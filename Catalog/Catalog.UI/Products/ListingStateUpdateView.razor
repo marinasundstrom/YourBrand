@@ -1,0 +1,21 @@
+@using YourBrand.Catalog
+
+<EditForm Model="@Model" OnValidSubmit="Model.UpdateListingState">
+    <DataAnnotationsValidator />
+
+    <MudSelect T="ProductListingState" Label="ListingState" @bind-Value="Model.ListingState" Variant="Variant.Outlined"
+        ToStringFunc="x => x.ToString()" For="() => Model.ListingState">
+        @foreach (var item in Enum.GetValues<ProductListingState>())
+        {
+            <MudSelectItem T="ProductListingState" Value="@item" />
+        }
+    </MudSelect>
+
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4">Update listing state</MudButton>
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public ListingStateUpdateViewModel Model { get; set; }
+}

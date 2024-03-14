@@ -1,0 +1,97 @@
+@using YourBrand.Catalog
+@inject NavigationManager NavigationManager
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+
+<MudPaper Elevation="2" Class="pa-4">
+    <MudTable T="Product" ServerData="@(new Func<TableState, Task<TableData<Product>>>(ServerReload))" Dense="true"
+        Elevation="0" Hover="true" @ref="table" OnRowClick="@OnItemClicked">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Variants</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateVariantDialog" />
+            <MudSpacer />
+            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Immediate="true" Placeholder="Search"
+                Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortLabel="Name" T="Product">Name</MudTableSortLabel>
+            </MudTh>
+            @foreach (var attr in Product.Attributes.OrderBy(x => x.Attribute.Id))
+            {
+                <MudTh>@attr.Attribute.Name</MudTh>
+            }
+            <MudTh>
+                <MudTableSortLabel SortLabel="Price" T="Product">Price</MudTableSortLabel>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            @foreach (var attr in context.Attributes.OrderBy(x => x.Attribute.Id))
+            {
+                <MudTd DataLabel="@attr.Value?.Name">@attr.Value?.Name</MudTd>
+            }
+            <MudTd DataLabel="Price">@context.Price sek</MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+@code
+{
+    private MudTable<Product> table;
+
+    private string searchString = null;
+
+    [Parameter]
+    public long ProductId { get; set; }
+
+    [Parameter]
+    public Product Product { get; set; }
+
+    /// <summary>
+    /// Here we simulate getting the paged, filtered and ordered data from the server
+    /// </summary>
+    private async Task<TableData<Product>> ServerReload(TableState state)
+    {
+        var result = await ProductsClient.GetVariantsAsync(ProductId.ToString(), state.Page + 1, state.PageSize,
+        searchString,
+        state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection ==
+        MudBlazor.SortDirection.Descending ? YourBrand.Catalog.SortDirection.Desc : YourBrand.Catalog.SortDirection.Asc));
+        return new TableData<Product>() { TotalItems = result.Total, Items = result.Items };
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private void OnItemClicked(TableRowClickEventArgs<Product> args)
+    {
+        NavigationManager.NavigateTo($"/products/{args.Item.Id}");
+    }
+
+    private async Task OpenCreateVariantDialog()
+    {
+        var param = new DialogParameters();
+        param.Add(nameof(CreateProductVariantDialog.ProductId), ProductId);
+        var dialog = await DialogService.ShowAsync<CreateProductVariantDialog>("Create variant", param);
+        var result = await dialog.Result;
+        if (result.Canceled)
+        {
+            return;
+        }
+
+        await table.ReloadServerData();
+    }
+}

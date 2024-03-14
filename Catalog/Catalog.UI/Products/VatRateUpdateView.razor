@@ -1,0 +1,25 @@
+<EditForm Model="@Model" OnValidSubmit="Model.UpdateVatRate">
+    <DataAnnotationsValidator />
+
+    <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" Variant="Variant.Outlined" For="() => Model.VatRate"
+        ToStringFunc="@((x) => x?.Name ?? "None")" Class="m2-4">
+        <MudSelectItem Value="@((YourBrand.Catalog.VatRate?)null)">None</MudSelectItem>
+        @foreach (var vatRate in (Model.VatRates ?? Array.Empty<YourBrand.Catalog.VatRate>()))
+        {
+            <MudSelectItem Value="@vatRate">@vatRate.Name</MudSelectItem>
+        }
+    </MudSelect>
+
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4 mb-4">Update VAT Rate</MudButton>
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public VatRateUpdateViewModel Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Model.InitializeAsync();
+    }
+}

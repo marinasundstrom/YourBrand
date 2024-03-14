@@ -1,0 +1,40 @@
+@inject IProductCategoriesClient ProductCategoriesClient
+@using YourBrand.Catalog
+
+<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 450px; min-width: 300px; overflow-y: scroll">
+            <MudPaper Elevation="0">
+                <ProductCategorySelector CategoryId="CategoryId" @bind-ProductCategoryTreeNode="ProductCategoryTreeNode"
+                    StoreId="@StoreId" />
+            </MudPaper>
+        </MudContainer>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="() => Modal.Close(ProductCategoryTreeNode)">Select</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [Parameter]
+    public string? StoreId { get; set; }
+
+    [Parameter]
+    public long? CategoryId { get; set; }
+
+    [Parameter]
+    public ProductCategoryTreeNode? ProductCategoryTreeNode { get; set; }
+
+    [Parameter]
+    public EventCallback<ProductCategoryTreeNode?> ProductCategoryTreeNodeChanged { get; set; }
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Modal.SetTitle("Select category");
+    }
+}

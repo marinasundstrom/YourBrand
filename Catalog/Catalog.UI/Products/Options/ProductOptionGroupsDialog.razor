@@ -1,0 +1,107 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductOptionsClient ProductOptionsClient
+@inject IDialogService DialogService
+@using YourBrand.Catalog
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 450px; overflow-y: scroll">
+
+                @if (item is null)
+                {
+                    <span>Loading...</span>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateGroup" StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create group</MudButton>
+
+                    <MudTable T="OptionGroup" Items="optionGroups"
+                            Dense="true" Hover="true" Elevation="0">
+                        <HeaderContent>
+                            <MudTh>Name</MudTh>
+                            <MudTh>Description</MudTh>
+                            <MudTh></MudTh>
+                        </HeaderContent>
+                        <RowTemplate Context="group">
+                            <MudTd DataLabel="Name">@group.Name</MudTd>
+                            <MudTd DataLabel="Description">@group.Description</MudTd>
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateGroup(group)" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteGroup(group)" />
+                            </MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText>No matching records found</MudText>
+                        </NoRecordsContent>
+                        <LoadingContent>
+                            <MudText>Loading...</MudText>
+                        </LoadingContent>
+                    </MudTable>
+                }
+            </MudContainer>
+        </DialogContent>
+
+    </MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    Product? item;
+    List<OptionGroup>? optionGroups;
+
+    [Parameter]
+    public long? ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        item = await ProductsClient.GetProductByIdAsync(ProductId.ToString());
+        optionGroups = (await ProductOptionsClient.GetProductOptionGroupsAsync(ProductId.GetValueOrDefault())).ToList();
+    }
+
+    async Task CreateGroup()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(CreateProductOptionGroupModal.ProductId), ProductId);
+
+        var modalRef = DialogService.Show<CreateProductOptionGroupModal>("Create Group", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        optionGroups.Add((OptionGroup)result.Data);
+    }
+
+    async Task UpdateGroup(OptionGroup optionGroup)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(UpdateProductOptionGroupModal.ProductId), ProductId);
+        parameters.Add(nameof(UpdateProductOptionGroupModal.OptionGroup), optionGroup);
+
+        var modalRef = DialogService.Show<UpdateProductOptionGroupModal>("Update Group", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        var index = optionGroups!.IndexOf(optionGroup);
+
+        optionGroups[index] = (OptionGroup)result.Data;
+    }
+
+    async Task DeleteGroup(OptionGroup optionGroup)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the group?", "The group will be deleted, but the options will remain.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+
+        {
+            return;
+        }
+
+        await ProductOptionsClient.DeleteProductOptionGroupAsync(ProductId.GetValueOrDefault(), optionGroup.Id);
+
+        optionGroups.Remove(optionGroup);
+    }
+}
+

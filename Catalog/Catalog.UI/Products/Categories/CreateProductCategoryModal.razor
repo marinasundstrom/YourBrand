@@ -1,0 +1,76 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IDialogService DialogService
+@inject IStoreProvider StoreProvider
+@using YourBrand.Catalog
+@using YourBrand.Portal.Services
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudTextField Label="Handle" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Handle"
+                For="() => Handle" />
+
+            <ProductCategorySelector2 @bind-Category="parentCategory" />
+
+            <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined"
+                @bind-Value="Description" For="() => Description" />
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    ProductCategory? parentCategory;
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Required]
+    public string Name { get; set; } = default!;
+
+    [Required]
+    public string Handle { get; set; } = default!;
+
+    public string? Description { get; set; }
+
+    [Parameter] public long? ParentCategoryId { get; set; }
+
+    async Task OnSubmit()
+    {
+        var store = StoreProvider.CurrentStore;
+
+        CreateProductCategoryRequest data = new()
+            {
+                Name = Name,
+                Handle = Handle,
+                Description = Description,
+                StoreId = store.Id,
+                ParentCategoryId = parentCategory?.Id ?? ParentCategoryId
+            };
+        var result = await ProductCategoriesClient.CreateProductCategoryAsync(data);
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+    async Task UpdateCategory()
+    {
+        var dref = DialogService.Show<ProductCategorySelectorModal>();
+        var r = await dref.Result;
+
+        if (r.Canceled) return;
+
+        var data = (ProductCategoryTreeNode)r.Data;
+
+        parentCategory = await ProductCategoriesClient.GetProductCategoryByIdAsync(data.Id.ToString());
+    }
+}

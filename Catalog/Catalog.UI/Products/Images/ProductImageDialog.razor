@@ -1,0 +1,64 @@
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Catalog
+@inject IProductsClient ProductsClient
+@inject ISnackbar Snackbar
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 300px; overflow-y: scroll">
+
+                <MudImage Src="@Url" ObjectFit="ObjectFit.Cover" Height="150" Width="150" Alt="Product image"
+                    Elevation="25" Class="rounded-lg" />
+
+                <MudTextField Class="mb-6" Variant="Variant.Outlined" Label="Title" @bind-Value="Title"
+                    For="() => Title" />
+
+                <MudTextField Class="mb-6" Variant="Variant.Outlined" Label="Text" @bind-Value="Text" For="() => Text"
+                    Lines="5" />
+
+            </MudContainer>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Update</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; } = default!;
+
+    [Parameter] public string ProductId { get; set; } = default!;
+
+    [Parameter] public ProductImage ProductImage { get; set; } = default!;
+
+    public string Url { get; set; } = default!;
+
+    [Required] public string Title { get; set; } = default!;
+
+    [Required] public string? Text { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Url = ProductImage.Url;
+        Title = ProductImage.Title;
+        Text = ProductImage.Text;
+    }
+
+    async Task OnSubmit()
+    {
+        var image = await ProductsClient.UpdateProductImageAsync(ProductId.ToString(), ProductImage.Id,
+        new UpdateProductImageData()
+            {
+                Title = Title,
+                Text = Text
+            });
+
+        Modal.Close(image);
+    }
+}

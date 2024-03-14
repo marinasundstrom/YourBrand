@@ -1,0 +1,63 @@
+@using ToastUI
+
+<EditForm Model="@Model" OnValidSubmit="Model.UpdateDetails">
+    <DataAnnotationsValidator />
+
+    @if (Model.CanInheritProperties)
+    {
+        <MudCheckBox T="bool" Label="Inherit name" @bind-Checked="Model.InheritName" />
+    }
+
+    @if (!Model.InheritName)
+    {
+        <MudTextField Label="Name" Class="mt-4" @bind-Value="Model.ShadowName" Variant="Variant.Outlined"
+            For="() => Model.ShadowName"></MudTextField>
+    }
+
+    @if (Model.CanInheritProperties)
+    {
+        <MudCheckBox T="bool" Label="Inherit description" Class="mt-4" @bind-Checked="Model.InheritDescription" />
+    }
+
+    @if (!Model.InheritDescription)
+    {
+        <MudTextField Label="Description" Lines="5" @bind-Value="Model.Description" Variant="Variant.Outlined"
+            For="() => Model.Description" Class="mt-4"></MudTextField>
+
+        @* <Editor @ref="editorRef" @bind-Value="empty" Options="@options" Change="MarkdownChanged" /> *@
+
+    }
+
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4">Update details</MudButton>
+</EditForm>
+
+@code
+{
+    Editor editorRef = default!;
+    EditorOptions options;
+    string empty = string.Empty;
+
+    [Parameter]
+    public DetailsUpdateViewModel Model { get; set; }
+
+    /*
+    protected override void OnInitialized()
+    {
+    empty = Model.Description;
+
+    options = new()
+    {
+    InitialValue = Model.Description,
+    PreviewStyle = PreviewStyle.Tab,
+    InitialEditType = EditorType.WYSIWYG,
+    Language = "en-US",
+    Theme = Theme.Auto
+    };
+    }
+
+    async Task MarkdownChanged()
+    {
+    Model.Description = await editorRef.GetMarkdown();
+    }
+    */
+}

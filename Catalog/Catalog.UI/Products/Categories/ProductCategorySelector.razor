@@ -1,0 +1,54 @@
+@inject IProductCategoriesClient ProductCategoriesClient
+@using YourBrand.Catalog
+
+@if (tree is not null)
+{
+    <div @onclick:stopPropagation @onclick:preventDefault>
+    <MudTreeView @ref="treeView" T="ProductCategoryTreeNode" Items="(new HashSet<ProductCategoryTreeNode>(tree))"
+        Hover="true" Expanded="@Expanded" ActivatedValue="ProductCategoryTreeNode"
+        SelectedValue="ProductCategoryTreeNode" SelectedValueChanged="OnProductCategoryTreeNodeChanged">
+        <ItemTemplate>
+            <MudTreeViewItem Items="@(new HashSet<ProductCategoryTreeNode>(context.SubCategories))" Value="@context"
+                Text="@context.Name" EndText="@context.ProductsCount.ToString()" EndTextTypo="@Typo.caption" />
+        </ItemTemplate>
+    </MudTreeView>
+</div>
+}
+
+@code
+{
+    MudTreeView<ProductCategoryTreeNode>? treeView;
+    IEnumerable<ProductCategoryTreeNode> tree;
+
+    [Parameter]
+    public long? CategoryId { get; set; }
+
+    [Parameter]
+    public string? StoreId { get; set; }
+
+    [Parameter]
+    public ProductCategoryTreeNode? ProductCategoryTreeNode { get; set; }
+
+    [Parameter]
+    public EventCallback<ProductCategoryTreeNode?> ProductCategoryTreeNodeChanged { get; set; }
+
+    [Parameter]
+    public bool Expanded { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var treeRoot = await ProductCategoriesClient.GetProductCategoryTreeAsync(StoreId, null);
+        tree = treeRoot.Categories;
+
+        if (CategoryId is not null)
+        {
+            ProductCategoryTreeNode = tree.FindNode(CategoryId.GetValueOrDefault());
+        }
+    }
+
+    private async Task OnProductCategoryTreeNodeChanged(ProductCategoryTreeNode? node)
+    {
+        ProductCategoryTreeNode = node;
+        await ProductCategoryTreeNodeChanged.InvokeAsync(node);
+    }
+}

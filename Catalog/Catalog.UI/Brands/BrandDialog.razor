@@ -1,0 +1,96 @@
+@using System.ComponentModel.DataAnnotations
+@inject IBrandsClient BrandsClient
+@inject ISnackbar Snackbar
+@using YourBrand.Catalog
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                    For="@(() => Name)" />
+
+                <MudTextField Label="Handle" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Handle"
+                    For="@(() => Handle)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if (BrandId is null)
+                {
+                    <text>Add</text>
+                }
+                else
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public int? BrandId { get; set; } = null!;
+
+    //[Required]
+    //public Brand Area { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    public string Handle { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (BrandId is not null)
+        {
+            var brand = await BrandsClient.GetBrandByIdAsync(BrandId.GetValueOrDefault());
+            //Area = brand.Area;
+            Name = brand.Name;
+            Handle = brand.Handle;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if (BrandId is null)
+        {
+            var brand = await BrandsClient.CreateBrandAsync(new CreateBrand
+                {
+                    //BrandId = Area.Id,
+                    Name = Name,
+                    Handle = Handle
+                });
+
+            Dialog.Close(brand);
+        }
+        else
+        {
+            if (context.IsModified())
+            {
+                await BrandsClient.UpdateBrandAsync(BrandId.GetValueOrDefault(), new UpdateBrand
+                    {
+                        //BrandId = Area.Id,
+                        Name = Name,
+                        Handle = Handle
+                    });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

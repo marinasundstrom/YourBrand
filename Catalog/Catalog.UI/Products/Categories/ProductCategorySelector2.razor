@@ -1,0 +1,65 @@
+﻿@using System.Linq.Expressions
+@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IDialogService DialogService
+@using YourBrand.Catalog
+
+<div class="d-flex flex-grow-1 mb-4">
+    <div class="flex-1 d-flex">
+        <MudTextField T="string" Label="@Label" Variant="Variant.Outlined"
+            Value="@(Category is null ? null : GetProductCategory(Category))" ReadOnly Required />
+    </div>
+
+    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateCategory" />
+</div>
+
+@code
+{
+    [Parameter] public string? Label { get; set; }
+
+    [Parameter] public ProductCategory? Category { get; set; }
+
+    [Parameter] public EventCallback<ProductCategory> CategoryChanged { get; set; }
+
+    [Parameter] public Expression<Func<ProductCategory>> For { get; set; } = default!;
+
+    async Task UpdateCategory()
+    {
+        var dref = DialogService.Show<ProductCategorySelectorModal>();
+        var r = await dref.Result;
+
+        if (r.Canceled) return;
+
+        var data = (ProductCategoryTreeNode)r.Data;
+
+        Category = await ProductCategoriesClient.GetProductCategoryByIdAsync(data.Id.ToString());
+
+        await CategoryChanged.InvokeAsync(Category);
+    }
+
+    string? GetProductCategory(ProductCategory pg)
+    {
+        if (pg is null)
+        {
+            return null;
+        }
+
+        if (pg.Parent is null)
+        {
+            return pg.Name;
+        }
+
+        return GetProductCategory(pg.Parent) + " » " + pg.Name;
+    }
+
+    string GetProductCategory(ParentProductCategory pg)
+    {
+        if (pg.Parent is null)
+        {
+            return pg.Name;
+        }
+
+        return GetProductCategory(pg.Parent) + " » " + pg.Name;
+    }
+}

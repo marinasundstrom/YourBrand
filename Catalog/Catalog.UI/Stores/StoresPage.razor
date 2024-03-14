@@ -1,0 +1,140 @@
+@page "/stores"
+@attribute [Authorize]
+@inject IStoresClient StoresClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@using YourBrand.Portal
+@using YourBrand.Catalog
+
+<AppPageTitle>Stores</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Stores</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnStoreClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New Store
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="Store" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="Store" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Store" SortLabel="Handle">Handle</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Store" SortLabel="Currency">Currency</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Handle">@context.Handle</MudTd>
+            <MudTd DataLabel="Currency">@context.Currency.Name (@context.Currency.Symbol)</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async (e) => await UpdateStore(context)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteStore(context)" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: false);
+    MudTable<Store> table; 
+    string? searchString;
+
+    public Store Store { get; set; }
+
+    private async Task<TableData<Store>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await StoresClient.GetStoresAsync(state.Page, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
+            return new TableData<Store> { Items = results.Items, TotalItems = results.Total };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<Store> ev)
+    {
+        var item = ev.Item;
+
+        await OnStoreClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnStoreChanged(Store sa)
+    {
+        Store = sa;
+        table.ReloadServerData();
+    }
+
+    async Task OnStoreClicked(Store? dto)
+    {
+        await UpdateStore(dto);
+    }
+
+    async Task UpdateStore(Store? dto)
+    {
+        /*try
+        {*/
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(StoreDialog.StoreId), dto?.Id);
+
+            var dialogReference = DialogService.Show<StoreDialog>(dto is null ? "New Store" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }*/
+    }
+
+    async Task DeleteStore(Store store)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the store?", "The store will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        await StoresClient.DeleteStoreAsync(store.Id);
+
+        await table.ReloadServerData();
+    }
+}

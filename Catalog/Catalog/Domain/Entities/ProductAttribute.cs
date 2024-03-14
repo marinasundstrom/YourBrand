@@ -1,10 +1,8 @@
 ﻿namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductAttribute
+public class ProductAttribute : Entity<int>
 {
-    public int Id { get; set; }
-
-    public string ProductId { get; set; } = null!;
+    public long ProductId { get; set; }
 
     public Product Product { get; set; } = null!;
 
@@ -12,4 +10,9 @@ public class ProductAttribute
 
     public Entities.Attribute Attribute { get; set; } = null!;
 
+    public bool ForVariant { get; set; }
+
+    public bool IsMainAttribute { get; set; }
+
+    public AttributeValue? Value { get; set; } = null!;
 }

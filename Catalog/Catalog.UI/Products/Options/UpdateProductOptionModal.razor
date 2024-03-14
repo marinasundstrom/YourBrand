@@ -1,0 +1,285 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductOptionsClient ProductOptionsClient
+@inject IDialogService DialogService
+@using YourBrand.Catalog
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <ObjectGraphDataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 450px; overflow-y: scroll">
+
+                <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name"
+                    For="() => Name" />
+
+                <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined"
+                    @bind-Value="Description" For="() => Description" />
+
+                <MudField Label="Option Type" Variant="Variant.Outlined" Class="mb-6">@OptionType</MudField>
+
+                @if (Groups is not null)
+                {
+                    <MudSelect T="OptionGroup" Label="Group" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Group"
+                        ToStringFunc="x => x?.Name" For="() => Group">
+                        @foreach (var item in Groups)
+                        {
+                            <MudSelectItem Value="@item" />
+                        }
+                    </MudSelect>
+                }
+
+                @if (OptionType == OptionType.YesOrNo)
+                {
+                    <MudTextField Label="Id" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Id" For="() => Id" />
+
+                    <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price"
+                        For="() => Price" />
+
+                    <MudCheckBox Label="Is selected" Class="mb-6" Variant="Variant.Outlined" @bind-Checked="IsSelected"
+                        For="() => IsSelected" />
+                }
+
+                @if (OptionType == OptionType.Choice)
+                {
+                    <MudText Typo="Typo.h6" Align="Align.Left" Class="mb-2">Values</MudText>
+
+                    <div class="form-group mb-2">
+
+                        <MudButton Color="Color.Primary" OnClick="AddValue" StartIcon="@Icons.Material.Filled.Add">Add value
+                        </MudButton>
+
+                        @if (Values.Any())
+                        {
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Id</th>
+                                        <th>Price</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var value in Values)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <MudTextField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                                    @bind-Value="value.Name" For="() => value.Name" />
+                                            </td>
+
+                                            <td>
+                                                <MudTextField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                                    @bind-Value="value.Id" For="() => value.Id" />
+                                            </td>
+
+                                            <td>
+                                                <MudNumericField Class="mb-2" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                                    @bind-Value="value.Price" For="() => value.Price" />
+                                            </td>
+
+                                            <td>
+                                                <MudIconButton Class="mb-2" Icon="@Icons.Material.Filled.Delete"
+                                                    OnClick="async () => await DeleteValue(value)" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+
+                    <MudSelect T="OptionValueVM" Label="Default value" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="SelectedValue" ToStringFunc="x => x?.Name" For="() => SelectedValue">
+                        @foreach (var value in Values)
+                        {
+                            <MudSelectItem Value="@value">@value.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudCheckBox Label="Is required" Class="mb-6" Variant="Variant.Outlined" @bind-Checked="IsRequired"
+                        For="() => IsRequired" />
+                }
+                else if (OptionType == OptionType.TextValue)
+                {
+                    <MudNumericField Label="Min length" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="TextValueMinLength" For="() => TextValueMinLength" />
+
+                    <MudNumericField Label="Max length" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="TextValueMaxLength" For="() => TextValueMaxLength" />
+
+                    <MudTextField Label="Default value" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="DefaultTextValue" For="() => DefaultTextValue" />
+                }
+                else if (OptionType == OptionType.NumericalValue)
+                {
+                    <MudNumericField Label="Min value" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="MinNumericalValue" For="() => MinNumericalValue" />
+
+                    <MudNumericField Label="Max value" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="MaxNumericalValue" For="() => MaxNumericalValue" />
+
+                    <MudNumericField Label="Default value" Class="mb-6" Variant="Variant.Outlined"
+                        @bind-Value="DefaultNumericalValue" For="() => DefaultNumericalValue" />
+
+                    <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price"
+                        For="() => Price" />
+
+                }
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    IList<OptionGroup> Groups { get; set; }
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public long ProductId { get; set; }
+
+    [Parameter] public Option Option { get; set; }
+
+    [Parameter] public Product Product { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+
+    public OptionType OptionType { get; set; }
+
+    public OptionGroup? Group { get; set; }
+
+    public bool? IsSelected { get; set; }
+
+    public string? Id { get; set; }
+
+    public decimal? Price { get; set; }
+
+    public bool IsRequired { get; set; }
+
+    [ValidateComplexType]
+    public List<OptionValueVM> Values { get; set; } = new List<OptionValueVM>();
+
+    public OptionValueVM? SelectedValue { get; set; }
+
+    public int? MinNumericalValue { get; set; }
+    public int? MaxNumericalValue { get; set; }
+    public int? DefaultNumericalValue { get; set; }
+
+    public int? TextValueMinLength { get; set; }
+    public int? TextValueMaxLength { get; set; }
+    public string? DefaultTextValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Groups = (await ProductOptionsClient.GetProductOptionGroupsAsync(ProductId)).Prepend(new OptionGroup
+            {
+                Id = null,
+                Name = "None"
+            }).ToList();
+
+        Name = Option.Name;
+        Description = Option.Description;
+        Group = Groups.FirstOrDefault(x => x?.Id == Option.Group?.Id);
+        IsSelected = Option.IsSelected;
+        Price = Option.Price;
+        Id = Option.Id;
+        OptionType = Option.OptionType;
+        IsRequired = Option.IsRequired;
+
+        MinNumericalValue = Option.MinNumericalValue;
+        MaxNumericalValue = Option.MaxNumericalValue;
+        DefaultNumericalValue = Option.DefaultNumericalValue;
+        TextValueMinLength = Option.TextValueMinLength;
+        TextValueMaxLength = Option.TextValueMaxLength;
+        DefaultTextValue = Option.DefaultTextValue;
+
+        foreach (var value in Option.Values)
+        {
+            Values.Add(new OptionValueVM()
+                {
+                    Id = value.Id,
+                    Name = value.Name,
+                    Price = value.Price,
+                    SKU = value.Sku
+                });
+        }
+
+        SelectedValue = Values.FirstOrDefault(x => x.Id == Option.DefaultValue?.Id);
+    }
+
+    void AddValue()
+    {
+        Values.Add(new OptionValueVM());
+    }
+
+
+    async Task DeleteValue(OptionValueVM vm)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the value?", "This can't be undone.", yesText: "Delete",
+        noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        if (vm.Id is not null)
+        {
+            await ProductOptionsClient.DeleteProductOptionValueAsync(ProductId, Option.Id, vm.Id);
+        }
+
+        Values.Remove(vm);
+    }
+
+    async Task OnSubmit()
+    {
+        var data = new UpdateProductOptionData
+            {
+                Name = Name,
+                Description = Description,
+                GroupId = Group?.Id,
+                IsSelected = IsSelected.GetValueOrDefault(),
+                Sku = Id,
+                Price = Price,
+                Values = Values.Select(x => new UpdateProductOptionValueData()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Sku = x.Id,
+                    Price = x.Price
+                }).ToList(),
+                DefaultOptionValueId = SelectedValue?.Id,
+                //IsRequired = IsRequired,
+
+                MinNumericalValue = MinNumericalValue,
+                MaxNumericalValue = MaxNumericalValue,
+                DefaultNumericalValue = DefaultNumericalValue,
+                TextValueMinLength = TextValueMinLength,
+                TextValueMaxLength = TextValueMaxLength,
+                DefaultTextValue = DefaultTextValue
+            };
+
+        var result = await ProductOptionsClient.UpdateProductOptionAsync(ProductId, Option.Id, data);
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+    public class OptionValueVM
+    {
+        public string Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        public string? SKU { get; set; }
+
+        public decimal? Price { get; set; }
+    }
+}

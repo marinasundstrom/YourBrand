@@ -1,6 +1,6 @@
 ﻿@page "/Orders/Create"
 @page "/Orders/{orderNo:int}"
-@using YourBrand.Catalog.Client
+@using YourBrand.Catalog
 @inject IOrdersClient OrdersClient
 @inject IOrderStatusesClient OrderStatusesClient
 @inject IProductsClient ProductsClient
@@ -93,7 +93,7 @@
         </HeaderContent>
         <RowTemplate Context="orderItem">
             <MudTd DataLabel="Item">@orderItem.Item?.Name</MudTd>
-            <MudTd DataLabel="Price">@orderItem.Item?.Price?.FormatCurrency(currency)</MudTd>
+            <MudTd DataLabel="Price">@orderItem.Item?.Price.FormatCurrency(currency)</MudTd>
             @* <MudTd DataLabel="VAT Rate">@(orderItem.Item?.VatRate * 100)%</MudTd> *@
             <MudTd DataLabel="Quantity">@orderItem.Quantity</MudTd>
             <MudTd DataLabel="Total" Style="text-align:right">@((orderItem.Item?.Price * orderItem.Quantity)?.FormatCurrency(currency))</MudTd>
@@ -169,7 +169,7 @@
             <MudTd DataLabel="Item">
                 <YourBrand.Catalog.ProductsSelector @bind-Value="orderItem.Item" />
             </MudTd>
-            <MudTd DataLabel="Price">@orderItem.Item?.Price?.FormatCurrency(currency)</MudTd>
+            <MudTd DataLabel="Price">@orderItem.Item?.Price.FormatCurrency(currency)</MudTd>
             @* <MudTd DataLabel="VAT Rate">@(orderItem.Item?.VatRate * 100)%</MudTd> *@
             <MudTd DataLabel="Quantity">
                 <MudNumericField T="int"
@@ -291,7 +291,7 @@
                 var i = new OrderItemVM()
                 {
                     Id = item.Id,
-                    Item = await ProductsClient.GetProductAsync(item.ItemId),
+                    Item = await ProductsClient.GetProductByIdAsync(item.ItemId),
                     Price = item.Price,
                     Quantity = (int)item.Quantity
                     
@@ -385,7 +385,7 @@
             var item = await OrdersClient.AddItemAsync(
                  OrderNo.GetValueOrDefault(),
                  dto.Item!.Description,
-                 dto.Item!.Id,
+                 dto.Item!.Id.ToString(),
                  "pcs", //dto.Item!.Unit,
                  dto.Item.Price,
                  dto.Quantity
@@ -459,9 +459,10 @@
 
     }
 
-    private async Task<IEnumerable<ProductDto>> SearchItems(string value)
+    private async Task<IEnumerable<Product>> SearchItems(string value)
     {
-        var products = await ProductsClient.GetProductsAsync(false, null, 0, 100, null, null, null);
+        var products = await ProductsClient.GetProductsAsync(null, null, true, true, null, null, 0,
+        10, null, null);
 
         // if text is null or empty, show complete list
         if (string.IsNullOrEmpty(value))

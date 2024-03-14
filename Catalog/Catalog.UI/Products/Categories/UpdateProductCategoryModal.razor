@@ -1,0 +1,61 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@using YourBrand.Catalog
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudTextField Label="Handle" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Handle"
+                For="() => Handle" />
+
+            <MudTextField Lines="3" Class="mb-6" Label="Description" Variant="Variant.Outlined"
+                @bind-Value="Description" For="() => Description" />
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Save</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public ProductCategory ProductCategory { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    public string Handle { get; set; }
+
+    public string? Description { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Name = ProductCategory.Name;
+        Handle = ProductCategory.Handle;
+        Description = ProductCategory.Description;
+    }
+
+    async Task OnSubmit()
+    {
+        UpdateProductCategoryDetailsRequest data = new()
+            {
+                Name = Name,
+                //Handle = Handle,
+                Description = Description
+            };
+        var result = await ProductCategoriesClient.UpdateProductCategoryDetailsAsync(ProductCategory.Id.ToString(), data);
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+}

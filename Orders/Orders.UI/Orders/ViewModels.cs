@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-using YourBrand.Catalog.Client;
+using YourBrand.Catalog;
 
 namespace YourBrand.Orders;
 
@@ -20,7 +20,7 @@ public class OrderItemVM
     public Guid? Id { get; set; }
 
     [Required]
-    public ProductDto? Item { get; set; }
+    public Product? Item { get; set; }
 
     public decimal Price { get; set; }
 

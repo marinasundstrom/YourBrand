@@ -1,0 +1,60 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductOptionsClient ProductOptionsClient
+@using YourBrand.Catalog
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 450px; overflow-y: scroll">
+                <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name"
+                    For="() => Name" />
+
+                <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined"
+                    @bind-Value="Description" For="() => Description" />
+
+                <MudNumericField Label="Min" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Min"
+                    For="() => Min" />
+
+                <MudNumericField Label="Max" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Max"
+                    For="() => Max" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance Modal { get; set; }
+
+    [Parameter] public long ProductId { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    public int? Min { get; set; }
+
+    public int? Max { get; set; }
+
+    async Task OnSubmit()
+    {
+        CreateProductOptionGroupData data = new()
+            {
+                Name = Name,
+                Description = Description,
+                Min = Min,
+                Max = Max
+            };
+        var result = await ProductOptionsClient.CreateProductOptionGroupAsync(ProductId, data);
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+}

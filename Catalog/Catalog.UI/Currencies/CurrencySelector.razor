@@ -1,0 +1,58 @@
+@using System.Linq.Expressions
+@inject ICurrenciesClient CurrenciesClient
+@inject IDialogService DialogService
+@using YourBrand.Catalog
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="Currency" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class"
+            Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchCurrencies"
+            ToStringFunc="(x) => x.Name" ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name (@context2.Symbol)</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name (@context2.Symbol)</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Currency";
+
+    [Parameter]
+    public Currency Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Currency> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<Currency>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    async Task<IEnumerable<Currency>> SearchCurrencies(string text)
+    {
+        /*try
+        {*/
+        var results = await CurrenciesClient.GetCurrenciesAsync(0, 10, text, null, null);
+        return results.Items;
+        /* }
+        catch (AccessTokenNotAvailableException exception)
+        {
+        exception.Redirect();
+        } */
+
+        //return null;
+    }
+}

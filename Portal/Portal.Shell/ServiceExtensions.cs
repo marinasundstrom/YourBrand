@@ -22,7 +22,7 @@ public static class ServiceExtensions
             .AddScoped<ICurrentUserService, CurrentUserService>()
             .AddScoped<IAccessTokenProvider, AccessTokenProvider>()
             .AddMarkdownServices();
-
+            
         return services;
     }
 }

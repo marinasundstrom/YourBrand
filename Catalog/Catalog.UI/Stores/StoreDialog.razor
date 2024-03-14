@@ -1,0 +1,103 @@
+@using System.ComponentModel.DataAnnotations
+@inject IStoresClient StoresClient
+@inject ISnackbar Snackbar
+@using YourBrand.Catalog
+@using YourBrand.Catalog.Currencies
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                    For="@(() => Name)" />
+
+                <MudTextField Label="Handle" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Handle"
+                    For="@(() => Handle)" />
+
+                <CurrencySelector Label="Currency" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Currency"
+                    For="@(() => Currency)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if (StoreId is null)
+                {
+                    <text>Add</text>
+                }
+                else
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = default!;
+
+    [Parameter]
+    public string StoreId { get; set; } = default!;
+
+    //[Required]
+    //public Store Area { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    public string Handle { get; set; }
+
+    [Required]
+    public Currency Currency { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (StoreId is not null)
+        {
+            var store = await StoresClient.GetStoreByIdAsync(StoreId);
+            Name = store.Name;
+            Handle = store.Handle;
+            Currency = store.Currency;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if (StoreId is null)
+        {
+            var store = await StoresClient.CreateStoreAsync(new CreateStore
+                {
+                    Name = Name,
+                    Handle = Handle,
+                    Currency = Currency.Code
+                });
+
+            Dialog.Close(store);
+        }
+        else
+        {
+            if (context.IsModified())
+            {
+                await StoresClient.UpdateStoreAsync(StoreId, new UpdateStore
+                    {
+                        Name = Name,
+                        Handle = Handle,
+                        Currency = Currency.Code
+                    });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

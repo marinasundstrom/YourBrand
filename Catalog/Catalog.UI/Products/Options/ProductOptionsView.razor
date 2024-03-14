@@ -1,0 +1,69 @@
+﻿@inject NavigationManager NavigationManager
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IProductOptionsClient ProductOptionsClient
+@inject IOptionsClient OptionsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Catalog
+
+<style>
+    .mud-table-cell-custom-group {
+        font-weight: 500;
+        font-size: 12pt;
+    }
+
+    .mud-table-cell-custom-group-footer {
+        padding-bottom: 50px;
+        text-align: right;
+    }
+</style>
+
+<MudTable @ref="productOptionsTable" Items="@ProductOptions" Class="mt-4" Dense="false" Hover="true" Elevation="25" ReadOnly="false" CanCancelEdit="true" Filter="new Func<ProductOption,bool>(FilterOptionsFunc)"
+          @bind-SelectedItem="selectedProductOption" SortLabel="Sort By" GroupBy="tableGroupDefinition">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Options</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="ShowAddOptionDialog" />
+        <MudIconButton Icon="@Icons.Material.Filled.List" OnClick="ShowOptionGroupsDialog" />
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(async s => await OnSearch(s))" Immediate="true" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<ProductOption, object>(x => x.Option.Name)">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ProductOption, object>(x => x.Option.OptionType)">Type</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ProductOption, object>(x => x.Option.IsRequired)">Is Required</MudTableSortLabel></MudTh>
+        <MudTh>Default Value</MudTh>
+        <MudTh>Price</MudTh>
+        <MudTh>Is inherited</MudTh>
+        <MudTh Style="text-align:right"></MudTh>
+    </HeaderContent>
+    <GroupHeaderTemplate>
+        <MudTh Class="mud-table-cell-custom-group py-4" colspan="7">@($"{(context.Key ?? "Miscellaneous")}")</MudTh>
+        @*
+        <MudTh Class="mud-table-cell-custom-group py-4" Style="text-align:right">
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await ShowEditOptionGroupDialog(null!)" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" />
+        </MudTh> *@
+    </GroupHeaderTemplate>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Option.Name</MudTd>
+        <MudTd DataLabel="Type">@context.Option.OptionType</MudTd>
+        <MudTd DataLabel="Is Required">@(context.Option.OptionType == OptionType.YesOrNo ? string.Empty : context.Option.IsRequired)</MudTd>
+        <MudTd DataLabel="Default Value">@((context.Option.OptionType == OptionType.YesOrNo ? (context.Option.IsSelected.GetValueOrDefault() ? "Yes" : "No") : null) ?? context.Option.DefaultValue?.Name ?? context.Option.DefaultNumericalValue?.ToString() ?? context.Option.DefaultTextValue)</MudTd>
+        <MudTd DataLabel="Price">@context.Option.Price?.ToString("c")</MudTd>
+        <MudTd DataLabel="Price">@context.IsInherited</MudTd>
+        <MudTd Style="text-align:right">
+            @if (!context.IsInherited)
+            {
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async () => await ShowEditOptionDialog(context)" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteOption(context.Option.Id)" />
+            }
+        </MudTd>
+    </RowTemplate>
+    @*
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+    *@
+</MudTable>

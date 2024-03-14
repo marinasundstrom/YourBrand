@@ -1,131 +1,210 @@
-﻿using System.Text.Json.Serialization;
+﻿using Azure.Identity;
+using Azure.Storage.Blobs;
+
+using YourBrand.Catalog.Common;
+using YourBrand.Catalog.Features;
+using YourBrand.Catalog.Features.ProductManagement.Products;
+using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
+using YourBrand.Catalog.Persistence;
+
+using FluentValidation;
+
+using HealthChecks.UI.Client;
 
 using MassTransit;
-
-using MediatR;
-
-using YourBrand.Catalog.Application;
-using YourBrand.Catalog.Application.Common.Interfaces;
-using YourBrand.Catalog.Infrastructure;
-using YourBrand.Catalog.Infrastructure.Persistence;
-using YourBrand.Documents.Client;
-using YourBrand.Payments.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
-using Azure.Storage.Blobs;
-using Azure.Identity;
-using YourBrand.Identity;
 
-using Serilog;
+using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Catalog;
 
+using Serilog;
+
+string ServiceName = "Catalog";
+
 var builder = WebApplication.CreateBuilder(args);
-
-string ServiceName = "Catalog"
-;
-string ServiceVersion = "1.0";
-
-// Add services to container
 
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDiscoveryClient();
+}
+
+builder.Services.AddOutputCache(options =>
+{
+    options.AddGetProductsPolicy();
+
+    options.AddGetProductByIdPolicy();
+});
+
+
+if (builder.Environment.IsProduction())
+{
+    builder.Configuration.AddAzureAppConfiguration(options =>
+        options.Connect(
+            new Uri($"https://{builder.Configuration["Azure:AppConfig:Name"]}.azconfig.io"),
+            new DefaultAzureCredential()));
+
+    builder.Configuration.AddAzureKeyVault(
+        new Uri($"https://{builder.Configuration["Azure:KeyVault:Name"]}.vault.azure.net/"),
+        new DefaultAzureCredential());
+}
+
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
+
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    if (builder.Environment.IsProduction())
+    {
+        // Add a KeyVault client
+        clientBuilder.AddSecretClient(new Uri($"https://{builder.Configuration["Azure:KeyVault:Name"]}.vault.azure.net/"));
+    }
+
+    // Add a Storage account client
+    if (builder.Environment.IsDevelopment())
+    {
+        clientBuilder.AddBlobServiceClient(builder.Configuration["Azure:StorageAccount:ConnectionString"])
+                        .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+    }
+    else
+    {
+        clientBuilder.AddBlobServiceClient(new Uri($"https://{builder.Configuration["Azure:StorageAccount:Name"]}.blob.core.windows.net"));
+    }
+
+    // Use DefaultAzureCredential by default
+    clientBuilder.UseCredential(new DefaultAzureCredential());
+});
+
+// Add services to the container.
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
+
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+builder.Services.AddProductsServices();
 
-builder.Services.AddProblemDetails();
+builder.Services.AddObservability("Catalog.API", "1.0", builder.Configuration);
 
+builder.Services.AddSqlServer<CatalogContext>(
+    builder.Configuration.GetValue<string>("yourbrand:catalog-svc:db:connectionstring"));
 
-var configuration = builder.Configuration;
-
-builder.Services
-    .AddApplication()
-    .AddInfrastructure(configuration);
-
-builder.Services.AddControllers();
-
-// Set the JSON serializer options
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
-{
-    // options.SerializerOptions.WriteIndented = true;
-    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
-
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddIdentityServices();
-
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddAzureClients(builder =>
-        {
-            // Add a KeyVault client
-            //builder.AddSecretClient(keyVaultUrl);
-
-            // Add a Storage account client
-            builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
-                            .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
-
-            // Use DefaultAzureCredential by default
-            builder.UseCredential(new DefaultAzureCredential());
-        });
+builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());
 
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
 
-    //x.AddConsumers(typeof(Program).Assembly);
+    x.AddConsumers(typeof(Program).Assembly);
 
-    //x.AddRequestClient<IncomingTransactionBatch>();
-
-    x.UsingRabbitMq((context, cfg) =>
+    if (builder.Environment.IsProduction())
     {
-        cfg.ConfigureEndpoints(context);
-    });
+        x.UsingAzureServiceBus((context, cfg) =>
+        {
+            cfg.Host($"sb://{builder.Configuration["Azure:ServiceBus:Namespace"]}.servicebus.windows.net");
+
+            cfg.ConfigureEndpoints(context);
+        });
+    }
+    else
+    {
+        x.UsingRabbitMq((context, cfg) =>
+        {
+            var rabbitmqHost = builder.Configuration["RABBITMQ_HOST"] ?? "localhost";
+
+            cfg.Host(rabbitmqHost, "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+
+            cfg.ConfigureEndpoints(context);
+        });
+    }
 });
 
-builder.Services.AddDocumentsClients((sp, http) =>
-{
-    http.BaseAddress = new Uri($"https://localhost:5174/api/documents/");
-});
+builder.Services
+    .AddHealthChecksServices()
+    .AddDbContextCheck<CatalogContext>();
 
-builder.Services.AddPaymentsClients((sp, http) =>
-{
-    http.BaseAddress = new Uri($"https://localhost:5174/api/payments/");
-});
+builder.Services.AddScoped<ProductVariantsService>();
+
+builder.Services.AddScoped<ICurrentUserService>(sp => null!);
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
+builder.Services.AddAuthorization();
+
+var reverseProxy = builder.Services
+.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
-
 app.MapObservability();
+
+app.MapReverseProxy();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApiAndSwaggerUi();
 }
-else
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
 
-app.MapGet("/", () => "Hello World!");
+app.UseOutputCache();
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
-if (args.Contains("--seed"))
+app.MapFeaturesEndpoints();
+
+app.MapHealthChecks("/healthz", new HealthCheckOptions()
 {
-    await SeedData.EnsureSeedData(app);
-    return;
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    //await context.Database.EnsureDeletedAsync();
+    //await context.Database.EnsureCreatedAsync(); 
+
+    if (args.Contains("--seed"))
+    {
+        await SeedData(context, configuration, logger);
+        return;
+    }
 }
 
 app.Run();
+
+static async Task SeedData(CatalogContext context, IConfiguration configuration, ILogger<Program> logger)
+{
+    try
+    {
+        await Seed2.SeedData(context, configuration);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred seeding the " +
+            "database. Error: {Message}", ex.Message);
+    }
+}

@@ -1,0 +1,13 @@
+<EditForm Model="@Model" OnValidSubmit="Model.UpdateSku">
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="Sku" @bind-Value="Model.Sku" Variant="Variant.Outlined" For="() => Model.Sku">
+    </MudTextField>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4">Update SKU</MudButton>
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public SkuUpdateViewModel Model { get; set; }
+}

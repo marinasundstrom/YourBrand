@@ -1,0 +1,104 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Catalog
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IAttributesClient AttributesClient
+@inject ISnackbar Snackbar
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 300px; overflow-y: scroll">
+
+                <MudAutocomplete T="YourBrand.Catalog.Attribute" Class="mb-6" Variant="Variant.Outlined"
+                    Label="Attribute" @bind-Value="Attribute" SearchFuncWithCancel="SearchAttribute"
+                    ShowProgressIndicator="true" ToStringFunc="(x) => x.Name" Required />
+
+                @if (!IsVariant)
+                {
+                    <MudCheckBox Label="For variant" @bind-Checked="ForVariant" />
+
+                    <MudCheckBox Label="Is Main Attribute" @bind-Checked="IsMainAttribute" />
+                }
+
+                <MudAutocomplete T="AttributeValue" Class="mb-6" Variant="Variant.Outlined" Label="Value"
+                    @bind-Value="Value"
+                    SearchFuncWithCancel="@(async (string value, CancellationToken ct) => await SearchAttributeValue(Attribute.Id, value, ct))"
+                    ShowProgressIndicator="true" ToStringFunc="(x) => x.Name" Required />
+            </MudContainer>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Create</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    IEnumerable<ProductAttribute> productAttributes = Enumerable.Empty<ProductAttribute>();
+
+    [CascadingParameter] MudDialogInstance Modal { get; set; } = default!;
+
+    [Parameter] public long ProductId { get; set; } = default!;
+
+    [Parameter] public bool IsVariant { get; set; } = default!;
+
+    [Required] public YourBrand.Catalog.Attribute Attribute { get; set; } = default!;
+
+    [Required] public bool ForVariant { get; set; } = default!;
+
+    [Required] public bool IsMainAttribute { get; set; } = default!;
+
+    [Required] public AttributeValue Value { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        productAttributes = await ProductsClient.GetProductAttributesAsync(ProductId);
+    }
+
+    async Task OnSubmit()
+    {
+        AddProductAttribute data = new()
+            {
+                AttributeId = Attribute.Id,
+                ValueId = Value.Id,
+                ForVariant = ForVariant,
+                IsMainAttribute = IsMainAttribute
+            };
+
+        try
+        {
+            var result = await ProductsClient.AddProductAttributeAsync(ProductId, data);
+            Modal.Close(DialogResult.Ok(result));
+        }
+        catch { Snackbar.Add("Error", Severity.Error); }
+        /*
+        catch (YourBrand.Catalog.ApiException<YourBrand.Catalog.> exc)
+        {
+        Snackbar.Add(exc.Result.Detail, Severity.Error);
+        }
+        */
+    }
+
+    private async Task<IEnumerable<YourBrand.Catalog.Attribute>> SearchAttribute(string value,
+    CancellationToken cancellationToken)
+    {
+        var r = await AttributesClient.GetAttributesAsync(null, 1, 10, value, null, null, cancellationToken);
+        return r.Items;
+    }
+
+    private async Task<IEnumerable<AttributeValue>> SearchAttributeValue(string attributeId, string value,
+    CancellationToken cancellationToken)
+    {
+        var attribute = await AttributesClient.GetAttributeByIdAsync(attributeId, cancellationToken);
+
+        if (value is null)
+            return attribute.Values;
+
+        return attribute.Values.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+}

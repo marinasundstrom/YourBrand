@@ -1,0 +1,251 @@
+@page "/products/{id}"
+@page "/products/{id}/edit"
+@attribute [Authorize]
+@using YourBrand.Portal
+@using YourBrand.Catalog
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IVatRatesClient VatRatesClient
+@inject IBrandsClient BrandsClient
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IStoreProvider StoreProvider
+@implements IDisposable
+@using Store = YourBrand.Portal.Services.Store
+@using YourBrand.Portal.Services
+@using YourBrand.Catalog.Products.Attributes
+@using YourBrand.Catalog.Products.Options
+@using YourBrand.Catalog.Products.Variants
+
+@if (loaded)
+{
+        <MudBreadcrumbs Items="_items" Class="ps-0"></MudBreadcrumbs>
+
+        <AppPageTitle>@detailsUpdateViewModel.Name</AppPageTitle>
+
+        <MudText Typo="Typo.h3" GutterBottom="true">@detailsUpdateViewModel.Name</MudText>
+
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <ImageUpdateView Model="imageUpdateViewModel" />
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <DetailsUpdateView @key="detailsUpdateViewModel.ProductId" Model="@detailsUpdateViewModel" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12">
+                <MudExpansionPanels MultiExpansion="true">
+                    <MudExpansionPanel MaxHeight="350">
+                        <TitleContent>
+                            <div class="d-flex justify-start flex-grow-1 gap-1">
+                                <MudText Typo="Typo.h6" Class="mt-2">Description</MudText>
+                                <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="() => {}" />
+                            </div>
+                            <MudSpacer />
+                        </TitleContent>
+
+                    @* <Editor @ref="editorRef" @bind-Value="empty" Options="@options" Change="MarkdownChanged" /> *@
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            </MudItem>
+
+        @if (product.Parent is null)
+        {
+                    <MudItem xs="12" sm="12" md="3">
+                        <MudPaper Elevation="2" Class="pa-4">
+                            <BrandUpdateView Model="brandUpdateViewModel" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3">
+                        <MudPaper Elevation="2" Class="pa-4">
+                            <CategoryUpdateView Model="categoryUpdateViewModel" />
+                        </MudPaper>
+                    </MudItem>
+        }
+
+            <MudItem xs="12" sm="12" md="3">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <div class="mb-4">
+                        <VatRateUpdateView Model="vatRateUpdateViewModel" />
+                    </div>
+
+                    <PriceUpdateView Model="priceUpdateViewModel" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="3">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <HandleUpdateView Model="handleUpdateViewModel" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="3">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <ListingStateUpdateView Model="visibilityUpdateViewModel" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="3">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <SkuUpdateView Model="skuUpdateViewModel" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12">
+                <ProductAttributesView @key="product.Id" ProductId="product.Id" HasVariants="product.HasVariants" />
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12">
+                <ProductOptionsView @key="product.Id" ProductId="product.Id" ProductOptions="product.Options.ToList()" />
+            </MudItem>
+
+        @if (product.Parent is null)
+        {
+                    <MudItem xs="12" sm="12" md="12">
+                        <VariantView @key="product.Id" ProductId="product.Id" Product="product" />
+                    </MudItem>
+        }
+
+            <MudItem xs="12" sm="12" md="12">
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error"
+                    OnClick="DeleteProduct">Delete product</MudButton>
+            </MudItem>
+
+        </MudGrid>
+}
+
+@code
+{
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: true);
+
+    bool loaded = false;
+    Product product;
+    ImageUpdateViewModel imageUpdateViewModel;
+    DetailsUpdateViewModel detailsUpdateViewModel;
+    BrandUpdateViewModel brandUpdateViewModel;
+    CategoryUpdateViewModel categoryUpdateViewModel;
+    VatRateUpdateViewModel vatRateUpdateViewModel;
+    PriceUpdateViewModel priceUpdateViewModel;
+    HandleUpdateViewModel handleUpdateViewModel;
+    ListingStateUpdateViewModel visibilityUpdateViewModel;
+    SkuUpdateViewModel skuUpdateViewModel;
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
+
+    [Parameter] public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+
+        await LoadAsync();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    protected async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await LoadAsync();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async Task LoadAsync()
+    {
+        product = await ProductsClient.GetProductByIdAsync(Id);
+
+        _items.Clear();
+
+        _items.Add(new BreadcrumbItem("Products", href: "/products"));
+
+        if (product.Parent is null)
+        {
+            _items.Add(new BreadcrumbItem(product.Name, href: null, disabled: true));
+        }
+        else
+        {
+            _items.Add(new BreadcrumbItem(product.Parent.Name, href: $"/products/{product.Parent.Id}"));
+            _items.Add(new BreadcrumbItem(product.Name, href: null, disabled: true));
+        }
+
+        imageUpdateViewModel = ImageUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        Snackbar);
+
+        detailsUpdateViewModel = DetailsUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        Snackbar);
+
+        brandUpdateViewModel = BrandUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        BrandsClient,
+        Snackbar,
+        StoreProvider);
+
+        vatRateUpdateViewModel = VatRateUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        VatRatesClient,
+        Snackbar);
+
+        priceUpdateViewModel = PriceUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        DialogService,
+        Snackbar);
+
+        handleUpdateViewModel = HandleUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        Snackbar);
+
+        visibilityUpdateViewModel = ListingStateUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        Snackbar);
+
+        skuUpdateViewModel = SkuUpdateViewModel.Create(
+        product,
+        ProductsClient,
+        Snackbar);
+
+        if (product.Parent is null)
+        {
+            categoryUpdateViewModel = CategoryUpdateViewModel.Create(
+            product,
+            ProductsClient,
+            ProductCategoriesClient,
+            Snackbar,
+            StoreProvider);
+        }
+
+        loaded = true;
+    }
+
+    async Task DeleteProduct()
+    {
+        var r = await DialogService.ShowMessageBox("Delete product", "Are you sure?", "Yes", "No");
+        if (r.GetValueOrDefault())
+        {
+            await ProductsClient.DeleteProductAsync(Id.ToString());
+
+            NavigationManager.NavigateTo("/products");
+        }
+    }
+}

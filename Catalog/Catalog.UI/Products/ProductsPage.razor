@@ -1,0 +1,110 @@
+﻿@page "/products"
+@layout MainLayout2
+@implements IDisposable
+@attribute [Authorize]
+@inject IStoresClient StoresClient
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IStoreProvider StoreProvider
+@using YourBrand.Catalog
+@using YourBrand.Portal
+@using YourBrand.Portal.Layouts
+@using YourBrand.Portal.Services
+@using Store = YourBrand.Portal.Services.Store
+
+<AppPageTitle>Products</AppPageTitle>
+
+<section>
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Products</MudText>
+
+    <MudPaper Elevation="25" Class="pa-2">
+        <div class="d-flex flex-grow-1 gap-4">
+            @* <div class="justify-start" style="max-width: 250px">
+
+            </div> *@
+
+            <div>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateProduct"
+                    StartIcon="@Icons.Material.Filled.Add" Class="my-2">Create product</MudButton>
+                <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight"
+                    TransformOrigin="Origin.TopRight" PopoverClass="docs-layout-menu-shadow"
+                    ListClass="pa-2 docs-menu-list" LockScroll="true">
+                    <ActivatorContent>
+                        <MudIconButton
+                            Icon="@(mode == ProductsViewMode.List ? Icons.Material.Filled.ViewList : Icons.Material.Filled.GridView)"
+                            Color="Color.Inherit" Edge="Edge.End" Class="me-2" />
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem OnClick="() => SetViewMode(ProductsViewMode.List)">
+                            <div class="d-flex">
+                                <MudIcon Icon="@Icons.Material.Filled.ViewList" class="me-2" />
+                                <MudText Style="overflow: hidden; white-space: nowrap;">List</MudText>
+                            </div>
+                        </MudMenuItem>
+                        <MudMenuItem OnClick="() => SetViewMode(ProductsViewMode.Grid)">
+                            <div class="d-flex">
+                                <MudIcon Icon="@Icons.Material.Filled.GridView" class="me-2" />
+                                <MudText Style="overflow: hidden; white-space: nowrap;">Grid</MudText>
+                            </div>
+                        </MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+                <MudButton StartIcon="@Icons.Material.Filled.Edit" Color="Color.Inherit" Edge="Edge.End" Class="me-2"
+                    Href="/products/import">Import products</MudButton>
+            </div>
+        </div>
+
+    </MudPaper>
+
+</section>
+
+<ProductsView @ref="productsView" Mode="@mode" StoreId="@store?.Id" GroupId="@GroupId" />
+
+@code
+{
+    ProductsView? productsView;
+    Store? store = null;
+    ProductsViewMode mode = ProductsViewMode.List;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public long? GroupId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        StoreProvider.CurrentStoreChanged += OnCurrentStoreChanged;
+
+        store = StoreProvider.CurrentStore;
+    }
+
+    private async void OnCurrentStoreChanged(object? sender, EventArgs e)
+    {
+        store = StoreProvider.CurrentStore;
+    }
+
+    private async Task SetViewMode(ProductsViewMode mode)
+    {
+        this.mode = mode;
+        await productsView.SetMode(mode);
+    }
+
+    public void Dispose()
+    {
+        StoreProvider.CurrentStoreChanged -= OnCurrentStoreChanged;
+    }
+
+    async Task CreateProduct()
+    {
+        var modalRef = DialogService.Show<CreateProductDialog>("New Product");
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        var item = (Product)result.Data;
+
+        NavigationManager.NavigateTo($"/products/{item.Id}/edit");
+    }
+}

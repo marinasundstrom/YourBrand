@@ -1,0 +1,121 @@
+@implements IDisposable
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IStoreProvider StoreProvider
+@using YourBrand.Catalog
+@using YourBrand.Portal
+@using YourBrand.Portal.Services
+@using Store = YourBrand.Portal.Services.Store
+
+@if (items is null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <MudGrid Spacing="6" Class="mb-4">
+    @foreach (var item in items)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="4" @key="@item.Id">
+                <a href="/products/@item.Id/edit">
+                    <MudCard Elevation="25">
+                        <MudCardMedia Image="@item.Image.Url" Height="200" />
+
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@item.Name</MudText>
+                            @* <MudText Typo="Typo.body2">@item.Headline</MudText> *@
+                        </MudCardContent>
+                        <MudCardActions Class="mx-2 d-flex justify-space-between flex-grow-1 gap-4">
+                            <MudText Typo="Typo.body2">
+                                @if (item.RegularPrice is not null)
+                                {
+                                    <span class="me-3"
+                                        style="text-decoration: line-through; color: gray;">@item.RegularPrice?.FormatCurrency(store.Currency.Code)
+                                    </span>
+                                }
+                                @item.Price.FormatCurrency(store.Currency.Code)
+                            </MudText>
+                            <div>
+                                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/products/{item.Id}")">View
+                                </MudButton>
+                                <MudButton StartIcon="@Icons.Material.Filled.Edit" Variant="Variant.Text" Color="Color.Primary"
+                                    Href="@($"/products/{item.Id}/edit")">Edit</MudButton>
+                            </div>
+                        </MudCardActions>
+                    </MudCard>
+                </a>
+            </MudItem>
+        }
+        </MudGrid>
+
+    <MudPagination Color="Color.Primary" Count="pages" SelectedChanged="OnPageChanged" />
+}
+
+@code
+{
+    IEnumerable<Product>? items = null;
+    int pageSize = 9;
+    int pages = 0;
+    int page = 1;
+    Store store = default!;
+
+    [Parameter]
+    public string? Path { get; set; }
+
+    [Parameter]
+    public string? StoreId { get; set; }
+
+    [Parameter]
+    public string? BrandId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await OnPageChanged(1);
+
+        store = StoreProvider.CurrentStore;
+    }
+
+    public void Dispose()
+    {
+
+    }
+
+    async Task OnPageChanged(int page)
+    {
+        store = StoreProvider.CurrentStore;
+
+        var result = await ProductsClient.GetProductsAsync(StoreId, BrandId, true, true, null, Path, page,
+        pageSize, null, null);
+        items = result.Items;
+
+        this.pages = (int)Math.Ceiling((double)result.Total / (double)pageSize);
+        this.page = page;
+    }
+
+    void ShowProduct(Product item)
+    {
+        NavigationManager.NavigateTo($"/products/{item.Id}/edit");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await OnPageChanged(1);
+    }
+
+    /*
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+    if (parameters.TryGetValue<string>(nameof(StoreId), out var storeId))
+    {
+    await OnPageChanged(1);
+    }
+    else if (parameters.TryGetValue<string>(nameof(Path), out var path))
+    {
+    await OnPageChanged(1);
+    }
+
+    await base.SetParametersAsync(parameters);
+    }
+    */
+}

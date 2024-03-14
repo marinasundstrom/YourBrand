@@ -1,0 +1,14 @@
+<EditForm Model="@Model" OnValidSubmit="Model.UpdateBrand">
+    <DataAnnotationsValidator />
+
+    <MudAutocomplete Label="Brand" SearchFunc="Model.Search" @bind-Value="Model.Brand" ToStringFunc="x => x.Name"
+        Strict="false" Variant="Variant.Outlined" For="() => Model.Brand" />
+
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Class="mt-4">Update brand</MudButton>
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public BrandUpdateViewModel Model { get; set; }
+}

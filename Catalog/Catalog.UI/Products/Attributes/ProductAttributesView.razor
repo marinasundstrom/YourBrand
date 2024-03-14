@@ -1,0 +1,106 @@
+﻿@inject NavigationManager NavigationManager
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject IAttributesClient AttributesClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Catalog
+
+<style>
+    .mud-table-cell-custom-group {
+        font-weight: 500;
+        font-size: 12pt;
+    }
+
+    .mud-table-cell-custom-group-footer {
+        padding-bottom: 50px;
+        text-align: right;
+    }
+</style>
+
+<MudPaper Elevation="2" Class="pa-4">
+    <MudTable @ref="productAttributesTable"
+        ServerData="@(new Func<TableState, Task<TableData<ProductAttribute>>>(ServerReload))" Dense="false" Hover="true"
+        Elevation="0" ReadOnly="false" CanCancelEdit="true"
+        Filter="new Func<ProductAttribute,bool>(FilterAttributesFunc)" @bind-SelectedItem="selectedProductAttribute"
+        SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+        OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem"
+        RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted" IsEditRowSwitchingBlocked="true"
+        EditTrigger="TableEditTrigger.EditButton" GroupBy="tableGroupDefinition">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Attributes</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="OpenAddProductAttributeDialog" />
+            <MudSpacer />
+            <MudTextField T="string" ValueChanged="@(s=> OnSearch(s))" Immediate="true" Placeholder="Search"
+                Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<ProductAttribute, object>(x=>x.Attribute.Name)">Name
+                </MudTableSortLabel>
+            </MudTh>
+            @if (HasVariants)
+            {
+                <MudTh>For variant</MudTh>
+                <MudTh>Is Main Attribute</MudTh>
+            }
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<ProductAttribute, object>(x=>x.Value?.Name)">Value
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+
+            </MudTh>
+        </HeaderContent>
+        <GroupHeaderTemplate>
+            <MudTh Class="mud-table-cell-custom-group py-4" colspan="5">@($"{(context.Key ?? "Miscellaneous")}")</MudTh>
+        </GroupHeaderTemplate>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Attribute.Name</MudTd>
+            @if (HasVariants)
+            {
+                <MudTd DataLabel="For variant">
+                    <MudCheckBox @bind-Checked="@context.ForVariant" ReadOnly></MudCheckBox>
+                </MudTd>
+                <MudTd DataLabel="Is Main Attribute">
+                    <MudCheckBox @bind-Checked="@context.IsMainAttribute" ReadOnly></MudCheckBox>
+                </MudTd>
+            }
+            <MudTd DataLabel="Value">
+                @context.Value?.Name
+            </MudTd>
+            <MudTd DataLabel="Value">
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete"
+                    OnClick="async () => await DeleteProductAttribute(context)"></MudIconButton>
+            </MudTd>
+        </RowTemplate>
+        <RowEditingTemplate>
+            <MudTd DataLabel="Name">@context.Attribute.Name</MudTd>
+            @if (HasVariants)
+            {
+                <MudTd DataLabel="For variant">
+                    <MudCheckBox @bind-Checked="@context.ForVariant"></MudCheckBox>
+                </MudTd>
+                <MudTd DataLabel="Is Main Attribute">
+                    <MudCheckBox @bind-Checked="@context.IsMainAttribute"></MudCheckBox>
+                </MudTd>
+            }
+            <MudTd DataLabel="Value">
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudAutocomplete T="AttributeValue" @bind-Value="context.Value"
+                            SearchFuncWithCancel="@SearchAttributeValue" ShowProgressIndicator="true"
+                            ToStringFunc="(x) => x.Name" Strict="false" Required />
+                    </MudItem>
+                </MudGrid>
+            </MudTd>
+        </RowEditingTemplate>
+        @*
+        <PagerContent>
+        <MudTablePager />
+        </PagerContent>
+        *@
+    </MudTable>
+</MudPaper>

@@ -1,0 +1,88 @@
+@using YourBrand.Catalog
+@using YourBrand.Portal.Services
+@using System.ComponentModel.DataAnnotations
+@inject IProductsClient ProductsClient
+@inject IProductCategoriesClient ProductCategoriesClient
+@inject ISnackbar Snackbar
+@inject IStoreProvider StoreProvider
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            <div class="d-flex flex-column py-1">
+                <MudField Label="Regular Price" Variant="Variant.Outlined" Class="mb-4">
+                    @RegularPrice
+                </MudField>
+
+                <MudNumericField Label="Discount Rate" @bind-Value="DiscountRate" Immediate="true"
+                    Variant="Variant.Outlined" For="() => DiscountRate" Class="mb-4" Adornment="Adornment.End"
+                    AdornmentText="%">
+                </MudNumericField>
+
+                <MudNumericField Label="Discount Price" @bind-Value="DiscountPrice" Immediate="true"
+                    Variant="Variant.Outlined" For="() => DiscountPrice" Class="mb-4" Adornment="Adornment.End"
+                    AdornmentText="sek">
+                </MudNumericField>
+
+            </div>
+        </DialogContent>
+        <DialogActions>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">Add</MudButton>
+            <MudButton Color="Color.Primary" OnClick="Cancel">Cancel</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public decimal RegularPrice { get; set; } = default!;
+
+    [Parameter]
+    public long ProductId { get; set; }
+
+    decimal discountPrice;
+
+    [Required]
+    public decimal DiscountPrice
+    {
+        set
+        {
+            discountPrice = value;
+            var discount = RegularPrice - discountPrice;
+            discountRate = (double)(discount / RegularPrice * 100);
+        }
+
+        get => discountPrice;
+    }
+
+    double discountRate;
+
+    public double DiscountRate
+    {
+        set
+        {
+            discountRate = value;
+            var dr = discountRate / 100;
+            discountPrice = RegularPrice - (RegularPrice * (decimal)dr);
+        }
+
+        get => discountRate;
+    }
+
+    async Task OnSubmit()
+    {
+        await ProductsClient.SetProductDiscountPriceAsync(ProductId.ToString(), new
+        SetProductDiscountPriceRequest()
+            {
+                DiscountPrice = DiscountPrice
+            });
+
+        MudDialog.Close((DiscountPrice, DiscountRate / 100));
+    }
+
+    void Cancel() => MudDialog.Close(DialogResult.Cancel());
+}

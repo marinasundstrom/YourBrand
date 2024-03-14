@@ -4,9 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using YourBrand.Catalog.Domain.Enums;
 
-public class Option
+public abstract class Option : Entity<string>
 {
-    public string Id { get; set; } = null!;
+    protected Option() { }
+
+    public Option(string name)
+        : base(Guid.NewGuid().ToString())
+    {
+        Name = name;
+    }
 
     public string Name { get; set; } = null!;
 
@@ -14,38 +20,87 @@ public class Option
 
     public OptionGroup? Group { get; set; }
 
-    public OptionType OptionType { get; set; } = OptionType.Choice;
+    public ProductCategory? ProductCategory { get; set; }
+
+    public OptionType OptionType { get; protected set; }
 
     public bool IsRequired { get; set; }
 
+    public List<Product> Products { get; } = new List<Product>();
+
+    public List<ProductOption> ProductOption { get; } = new List<ProductOption>();
+
+    public List<ProductVariantOption> ProductVariantOptions { get; } = new List<ProductVariantOption>();
+}
+
+public sealed class SelectableOption : Option
+{
+    private SelectableOption() { }
+
+    public SelectableOption(string name)
+        : base(name)
+    {
+        OptionType = OptionType.YesOrNo;
+    }
+
     public bool IsSelected { get; set; }
 
+    [Column("InventoryProductId")]
     public string? SKU { get; set; }
 
     public decimal? Price { get; set; }
+}
+
+public sealed class ChoiceOption : Option
+{
+    private ChoiceOption() { }
+
+    public ChoiceOption(string name)
+        : base(name)
+    {
+        OptionType = OptionType.Choice;
+    }
 
     public List<OptionValue> Values { get; } = new List<OptionValue>();
-
-    public List<Product> Products { get; } = new List<Product>();
-
-    public List<ProductVariantOption> ProductVariantOptions { get; } = new List<ProductVariantOption>();
 
     [ForeignKey(nameof(DefaultValue))]
     public string? DefaultValueId { get; set; }
 
     public OptionValue? DefaultValue { get; set; }
+}
 
-    //public bool HasCustomData { get; set; }
+public sealed class NumericalValueOption : Option
+{
+    private NumericalValueOption() { }
 
-    public int? MinNumericalValue  { get; set; }
+    public NumericalValueOption(string name)
+        : base(name)
+    {
+        OptionType = OptionType.NumericalValue;
+    }
 
-    public int? MaxNumericalValue  { get; set; }
+    public int? MinNumericalValue { get; set; }
+
+    public int? MaxNumericalValue { get; set; }
 
     public int? DefaultNumericalValue { get; set; }
 
-    public int? TextValueMinLength  { get; set; }
+    public decimal? Price { get; set; }
+}
 
-    public int? TextValueMaxLength  { get; set; }
+public sealed class TextValueOption : Option
+{
+    private TextValueOption() { }
+
+    public TextValueOption(string name)
+        : base(name)
+    {
+        OptionType = OptionType.TextValue;
+    }
+
+    public int? TextValueMinLength { get; set; }
+
+    public int? TextValueMaxLength { get; set; }
 
     public string? DefaultTextValue { get; set; }
 }

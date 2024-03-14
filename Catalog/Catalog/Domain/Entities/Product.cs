@@ -1,44 +1,260 @@
-﻿using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Catalog.Domain.Entities;
+using Core;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class Product
+public sealed class Product
 {
-    public string Id { get; set; } = null!;
+    readonly HashSet<ProductAttribute> _productAttributes = new HashSet<ProductAttribute>();
 
-    public string Name { get; set; } = null!;
+    readonly HashSet<AttributeGroup> _attributeGroups = new HashSet<AttributeGroup>();
 
-    public ProductGroup? Group { get; set; }
+    readonly HashSet<Product> _variants = new HashSet<Product>();
 
-    public string? Description { get; set; } = null!;
+    readonly HashSet<Option> _options = new HashSet<Option>();
 
-    public string? SKU { get; set; }
+    readonly HashSet<ProductOption> _productOptions = new HashSet<ProductOption>();
 
-    public string? UPC { get; set; }
+    readonly HashSet<OptionGroup> _optionGroups = new HashSet<OptionGroup>();
 
-    public string? Image { get; set; }
+    readonly HashSet<ProductVariantOption> _productVariantOptions = new HashSet<ProductVariantOption>();
 
-    public decimal? Price { get; set; }
+    readonly HashSet<ProductImage> _images = new HashSet<ProductImage>();
+    private decimal _price;
+    private decimal? _regularPrice;
+
+    public Product() { }
+
+    public Product(string name, string handle)
+    {
+        Name = name;
+        Handle = handle;
+    }
+
+    public long Id { get; private set; }
+
+    public Store? Store { get; internal set; }
+
+    public string? StoreId { get; private set; }
+
+    public Brand? Brand { get; set; }
+
+    public int? BrandId { get; set; }
+
+    public string Name { get; set; } = default!;
+
+    public ProductCategory? Category { get; internal set; }
+
+    public long? CategoryId { get; private set; }
+
+
+    public string Description { get; set; } = default!;
+
+    public string? Headline { get; set; }
+
+    public string? Sku { get; set; }
+
+    public string? Gtin { get; set; }
+
+    public decimal Price
+    {
+        get => _price;
+        internal set
+        {
+            if (RegularPrice is not null && value >= RegularPrice.GetValueOrDefault())
+            {
+                throw new Exception("Price can not be greater than or equal to Regular Price");
+            }
+
+            _price = value;
+        }
+    }
+
+    //public decimal Vat { get; set; }
+
+    public double? VatRate { get; set; }
+
+    public int? VatRateId { get; set; }
+
+    public decimal? Discount { get; private set; }
+
+    public double? DiscountRate { get; private set; }
+
+    public decimal? RegularPrice
+    {
+        get => _regularPrice;
+        internal set
+        {
+            if (value is not null && value < Price)
+            {
+                throw new Exception("Regular Price can not be less than or equal to Price");
+            }
+
+            _regularPrice = value;
+        }
+    }
+
+    public decimal? PurchasePrice { get; set; }
+
+    public ProductImage? Image { get; set; }
+
+    public string? ImageId { get; set; }
+
+    public IReadOnlyCollection<ProductImage> Images => _images;
+
+    public void AddImage(ProductImage productImage) => _images.Add(productImage);
+
+    public void RemoveImage(ProductImage productImage) => _images.Remove(productImage);
+
+    public string Handle { get; set; } = default!;
+
+    public bool? IsCustomizable { get; set; } = false;
 
     public bool HasVariants { get; set; } = false;
 
-    public bool? AllCustom { get; set; }
+    public Product? Parent { get; internal set; }
 
-    public List<Entities.Attribute> Attributes { get; } = new List<Entities.Attribute>();
+    public long? ParentId { get; internal set; }
 
-    public List<ProductAttribute> ProductAttributes { get; } = new List<ProductAttribute>();
+    public IReadOnlyCollection<ProductAttribute> ProductAttributes => _productAttributes;
 
-    public List<AttributeGroup> AttributeGroups { get; } = new List<AttributeGroup>();
+    public IReadOnlyCollection<AttributeGroup> AttributeGroups => _attributeGroups;
 
-    public List<ProductVariant> Variants { get; } = new List<ProductVariant>();
+    public IReadOnlyCollection<Product> Variants => _variants;
 
-    public List<Option> Options { get; } = new List<Option>();
+    public IReadOnlyCollection<Option> Options => _options;
 
-    public List<ProductOption> ProductOptions { get; } = new List<ProductOption>();
+    public IReadOnlyCollection<ProductOption> ProductOptions => _productOptions;
 
-    public List<ProductVariantOption> ProductVariantOptions { get; } = new List<ProductVariantOption>();
+    public IReadOnlyCollection<OptionGroup> OptionGroups => _optionGroups;
 
-    public List<OptionGroup> OptionGroups { get; } = new List<OptionGroup>();
+    public ProductListingState ListingState { get; set; }
 
-    public ProductVisibility Visibility { get; set; }
+    public IReadOnlyCollection<ProductVariantOption> ProductVariantOptions => _productVariantOptions;
+
+    public void AddVariant(Product variant)
+    {
+        _variants.Add(variant);
+        variant.Store = this.Store;
+        variant.Category = this.Category;
+        variant.Parent = this;
+    }
+
+    public void RemoveVariant(Product variant)
+    {
+        _variants.Add(variant);
+    }
+
+    public void AddProductOption(ProductOption productOption)
+    {
+        _productOptions.Add(productOption);
+    }
+
+    public void RemoveProductOption(ProductOption option)
+    {
+        _productOptions.Remove(option);
+    }
+
+    public void AddProductAttribute(ProductAttribute productAttribute)
+    {
+        _productAttributes.Add(productAttribute);
+    }
+
+    public void RemoveProductAttribute(ProductAttribute productAttribute)
+    {
+        _productAttributes.Remove(productAttribute);
+    }
+
+    public void AddOptionGroup(OptionGroup group)
+    {
+        _optionGroups.Add(group);
+    }
+
+    public void RemoveOptionGroup(OptionGroup group)
+    {
+        _optionGroups.Remove(group);
+    }
+
+    public void AddOption(Option option)
+    {
+        _options.Add(option);
+    }
+
+    public void RemoveOption(Option option)
+    {
+        _options.Remove(option);
+    }
+
+    public (decimal price, decimal? regularPrice) GetTotalOptionsPrice()
+    {
+        var price = 0m;
+        var regularPrice = 0m;
+
+        foreach (var productOption in ProductOptions)
+        {
+            var option = productOption.Option;
+
+            if (option is SelectableOption selectableOption)
+            {
+                var isSelected = selectableOption.IsSelected;
+
+                if (!isSelected)
+                {
+                    continue;
+                }
+
+                if (isSelected)
+                {
+                    price += selectableOption.Price.GetValueOrDefault();
+                    regularPrice += selectableOption.Price.GetValueOrDefault();
+                }
+            }
+            else if (option is ChoiceOption { DefaultValue: not null } choiceOption)
+            {
+                var value = choiceOption.DefaultValue;
+
+                price += value.Price.GetValueOrDefault();
+                regularPrice += value.Price.GetValueOrDefault();
+            }
+            else if (option is NumericalValueOption numericalValueOption)
+            {
+                price += numericalValueOption.Price.GetValueOrDefault() * numericalValueOption.DefaultNumericalValue.GetValueOrDefault();
+                regularPrice += numericalValueOption.Price.GetValueOrDefault() * numericalValueOption.DefaultNumericalValue.GetValueOrDefault();
+            }
+        }
+
+        return (price, regularPrice);
+    }
+
+    public void SetPrice(decimal price)
+    {
+        Price = price;
+
+        if (RegularPrice is not null)
+        {
+            DiscountRate = PriceCalculations.CalculateDiscountRate(Price, RegularPrice.GetValueOrDefault());
+            Discount = RegularPrice - Price;
+        }
+    }
+
+    public void SetDiscountPrice(decimal discountPrice)
+    {
+        var originalPrice = Price;
+
+        Price = discountPrice;
+        RegularPrice = originalPrice;
+        DiscountRate = PriceCalculations.CalculateDiscountRate(Price, RegularPrice.GetValueOrDefault());
+        Discount = RegularPrice - Price;
+    }
+
+    public void RestoreRegularPrice()
+    {
+        var regularPrice = RegularPrice.GetValueOrDefault();
+
+        RegularPrice = null;
+        Price = regularPrice;
+        DiscountRate = null;
+        Discount = null;
+    }
 }

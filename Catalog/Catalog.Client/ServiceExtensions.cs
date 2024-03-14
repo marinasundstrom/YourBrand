@@ -1,50 +1,54 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿namespace YourBrand.Catalog;
 
-using YourBrand.Catalog.Client;
-
-namespace YourBrand.Catalog.Client;
+using Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddCatalogClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    public static IServiceCollection AddCatalogClients(this IServiceCollection services, Uri baseUrl, Action<IHttpClientBuilder>? configureBuilder = null)
     {
-        services
-            .AddCatalogClient(configureClient, builder)
-            .AddOptionsClient(configureClient, builder)
-            .AddAttributesClient(configureClient, builder);
+        services.AddCatalogClients((sp, http) =>
+        {
+            http.BaseAddress = baseUrl;
+        }, configureBuilder);
 
         return services;
     }
 
-    public static IServiceCollection AddCatalogClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    public static IServiceCollection AddCatalogClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
     {
-        var b = services
-            .AddHttpClient(nameof(ProductsClient), configureClient)
-            .AddTypedClient<IProductsClient>((http, sp) => new ProductsClient(http));
+        IHttpClientBuilder builder = services.AddHttpClient("CatalogAPI", configureClient);
 
-        builder?.Invoke(b);
+        configureBuilder?.Invoke(builder);
 
-        return services;
-    }
+        services.AddHttpClient<IProductsClient>("CatalogAPI")
+            .AddTypedClient<IProductsClient>((http, sp) => new YourBrand.Catalog.ProductsClient(http));
 
-    public static IServiceCollection AddOptionsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
-    {
-        var b = services
-            .AddHttpClient(nameof(OptionsClient), configureClient)
-            .AddTypedClient<IOptionsClient>((http, sp) => new OptionsClient(http));
+        services.AddHttpClient<IProductCategoriesClient>("CatalogAPI")
+            .AddTypedClient<IProductCategoriesClient>((http, sp) => new YourBrand.Catalog.ProductCategoriesClient(http));
 
-        builder?.Invoke(b);
+        services.AddHttpClient<IAttributesClient>("CatalogAPI")
+            .AddTypedClient<IAttributesClient>((http, sp) => new YourBrand.Catalog.AttributesClient(http));
 
-        return services;
-    }
+        services.AddHttpClient<IProductOptionsClient>("CatalogAPI")
+            .AddTypedClient<IProductOptionsClient>((http, sp) => new YourBrand.Catalog.ProductOptionsClient(http));
 
-    public static IServiceCollection AddAttributesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
-    {
-        var b = services
-            .AddHttpClient(nameof(AttributesClient), configureClient)
-            .AddTypedClient<IAttributesClient>((http, sp) => new AttributesClient(http));
+        services.AddHttpClient<IOptionsClient>("CatalogAPI")
+            .AddTypedClient<IOptionsClient>((http, sp) => new YourBrand.Catalog.OptionsClient(http));
 
-        builder?.Invoke(b);
+        services.AddHttpClient<IAttributesClient>("CatalogAPI")
+            .AddTypedClient<IAttributesClient>((http, sp) => new YourBrand.Catalog.AttributesClient(http));
+
+        services.AddHttpClient<IBrandsClient>("CatalogAPI")
+            .AddTypedClient<IBrandsClient>((http, sp) => new YourBrand.Catalog.BrandsClient(http));
+
+        services.AddHttpClient<IStoresClient>("CatalogAPI")
+            .AddTypedClient<IStoresClient>((http, sp) => new YourBrand.Catalog.StoresClient(http));
+
+        services.AddHttpClient<ICurrenciesClient>("CatalogAPI")
+            .AddTypedClient<ICurrenciesClient>((http, sp) => new YourBrand.Catalog.CurrenciesClient(http));
+
+        services.AddHttpClient<IVatRatesClient>("CatalogAPI")
+            .AddTypedClient<IVatRatesClient>((http, sp) => new YourBrand.Catalog.VatRatesClient(http));
 
         return services;
     }

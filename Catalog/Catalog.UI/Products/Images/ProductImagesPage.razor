@@ -1,0 +1,117 @@
+@page "/products/{productId}/images"
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@using YourBrand.Catalog
+
+<AppPageTitle>Product Images</AppPageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12">Product Images</MudText>
+
+@if (product is null || productImages is null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <MudFileUpload T="IBrowserFile" Accept="*.jpg, *.jpeg, *.png" FilesChanged="UploadProductImage" Class="mb-4">
+        <ButtonTemplate>
+            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                StartIcon="@Icons.Material.Filled.CloudUpload" for="@context">
+                Upload image
+            </MudButton>
+        </ButtonTemplate>
+    </MudFileUpload>
+
+    <MudTable T="ProductImage" Items="productImages"
+              Dense="true" Hover="true" Elevation="25">
+        <HeaderContent>
+            <MudTh></MudTh>
+            <MudTh>Title</MudTh>
+            <MudTh>Text</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="productImage">
+              <MudTd><MudImage Src="@productImage.Url" ObjectFit="ObjectFit.Cover" Height="150" Width="150" Alt="Product image"
+                    Elevation="25" Class="rounded-lg"></MudImage></MudTd>
+            <MudTd DataLabel="Title">@productImage.Title</MudTd>
+            <MudTd DataLabel="Text">@productImage.Text</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await UpdateProductImage(productImage)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteProductImage(productImage)" />
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+    </MudTable>
+}
+
+@code
+{
+    Product? product;
+    List<ProductImage>? productImages;
+
+    [Parameter]
+    public string ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductsClient.GetProductByIdAsync(ProductId.ToString());
+        productImages = product.Images.ToList(); //(await ProductOptionsClient.GetProductImagesAsync(ProductId.GetValueOrDefault())).ToList();
+    }
+
+    public async Task UploadProductImage(IBrowserFile file)
+    {
+        try
+        {
+            var productImage = await ProductsClient.UploadProductImageAsync(ProductId.ToString(), false, new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
+
+            productImages.Add(productImage);
+
+            Snackbar.Add("Image was updated", Severity.Info);
+
+            await UpdateProductImage(productImage);
+        }
+        catch
+        {
+            Snackbar.Add("Failed to update product image", Severity.Error);
+        }
+    }
+
+    async Task UpdateProductImage(ProductImage productImage)
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(ProductImageDialog.ProductId), ProductId);
+        parameters.Add(nameof(ProductImageDialog.ProductImage), productImage);
+
+        var modalRef = DialogService.Show<ProductImageDialog>("Update Image", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Cancelled) return;
+
+        var index = productImages!.IndexOf(productImage);
+
+        productImages[index] = (ProductImage)result.Data;
+    }
+
+    async Task DeleteProductImage(ProductImage productImage)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the image?", "The image will be deleted.\n\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+
+        {
+            return;
+        }
+
+        await ProductsClient.DeleteProductImageAsync(ProductId.ToString(), productImage.Id);
+
+        productImages.Remove(productImage);
+    }
+}
+

@@ -1,0 +1,173 @@
+@implements IDisposable
+@inject IProductsClient ProductsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IStoreProvider StoreProvider
+@using Store = YourBrand.Portal.Services.Store
+@using YourBrand.Portal.Services
+@using YourBrand.Catalog
+
+
+            <MudTable T="Product" ServerData="@(new Func<TableState, Task<TableData<Product>>>(ServerReload))"
+            Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" Elevation="25">
+                @*<ToolBarContent>
+                <MudText Typo="Typo.h6">Products</MudText>
+                <MudSpacer />
+                <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent> *@
+                <HeaderContent>
+                    <MudTh></MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Id" T="Product">Id</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Name" T="Product">Name</MudTableSortLabel>
+                    </MudTh>
+                   <MudTh>
+                        <MudTableSortLabel SortLabel="Brand" T="Product">Brand</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Category" T="Product">Category</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="HasVariants" T="Product">Has variants</MudTableSortLabel>
+                    </MudTh>
+                    @*<MudTh>
+                <MudTableSortLabel SortLabel="Handle" T="Product">Handle</MudTableSortLabel>
+                </MudTh>*@
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="Price" T="Product">Price</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="RegularPrice" T="Product">Regular Price</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh>
+                        <MudTableSortLabel SortLabel="ListingState" T="Product">Listed</MudTableSortLabel>
+                    </MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        @if (context.Image is not null)
+                        {
+                            <MudImage Src="@context.Image.Url" ObjectFit="ObjectFit.Contain" Alt="Mony the dog" Width="100"
+                        Height="100" Elevation="0" Class="rounded-lg" />
+                        }
+                        @*
+                    else
+                    {
+                    <svg class="rounded-lg" width="120px" height="120" xmlns="http://www.w3.org/2000/svg" role="img"
+                    aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+                    dy=".3em">Thumbnail</text>
+                    </svg>
+                    }
+                    *@
+                    </MudTd>
+                    <MudTd DataLabel="Id">@context.Id</MudTd>
+                    <MudTd DataLabel="Name">@context.Name</MudTd>
+                    <MudTd DataLabel="Brand">@context.Brand?.Name</MudTd>
+                    <MudTd DataLabel="Category">@context.Category?.Name</MudTd>
+                    <MudTd DataLabel="Has variants">@(context.HasVariants ? "Yes" : string.Empty)</MudTd>
+                        @* <MudTd DataLabel="Handle">@context.Handle</MudTd> *@
+                        <MudTd DataLabel="Price">@context.Price.FormatCurrency(store.Currency.Code)</MudTd>
+                        <MudTd DataLabel="Compare At Price">@context.RegularPrice?.FormatCurrency(store.Currency.Code)</MudTd>
+                        <MudTd DataLabel="Listed">@(context.ListingState == 0 ? "No" : "Yes")</MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Send" Size="Size.Small" Class="me-2" Href="@($"/products/{context.Id}")" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Href="@($"/products/{context.Id}/edit")" />
+                        </MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <MudText>No matching records found</MudText>
+                    </NoRecordsContent>
+                    <LoadingContent>
+                        <MudText>Loading...</MudText>
+                    </LoadingContent>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+
+@code
+{
+    MudTable<Product> table;
+    Store store = default!;
+
+    [Parameter]
+    public string? Path { get; set; }
+
+    [Parameter]
+    public string? StoreId { get; set; }
+
+    [Parameter]
+    public string? BrandId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // if(table is not null)
+        //     await table.ReloadServerData();
+
+        store = StoreProvider.CurrentStore;
+    }
+
+    public void Dispose()
+    {
+        
+    }
+
+    private async Task<TableData<Product>> ServerReload(TableState state)
+    {
+        store = StoreProvider.CurrentStore;
+
+        var result = await ProductsClient.GetProductsAsync(StoreId, BrandId, true, true, null, Path, state.Page + 1,
+        state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
+        YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);
+
+        return new TableData<Product>() { TotalItems = result.Total, Items = result.Items };
+    }
+
+    async Task CreateProduct()
+    {
+        var modalRef = DialogService.Show<CreateProductDialog>("New Product");
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var item = (Product)result.Data;
+
+        NavigationManager.NavigateTo($"/products/{item.Id}/edit");
+    }
+
+    void ShowProduct(Product item)
+    {
+        NavigationManager.NavigateTo($"/products/{item.Id}/edit");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(table is not null)
+            await table.ReloadServerData();
+    }
+
+    /*
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<string>(nameof(StoreId), out var storeId))
+        {
+            if(table is not null)
+                await table.ReloadServerData();
+        }
+        else if (parameters.TryGetValue<string>(nameof(Path), out var path))
+        {
+            if(table is not null)
+                await table.ReloadServerData();
+        }
+
+        await base.SetParametersAsync(parameters);
+    }
+    */
+}
