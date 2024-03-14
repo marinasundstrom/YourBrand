@@ -23,7 +23,7 @@ public static class Seed2
         var connectionString = context.Database.GetConnectionString()!;
 
         cdnBaseUrl = (connectionString.Contains("localhost") || connectionString.Contains("mssql"))
-            ? "https://localhost:7134/images/{0}"
+            ? "https://localhost:5120/images/{0}"
             : "https://yourbrandstorage.blob.core.windows.net/images/{0}";
 
         PlaceholderImage = new ProductImage("Placeholder", string.Empty, string.Format(cdnBaseUrl, "placeholder.jpeg"));
