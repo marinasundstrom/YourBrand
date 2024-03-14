@@ -25,7 +25,6 @@ public record DeleteContact(string Id) : IRequest
             _context.Contacts.Remove(contact);
 
             await _context.SaveChangesAsync(cancellationToken);
-
         }
     }
 }

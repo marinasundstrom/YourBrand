@@ -25,9 +25,8 @@ public record DeleteDiscountCommand(string Id) : IRequest
             if (discount is null) throw new Exception();
 
             context.Discounts.Remove(discount);
-           
-            await context.SaveChangesAsync(cancellationToken);
 
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

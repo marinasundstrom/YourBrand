@@ -25,7 +25,7 @@ public record DeleteAddress(string AddressId) : IRequest
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.AddressId, cancellationToken);
 
-            if(address is null)
+            if (address is null)
             {
                 throw new Exception();
             }
@@ -33,7 +33,6 @@ public record DeleteAddress(string AddressId) : IRequest
             _context.Addresses.Remove(address);
 
             await _context.SaveChangesAsync(cancellationToken);
-
         }
     }
 }

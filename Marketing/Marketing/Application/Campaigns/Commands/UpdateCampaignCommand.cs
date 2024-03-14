@@ -25,7 +25,6 @@ public record UpdateCampaignCommand(string Id, string Name) : IRequest
             campaigns.Name = request.Name;
 
             await context.SaveChangesAsync(cancellationToken);
-
         }
     }
 }

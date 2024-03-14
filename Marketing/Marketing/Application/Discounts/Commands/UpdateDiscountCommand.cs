@@ -5,12 +5,12 @@ using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Discounts.Commands;
 
-public record UpdateDiscountCommand(string Id, 
-                string ProductId, 
-                string ProductName, 
-                string ProductDescription, 
-                decimal OrdinaryPrice, 
-                double Percent) : IRequest
+public record UpdateDiscountCommand(string Id,
+                string ItemId,
+                string ItemName,
+                string ItemDescription,
+                double Percentage,
+                decimal Amount) : IRequest
 {
     public class UpdateDiscountCommandHandler : IRequestHandler<UpdateDiscountCommand>
     {
@@ -30,7 +30,6 @@ public record UpdateDiscountCommand(string Id,
             //discount.Name = request.Name;
 
             await context.SaveChangesAsync(cancellationToken);
-
         }
     }
 }

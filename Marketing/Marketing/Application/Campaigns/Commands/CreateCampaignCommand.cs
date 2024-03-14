@@ -25,7 +25,7 @@ public record CreateCampaignCommand(string Name) : IRequest<CampaignDto>
             campaigns = new Domain.Entities.Campaign(request.Name);
 
             context.Campaigns.Add(campaigns);
-            
+
             await context.SaveChangesAsync(cancellationToken);
 
             return campaigns.ToDto();

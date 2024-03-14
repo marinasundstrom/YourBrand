@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Marketing.Application.Contacts;
 
+using YourBrand.Marketing.Application.Common.Models;
+
 namespace YourBrand.Marketing.Application.Contacts.Queries;
 
 public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ContactDto>>
@@ -22,12 +24,12 @@ public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = 
 
         public async Task<ItemsResult<ContactDto>> Handle(GetContacts request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
@@ -44,7 +46,7 @@ public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = 
 
             if (request.SearchString is not null)
             {
-                query = query.Where(o => 
+                query = query.Where(o =>
                     o.FirstName.ToLower().Contains(request.SearchString.ToLower())
                     || o.LastName.ToLower().Contains(request.SearchString.ToLower())
                     || o.Ssn.ToLower().Contains(request.SearchString.ToLower()));
@@ -56,7 +58,7 @@ public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = 
             {
                 query = query.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Marketing.Application.SortDirection.Descending : Marketing.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 query = query.OrderBy(x => x.Id);
             }

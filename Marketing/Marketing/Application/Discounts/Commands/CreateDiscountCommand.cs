@@ -6,11 +6,8 @@ using YourBrand.Marketing.Domain;
 namespace YourBrand.Marketing.Application.Discounts.Commands;
 
 public record CreateDiscountCommand(
-                string ProductId, 
-                string ProductName, 
-                string ProductDescription, 
-                decimal OrdinaryPrice, 
-                double Percent) : IRequest<DiscountDto>
+                double Percentage,
+                decimal Amount) : IRequest<DiscountDto>
 {
     public class CreateDiscountCommandHandler : IRequestHandler<CreateDiscountCommand, DiscountDto>
     {
@@ -23,15 +20,10 @@ public record CreateDiscountCommand(
 
         public async Task<DiscountDto> Handle(CreateDiscountCommand request, CancellationToken cancellationToken)
         {
-            var discount = new Domain.Entities.Discount(
-                request.ProductId, 
-                request.ProductName, 
-                request.ProductDescription, 
-                request.OrdinaryPrice, 
-                request.Percent);
+            var discount = Domain.Entities.Discount.CreateDiscountForPurchase(request.Percentage, request.Amount);
 
             context.Discounts.Add(discount);
-            
+
             await context.SaveChangesAsync(cancellationToken);
 
             return discount.ToDto();

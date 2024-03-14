@@ -38,8 +38,10 @@ public class ModuleInitializer : IModuleInitializer
             options.RequiresAuthorization = true;
         });
 
-        group.CreateItem("contacts", () => resources["Contacts"], MudBlazor.Icons.Material.Filled.Person, "/contacts");
+        group.CreateItem("contacts", () => resources["Contacts"], MudBlazor.Icons.Material.Filled.Person, "/marketing/contacts");
 
-        group.CreateItem("campaigns", () => resources["Campaigns"], MudBlazor.Icons.Material.Filled.ListAlt, "/campaigns");
+        group.CreateItem("campaigns", () => resources["Campaigns"], MudBlazor.Icons.Material.Filled.ListAlt, "/marketing/campaigns");
+
+        group.CreateItem("discounts", () => resources["Discounts"], MudBlazor.Icons.Material.Filled.Discount, "/marketing/discounts");
     }
 }

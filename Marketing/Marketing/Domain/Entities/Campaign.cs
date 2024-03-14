@@ -1,22 +1,42 @@
-﻿using YourBrand.Marketing.Domain.Common;
-using YourBrand.Marketing.Domain.Events;
+﻿using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Campaign : AuditableEntity
+public class Campaign : Entity<string>, IAuditable
 {
-    readonly HashSet<Address> _addresses = new HashSet<Address>();
+    readonly HashSet<ProductOffer> _productOffers = new HashSet<ProductOffer>();
 
-    protected Campaign() { }
+#nullable disable
+
+    protected Campaign() : base() { }
+
+#nullable restore
 
     public Campaign(string name)
+    : base(Guid.NewGuid().ToString())
     {
         Name = name;
     }
 
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-
     public string Name { get; set; }
 
     public string? Description { get; set; }
+
+    public DateTimeOffset StartDate { get; set; }
+
+    public DateTimeOffset EndTime { get; set; }
+
+    public IReadOnlyCollection<ProductOffer> ProductOffers => _productOffers;
+
+    public void AddProductOffer(ProductOffer productOffer) => _productOffers.Add(productOffer);
+
+    public bool RemoveProductOffer(ProductOffer productOffer) => _productOffers.Remove(productOffer);
+
+    public string? CreatedById { get; set; } = null!;
+
+    public DateTimeOffset Created { get; set; }
+
+    public string? LastModifiedById { get; set; }
+
+    public DateTimeOffset? LastModified { get; set; }
 }

@@ -6,7 +6,7 @@ namespace YourBrand.Marketing.Application.Common.Interfaces;
 
 public interface IDomainEventHandler<TDomainEvent>
     : INotificationHandler<TDomainEvent>
-    where TDomainEvent : DomainEvent
+    where TDomainEvent : Domain.DomainEvent
 {
 
 }

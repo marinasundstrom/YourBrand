@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client;
 
-@page "/contacts"
+@page "/marketing/contacts"
 @attribute [Authorize]
 
 @inject IContactsClient ContactsClient
@@ -16,7 +16,7 @@
     New Contact
 </MudButton>
 
-<MudTable T="ContactDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+<MudTable T="Contact" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" Striped="true" OnRowClick="ItemOnClick">
     
         <ToolBarContent>
@@ -28,13 +28,13 @@
         </ToolBarContent>
 
      <HeaderContent>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="Campaign">Campaign</MudTableSortLabel></MudTh>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="SSN">SSN</MudTableSortLabel></MudTh>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="Phone">Phone</MudTableSortLabel></MudTh>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="PhoneMobile">Phone (Mobile)</MudTableSortLabel></MudTh>
-         <MudTh><MudTableSortLabel T="ContactDto" SortLabel="Email">Email</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="Campaign">Campaign</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="SSN">SSN</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="Phone">Phone</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="PhoneMobile">Phone (Mobile)</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Contact" SortLabel="Email">Email</MudTableSortLabel></MudTh>
          <MudTh>Address</MudTh>
      </HeaderContent>
      <RowTemplate Context="contact">
@@ -58,13 +58,13 @@
 
 @code
 {
-    MudTable<ContactDto> table = null!;
+    MudTable<Contact> table = null!;
     bool loading = false;
     string? searchString;
 
-    CampaignDto Campaign { get; set; }
+    Campaign Campaign { get; set; }
 
-    private async Task<TableData<ContactDto>> ServerReload(TableState state)
+    private async Task<TableData<Contact>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -72,7 +72,7 @@
         {
             var result = await ContactsClient.GetContactsAsync(state.Page, state.PageSize, Campaign?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc));
 
-            return new TableData<ContactDto>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Contact>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {
@@ -86,20 +86,20 @@
         table.ReloadServerData();
     }
 
-    private async Task OnCampaignChanged(CampaignDto sa)
+    private async Task OnCampaignChanged(Campaign sa)
     {
         Campaign = sa;
         table.ReloadServerData();
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<ContactDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Contact> ev)
     {
         var item = ev.Item;
 
         await OnItemClicked(item);
     }
 
-    async Task OnItemClicked(ContactDto? dto)
+    async Task OnItemClicked(Contact? dto)
     {
         try
         {
@@ -123,9 +123,9 @@
         }
     }
 
-    private TableData<ContactDto>? GetTableData()
+    private TableData<Contact>? GetTableData()
     {
-        return (TableData<ContactDto>?)table?.GetType()?
+        return (TableData<Contact>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

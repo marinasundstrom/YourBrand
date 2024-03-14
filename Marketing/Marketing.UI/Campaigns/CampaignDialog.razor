@@ -57,7 +57,7 @@
     {
         if(Id is null) 
         {
-            var item = await CampaignsClient.CreateCampaignAsync(new CreateCampaignDto {
+            var item = await CampaignsClient.CreateCampaignAsync(new CreateCampaign {
                 Name = Name
             });
 
@@ -67,7 +67,7 @@
         {
             if (context.IsModified())
             {
-                await CampaignsClient.UpdateCampaignAsync(Id, new UpdateCampaignDto
+                await CampaignsClient.UpdateCampaignAsync(Id, new UpdateCampaign
                 {
                     Name = Name
                 });

@@ -21,4 +21,7 @@
     <data name="Campaigns">
         <value>Kampanjer</value>
     </data>
+    <data name="Discounts">
+        <value>Rabatter</value>
+    </data>
 </root>

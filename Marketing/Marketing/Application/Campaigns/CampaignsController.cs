@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using YourBrand.Marketing.Application.Campaigns;
 using YourBrand.Marketing.Application.Campaigns.Queries;
 using YourBrand.Marketing.Application.Campaigns.Commands;
+using YourBrand.Marketing.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Marketing.Controllers;
+namespace YourBrand.Marketing.Application.Campaigns;
 
-[Route("[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class CampaignsController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,22 +1,22 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client;
 
-@page "/marketing/campaigns"
+@page "/marketing/discounts"
 @attribute [Authorize]
 
-@inject ICampaignsClient CampaignsClient
+@inject IDiscountsClient DiscountsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
-<AppPageTitle>Campaigns</AppPageTitle>
+<AppPageTitle>Discounts</AppPageTitle>
 
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Campaigns</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Discounts</MudText>
 
 <MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
-    New Campaign
+    New Discount
 </MudButton>
 
-<MudTable T="Campaign" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+<MudTable T="Discount" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" Striped="true" OnRowClick="ItemOnClick">
     
         <ToolBarContent>
@@ -26,10 +26,10 @@
         </ToolBarContent>
 
      <HeaderContent>
-         <MudTh><MudTableSortLabel T="Campaign" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+         <MudTh><MudTableSortLabel T="Discount" SortLabel="Name">Name</MudTableSortLabel></MudTh>
      </HeaderContent>
-     <RowTemplate Context="campaign">
-         <MudTd DataLabel="Name">@campaign.Name</MudTd>
+     <RowTemplate Context="Discount">
+         <MudTd DataLabel="Name">@Discount.Name</MudTd>
      </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
@@ -41,19 +41,19 @@
 
 @code
 {
-    MudTable<Campaign> table = null!;
+    MudTable<Discount> table = null!;
     bool loading = false;
     string? searchString;
 
-    private async Task<TableData<Campaign>> ServerReload(TableState state)
+    private async Task<TableData<Discount>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await CampaignsClient.GetCampaignsAsync(state.Page, state.PageSize, null, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc));
+            var result = await DiscountsClient.GetDiscountsAsync(state.Page, state.PageSize, null, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc));
 
-            return new TableData<Campaign>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Discount>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {
@@ -67,23 +67,25 @@
         table.ReloadServerData();
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<Campaign> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Discount> ev)
     {
         var item = ev.Item;
 
         await OnItemClicked(item);
     }
 
-    async Task OnItemClicked(Campaign? dto)
+    async Task OnItemClicked(Discount? dto)
     {
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(CampaignDialog.Id), dto?.Id);
+            parameters.Add(nameof(DiscountDialog.Id), dto?.Id);
 
-            var dialogReference = DialogService.Show<CampaignDialog>(dto is null ? "New Campaign" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = DialogService.Show<DiscountDialog>(dto is null ? "New Discount" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
-                MaxWidth = MaxWidth.ExtraLarge
+                FullWidth = true,
+                MaxWidth = MaxWidth.Small,
+                DisableBackdropClick = true
             });
             var result = await dialogReference.Result;
 
@@ -98,9 +100,9 @@
         }
     }
 
-    private TableData<Campaign>? GetTableData()
+    private TableData<Discount>? GetTableData()
     {
-        return (TableData<Campaign>?)table?.GetType()?
+        return (TableData<Discount>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

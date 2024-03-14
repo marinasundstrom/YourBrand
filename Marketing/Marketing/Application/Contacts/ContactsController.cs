@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using YourBrand.Marketing.Application.Contacts;
 using YourBrand.Marketing.Application.Contacts.Queries;
 using YourBrand.Marketing.Application.Contacts.Commands;
+using YourBrand.Marketing.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Marketing.Controllers;
+namespace YourBrand.Marketing.Application.Contacts;
 
-[Route("[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class ContactsController : ControllerBase
 {
     private readonly IMediator _mediator;

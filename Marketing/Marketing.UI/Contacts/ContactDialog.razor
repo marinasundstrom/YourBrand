@@ -49,7 +49,7 @@
     public string Id { get; set; }
 
     [Required]
-    public CampaignDto Campaign { get; set; }
+    public Campaign Campaign { get; set; }
 
     [Required]
     public string FirstName { get; set; }
@@ -78,7 +78,7 @@
     {
         if(Id is null) 
         {
-            var item = await ContactsClient.CreateContactAsync(new CreateContactDto {
+            var item = await ContactsClient.CreateContactAsync(new CreateContact {
                 FirstName = FirstName,
                 LastName = LastName,
                 Ssn = SSN,
@@ -91,7 +91,7 @@
         {
             if (context.IsModified())
             {
-                await ContactsClient.UpdateContactAsync(Id, new UpdateContactDto
+                await ContactsClient.UpdateContactAsync(Id, new UpdateContact
                 {
                     FirstName = FirstName,
                     LastName = LastName,

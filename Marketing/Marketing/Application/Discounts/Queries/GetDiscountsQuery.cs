@@ -8,9 +8,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Identity;
 using YourBrand.Marketing.Domain.Entities;
 using YourBrand.Marketing.Domain;
+
+using YourBrand.Marketing.Application.Common.Models;
+using YourBrand.Identity;
 
 namespace YourBrand.Marketing.Application.Discounts.Queries;
 
@@ -39,7 +41,7 @@ public record GetDiscountsQuery(int Page = 0, int PageSize = 10, string? SearchS
 
             if (request.SearchString is not null)
             {
-                result = result.Where(o => o.ProductName.ToLower().Contains(request.SearchString.ToLower()));
+                result = result.Where(o => o.ItemName!.ToLower().Contains(request.SearchString.ToLower()));
             }
 
             var totalCount = await result.CountAsync(cancellationToken);
@@ -48,7 +50,7 @@ public record GetDiscountsQuery(int Page = 0, int PageSize = 10, string? SearchS
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Marketing.Application.SortDirection.Descending : Marketing.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result.OrderBy(x => x.Id);
             }

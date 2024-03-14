@@ -74,12 +74,6 @@ builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Marketing API";
-    c.Version = "0.1";
-});
-
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();

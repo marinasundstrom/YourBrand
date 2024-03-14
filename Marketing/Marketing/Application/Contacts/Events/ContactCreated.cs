@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Marketing.Application.Common.Interfaces;
 
+using YourBrand.Marketing.Application.Common;
+
 namespace YourBrand.Marketing.Application.Contacts.Events;
 
 public class ContactCreatedHandler : IDomainEventHandler<ContactCreated>

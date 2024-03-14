@@ -25,9 +25,8 @@ public record DeleteCampaignCommand(string Id) : IRequest
             if (campaigns is null) throw new Exception();
 
             context.Campaigns.Remove(campaigns);
-           
-            await context.SaveChangesAsync(cancellationToken);
 
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

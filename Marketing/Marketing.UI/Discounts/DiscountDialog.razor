@@ -1,0 +1,109 @@
+@using System.ComponentModel.DataAnnotations
+@inject IDiscountsClient DiscountsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+                <MudTabPanel Text="General">
+                    <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                        <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                                    For="@(() => Name)" Placeholder="10% off a purchase" />
+
+                        <MudTextField T="string" Label="Description" Lines="3" Variant="Variant.Outlined" Class="mt-4"/>
+
+                        <MudSelect T="string" Label="Discount type" Variant="Variant.Outlined" Class="mt-4"></MudSelect>
+
+                        <MudSelect T="string" Label="Campaign" Variant="Variant.Outlined" Class="mt-4"></MudSelect>
+
+                        <MudNumericField T="decimal?" Label="Amount" Variant="Variant.Outlined" Class="mt-4" />
+
+                        <MudNumericField T="double?" Label="Percentage" Variant="Variant.Outlined" Class="mt-4" />
+
+                        <MudCheckBox T="bool" Label="Allow for free shipping" Class="mt-4" />
+
+                        <MudCheckBox T="bool" Label="Apply before tax" Class="mt-4" />
+
+                        <MudDatePicker T="DateTime?" Label="Expiry date" Variant="Variant.Outlined" Class="mt-4" />
+                    </MudContainer>
+                </MudTabPanel>
+
+                <MudTabPanel Text="Usage restrictions">
+                    <MudText>Content Two</MudText>
+                </MudTabPanel>
+
+                 <MudTabPanel Text="Usage Limits">
+                        <MudNumericField T="double?" Label="Max uses" Variant="Variant.Outlined" Class="mt-4" />
+
+                        <MudNumericField T="double?" Label="Max uses per customer" Variant="Variant.Outlined" Class="mt-4" />
+                </MudTabPanel>
+            </MudTabs>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(Id is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (Id is not null) 
+        {
+            var item = await DiscountsClient.GetDiscountAsync(Id);
+            Name = item.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(Id is null) 
+        {
+            var item = await DiscountsClient.CreateDiscountAsync(new CreateDiscount {
+                //Name = Name
+            });
+
+            Dialog.Close(item);
+        }
+        else 
+        {
+            if (context.IsModified())
+            {
+                await DiscountsClient.UpdateDiscountAsync(Id, new UpdateDiscount
+                {
+                    //Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

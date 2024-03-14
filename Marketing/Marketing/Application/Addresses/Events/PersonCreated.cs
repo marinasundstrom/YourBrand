@@ -5,6 +5,10 @@ using YourBrand.Marketing.Domain.Events;
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Marketing.Application.Common.Interfaces;
 
+using YourBrand.Marketing.Application;
+
+using YourBrand.Marketing.Application.Common;
+
 namespace YourBrand.Marketing.Application.Addresses.Events;
 
 public class AddressCreatedHandler : IDomainEventHandler<AddressCreated>
@@ -21,9 +25,9 @@ public class AddressCreatedHandler : IDomainEventHandler<AddressCreated>
         var person = await _context.Addresses
             .FirstOrDefaultAsync(i => i.Id == notification.AddressId);
 
-        if(person is not null) 
+        if (person is not null)
         {
-           
+
         }
     }
 }

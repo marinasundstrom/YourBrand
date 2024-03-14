@@ -1,19 +1,23 @@
-using YourBrand.Marketing.Domain.Common;
 using YourBrand.Marketing.Domain.Enums;
 using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Address : AuditableEntity
+public class Address : Entity<string>, IAuditable
 {
-    public Address()
+#nullable disable
+
+    protected Address() : base() { }
+
+#nullable restore
+
+    public Address(AddressType addressType)
+    : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
+        Type = addressType;
 
         //AddDomainEvent(new AddressCreated(Id));
     }
-
-    public string Id { get; private set; }
 
     public AddressType Type { get; set; }
 
@@ -38,4 +42,12 @@ public class Address : AuditableEntity
     public string AdministrativeArea { get; set; } = null!;
 
     public string Country { get; set; } = null!;
+
+    public string? CreatedById { get; set; } = null!;
+
+    public DateTimeOffset Created { get; set; }
+
+    public string? LastModifiedById { get; set; }
+
+    public DateTimeOffset? LastModified { get; set; }
 }

@@ -3,6 +3,7 @@ using YourBrand.Marketing.Domain.Entities;
 using YourBrand.Marketing.Application.Contacts;
 using YourBrand.Marketing.Application.Campaigns;
 using YourBrand.Marketing.Application.Discounts;
+using YourBrand.Marketing.Application.Discounts;
 
 namespace YourBrand.Marketing.Application;
 

@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using YourBrand.Marketing.Application.Discounts;
 using YourBrand.Marketing.Application.Discounts.Queries;
 using YourBrand.Marketing.Application.Discounts.Commands;
+using YourBrand.Marketing.Application.Common.Models;
+using Asp.Versioning;
 
-namespace YourBrand.Marketing.Controllers;
+namespace YourBrand.Marketing.Application.Discounts;
 
-[Route("[controller]")]
 [ApiController]
-[Authorize]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class DiscountsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -37,13 +39,13 @@ public class DiscountsController : ControllerBase
     [HttpPost]
     public async Task<DiscountDto> CreateDiscount(CreateDiscountDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateDiscountCommand(dto.ProductId, dto.ProductName, dto.ProductDescription, dto.OrdinaryPrice, dto.Percent), cancellationToken);
+        return await _mediator.Send(new CreateDiscountCommand(dto.Percentage, dto.Amount), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateDiscount(string id, UpdateDiscountDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateDiscountCommand(id, dto.ProductId, dto.ProductName, dto.ProductDescription, dto.OrdinaryPrice, dto.Percent), cancellationToken);
+        await _mediator.Send(new UpdateDiscountCommand(id, dto.ItemId, dto.ItemName, dto.ItemDescription, dto.Percentage, dto.Amount), cancellationToken);
     }
 
     [HttpDelete("{id}")]
@@ -53,15 +55,13 @@ public class DiscountsController : ControllerBase
     }
 }
 
-public record CreateDiscountDto(string ProductId, 
-                string ProductName, 
-                string ProductDescription, 
-                decimal OrdinaryPrice, 
-                double Percent);
+public record CreateDiscountDto(
+                double Percentage,
+                decimal Amount);
 
-public record UpdateDiscountDto(string ProductId, 
-                string ProductName, 
-                string ProductDescription, 
-                decimal OrdinaryPrice, 
-                double Percent);
-
+public record UpdateDiscountDto(
+                string ItemId,
+                string ItemName,
+                string ItemDescription,
+                double Percentage,
+                decimal Amount);
