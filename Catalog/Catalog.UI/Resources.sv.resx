@@ -17,4 +17,25 @@
     <data name="Sales">
         <value>Sälj</value>
     </data>
+    <data name="Catalog">
+        <value>Katalog</value>
+    </data>
+    <data name="Products">
+        <value>Produkter</value>
+    </data>
+    <data name="Categories">
+        <value>Kategories</value>
+    </data>
+    <data name="Attributes">
+        <value>Attribut</value>
+    </data>
+    <data name="Brands">
+        <value>Varumärken</value>
+    </data>
+    <data name="Stores">
+        <value>Butiker</value>
+    </data>
+    <data name="Store">
+        <value>Butik</value>
+    </data>
 </root>

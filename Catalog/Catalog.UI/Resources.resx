@@ -17,4 +17,25 @@
     <data name="Sales">
         <value>Sales</value>
     </data>
+    <data name="Catalog">
+        <value>Catalog</value>
+    </data>
+    <data name="Products">
+        <value>Products</value>
+    </data>
+    <data name="Categories">
+        <value>Categories</value>
+    </data>
+    <data name="Attributes">
+        <value>Attributes</value>
+    </data>
+    <data name="Brands">
+        <value>Brands</value>
+    </data>
+    <data name="Stores">
+        <value>Stores</value>
+    </data>
+    <data name="Store">
+        <value>Store</value>
+    </data>
 </root>
