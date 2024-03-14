@@ -200,7 +200,7 @@
             </MudItem>
         </MudGrid>
 
-         <MudExpansionPanels MultiExpansion="true" Class="mt-8">
+         <MudExpansionPanels MultiExpansion="true" Class="mt-8" Elevation="25">
         <MudExpansionPanel Text="Billing detail">
             <TitleContent>
                   <div class="d-flex flex-grow-1 gap-1">
@@ -248,14 +248,21 @@
         </MudExpansionPanel>
     </MudExpansionPanels>
 
-        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
-
     @if (Model.Status == InvoiceStatus.Draft)
     {
                 <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
     }
 
-        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Model.Items" Hover="true" Elevation="25"
+ <MudExpansionPanels MultiExpansion="true" Class="mt-4" Elevation="25">
+        <MudExpansionPanel @bind-IsExpanded="isExpanded">
+            <TitleContent>
+                  <div class="d-flex flex-grow-1 gap-1">
+                    <MudText Typo="Typo.h5" Class="mb-1">Items</MudText>
+                </div>
+            </TitleContent>
+
+            <ChildContent>
+        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="false" Items="Model.Items" Hover="true" Elevation="0"
               Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateInvoiceItem(e.Item)">
             <HeaderContent>
                 <MudTh>Description</MudTh>
@@ -291,6 +298,10 @@
                 <MudText>Loading...</MudText>
             </LoadingContent>
         </MudTable>
+          </ChildContent>
+        </MudExpansionPanel>
+ </MudExpansionPanels>
+
 
     @if (invoice.DomesticService is null)
     {
@@ -315,6 +326,7 @@
 
 @code
 {
+    bool isExpanded = true;
     InvoiceDto? invoice;
     MudTable<InvoiceItemViewModel> table;
     bool loading = false;
