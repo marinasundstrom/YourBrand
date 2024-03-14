@@ -248,11 +248,6 @@
         </MudExpansionPanel>
     </MudExpansionPanels>
 
-    @if (Model.Status == InvoiceStatus.Draft)
-    {
-                <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
-    }
-
  <MudExpansionPanels MultiExpansion="true" Class="mt-4" Elevation="25">
         <MudExpansionPanel @bind-IsExpanded="isExpanded">
             <TitleContent>
@@ -262,6 +257,11 @@
             </TitleContent>
 
             <ChildContent>
+                    @if (Model.Status == InvoiceStatus.Draft)
+        {
+            <MudButton StartIcon="@Icons.Filled.Add" Variant="Variant.Text" OnClick="AddItem" Class="mb-2">Add item</MudButton>
+        }
+
         <MudTable T="InvoiceItemViewModel" @ref="table" Dense="false" Items="Model.Items" Hover="true" Elevation="0"
               Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateInvoiceItem(e.Item)">
             <HeaderContent>
