@@ -1,0 +1,81 @@
+@using System.ComponentModel.DataAnnotations
+@inject IAttributesClient AttributesClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                              For="@(() => Name)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if(AttributeId is null) 
+                {
+                    <text>Add</text>
+                }
+                else 
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? AttributeId { get; set; } = null!;
+
+    [Required]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        if (AttributeId is not null) 
+        {
+            var attribute = await AttributesClient.GetAttributeByIdAsync(AttributeId);
+            Name = attribute.Name;
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(AttributeId is null) 
+        {
+            await AttributesClient.CreateAttributeAsync(new CreateAttribute {
+                Name = Name
+            });
+
+            //Dialog.Close(attribute);
+        }
+        else
+        {
+            if (context.IsModified())
+            {
+                await AttributesClient.UpdateAttributeAsync(AttributeId, new UpdateAttribute
+                {
+                    Name = Name
+                });
+            }
+
+            Dialog.Close();
+        }
+
+        Dialog.Close();
+    }
+}

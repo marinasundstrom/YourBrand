@@ -1,0 +1,130 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Sales
+@inject IOrdersClient OrdersClient
+
+<EditForm Model="@Model" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+
+            <MudContainer Style="max-height: 300px; overflow-y: scroll">
+                <MudGrid>
+
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="First Name" @bind-Value="Model.FirstName" For="() => Model.FirstName"
+                            Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Last Name" @bind-Value="Model.LastName" For="() => Model.LastName"
+                            Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="SSN" @bind-Value="Model.Ssn" For="() => Model.Ssn" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Phone Number" @bind-Value="Model.PhoneNumber" For="() => Model.PhoneNumber"
+                            Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Email" @bind-Value="Model.Email" For="() => Model.Email" Class="mt-4"
+                            Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="8">
+                        <MudTextField Label="Thoroughfare" @bind-Value="Model.Address.Thoroughfare"
+                            For="() => Model.Address.Thoroughfare" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4">
+                        <MudTextField Label="Premises" @bind-Value="Model.Address.Premises"
+                            For="() => Model.Address.Premises" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Sub Premises" @bind-Value="Model.Address.SubPremises"
+                            For="() => Model.Address.SubPremises" Class="mt-4">
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4">
+                        <MudTextField Label="Postal Code" @bind-Value="Model.Address.PostalCode"
+                            For="() => Model.Address.PostalCode" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="8">
+                        <MudTextField Label="Locality" @bind-Value="Model.Address.Locality"
+                            For="() => Model.Address.Locality" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Sub Administrative Area" @bind-Value="Model.Address.SubAdministrativeArea"
+                            For="() => Model.Address.SubAdministrativeArea" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Administrative Area" @bind-Value="Model.Address.AdministrativeArea"
+                            For="() => Model.Address.AdministrativeArea" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Country" @bind-Value="Model.Address.Country"
+                            For="() => Model.Address.Country" Class="mt-4" Required>
+                        </MudTextField>
+                    </MudItem>
+
+                </MudGrid>
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    OrderItem? item;
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public string? OrderId { get; set; }
+
+    [Parameter] public BillingDetails? Model { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Model is null)
+        {
+            Model = new BillingDetails()
+                {
+                    Address = new Address()
+                };
+        }
+    }
+
+    async Task Submit()
+    {
+        await OrdersClient.UpdateBillingDetailsAsync(OrderId, Model);
+
+        MudDialog.Close(DialogResult.Ok(Model));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

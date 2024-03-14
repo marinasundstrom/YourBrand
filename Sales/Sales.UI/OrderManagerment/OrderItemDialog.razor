@@ -1,0 +1,116 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Sales
+@inject IOrdersClient OrdersClient
+
+<EditForm Model="@Model" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="Description" @bind-Value="Model.Description" For="() => Model.Description"
+                Class="mt-4">
+            </MudTextField>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity"
+                        Class="mt-4">
+                    </MudNumericField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit" Class="mt-4">
+                        <MudSelectItem Value="@(string.Empty)">Unspecified</MudSelectItem>
+                        <MudSelectItem Value="@("pcs")">Pieces</MudSelectItem>
+                        <MudSelectItem Value="@("hours")">Hours</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+            </MudGrid>
+
+            <MudNumericField Label="Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
+            </MudNumericField>
+
+            <MudNumericField Label="Regular Price" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
+                Class="mt-4">
+            </MudNumericField>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate" Class="mt-4">
+                        <MudSelectItem Value="@((double?)0)">Ingen</MudSelectItem>
+                        <MudSelectItem Value="@((double?)0.06)">6%</MudSelectItem>
+                        <MudSelectItem Value="@((double?)0.12)">12%</MudSelectItem>
+                        <MudSelectItem Value="@((double?)0.25)">25%</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                @*<MudItem xs="12" md="6">
+                <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType"
+                Class="mt-4">
+                @foreach (var status in Enum.GetValues<ProductType>())
+                {
+                <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
+                }
+                </MudSelect>
+                </MudItem>*@
+
+            </MudGrid>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudField Label="Line Total" Class="mt-4">@Model.Total.ToString("c")</MudField>
+                </MudItem>
+
+            </MudGrid>
+
+            <MudTextField Label="Notes" Lines="5" @bind-Value="Model.Notes" For="() => Model.Notes" Class="mt-4">
+            </MudTextField>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    OrderItem? item;
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public string? OrderId { get; set; }
+
+    [Parameter] public OrderItemViewModel? Model { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Model is null)
+        {
+            Model = new OrderItemViewModel();
+        }
+    }
+
+    async Task Submit()
+    {
+        if (Model.Id == null)
+        {
+            var dto = Model.ToCreateOrderItemRequest();
+            item = await OrdersClient.AddOrderItemAsync(OrderId, dto);
+        }
+        else
+        {
+            var dto = Model.ToUpdateOrderItemRequest();
+            item = await OrdersClient.UpdateOrderItemAsync(OrderId, Model.Id, dto);
+        }
+
+        MudDialog.Close(DialogResult.Ok(item.ToModel()));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

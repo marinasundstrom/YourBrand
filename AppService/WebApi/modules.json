@@ -10,8 +10,8 @@
         "Enabled": true
     },
     {
-        "Name": "Orders",
-        "Assembly": "Orders.UI",
+        "Name": "Sales",
+        "Assembly": "Sales.UI",
         "Enabled": true
     },
     {

@@ -1,0 +1,55 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IOrdersClient OrdersClient
+@inject IOrderStatusesClient OrderStatusesClient
+@using YourBrand.Sales
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
+                @foreach (var status in orderStatuses)
+                {
+                    <MudSelectItem Value="@status">@status.Name</MudSelectItem>
+                }
+            </MudSelect>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Ok</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Required]
+    [Parameter] public string OrderId { get; set; }
+
+    [Required]
+    [Parameter] public OrderStatus Status { get; set; }
+
+    OrderStatus currentStatus;
+    IEnumerable<OrderStatus> orderStatuses = Array.Empty<OrderStatus>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
+        Status = orderStatuses.FirstOrDefault(x => x.Id == Status?.Id);
+
+        StateHasChanged();
+    }
+
+    async Task Submit()
+    {
+        //await OrdersClient.SetOrderStatusAsync(OrderId, Status);
+
+        MudDialog.Close(DialogResult.Ok(Status));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

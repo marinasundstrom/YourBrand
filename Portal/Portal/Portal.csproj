@@ -73,9 +73,9 @@
     <ProjectReference Include="..\..\Catalog\Catalog.UI\Catalog.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Orders\Orders.UI\Orders.UI.csproj">
+    <!-- <ProjectReference Include="..\..\Orders\Orders.UI\Orders.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    </ProjectReference> -->
     <ProjectReference Include="..\..\Marketing\Marketing.UI\Marketing.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
@@ -86,6 +86,9 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\Portal.Modules.Loader\Portal.Modules.Loader.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sales\Sales.UI\Sales.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

@@ -1,0 +1,105 @@
+@page "/products/attributes"
+@attribute [Authorize]
+@inject IAttributesClient AttributesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<AppPageTitle>Attributes</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Attributes</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnAttributeClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New Attribute
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="YourBrand.Catalog.Attribute" Elevation="0" ServerData="LoadData" Dense="false"
+        Hover="true" Bordered="false" Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel T="YourBrand.Catalog.Attribute" SortLabel="Name">Name</MudTableSortLabel>
+            </MudTh>
+            <MudTh>Values</MudTh>
+        </HeaderContent>
+
+        <RowTemplate Context="attribute">
+            <MudTd DataLabel="Name">@(attribute.Name)</MudTd>
+            <MudTd DataLabel="Values">@string.Join(", ", attribute.Values.Select(x => x.Name))</MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    MudTable<YourBrand.Catalog.Attribute> table; 
+    string? searchString;
+
+    private async Task<TableData<YourBrand.Catalog.Attribute>> LoadData(TableState state)
+    {
+        try
+        {
+            var results = await AttributesClient.GetAttributesAsync(null, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
+            return new TableData<YourBrand.Catalog.Attribute> { Items = results.Items, TotalItems = results.Total };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<YourBrand.Catalog.Attribute> ev)
+    {
+        var item = ev.Item;
+
+        await OnAttributeClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    async Task OnAttributeClicked(YourBrand.Catalog.Attribute? dto)
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(AttributeDialog.AttributeId), dto?.Id);
+
+            var dialogReference = DialogService.Show<AttributeDialog>(dto is null ? "New Attribute" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        }
+        catch (Microsoft.AspNetCore.Components.WebAssembly.Authentication.AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
