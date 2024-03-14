@@ -15,11 +15,11 @@
 
     @if(IsPerson) 
     {
-        <CreatePersonForm />
+        <CreatePersonForm Address="Address" />
     }
     else 
     {
-        <CreateOrganizationForm />
+        <CreateOrganizationForm Address="Address" />
     }
 </MudPaper>
 
@@ -30,6 +30,8 @@
     public string? DisplayName { get; set; }
 
     public bool IsPerson { get; set; } = true;
+
+    public AddressFormModel Address { get; set; } = new AddressFormModel();
 
     private async Task Submit()
     {

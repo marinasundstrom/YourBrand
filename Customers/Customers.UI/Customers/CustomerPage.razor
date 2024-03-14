@@ -1,4 +1,4 @@
-@page "/customers/{Id}"
+@page "/customers/{Id:int}"
 @attribute [Authorize]
 @using Humanizer
 @inject ICustomersClient CustomersClient
@@ -19,10 +19,21 @@
 }
 else
 {
-    <MudText Typo="Typo.h3" Class="mb-4">Customer @Id</MudText>
-
+<MudText Typo="Typo.h3" Class="mb-4">
+    @if (customer.CustomerType == CustomerType.Individual)
+    {
+        <text>@Id - @customer.FirstName @customer.LastName (@customer.Ssn)</text>
+    }
+    else if (customer.CustomerType == CustomerType.Organization)
+    {
+        <text>@Id - @customer.Name (@customer.OrgNo)</text>
+    }
+</MudText>
+    <MudText Typo="Typo.h4">Address</MudText>
     <MudPaper Class="pa-4" Elevation="25">
-        Test
+        @customer.Address.Thoroughfare @customer.Address.Premises @customer.Address.SubPremises<br />
+        @customer.Address.PostalCode @customer.Address.Locality<br />
+        @customer.Address.SubAdministrativeArea @customer.Address.AdministrativeArea<br />
     </MudPaper>
 }
 
@@ -32,7 +43,7 @@ else
     private bool loadingFailed = false;
 
     [Parameter]
-    public string Id { get; set; } = null!;
+    public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,7 +51,7 @@ else
 
         try
         {
-            //this.@customer = await CustomersClient.GetCustomerAsync(Id);
+            this.@customer = await CustomersClient.GetCustomerAsync(Id);
         }
         catch (Exception exc)
         {

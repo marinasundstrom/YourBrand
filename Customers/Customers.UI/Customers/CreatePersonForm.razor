@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 
     <EditForm Model="@this" OnValidSubmit="Submit">
-            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ObjectGraphDataAnnotationsValidator />
 
             <MudGrid>
                 <MudItem xs="12" md="6">
@@ -36,6 +36,10 @@
                 </MudItem>
             </MudGrid>
 
+            <MudText Typo="Typo.h4" Class="mb-4 mt-8">Address</MudText>
+
+            <AddressForm Address="Address" />
+
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">Register</MudButton>
     </EditForm>
 
@@ -57,17 +61,31 @@
     [Required]
     public string Email { get; set; } = null!;
 
+    [Parameter]
+    public AddressFormModel Address { get; set; } = null!;
+
     private async Task Submit()
     {
         var dto = await PersonsClient.CreatePersonAsync(new CreatePerson {
-            FirstName = FirstName, 
-            LastName = LastName, 
+            FirstName = FirstName,
+            LastName = LastName,
             Ssn = SSN,
             Phone = Phone,
             PhoneMobile = PhoneMobile,
-            Email = Email
+            Email = Email,
+            Address = new Address2()
+            {
+                Thoroughfare = Address.Thoroughfare,
+                Premises = Address.Premises,
+                SubPremises = Address.SubPremises,
+                PostalCode = Address.PostalCode,
+                Locality = Address.Locality,
+                SubAdministrativeArea = Address.SubAdministrativeArea,
+                AdministrativeArea = Address.AdministrativeArea,
+                Country = Address.Country
+            }
         });
 
-       NavigationManager.NavigateTo($"/Customers/Persons/{dto.Id}");
+        NavigationManager.NavigateTo($"/Customers/Persons/{dto.Id}");
     }
 }

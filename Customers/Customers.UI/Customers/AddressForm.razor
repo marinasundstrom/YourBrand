@@ -1,0 +1,42 @@
+
+<MudGrid>
+    <MudItem xs="12" md="8">
+        <MudTextField Label="Thoroughfare" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.Thoroughfare" For="() => Address.Thoroughfare"></MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="2">
+        <MudTextField Label="Premises" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.Premises" For="() => Address.Premises"></MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="2">
+        <MudTextField Label="SubPremises" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.SubPremises" For="() => Address.SubPremises"></MudTextField>
+    </MudItem>
+</MudGrid>
+
+<MudGrid>
+    <MudItem xs="12" md="4">
+        <MudTextField Label="PostalCode" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.PostalCode" For="() => Address.PostalCode"></MudTextField>
+    </MudItem>
+    
+    <MudItem xs="12" md="8">
+        <MudTextField Label="Locality" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.Locality" For="() => Address.Locality"></MudTextField>
+    </MudItem>
+</MudGrid>
+
+<MudItem xs="12" md="6">
+    <MudTextField Label="SubAdministrativeArea" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.SubAdministrativeArea" For="() => Address.SubAdministrativeArea"></MudTextField>
+</MudItem>
+
+<MudItem xs="12" md="6">
+    <MudTextField Label="AdministrativeArea" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.AdministrativeArea" For="() => Address.AdministrativeArea"></MudTextField>
+</MudItem>
+
+<MudItem xs="12" md="6">
+    <MudTextField Label="Country" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Address.Country" For="() => Address.Country"></MudTextField>
+</MudItem>
+
+
+@code {
+    [Parameter]
+    public AddressFormModel Address { get; set; } = null!;
+}

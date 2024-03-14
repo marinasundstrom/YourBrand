@@ -1,0 +1,90 @@
+@page "/customers/import"
+@inject ICustomersClient CustomersClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<AppPageTitle>Import Customers</AppPageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" Class="mb-12" GutterBottom="true">Import Customers</MudText>
+
+<MudText Typo="Typo.body1">Upload a JSON file with the expected format.</MudText>
+
+<MudFileUpload T="IReadOnlyList<IBrowserFile>" Accept=".zip" OnFilesChanged="UploadArchive" Hidden="false" Class="flex-1" InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20" InputStyle="opacity:0"
+                   @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass">
+    <ButtonTemplate>       
+        <MudPaper Height="300px" Outlined="true" Class="@DragClass">
+            <MudText Typo="Typo.h6">Zip file</MudText>
+            <MudText Typo="Typo.body1">@(archiveFile is null ? "Drag and drop files here or click" : archiveFile.Name)</MudText>
+        </MudPaper>
+    </ButtonTemplate>
+</MudFileUpload>
+
+<MudButton OnClick="Upload" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.CloudUpload" Class="mt-4" Disabled="@(!CanUpload)">
+    Upload
+</MudButton>
+
+@if(diagnostics is not null) 
+{
+    <MudPaper Class="mt-4 pa-4" Elevation="25">
+        <MudText Typo="Typo.h5" Class="mb-4">Exceptions</MudText>
+
+        <ul>
+        @foreach (var diagnostic in diagnostics)
+        {
+            <li>@diagnostic</li>
+        }  
+        </ul>
+    </MudPaper>
+}
+
+@code 
+{
+    private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
+    private string DragClass = DefaultDragClass;
+    private IEnumerable<string>? diagnostics;
+
+    IBrowserFile archiveFile;
+
+    private async void UploadArchive(InputFileChangeEventArgs e)
+    {
+        archiveFile = e.GetMultipleFiles().First();
+    }
+
+    public bool CanUpload => (archiveFile is not null);
+
+    private async void Upload()
+    {
+        try 
+        {
+            var result = await CustomersClient.ImportCustomersAsync(new FileParameter(archiveFile.OpenReadStream(3 *
+                1000000), archiveFile.Name));
+
+            diagnostics = result.Diagnostics;
+
+            StateHasChanged();
+
+            if(diagnostics.Any()) 
+            {
+                Snackbar.Add("Import succeeded with exceptions", Severity.Success);
+
+                return;
+            }
+
+            Snackbar.Add("Import successful", Severity.Success);
+        }
+        catch(Exception) 
+        {
+            Snackbar.Add("Import failed", Severity.Error);
+        }
+    }
+
+    private void SetDragClass()
+    {
+        DragClass = $"{DefaultDragClass} mud-border-primary";
+    }
+
+    private void ClearDragClass()
+    {
+        DragClass = DefaultDragClass;
+    }
+}
