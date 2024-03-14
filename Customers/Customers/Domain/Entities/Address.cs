@@ -1,25 +1,16 @@
-using YourBrand.Customers.Domain.Common;
+using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Enums;
 using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public class Address : AuditableEntity
+public class Address : Entity<string>, IAuditable
 {
-    protected Address()
-    {
-
-    }
-
-    public Address(string thoroughfare)
+    public Address()
     {
         Id = Guid.NewGuid().ToString();
-        Thoroughfare = thoroughfare;
-
         //AddDomainEvent(new AddressCreated(Id));
     }
-
-    public string Id { get; private set; }
 
     public Organization? Organization { get; private set; } = null!;
 
@@ -48,4 +39,12 @@ public class Address : AuditableEntity
     public string AdministrativeArea { get; set; } = null!;
 
     public string Country { get; set; } = null!;
+
+    public string? CreatedById { get; set; } = null!;
+
+    public DateTimeOffset Created { get; set; }
+
+    public string? LastModifiedById { get; set; }
+
+    public DateTimeOffset? LastModified { get; set; }
 }

@@ -19,11 +19,11 @@ public class Person : Customer
         //AddDomainEvent(new PersonCreated(Id));
     }
 
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
-    public string Ssn { get; set; }
+    public string Ssn { get; set; } = null!;
 
     public bool? IsDeceased { get; set; }
 }

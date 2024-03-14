@@ -51,7 +51,7 @@
 
     private async Task Submit()
     {
-        var dto = await OrganizationsClient.CreateOrganizationAsync(new CreateOrganizationDto 
+        var dto = await OrganizationsClient.CreateOrganizationAsync(new CreateOrganization 
         {   
             Name = Name, 
             OrgNo = OrganizationNo,

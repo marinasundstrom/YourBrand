@@ -1,0 +1,644 @@
+﻿x-generator: NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Customers
+  version: v1
+servers:
+- url: https://localhost:5090
+paths:
+  /v1/Persons:
+    get:
+      tags:
+      - Persons
+      operationId: Persons_GetPersons
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfPerson'
+    post:
+      tags:
+      - Persons
+      operationId: Persons_CreatePerson
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePerson'
+        required: true
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /v1/Persons/{id}:
+    get:
+      tags:
+      - Persons
+      operationId: Persons_GetPerson
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+    put:
+      tags:
+      - Persons
+      operationId: Persons_UpdatePerson
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePerson'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Persons
+      operationId: Persons_DeletePerson
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /v1/Organizations:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganizations
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfOrganization'
+    post:
+      tags:
+      - Organizations
+      operationId: Organizations_CreateOrganization
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganization'
+        required: true
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+  /v1/Organizations/{id}:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    put:
+      tags:
+      - Organizations
+      operationId: Organizations_UpdateOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganization'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Organizations
+      operationId: Organizations_DeleteOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /v1/Customers:
+    get:
+      tags:
+      - Customers
+      operationId: Customers_GetCustomers
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfCustomer'
+  /v1/Customers/{id}:
+    get:
+      tags:
+      - Customers
+      operationId: Customers_GetCustomer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /v1/Customers/GetCustomerBySsn/{ssn}:
+    get:
+      tags:
+      - Customers
+      operationId: Customers_GetCustomerBySSN
+      parameters:
+      - name: ssn
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /v1/Customers/ImportCustomers:
+    post:
+      tags:
+      - Customers
+      operationId: Customers_ImportCustomers
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerImportResult'
+  /v1/Addresses:
+    get:
+      tags:
+      - Addresses
+      operationId: Addresses_GetAddresses
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfAddress'
+components:
+  schemas:
+    ItemsResultOfPerson:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+        totalItems:
+          type: integer
+          format: int32
+    Person:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+        ssn:
+          type: string
+        isDeceased:
+          type: boolean
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/AddressType'
+        thoroughfare:
+          type: string
+        premises:
+          type: string
+          nullable: true
+        subPremises:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+        locality:
+          type: string
+        subAdministrativeArea:
+          type: string
+        administrativeArea:
+          type: string
+        country:
+          type: string
+    AddressType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Delivery
+      - Billing
+      enum:
+      - 1
+      - 2
+    ProblemDetails:
+      type: object
+      additionalProperties:
+        nullable: true
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+    CreatePerson:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        ssn:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address2'
+    Address2:
+      type: object
+      additionalProperties: false
+      properties:
+        thoroughfare:
+          type: string
+        premises:
+          type: string
+          nullable: true
+        subPremises:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+        locality:
+          type: string
+        subAdministrativeArea:
+          type: string
+        administrativeArea:
+          type: string
+        country:
+          type: string
+    UpdatePerson:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        ssn:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+    ItemsResultOfOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        totalItems:
+          type: integer
+          format: int32
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        orgNo:
+          type: string
+        hasCeased:
+          type: boolean
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+    CreateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        orgNo:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address2'
+    UpdateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        orgNo:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+    ItemsResultOfCustomer:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+        totalItems:
+          type: integer
+          format: int32
+    Customer:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        customerType:
+          $ref: '#/components/schemas/CustomerType'
+        name:
+          type: string
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        ssn:
+          type: string
+          nullable: true
+        orgNo:
+          type: string
+          nullable: true
+        vatNo:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        phoneMobile:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address'
+    CustomerType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Individual
+      - Organization
+      enum:
+      - 1
+      - 2
+    CustomerImportResult:
+      type: object
+      additionalProperties: false
+      properties:
+        diagnostics:
+          type: array
+          items:
+            type: string
+    ItemsResultOfAddress:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        totalItems:
+          type: integer
+          format: int32

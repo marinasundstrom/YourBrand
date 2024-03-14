@@ -9,8 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/customers.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime" Namespace="YourBrand.Customers.Client">
-			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
+        <OpenApiReference Include="OpenAPIs/customers.yaml"
+            Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime"
+            Namespace="YourBrand.Customers.Client">
+			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.yaml</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>CustomersClient.cs</OutputPath>
 		</OpenApiReference>

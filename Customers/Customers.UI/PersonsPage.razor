@@ -13,7 +13,7 @@
 
 @* <MudButton Variant="Variant.Filled" OnClick="NewPerson" Class="mb-2">New transaction</MudButton> *@
 
-<MudTable T="PersonDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+<MudTable T="Person" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" >
     
      <HeaderContent>
@@ -38,18 +38,18 @@
 
 @code
 {
-    MudTable<PersonDto> table = null!;
+    MudTable<Person> table = null!;
     bool loading = false;
 
-    private async Task<TableData<PersonDto>> ServerReload(TableState state)
+    private async Task<TableData<Person>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await PersonsClient.GetPersons2Async(state.Page, state.PageSize);
+            var result = await PersonsClient.GetPersonsAsync(state.Page, state.PageSize);
 
-            return new TableData<PersonDto>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Person>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {
@@ -57,9 +57,9 @@
         }
     }
 
-    private TableData<PersonDto>? GetTableData()
+    private TableData<Person>? GetTableData()
     {
-        return (TableData<PersonDto>?)table?.GetType()?
+        return (TableData<Person>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

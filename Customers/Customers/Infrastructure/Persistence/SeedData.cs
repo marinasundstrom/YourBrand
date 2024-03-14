@@ -25,7 +25,8 @@ public class SeedData
                     Email = "john.d@email.com",
                 };
 
-                person.AddAddress(new Address("foo") {
+                person.AddAddress(new Address
+                {
                     Type = Domain.Enums.AddressType.Billing,
                     Thoroughfare = "Baker Street",
                     SubPremises = null,
@@ -33,7 +34,7 @@ public class SeedData
                     PostalCode = "4534 23",
                     Locality = "Testville",
                     SubAdministrativeArea = "Sub",
-                    AdministrativeArea =  "Area",
+                    AdministrativeArea = "Area",
                     Country = "Testland"
                 });
 
@@ -54,7 +55,8 @@ public class SeedData
                     Email = "acme@email.com",
                 };
 
-                organization.AddAddress(new Address("foo") {
+                organization.AddAddress(new Address
+                {
                     Type = Domain.Enums.AddressType.Billing,
                     Thoroughfare = "Baker Street",
                     SubPremises = null,
@@ -62,7 +64,7 @@ public class SeedData
                     PostalCode = "4534 23",
                     Locality = "Testville",
                     SubAdministrativeArea = "Sub",
-                    AdministrativeArea =  "Area",
+                    AdministrativeArea = "Area",
                     Country = "Testland"
                 });
 

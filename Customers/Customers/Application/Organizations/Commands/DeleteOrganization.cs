@@ -4,7 +4,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace YourBrand.Customers.Application.Organizations.Commands;
+namespace YourBrand.Customers.Application.Commands;
 
 public record DeleteOrganization(string OrganizationId) : IRequest
 {
@@ -35,7 +35,6 @@ public record DeleteOrganization(string OrganizationId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
             */
-
         }
     }
 }

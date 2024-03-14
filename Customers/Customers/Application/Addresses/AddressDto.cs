@@ -30,3 +30,27 @@ public record AddressDto(
 
     string Country
 );
+
+public record Address2Dto(
+    // Street
+    string Thoroughfare,
+
+    // Street number
+    string? Premises,
+
+    // Suite
+    string? SubPremises,
+
+    string PostalCode,
+
+    // Town or City
+    string Locality,
+
+    // County
+    string SubAdministrativeArea,
+
+    // State
+    string AdministrativeArea,
+
+    string Country
+);

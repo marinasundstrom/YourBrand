@@ -1,0 +1,47 @@
+[
+    {
+        "customerType": "Individual",
+        "name": "Test Testsson",
+        "firstName": "Test",
+        "lastName": "Testsson",
+        "ssn": "19924234",
+        "phone": "0723534",
+        "phoneMobile": "0723534",
+        "email": "test@email.com",
+        "addresses": [
+            { 
+                "type": "Billing",
+                "thoroughfare": "Foo",
+                "premises": "34",
+                "subPremises": "343",
+                "postalCode": "342 34",
+                "locality": "Foobar",
+                "subAdministrativeArea": "Foo",
+                "administrativeArea": "dfsf",
+                "country": "fgdfg"
+            }
+        ]
+    },
+    {
+        "customerType": "Organization",
+        "name": "ACME Inc.",
+        "orgNo": "2323434",
+        "vatNo": "SE-2323434",
+        "phone": null,
+        "phoneMobile": "072423123",
+        "email": "acme@email.com",
+        "addresses": [
+            {
+                "type": "Delivery",
+                "thoroughfare": "Test street",
+                "premises": "3",
+                "subPremises": "45645",
+                "postalCode": "456546",
+                "locality": "Testville",
+                "subAdministrativeArea": "Foobar",
+                "administrativeArea": "Arr",
+                "country": "dfgdfg"
+            }
+        ]
+    }
+]

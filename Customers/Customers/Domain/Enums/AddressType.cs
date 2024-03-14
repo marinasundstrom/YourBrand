@@ -1,4 +1,4 @@
-using YourBrand.Customers.Domain.Common;
+using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Domain.Enums;

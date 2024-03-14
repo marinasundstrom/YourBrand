@@ -1,12 +1,10 @@
-﻿using YourBrand.Customers.Domain.Common;
+﻿using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Domain.Entities;
 
 public class Organization : Customer
 {
-    readonly HashSet<Address> _addresses = new HashSet<Address>();
-
     protected Organization() { }
 
     public Organization(string name, string organizationNo, string vatNo)
@@ -18,9 +16,9 @@ public class Organization : Customer
         //AddDomainEvent(new PersonCreated(Id));
     }
 
-    public string OrganizationNo { get; set; }
+    public string OrganizationNo { get; set; } = null!;
 
-    public string VatNo { get; set; }
+    public string VatNo { get; set; } = null!;
 
     public bool? HasCeased { get; set; }
 }

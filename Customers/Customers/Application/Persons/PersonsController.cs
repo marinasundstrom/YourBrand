@@ -3,14 +3,20 @@ using YourBrand.Customers.Application;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using YourBrand.Customers.Application.Addresses;
 using YourBrand.Customers.Application.Persons.Queries;
 using YourBrand.Customers.Application.Persons;
 using YourBrand.Customers.Application.Persons.Commands;
+using YourBrand.Customers.Application.Common.Models;
+using Microsoft.AspNetCore.Http;
+using Asp.Versioning;
 
-namespace YourBrand.Customers.Controllers;
+namespace YourBrand.Customers.Application.Persons;
 
-[Route("Customers/[controller]")]
-public class PersonsController : ControllerBase 
+[ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
+public class PersonsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -20,14 +26,14 @@ public class PersonsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ItemsResult<Application.Persons.PersonDto>>> GetPersons(int page, int pageSize, CancellationToken cancellationToken = default) 
+    public async Task<ActionResult<ItemsResult<Persons.PersonDto>>> GetPersons(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var result = await _mediator.Send(new GetPersons(page, pageSize), cancellationToken);
         return Ok(result);
     }
-    
+
     [HttpGet("{id}")]
-    public async Task<PersonDto?> GetPerson(string id, CancellationToken cancellationToken)
+    public async Task<PersonDto?> GetPerson(int id, CancellationToken cancellationToken)
     {
         return await _mediator.Send(new GetPerson(id), cancellationToken);
     }
@@ -37,7 +43,7 @@ public class PersonsController : ControllerBase
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status201Created)]
     public async Task<ActionResult> CreatePerson([FromBody] CreatePersonDto dto, CancellationToken cancellationToken)
     {
-        var dto2 = await _mediator.Send(new CreatePerson(dto.FirstName, dto.LastName, dto.SSN, dto.Phone, dto.PhoneMobile, dto.Email), cancellationToken);
+        var dto2 = await _mediator.Send(new CreatePerson(dto.FirstName, dto.LastName, dto.SSN, dto.Phone, dto.PhoneMobile, dto.Email, dto.Address), cancellationToken);
         return CreatedAtAction(nameof(GetPerson), new { id = dto2.Id }, dto2);
     }
 
@@ -54,6 +60,6 @@ public class PersonsController : ControllerBase
     }
 }
 
-public record CreatePersonDto(string FirstName, string LastName, string SSN, string? Phone, string? PhoneMobile, string? Email);
+public record CreatePersonDto(string FirstName, string LastName, string SSN, string? Phone, string? PhoneMobile, string? Email, Address2Dto Address);
 
 public record UpdatePersonDto(string FirstName, string LastName, string SSN, string? Phone, string? PhoneMobile, string? Email);

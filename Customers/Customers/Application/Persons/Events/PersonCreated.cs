@@ -6,6 +6,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Customers.Application.Common.Interfaces;
+using YourBrand.Customers.Application.Common;
 
 namespace YourBrand.Customers.Application.Persons.Events;
 

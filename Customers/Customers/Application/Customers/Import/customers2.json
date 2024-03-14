@@ -1,0 +1,25 @@
+[
+    {
+        "customerType": "Individual",
+        "name": "Anna Andersson",
+        "firstName": "Anna",
+        "lastName": "Andersson",
+        "ssn": "199002053932",
+        "phone": "0723534",
+        "phoneMobile": "0723534",
+        "email": "test@email.com",
+        "addresses": [
+            { 
+                "type": "Billing",
+                "thoroughfare": "Foo",
+                "premises": "34",
+                "subPremises": "343",
+                "postalCode": "342 34",
+                "locality": "Foobar",
+                "subAdministrativeArea": "Foo",
+                "administrativeArea": "dfsf",
+                "country": "fgdfg"
+            }
+        ]
+    }
+]

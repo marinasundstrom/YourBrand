@@ -6,6 +6,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Customers.Application.Common.Interfaces;
+using YourBrand.Customers.Application.Common;
 
 namespace YourBrand.Customers.Application.Addresses.Events;
 
@@ -23,9 +24,9 @@ public class AddressCreatedHandler : IDomainEventHandler<AddressCreated>
         var person = await _context.Addresses
             .FirstOrDefaultAsync(i => i.Id == notification.AddressId);
 
-        if(person is not null) 
+        if (person is not null)
         {
-           
+
         }
     }
 }

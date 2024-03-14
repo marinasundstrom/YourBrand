@@ -1,11 +1,10 @@
 ﻿using YourBrand.Customers.Domain;
 
-using MassTransit;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Customers.Application.Organizations;
+using YourBrand.Customers.Application.Common.Models;
 
 namespace YourBrand.Customers.Application.Organizations.Queries;
 
@@ -22,12 +21,12 @@ public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchSt
 
         public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizations request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
@@ -38,16 +37,16 @@ public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchSt
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
 
-            if(request.SearchString is not null) 
+            if (request.SearchString is not null)
             {
-                query = query.Where(x => x.Id.ToString().Contains(request.SearchString) 
-                    || x.Name.ToLower().Contains(request.SearchString.ToLower())
+                query = query.Where(x => x.Id.ToString().Contains(request.SearchString)
+                    || x.Name.ToLower().Contains(request.SearchString.ToLower())
                     || (x as Domain.Entities.Organization)!.OrganizationNo.ToLower().Contains(request.SearchString.ToLower()));
-            }          
+            }
 
             int totalItems = await query.CountAsync(cancellationToken);
 
-            query = query         
+            query = query
                 .Include(i => i.Addresses)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);

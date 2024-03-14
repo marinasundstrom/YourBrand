@@ -23,6 +23,12 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Customers;
+using YourBrand.Customers.Application.Commands;
+using YourBrand.Customers.Application.Services;
+using YourBrand.Customers.Infrastructure.Services;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Blobs;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +95,21 @@ builder.Services.AddPaymentsClients((sp, http) =>
     http.BaseAddress = new Uri($"https://localhost:5174/api/payments/");
 });
 
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+
+builder.Services.AddAzureClients(builder =>
+{
+    // Add a KeyVault client
+    //builder.AddSecretClient(keyVaultUrl);
+
+    // Add a Storage account client
+    builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
+                    .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+
+    // Use DefaultAzureCredential by default
+    builder.UseCredential(new DefaultAzureCredential());
+});
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
@@ -108,42 +129,6 @@ else
 }
 
 app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/Persons/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetPerson(personId), cancellationToken))
-    .WithName("Persons_GetPersons")
-    .WithTags("Persons")
-    .Produces<PersonDto>(StatusCodes.Status200OK);
-
-app.MapDelete("/Persons/{personId}", async (string personId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeletePerson(personId), cancellationToken))
-    .WithName("Persons_DeletePerson")
-    .WithTags("Persons")
-    .Produces(StatusCodes.Status200OK);
-
-app.MapPost("/Persons", async (CreatePerson createPerson, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(createPerson, cancellationToken))
-    .WithName("Persons_CreatePersons")
-    .WithTags("Persons")
-    .Produces<PersonDto>(StatusCodes.Status200OK);
-
-app.MapGet("/Persons/{personId}/Addresses", async (string personId, string foo, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetAddress(personId), cancellationToken))
-    .WithName("Addresses_GetAddress")
-    .WithTags("Addresses")
-    .Produces<AddressDto>(StatusCodes.Status200OK);
-
-app.MapPost("/Persons/{personId}/Addresses", async (CreateAddress createAddress, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(createAddress, cancellationToken))
-    .WithName("Addresses_CreateAddress")
-    .WithTags("Addresses")
-    .Produces<AddressDto>(StatusCodes.Status200OK);
-
-app.MapDelete("/Persons/{personId}/Addresses/{addressId}", async (string personId, string addressId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeleteAddress(addressId), cancellationToken))
-    .WithName("Addresses_DeleteAddress")
-    .WithTags("Addresses")
-    .Produces(StatusCodes.Status200OK);
 
 app.MapControllers();
 

@@ -59,7 +59,7 @@
 
     private async Task Submit()
     {
-        var dto = await PersonsClient.CreatePersonAsync(new CreatePersonDto {
+        var dto = await PersonsClient.CreatePersonAsync(new CreatePerson {
             FirstName = FirstName, 
             LastName = LastName, 
             Ssn = SSN,

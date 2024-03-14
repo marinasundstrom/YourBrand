@@ -35,7 +35,6 @@ public record DeletePerson(string PersonId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
             */
-
         }
     }
 }

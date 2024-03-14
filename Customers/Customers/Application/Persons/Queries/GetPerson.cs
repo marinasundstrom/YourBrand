@@ -7,7 +7,7 @@ using YourBrand.Customers.Application.Persons;
 
 namespace YourBrand.Customers.Application.Persons.Queries;
 
-public record GetPerson(string PersonId) : IRequest<PersonDto?>
+public record GetPerson(int Id) : IRequest<PersonDto?>
 {
     public class Handler : IRequestHandler<GetPerson, PersonDto?>
     {
@@ -20,19 +20,15 @@ public record GetPerson(string PersonId) : IRequest<PersonDto?>
 
         public async Task<PersonDto?> Handle(GetPerson request, CancellationToken cancellationToken)
         {
-            /*
             var person = await _context.Persons
                 .Include(i => i.Addresses)
                 .AsSplitQuery()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.PersonId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             return person is null
                 ? null
                 : person.ToDto();
-            */
-
-            return null;
         }
     }
 }
