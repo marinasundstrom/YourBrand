@@ -48,12 +48,6 @@ static class Program
                 builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
             }
 
-            /*
-            builder.Host.UseSerilog((ctx, lc) => lc
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-                .Enrich.FromLogContext()
-                .ReadFrom.Configuration(ctx.Configuration));*/
-
             var app = builder
                 .ConfigureServices()
                 .ConfigurePipeline();
@@ -64,10 +58,8 @@ static class Program
 
             if(app.Environment.IsDevelopment()) 
             {
-                app.UseOpenApi();
+                app.UseOpenApiAndSwaggerUi();
             }
-
-            //await SeedData.EnsureSeedData(app);
 
             // this seeding is only for the template to bootstrap the DB and users.
             // in production you will likely want a different approach.

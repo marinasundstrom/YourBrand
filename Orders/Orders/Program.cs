@@ -72,49 +72,9 @@ builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Orders API";
-    c.Version = "0.1";
-});
+builder.Services.AddAuthorization();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://localhost:5040";
-                        options.Audience = "myapi";
-
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-
-                        };
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnTokenValidated = context =>
-                            {
-                                // Add the access_token as a claim, as we may actually need it
-                                var accessToken = context.SecurityToken as JwtSecurityToken;
-                                if (accessToken != null)
-                                {
-                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
-                                    if (identity != null)
-                                    {
-                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                    }
-                                }
-
-                                return Task.CompletedTask;
-                            }
-                        };
-
-                        //options.TokenValidationParameters.ValidateAudience = false;
-
-                        //options.Audience = "openid";
-
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
+builder.Services.AddAuthenticationServices(Configuration);
 
 builder.Services.AddMassTransit(x =>
 {
@@ -149,7 +109,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 else
 {

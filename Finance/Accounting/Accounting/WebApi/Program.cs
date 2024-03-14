@@ -76,12 +76,6 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Accounting API";
-    c.Version = "0.1";
-});
-
 builder.Services.AddAzureClients(builder =>
 {
     // Add a KeyVault client
@@ -128,7 +122,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 else
 {

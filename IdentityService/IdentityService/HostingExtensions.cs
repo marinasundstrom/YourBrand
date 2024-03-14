@@ -48,7 +48,7 @@ internal static class HostingExtensions
             document.AddSecurity("ApiKey", new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "X-API-KEY",
+                Name = "X-API-Key",
                 In = OpenApiSecurityApiKeyLocation.Header,
                 Description = "Type into the textbox: {your API key}."
             });

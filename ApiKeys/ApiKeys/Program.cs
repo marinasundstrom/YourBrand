@@ -34,7 +34,12 @@ static class Program
                                 .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
         builder.Services
-            .AddOpenApi(ServiceName, ApiVersions.All)
+            .AddOpenApi(ServiceName, ApiVersions.All, settings =>
+            {
+                settings
+                    .AddApiKeySecurity()
+                    .AddJwtSecurity();
+            })
             .AddApiVersioningServices();
 
         builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
@@ -62,32 +67,6 @@ static class Program
 
         services.AddEndpointsApiExplorer();
 
-        // Register the Swagger services
-        services.AddOpenApiDocument(document =>
-        {
-            document.Title = "ApiKeys API";
-            document.Version = "v1";
-
-            document.AddSecurity("JWT", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
-            });
-
-            document.AddSecurity("ApiKey", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "X-API-KEY",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: {your API key}."
-            });
-
-            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("ApiKey"));
-        });
-
         services.AddAuthWithJwt();
         services.AddAuthWithApiKey();
 
@@ -111,7 +90,7 @@ static class Program
         {
             app.UseDeveloperExceptionPage();
 
-            app.UseOpenApi();
+            app.UseOpenApiAndSwaggerUi();
         }
 
         app.UseHttpsRedirection();

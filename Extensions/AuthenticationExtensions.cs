@@ -49,34 +49,12 @@ public static class AuthenticationExtensions
                         Console.WriteLine(options.Authority);
                         Console.WriteLine("Audience: " + options.Audience);
 
-
-                        options.TokenValidationParameters = new TokenValidationParameters()
+                        options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            NameClaimType = "name"
+                            NameClaimType = "name",
+                            ValidateAudience = false,
+                            ValidTypes = new[] { "at+jwt" }
                         };
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnTokenValidated = context =>
-                            {
-                                // Add the access_token as a claim, as we may actually need it
-                                var accessToken = context.SecurityToken as JwtSecurityToken;
-                                if (accessToken != null)
-                                {
-                                    ClaimsIdentity? identity = context?.Principal?.Identity as ClaimsIdentity;
-                                    if (identity != null)
-                                    {
-                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                    }
-                                }
-
-                                return Task.CompletedTask;
-                            }
-                        };
-
-                        options.TokenValidationParameters.ValidateAudience = false;
-
-                        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                     });
 
         return services;

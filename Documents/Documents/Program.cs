@@ -82,12 +82,6 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Documents API";
-    c.Version = "0.1";
-});
-
 // Add the reverse proxy capability to the server
 var proxyBuilder = builder.Services.AddReverseProxy();
 // Initialize the reverse proxy from the "ReverseProxy" section of configuration
@@ -152,7 +146,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 else
 {

@@ -82,44 +82,9 @@ builder.Services
     .AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://localhost:5031";
-                        options.Audience = "myapi";
-
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-                        };
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnTokenValidated = context =>
-                            {
-                                // Add the access_token as a claim, as we may actually need it
-                                var accessToken = context.SecurityToken as JwtSecurityToken;
-                                if (accessToken != null)
-                                {
-                                    ClaimsIdentity? identity = context?.Principal?.Identity as ClaimsIdentity;
-                                    if (identity != null)
-                                    {
-                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                    }
-                                }
-
-                                return Task.CompletedTask;
-                            }
-                        };
-
-                        //options.TokenValidationParameters.ValidateAudience = false;
-
-                        //options.Audience = "openid";
-
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
-
 builder.Services.AddAuthorization();
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
 
 builder.Services.AddUniverse(builder.Configuration);
 

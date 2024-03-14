@@ -20,6 +20,8 @@ using Serilog;
 
 using YourBrand;
 using YourBrand.Extensions;
+using Microsoft.IdentityModel.Logging;
+
 
 static class Program
 {
@@ -36,9 +38,11 @@ static class Program
 
         // Add services to container
 
+        /*
         builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
                                 .Enrich.WithProperty("Application", ServiceName)
                                 .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+        */
 
         builder.Services
             .AddOpenApi(ServiceName, ApiVersions.All)
@@ -48,9 +52,9 @@ static class Program
 
         builder.Services.AddProblemDetails();
 
-        if (args.Contains("--connection-string"))
+        if (connectionString is not null)
         {
-            builder.Configuration["ConnectionStrings:DefaultConnection"] = args[args.ToList().IndexOf("--connection-string") + 1];
+            builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
         }
 
         var Configuration = builder.Configuration;
@@ -69,40 +73,9 @@ static class Program
 
         services.AddEndpointsApiExplorer();
 
-        // Register the Swagger services
-        services.AddOpenApiDocument(document =>
-        {
-            document.Title = "Worker API";
-            document.Version = "v1";
+        services.AddAuthorization();
 
-            document.AddSecurity("JWT", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
-            });
-
-            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-        });
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://localhost:5040";
-                        options.Audience = "myapi";
-
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-                        };
-
-                        //options.TokenValidationParameters.ValidateAudience = false;
-
-                        //options.Audience = "openid";
-
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
+services.AddAuthenticationServices(Configuration);        
 
         builder.Services.AddMassTransit(x =>
         {
@@ -132,7 +105,7 @@ static class Program
 
         var app = builder.Build();
 
-        app.UseSerilogRequestLogging();
+        //app.UseSerilogRequestLogging();
 
         app.MapObservability();
 
@@ -140,7 +113,7 @@ static class Program
         {
             app.UseDeveloperExceptionPage();
 
-            app.UseOpenApi();
+            app.UseOpenApiAndSwaggerUi();
         }
 
         app.UseHttpsRedirection();

@@ -73,12 +73,6 @@ builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Invoices API";
-    c.Version = "0.1";
-});
-
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
@@ -108,7 +102,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 else
 {

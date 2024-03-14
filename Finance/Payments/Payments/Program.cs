@@ -84,12 +84,6 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Payments API";
-    c.Version = "0.1";
-});
-
 builder.Services.AddTransactionsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/transactions/");
@@ -118,7 +112,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 else
 {

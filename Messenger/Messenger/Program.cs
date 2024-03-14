@@ -29,7 +29,12 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddOpenApi(ServiceName, ApiVersions.All, settings => 
+    {
+        settings
+            .AddApiKeySecurity()
+            .AddJwtSecurity();
+    })
     .AddApiVersioningServices();
 
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
@@ -59,31 +64,9 @@ builder.Services.AddHttpContextAccessor();
 
 services.AddEndpointsApiExplorer();
 
-// Register the Swagger services
-services.AddOpenApiDocument(document =>
-{
-    document.Title = "Messenger API";
-    document.Version = "v1";
+services.AddAuthorization();
 
-    document.AddSecurity("JWT", new OpenApiSecurityScheme
-    {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Type into the textbox: Bearer {your JWT token}."
-    });
-
-    document.AddSecurity("ApiKey", new OpenApiSecurityScheme
-    {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "X-API-KEY",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Type into the textbox: {your API key}."
-    });
-
-    document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-    document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("ApiKey"));
-});
+services.AddAuthenticationServices(Configuration);
 
 services.AddAuthWithJwt();
 services.AddAuthWithApiKey();
@@ -108,7 +91,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
     app.UseSwaggerUi(c =>
     {
         c.DocumentTitle = "Messenger API v1";

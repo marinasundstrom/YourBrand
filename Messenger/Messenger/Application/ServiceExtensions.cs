@@ -19,7 +19,7 @@ public static class ServiceExtensions
             var conf = sp.GetRequiredService<IConfiguration>();
 
             http.BaseAddress = conf.GetServiceUri("notifications");
-            http.DefaultRequestHeaders.Add("X-API-KEY", ApiKey);
+            http.DefaultRequestHeaders.Add("X-API-Key", ApiKey);
         })
         .AddTypedClient<INotificationsClient>((http, sp) => new NotificationsClient(http))
         .AddHttpMessageHandler<Handler>();

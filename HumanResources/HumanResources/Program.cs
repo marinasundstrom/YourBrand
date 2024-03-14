@@ -79,32 +79,6 @@ static class Program
 
         services.AddEndpointsApiExplorer();
 
-        // Register the Swagger services
-        builder.Services.AddOpenApiDocument(document =>
-        {
-            document.Title = "Human Resources API";
-            document.Version = "v1";
-
-            document.AddSecurity("JWT", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
-            });
-
-            document.AddSecurity("ApiKey", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "X-API-KEY",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: {your API key}."
-            });
-
-            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("ApiKey"));
-        });
-
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -138,43 +112,9 @@ static class Program
         IdentityModelEventSource.ShowPII = true;
 #endif
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://localhost:5040";
-                        options.Audience = "myapi";
+        services.AddAuthorization();
 
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-
-                        };
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnTokenValidated = context =>
-                            {
-                                // Add the access_token as a claim, as we may actually need it
-                                var accessToken = context.SecurityToken as JwtSecurityToken;
-                                if (accessToken != null)
-                                {
-                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
-                                    if (identity != null)
-                                    {
-                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                    }
-                                }
-
-                                return Task.CompletedTask;
-                            }
-                        };
-
-                        //options.TokenValidationParameters.ValidateAudience = false;
-
-                        //options.Audience = "openid";
-
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
+        services.AddAuthenticationServices(Configuration);
 
         var app = builder.Build();
 
@@ -186,7 +126,7 @@ static class Program
         {
             app.UseDeveloperExceptionPage();
 
-            app.UseOpenApi();
+            app.UseOpenApiAndSwaggerUi();
         }
 
         app.UseHttpsRedirection();

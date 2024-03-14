@@ -1438,7 +1438,7 @@
       "ApiKey": {
         "type": "apiKey",
         "description": "Type into the textbox: {your API key}.",
-        "name": "X-API-KEY",
+        "name": "X-API-Key",
         "in": "header"
       }
     }

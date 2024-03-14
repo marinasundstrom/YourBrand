@@ -88,41 +88,9 @@ static class Program
 
         services.AddEndpointsApiExplorer();
 
-        // Register the Swagger services
-        services.AddOpenApiDocument(config =>
-        {
-            config.Title = "TimeReport API";
-            config.Version = "v1";
+        services.AddAuthorization();
 
-
-            config.AddSecurity("JWT", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
-            });
-
-            config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-        });
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://localhost:5040";
-                        options.Audience = "myapi";
-
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-                        };
-
-                        //options.TokenValidationParameters.ValidateAudience = false;
-
-                        //options.Audience = "openid";
-
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
+        services.AddAuthenticationServices(builder.Configuration);
 
         services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
@@ -163,7 +131,7 @@ static class Program
         {
             app.UseDeveloperExceptionPage();
 
-            app.UseOpenApi();
+            app.UseOpenApiAndSwaggerUi();
             app.UseSwaggerUi(c => c.DocumentTitle = "Web API v1");
         }
 

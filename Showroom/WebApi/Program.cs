@@ -79,23 +79,6 @@ static class Program
 
         services.AddEndpointsApiExplorer();
 
-        // Register the Swagger services
-        services.AddOpenApiDocument(document =>
-        {
-            document.Title = "Showroom API";
-            document.Version = "v1";
-
-            document.AddSecurity("JWT", new OpenApiSecurityScheme
-            {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
-            });
-
-            document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-        });
-
         services.AddAzureClients(builder =>
         {
             // Add a KeyVault client
@@ -135,43 +118,9 @@ static class Program
         IdentityModelEventSource.ShowPII = true;
 #endif
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = "https://localhost:5040";
-                        options.Audience = "myapi";
+        services.AddAuthorization();
 
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "name"
-
-                        };
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnTokenValidated = context =>
-                            {
-                                // Add the access_token as a claim, as we may actually need it
-                                var accessToken = context.SecurityToken as JwtSecurityToken;
-                                if (accessToken != null)
-                                {
-                                    ClaimsIdentity? identity = context.Principal.Identity as ClaimsIdentity;
-                                    if (identity != null)
-                                    {
-                                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                                    }
-                                }
-
-                                return Task.CompletedTask;
-                            }
-                        };
-
-                        //options.TokenValidationParameters.ValidateAudience = false;
-
-                        //options.Audience = "openid";
-
-                        //options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    });
+        services.AddAuthenticationServices(builder.Configuration);
 
         services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
@@ -185,7 +134,7 @@ static class Program
         {
             app.UseDeveloperExceptionPage();
 
-            app.UseOpenApi();
+            app.UseOpenApiAndSwaggerUi();
         }
 
         app.UseHttpsRedirection();

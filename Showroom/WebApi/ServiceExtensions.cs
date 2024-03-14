@@ -34,7 +34,7 @@ public static class ServiceExtensions
         services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>
         {
             http.BaseAddress = new Uri($"https://localhost:5040/");
-            http.DefaultRequestHeaders.Add("X-API-KEY", "foobar");
+            http.DefaultRequestHeaders.Add("X-API-Key", "foobar");
         })
         .AddTypedClient<IdentityService.Client.IUsersClient>((http, sp) => new IdentityService.Client.UsersClient(http));
         */

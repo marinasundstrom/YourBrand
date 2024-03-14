@@ -26,7 +26,7 @@ public static class ServiceExtensions
             .AddApiKeyInHeaderOrQueryParams<ApiKeyProvider>(options =>
             {
                 options.Realm = "Identity Service API";
-                options.KeyName = "X-API-KEY";
+                options.KeyName = "X-API-Key";
             });
 
         services.AddApiApplicationService();

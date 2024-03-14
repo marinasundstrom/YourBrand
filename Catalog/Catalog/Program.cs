@@ -68,12 +68,6 @@ builder.Services.AddIdentityServices();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Catalog API";
-    c.Version = "0.1";
-});
-
 builder.Services.AddAzureClients(builder =>
         {
             // Add a KeyVault client
@@ -120,7 +114,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 else
 {

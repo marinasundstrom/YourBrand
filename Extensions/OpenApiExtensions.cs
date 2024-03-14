@@ -11,6 +11,8 @@ using NJsonSchema.Generation;
 
 using NSwag;
 using NSwag.AspNetCore;
+using NSwag.Generation;
+using NSwag.Generation.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
 namespace YourBrand.Extensions;
@@ -22,7 +24,10 @@ public static class OpenApiExtensions
         new(2, 0)
     ];
 
-    public static IServiceCollection AddOpenApi(this IServiceCollection services, string documentTitle, IEnumerable<ApiVersion>? apiVersions = null)
+    public static IServiceCollection AddOpenApi(this IServiceCollection services, 
+        string documentTitle, 
+        IEnumerable<ApiVersion>? apiVersions = null,
+        Action<AspNetCoreOpenApiDocumentGeneratorSettings>? setting = null)
     {
         services.AddEndpointsApiExplorer();
 
@@ -30,29 +35,22 @@ public static class OpenApiExtensions
 
         foreach (var apiVersion in apiVersions)
         {
-            services.AddOpenApiDocument(config =>
+            services.AddOpenApiDocument(settings =>
             {
-                config.DocumentName = $"v{GetApiVersion(apiVersion)}";
-                config.PostProcess = document =>
+                settings.Title = documentTitle;
+
+                settings.DocumentName = $"v{GetApiVersion(apiVersion)}";
+                settings.PostProcess = document =>
                 {
                     document.Info.Title = documentTitle;
                     document.Info.Version = $"v{GetApiVersion(apiVersion)}";
                 };
-                config.ApiGroupNames = [GetApiVersion(apiVersion)];
+                settings.ApiGroupNames = [GetApiVersion(apiVersion)];
 
-                config.SchemaSettings.DefaultReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull;
-                config.SchemaSettings.SchemaNameGenerator = new CustomSchemaNameGenerator();
+                settings.SchemaSettings.DefaultReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull;
+                settings.SchemaSettings.SchemaNameGenerator = new CustomSchemaNameGenerator();
 
-                config.AddSecurity("JWT", new OpenApiSecurityScheme
-                {
-                    Type = OpenApiSecuritySchemeType.ApiKey,
-                    Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
-                });
-
-                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-                //config.OperationProcessors.Add(new TenantIdHeaderOperationProcessor(isRequired: false));
+                setting?.Invoke(settings);
             });
         }
 
@@ -66,11 +64,59 @@ public static class OpenApiExtensions
         return services;
     }
 
-    public static WebApplication UseOpenApi(this WebApplication app)
+    public static AspNetCoreOpenApiDocumentGeneratorSettings AddJwtSecurity(this AspNetCoreOpenApiDocumentGeneratorSettings settings) 
     {
-        app.UseOpenApi(p => p.Path = "/swagger/{documentName}/swagger.yaml");
+        settings.AddSecurity("JWT", new OpenApiSecurityScheme
+        {
+            Type = OpenApiSecuritySchemeType.ApiKey,
+            Name = "Authorization",
+            In = OpenApiSecurityApiKeyLocation.Header,
+            Description = "Type into the textbox: Bearer {your JWT token}."
+        });
+
+        settings.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+
+        return settings;
+    }
+
+    public static AspNetCoreOpenApiDocumentGeneratorSettings AddApiKeySecurity(this AspNetCoreOpenApiDocumentGeneratorSettings settings)
+    {
+        settings.AddSecurity("ApiKey", new OpenApiSecurityScheme
+        {
+            Type = OpenApiSecuritySchemeType.ApiKey,
+            Name = "X-API-Key",
+            In = OpenApiSecurityApiKeyLocation.Header,
+            Description = "Type into the textbox: {your API key}."
+        });
+
+        settings.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("ApiKey"));
+
+        return settings;
+    }
+
+    public static AspNetCoreOpenApiDocumentGeneratorSettings RequireTenantId(this AspNetCoreOpenApiDocumentGeneratorSettings settings)
+    {
+        settings.OperationProcessors.Add(new TenantIdHeaderOperationProcessor(isRequired: false));
+
+        return settings;
+    }
+
+    public static WebApplication UseOpenApiAndSwaggerUi(
+        this WebApplication app,
+        Action<OpenApiDocumentMiddlewareSettings>? configureOpenApi = null,
+        Action<SwaggerUiSettings>? configureSwaggerUi = null)
+    {
+        app.UseOpenApi(options => 
+        {
+            configureOpenApi?.Invoke(options);
+
+            options.Path = "/swagger/{documentName}/swagger.yaml"; 
+        });
+        
         app.UseSwaggerUi(options =>
         {
+            configureSwaggerUi?.Invoke(options);
+
             var descriptions = app.DescribeApiVersions();
 
             // build a swagger endpoint for each discovered API version

@@ -12,12 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.AddSwaggerDocument(c =>
-{
-    c.Title = "Commerce API";
-    c.Version = "0.1";
-});
-
 const string RootUrl = "https://localhost:5174/api";
 const string CatalogServiceUrl = $"{RootUrl}/catalog";
 
