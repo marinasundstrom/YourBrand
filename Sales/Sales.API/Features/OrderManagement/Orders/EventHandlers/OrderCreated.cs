@@ -8,13 +8,15 @@ using YourBrand.Sales.API.Features.OrderManagement.Repositories;
 using YourBrand.Orders.Application.Common;
 using YourBrand.Orders.Application.Services;
 using YourBrand.Domain;
+using YourBrand.Notifications.Client;
+using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.EventHandlers;
 
-public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, IOrderNotificationService orderNotificationService) : IDomainEventHandler<OrderCreated>
+public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, INotificationsClient notificationsClient,
+    ILogger<OrderCreatedEventHandler> logger) : IDomainEventHandler<OrderCreated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
-    private readonly IOrderNotificationService orderNotificationService = orderNotificationService;
 
     public async Task Handle(OrderCreated notification, CancellationToken cancellationToken)
     {
@@ -25,6 +27,27 @@ public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, I
 
         Console.WriteLine("CREATED C");
 
-        //await orderNotificationService.Created(order.OrderNo);
+        if (order.StatusId == 2)
+        {
+            await PostNotification(order);
+        }
+    }
+
+    private async Task PostNotification(Order order)
+    {
+        try
+        {
+            await notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+            {
+                Title = "Sales",
+                Text = $"New order #{order.OrderNo}.",
+                UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
+                Link = $"/orders/{order.OrderNo}"
+            });
+        }
+        catch (Exception exc)
+        {
+            logger.LogError(exc, "Failed to post notification.");
+        }
     }
 }
