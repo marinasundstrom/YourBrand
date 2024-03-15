@@ -317,6 +317,17 @@
                     "shouldRunCommands": false
                 }
             ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Store",
+                    "commands": [
+                        "dotnet run --project Store/Web/Server/BlazorApp.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
         }
     ]
 }
