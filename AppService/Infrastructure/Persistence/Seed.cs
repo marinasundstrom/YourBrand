@@ -54,6 +54,8 @@ public static class Seed
                await File.ReadAllTextAsync("modules.json")
            )!;
 
+        int i = 1;
+
         foreach (var module in modules)
         {
             context.Modules.Add(new Module
@@ -61,7 +63,8 @@ public static class Seed
                 Id = Guid.NewGuid(),
                 Name = module.Name,
                 Assembly = module.Assembly,
-                Enabled = module.Enabled
+                Enabled = module.Enabled,
+                Index = i++
             });
         }
 

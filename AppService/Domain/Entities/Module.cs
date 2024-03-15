@@ -13,4 +13,6 @@ public sealed class Module : Entity
     public string Assembly { get; set; }
 
     public bool Enabled { get; set; }
+
+    public int Index { get; set; }
 }

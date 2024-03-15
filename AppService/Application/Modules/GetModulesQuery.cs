@@ -31,7 +31,7 @@ public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
             )!;
             */
             
-            var modules = await _appServiceContext.Modules.ToListAsync(cancellationToken);
+            var modules = await _appServiceContext.Modules.OrderBy(x => x.Index).ToListAsync(cancellationToken);
             return modules.Select(x => new ModuleDto {
                 Name = x.Name,
                 Assembly = x.Assembly,
