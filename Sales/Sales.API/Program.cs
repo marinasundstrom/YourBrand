@@ -12,6 +12,7 @@ using YourBrand.Sales.API.Features.OrderManagement;
 using YourBrand.Sales.API.Features.OrderManagement.Orders;
 using YourBrand.Sales.API.Infrastructure;
 using YourBrand.Sales.API.Persistence;
+using YourBrand.Notifications.Client;
 
 using Steeltoe.Discovery.Client;
 
@@ -87,6 +88,11 @@ builder.Services
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+builder.Services.AddNotificationsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"https://localhost:5174/api/notifications/");
+}, b => { });
+
 //builder.Services.AddTenantService();
 //builder.Services.AddCurrentUserService();
 
@@ -151,7 +157,8 @@ try
         //await context.Database.EnsureCreatedAsync();
 
         if (args.Contains("--seed"))
-        {
+        {   
+
             await SeedData(context, configuration, logger);
             return;
         }

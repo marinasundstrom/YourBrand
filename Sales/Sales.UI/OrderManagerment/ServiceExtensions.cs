@@ -8,6 +8,7 @@ using MudBlazor;
 using YourBrand.Portal.AppBar;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Services;
+using YourBrand.Portal.Widgets;
 
 using Store = YourBrand.Portal.Services.Store;
 
@@ -33,5 +34,14 @@ public static class ServiceExtensions
         group.RequiresAuthorization = true;
 
         group.CreateItem("orders", () => t["Orders"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/orders");
+
+
+        var widgetService =
+            services.GetRequiredService<IWidgetService>();
+
+        widgetService.RegisterWidget(new Widget("orders.pendingOrders", "Pending orders", typeof(PendingOrdersWidget))
+        {
+            Size = WidgetSize.Medium
+        });
     }
 }

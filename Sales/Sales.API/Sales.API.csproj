@@ -42,6 +42,7 @@
     <ProjectReference Include="..\Sales.Contracts\Sales.Contracts.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />
     <ProjectReference Include="..\..\Domain.Infrastructure\Domain.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Domain.Persistence\Domain.Persistence.csproj" />
