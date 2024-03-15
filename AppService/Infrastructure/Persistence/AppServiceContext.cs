@@ -43,10 +43,9 @@ public class AppServiceContext : DbContext, IAppServiceContext
     }
 
 #nullable disable
-
     public DbSet<Item> Items { get; set; } = null!;
 
-    public DbSet<Comment> Comments { get; set; } = null!;
+    public DbSet<Module> Modules { get; set; } = null!;
 
     public DbSet<Widget> Widgets { get; set; } = null!;
 

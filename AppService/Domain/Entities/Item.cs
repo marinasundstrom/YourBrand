@@ -7,8 +7,6 @@ namespace YourBrand.Domain.Entities;
 
 public class Item : AuditableEntity, ISoftDelete
 {
-    readonly HashSet<Comment> _comments = new HashSet<Comment>();
-
     protected Item()
     {
 
@@ -27,17 +25,6 @@ public class Item : AuditableEntity, ISoftDelete
     public string? Description { get; set; } = null!;
 
     public string? Image { get; set; } = null!;
-
-    public int CommentCount { get; set; }
-
-    public IReadOnlyCollection<Comment> Comments => _comments;
-
-    public void AddComment(string text)
-    {
-        var comment = new Comment(text);
-        comment.AddDomainEvent(new CommentPostedEvent(Id, comment.Id));
-        _comments.Add(comment);
-    }
 
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }

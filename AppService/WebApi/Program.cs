@@ -158,7 +158,6 @@ app.MapGet("/info", () =>
 .Produces<string>();
 
 app.MapControllers();
-app.MapHub<ItemsHub>("/hubs/items");
 app.MapHub<SomethingHub>("/hubs/something");
 app.MapHub<WorkerHub>("/hubs/worker");
 app.MapHub<NotificationHub>("/hubs/notifications");

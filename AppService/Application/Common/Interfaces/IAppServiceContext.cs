@@ -8,8 +8,8 @@ namespace YourBrand.Application.Common.Interfaces;
 public interface IAppServiceContext
 {
     DbSet<Item> Items { get; }
-
-    DbSet<Comment> Comments { get; }
+    
+    DbSet<Module> Modules { get; }
 
     DbSet<Widget> Widgets { get; }
 

@@ -2,7 +2,6 @@
 using System.Net.Http.Headers;
 
 using YourBrand.Application.Common.Interfaces;
-using YourBrand.Application.Items.Queries;
 
 using MediatR;
 
@@ -17,7 +16,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetItemsQuery)));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ServiceExtensions)));
 
         services.AddScoped<Handler>();
 
