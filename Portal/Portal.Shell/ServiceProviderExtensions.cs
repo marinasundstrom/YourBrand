@@ -35,8 +35,8 @@ public static class ServiceProviderExtensions
 
         navManager.CreateItem("home", options =>
         {
-            options.NameFunc = () => t["Home"];
-            options.Icon = MudBlazor.Icons.Material.Filled.Home;
+            options.NameFunc = () => t["Dashboard"];
+            options.Icon = MudBlazor.Icons.Material.Filled.Dashboard;
             options.Href = "/";
             options.RequiresAuthorization = false;
             options.Index = 0;
