@@ -7,70 +7,67 @@ namespace YourBrand.IdentityService;
 public static class Config
 {
     public static IEnumerable<IdentityResource> IdentityResources =>
-          new IdentityResource[]
-          {
+          [
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email()
                 
                 // let's include the role claim in the profile
                 //new ProfileWithRoleIdentityResource(),
-          };
+          ];
 
     public static IEnumerable<ApiResource> ApiResources =>
-        new ApiResource[]
-        {
+        [
                 // the api requires the role claim
-                new ApiResource("myapi", "The Web Api", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+                new ApiResource("myapi", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
                 {
-                    Scopes = new string[] { "myapi" }
-                },
-                // the api requires the role claim
-                new ApiResource("worker", "The Web Api", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
-                {
-                    Scopes = new string[] { "myapi" }
+                    Scopes = ["myapi"]
                 },
                 // the api requires the role claim
-                new ApiResource("timereport", "The Web Api", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+                new ApiResource("worker", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
                 {
-                    Scopes = new string[] { "myapi" }
+                    Scopes = ["myapi"]
                 },
-                 new ApiResource("catalogapi", "The Catalog API", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+                // the api requires the role claim
+                new ApiResource("timereport", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
                 {
-                    Scopes = new string[] { "catalogapi" }
+                    Scopes = ["myapi"]
                 },
-                new ApiResource("cartsapi", "The Carts API", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+                 new ApiResource("catalogapi", "The Catalog API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
                 {
-                    Scopes = new string[] { "cartsapi" }
+                    Scopes = ["catalogapi"]
                 },
-                new ApiResource("salesapi", "The Carts API", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+                new ApiResource("cartsapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
                 {
-                    Scopes = new string[] { "salesapi" }
+                    Scopes = ["cartsapi"]
+                },
+                new ApiResource("salesapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
+                {
+                    Scopes = ["salesapi"]
                 }
-        };
+        ];
 
     public static IEnumerable<ApiScope> ApiScopes =>
-        new ApiScope[]
-        {
+        [
             // the api requires the role claim
             new ApiScope("myapi", "Access the api"),
             new ApiScope("catalogapi", "Access the Catalog API"),
             new ApiScope("cartsapi", "Access the Carts API"),
             new ApiScope("salesapi", "Access the Carts API")
-        };
+        ];
 
     public static IEnumerable<Duende.IdentityServer.Models.Client> Clients =>
             [
             new Duende.IdentityServer.Models.Client
             {
-                ClientId = "clientapp",
+                ClientId = "portal",
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
                 RequireClientSecret = false,
-                AllowedCorsOrigins = { "https://localhost:5001" },
-                AllowedScopes = { "openid", "profile", "email", "myapi", "catalogapi", "salesapi" },
-                RedirectUris = { "https://localhost:5001/authentication/login-callback" },
-                PostLogoutRedirectUris = { "https://localhost:5001/" },
+                AllowedCorsOrigins = { "https://localhost:5174" },
+                AllowedScopes = { "openid", "profile", "email", "myapi" },
+                RedirectUris = { "https://localhost:5174/authentication/login-callback" },
+                PostLogoutRedirectUris = { "https://localhost:5174/" },
                 Enabled = true
             },
             new Duende.IdentityServer.Models.Client
