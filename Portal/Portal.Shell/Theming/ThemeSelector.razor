@@ -4,7 +4,7 @@
 <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
              PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
         <ActivatorContent>
-            <MudIconButton Icon="@(ThemeManager.IsAutoColorScheme ? Icons.Material.Filled.AutoMode : (_currentColorScheme == ColorScheme.Light ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode))" Color="Color.Inherit" Edge="Edge.End" Class="me-2" />
+            <MudIconButton Icon="@(ThemeManager.IsAutoColorScheme ? Icons.Material.Filled.AutoMode : (_currentColorScheme == ColorScheme.Light ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode))" Color="Color.Inherit" Edge="Edge.End" Class="me-1" />
         </ActivatorContent>
         <ChildContent>
             <MudMenuItem OnClick="@(async (e) => ThemeManager.SetPreferredColorScheme(ColorScheme.Light))">
