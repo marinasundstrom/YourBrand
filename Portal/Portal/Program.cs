@@ -54,7 +54,7 @@ async Task LoadModules(IServiceCollection services)
         .BuildServiceProvider()
         .GetRequiredService<HttpClient>();
 
-    var entries = await http.GetFromJsonAsync<IEnumerable<ModuleDefinition>>($"{ServiceUrls.AppServiceUrl}/Modules");
+    var entries = await http.GetFromJsonAsync<IEnumerable<ModuleDefinition>>($"{ServiceUrls.AppServiceUrl}/v1/Modules");
 
     entries!.Where(x => x.Enabled).ToList().ForEach(x =>
         ModuleLoader.LoadModule(x.Name, Assembly.Load(x.Assembly), x.Enabled));

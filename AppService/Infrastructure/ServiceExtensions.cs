@@ -46,11 +46,11 @@ public static class ServiceExtensions
 
         Console.WriteLine("Foo: " + str);
 
-        services.AddSqlServer<CatalogContext>(
+        services.AddSqlServer<AppServiceContext>(
             configuration.GetConnectionString("mssql", "AppService") ?? configuration.GetConnectionString("DefaultConnection"),
             options => options.EnableRetryOnFailure());
 
-        services.AddScoped<ICatalogContext>(sp => sp.GetRequiredService<CatalogContext>());
+        services.AddScoped<IAppServiceContext>(sp => sp.GetRequiredService<AppServiceContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 

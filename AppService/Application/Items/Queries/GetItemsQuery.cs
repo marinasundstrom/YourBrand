@@ -13,10 +13,10 @@ public record GetItemsQuery(int Page, int PageSize, string? SortBy = null, Appli
 {
     public class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, Results<ItemDto>>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
         private readonly IUrlHelper urlHelper;
 
-        public GetItemsQueryHandler(ICatalogContext context, IUrlHelper urlHelper)
+        public GetItemsQueryHandler(IAppServiceContext context, IUrlHelper urlHelper)
         {
             this.context = context;
             this.urlHelper = urlHelper;

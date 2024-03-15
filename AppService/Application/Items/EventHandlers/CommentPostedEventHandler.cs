@@ -10,9 +10,9 @@ namespace YourBrand.Application.Items.EventHandlers;
 
 public class CommentPostedEventHandler : IDomainEventHandler<CommentPostedEvent>
 {
-    private readonly ICatalogContext context;
+    private readonly IAppServiceContext context;
 
-    public CommentPostedEventHandler(ICatalogContext context)
+    public CommentPostedEventHandler(IAppServiceContext context)
     {
         this.context = context;
     }

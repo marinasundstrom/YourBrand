@@ -9,10 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-        <OpenApiReference Include="OpenAPIs/AppService.json"
+        <OpenApiReference Include="OpenAPIs/AppService.yaml"
             Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true"
             Namespace="YourBrand.AppService.Client">
-			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
+			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.yaml</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>AppServiceClient.cs</OutputPath>
 		</OpenApiReference>

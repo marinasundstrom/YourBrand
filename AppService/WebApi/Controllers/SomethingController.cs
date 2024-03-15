@@ -1,4 +1,6 @@
 ﻿
+using Asp.Versioning;
+
 using Contracts;
 
 using MassTransit;
@@ -8,7 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace YourBrand.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class DoSomethingController : ControllerBase
 {
     [HttpPost]

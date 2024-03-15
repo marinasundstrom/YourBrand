@@ -11,10 +11,10 @@ public record GetItemQuery(string Id) : IRequest<ItemDto?>
 {
     public class GetItemQueryHandler : IRequestHandler<GetItemQuery, ItemDto?>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
         private readonly IUrlHelper urlHelper;
 
-        public GetItemQueryHandler(ICatalogContext context, IUrlHelper urlHelper)
+        public GetItemQueryHandler(IAppServiceContext context, IUrlHelper urlHelper)
         {
             this.context = context;
             this.urlHelper = urlHelper;

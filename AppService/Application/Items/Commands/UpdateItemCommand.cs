@@ -11,9 +11,9 @@ public record UpdateItemCommand(string Id, string Name, string Description) : IR
 {
     public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public UpdateItemCommandHandler(ICatalogContext context)
+        public UpdateItemCommandHandler(IAppServiceContext context)
         {
             this.context = context;
         }

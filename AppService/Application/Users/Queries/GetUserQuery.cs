@@ -12,9 +12,9 @@ public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
     { 
-        readonly ICatalogContext _context;
+        readonly IAppServiceContext _context;
 
-        public GetUserQueryHandler(ICatalogContext context)
+        public GetUserQueryHandler(IAppServiceContext context)
         {
             _context = context;
         }

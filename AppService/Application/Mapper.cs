@@ -4,6 +4,8 @@ using Newtonsoft.Json.Converters;
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Application.Items;
 using YourBrand.Application.Users;
+using YourBrand.Application.Widgets;
+using YourBrand.Domain.Entities;
 
 namespace YourBrand.Application;
 
@@ -23,4 +25,6 @@ public static class Mapper
     {
         return new CommentDto(comment.Id, comment.Text, comment.Created, comment.CreatedBy?.ToDto(), comment.LastModified, comment.LastModifiedBy?.ToDto());
     }
+
+    public static WidgetDto ToDto(this Widget widget) => new(widget.Id, widget.WidgetId, widget.WidgetAreaId, widget.UserId, widget?.Settings?.RootElement.ToString());
 }

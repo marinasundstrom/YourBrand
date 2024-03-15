@@ -13,9 +13,9 @@ public record GetCommentsQuery(string ItemId, int Page, int PageSize, string? So
 {
     public class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, Results<CommentDto>>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public GetCommentsQueryHandler(ICatalogContext context)
+        public GetCommentsQueryHandler(IAppServiceContext context)
         {
             this.context = context;
         }

@@ -11,7 +11,7 @@ public static class ServiceExtensions
             .AddNotificationsClient(configureClient, builder)
             .AddSearchClient(configureClient, builder)
             .AddDoSomethingClient(configureClient, builder)
-            .AddClient(configureClient, builder);
+            .AddWidgetsClient(configureClient, builder);
 
         return services;
     }
@@ -71,11 +71,11 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    public static IServiceCollection AddWidgetsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(Client), configureClient)
-            .AddTypedClient<IClient>((http, sp) => new Client(http));
+            .AddHttpClient(nameof(WidgetsClient), configureClient)
+            .AddTypedClient<IWidgetsClient>((http, sp) => new WidgetsClient(http));
 
         builder?.Invoke(b);
 

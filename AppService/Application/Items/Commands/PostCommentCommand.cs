@@ -11,9 +11,9 @@ public record PostCommentCommand(string ItemId, string Text) : IRequest
 {
     public class PostCommentCommandHandler : IRequestHandler<PostCommentCommand>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public PostCommentCommandHandler(ICatalogContext context)
+        public PostCommentCommandHandler(IAppServiceContext context)
         {
             this.context = context;
         }

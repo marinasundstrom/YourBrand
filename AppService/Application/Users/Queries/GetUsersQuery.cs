@@ -13,9 +13,9 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
 
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Results<UserDto>>
     { 
-        readonly ICatalogContext _context;
+        readonly IAppServiceContext _context;
 
-        public GetUsersQueryHandler(ICatalogContext context)
+        public GetUsersQueryHandler(IAppServiceContext context)
         {
             _context = context;
         }

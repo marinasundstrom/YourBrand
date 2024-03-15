@@ -49,7 +49,7 @@
 
     async Task Send() 
     {
-        await NotificationsClient.CreateNotificationAsync(new CreateNotificationDto {
+        await NotificationsClient.CreateNotificationAsync(new YourBrand.AppService.Client.CreateNotification {
             Title = Title,
             Text = Text,
             UserId = UserId,

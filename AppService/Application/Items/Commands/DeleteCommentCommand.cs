@@ -11,9 +11,9 @@ public record DeleteCommentCommand(string CommentId) : IRequest
 {
     public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public DeleteCommentCommandHandler(ICatalogContext context)
+        public DeleteCommentCommandHandler(IAppServiceContext context)
         {
             this.context = context;
         }

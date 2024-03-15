@@ -9,11 +9,13 @@ using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 
 namespace YourBrand.WebApi.Controllers;
 
-[Route("[controller]")]
 [ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 [Authorize]
 public class NotificationsController : Controller
 {

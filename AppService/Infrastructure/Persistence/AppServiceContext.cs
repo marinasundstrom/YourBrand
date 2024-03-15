@@ -13,12 +13,12 @@ using Newtonsoft.Json;
 
 namespace YourBrand.Infrastructure.Persistence;
 
-public class CatalogContext : DbContext, ICatalogContext
+public class AppServiceContext : DbContext, IAppServiceContext
 {
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
-    public CatalogContext(
-        DbContextOptions<CatalogContext> options,
+    public AppServiceContext(
+        DbContextOptions<AppServiceContext> options,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
@@ -47,6 +47,8 @@ public class CatalogContext : DbContext, ICatalogContext
     public DbSet<Item> Items { get; set; } = null!;
 
     public DbSet<Comment> Comments { get; set; } = null!;
+
+    public DbSet<Widget> Widgets { get; set; } = null!;
 
     public DbSet<User> Users { get; set; } = null!;
 

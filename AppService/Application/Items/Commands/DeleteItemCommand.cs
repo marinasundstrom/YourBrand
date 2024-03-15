@@ -12,10 +12,10 @@ public record DeleteItemCommand(string Id) : IRequest<DeletionResult>
 {
     public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand, DeletionResult>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
         private readonly IItemsClient client;
 
-        public DeleteItemCommandHandler(ICatalogContext context, IItemsClient client)
+        public DeleteItemCommandHandler(IAppServiceContext context, IItemsClient client)
         {
             this.context = context;
             this.client = client;

@@ -11,10 +11,10 @@ namespace YourBrand.Application.Items.EventHandlers;
 
 public class ItemDeletedEventHandler : IDomainEventHandler<ItemDeletedEvent>
 {
-    private readonly ICatalogContext _context;
+    private readonly IAppServiceContext _context;
     private readonly IItemsClient _itemsClient;
 
-    public ItemDeletedEventHandler(ICatalogContext context, IItemsClient itemsClient)
+    public ItemDeletedEventHandler(IAppServiceContext context, IItemsClient itemsClient)
     {
         _context = context;
         _itemsClient = itemsClient;

@@ -18,11 +18,11 @@ namespace YourBrand.Infrastructure.BackgroundJobs;
 [DisallowConcurrentExecution]
 public sealed class ProcessOutboxMessagesJob : IJob
 {
-    private readonly CatalogContext dbContext;
+    private readonly AppServiceContext dbContext;
     private readonly IDomainEventDispatcher domainEventDispatcher;
     private readonly ILogger<ProcessOutboxMessagesJob> logger;
 
-    public ProcessOutboxMessagesJob(CatalogContext dbContext, IDomainEventDispatcher domainEventDispatcher,
+    public ProcessOutboxMessagesJob(AppServiceContext dbContext, IDomainEventDispatcher domainEventDispatcher,
         ILogger<ProcessOutboxMessagesJob> logger)
     {
         this.dbContext = dbContext;

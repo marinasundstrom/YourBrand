@@ -11,9 +11,9 @@ public record UpdateCommentCommand(string CommentId, string Text) : IRequest
 {
     public class UpdateCommentCommandHandler : IRequestHandler<UpdateCommentCommand>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public UpdateCommentCommandHandler(ICatalogContext context)
+        public UpdateCommentCommandHandler(IAppServiceContext context)
         {
             this.context = context;
         }

@@ -11,9 +11,9 @@ public record GetCommentQuery(string Id) : IRequest<CommentDto?>
 {
     public class GetCommentQueryHandler : IRequestHandler<GetCommentQuery, CommentDto?>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public GetCommentQueryHandler(ICatalogContext context)
+        public GetCommentQueryHandler(IAppServiceContext context)
         {
             this.context = context;
         }

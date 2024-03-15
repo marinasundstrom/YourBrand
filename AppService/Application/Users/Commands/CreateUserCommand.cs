@@ -12,9 +12,9 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     { 
-        readonly ICatalogContext _context;
+        readonly IAppServiceContext _context;
 
-        public CreateUserCommandHandler(ICatalogContext context)
+        public CreateUserCommandHandler(IAppServiceContext context)
         {
             _context = context;
         }

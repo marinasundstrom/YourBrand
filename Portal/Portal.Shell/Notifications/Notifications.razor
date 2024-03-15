@@ -69,7 +69,7 @@
 @code {
     bool isLoading = true;
     HubConnection hubConnection = null!;
-    List<NotificationDto> notifications = new List<NotificationDto>();
+    List<Notification> notifications = new List<Notification>();
     int totalNotificationsCount = 0;
     int unreadNotificationsCount = 0;
     int limit = 100;
@@ -89,7 +89,7 @@
         }
     }
 
-    async Task OnNotificationClicked(NotificationDto notification)
+    async Task OnNotificationClicked(Notification notification)
     {
         if(!notification.IsRead) 
         {
@@ -131,7 +131,7 @@
                 .WithAutomaticReconnect()
                 .Build();
 
-            hubConnection.On<NotificationDto>("NotificationReceived", OnNotificationReceived);
+            hubConnection.On<Notification>("NotificationReceived", OnNotificationReceived);
 
             hubConnection.Closed += (error) =>
             {
@@ -188,7 +188,7 @@
         unreadNotificationsCount = 0;
     }
 
-    async Task MarkNotificationAsRead(NotificationDto notification)
+    async Task MarkNotificationAsRead(Notification notification)
     {
         await NotificationsClient.MarkNotificationAsReadAsync(notification.Id);
 
@@ -198,7 +198,7 @@
         StateHasChanged();
     }
 
-    async Task OnNotificationReceived(NotificationDto notification)
+    async Task OnNotificationReceived(Notification notification)
     {
         notifications.Insert(0, notification);
 

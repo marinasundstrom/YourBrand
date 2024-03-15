@@ -10,7 +10,7 @@ public static class Seed
     public static async Task SeedAsync(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
-        using var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
+        using var context = scope.ServiceProvider.GetRequiredService<AppServiceContext>();
 
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
@@ -28,5 +28,13 @@ public static class Seed
 
             await context.SaveChangesAsync();
         }
+
+        var widgetArea = new WidgetArea("dashboard", "Dashboard");
+        widgetArea.AddWidget(new Widget("analytics.engagements", null, null));
+        widgetArea.AddWidget(new Widget("sample-widget2", null, null));
+
+        context.Set<WidgetArea>().Add(widgetArea);
+
+        await context.SaveChangesAsync();
     }
 }

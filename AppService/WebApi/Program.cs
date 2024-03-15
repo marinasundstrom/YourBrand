@@ -148,8 +148,6 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapApplicationRequests();
-
 app.MapGet("/info", () =>
 {
     return System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();

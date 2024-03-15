@@ -12,9 +12,9 @@ public record UpdateUserCommand(string UserId, string FirstName, string LastName
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
     { 
-        readonly ICatalogContext _context;
+        readonly IAppServiceContext _context;
 
-        public UpdateUserCommandHandler(ICatalogContext context)
+        public UpdateUserCommandHandler(IAppServiceContext context)
         {
             _context = context;
         }

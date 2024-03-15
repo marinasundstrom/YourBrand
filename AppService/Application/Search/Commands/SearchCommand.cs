@@ -17,9 +17,9 @@ public record SearchCommand(string SearchText,
 {
     public class SearchCommandHandler : IRequestHandler<SearchCommand, Results<SearchResultItem>>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
 
-        public SearchCommandHandler(ICatalogContext context)
+        public SearchCommandHandler(IAppServiceContext context)
         {
             this.context = context;
         }

@@ -12,9 +12,9 @@ public record DeleteUserCommand(string UserId) : IRequest
 {
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
-        private readonly ICatalogContext _context;
+        private readonly IAppServiceContext _context;
 
-        public DeleteUserCommandHandler(ICatalogContext context)
+        public DeleteUserCommandHandler(IAppServiceContext context)
         {
             _context = context;
         }

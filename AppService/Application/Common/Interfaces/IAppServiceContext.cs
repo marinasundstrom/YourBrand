@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace YourBrand.Application.Common.Interfaces;
 
-public interface ICatalogContext
+public interface IAppServiceContext
 {
     DbSet<Item> Items { get; }
 
     DbSet<Comment> Comments { get; }
+
+    DbSet<Widget> Widgets { get; }
 
     DbSet<User> Users { get; }
 

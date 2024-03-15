@@ -11,11 +11,11 @@ namespace YourBrand.Application.Items.EventHandlers;
 
 public class ItemImageUploadedEventHandler : IDomainEventHandler<ItemImageUploadedEvent>
 {
-    private readonly ICatalogContext _context;
+    private readonly IAppServiceContext _context;
     private readonly IUrlHelper _urlHelper;
     private readonly IItemsClient _itemsClient;
 
-    public ItemImageUploadedEventHandler(ICatalogContext context, IUrlHelper urlHelper, IItemsClient itemsClient)
+    public ItemImageUploadedEventHandler(IAppServiceContext context, IUrlHelper urlHelper, IItemsClient itemsClient)
     {
         _context = context;
         _urlHelper = urlHelper;

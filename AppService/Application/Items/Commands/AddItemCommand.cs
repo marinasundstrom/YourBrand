@@ -13,11 +13,11 @@ public record AddItemCommand(string Name, string Description) : IRequest
 {
     public class AddItemCommandHandler : IRequestHandler<AddItemCommand>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
         private readonly IUrlHelper urlHelper;
         private readonly IItemsClient client;
 
-        public AddItemCommandHandler(ICatalogContext context, IUrlHelper urlHelper, IItemsClient client)
+        public AddItemCommandHandler(IAppServiceContext context, IUrlHelper urlHelper, IItemsClient client)
         {
             this.context = context;
             this.urlHelper = urlHelper;

@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,9 @@ using YourBrand.Application.Modules;
 namespace YourBrand.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
+[AllowAnonymous]
 public class ModulesController : ControllerBase
 {
     [HttpGet]

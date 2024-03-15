@@ -1,0 +1,19 @@
+﻿@page "/"
+@layout MainLayout2
+@using YourBrand.Portal.Widgets
+@inject IStringLocalizer<HomePage> T
+
+<AppPageTitle>@T["Dashboard"]</AppPageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudText Typo="Typo.h4" GutterBottom="true" Class="d-inline-flex">@T["Dashboard"]</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" class="ms-2" />
+
+        <WidgetDisplay WidgetAreaId="dashboard" />
+    </Authorized>
+
+    <NotAuthorized>
+        <MudText Typo="Typo.h4" GutterBottom="true" Class="d-inline-flex">@T["Welcome!"]</MudText>
+    </NotAuthorized>
+</AuthorizeView>

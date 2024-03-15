@@ -12,11 +12,11 @@ public record UploadImageCommand(string Id, Stream Stream) : IRequest<UploadImag
 {
     public class UploadImageCommandHandler : IRequestHandler<UploadImageCommand, UploadImageResult>
     {
-        private readonly ICatalogContext context;
+        private readonly IAppServiceContext context;
         private readonly IFileUploaderService _fileUploaderService;
         private readonly IItemsClient client;
 
-        public UploadImageCommandHandler(ICatalogContext context, IFileUploaderService fileUploaderService, IItemsClient client)
+        public UploadImageCommandHandler(IAppServiceContext context, IFileUploaderService fileUploaderService, IItemsClient client)
         {
             this.context = context;
             this._fileUploaderService = fileUploaderService;

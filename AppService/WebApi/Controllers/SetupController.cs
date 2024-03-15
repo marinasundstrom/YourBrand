@@ -8,11 +8,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YourBrand.Application.Setup;
+using Asp.Versioning;
 
 namespace YourBrand.WebApi.Controllers;
 
-[Route("[controller]")]
 [ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class SetupController : Controller
 {
     private readonly IMediator _mediator;
