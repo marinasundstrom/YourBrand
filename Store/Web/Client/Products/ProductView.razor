@@ -1,0 +1,96 @@
+@using Client.Shared
+@inject BlazorApp.Cart.ICartService CartService
+@inject IToastService ToastService
+
+<div class="col card-group">
+    <div class="card">
+        <Badge BadgeClass="top-0 start-100 discount-label" BadgeStyle=""
+            IsVisible="@(Product.RegularPrice is not null)">
+            <ChildContent>
+                <a href="/products/@Product.Handle">
+                    <img class="bd-placeholder-img card-img-top shadow" alt="Product image"
+                        style="max-width: 100%; height: auto; object-fit: cover; aspect-ratio: 1 / 1;"
+                        src="@Product.Image.Url" />
+                </a>
+            </ChildContent>
+            <BadgeContent>
+                <span class="translate-middle text-white bg-red border-0 p-2 fs-md-5" style="background: #e60c0c;">
+                    <text>
+                        -@(Product.DiscountRate * 100)%
+                    </text>
+                </span>
+            </BadgeContent>
+        </Badge>
+        <div class="card-body">
+            <a href="/products/@Product.Handle" class="text-decoration-none text-reset">
+                <h5 class="card-title mt-2">@Product.Name</h5>
+            </a>
+            <a href="/products/@Product.Handle" class="text-decoration-none text-reset">
+                <p class="card-text mt-2 text-muted">@Product.Description</p>
+            </a>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="price" content="@Product.Price"
+                        style="display: inline-block; font-weight: 500; color: #ca0000; line-height: 0; ">@(((decimal)Product.Price).FormatCurrency(currency))</span>
+                    @if (Product.RegularPrice is not null)
+                    {
+                        <span class="price text-muted"
+                            style="display: inline-block; text-decoration: line-through; color: gray !important; line-height: 0; margin-left: 10px;">@(((decimal?)Product.RegularPrice)?.FormatCurrency(currency))</span>
+                    }
+                </div>
+                <div>
+                    <button class="btn btn-lg btn-primary" disabled="@(isAddingItem)" @onclick="AddItemToCart">
+                        @if (isAddingItem)
+                        {
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <i class="bi bi-basket" />
+                        }
+                    </button>
+                </div>
+            </div>
+        </div>
+        @* <div class="btn-group mt-2">
+        <button class="btn btn-outline-primary">Purchase</button>
+        </div> *@
+    </div>
+</div>
+
+@code
+{
+    string currency = "SEK";
+
+    [Parameter]
+    [EditorRequired]
+    public BlazorApp.Products.Product Product { get; set; } = default!;
+
+    bool isAddingItem = false;
+
+    async Task AddItemToCart()
+    {
+        try
+        {
+            isAddingItem = true;
+
+            await CartService.AddCartItem(Product.Name, Product.Image.Url, Product.Id, Product.Handle, Product.Description,
+            Product.Price, Product.RegularPrice, 1, null);
+
+
+            ToastService.ShowInfo($"{Product.Name} was added to your basket");
+        }
+        catch (Exception exc)
+        {
+            ToastService.ShowInfo("Failed to update item");
+        }
+        finally
+        {
+            isAddingItem = false;
+        }
+    }
+}

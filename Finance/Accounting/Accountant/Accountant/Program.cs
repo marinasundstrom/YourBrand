@@ -26,8 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
 
-string ServiceName = "Accountant"
-;
+string ServiceName = "Accountant";
 string ServiceVersion = "1.0";
 
 // Add services to container

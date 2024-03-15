@@ -1,0 +1,8 @@
+﻿.price, .price2 {
+    font-size: 1.7rem;
+}
+
+
+.breadcrumb-item a:hover {
+    text-decoration: underline !important;
+}

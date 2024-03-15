@@ -1,0 +1,15 @@
+@inherits LayoutComponentBase
+@layout BaseLayout
+@using Microsoft.AspNetCore.Components.Sections
+
+<main class="bg-body pb-4">
+    <SectionOutlet SectionId="HeroSection" />
+
+    <div class="container  mt-5 px-4 px-md-3">
+        @Body
+    </div>
+</main>
+
+@code {
+    internal static object HeroSection = new();
+}

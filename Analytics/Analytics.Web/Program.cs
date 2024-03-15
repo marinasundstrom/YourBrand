@@ -25,6 +25,7 @@ using Microsoft.Extensions.Azure;
 using Azure.Storage.Blobs;
 using Azure.Identity;
 using Microsoft.Extensions.Caching.Memory;
+using Steeltoe.Discovery.Client;
 
 using Serilog;
 
@@ -38,8 +39,7 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-string ServiceName = "Analytics"
-;
+string ServiceName = "Analytics";
 string ServiceVersion = "1.0";
 
 // Add services to container
@@ -48,6 +48,11 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDiscoveryClient();
+}
+
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
@@ -55,6 +60,7 @@ builder.Services
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
+
 
 var configuration = builder.Configuration;
 

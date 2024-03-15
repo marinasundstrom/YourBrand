@@ -1,0 +1,13 @@
+﻿@page "/order/confirmation"
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.StoreFront
+@inject ICartClient CartClient
+@inject ICheckoutClient CheckoutClient
+@inject NavigationManager NavigationManager
+
+<AppPageTitle>Checkout</AppPageTitle>
+
+<div class="py-5 text-center">
+    <h2>Thank you for ordering</h2>
+    <p class="lead">You will soon get a confirmation e-mail in your inbox.</p>
+</div>

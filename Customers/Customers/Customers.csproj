@@ -21,6 +21,7 @@
         <PackageReference Include="Scrutor" Version="4.2.0" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
         <PackageReference Include="Microsoft.Extensions.Azure" Version="1.6.0" />
+        <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
     </ItemGroup>
 
 	<ItemGroup>

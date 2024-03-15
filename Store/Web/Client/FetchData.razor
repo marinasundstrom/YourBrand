@@ -1,0 +1,55 @@
+@inject IWeatherForecastService WeatherForecastService
+
+@using BlazorApp
+
+@* <PageTitle>Weather forecast</PageTitle> *@
+
+<h1>Weather forecast</h1>
+
+<p>This component is a client-side interactive component that demonstrates fetching and displaying data from the server
+    via Web API.</p>
+
+<p>The page is prerendered on the server. But currently there is no way to pass that server state to the client.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Temp. (C)</th>
+            <th>Temp. (F)</th>
+            <th>Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // INFO: If this component is being prerendered by the server,
+        // then the server implementation of WeatherForecastService will be used instead of the one in the client.
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+
+        forecasts = (await WeatherForecastService.GetWeatherForecasts(startDate)).ToArray();
+    }
+}

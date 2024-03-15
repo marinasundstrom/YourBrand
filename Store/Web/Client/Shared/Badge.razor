@@ -1,0 +1,31 @@
+<div class="position-relative @Class" @attributes="AdditionalAttributes">
+    @ChildContent
+    @if (IsVisible)
+    {
+            <div class="position-absolute @BadgeClass translate-middle" style="@BadgeStyle">
+            @BadgeContent
+            </div>
+    }
+    @*<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    99+
+    <span class="visually-hidden">unread messages</span>
+    </span>*@
+</div>
+
+@code {
+    [Parameter] public RenderFragment BadgeContent { get; set; } = default!;
+
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter] public string? BadgeClass { get; set; } = "top-0 start-100";
+
+    [Parameter] public string? BadgeStyle { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public bool IsVisible { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; } =
+    default!;
+}

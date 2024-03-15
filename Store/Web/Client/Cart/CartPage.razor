@@ -1,0 +1,181 @@
+@page "/basket"
+@attribute [StreamRendering(false)]
+@rendermode renderMode
+@using BlazorApp
+@using BlazorApp.Cart
+@using BlazorApp.Shared
+@using Client.Shared
+@inject ICartService CartService
+@inject NavigationManager NavigationManager
+@using Core
+@implements IDisposable
+@inject IToastService ToastService
+
+<AppPageTitle>Basket</AppPageTitle>
+
+<h1>Basket</h1>
+
+@if(cartItems is null) 
+{
+    <em>Loading...</em>
+}
+else 
+{
+    <div style="row">
+        <div class="col-12 col-sm-12 col-lg-6 col-md-12">
+            @if(cartItems.Any()) 
+            {
+                <ul class="mb-4 my-3 bg-body list-unstyled">
+                    @foreach (var cartItem in cartItems)
+                    {
+                        <li @key="cartItem.Id"> @* d-flex flex-row justify-content-between flex-md-wrap *@
+                           <div class="row mb-3">
+                                    <div class="col-1" style="width: 110px;">
+                                        <a href="/products/@cartItem.ProductHandle">
+                                            <img src="@cartItem.Image" class="ms-0 my-2 mx-2 me-4 img-border-rounded shadow" style="width: 80px; height: 80px; aspect-ratio: 1 / 1; object-fit: cover;" />
+                                        </a>    
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="py-2">
+                                                <h6 class="mb-2">@cartItem.Name x @cartItem.Quantity</h6>
+                                                <small class="text-muted">@cartItem.Description</small>
+                                                <InputQuantity Class="mt-2" MinValue="0" Value="cartItem.Quantity" ValueChanged="async (v) => await ItemQuantityChanged(cartItem, v)" />
+
+                                                <p class="small text-muted my-2">
+                                                        <span
+                                                            style="display: inline-block; font-weight: 500; color: #ca0000 !important; line-height: 0; margin-right: 10px; ">
+                                                            @((cartItem.Price *
+                                                                cartItem.Quantity).FormatCurrency(Currency))</span>
+
+                                                        @if (cartItem.RegularPrice is not null)
+                                                        {
+                                                            <span
+                                                                style="display: inline-block; text-decoration: line-through; color: gray !important; line-height: 0;">
+                                                                @((cartItem.RegularPrice.GetValueOrDefault() *
+                                                                    cartItem.Quantity).FormatCurrency(Currency))</span>
+                                                        }
+                                                    </p>
+                                            </div>
+
+                                            <div>
+                                                <button class="btn ms-2" @onclick="async () => await UpdateItem(cartItem)"><i class="bi bi-pencil-square" /></button>
+                                                <button class="btn" disabled="@(isDeletingItem)" @onclick="async () => await DeleteItem(cartItem)"><i class="bi bi-trash" /></button>                                           
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </li>   
+                    }
+
+                    <hr />
+
+                    <li class="list-group-item d-flex justify-content-end">
+                        <div>
+                            <li class="d-flex justify-content-between">
+                                <span class="me-5">Total</span>
+                                <strong>@cartItems.Sum(x => x.Total).FormatCurrency(Currency)</strong>
+                            </li>
+                            <li class="d-flex justify-content-between mt-2">
+                                <small class="me-5">VAT incl.</small>
+                                <small>@((cartItems.Sum(x => x.Total.GetVatFromTotal(x.VatRate.GetValueOrDefault()))).FormatCurrency(Currency))</small>
+                            </li>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="d-flex justify-content-end">
+@*                        <LoadingButton Color="secondary" Class="me-2" Icon="trash" OnClick="async () => await ClearItems()">Clear basket</LoadingButton>*@
+                    <a class="btn btn-lg btn-primary" href="/checkout">Checkout & Pay</a>
+                </div>
+            }
+            else 
+            {
+                <p>No items here :(</p>
+            }
+        </div>
+    </div>
+}
+
+@code 
+{
+    static IComponentRenderMode renderMode = new InteractiveWebAssemblyRenderMode(prerender: false);
+
+    bool isDeletingItem = false;
+
+    string Currency = "SEK";
+    IEnumerable<BlazorApp.Cart.CartItem>? cartItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CartService.CartUpdated += OnCartUpdated;
+        await CartService.InitializeAsync();    
+    }
+
+    private async void OnCartUpdated(object? sender, EventArgs eventArgs) 
+    {
+        cartItems = CartService.Items.ToList();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose() 
+    {
+        CartService.CartUpdated -= OnCartUpdated;
+    }
+
+    async Task ItemQuantityChanged(CartItem cartItem, int quantity)
+    {
+        if(quantity == 0) 
+        {
+            await CartService.RemoveCartItem(cartItem.Id);
+            StateHasChanged();
+            return;
+        }
+
+        await CartService.UpdateCartItemQuantity(cartItem.Id, quantity);
+
+        StateHasChanged();
+    }
+
+    async Task UpdateItem(CartItem cartItem)
+    {
+        NavigationManager.NavigateTo($"/products/{cartItem.ProductId}?cartItemId={cartItem.Id}");
+
+        /*
+        if(cartItem.Product.Parent is null) 
+        {
+            NavigationManager.NavigateTo($"/products/{cartItem.Product.Id}?cartItemId={cartItem.Id}");
+        }
+        else 
+        {
+            NavigationManager.NavigateTo($"/products/{cartItem.Product?.Parent.Id}/{cartItem.Product.Id}?cartItemId={cartItem.Id}");
+        }
+        */
+    }
+
+    async Task DeleteItem(CartItem cartItem)
+    {
+        try 
+        {                   
+            isDeletingItem = true;
+
+            await CartService.RemoveCartItem(cartItem.Id);
+        }
+        catch (Exception exc)
+        {
+            ToastService.ShowError("Could not delete item.");
+        }
+        finally
+        {
+            isDeletingItem = false;
+        }
+    }
+
+    async Task ClearItems()
+    {
+        //await CartClient.ClearCartAsync();
+
+        //cart!.Items.Clear();
+    }
+}

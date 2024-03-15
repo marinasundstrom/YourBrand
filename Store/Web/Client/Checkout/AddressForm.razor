@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+<div class="form-floating col-6">
+    <InputText class="form-control" @bind-Value="Model.Thoroughfare" />
+    <label for="Model" class="form-label">Street</label>
+    <ValidationMessage For="() => Model.Thoroughfare" />
+</div>
+
+<div class="form-floating col-md-3">
+    <InputText class="form-control" @bind-Value="Model.Premises" />
+    <label for="zip" class="form-label">Premise</label>
+    <ValidationMessage For="() => Model.Premises" />
+</div>
+
+<div class="form-floating col-md-3">
+    <InputText class="form-control" @bind-Value="Model.SubPremises" />
+    <label for="zip" class="form-label">Sub Premise <span class="text-muted">(Optional)</span></label>
+    <ValidationMessage For="() => Model.SubPremises" />
+</div>
+
+<div class="form-floating col-md-3">
+    <InputText class="form-control" @bind-Value="Model.PostalCode" />
+    <label for="zip" class="form-label">Postal Code</label>
+    <ValidationMessage For="() => Model.PostalCode" />
+</div>
+
+<div class="form-floating col-md-9">
+    <InputText class="form-control" @bind-Value="Model.Locality" />
+    <label for="address2" class="form-label">City</label>
+    <ValidationMessage For="() => Model.Locality" />
+</div>
+
+<div class="form-floating col-md-3">
+    <InputSelect class="form-select" @bind-Value="Model.Country">
+        <option value="Sweden">Sweden</option>
+    </InputSelect>
+    <label for="country" class="form-label">Country</label>
+    <ValidationMessage For="() => Model.Country" />
+</div>
+
+<div class="form-floating col-md-4">
+    <InputSelect class="form-select" @bind-Value="Model.AdministrativeArea">
+        <option value=""></option>
+        <option value="Skane">Skåne</option>
+    </InputSelect>
+    <label for="state" class="form-label">State</label>
+    <ValidationMessage For="() => Model.AdministrativeArea" />
+</div>
+
+@code {
+    [Parameter]
+    public AddressModel Model { get; set; } = null!;
+}

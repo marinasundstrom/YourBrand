@@ -1,0 +1,9 @@
+.theme-selector svg.theme-icon-active {
+    fill: white;
+}
+
+[data-bs-theme="dark"] {
+    .theme-selector svg {
+        fill: white;
+    }
+}

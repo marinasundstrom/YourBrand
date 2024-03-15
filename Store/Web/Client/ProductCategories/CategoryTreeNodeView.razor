@@ -1,0 +1,49 @@
+@using BlazorApp.ProductCategories
+
+<li>
+    <div class="row">
+        <div class="col-1">
+            @if (Node.SubCategories.Count() > 0)
+            {
+                <div @onclick="() => Expanded = !Expanded" style="cursor: pointer">
+                    <i class="me-2 bi bi-chevron-@(Expanded ? "up" : "down")"></i>
+                </div>
+            }
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <a href="@("/categories/" + Node.Path)" class="text-decoration-none text-reset @(Path == $"{Node.Path}" ? "active" : null)" @onclick:preventDefault @onclick="async () => await OnClick.InvokeAsync(Node)">
+                        @Node.Name
+                    </a>
+
+                    <small class="float-end text-muted mt-1">@Node.ProductsCount</small>
+
+
+                </div>
+            </div>
+
+            @if (Node.SubCategories.Count() > 0 && Expanded)
+            {
+                <ul class="nested col-12">
+                    @foreach (var node in Node.SubCategories)
+                    {
+                        <CategoryTreeNodeView @key="node.Id" Node="node" OnClick="OnClick" />
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</li>
+
+@code 
+{
+    [CascadingParameter(Name = "Path")] public string? Path { get; set; }
+
+    [Parameter] public ProductCategoryTreeNodeDto Node { get; set; }
+
+    [Parameter] public bool Expanded { get; set; }
+
+    [Parameter] public EventCallback<ProductCategoryTreeNodeDto> OnClick { get; set; } = default!;
+}

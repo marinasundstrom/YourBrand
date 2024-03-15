@@ -1,0 +1,100 @@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveWebAssembly
+@attribute [StreamRendering(true)]
+@using BlazorApp
+@using BlazorApp.Cart
+@implements IDisposable
+@inject NavigationManager NavigationManager
+@inject ICartService CartService
+@inject RenderingContext RenderingContext
+@inject IJSRuntime JSRuntime
+@inject IToastService ToastService
+
+<div class="offcanvas offcanvas-end" style="z-index: 99999;" tabindex="-1" id="offcanvasRight"
+    aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Basket</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul style="
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    ">
+            @if (cartItems is not null)
+            {
+                @if (cartItems!.Any())
+                {
+                    <li>
+                        <ul class="mb-4 list-unstyled">
+                            @foreach (var cartItem in cartItems)
+                            {
+                                <li @key="cartItem.Id">
+                                    <div class="row">
+                                        <div class="col-1" style="width: 90px;">
+                                            <a href="/products/@cartItem.ProductHandle">
+                                                <img src="@cartItem.Image" class="ms-0 my-2 mx-2 me-4 img-border-rounded shadow"
+                                                    style="width: 60px; height: 60px; aspect-ratio: 1 / 1; object-fit: cover;" />
+                                            </a>
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="py-2">
+                                                    <h6 class="mb-2">@cartItem.Name x @cartItem.Quantity</h6>
+                                                    <small class="text-muted">@cartItem.Description</small>
+                                                    <p class="small text-muted my-2">
+                                                        <span
+                                                            style="display: inline-block; font-weight: 500; color: #ca0000 !important; line-height: 0; margin-right: 10px; ">
+                                                            @((cartItem.Price *
+                                                                cartItem.Quantity).FormatCurrency(currency))</span>
+
+                                                        @if (cartItem.RegularPrice is not null)
+                                                        {
+                                                            <span
+                                                                style="display: inline-block; text-decoration: line-through; color: gray !important; line-height: 0;">
+                                                                @((cartItem.RegularPrice.GetValueOrDefault() *
+                                                                    cartItem.Quantity).FormatCurrency(currency))</span>
+                                                        }
+                                                    </p>
+                                                </div>
+
+                                                <div>
+                                                    <button class="btn ms-2" @onclick="async () => await UpdateItem(cartItem)"><i
+                                                            class="bi bi-pencil-square" /></button>
+                                                    <button class="btn" disabled="@(isDeletingItem)"
+                                                        @onclick="async () => await DeleteItem(cartItem)"><i
+                                                            class="bi bi-trash" /></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                            <hr />
+
+                            <li class="mt-4 d-flex justify-content-between">
+                                <span>Total</span>
+                                <strong>@(cartItems.Sum(x => x.Total).FormatCurrency(currency))</strong>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-2">
+                        <CartButtons />
+                    </li>
+                }
+                else
+                {
+                    <span class="mx-4 my-2">You have not added any items yet :( </span>
+                }
+            }
+            else
+            {
+                <span>Loading...</span>
+            }
+        </ul>
+    </div>
+</div>

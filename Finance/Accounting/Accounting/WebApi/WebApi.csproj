@@ -15,11 +15,13 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Accounting.Server' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation"
+      Version="3.2.0-rc1.20223.4" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0-beta.1" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
+    <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
   </ItemGroup>
 
   <ItemGroup>

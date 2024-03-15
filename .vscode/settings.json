@@ -123,9 +123,9 @@
         {
             "splitTerminals": [
                 {
-                    "name": "Orders",
+                    "name": "Sales",
                     "commands": [
-                        "dotnet run --project Orders/Orders/Orders.csproj"
+                        "dotnet run --project Sales/Sales.API/Sales.API.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -290,7 +290,29 @@
                 {
                     "name": "Analytics",
                     "commands": [
-                        "dotnet run --project Analytics/Analytics/Analytics.csproj"
+                        "dotnet run --project Analytics/Analytics.Web/Analytics.Web.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "StoreFront",
+                    "commands": [
+                        "dotnet run --project StoreFront/StoreFront.API/StoreFront.API.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Carts",
+                    "commands": [
+                        "dotnet run --project Carts/Carts.API/Carts.API.csproj"
                     ],
                     "shouldRunCommands": false
                 }

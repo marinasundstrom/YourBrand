@@ -1,0 +1,17 @@
+@inject IJSRuntime JSRuntime
+
+<div class="d-flex justify-content-between">
+    <a class="btn btn-secondary" href="basket">Manage basket</a>
+    <a class="btn btn-primary" href="checkout">Check out & Pay</a>
+</div>
+
+@code 
+{
+    IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Cart/CartOffCanvas.razor.js");
+        await module.InvokeVoidAsync("init");
+    }
+}

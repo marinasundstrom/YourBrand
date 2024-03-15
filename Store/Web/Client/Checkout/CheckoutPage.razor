@@ -1,0 +1,378 @@
+@page "/checkout"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using YourBrand.StoreFront
+@attribute [StreamRendering(false)]
+@rendermode Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveWebAssembly
+@inject ICartClient CartClient
+@inject BlazorApp.Cart.ICartService CartService
+@inject ICheckoutClient CheckoutClient
+@* @inject IUserClient UserClient *@
+@inject NavigationManager NavigationManager
+@* @inject Services.IAccessTokenProvider AccessTokenProvider *@
+@inject RenderingContext RenderingContext
+@implements IDisposable
+@using Core
+@inject IToastService ToastService
+
+<AppPageTitle>Checkout</AppPageTitle>
+
+@if (cart is not null)
+{
+    <div class="py-5 text-center">
+        @*<img class="d-block mx-auto mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> *@
+        <h2>Checkout</h2>
+        <p class="lead">Fill out this form to finish your order.</p>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-5 col-lg-4 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span>Your basket</span>
+                <span class="badge bg-danger rounded-pill">@(cart.Items.Sum(x => x.Quantity))</span>
+            </h4>
+            <ul class="list-group mb-3">
+                @foreach (var cartItem in cart.Items)
+                {
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">@cartItem.Name x @cartItem.Quantity</h6>
+                            <small class="text-muted">@cartItem.Description</small>
+                        </div>
+                        <span class="text-muted">@((cartItem.Total).FormatCurrency("SEK"))</span>
+                    </li>
+
+                }
+                <div class="list-group-item">
+                <li class="d-flex justify-content-between">
+                    <span>Total</span>
+                    <strong>@cart.Items.Sum(x => x.Total).FormatCurrency("SEK")</strong>
+                </li>
+                <li class="d-flex justify-content-between mt-2">
+                    <small>VAT incl.</small>
+                    <small>@((cart.Items.Sum(x => x.Total.GetVatFromTotal(x.VatRate.GetValueOrDefault()))).FormatCurrency("SEK"))</small>
+                </li>
+        </div>
+        </ul>
+
+        @*
+            <form class="card p-2">
+                <div class="input-group">
+                <input type="text" class="form-control" placeholder="Promo code">
+                <button type="submit" class="btn btn-secondary">Redeem</button>
+                </div>
+            </form>
+        *@
+    </div>
+    <div class="col-md-7 col-lg-8">
+
+        <h4 class="mb-3">Billing address</h4>
+
+        <EditForm Model="@this" OnValidSubmit="Submit">
+            <ObjectGraphDataAnnotationsValidator />
+
+            <div class="row g-3">
+                <div class="form-floating col-sm-6">
+                    <InputText class="form-control" @bind-Value="FirstName" />
+                    <label for="firstName" class="form-label">First name</label>
+                    <ValidationMessage For="() => FirstName" />
+                </div>
+
+                <div class="form-floating col-sm-6">
+                    <InputText class="form-control" @bind-Value="LastName" />
+                    <label for="lastName" class="form-label">Last name</label>
+                    <ValidationMessage For="() => LastName" />
+                </div>
+
+                <div class="form-floating col-sm-6">
+                    <InputText class="form-control" @bind-Value="SSN" />
+                    <label for="ssn" class="form-label">SSN</label>
+                    <ValidationMessage For="() => SSN" />
+                </div>
+
+                <div class="form-floating col-12">
+                    <InputText class="form-control" @bind-Value="Email" />
+                    <label for="email" class="form-label">Email</label>
+                    <ValidationMessage For="() => Email" />
+                </div>
+
+                <div class="form-floating col-12">
+                    <InputText class="form-control" @bind-Value="Phone" />
+                    <label for="phoneNumber" class="form-label">Phone number</label>
+                    <ValidationMessage For="() => Phone" />
+                </div>
+
+                <AddressForm Model="BillingAddress" />
+
+                <hr class="my-4">
+
+                <div class="form-check ms-3 mt-0">
+                    <InputCheckbox class="form-check-input" @bind-Value="ShipToSameAddress"></InputCheckbox>
+                    <label class="form-check-label ms-2" for="flexCheckIndeterminate">
+                        Shipping address is the same as billing
+                    </label>
+                </div>
+
+                @if (!ShipToSameAddress)
+                {
+                    <hr class="my-4">
+
+                    <h4 class="mb-3 mt-2">Shipping address</h4>
+
+                    <ShippingDetailsForm Model="ShippingDetails" />
+                }
+
+            </div>
+
+            @*
+                <hr class="my-4">
+
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="same-address">
+                    <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="save-info">
+                    <label class="form-check-label" for="save-info">Save this information for next time</label>
+                </div>
+
+
+
+                <hr class="my-4">
+
+                <h4 class="mb-3">Payment</h4>
+
+                <div class="my-3">
+                <div class="form-check">
+                    <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
+                    <label class="form-check-label" for="credit">Credit card</label>
+                </div>
+                <div class="form-check">
+                    <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <label class="form-check-label" for="debit">Debit card</label>
+                </div>
+                <div class="form-check">
+                    <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <label class="form-check-label" for="paypal">PayPal</label>
+                </div>
+                </div>
+
+                <div class="row gy-3">
+                <div class="col-md-6">
+                    <label for="cc-name" class="form-label">Name on card</label>
+                    <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                    <small class="text-muted">Full name as displayed on card</small>
+                    <div class="invalid-feedback">
+                    Name on card is required
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="cc-number" class="form-label">Credit card number</label>
+                    <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                    <div class="invalid-feedback">
+                    Credit card number is required
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="cc-expiration" class="form-label">Expiration</label>
+                    <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                    <div class="invalid-feedback">
+                    Expiration date required
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="cc-cvv" class="form-label">CVV</label>
+                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                    <div class="invalid-feedback">
+                    Security code required
+                    </div>
+                </div>
+                </div>
+
+            *@
+
+            <hr class="my-4">
+
+            <ValidationSummary />
+
+            <button class="w-100 btn btn-primary btn-lg" disabled="@(checkingOut)" type="submit">
+                @if(checkingOut) 
+                { 
+                    <div class="spinner-border spinner-border-sm me-2" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                    </div> <span>Placing order...</span> 
+                } 
+                else 
+                { 
+                    <span>Continue to checkout</span> 
+                }
+                </button>
+        </EditForm>
+    </div>
+    </div>
+}
+
+@code
+{
+    Cart? cart;
+    ShippingDetailsModel? shippingDetails;
+    bool checkingOut;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CartService.CartUpdated += OnCartUpdated;
+
+        //if(RenderingContext.IsPrerendering) return;
+
+        cart = await CartClient.GetCartAsync();
+
+        /*
+
+        string? accessToken = await AccessTokenProvider.GetAccessToken();
+
+        if(accessToken is not null) 
+        {
+            try 
+            {
+                var profile = await UserClient.GetProfileAsync();
+                var addresses = await UserClient.GetAddressesAsync();
+
+                var address = addresses.FirstOrDefault();
+
+                FirstName = profile.FirstName;
+                LastName = profile.LastName;
+                SSN = profile.Ssn;
+                Phone = profile.Phone;
+                Email = profile.Email;
+                BillingAddress.Thoroughfare = address.Thoroughfare;
+                BillingAddress.Premises = address.Premises;
+                BillingAddress.SubPremises = address.SubPremises;
+                BillingAddress.PostalCode = address.PostalCode;
+                BillingAddress.Locality = address.Locality;
+                BillingAddress.SubAdministrativeArea = address.SubAdministrativeArea;
+                BillingAddress.AdministrativeArea = address.AdministrativeArea;
+                BillingAddress.Country = address.Country;
+                BillingAddress.Country = address.Country;
+            }
+            catch 
+            {
+
+            }
+        }
+
+        */
+    }
+
+    private async void OnCartUpdated(object? sender, EventArgs eventArgs) 
+    {
+        var cartItems = CartService.Items.ToList();
+        if(!cartItems.Any()) 
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    public void Dispose() 
+    {
+        CartService.CartUpdated -= OnCartUpdated;
+    }
+
+    [Required]
+    public string FirstName { get; set; } = null!;
+
+    [Required]
+    public string LastName { get; set; } = null!;
+    
+    [Required]
+    public string SSN { get; set; } = null!;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+
+    [Required]
+    [Phone]
+    public string Phone { get; set; } = null!;
+
+    [Required]
+    public AddressModel BillingAddress { get; set; } = new AddressModel();
+
+    public bool ShipToSameAddress { get; set; } = true;
+
+    public ShippingDetailsModel? ShippingDetails => !ShipToSameAddress ? shippingDetails ??= new ShippingDetailsModel() : null;
+
+    public async Task Submit()
+    {
+        try 
+        {
+            checkingOut = true;
+
+            var cart = await CartClient.GetCartAsync();
+
+            if(!cart.Items.Any())
+            {
+                NavigationManager.NavigateTo("/cart");
+            }
+
+            await CheckoutClient.CheckoutAsync(new Checkout
+            {
+                BillingDetails = new BillingDetails
+                {
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    Ssn = SSN,
+                    Email = Email,
+                    PhoneNumber = Phone,
+                    Address = Map(BillingAddress)
+                },
+                ShippingDetails = ShipToSameAddress ?
+                new ShippingDetails
+                {
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    CareOf = string.Empty,
+                    Address = Map(BillingAddress),
+                }
+                : new ShippingDetails
+                {
+                    FirstName = ShippingDetails.FirstName,
+                    LastName = ShippingDetails.LastName,
+                    CareOf = ShippingDetails.CareOf,
+                    Address = Map(ShippingDetails.Address),
+                }
+            });
+
+            await CartService.Clear();
+
+            NavigationManager.NavigateTo("/order/confirmation");
+        }
+        catch(Exception) 
+        {
+            ToastService.ShowInfo("Failed to place order");
+        }
+        finally 
+        {
+            checkingOut = false;
+        }
+    }
+
+    private Address Map(AddressModel address)
+    {
+        return new Address
+        {
+            Thoroughfare = address.Thoroughfare,
+            Premises = address.Premises,
+            SubPremises = address.SubPremises,
+            PostalCode = address.PostalCode,
+            Locality = address.Locality,
+            SubAdministrativeArea = address.SubAdministrativeArea ?? "TEST",
+            AdministrativeArea = address.AdministrativeArea,
+            Country = address.Country ?? "Testland"
+        };
+    }
+}

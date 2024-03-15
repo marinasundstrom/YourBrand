@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <RootNamespace>YourBrand.StoreFront.API</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <PackageReference Include="IdentityModel" Version="6.2.0" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration"
+      Version="6.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.0.0-preview*" />
+    <PackageReference Include="MassTransit" Version="8.0.16" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.16" />
+    <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="8.0.16" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
+    <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StoreFront.Contracts\StoreFront.Contracts.csproj" />
+    <ProjectReference Include="..\..\Catalog\Catalog.Contracts\Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
+    <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\Catalog\Catalog.Client\Catalog.Client.csproj" />
+    <ProjectReference Include="..\..\Carts\Carts.Client\Carts.Client.csproj" />
+    <ProjectReference Include="..\..\Carts\Carts.Contracts\Carts.Contracts.csproj" />
+    <ProjectReference Include="..\..\Sales\Sales.Client\Sales.Client.csproj" />
+    <ProjectReference Include="..\..\Inventory\Inventory.Client\Inventory.Client.csproj" />
+  </ItemGroup>
+
+</Project>

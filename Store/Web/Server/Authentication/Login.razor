@@ -1,0 +1,88 @@
+@page "/authentication/login"
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject ILogger<Login> Logger
+@inject NavigationManager NavigationManager
+
+@using BlazorApp.Data
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+
+<AppPageTitle>Log in</AppPageTitle>
+
+<h1>Log in</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Model" OnValidSubmit="LoginUser">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <InputText id="username" @bind-Value="Model.Username" class="form-control" />
+                <ValidationMessage For="() => Model.Username" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <InputText type="password" id="password" @bind-Value="Model.Password" class="form-control" />
+                <ValidationMessage For="() => Model.Password" />
+            </div>
+             <div class="mb-3">
+                <div class="form-check">
+                    <InputCheckbox id="rememberMe" @bind-Value="Model.RememberMe"  class="form-check-input" />
+                    <label class="form-check-label" for="rememberMe">
+                        Remember me
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Log in</button>
+        </EditForm>
+    </div>
+</div>
+
+<div class="mt-4">
+    @if (loginUnsuccessful)
+    {
+        <span class="text-danger">
+            Login unsuccessful. Please check your credentials.
+        </span>
+    }
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public LoginModel Model { get; set; } = new();
+
+    private bool loginUnsuccessful = false;
+
+    public async Task LoginUser()
+    {
+        var user = await UserManager.FindByNameAsync(Model.Username!);
+
+        var result = await SignInManager.PasswordSignInAsync(Model.Username!, Model.Password!, Model.RememberMe, lockoutOnFailure: false);
+        if (result.Succeeded)
+        {
+            Logger.LogInformation("User signed-in successfully");
+
+            NavigationManager.NavigateTo("/authentication/profile");
+        }
+        else
+        {
+            Logger.LogInformation("User was not authenticated");
+
+            loginUnsuccessful = true;
+        }
+    }
+
+    public class LoginModel 
+    {
+        [Required]
+        public string? Username { get; set; }
+
+        [Required]
+        public string? Password { get; set; }
+
+        public bool RememberMe { get; set; }
+    }
+}

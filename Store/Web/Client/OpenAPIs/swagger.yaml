@@ -1,0 +1,743 @@
+x-generator: NSwag v14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Store.Web
+  version: v1
+servers:
+  - url: http://localhost:5153
+paths:
+  /api/v1/products:
+    get:
+      tags:
+        - Products
+        - Products
+      operationId: Products_GetProducts
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            nullable: true
+          x-position: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            nullable: true
+          x-position: 2
+        - name: searchTerm
+          in: query
+          schema:
+            type: string
+            nullable: true
+          x-position: 3
+        - name: categoryPath
+          in: query
+          schema:
+            type: string
+            nullable: true
+          x-position: 4
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfProduct"
+        404:
+          description: ""
+  /api/v1/products/{productIdOrHandle}:
+    get:
+      tags:
+        - Products
+        - Products
+      operationId: Products_GetProductById
+      parameters:
+        - name: productIdOrHandle
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: ""
+  /api/v1/products/{productIdOrHandle}/findVariant:
+    post:
+      tags:
+        - Products
+        - Products
+      operationId: Products_FindProductVariantByAttributes
+      parameters:
+        - name: productIdOrHandle
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+      requestBody:
+        x-name: selectedAttributeValues
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: ""
+  /api/v1/products/{productIdOrHandle}/find:
+    post:
+      tags:
+        - Products
+        - Products
+      operationId: Products_FindProductVariantsByAttributes
+      parameters:
+        - name: productIdOrHandle
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+      requestBody:
+        x-name: selectedAttributeValues
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        404:
+          description: ""
+  /api/v1/products/{productIdOrHandle}/variants:
+    get:
+      tags:
+        - Products
+        - Products
+      operationId: Products_GetProductVariants
+      parameters:
+        - name: productIdOrHandle
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          x-position: 2
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 10
+          x-position: 3
+        - name: searchTerm
+          in: query
+          schema:
+            type: string
+            nullable: true
+          x-position: 4
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResultOfProduct"
+        404:
+          description: ""
+  ? /api/v1/products/{productIdOrHandle}/attributes/{attributeId}/availableValuesForVariant
+  : post:
+      tags:
+        - Products
+        - Products
+      operationId: Products_GetAvailableVariantAttributeValues
+      parameters:
+        - name: productIdOrHandle
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+        - name: attributeId
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 2
+      requestBody:
+        x-name: selectedAttributeValues
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+                nullable: true
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttributeValue"
+        400:
+          description: ""
+  /api/v1/productCategories:
+    get:
+      tags:
+        - ProductCategories
+        - ProductCategories
+      operationId: ProductCategories_GetProductCategories
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductCategoryTreeRoot"
+        404:
+          description: ""
+  /api/v1/productCategories/{id}:
+    get:
+      tags:
+        - ProductCategories
+        - ProductCategories
+      operationId: ProductCategories_GetProductCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductCategory"
+        404:
+          description: ""
+  /api/v1/cart:
+    get:
+      tags:
+        - Cart
+        - Cart
+      operationId: Cart_GetCart
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        404:
+          description: ""
+  /api/v1/cart/items:
+    post:
+      tags:
+        - Cart
+        - Cart
+      operationId: Cart_AddCartItem
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddCartItemRequest"
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItem"
+        404:
+          description: ""
+  /api/v1/cart/items/{cartItemId}/quantity:
+    put:
+      tags:
+        - Cart
+        - Cart
+      operationId: Cart_UpdateCartItemQuantity
+      parameters:
+        - name: cartItemId
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCartItemQuantityRequest"
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItem"
+        404:
+          description: ""
+  /api/v1/cart/items/{cartItemId}:
+    delete:
+      tags:
+        - Cart
+        - Cart
+      operationId: Cart_RemoveCartItem
+      parameters:
+        - name: cartItemId
+          in: path
+          required: true
+          schema:
+            type: string
+          x-position: 1
+      responses:
+        200:
+          description: ""
+        404:
+          description: ""
+components:
+  schemas:
+    PagedResultOfProduct:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        total:
+          type: integer
+          format: int32
+    Product:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        category:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ProductCategoryParent"
+        image:
+          type: string
+          nullable: true
+        description:
+          type: string
+        price:
+          type: number
+          format: decimal
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
+        handle:
+          type: string
+        hasVariants:
+          type: boolean
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductAttribute"
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductOption"
+    ProductCategoryParent:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        handle:
+          type: string
+        path:
+          type: string
+        parent:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ProductCategoryParent"
+        productsCount:
+          type: integer
+          format: int64
+    ProductAttribute:
+      type: object
+      additionalProperties: false
+      properties:
+        attribute:
+          $ref: "#/components/schemas/Attribute"
+        value:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/AttributeValue"
+        forVariant:
+          type: boolean
+        isMainAttribute:
+          type: boolean
+    Attribute:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        group:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/AttributeGroup"
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttributeValue"
+    AttributeGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+    AttributeValue:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        seq:
+          type: integer
+          format: int32
+          nullable: true
+    ProductOption:
+      type: object
+      additionalProperties: false
+      properties:
+        option:
+          $ref: "#/components/schemas/Option"
+        isInherited:
+          type: boolean
+    Option:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        optionType:
+          $ref: "#/components/schemas/OptionType"
+        group:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/OptionGroup"
+        isRequired:
+          type: boolean
+        sku:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        isSelected:
+          type: boolean
+          nullable: true
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/OptionValue"
+        defaultValue:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/OptionValue"
+        minNumericalValue:
+          type: integer
+          format: int32
+          nullable: true
+        maxNumericalValue:
+          type: integer
+          format: int32
+          nullable: true
+        defaultNumericalValue:
+          type: integer
+          format: int32
+          nullable: true
+        textValueMinLength:
+          type: integer
+          format: int32
+          nullable: true
+        textValueMaxLength:
+          type: integer
+          format: int32
+          nullable: true
+        defaultTextValue:
+          type: string
+          nullable: true
+    OptionType:
+      type: integer
+      description: ""
+      x-enumNames:
+        - YesOrNo
+        - Choice
+        - NumericalValue
+        - TextValue
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+    OptionGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        seq:
+          type: integer
+          format: int32
+          nullable: true
+        min:
+          type: integer
+          format: int32
+          nullable: true
+        max:
+          type: integer
+          format: int32
+          nullable: true
+    OptionValue:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sku:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        seq:
+          type: integer
+          format: int32
+          nullable: true
+    ProductCategoryTreeRoot:
+      type: object
+      additionalProperties: false
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductCategoryTreeNode"
+        productsCount:
+          type: integer
+          format: int64
+    ProductCategoryTreeNode:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        handle:
+          type: string
+        path:
+          type: string
+        description:
+          type: string
+          nullable: true
+        parent:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ProductCategoryParent"
+        subCategories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductCategoryTreeNode"
+        productsCount:
+          type: integer
+          format: int64
+        canAddProducts:
+          type: boolean
+    ProductCategory:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        handle:
+          type: string
+        path:
+          type: string
+        parent:
+          nullable: true
+          oneOf:
+            - $ref: "#/components/schemas/ProductCategoryParent"
+        productsCount:
+          type: integer
+          format: int64
+    Cart:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+    CartItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+          nullable: true
+        productId:
+          type: integer
+          format: int64
+          nullable: true
+        productHandle:
+          type: string
+          nullable: true
+        description:
+          type: string
+        price:
+          type: number
+          format: decimal
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
+        quantity:
+          type: integer
+          format: int32
+        total:
+          type: number
+          format: decimal
+    AddCartItemRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          nullable: true
+        productId:
+          type: integer
+          format: int64
+          nullable: true
+        productHandle:
+          type: string
+          nullable: true
+        description:
+          type: string
+        price:
+          type: number
+          format: decimal
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
+        quantity:
+          type: integer
+          format: int32
+    UpdateCartItemQuantityRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: "Type into the textbox: Bearer {your JWT token}."
+      name: Authorization
+      in: header

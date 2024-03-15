@@ -7,6 +7,7 @@ using Serilog;
 
 using YourBrand;
 using YourBrand.Extensions;
+using Steeltoe.Discovery.Client;
 
 /* Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -18,8 +19,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    string ServiceName = "IdentityService"
-;
+    string ServiceName = "IdentityService";
     string ServiceVersion = "1.0";
 
     // Add services to container
@@ -27,6 +27,11 @@ try
     builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
                             .Enrich.WithProperty("Application", ServiceName)
                             .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Services.AddDiscoveryClient();
+    }
 
     builder.Services
         .AddOpenApi(ServiceName, ApiVersions.All)

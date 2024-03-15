@@ -1,0 +1,18 @@
+@rendermode renderMode
+
+@inject HttpClient HttpClient
+
+<button type="button" class="btn btn-primary" @onclick="Fetch">Get message</button>
+
+<p class="mt-4">@result</p>
+
+@code {
+    static IComponentRenderMode renderMode = new InteractiveWebAssemblyRenderMode(prerender: false);
+
+    string? result;
+
+    public async Task Fetch() 
+    {
+        result = await HttpClient.GetStringAsync("/requires-auth");
+    }
+}

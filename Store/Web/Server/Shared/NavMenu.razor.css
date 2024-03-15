@@ -1,0 +1,16 @@
+.navbar-nav-svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+  outline: none;
+  box-shadow: none;
+}

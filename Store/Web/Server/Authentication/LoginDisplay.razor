@@ -1,0 +1,38 @@
+@inject NavigationManager NavigationManager
+@inject SignInManager<IdentityUser> SignInManager
+
+@using Microsoft.AspNetCore.Identity
+
+<AuthorizeView>
+    <Authorized>
+        <li class="nav-item col-12 col-md-auto">
+            <a class="nav-link" href="/authentication/profile">Hello, @context.User.Identity?.Name!</a>
+        </li>
+
+        <li class="nav-item col-12 col-md-auto">
+            <EditForm Context="ctx" FormHandlerName="logout" method="post" Model="@Model" OnValidSubmit="BeginSignOut">
+                <button type="submit" class="nav-link border-0">Log out</button>
+            </EditForm>
+        </li>
+    </Authorized>
+    <NotAuthorized>
+        <li class="nav-item col-12 col-md-auto">
+            <a class="nav-link" href="/authentication/register">Register</a>              
+        </li>
+
+        <li class="nav-item col-12 col-md-auto">
+            <a class="nav-link" href="/authentication/login">Log in</a>
+        </li>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    [SupplyParameterFromForm(Name = "logout")]
+    public object Model { get; set; } = new();
+
+    async Task BeginSignOut()
+    {
+        await SignInManager.SignOutAsync();
+        NavigationManager.NavigateTo("/authentication/logout");
+    }
+}

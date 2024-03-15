@@ -1,0 +1,50 @@
+@page "/categories/{*path}"
+@attribute [StreamRendering(false)]
+@using BlazorApp.ProductCategories
+@rendermode RenderMode.InteractiveAuto
+@inject IProductCategoryService ProductCategoryService
+
+<AppPageTitle>@(categoryName is null ? "Products" : categoryName)</AppPageTitle>
+
+<Client.Products.ProductsView Page="Page" PageSize="PageSize" SearchTerm="@SearchTerm" Path="@Path" BrandId="@Brand" />
+
+@code {
+    string? categoryName = null;
+    string? categoryDescription = null;
+
+    [SupplyParameterFromQuery]
+    public int? Page { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? PageSize { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? SearchTerm { get; set; }
+
+    [Parameter]
+    public string? Path { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Brand { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Page ??= 1;
+        PageSize ??= 6;
+
+        if (!string.IsNullOrEmpty(Path))
+        {
+            // Encode
+            var encodedPath = Uri.EscapeDataString(Path);
+
+            //Console.WriteLine(encodedPath);
+
+            var category = await ProductCategoryService.GetProductCategoryById(encodedPath);
+
+            categoryName = category.Name;
+            categoryDescription = category.Description;
+
+            StateHasChanged();
+        }
+    }
+}

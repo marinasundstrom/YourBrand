@@ -1,0 +1,16 @@
+@page "/authentication/profile"
+@attribute [Authorize]
+
+@using BlazorApp.Data
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+
+<AppPageTitle>Profile</AppPageTitle>
+
+<h1>Profile</h1>
+
+<AuthorizeView>
+    <Authorized>
+        Your name is: @context.User.Identity!.Name
+    </Authorized>
+</AuthorizeView>

@@ -1,0 +1,71 @@
+﻿@page "/"
+@layout HeroLayout
+@using Microsoft.AspNetCore.Components.Sections
+
+<AppPageTitle>Start</AppPageTitle>
+
+<SectionContent SectionId="HeroLayout.HeroSection">
+
+    <div style="padding-top: 55px;">
+        <div id="carouselExampleIndicators" class="px-0 carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-label="Slide 1" aria-current="true"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2" class=""></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3" class=""></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="carousel-item--image" width="100%" height="100%" src="banner1.jpg" />
+
+                </div>
+                <div class="carousel-item">
+                    <img class="carousel-item--image" width="100%" height="100%" src="banner2.jpg" />
+
+                </div>
+                <div class="carousel-item">
+                    <img class="carousel-item--image" width="100%" height="100%" src="banner3.jpg" />
+
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+</SectionContent>
+
+<div class="row gx-5">
+
+    <div class="col-md-6 d-flex mb-3 justify-content-center order-1 order-md-2">
+
+        <i class="bi bi-cup-straw mt-md-3" style="font-size: 8em"></i>
+
+    </div>
+
+    <div class="col-md-6 mb-3 order-2 order-md-1">
+        <h2>Test</h2>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam at dignissim turpis. Nunc pellentesque purus
+            ac consectetur consectetur. Pellentesque nec orci enim. Curabitur sit amet metus nibh. Aenean sagittis
+            molestie mi eu bibendum. Sed porttitor quam nec nunc euismod consectetur. Nullam commodo felis vel ex
+            vehicula ultricies.</p>
+
+        <p>Etiam ut diam interdum, rhoncus ante sed, cursus purus. Vestibulum ante ipsum primis in faucibus orci luctus
+            et ultrices posuere cubilia curae; Donec vulputate mi ligula, in interdum mi venenatis et. Quisque nec
+            facilisis nibh. Aenean vel odio vel nunc sodales gravida. Nulla a magna finibus, condimentum eros a,
+            facilisis ipsum. Vestibulum sed mollis elit, nec finibus nisi. Suspendisse hendrerit, nibh ut sodales
+            euismod, odio augue consectetur dolor, id molestie dolor massa non lacus. Phasellus ac lobortis dolor, a
+            aliquam enim. Maecenas scelerisque tellus quis iaculis consequat.</p>
+    </div>
+</div>

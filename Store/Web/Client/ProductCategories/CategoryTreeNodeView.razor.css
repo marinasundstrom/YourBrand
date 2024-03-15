@@ -1,0 +1,13 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.active {
+    font-weight: bold;
+}
+
+a:hover {
+    /* text-decoration: underline !important; */
+    font-weight: bold;
+}

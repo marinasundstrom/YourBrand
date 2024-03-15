@@ -1,0 +1,8 @@
+@namespace BlazorApp.Shared
+
+<PageTitle>@ChildContent | YourBrand</PageTitle>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

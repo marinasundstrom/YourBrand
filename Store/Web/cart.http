@@ -1,0 +1,38 @@
+# Cart requests
+
+@host=localhost
+@port=7188
+
+### Get cart
+
+GET https://{{hostname}}:{{port}}/api/cart
+
+### Add item
+
+POST https://{{hostname}}:{{port}}/api/cart/items
+Content-Type: application/json
+
+{
+  "name": "My awesome product",
+  "image": "test.jpeg",
+  "productId": "1234",
+  "description": "Lorem ipsum",
+  "price": 19,
+  "regularPrice": null,
+  "quantity": 1
+}
+
+### Update item quantity
+
+@cartItemId=68ecbf75-3eff-44b8-852c-5d6db5c023ec
+
+PUT https://{{hostname}}:{{port}}/api/cart/items/{{cartItemId}}/quantity
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Remove item
+
+DELETE https://{{hostname}}:{{port}}/api/cart/items/{{cartItemId}}

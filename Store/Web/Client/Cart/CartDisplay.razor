@@ -1,0 +1,46 @@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@attribute [StreamRendering(true)]
+@rendermode renderMode
+@using BlazorApp.Cart
+@inject ICartService CartService
+
+<a href="#" class="nav-link py-2 px-0 px-lg-2 position-relative p-0" @attributes="@AdditionalAttributes">
+  <i class="bi bi-basket3"></i>
+  @if(NoOfItems > 0) 
+  {
+    <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+        @NoOfItems
+        <span class="visually-hidden">items</span>
+    </span>
+  }
+</a>
+
+@code {
+    static IComponentRenderMode renderMode = new InteractiveWebAssemblyRenderMode(prerender: false);
+
+    [Parameter]
+    public int NoOfItems { get; set; }
+
+    [Parameter]
+    public bool SmallIcon { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        CartService.CartUpdated += CartUpdated;
+    }
+
+    public void Dispose() 
+    {
+      CartService.CartUpdated -= CartUpdated;
+    }
+
+    public async void CartUpdated(object? sender, EventArgs eventArgs) 
+    {
+      NoOfItems = CartService.Items.Sum(item => item.Quantity);
+
+      await InvokeAsync(StateHasChanged);
+    }
+}

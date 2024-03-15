@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -24,11 +24,13 @@
 
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="8.0.0-*" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer"
+      Version="8.0.0-*" />
 
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="7.0.0" />
+    <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">

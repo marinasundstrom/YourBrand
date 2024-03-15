@@ -1,0 +1,23 @@
+@page "/authentication/logout"
+
+@inject NavigationManager Navigation
+@inject SignInManager<IdentityUser> SignInManager
+
+@using Microsoft.AspNetCore.Identity
+
+<AppPageTitle>Logged out</AppPageTitle>
+
+@if(loggedOut) 
+{
+    <h1>You have been logged out</h1>
+}
+
+@code{
+    bool loggedOut = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SignInManager.SignOutAsync();
+        loggedOut = true;
+    }
+}

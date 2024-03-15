@@ -1,0 +1,27 @@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveWebAssembly
+@attribute [StreamRendering(true)]
+@inject BlazorApp.Cart.ICartService CartService
+
+<div @attributes="AdditionalAttributes">
+    <button class="btn btn-primary" @onclick="AddItemToCart"><i class="bi bi-basket" /> Add to cart</button>
+</div>
+
+@code
+{
+    [Parameter]
+    [EditorRequired]
+    public ProductInfo Product { get; set; } = default!;
+
+    [Parameter]
+    public string? Data { get; set; }
+
+    async Task AddItemToCart()
+    {
+        await CartService.AddCartItem(Product.Name, Product.Image, Product.ProductId, Product.Handle, Product.Description,
+        Product.Price, Product.RegularPrice, 1, Data);
+    }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; }
+}

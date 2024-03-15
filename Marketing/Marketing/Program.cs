@@ -28,11 +28,11 @@ using YourBrand;
 using YourBrand.Extensions;
 
 using YourBrand.Marketing;
+using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string ServiceName = "Marketing"
-;
+string ServiceName = "Marketing";
 string ServiceVersion = "1.0";
 
 // Add services to container
@@ -40,6 +40,11 @@ string ServiceVersion = "1.0";
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDiscoveryClient();
+}
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)

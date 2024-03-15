@@ -1,0 +1,18 @@
+@inject RenderingContext RenderingContext
+
+@using BlazorApp
+
+<button type="button" class="btn btn-primary" @onclick="IncrementCount">@(RenderingContext.IsPrerendering ? "Prerendered" : RenderingContext.IsClient ? "Client" : "Server") count: @CurrentCount</button>
+
+@code {
+     [Parameter]
+    public int CurrentCount { get; set; } = 0;
+
+    [Parameter]
+    public int IncrementAmount { get; set; } = 1;
+
+    void IncrementCount()
+    {
+        CurrentCount += IncrementAmount;
+    }
+}

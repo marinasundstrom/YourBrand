@@ -1,0 +1,89 @@
+<nav @attributes="@AdditionalAttributes">
+        <ul class="pagination">
+            @if (StartIndex != 1)
+            {
+                @if (Page != 1)
+                {
+                    <li class="page-item"><a class="page-link" href="@(Href)?page=1" @onclick:preventDefault @onclick="async () => await PagerButtonClicked(1)">First</a></li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><span class="page-link">First</span></li>
+                }
+            }
+            @if (Page > 1)
+            {
+                <li class="page-item"><a class="page-link" href="@(Href)?page=@(Page - 1)" @onclick:preventDefault @onclick="async () => await PagerButtonClicked(Page -1)"><i class="bi bi-chevron-left"></i></a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-left"></i></span></li>
+            }
+            @for (var currentIndex = StartIndex; currentIndex <= FinishIndex; currentIndex++)
+            {
+                var i = currentIndex;
+
+                @if (currentIndex == Page)
+                {
+                    <li class="page-item active"><a class="page-link">@i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="@(Href)?page=@i" @onclick:preventDefault @onclick="async () => await PagerButtonClicked(i)">@i</a></li>
+                }
+            }
+            @if (Page < PageCount)
+            {
+                <li class="page-item"><a class="page-link" href="@(Href)?page=@(Page + 1)" @onclick:preventDefault @onclick="async () => await PagerButtonClicked(Page + 1)"><i class="bi bi-chevron-right"></i></a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-right"></i></span></li>
+            }
+            @if (FinishIndex != PageCount)
+            {
+                @if (Page != PageCount)
+                {
+                    <li class="page-item"><a class="page-link" href="@(Href)?page=@(PageCount)" @onclick:preventDefault  @onclick="async () => await PagerButtonClicked(PageCount)">Last</a></li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><span class="page-link">Last</span></li>
+                }
+            }
+        </ul>
+    </nav>
+
+@code {
+    [Parameter]
+    public EventCallback<int> PageChanged { get; set; }
+
+    [Parameter]
+    public int Page { get; set; }
+
+    [Parameter]
+    public int PageCount { get; set; }
+
+    public int StartIndex { get; private set; } = 0;
+
+    public int FinishIndex { get; private set; } = 0;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; } = null!;
+
+    [Parameter]
+    public string? Href { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        StartIndex = Math.Max(Page - 5, 1);
+        FinishIndex = Math.Min(Page + 5, PageCount);
+
+        base.OnParametersSet();
+    }
+
+    protected async Task PagerButtonClicked(int page)
+    {
+        await PageChanged.InvokeAsync(page);
+    }
+}
