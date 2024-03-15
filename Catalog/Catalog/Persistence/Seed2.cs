@@ -204,6 +204,7 @@ public static class Seed2
             Gtin = "4345547457457",
             Price = 120,
             VatRate = 0.25,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -233,6 +234,7 @@ public static class Seed2
             Gtin = "543453454567",
             Price = 120,
             VatRate = 0.25,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -260,6 +262,7 @@ public static class Seed2
             Gtin = "6876345345345",
             Price = 60,
             VatRate = 0.25,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -289,6 +292,7 @@ public static class Seed2
             Gtin = "4345547457457",
             Price = 120,
             VatRate = 0.25,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -316,6 +320,7 @@ public static class Seed2
             Gtin = "543453454567",
             Price = 120,
             VatRate = 0.25,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -343,6 +348,7 @@ public static class Seed2
             Gtin = "6876345345345",
             Price = 120,
             VatRate = 0.25,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -379,6 +385,7 @@ public static class Seed2
             Headline = "Dönnerkebab, nyfriterad pommes frites, sallad, och sås",
             Price = 89,
             VatRate = 0.12,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -419,6 +426,7 @@ public static class Seed2
             Headline = "Vår fina stek med pommes och vår hemlagade bearnaise sås",
             Price = 179,
             VatRate = 0.12,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -472,6 +480,7 @@ public static class Seed2
             Headline = "En korg med smårätter",
             Price = 179,
             VatRate = 0.12,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -547,6 +556,7 @@ public static class Seed2
             Headline = "Custom pizza",
             Price = 40,
             VatRate = 0.12,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
         };
@@ -663,6 +673,7 @@ public static class Seed2
             Headline = "Din egna sallad",
             Price = 52,
             VatRate = 0.12,
+            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
             ListingState = ProductListingState.Listed,
             Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
             Image = PlaceholderImage,
