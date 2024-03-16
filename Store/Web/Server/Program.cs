@@ -33,6 +33,7 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.StoreFront;
+using System.IdentityModel.Tokens.Jwt;
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 
@@ -106,18 +107,28 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents()
     .AddInteractiveServerComponents();
 
-/*
-builder.Services.AddAuthorization()
-    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie();
-*/
+builder.Services.AddAuthentication("MicrosoftOidc")
+    .AddOpenIdConnect("MicrosoftOidc", oidcOptions =>
+{
+    oidcOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+    builder.Configuration.Bind("Local", oidcOptions);
+
+    oidcOptions.MapInboundClaims = true;
+    oidcOptions.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
+    oidcOptions.TokenValidationParameters.RoleClaimType = "role";
+})
+.AddCookie("Cookies");
+
+builder.Services.ConfigureCookieOidcRefresh("Cookies", "MicrosoftOidc");
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<ApplicationDbContext>(c => c.UseInMemoryDatabase("db"));
-
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
@@ -212,7 +223,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddInteractiveServerRenderMode();
 
-//app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
+app.MapGroup("/authentication").MapLoginAndLogout();
 
 app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization();
 

@@ -1,7 +1,7 @@
-@inject NavigationManager NavigationManager
-@inject SignInManager<IdentityUser> SignInManager
-
 @using Microsoft.AspNetCore.Identity
+@implements IDisposable
+
+@inject NavigationManager NavigationManager
 
 <AuthorizeView>
     <Authorized>
@@ -10,9 +10,14 @@
         </li>
 
         <li class="nav-item col-12 col-md-auto">
-            <EditForm Context="ctx" FormHandlerName="logout" method="post" Model="@Model" OnValidSubmit="BeginSignOut">
-                <button type="submit" class="nav-link border-0">Log out</button>
-            </EditForm>
+            <form action="authentication/logout" method="post">
+                <AntiforgeryToken />
+                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                <button type="submit" class="nav-link">
+                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                    @context.User.Identity?.Name
+                </button>
+            </form>
         </li>
     </Authorized>
     <NotAuthorized>
@@ -26,13 +31,25 @@
     </NotAuthorized>
 </AuthorizeView>
 
-@code{
-    [SupplyParameterFromForm(Name = "logout")]
-    public object Model { get; set; } = new();
 
-    async Task BeginSignOut()
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
     {
-        await SignInManager.SignOutAsync();
-        NavigationManager.NavigateTo("/authentication/logout");
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }
