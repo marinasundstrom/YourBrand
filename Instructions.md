@@ -4,7 +4,8 @@ Nginx has been replaced by YARP - the Proxy project.
 
 * Portal: https://localhost:5174/ (Actually the reverse proxy)
 * Identity server: https://localhost:5040/
-* Store: https://localhost:7188/ 
+* Store: https://localhost:7188/
+
 ## Run dependencies in Docker
 
 To run dependencies, like database, in Docker:

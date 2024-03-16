@@ -27,6 +27,9 @@ using YourBrand.Sales;
 using YourBrand.StoreFront.API.Features.Checkout;
 
 using Serilog;
+using YourBrand.Analytics.Client;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 string ServiceName = "StoreFront.API";
 
@@ -40,10 +43,6 @@ if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
-
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
-    .AddApiVersioningServices();
 
 builder.Services.AddCors();
 
@@ -64,11 +63,6 @@ if (builder.Environment.IsProduction())
     builder.Configuration.AddAzureKeyVault(
         new Uri($"https://{builder.Configuration["Azure:KeyVault:Name"]}.vault.azure.net/"),
         new DefaultAzureCredential());
-}
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
 }
 
 // Add services to the container.
@@ -138,6 +132,12 @@ else
 
 builder.Services.AddTransient<AuthenticationDelegatingHandler>();
 
+builder.Services.AddControllers()
+            .AddJsonOptions(jsonOptions =>
+            {
+                jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+            });
+
 var app = builder.Build();
 
 app.MapObservability();
@@ -145,7 +145,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 
 app.UseOutputCache();
@@ -158,6 +158,8 @@ app.MapCartEndpoints()
     .MapProductsEndpoints()
     .MapCheckoutEndpoints()
     .MapBrandsEndpoints();
+
+app.MapControllers();
 
 app.MapHealthChecks("/healthz", new HealthCheckOptions()
 {
@@ -252,6 +254,21 @@ static void AddClients(WebApplicationBuilder builder)
     var inventoryApiHttpClient = builder.Services.AddInventoryClients((sp, http) =>
     {
         http.BaseAddress = new Uri(builder.Configuration["yourbrand:inventory-svc:url"]!);
+    },
+    clientBuilder =>
+    {
+        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+        clientBuilder.AddStandardResilienceHandler();
+
+        if (builder.Environment.IsDevelopment())
+        {
+            clientBuilder.AddServiceDiscovery();
+        }
+    });
+
+    var analyticsApiHttpClient = builder.Services.AddAnalyticsClients((sp, http) => {
+        http.BaseAddress = new Uri(builder.Configuration["yourbrand:analytics-svc:url"]!);
     },
     clientBuilder =>
     {

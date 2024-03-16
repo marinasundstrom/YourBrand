@@ -34,6 +34,9 @@ using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.StoreFront;
 using System.IdentityModel.Tokens.Jwt;
+using Client.Analytics;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 
@@ -83,6 +86,15 @@ builder.Services
     .AddProductCategoriesServices()
     .AddCartServices()
     .AddBrandsServices();
+
+builder.Services
+    .AddScoped<AnalyticsService>();
+
+builder.Services.AddGeolocationServices();
+
+builder.Services
+    .AddBlazoredLocalStorage()
+    .AddBlazoredSessionStorage();
 
 if (builder.Environment.IsProduction())
 {

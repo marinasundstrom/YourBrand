@@ -76,3 +76,7 @@ Blazor.addEventListener('enhancedload', () => {
 window.changeUrl = function (url) {
     history.pushState(null, '', url);
 }
+
+window.getReferrer = function () {
+    return document.referrer;
+};

@@ -1,6 +1,7 @@
 @page "/categories/{*path}"
 @attribute [StreamRendering(false)]
 @using BlazorApp.ProductCategories
+@using YourBrand.StoreFront
 @rendermode RenderMode.InteractiveAuto
 @inject IProductCategoryService ProductCategoryService
 
@@ -45,6 +46,7 @@
             categoryDescription = category.Description;
 
             StateHasChanged();
+
         }
     }
 }

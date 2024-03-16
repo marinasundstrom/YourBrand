@@ -4,301 +4,301 @@ info:
   title: StoreFront.API
   version: v1
 servers:
-  - url: https://localhost:7174
+- url: https://localhost:7174
 paths:
   /v1/cart:
     get:
       tags:
-        - Cart
-        - Cart
+      - Cart
+      - Cart
       operationId: Cart_GetCart
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cart"
+                $ref: '#/components/schemas/Cart'
         404:
-          description: ""
+          description: ''
   /v1/cart/items:
     post:
       tags:
-        - Cart
-        - Cart
+      - Cart
+      - Cart
       operationId: Cart_AddCartItem
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddCartItemRequest"
+              $ref: '#/components/schemas/AddCartItemRequest'
         required: true
         x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
     delete:
       tags:
-        - Cart
-        - Cart
+      - Cart
+      - Cart
       operationId: Cart_ClearCart
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/cart/items/{cartItemId}/quantity:
     put:
       tags:
-        - Cart
-        - Cart
+      - Cart
+      - Cart
       operationId: Cart_UpdateCartItemQuantity
       parameters:
-        - name: cartItemId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: cartItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateCartItemQuantityRequest"
+              $ref: '#/components/schemas/UpdateCartItemQuantityRequest'
         required: true
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
   /v1/cart/items/{cartItemId}/data:
     put:
       tags:
-        - Cart
-        - Cart
+      - Cart
+      - Cart
       operationId: Cart_UpdateCartItemData
       parameters:
-        - name: cartItemId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: cartItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateCartItemDataRequest"
+              $ref: '#/components/schemas/UpdateCartItemDataRequest'
         required: true
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
   /v1/cart/items/{cartItemId}:
     delete:
       tags:
-        - Cart
-        - Cart
+      - Cart
+      - Cart
       operationId: Cart_RemoveCartItem
       parameters:
-        - name: cartItemId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: cartItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/productCategories:
     get:
       tags:
-        - ProductCategories
-        - ProductCategories
+      - ProductCategories
+      - ProductCategories
       operationId: ProductCategories_GetProductCategories
       parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 1
-            nullable: true
-          x-position: 1
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-            nullable: true
-          x-position: 2
-        - name: searchTerm
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 3
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          nullable: true
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 2
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfProductCategory"
+                $ref: '#/components/schemas/PagedResultOfProductCategory'
         404:
-          description: ""
+          description: ''
   /v1/productCategories/{id}:
     get:
       tags:
-        - ProductCategories
-        - ProductCategories
+      - ProductCategories
+      - ProductCategories
       operationId: ProductCategories_GetProductCategoryById
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductCategory"
+                $ref: '#/components/schemas/ProductCategory'
         404:
-          description: ""
+          description: ''
   /v1/productCategories/tree:
     get:
       tags:
-        - ProductCategories
-        - ProductCategories
+      - ProductCategories
+      - ProductCategories
       operationId: ProductCategories_GetProductCategoryTree
       parameters:
-        - name: rootNodeIdOrPath
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 1
+      - name: rootNodeIdOrPath
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductCategoryTreeRoot"
+                $ref: '#/components/schemas/ProductCategoryTreeRoot'
         404:
-          description: ""
+          description: ''
   /v1/products:
     get:
       tags:
-        - Products
-        - Products
+      - Products
+      - Products
       operationId: Products_GetProducts
       parameters:
-        - name: brandIdOrHandle
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 1
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 1
-            nullable: true
-          x-position: 2
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-            nullable: true
-          x-position: 3
-        - name: searchTerm
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 4
-        - name: categoryPath
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 5
+      - name: brandIdOrHandle
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          nullable: true
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: categoryPath
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfProduct"
+                $ref: '#/components/schemas/PagedResultOfProduct'
         404:
-          description: ""
+          description: ''
   /v1/products/{productIdOrHandle}:
     get:
       tags:
-        - Products
-        - Products
+      - Products
+      - Products
       operationId: Products_GetProductById
       parameters:
-        - name: productIdOrHandle
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
+                $ref: '#/components/schemas/Product'
         404:
-          description: ""
+          description: ''
   /v1/products/{productIdOrHandle}/findVariant:
     post:
       tags:
-        - Products
-        - Products
+      - Products
+      - Products
       operationId: Products_FindProductVariantByAttributes
       parameters:
-        - name: productIdOrHandle
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: selectedAttributeValues
         content:
@@ -312,26 +312,26 @@ paths:
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
+                $ref: '#/components/schemas/Product'
         404:
-          description: ""
+          description: ''
   /v1/products/{productIdOrHandle}/find:
     post:
       tags:
-        - Products
-        - Products
+      - Products
+      - Products
       operationId: Products_FindProductVariantsByAttributes
       parameters:
-        - name: productIdOrHandle
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: selectedAttributeValues
         content:
@@ -345,76 +345,76 @@ paths:
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Product"
+                  $ref: '#/components/schemas/Product'
         404:
-          description: ""
+          description: ''
   /v1/products/{productIdOrHandle}/variants:
     get:
       tags:
-        - Products
-        - Products
+      - Products
+      - Products
       operationId: Products_GetProductVariants
       parameters:
-        - name: productIdOrHandle
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-          x-position: 2
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-          x-position: 3
-        - name: searchTerm
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 4
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfProduct"
+                $ref: '#/components/schemas/PagedResultOfProduct'
         404:
-          description: ""
-  ? /v1/products/{productIdOrHandle}/attributes/{attributeId}/availableValuesForVariant
-  : post:
+          description: ''
+  /v1/products/{productIdOrHandle}/attributes/{attributeId}/availableValuesForVariant:
+    post:
       tags:
-        - Products
-        - Products
+      - Products
+      - Products
       operationId: Products_GetAvailableVariantAttributeValues
       parameters:
-        - name: productIdOrHandle
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: attributeId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: attributeId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       requestBody:
         x-name: selectedAttributeValues
         content:
@@ -428,76 +428,202 @@ paths:
         x-position: 3
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/AttributeValue"
+                  $ref: '#/components/schemas/AttributeValue'
         400:
-          description: ""
+          description: ''
   /v1/checkout:
     post:
       tags:
-        - Checkout
-        - Checkout
+      - Checkout
+      - Checkout
       operationId: Checkout_Checkout
       requestBody:
         x-name: dto
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Checkout"
+              $ref: '#/components/schemas/Checkout'
         required: true
         x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
   /v1/brands:
     get:
       tags:
-        - Brands
-        - Brands
+      - Brands
+      - Brands
       operationId: Brands_GetBrands
       parameters:
-        - name: productCategoryId
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 1
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 1
-            nullable: true
-          x-position: 2
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-            nullable: true
-          x-position: 3
-        - name: searchTerm
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 4
+      - name: productCategoryId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          nullable: true
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfBrand"
+                $ref: '#/components/schemas/PagedResultOfBrand'
         404:
-          description: ""
+          description: ''
+  /v1/Analytics/Event:
+    post:
+      tags:
+      - Analytics
+      operationId: Analytics_RegisterEvent
+      parameters:
+      - name: X-Client-Id
+        x-originalName: clientId
+        in: header
+        schema:
+          type: string
+        x-position: 1
+      - name: X-Session-Id
+        x-originalName: sessionId
+        in: header
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventData'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/Analytics:
+    post:
+      tags:
+      - Analytics
+      operationId: Analytics_RegisterEvent2
+      parameters:
+      - name: X-Client-Id
+        x-originalName: clientId
+        in: header
+        schema:
+          type: string
+        x-position: 1
+      - name: X-Session-Id
+        x-originalName: sessionId
+        in: header
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventData'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/Analytics/Client:
+    post:
+      tags:
+      - Analytics
+      operationId: Analytics_CreateClient
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/Analytics/Session:
+    post:
+      tags:
+      - Analytics
+      operationId: Analytics_StartSession
+      parameters:
+      - name: X-Client-Id
+        x-originalName: clientId
+        in: header
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/Analytics/Session/Coordinates:
+    post:
+      tags:
+      - Analytics
+      operationId: Analytics_RegisterCoordinates
+      parameters:
+      - name: X-Client-Id
+        x-originalName: clientId
+        in: header
+        schema:
+          type: string
+        x-position: 1
+      - name: X-Session-Id
+        x-originalName: sessionId
+        in: header
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: coordinates
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coordinates'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
 components:
   schemas:
     Cart:
@@ -511,7 +637,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/CartItem"
+            $ref: '#/components/schemas/CartItem'
     CartItem:
       type: object
       additionalProperties: false
@@ -591,7 +717,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/ProductCategory"
+            $ref: '#/components/schemas/ProductCategory'
         total:
           type: integer
           format: int32
@@ -613,7 +739,7 @@ components:
         parent:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ProductCategoryParent"
+          - $ref: '#/components/schemas/ProductCategoryParent'
         productsCount:
           type: integer
           format: int64
@@ -633,7 +759,7 @@ components:
         parent:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ProductCategoryParent"
+          - $ref: '#/components/schemas/ProductCategoryParent'
         productsCount:
           type: integer
           format: int64
@@ -644,7 +770,7 @@ components:
         categories:
           type: array
           items:
-            $ref: "#/components/schemas/ProductCategoryTreeNode"
+            $ref: '#/components/schemas/ProductCategoryTreeNode'
         productsCount:
           type: integer
           format: int64
@@ -667,11 +793,11 @@ components:
         parent:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ProductCategoryParent"
+          - $ref: '#/components/schemas/ProductCategoryParent'
         subCategories:
           type: array
           items:
-            $ref: "#/components/schemas/ProductCategoryTreeNode"
+            $ref: '#/components/schemas/ProductCategoryTreeNode'
         productsCount:
           type: integer
           format: int64
@@ -684,7 +810,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/Product"
+            $ref: '#/components/schemas/Product'
         total:
           type: integer
           format: int32
@@ -700,19 +826,19 @@ components:
         brand:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/Brand"
+          - $ref: '#/components/schemas/Brand'
         category:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ProductCategoryParent"
+          - $ref: '#/components/schemas/ProductCategoryParent'
         image:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ProductImage"
+          - $ref: '#/components/schemas/ProductImage'
         images:
           type: array
           items:
-            $ref: "#/components/schemas/ProductImage"
+            $ref: '#/components/schemas/ProductImage'
         description:
           type: string
         price:
@@ -737,11 +863,11 @@ components:
         attributes:
           type: array
           items:
-            $ref: "#/components/schemas/ProductAttribute"
+            $ref: '#/components/schemas/ProductAttribute'
         options:
           type: array
           items:
-            $ref: "#/components/schemas/ProductOption"
+            $ref: '#/components/schemas/ProductOption'
     Brand:
       type: object
       additionalProperties: false
@@ -770,11 +896,11 @@ components:
       additionalProperties: false
       properties:
         attribute:
-          $ref: "#/components/schemas/Attribute"
+          $ref: '#/components/schemas/Attribute'
         value:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/AttributeValue"
+          - $ref: '#/components/schemas/AttributeValue'
         forVariant:
           type: boolean
         isMainAttribute:
@@ -793,11 +919,11 @@ components:
         group:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/AttributeGroup"
+          - $ref: '#/components/schemas/AttributeGroup'
         values:
           type: array
           items:
-            $ref: "#/components/schemas/AttributeValue"
+            $ref: '#/components/schemas/AttributeValue'
     AttributeGroup:
       type: object
       additionalProperties: false
@@ -826,7 +952,7 @@ components:
       additionalProperties: false
       properties:
         option:
-          $ref: "#/components/schemas/Option"
+          $ref: '#/components/schemas/Option'
         isInherited:
           type: boolean
     Option:
@@ -841,11 +967,11 @@ components:
           type: string
           nullable: true
         optionType:
-          $ref: "#/components/schemas/OptionType"
+          $ref: '#/components/schemas/OptionType'
         group:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/OptionGroup"
+          - $ref: '#/components/schemas/OptionGroup'
         isRequired:
           type: boolean
         sku:
@@ -861,11 +987,11 @@ components:
         values:
           type: array
           items:
-            $ref: "#/components/schemas/OptionValue"
+            $ref: '#/components/schemas/OptionValue'
         defaultValue:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/OptionValue"
+          - $ref: '#/components/schemas/OptionValue'
         minNumericalValue:
           type: integer
           format: int32
@@ -891,17 +1017,17 @@ components:
           nullable: true
     OptionType:
       type: integer
-      description: ""
+      description: ''
       x-enumNames:
-        - YesOrNo
-        - Choice
-        - NumericalValue
-        - TextValue
+      - YesOrNo
+      - Choice
+      - NumericalValue
+      - TextValue
       enum:
-        - 0
-        - 1
-        - 2
-        - 3
+      - 0
+      - 1
+      - 2
+      - 3
     OptionGroup:
       type: object
       additionalProperties: false
@@ -949,9 +1075,9 @@ components:
       additionalProperties: false
       properties:
         billingDetails:
-          $ref: "#/components/schemas/BillingDetails"
+          $ref: '#/components/schemas/BillingDetails'
         shippingDetails:
-          $ref: "#/components/schemas/ShippingDetails"
+          $ref: '#/components/schemas/ShippingDetails'
     BillingDetails:
       type: object
       additionalProperties: false
@@ -968,7 +1094,7 @@ components:
         email:
           type: string
         address:
-          $ref: "#/components/schemas/Address"
+          $ref: '#/components/schemas/Address'
     Address:
       type: object
       additionalProperties: false
@@ -1003,7 +1129,7 @@ components:
           type: string
           nullable: true
         address:
-          $ref: "#/components/schemas/Address"
+          $ref: '#/components/schemas/Address'
     PagedResultOfBrand:
       type: object
       additionalProperties: false
@@ -1011,13 +1137,35 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/Brand"
+            $ref: '#/components/schemas/Brand'
         total:
           type: integer
           format: int32
-  securitySchemes:
-    JWT:
-      type: apiKey
-      description: "Type into the textbox: Bearer {your JWT token}."
-      name: Authorization
-      in: header
+    EventData:
+      type: object
+      additionalProperties: false
+      properties:
+        eventType:
+          $ref: '#/components/schemas/EventType'
+        data:
+          type: object
+          additionalProperties: {}
+    EventType:
+      type: string
+      description: ''
+      x-enumNames:
+      - ProductViewed
+      - ProductGroupViewed
+      enum:
+      - productViewed
+      - productGroupViewed
+    Coordinates:
+      type: object
+      additionalProperties: false
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

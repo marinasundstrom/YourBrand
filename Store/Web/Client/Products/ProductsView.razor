@@ -2,12 +2,15 @@
 @using BlazorApp.Products
 @using BlazorApp.ProductCategories
 @using BlazorApp.Brands
+@using Client.Analytics
 @inject IProductsService ProductsService
 @inject IProductCategoryService ProductCategoryService
 @inject IBrandsService BrandsService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @inject PersistentComponentState ApplicationState
+@inject RenderingContext RenderingContext
+@inject AnalyticsService AnalyticsService
 
 <div class="row gx-5 pt-md-4">
 
@@ -238,7 +241,32 @@
         {
             pageCount = restored3!;
         }
+
+        if (!RenderingContext.IsPrerendering)
+        {
+            _ = ProductGroupViewed(category!);
+        }
     }
+
+    private async Task ProductGroupViewed(ProductCategoryDto category)
+    {
+        await AnalyticsService.RegisterEvent(new YourBrand.StoreFront.EventData
+            {
+                EventType = YourBrand.StoreFront.EventType.ProductGroupViewed,
+                Data = new Dictionary<string, object>
+                {
+                    { "productCategoryId", category!.Id },
+                    { "name", /* GetGroupName() ?? */ category.Name }
+                }
+            });
+    }
+
+    /*
+    private string? GetGroupName()
+    {
+        return subGroups.FirstOrDefault(x => x.Path == Path)?.Name;
+    }
+    */
 
     private Task PersistData()
     {
@@ -258,6 +286,8 @@
         //Page = 1;
 
         //await FetchItems(Page.GetValueOrDefault());
+
+        //_ = ProductGroupViewed(category!);
     }
 
     private async Task OnPageChanged(int page)

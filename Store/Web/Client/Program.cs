@@ -12,11 +12,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http.Resilience;
 
 using YourBrand.StoreFront;
+using Client.Analytics;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services
     .AddTransient<CookieHandler>();
+
+builder.Services
+    .AddScoped<AnalyticsService>();
+
+builder.Services.AddGeolocationServices();
+
+builder.Services
+    .AddBlazoredLocalStorage()
+    .AddBlazoredSessionStorage();
 
 builder.Services
     .AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
@@ -46,4 +58,9 @@ builder.Services
 
 builder.Services.AddBlazoredToast();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+var analyticsService = app.Services.GetRequiredService<Client.Analytics.AnalyticsService>();
+await analyticsService.Init();
+
+await app.RunAsync();

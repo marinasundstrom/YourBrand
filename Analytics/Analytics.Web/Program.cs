@@ -154,7 +154,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 
 app.UseCors(MyAllowSpecificOrigins);

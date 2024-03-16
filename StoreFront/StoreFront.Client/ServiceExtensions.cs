@@ -27,6 +27,11 @@ public static class ServiceExtensions
                     http.BaseAddress = baseUrl;
                 }, configureBuilder);
 
+        services.AddAnalyticsClient((sp, http) =>
+            {
+                http.BaseAddress = baseUrl;
+            }, configureBuilder);
+
         return services;
     }
 
@@ -39,6 +44,8 @@ public static class ServiceExtensions
         services.AddCheckoutClient(configureClient, configureBuilder);
 
         services.AddBrandsClient(configureClient, configureBuilder);
+
+        services.AddAnalyticsClient(configureClient, configureBuilder);
 
         return services;
     }
@@ -90,6 +97,18 @@ public static class ServiceExtensions
 
         services.AddHttpClient<IBrandsClient>("StoreFront")
             .AddTypedClient<IBrandsClient>((http, sp) => new YourBrand.StoreFront.BrandsClient(http));
+
+        return services;
+    }
+
+    public static IServiceCollection AddAnalyticsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
+    {
+        IHttpClientBuilder builder = services.AddHttpClient("StoreFront", configureClient);
+
+        configureBuilder?.Invoke(builder);
+
+        services.AddHttpClient<IAnalyticsClient>("StoreFront")
+            .AddTypedClient<IAnalyticsClient>((http, sp) => new YourBrand.StoreFront.AnalyticsClient(http));
 
         return services;
     }

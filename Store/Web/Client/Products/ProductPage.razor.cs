@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 
 using BlazorApp.Cart;
@@ -39,6 +40,11 @@ namespace Client.Products
             NavigationManager.LocationChanged += OnLocationChanged;
 
             await Load();
+
+            if (!RenderingContext.IsPrerendering)
+            {
+                _ = ProductViewed();
+            }
         }
 
         private async Task Load()
@@ -83,36 +89,34 @@ namespace Client.Products
                 var str = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Data));
                 Deserialize(str);
             }
-
-            /*
-            if (!RenderingContext.IsPrerendering)
-            {
-                _ = ProductViewed();
-            }
-            */
         }
 
         private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
         {
             await Load();
 
+            if (!RenderingContext.IsPrerendering)
+            {
+                _ = ProductViewed();
+            }
+
             StateHasChanged();
         }
 
         private async Task ProductViewed()
         {
-            /*
-            await AnalyticsService.RegisterEvent(new EventData
+            Console.WriteLine("FOO");
+
+            await AnalyticsService.RegisterEvent(new YourBrand.StoreFront.EventData
             {
-            EventType = EventType.ProductViewed,
-            Data = new Dictionary<string, object>
-            {
-            { "productId", productViewModel.Variant?.Id ?? productViewModel.Product!.Id },
-            { "name", productViewModel.Name },
-            { "isEdit", CartItemId is not null }
-            }
+                EventType = YourBrand.StoreFront.EventType.ProductViewed,
+                Data = new Dictionary<string, object>
+                {
+                    { "productId", productViewModel.Variant?.Id ?? productViewModel.Product!.Id },
+                    { "name", productViewModel.Name },
+                    { "isEdit", CartItemId is not null }
+                }
             });
-            */
         }
 
         async Task UpdateVariant()

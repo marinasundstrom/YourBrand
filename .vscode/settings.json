@@ -46,20 +46,9 @@
         {
             "splitTerminals": [
                 {
-                    "name": "Identity",
+                    "name": "IdentityService",
                     "commands": [
                         "dotnet run --project IdentityService/IdentityService/IdentityService.csproj"
-                    ],
-                    "shouldRunCommands": false
-                }
-            ]
-        },
-        {
-            "splitTerminals": [
-                {
-                    "name": "Identity2",
-                    "commands": [
-                        "dotnet run --project IdentityService/IdentityService2/IdentityService2.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -335,6 +324,17 @@
                     "name": "Store",
                     "commands": [
                         "dotnet run --project Store/Web/Server/BlazorApp.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Store IdentityService",
+                    "commands": [
+                        "dotnet run --project IdentityService2/IdentityService2.csproj"
                     ],
                     "shouldRunCommands": false
                 }

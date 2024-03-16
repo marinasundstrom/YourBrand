@@ -30,6 +30,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
     <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,7 @@
     <ProjectReference Include="..\..\Carts\Carts.Contracts\Carts.Contracts.csproj" />
     <ProjectReference Include="..\..\Sales\Sales.Client\Sales.Client.csproj" />
     <ProjectReference Include="..\..\Inventory\Inventory.Client\Inventory.Client.csproj" />
+    <ProjectReference Include="..\..\Analytics\Analytics.Client\Analytics.Client.csproj" />
   </ItemGroup>
 
 </Project>
