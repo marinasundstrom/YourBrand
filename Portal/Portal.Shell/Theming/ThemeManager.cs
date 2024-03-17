@@ -45,6 +45,8 @@ public sealed class ThemeManager : IThemeManager
     public void Initialize()
     {
         CurrentColorScheme = PreferredColorScheme ?? _systemColorSchemeDetector.CurrentColorScheme;
+
+        RaiseCurrentColorSchemeChanged();
     }
 
     public MudTheme Theme { get; private set; } = new MudTheme();
@@ -100,10 +102,9 @@ public sealed class ThemeManager : IThemeManager
 
     public void SetPreferredColorScheme(ColorScheme colorScheme)
     {
-        PreferredColorScheme = colorScheme;
-
-        if (CurrentColorScheme != colorScheme)
+        if (PreferredColorScheme != colorScheme)
         {
+            PreferredColorScheme = colorScheme;
             CurrentColorScheme = colorScheme;
 
             RaiseCurrentColorSchemeChanged();

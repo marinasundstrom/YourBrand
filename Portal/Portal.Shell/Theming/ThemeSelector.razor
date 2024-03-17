@@ -48,6 +48,8 @@
     protected override void OnInitialized()
     {
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+
+        // INFO: Not useful since CurrentColorScheme has not been loaded yet.
         _currentColorScheme = ThemeManager.CurrentColorScheme;
     }
 
@@ -60,6 +62,6 @@
 
     public void Dispose() 
     {
-
+        ThemeManager.ColorSchemeChanged -= OnColorSchemeChanged;
     }
 }
