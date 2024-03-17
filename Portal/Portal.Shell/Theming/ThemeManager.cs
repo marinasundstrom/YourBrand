@@ -96,7 +96,7 @@ public sealed class ThemeManager : IThemeManager
     {
         PreferredColorScheme = null;
         CurrentColorScheme = _systemColorSchemeDetector.CurrentColorScheme;
-        _localStorage.SetItem<ColorScheme?>(PreferredColorSchemeKey, null);
+        PreferredColorScheme = null;
         RaiseCurrentColorSchemeChanged();
     }
 
@@ -109,8 +109,6 @@ public sealed class ThemeManager : IThemeManager
 
             RaiseCurrentColorSchemeChanged();
         }
-
-        _localStorage.SetItem<ColorScheme?>(PreferredColorSchemeKey, colorScheme);
     }
 
     public event EventHandler<ColorSchemeChangedEventArgs>? ColorSchemeChanged;
