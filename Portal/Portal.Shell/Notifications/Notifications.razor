@@ -42,8 +42,8 @@
 
                     <MudMenuItem Class="@cls" OnClick="async () => await OnNotificationClicked(notification)">
                         @*<MudText Typo="Typo.subtitle2">@notification.Title</MudText>*@
-                        <MudText Typo="Typo.body1" Class="mb-1">@notification.Text</MudText>
-                        <MudText Typo="Typo.caption">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-2">@notification.Text</MudText>
+                        <MudText Typo="Typo.body2">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
                     </MudMenuItem>
 
                      <MudDivider />                 
