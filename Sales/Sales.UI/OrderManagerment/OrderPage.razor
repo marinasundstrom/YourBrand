@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Sales
+@implements IAsyncDisposable
 @inject NavigationManager NavigationManager
 @inject IOrdersClient OrdersClient
 @inject IOrderStatusesClient OrderStatusesClient
@@ -346,11 +347,11 @@ Delete
 
     protected override async Task OnInitializedAsync()
     {
+        NavigationManager.LocationChanged += OnLocationChanged;
+
         if (OrderNo is not null)
         {
-            order = await OrdersClient.GetOrderByNoAsync(OrderNo.GetValueOrDefault());
-
-            Model = order.ToModel();
+            await Load();
         }
         else
         {
@@ -362,6 +363,20 @@ Delete
 
             Snackbar.Add("Created order draft", Severity.Info);
         }
+    }
+
+    async void OnLocationChanged(object? sender, LocationChangedEventArgs args) 
+    {
+        await Load();
+
+        StateHasChanged();
+    }
+
+    async Task Load() 
+    {
+        order = await OrdersClient.GetOrderByNoAsync(OrderNo.GetValueOrDefault());
+
+        Model = order.ToModel();
     }
 
     private async Task Submit()
@@ -478,5 +493,10 @@ Delete
         if (result.Cancelled) return;
 
         order.ShippingDetails = (ShippingDetails)result.Data;
+    }
+
+    public async ValueTask DisposeAsync() 
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }

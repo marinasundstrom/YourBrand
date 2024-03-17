@@ -12,7 +12,7 @@
 <audio id="sound" src="/pling.mp3" />
 
 <MudBadge Color="Color.Secondary" Content="BadgeText" Overlap="true" Visible="@(unreadNotificationsCount > 0)" class="notification-button">
-    <MudMenu AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopCenter" PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+    <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" PopoverClass="docs-layout-menu-shadow" ListClass="notifications-menu-list" LockScroll="true">
         
         <ActivatorContent>
             <MudIconButton class="me-1" Color="Color.Inherit" Icon="@(unreadNotificationsCount > 0 ? Icons.Filled.Notifications : Icons.Outlined.Notifications)" />
@@ -20,10 +20,12 @@
         
         <ChildContent>
 
-        <div class="d-flex justify-space-between align-center px-2">
-            <MudText Typo="Typo.subtitle2"><b>@T["Notifications"]</b></MudText>
-            <MudButton Disabled="@(unreadNotificationsCount == 0)" OnClick="MarkAllNotificationsAsRead" StartIcon="@Icons.Filled.DoneAll" Variant="Variant.Text" Color="Color.Primary">@T["MarkAllAsRead"]</MudButton>
+        <div class="d-flex justify-space-between align-center px-3">
+            <MudText Typo="Typo.h6"><b>@T["Notifications"]</b></MudText>
+            <MudIconButton Icon="@Icons.Outlined.Settings" Variant="Variant.Text" Color="Color.Primary" Class="pa-2"></MudIconButton> 
         </div>
+
+        <MudDivider Class="mt-2" />
 
         <div>
             @if (isLoading)
@@ -36,15 +38,16 @@
             {
                 @foreach (var notification in notifications)
                     {
-                        var cls = $"px-2 py-0 rounded {(!notification.IsRead ? "notification-unread" : string.Empty)}";
+                        var cls = $"px-3 py-3 py-0 rounded {(!notification.IsRead ? "notification-unread" : string.Empty)}";
 
                     <MudMenuItem Class="@cls" OnClick="async () => await OnNotificationClicked(notification)">
-                        <MudText Typo="Typo.subtitle2">@notification.Title</MudText>
-                        <MudText Typo="Typo.body2">@notification.Text</MudText>
-                        <MudText Typo="Typo.body2">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
+                        @*<MudText Typo="Typo.subtitle2">@notification.Title</MudText>*@
+                        <MudText Typo="Typo.body2" Class="mb-1">@notification.Text</MudText>
+                        <MudText Typo="Typo.caption">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
                     </MudMenuItem>
-                    <MudDivider Class="my-2" />
-                    }
+
+                     <MudDivider />                 
+                }
 
                 @if (totalNotificationsCount > 5)
                     {
@@ -56,7 +59,7 @@
                 else
                 {
                 <div class="d-flex justify-center align-center px-2 py-8 relative">
-                    <MudText Class="mud-text-secondary my-12">@T["NothingNew"]</MudText>
+                    <MudText Typo="Typo.body2" Class="mud-text-secondary my-12">@T["NothingNew"]</MudText>
                 </div>
                 }
             }

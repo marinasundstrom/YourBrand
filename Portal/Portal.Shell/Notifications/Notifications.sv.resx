@@ -13,7 +13,7 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
     <data name="Notifications">
-        <value>Notiser</value>
+        <value>Aviseringar</value>
       </data>
       <data name="Loading">
         <value>Laddar...</value>
@@ -25,6 +25,6 @@
         <value>Markera som lästa</value>
       </data>
       <data name="MoreNotifications">
-        <value>Fler notiser</value>
+        <value>Visa fler</value>
       </data>
 </root>

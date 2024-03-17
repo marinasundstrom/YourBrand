@@ -117,3 +117,7 @@ h1:focus {
 .notification-button .mud-badge.mud-badge-top.right.mud-badge-overlap {
     inset: auto auto calc(100% - 26px) calc(100% - 26px);
 }
+
+.notifications-menu-list {
+    width: 350px; /* 480px; */
+}

@@ -10,7 +10,7 @@
 
 @if(journalEntry is not null)
 {
-    <MudCard Class="mb-4">
+    <MudCard Class="mb-4" Elevation="25">
         <MudCardContent>
             <MudText Typo="@Typo.subtitle1">@journalEntry.Date.Date.ToShortDateString()</MudText>
             <MudText Typo="@Typo.body1">@journalEntry.Description</MudText>
