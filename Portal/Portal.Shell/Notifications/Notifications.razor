@@ -12,7 +12,7 @@
 <audio id="sound" src="/pling.mp3" />
 
 <MudBadge Color="Color.Secondary" Content="BadgeText" Overlap="true" Visible="@(unreadNotificationsCount > 0)" class="notification-button">
-    <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" PopoverClass="docs-layout-menu-shadow" ListClass="notifications-menu-list" LockScroll="true">
+    <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" PopoverClass="docs-layout-menu-shadow rounded-lg" ListClass="notifications-menu-list" LockScroll="true">
         
         <ActivatorContent>
             <MudIconButton class="me-1" Color="Color.Inherit" Icon="@(unreadNotificationsCount > 0 ? Icons.Filled.Notifications : Icons.Outlined.Notifications)" />
