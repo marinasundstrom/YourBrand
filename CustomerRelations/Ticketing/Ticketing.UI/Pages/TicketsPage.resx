@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="Tickets">
+        <value>Tickets</value>
+    </data>
+    <data name="CreateTicket">
+        <value>Create ticket</value>
+    </data>
+    <data name="SortBy">
+        <value>Sort by</value>
+    </data>
+	<data name="Id">
+        <value>Id</value>
+    </data>
+	<data name="Title">
+        <value>Title</value>
+    </data>
+	<data name="Status">
+        <value>Status</value>
+    </data>
+    <data name="AllStatuses">
+        <value>All statuses</value>
+    </data>
+    <data name="AssignedTo">
+        <value>Assigned to</value>
+    </data>
+	<data name="EstimatedTime">
+        <value>Estimated time</value>
+    </data>
+	<data name="RemainingTime">
+        <value>Remaining time</value>
+    </data>
+	<data name="Created">
+        <value>Created</value>
+    </data>
+    <data name="CreatedBy">
+        <value>Created by</value>
+    </data>
+	<data name="LastModified">
+        <value>Last modified</value>
+    </data>
+    <data name="LastModifiedBy">
+        <value>Last modified by</value>
+    </data>
+	<data name="NotStarted">
+        <value>Not started</value>
+    </data>
+	<data name="InProgress">
+        <value>In progress</value>
+    </data>
+	<data name="OnHold">
+        <value>On hold</value>
+    </data>
+	<data name="Completed">
+        <value>Completed</value>
+    </data>
+    <data name="RowsPerPage">
+        <value>Rows per page</value>
+    </data>
+    <data name="NoMatchesFound">
+        <value>No matches found</value>
+    </data>
+    <data name="Loading">
+        <value>Loading...</value>
+    </data>
+    <data name="DeleteTicket">
+        <value>Delete "{0}"?</value>
+    </data>
+    <data name="AreYouSure">
+        <value>Are you sure?</value>
+    </data>
+    <data name="Yes">
+        <value>Yes</value>
+    </data>
+    <data name="No">
+        <value>No</value>
+    </data>
+    <data name="SelectMultiple">
+        <value>Select multiple</value>
+    </data>
+    <data name="DeleteSelectedTickets">
+        <value>Delete selected</value>
+    </data>
+    <data name="FailedToDeleteTicket">
+        <value>Failed to delete ticket</value>
+    </data>
+    <data name="FailedToDeleteTickets">
+        <value>Failed to delete {0} tickets</value>
+    </data>
+    <data name="TicketCreated">
+        <value>{0} - {1} was created</value>
+    </data>
+    <data name="TicketUpdated">
+        <value>{0} - {1} was updated</value>
+    </data>
+    <data name="TicketDeleted">
+        <value>{0} - {1} was deleted</value>
+    </data>
+    <data name="FailedToGetTickets">
+        <value>Failed to retrieve tickets</value>
+    </data>
+</root>

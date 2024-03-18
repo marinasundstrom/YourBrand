@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="Tickets">
+        <value>Att göra</value>
+    </data>
+    <data name="CreateTicket">
+        <value>Skapa lapp</value>
+    </data>
+    <data name="SortBy">
+        <value>Sortera efter</value>
+    </data>
+	<data name="Id">
+        <value>Id</value>
+    </data>
+	<data name="Title">
+        <value>Titel</value>
+    </data>
+	<data name="Status">
+        <value>Status</value>
+    </data>
+    <data name="AllStatuses">
+        <value>Alla status</value>
+    </data>
+    <data name="AssignedTo">
+        <value>Tilldelad</value>
+    </data>
+	<data name="EstimatedTime">
+        <value>Beräknade tid</value>
+    </data>
+	<data name="RemainingTime">
+        <value>Återstående tid</value>
+    </data>
+	<data name="Created">
+        <value>Skapad</value>
+    </data>
+    <data name="CreatedBy">
+        <value>Skapad av</value>
+    </data>
+    <data name="LastModified">
+        <value>Senast ändrad</value>
+    </data>
+    <data name="LastModifiedBy">
+        <value>Senast ändrad av</value>
+    </data>
+	<data name="NotStarted">
+        <value>Ej påbörjat</value>
+    </data>
+	<data name="InProgress">
+        <value>Pågående</value>
+    </data>
+	<data name="OnHold">
+        <value>Avvaktar</value>
+    </data>
+	<data name="Completed">
+        <value>Avslutat</value>
+    </data>
+    <data name="RowsPerPage">
+        <value>Rader per sida</value>
+    </data>
+    <data name="NoMatchesFound">
+        <value>Inga träffar</value>
+    </data>
+    <data name="Loading">
+        <value>Laddar...</value>
+    </data>
+    <data name="DeleteTicket">
+        <value>Ta bort "{0}"?</value>
+    </data>
+    <data name="AreYouSure">
+        <value>Är du säker?</value>
+    </data>
+    <data name="Yes">
+        <value>Ja</value>
+    </data>
+    <data name="No">
+        <value>Nej</value>
+    </data>
+    <data name="SelectMultiple">
+        <value>Välj flera</value>
+    </data>
+    <data name="DeleteSelectedTickets">
+        <value>Ta bort valda</value>
+    </data>
+    <data name="FailedToDeleteTicket">
+        <value>Kunde inte ta bort föremålet</value>
+    </data>
+    <data name="FailedToDeleteTickets">
+        <value>Kunde inte ta bort {0} föremål</value>
+    </data>
+    <data name="TicketCreated">
+        <value>{0} - {1} skapades</value>
+    </data>
+    <data name="TicketUpdated">
+        <value>{0} - {1} uppdaterades</value>
+    </data>
+    <data name="TicketDeleted">
+        <value>{0} - {1} togs bort</value>
+    </data>
+    <data name="FailedToGetTickets">
+        <value>Misslyckades att hämta föremål</value>
+    </data>
+</root>

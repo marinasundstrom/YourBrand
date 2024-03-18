@@ -81,7 +81,18 @@
                 {
                     "name": "Customers",
                     "commands": [
-                        "dotnet run --project Customers/Customers/Customers.csproj"
+                        "dotnet run --project CustomerRelations/Customers/Customers/Customers.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Ticketing",
+                    "commands": [
+                        "dotnet run --project CustomerRelations/Ticketing/Ticketing/Ticketing.csproj"
                     ],
                     "shouldRunCommands": false
                 }

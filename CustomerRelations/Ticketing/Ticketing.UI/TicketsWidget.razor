@@ -1,0 +1,420 @@
+@namespace YourBrand.Ticketing
+@using YourBrand.CustomerService.Pages
+@attribute [Authorize]
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@inject ISnackbar Snackbar
+@inject ITicketsClient TicketsClient
+@inject ITicketStatusesClient TicketStatusesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IStringLocalizer<TicketsPage> T
+
+<MudTable T="TicketDto" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<TicketDto>>>(ServerReload))" Elevation="0"
+          OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">@T["CreateTicket"]</MudButton>
+
+        <MudSpacer />
+
+        <MudSelect T="TicketStatusDto?" Label="@T["Status"]" Dense="true" Value="Status" ValueChanged="OnStatusChanged" For="() => Status" Immediate="true" Variant="Variant.Outlined">
+            <MudSelectItem Value="@((TicketStatusDto?)null)">@T["AllStatuses"]</MudSelectItem>
+
+            @foreach (var status in ticketStatuses)
+            {
+                <MudSelectItem Value="@status">@T[status.Name]</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudSpacer />
+
+        <UserSelector Label="@T["Assignee"]" Variant="Variant.Outlined" Value="Assignee" ValueChanged="OnAssigneeChanged"
+                      For="() => Assignee" />
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Id" T="TicketDto">@T["Id"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Title" T="TicketDto">@T["Title"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Status" T="TicketDto">@T["Status"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Priority" T="TicketDto">@T["Priority"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Severity" T="TicketDto">@T["Severity"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Impact" T="TicketDto">@T["Impact"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Assignee" T="TicketDto">@T["Assignee"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="EstimatedHours" T="TicketDto">@T["EstimatedTime"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="RemainingHours" T="TicketDto">@T["RemainingTime"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Created" T="TicketDto">@T["Created"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="CreatedBy" T="TicketDto">@T["CreatedBy"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="LastModified" T="TicketDto">@T["LastModified"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortLabel="LastModifiedBy" T="TicketDto">@T["LastModifiedBy"]</MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="@T["Id"]">@context.Id</MudTd>
+        <MudTd DataLabel="@T["Title"]">@context.Subject</MudTd>
+        <MudTd DataLabel="@T["Status"]">@T[context.Status.Name]</MudTd>
+        <MudTd DataLabel="@T["Priority"]">@T[context.Priority.ToString()]</MudTd>
+        <MudTd DataLabel="@T["Severity"]">@T[context.Severity.ToString()]</MudTd>
+        <MudTd DataLabel="@T["Impact"]">@T[context.Impact.ToString()]</MudTd>
+        <MudTd DataLabel="@T["Assignee"]">@context.Assignee?.Name</MudTd>
+        <MudTd DataLabel="@T["EstimatedTime"]">@(context.EstimatedHours is null ? null : TimeSpan.FromHours(context.EstimatedHours.GetValueOrDefault()).ToString("hh\\:mm"))</MudTd>
+        <MudTd DataLabel="@T["RemainingTime"]">@(context.RemainingHours is null ? null : TimeSpan.FromHours(context.RemainingHours.GetValueOrDefault()).ToString("hh\\:mm"))</MudTd>
+        <MudTd DataLabel="@T["Created"]">@context.Created.ToLocalTime().ToString("g")</MudTd>
+        <MudTd DataLabel="@T["CreatedBy"]">@context.CreatedBy?.Name</MudTd>
+        <MudTd DataLabel="@T["LastModified"]">@context.LastModified?.ToLocalTime().ToString("g")</MudTd>
+        <MudTd DataLabel="@T["LastModifiedBy"]">@context.LastModifiedBy?.Name</MudTd>
+        <MudTh>
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteTicket(context)" Disabled="selectMultiple"></MudIconButton>
+        </MudTh>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>@T["NoMatchesFound"]</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@T["Loading"]</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    CancellationTokenSource cts = new();
+    HubConnection hubConnection = null!;
+    MudTable<TicketDto> table = null!;
+    bool selectMultiple;
+    private HashSet<TicketDto> selectedItems = new HashSet<TicketDto>();
+    List<TicketStatusDto> ticketStatuses = new();
+
+    [Parameter] public int? Id { get; set; }
+
+    public TicketStatusDto? Status { get; set; }
+
+    public UserDto? Assignee { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
+
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{ServiceUrls.CustomerServiceServiceUrl}/hubs/tickets", options =>
+            {
+                options.AccessTokenProvider = async () => await AccessTokenProvider.GetAccessTokenAsync();
+            })
+            .WithAutomaticReconnect().Build();
+
+            hubConnection.On<int, string>("Created", OnCreated);
+            hubConnection.On<int, string>("Updated", OnUpdated);
+            hubConnection.On<int, string>("Deleted", OnDeleted);
+
+            //hubConnection.On<string, string>("TitleUpdated", OnTitleUpdated);
+            //hubConnection.On<string, string?>("DescriptionUpdated", OnDescriptionUpdated);
+            //hubConnection.On<string, TicketStatusDto>("StatusUpdated", OnStatusUpdated);
+
+            hubConnection.Closed += (error) =>
+            {
+                if (error is not null)
+                {
+                    Snackbar.Add($"{error.Message}", Severity.Error);
+                }
+
+                return Task.CompletedTask;
+            };
+            hubConnection.Reconnected += (error) =>
+            {
+                Snackbar.Add("Reconnected");
+                return Task.CompletedTask;
+            };
+            hubConnection.Reconnecting += (error) =>
+            {
+                Snackbar.Add("Reconnecting");
+                return Task.CompletedTask;
+            };
+            await hubConnection.StartAsync(cts.Token);
+        }
+        catch (HttpRequestException exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+
+        if (Id is not null)
+        {
+            await ShowTicket(Id.GetValueOrDefault());
+        }
+        else
+        {
+            if (NavigationManager.Uri.EndsWith("/tickets/new"))
+            {
+                await CreateTicket();
+            }
+        }
+    }
+
+    async Task CreateTicket()
+    {
+        var uri = NavigationManager.Uri;
+
+        DialogOptions dialogOptions = new DialogOptions() { FullScreen = false, MaxWidth = MaxWidth.Large, CloseButton = true };
+        var dialogRef = DialogService.Show<TicketDialog>(string.Empty, dialogOptions);
+        var result = await dialogRef.Result;
+
+        //Temp
+         await table.ReloadServerData();
+
+        //NavigationManager.NavigateTo(uri, replace: true);
+    }
+
+    async Task ShowTicket(int id)
+    {
+        if (selectMultiple)
+            return;
+
+        DialogParameters dialogParameters = new();
+        dialogParameters.Add(nameof(TicketDialog.Id), id);
+
+        DialogOptions dialogOptions = new DialogOptions() { FullScreen = false, MaxWidth = MaxWidth.Large, CloseButton = true };
+        var dialogRef = DialogService.Show<TicketDialog>(string.Empty, dialogParameters, dialogOptions);
+        var result = await dialogRef.Result;
+    }
+
+    Task OnSelectMultipleChanged(bool value)
+    {
+        selectMultiple = value;
+        selectedItems.Clear();
+
+        return Task.CompletedTask;
+    }
+
+    private async Task<TableData<TicketDto>> ServerReload(TableState state)
+    {
+        try
+        {
+            var result = await TicketsClient.GetTicketsAsync(Status is null ? null : new int[] { Status.Id }, Assignee?.Id, state.Page + 1, state.PageSize,
+                state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+                state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);
+
+            return new TableData<TicketDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        /*catch (Exception)
+        {
+            Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
+        }*/
+
+        return new TableData<TicketDto>() { Items = Enumerable.Empty<TicketDto>(), TotalItems = 0 };
+    }
+
+    async Task<TicketDto> FetchTicket(int id)
+    {
+        return await TicketsClient.GetTicketByIdAsync(id, cts.Token);
+    }
+
+    private async Task DeleteTicket(TicketDto item)
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBox(T["DeleteTicket", item.Subject], T["AreYouSure"], T["Yes"], T["No"]);
+
+            if (result.GetValueOrDefault())
+            {
+                await DeleteTicketCore(item);
+
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception)
+        {
+            Snackbar.Add(T["FailedToDeleteTicket"], Severity.Error);
+        }
+    }
+
+    private async Task DeleteTicketCore(TicketDto item)
+    {
+        await TicketsClient.DeleteTicketAsync(item.Id, cts.Token);
+
+        selectedItems.Remove(item);
+    }
+
+    private async Task DeleteSelectedItems()
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBox(T["DeleteSelectedTickets"], T["AreYouSure"], T["Yes"], T["No"]);
+
+            if (result.GetValueOrDefault())
+            {
+                List<TicketDto>? failedItems = null;
+
+                foreach (var item in selectedItems)
+                {
+                    try
+                    {
+                        await DeleteTicketCore(item);
+
+                        selectedItems.Remove(item);
+                    }
+                    catch (AccessTokenNotAvailableException exception)
+                    {
+                        exception.Redirect();
+                    }
+                    catch (Exception)
+                    {
+                        if (failedItems is null)
+                        {
+                            failedItems = new List<TicketDto>();
+                        }
+
+                        failedItems.Add(item);
+                    }
+                }
+
+                if (failedItems?.Any() ?? false)
+                {
+                    Snackbar.Add(T["FailedToDeleteTickets", failedItems!.Count()], Severity.Error);
+                }
+
+                selectMultiple = false;
+
+                await table.ReloadServerData();
+
+                StateHasChanged();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    async Task OnCreated(int ticketId, string title)
+    {
+        await table.ReloadServerData();
+
+        Snackbar.Add(T["TicketCreated", ticketId, title], Severity.Normal);
+    }
+
+    async Task OnUpdated(int ticketId, string title)
+    {
+        bool hasUpdated = await UpdateItem(ticketId);
+
+        Snackbar.Add(T["TicketUpdated", ticketId, title], Severity.Normal);
+    }
+
+    async Task OnDeleted(int ticketId, string title)
+    {
+        await table.ReloadServerData();
+
+        Snackbar.Add(T["TicketDeleted", ticketId, title], Severity.Normal);
+    }
+
+    /* void OnTitleUpdated(int ticketId, string title)
+    {
+        var item = GetTicketFromTable(ticketId);
+
+        if(item is not null)
+        {
+            item.Title = Title;
+
+            StateHasChanged();
+        }
+    } */
+
+    private async Task<bool> UpdateItem(int id)
+    {
+        var newItem = await FetchTicket(id);
+        var hasReplaced = ReplaceItemInTable(id, newItem);
+
+        StateHasChanged();
+
+        return hasReplaced;
+    }
+
+    private bool ReplaceItemInTable(int id, TicketDto item)
+    {
+        var data = GetTableData();
+        var items = data!.Items.ToList();
+        var existingItem = items.FirstOrDefault(x => x.Id == id);
+        if (existingItem is not null)
+        {
+            var index = items.TakeWhile(x => x.Id != id).Count();
+            items[index] = item;
+            data!.Items = items;
+
+            return true;
+        }
+        return false;
+    }
+
+    private TicketDto? GetItemFromTable(int id)
+    {
+        var data = GetTableData();
+        return data!.Items.FirstOrDefault(x => x.Id == id);
+    }
+
+    private TableData<TicketDto>? GetTableData()
+    {
+        return (TableData<TicketDto>?)table?.GetType()?
+        .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
+        System.Reflection.BindingFlags.Instance)?
+        .GetValue(table);
+    }
+    public async ValueTask DisposeAsync()
+    {
+        cts.Cancel();
+        await hubConnection.DisposeAsync();
+    }
+
+    private async Task OnAssigneeChanged(UserDto? user)
+    {
+        Assignee = user;
+        await table.ReloadServerData();
+    }
+
+    private async Task OnStatusChanged(TicketStatusDto? status)
+    {
+        Status = status;
+        await table.ReloadServerData();
+    }
+}

@@ -25,7 +25,7 @@
     <ProjectReference Include="..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
     <ProjectReference Include="..\Showroom.Client\Showroom.Client.csproj" />
     <ProjectReference Include="..\Showroom.Components\Showroom.Components.csproj" />
-    <ProjectReference Include="..\..\Customers\Customers.Components\Customers.Components.csproj" />
+    <ProjectReference Include="..\..\CustomerRelations\Customers\Customers.Components\Customers.Components.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
   </ItemGroup>
 

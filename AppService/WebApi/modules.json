@@ -65,6 +65,11 @@
         "Enabled": true
     },
     {
+        "Name": "Ticketing",
+        "Assembly": "Ticketing.UI",
+        "Enabled": true
+    },
+    {
         "Name": "HumanResources",
         "Assembly": "HumanResources.UI",
         "Enabled": true

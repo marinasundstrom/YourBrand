@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>YourBrand.Ticketing.Web</RootNamespace>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
+		<NoWarn>1701;1702;CS1591</NoWarn>
+		<AssemblyName>Web</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="IntegrationTests" />
+	</ItemGroup>
+
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Web' " />
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'YourBrand.Orders.Web' " />
+	<ItemGroup>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+        <PackageReference
+            Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"
+            Version="8.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
+            Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+        <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+        <ProjectReference Include="..\Ticketing.Application\Ticketing.Application.csproj" />
+        <ProjectReference Include="..\Ticketing.Consumers\Ticketing.Consumers.csproj" />
+        <ProjectReference Include="..\Ticketing.Infrastructure\Ticketing.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
+	</ItemGroup>
+
+</Project>

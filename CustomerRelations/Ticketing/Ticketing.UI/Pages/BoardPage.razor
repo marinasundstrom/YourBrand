@@ -1,0 +1,303 @@
+﻿@page "/tickets/board"
+@attribute [Authorize]
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@implements IAsyncDisposable
+@inject ITicketsClient TicketsClient
+@inject ITicketStatusesClient TicketStatusesClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IStringLocalizer<BoardPage> T
+
+<AppPageTitle>@T["Board"]</AppPageTitle>
+
+
+<MudText Typo="Typo.h4" Class="mb-4">@T["Board"]</MudText>
+
+@if (loaded)
+{
+    <MudPaper Elevation="25" Style="overflow-x: scroll;">
+
+        <MudDropContainer @ref="dropContainer" T="TicketDto" Items="tickets" Context="context"
+                          ItemsSelector="@((item, dropzone) => item.Status.Id.ToString() == dropzone)"
+                          ItemDropped="ItemUpdated" Class="d-flex flex-row">
+            <ChildContent>
+                @foreach (var status in ticketStatuses)
+                {
+                    <MudPaper Elevation="0" Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg" Style="min-width: 250px;">
+                        <MudToolBar DisableGutters="true" Dense="true">
+                            <MudText Typo="Typo.h6" Class="mb-4"><b>@T[status.Name]</b></MudText>
+                            <MudSpacer />
+                            @*
+                                <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight"
+                                TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column"
+                                PopoverClass="mud-elevation-25">
+                                <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Outlined.Delete" OnClick="@( ()
+                                => { })">Delete Section</MudButton>
+                                <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Rounded.Edit">Rename
+                                Section</MudButton>
+                                </MudMenu>
+                            *@
+                        </MudToolBar>
+                        <MudDropZone T="TicketDto" Identifier="@($"{status.Id}")" Class="mud-height-full" />
+                        @*
+                            <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Filled.Add" FullWidth="true"
+                            Class="py-2" Style="background-color: inherit;">Add Task</MudButton>
+                        *@
+                    </MudPaper>
+                }
+            </ChildContent>
+            <ItemRenderer>
+                <div>
+                    <MudCard Class="rounded-lg mb-4" Elevation="25" Style="width: 215.344px">
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudIcon Icon="@Icons.Material.Filled.Task"></MudIcon>
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.body1">@context.Id - @context.Subject</MudText>
+                                @if (context.Assignee is not null)
+                                {
+                                    <MudText Typo="Typo.body2">@context.Assignee?.Name</MudText>
+                                }
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            @if (context.EstimatedHours is not null)
+                            {
+                                <MudText Typo="Typo.caption" Class="mt-2">
+                                    @T["EstimatedTime", TimeSpan.FromHours(context.EstimatedHours.GetValueOrDefault()).ToString("hh\\:mm")]
+                                </MudText> <br />
+                            }
+                            @if (context.RemainingHours is not null)
+                            {
+                                <MudText Typo="Typo.caption" Class="mt-2">
+                                    @T["RemainingTime", TimeSpan.FromHours(context.RemainingHours.GetValueOrDefault()).ToString("hh\\:mm")]
+                                </MudText>
+                            }
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Default"
+                                           OnClick="async (e) => await ShowTicket(context.Id)" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           OnClick="async (e) => await DeleteTicket(context)" Color="Color.Default" />
+                        </MudCardActions>
+                    </MudCard>
+                </div>
+            </ItemRenderer>
+        </MudDropContainer>
+    </MudPaper>
+}
+
+@code {
+    CancellationTokenSource cts = new();
+    MudDropContainer<TicketDto> dropContainer = null!;
+    HubConnection hubConnection = null!;
+    List<TicketDto> tickets = new();
+    List<TicketStatusDto> ticketStatuses = new();
+    bool loaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            tickets.AddRange((await TicketsClient.GetTicketsAsync(null, null, 1, 100, null, null, cts.Token)).Items);
+            ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
+
+            loaded = true;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception)
+        {
+            Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
+        }
+
+        try
+        {
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{ServiceUrls.CustomerServiceServiceUrl}/hubs/tickets", options =>
+            {
+                options.AccessTokenProvider = async () => await AccessTokenProvider.GetAccessTokenAsync();
+            })
+            .WithAutomaticReconnect().Build();
+
+            hubConnection.On<int, string>("Created", OnCreated);
+            //hubConnection.On<int, string>("Updated", OnUpdated);
+            hubConnection.On<int, string>("Deleted", OnDeleted);
+
+            hubConnection.On<int, string>("SubjectUpdated", OnSubjectUpdated);
+            hubConnection.On<int, string?>("DescriptionUpdated", OnDescriptionUpdated);
+            hubConnection.On<int, TicketStatusDto>("StatusUpdated", OnStatusUpdated);
+            hubConnection.On<int, double?>("EstimatedHoursUpdated", OnEstimatedHoursUpdated);
+            hubConnection.On<int, double?>("RemainingHoursUpdated", OnRemainingHoursUpdated);
+
+            hubConnection.Closed += (error) =>
+            {
+                if (error is not null)
+                {
+                    Snackbar.Add($"{error.Message}", Severity.Error);
+                }
+
+                return Task.CompletedTask;
+            };
+            hubConnection.Reconnected += (error) =>
+            {
+                Snackbar.Add("Reconnected");
+                return Task.CompletedTask;
+            };
+            hubConnection.Reconnecting += (error) =>
+            {
+                Snackbar.Add("Reconnecting");
+                return Task.CompletedTask;
+            };
+            await hubConnection.StartAsync(cts.Token);
+        }
+        catch (HttpRequestException exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+    }
+
+    async Task ShowTicket(int id)
+    {
+        var uri = NavigationManager.Uri;
+
+        DialogParameters dialogParameters = new();
+        dialogParameters.Add(nameof(TicketDialog.Id), id);
+
+        DialogOptions dialogOptions = new DialogOptions() { FullScreen = false, MaxWidth = MaxWidth.Large, CloseButton = true };
+        var dialogRef = DialogService.Show<TicketDialog>(string.Empty, dialogParameters, dialogOptions);
+        var result = await dialogRef.Result;
+    }
+
+    private async Task DeleteTicket(TicketDto item)
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBox(T["DeleteTicket", item.Subject], T["AreYouSure"], T["Yes"], T["No"]);
+
+            if (result.GetValueOrDefault())
+            {
+                await TicketsClient.DeleteTicketAsync(item.Id, cts.Token);
+            }
+
+            dropContainer.Refresh();
+            StateHasChanged();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception)
+        {
+            Snackbar.Add(T["FailedToDeleteTicket"], Severity.Error);
+        }
+    }
+
+    private async void ItemUpdated(MudItemDropInfo<TicketDto> dropItem)
+    {
+        var id = dropItem.DropzoneIdentifier;
+
+        var newStatus = ticketStatuses.First(x => x.Id == int.Parse(id));
+
+        var oldStatus = dropItem.Item.Status;
+        dropItem.Item.Status = newStatus;
+
+        try
+        {
+            await TicketsClient.UpdateStatusAsync(dropItem.Item.Id, newStatus.Id, cts.Token);
+        }
+        catch (ApiException<ProblemDetails> exc)
+        {
+            dropItem.Item.Status = oldStatus;
+
+            Snackbar.Add(exc.Result.Title, Severity.Error);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.Message, Severity.Error);
+        }
+    }
+
+    async Task OnCreated(int ticketId, string title)
+    {
+        var item = await TicketsClient.GetTicketByIdAsync(ticketId, cts.Token);
+        tickets.Add(item);
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    /*
+    async Task OnUpdated(int ticketId, string title)
+    {
+
+    }
+    */
+
+    void OnDeleted(int ticketId, string title)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        tickets.Remove(item);
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    void OnSubjectUpdated(int ticketId, string title)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        item.Subject = title;
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    void OnDescriptionUpdated(int ticketId, string? description)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        item.Description = description;
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    void OnStatusUpdated(int ticketId, TicketStatusDto status)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        item.Status = status;
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    void OnEstimatedHoursUpdated(int ticketId, double? hours)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        item.EstimatedHours = hours;
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    void OnRemainingHoursUpdated(int ticketId, double? hours)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        item.RemainingHours = hours;
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        cts.Cancel();
+        await hubConnection.DisposeAsync();
+    }
+}

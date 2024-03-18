@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>YourBrand.Ticketing.Domain</RootNamespace>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
+		<NoWarn>1701;1702;CS1591</NoWarn>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="LinqKit" Version="1.2.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="MediatR.Contracts" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Enums\" />
+	</ItemGroup>
+</Project>

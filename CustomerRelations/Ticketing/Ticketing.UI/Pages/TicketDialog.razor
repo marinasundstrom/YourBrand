@@ -1,0 +1,279 @@
+﻿@using System.ComponentModel.DataAnnotations
+@implements IDisposable
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject ITicketsClient TicketsClient
+@inject ITicketStatusesClient TicketStatusesClient
+@inject IDialogService DialogService
+@inject Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IStringLocalizer<TicketDialog> T
+
+@if (notFound)
+{
+    <AppPageTitle>Not found</AppPageTitle>
+
+    <MudText Typo="Typo.h4" GutterBottom="true">Not found</MudText>
+}
+else if (error)
+{
+    <AppPageTitle>Error</AppPageTitle>
+
+    <MudText Typo="Typo.h4" GutterBottom="true">Error</MudText>
+}
+else
+{
+    @if (Id is null || ticket is not null)
+    {
+        @if (ticket is null)
+        {
+            <AppPageTitle>@T["NewTicket"]</AppPageTitle>
+        }
+        else
+        {
+            <AppPageTitle>@ticket?.Id - @ticket?.Subject</AppPageTitle>
+        }
+
+        <EditForm EditContext="editContext" OnValidSubmit="Submit">
+
+            <MudDialog DisableSidePadding="true">
+                <DialogContent>
+                    <MudContainer Style="max-height: 600px; overflow-y: scroll">
+
+                        <DataAnnotationsValidator />
+
+                        <MudTextField Label="@T["Title"]" Variant="Variant.Outlined" @bind-Value="Title" For="() => Title"
+                                      Immediate="true" Class="mb-4" />
+
+                        <MudGrid>
+                            <MudItem xs="12" md="6">
+                                <MudTextField Label="@T["Description"]" Lines="5" Variant="Variant.Outlined" @bind-Value="Description"
+                                              For="() => Description" Immediate="true" Class="mb-4" />
+                            </MudItem>
+
+                            <MudItem xs="12" md="6">
+                                <MudSelect Label="@T["Status"]" @bind-Value="Status" For="() => Status" Immediate="true" Variant="Variant.Outlined" Class="mb-4" ToStringFunc="(s) => s.Name">
+                                    @foreach (var status in ticketStatuses)
+                                    {
+                                        <MudSelectItem Value="@status">@T[status.Name]</MudSelectItem>
+                                    }
+                                </MudSelect>
+
+                                <MudGrid>
+                                    <MudItem xs="12" md="6">
+                                        <MudNumericField Label="@T["EstimatedTime"]" Variant="Variant.Outlined" @bind-Value="EstimatedHours"
+                                                         For="() => EstimatedHours" Immediate="true" Class="mb-4" />
+                                    </MudItem>
+
+                                    <MudItem xs="12" md="6">
+                                        <MudNumericField Label="@T["RemainingTime"]" Variant="Variant.Outlined" @bind-Value="RemainingHours"
+                                                         For="() => RemainingHours" Immediate="true" Class="mb-4" />
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+
+                            @**
+                            <MudItem xs="12" md="6">
+                                <UserSelector Label="@T["Assignee"]" Variant="Variant.Outlined" @bind-Value="Assignee"
+                                              For="() => Assignee" Class="mb-4" />
+                            </MudItem> *@
+                        </MudGrid>
+
+                    </MudContainer>
+                </DialogContent>
+                <DialogActions>
+                    @if (editContext.IsModified())
+                    {
+                        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">
+                            @if (ticket is null)
+                            {
+                                @T["Create"]
+                            }
+                            else
+                            {
+                                @T["SaveChanges"]
+                            }
+                        </MudButton>
+                    }
+                </DialogActions>
+            </MudDialog>
+
+        </EditForm>
+    }
+    else
+    {
+        <div style="display: flex; justify-content: center; align-items:center; height:100%; width:100%;">
+            <MudProgressCircular Color="Color.Default" Size="Size.Large" Indeterminate="true" />
+        </div>
+    }
+}
+
+
+@code {
+    CancellationTokenSource cts = new ();
+    EditContext editContext = null!;
+    TicketDto? ticket;
+    List<TicketStatusDto> ticketStatuses = new();
+    bool notFound = false;
+    bool error = false;
+
+    [CascadingParameter] public MudDialogInstance Instance { get; set; } = null!;
+
+    [Parameter] public int? Id { get; set; }
+
+    [Required]
+    [MaxLength(60)]
+    public string Title { get; set; } = null!;
+
+    [MaxLength(340)]
+    public string? Description { get; set; }
+
+    public UserDto? Assignee { get; set; }
+
+    public TicketStatusDto Status { get; set; }
+
+    public double? EstimatedHours { get; set; }
+
+    public double? RemainingHours { get; set; }
+
+    async Task Submit()
+    {
+        try
+        {
+            if (Id is null)
+            {
+                await CreateTicket();
+
+                editContext.MarkAsUnmodified();
+
+                Instance.Close();
+
+                return;
+            }
+
+            if (editContext.IsModified(() => Title))
+            {
+                await TicketsClient.UpdateTitleAsync(Id.GetValueOrDefault(), Title, cts.Token);
+            }
+
+            if (editContext.IsModified(() => Description!))
+            {
+                //await TicketsClient.UpdateDescriptionAsync(Id.GetValueOrDefault(), Description, cts.Token);
+            }
+
+            if (editContext.IsModified(() => Status))
+            {
+                await TicketsClient.UpdateStatusAsync(Id.GetValueOrDefault(), Status.Id, cts.Token);
+            }
+
+            if (editContext.IsModified(() => Assignee!))
+            {
+                //await TicketsClient.UpdateAssignedUserAsync(Id.GetValueOrDefault(), Assignee?.Id, cts.Token);
+            }
+
+            if (editContext.IsModified(() => EstimatedHours!))
+            {
+                await TicketsClient.UpdateEstimatedHoursAsync(Id.GetValueOrDefault(), EstimatedHours, cts.Token);
+            }
+
+            if (editContext.IsModified(() => RemainingHours!))
+            {
+                await TicketsClient.UpdateRemainingHoursAsync(Id.GetValueOrDefault(), RemainingHours, cts.Token);
+            }
+
+            editContext.MarkAsUnmodified();
+
+            ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
+
+            ticket = await TicketsClient.GetTicketByIdAsync(Id.GetValueOrDefault(), cts.Token);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        editContext = new EditContext(this);
+
+        notFound = false;
+        error = false;
+
+        ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
+
+        Status = ticketStatuses.First();
+
+        if (Id is not null)
+        {
+            try
+            {
+                await LoadTicket(Id.GetValueOrDefault());
+            }
+            catch (ApiException<ProblemDetails> exc)
+            {
+                if (exc.StatusCode == (int)System.Net.HttpStatusCode.NotFound)
+                {
+                    notFound = true;
+                }
+                else
+                {
+                    error = true;
+                }
+            }
+            catch (Exception)
+            {
+                error = true;
+            }
+        }
+        else
+        {
+            Instance.SetTitle(T["NewTicket"]);
+        }
+    }
+
+    async Task CreateTicket()
+    {
+        ticket = await TicketsClient.CreateTicketAsync(new CreateTicketRequest
+        {
+            Title = Title,
+            Text = Description,
+            Status = Status.Id,
+            //Assignee = Assignee?.Id,
+            EstimatedHours = EstimatedHours,
+            RemainingHours = RemainingHours
+        }, cts.Token);
+
+        Instance.SetTitle($"{ticket.Id} - {ticket.Subject}");
+    }
+
+    async Task FetchTicket()
+    {
+        await LoadTicket(ticket!.Id);
+    }
+
+    async Task LoadTicket(int id)
+    {
+        try
+        {
+            this.ticket = await TicketsClient.GetTicketByIdAsync(id, cts.Token);
+
+            Instance.SetTitle($"{ticket.Id} - {ticket.Subject}");
+
+            Title = ticket.Subject;
+            Description = ticket.Description;
+            Status = ticket.Status;
+            Assignee = ticket.Assignee;
+            EstimatedHours = ticket.EstimatedHours;
+            RemainingHours = ticket.RemainingHours;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    public void Dispose()
+    {
+        cts.Cancel();
+    }
+}
