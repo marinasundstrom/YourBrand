@@ -2,48 +2,55 @@
 
 <CascadingValue Value="@Widget">
     <MudPaper Elevation="25" Class="pa-4" Style="@Style">
-        <div class="d-flex justify-space-between flex-grow-1 gap-4">
-            <div>
-                @if (Widget.IsHeaderVisible)
-                {
-                    <MudText Typo="Typo.h6">@Widget.Name</MudText>
-                }
+                    <div class="d-flex justify-space-between flex-grow-1 gap-4">
+                <div>
+                    @if (Widget.IsHeaderVisible)
+                    {
+                        <MudText Typo="Typo.h6">@Widget.Name</MudText>
+                    }
+                </div>
+                <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Dense="true">
+                    <ActivatorContent>
+                        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" aria-label="settings" Size="Size.Small"></MudIconButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem>
+                            <div class="d-flex">
+                                <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
+                                <MudText Style="overflow: hidden; white-space: nowrap;">Settings</MudText>
+                            </div>
+                        </MudMenuItem>
+                        <MudMenuItem>
+                            <div class="d-flex">
+                                <MudIcon Icon="@Icons.Material.Filled.Delete" class="me-2" />
+                                <MudText Style="overflow: hidden; white-space: nowrap;">Remove</MudText>
+                            </div>
+                        </MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
             </div>
-            <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Dense="true">
-                <ActivatorContent>
-                    <MudIconButton Icon="@Icons.Material.Filled.MoreVert" aria-label="settings" Size="Size.Small"></MudIconButton>
-                </ActivatorContent>
-                <ChildContent>
-                    <MudMenuItem>
-                        <div class="d-flex">
-                            <MudIcon Icon="@Icons.Material.Filled.Settings" class="me-2" />
-                            <MudText Style="overflow: hidden; white-space: nowrap;">Settings</MudText>
-                        </div>
-                    </MudMenuItem>
-                    <MudMenuItem>
-                        <div class="d-flex">
-                            <MudIcon Icon="@Icons.Material.Filled.Delete" class="me-2" />
-                            <MudText Style="overflow: hidden; white-space: nowrap;">Remove</MudText>
-                        </div>
-                    </MudMenuItem>
-                </ChildContent>
-            </MudMenu>
-        </div>
-        @if (Widget.RequiresAuthorization)
-        {
-            <AuthorizeView Roles="@(Widget.Roles is null ? null : string.Join(",", Widget.Roles))" Policy="@Widget.Policy">
-                <Authorized>
-                    <DynamicComponent @key="@Widget.Id" Type="Widget.ComponentType" />
-                </Authorized>
-                <NotAuthorized>
-                    <p>Unauthorized</p>
-                </NotAuthorized>
-            </AuthorizeView>
-        }
-        else
-        {
-            <DynamicComponent @key="@Widget.Id" Type="Widget.ComponentType" />
-        }
+        <ErrorBoundary>
+            <ChildContent>
+            @if (Widget.RequiresAuthorization)
+            {
+                <AuthorizeView Roles="@(Widget.Roles is null ? null : string.Join(",", Widget.Roles))" Policy="@Widget.Policy">
+                    <Authorized>
+                        <DynamicComponent @key="@Widget.Id" Type="Widget.ComponentType" />
+                    </Authorized>
+                    <NotAuthorized>
+                        <p>Unauthorized</p>
+                    </NotAuthorized>
+                </AuthorizeView>
+            }
+            else
+            {
+                <DynamicComponent @key="@Widget.Id" Type="Widget.ComponentType" />
+            }
+            </ChildContent>
+             <ErrorContent>
+                <MudText Typo="Typo.body1" Class="mt-2">Widget could not load.</MudText>
+            </ErrorContent>
+        </ErrorBoundary>
     </MudPaper>
 </CascadingValue>
 

@@ -5,10 +5,13 @@
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IModulesClient ModulesClient
+@inject IDialogService DialogService
 
 <AppPageTitle>@T["Modules"] - YourBrand</AppPageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Modules"]</MudText>
+
+<MudButton OnClick="Refresh">Refresh</MudButton>
 
 <MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
@@ -68,7 +71,7 @@
 
             module.Enabled = !module.Enabled;
 
-            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info);
+            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info, config => { config.Onclick = async (Snackbar snackbar) => await Refresh(); });
         }
         catch(Exception) 
         {
@@ -79,6 +82,16 @@
     private void RowClickEvent(TableRowClickEventArgs<Module> args)
     {
         //NavigationManager.NavigateTo($"/modules/{args.Item.Id}");
+    }
+
+    private async Task Refresh() 
+    {   
+        var r = await DialogService.ShowMessageBox("Refresh site", "Are you sure?", "Yes, refresh", "Abort");
+
+        if(r.GetValueOrDefault()) 
+        {
+            NavigationManager.Refresh(true);
+        }
     }
 }
 
