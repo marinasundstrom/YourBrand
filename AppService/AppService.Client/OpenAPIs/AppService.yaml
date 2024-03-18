@@ -6,36 +6,6 @@ info:
 servers:
 - url: https://localhost:5020
 paths:
-  /{id}/UploadImage:
-    post:
-      tags:
-      - Items
-      operationId: Items_UploadImage
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
   /v1/Modules:
     get:
       tags:
@@ -50,6 +20,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Module'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Modules/{id}/Toggle:
+    post:
+      tags:
+      - Modules
+      operationId: Modules_ToggleModule
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
         404:
           description: ''
           content:
@@ -294,6 +286,19 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
 components:
   schemas:
+    Module:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        assembly:
+          type: string
+        enabled:
+          type: boolean
     ProblemDetails:
       type: object
       additionalProperties:
@@ -318,16 +323,6 @@ components:
         extensions:
           type: object
           additionalProperties: {}
-    Module:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        assembly:
-          type: string
-        enabled:
-          type: boolean
     NotificationsResults:
       allOf:
       - $ref: '#/components/schemas/ResultsOfNotification'

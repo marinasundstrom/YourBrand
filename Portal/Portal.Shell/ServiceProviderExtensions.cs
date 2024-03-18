@@ -72,6 +72,13 @@ public static class ServiceProviderExtensions
             options.Icon = MudBlazor.Icons.Material.Filled.NotificationAdd;
             options.Href = "/notifications/create";
         });
+
+        group.CreateItem("modules", options =>
+        {
+            options.NameFunc = () => t["Modules"];
+            options.Icon = MudBlazor.Icons.Material.Filled.ViewModule;
+            options.Href = "/modules";
+        });
     }
 
     private static void CreateDashboard(IServiceProvider services)

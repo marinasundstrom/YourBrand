@@ -1,0 +1,84 @@
+﻿@page "/modules"
+@using YourBrand.AppService.Client
+@attribute [Authorize]
+@inject IStringLocalizer<ModulesPage> T
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IModulesClient ModulesClient
+
+<AppPageTitle>@T["Modules"] - YourBrand</AppPageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">@T["Modules"]</MudText>
+
+<MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T="Module" SortLabel="Enabled">@T["Header_Enabled"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Module" SortLabel="Name">@T["Header_Name"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Module" SortLabel="Assembly">@T["Header_Assembly"]</MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTh DataLabel="@T["Header_Enabled"]">
+            <MudCheckBox Value="context.Enabled" ValueChanged="async (bool e) => await ToggleModule(context)" />
+        </MudTh>
+        <MudTd DataLabel="@T["Header_Name"]">@context.Name</MudTd>
+        <MudTd DataLabel="@T["Header_Assembly"]">@context.Assembly</MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>@T["NoRecordsFound"]</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@T["Loading"]</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    MudTable<Module> table;
+
+    private async Task<TableData<Module>> ServerReload(TableState state)
+    {
+        try
+        {
+            var results = await ModulesClient.GetModulesAsync(); //false, state.Page + 1, state.PageSize, state.SortLabel,
+                //state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc);
+
+            return new TableData<Module>() { TotalItems = results.Count, Items = results }; //  { TotalItems = results.TotalCount, Items = results.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    private async Task ToggleModule(Module module)
+    {
+        try 
+        {
+            await ModulesClient.ToggleModuleAsync(module.Id);
+
+            module.Enabled = !module.Enabled;
+
+            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info);
+        }
+        catch(Exception) 
+        {
+            Snackbar.Add("Failed to toggle module", Severity.Error);
+        }
+    }
+
+    private void RowClickEvent(TableRowClickEventArgs<Module> args)
+    {
+        //NavigationManager.NavigateTo($"/modules/{args.Item.Id}");
+    }
+}
+

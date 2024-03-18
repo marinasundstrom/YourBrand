@@ -7,22 +7,11 @@ public static class ServiceExtensions
     public static IServiceCollection AddAppServiceClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         services
-            .AddItemsClient(configureClient, builder)
             .AddNotificationsClient(configureClient, builder)
             .AddSearchClient(configureClient, builder)
+            .AddModulesClient(configureClient, builder)
             .AddDoSomethingClient(configureClient, builder)
             .AddWidgetsClient(configureClient, builder);
-
-        return services;
-    }
-
-    public static IServiceCollection AddItemsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
-    {
-        var b = services
-            .AddHttpClient(nameof(ItemsClient), configureClient)
-            .AddTypedClient<IItemsClient>((http, sp) => new ItemsClient(http));
-
-        builder?.Invoke(b);
 
         return services;
     }
@@ -70,6 +59,18 @@ public static class ServiceExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddModulesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ModulesClient), configureClient)
+            .AddTypedClient<IModulesClient>((http, sp) => new ModulesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
 
     public static IServiceCollection AddWidgetsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {

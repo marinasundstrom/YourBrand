@@ -13,27 +13,27 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="Notifications">
-		<value>Notifications</value>
+		<value>Moduler</value>
 	</data>
 	<data name="SortBy">
-		<value>Sort by</value>
+		<value>Sortera efter</value>
 	</data>
-	<data name="Header_Name">
-		<value>Name</value>
-	</data>
-	<data name="Header_Assembly">
-		<value>Assembly</value>
-	</data>
+    <data name="Header_Name">
+        <value>Namn</value>
+    </data>
+    <data name="Header_Assembly">
+        <value>Kodmodul</value>
+    </data>
     <data name="Header_Enabled">
-		<value>Enabled</value>
-	</data>
+        <value>Aktiverad</value>
+    </data>
 	<data name="NoRecordsFound">
-		<value>No records found</value>
+		<value>Inget resultat</value>
 	</data>
 	<data name="Loading">
-		<value>Loading...</value>
+		<value>Laddar...</value>
 	</data>
 	<data name="RowsPerPage">
-		<value>Rows per page</value>
+		<value>Rader per sida</value>
 	</data>
 </root>

@@ -26,4 +26,7 @@
     <data name="SetUp">
         <value>Set up</value>
     </data>
+    <data name="Modules">
+        <value>Modules</value>
+    </data>
 </root>

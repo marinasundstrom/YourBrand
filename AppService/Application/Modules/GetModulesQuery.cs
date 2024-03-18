@@ -31,14 +31,15 @@ public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
             )!;
             */
             
-            var modules = await _appServiceContext.Modules
-            .Where(x => x.Enabled)
-            .OrderBy(x => x.Index).ToListAsync(cancellationToken);
-                return modules.Select(x => new ModuleDto {
+            return await _appServiceContext.Modules
+            //.Where(x => x.Enabled)
+            .OrderBy(x => x.Index)
+            .Select(x => new ModuleDto {
+                    Id = x.Id,
                     Name = x.Name,
                     Assembly = x.Assembly,
                     Enabled = x.Enabled
-                });
+                }).ToListAsync(cancellationToken);
         }
     }
 }

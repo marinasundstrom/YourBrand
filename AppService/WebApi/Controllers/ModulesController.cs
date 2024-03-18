@@ -23,4 +23,14 @@ public class ModulesController : ControllerBase
         var modules = await mediator.Send(new GetModulesQuery(), cancellationToken);
         return Ok(modules);
     }
+
+    [HttpPost("{id}/Toggle")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> ToggleModule(Guid id,
+    [FromServices] IMediator mediator, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new ToggleModule(id), cancellationToken);
+        return Ok();
+    }
 }

@@ -26,4 +26,7 @@
     <data name="SetUp">
         <value>Kom igång</value>
     </data>
+    <data name="Modules">
+        <value>Moduler</value>
+    </data>
 </root>
