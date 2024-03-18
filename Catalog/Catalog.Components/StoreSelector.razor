@@ -11,29 +11,47 @@
         <MudIconButton Class="me-1" Icon="@Icons.Material.Filled.Shop" Color="Color.Inherit" Edge="Edge.Start" />
     </ActivatorContent>
     <ChildContent>
-        @foreach (var item in items)
-        {
-            <MudMenuItem @key="@item" OnClick="async () => await StoreProvider.SetCurrentStore(item.Id)">
-                <div class="d-flex">
-                    <MudIcon Icon="@(currentStore?.Id == item.Id ? Icons.Material.Filled.Check : null)" class="me-2" />
-                    <MudText Style="overflow: hidden; white-space: nowrap;">@item.Name</MudText>
-                </div>
-            </MudMenuItem>
+      @if(error) 
+      {
+        <MudMenuItem>
+            <MudText>Failed to load stores.</MudText>
+         </MudMenuItem>
+      }
+      else 
+      {
+            foreach (var item in items)
+            {
+                <MudMenuItem @key="@item" OnClick="async () => await StoreProvider.SetCurrentStore(item.Id)">
+                    <div class="d-flex">
+                        <MudIcon Icon="@(currentStore?.Id == item.Id ? Icons.Material.Filled.Check : null)"
+                            class="me-2" />
+                        <MudText Style="overflow: hidden; white-space: nowrap;">@item.Name</MudText>
+                    </div>
+                </MudMenuItem>
+            }
         }
     </ChildContent>
 </MudMenu>
 
 @code {
+    bool error;
     IEnumerable<YourBrand.Portal.Services.Store> items = Enumerable.Empty<YourBrand.Portal.Services.Store>();
     YourBrand.Portal.Services.Store? currentStore;
 
     protected override async Task OnInitializedAsync()
     {
-        StoreProvider.CurrentStoreChanged += OnCurrentStoreChanged;
+        try 
+        {
+            StoreProvider.CurrentStoreChanged += OnCurrentStoreChanged;
 
-        items = await StoreProvider.GetAvailableStoresAsync();
+            items = await StoreProvider.GetAvailableStoresAsync();
 
-        StateHasChanged();
+            StateHasChanged();
+        }
+        catch 
+        {
+            error = true;
+        }
     }
 
     private void OnCurrentStoreChanged(object? sender, EventArgs e)
