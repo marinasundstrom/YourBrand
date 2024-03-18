@@ -73,7 +73,7 @@ services.AddAuthorization();
 
 services.AddAuthenticationServices(Configuration);
 
-services.AddAuthWithJwt();
+//services.AddAuthWithJwt();
 services.AddAuthWithApiKey();
 
 builder.Services.AddMassTransit(x =>
