@@ -43,12 +43,12 @@ public class SalesUserCreatedConsumer : IConsumer<UserCreated>
     }
 }
 
-public class ASalesUserDeletedConsumer : IConsumer<UserDeleted>
+public class SalesUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
 
-    public ASalesUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public SalesUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;
@@ -64,7 +64,7 @@ public class ASalesUserDeletedConsumer : IConsumer<UserDeleted>
     }
 }
 
-/*
+
 public class SalesUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
@@ -82,12 +82,11 @@ public class SalesUserUpdatedConsumer : IConsumer<UserUpdated>
     {
         var message = context.Message;
 
-        _currentUserService.SetCurrentUser(message.UpdatedById);
+        //_currentUserService.SetCurrentUser(message.UpdatedById);
 
         var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new UpdateUser(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
+        var result = await _mediator.Send(new UpdateUser(message2.UserId, $"{message2.FirstName} {message2.LastName}", message2.Email));
     }
 }
-*/

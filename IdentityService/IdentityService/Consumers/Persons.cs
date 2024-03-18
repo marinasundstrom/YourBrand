@@ -8,6 +8,8 @@ using YourBrand.IdentityService.Application.Common.Interfaces;
 using YourBrand.IdentityService.Application.Users.Commands;
 namespace YourBrand.IdentityService.Consumers;
 
+/*
+
 public class IdentityServiceUserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
@@ -82,3 +84,5 @@ public class IdentityServiceUserUpdatedConsumer : IConsumer<UserUpdated>
         var result = await _mediator.Send(new UpdateUserDetailsCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }
 }
+
+*/

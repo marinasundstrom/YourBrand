@@ -27,10 +27,10 @@
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer"
       Version="8.0.0-*" />
 
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0-develop.1692" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.3" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="7.0.0" />
-    <PackageReference Include="MassTransit.Abstractions" Version="8.2.0-develop.1692" />
+    <PackageReference Include="MassTransit.Abstractions" Version="8.1.3" />
     <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
   </ItemGroup>
 
@@ -41,7 +41,8 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\UserManagement.Contracts\UserManagement.Contracts.csproj">
+    <ProjectReference
+      Include="..\..\UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj">
@@ -50,7 +51,8 @@
     <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\HumanResources.Consumers\HumanResources.Consumers.csproj">
+    <ProjectReference
+      Include="..\HumanResources.Consumers\HumanResources.Consumers.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />

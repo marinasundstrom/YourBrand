@@ -10,9 +10,9 @@ public class User : AggregateRoot<string>, IAuditable
         Email = email;
     }
 
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
-    public string Email { get; private set; }
+    public string Email { get; set; }
 
     public User? CreatedBy { get; set; }
 

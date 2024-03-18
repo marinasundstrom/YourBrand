@@ -7,16 +7,16 @@ using YourBrand.Sales.API.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Users;
 
-public record DeleteUser(string UserId) : IRequest<Result<DeleteUser>>
+public record UpdateUser(string UserId, string Name, string Email) : IRequest<Result<UserInfoDto>>
 {
-    public class Validator : AbstractValidator<DeleteUser>
+    public class Validator : AbstractValidator<UpdateUser>
     {
         public Validator()
         {
         }
     }
 
-    public class Handler : IRequestHandler<DeleteUser, Result>
+    public class Handler : IRequestHandler<UpdateUser, Result<UserInfoDto>>
     {
         private readonly IUserRepository userRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -29,7 +29,7 @@ public record DeleteUser(string UserId) : IRequest<Result<DeleteUser>>
             this.currentUserService = currentUserService;
         }
 
-        public async Task<Result> Handle(DeleteUser request, CancellationToken cancellationToken)
+        public async Task<Result<UserInfoDto>> Handle(UpdateUser request, CancellationToken cancellationToken)
         {
             var user = await userRepository.FindByIdAsync(request.UserId!, cancellationToken);
 
@@ -38,7 +38,8 @@ public record DeleteUser(string UserId) : IRequest<Result<DeleteUser>>
                 return Result.Failure<UserInfoDto>(Errors.Users.UserNotFound);
             }
 
-            userRepository.Remove(user);
+            user.Name = request.Name;
+            user.Email = request.Name;
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

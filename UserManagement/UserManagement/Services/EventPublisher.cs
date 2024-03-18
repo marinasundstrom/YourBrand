@@ -11,13 +11,13 @@ namespace YourBrand.UserManagement.Services;
 
 public class EventPublisher : IEventPublisher
 {
-    private readonly IBus _bus;
+    private readonly IPublishEndpoint _publishEndpoint;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventPublisher> _logger;
 
-    public EventPublisher(IBus bus, IServiceProvider serviceProvider, ILogger<EventPublisher> logger)
+    public EventPublisher(IPublishEndpoint publishEndpoint, IServiceProvider serviceProvider, ILogger<EventPublisher> logger)
     {
-        _bus = bus;
+        _publishEndpoint = publishEndpoint;
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
@@ -31,7 +31,7 @@ public class EventPublisher : IEventPublisher
 
         //await endpoint.Send(ev);
 
-        await _bus.Publish<T>(ev);
+        await _publishEndpoint.Publish(ev);
 
     }
 }

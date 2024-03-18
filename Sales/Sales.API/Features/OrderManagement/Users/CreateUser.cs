@@ -35,7 +35,7 @@ public record CreateUser(string Name, string Email, string? UserId = null) : IRe
 
         public async Task<Result<UserInfoDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
-            var user = await userRepository.FindByIdAsync(currentUserService.UserId!, cancellationToken);
+            var user = await userRepository.FindByIdAsync(request.UserId!, cancellationToken);
 
             if (user is not null)
             {

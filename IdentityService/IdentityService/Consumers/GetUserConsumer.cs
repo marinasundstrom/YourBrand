@@ -8,6 +8,8 @@ using YourBrand.Identity;
 
 namespace YourBrand.IdentityService.Consumers;
 
+/*
+
 public class GetUserConsumer : IConsumer<GetUser>
 {
     private readonly IMediator _mediator;
@@ -28,3 +30,5 @@ public class GetUserConsumer : IConsumer<GetUser>
         await context.RespondAsync(new GetUserResponse(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email));
     }
 }
+
+*/
