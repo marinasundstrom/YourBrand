@@ -34,7 +34,7 @@ public sealed record CreateTicket(string Title, string? Description, int Status,
 
         public async Task<Result<TicketDto>> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
-            var ticket = new Ticket("", "", "");
+            var ticket = new Ticket(request.Title, "", request.Description!);
             
             ticket.Status = await context.TicketStatuses.FirstAsync(s => s.Id == request.Status, cancellationToken);
 
