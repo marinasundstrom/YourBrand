@@ -21,13 +21,13 @@ public sealed class Widget : AuditableEntity
 
     public Guid Id { get; set; } = default!;
 
-    public string WidgetId { get; private set; } = null!;
+    public string WidgetId { get; set; } = null!;
 
-    public string WidgetAreaId { get; private set; } = default!;
+    public string WidgetAreaId { get; set; } = default!;
 
-    public string? UserId { get; private set; } = null!;
+    public string? UserId { get; set; } = null!;
 
-    public JsonDocument? Settings { get; private set; } = null!;
+    public JsonDocument? Settings { get; set; } = null!;
 
     /*
     public User CreatedBy { get; set; } = null!;

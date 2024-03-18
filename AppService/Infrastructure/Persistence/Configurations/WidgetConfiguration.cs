@@ -18,11 +18,3 @@ public sealed class WidgetConfiguration : IEntityTypeConfiguration<Widget>
             .HasConversion(x => x == null ? null : x.RootElement.ToString(), x => x == null ? null : JsonDocument.Parse(x, new JsonDocumentOptions()));
     }
 }
-
-public sealed class WidgetAreaConfiguration : IEntityTypeConfiguration<WidgetArea>
-{
-    public void Configure(EntityTypeBuilder<WidgetArea> builder)
-    {
-        builder.ToTable("WidgetAreas");
-    }
-}

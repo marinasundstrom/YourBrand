@@ -47,6 +47,8 @@ public class AppServiceContext : DbContext, IAppServiceContext
 
     public DbSet<Module> Modules { get; set; } = null!;
 
+    public DbSet<WidgetArea> WidgetAreas { get; set; } = null!;
+
     public DbSet<Widget> Widgets { get; set; } = null!;
 
     public DbSet<User> Users { get; set; } = null!;

@@ -3,6 +3,7 @@ using YourBrand.Infrastructure.Persistence;
 
 using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Application.Modules;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace YourBrand.Infrastructure.Persistence;
 
@@ -67,6 +68,27 @@ public static class Seed
                 Index = i++
             });
         }
+
+        await context.SaveChangesAsync();
+
+        context.Set<WidgetArea>().Add(new WidgetArea("dashboard", "Dashboard"));
+
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null) {
+            WidgetId = "analytics.engagements",
+            WidgetAreaId = "dashboard"
+        });
+
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
+        {
+            WidgetId = "tickets.overview",
+            WidgetAreaId = "dashboard"
+        });
+
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
+        {
+            WidgetId = "orders.pendingOrders",
+            WidgetAreaId = "dashboard"
+        });
 
         await context.SaveChangesAsync();
     }
