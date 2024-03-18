@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Portal;
-using YourBrand.Catalog;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using Microsoft.Extensions.Localization;
@@ -69,6 +68,6 @@ public class ModuleInitializer : IModuleInitializer
 
         var t = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        appBarTray.AddItem(new AppBarTrayItem("show", () => t["Store"], typeof(StoreSelector)));
+        appBarTray.AddItem(new AppBarTrayItem("store-selector", () => t["Store"], typeof(StoreSelector)));
     }
 }

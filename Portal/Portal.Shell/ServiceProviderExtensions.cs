@@ -44,6 +44,7 @@ public static class ServiceProviderExtensions
 
         var group = navManager.GetGroup("administration") ?? navManager.CreateGroup("administration", () => t["Administration"]);
 
+        /*
         group.CreateItem("users", options =>
         {
             options.NameFunc = () => t["Users"];
@@ -51,6 +52,7 @@ public static class ServiceProviderExtensions
             options.Href = "/users";
             options.RequiresAuthorization = true;
         });
+        */
 
         group.CreateItem("setup", options =>
         {

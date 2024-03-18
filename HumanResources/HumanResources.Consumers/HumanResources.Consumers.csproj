@@ -10,7 +10,7 @@
     <ProjectReference Include="..\Application\Application.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\HumanResources.Contracts\HumanResources.Contracts.csproj" />
+    <ProjectReference Include="..\UserManagement.Contracts\UserManagement.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

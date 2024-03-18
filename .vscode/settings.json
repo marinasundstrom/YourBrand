@@ -68,6 +68,17 @@
         {
             "splitTerminals": [
                 {
+                    "name": "UserManagement",
+                    "commands": [
+                        "dotnet run --project UserManagement/UserManagement/UserManagement.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
                     "name": "ApiKeys",
                     "commands": [
                         "dotnet run --project ApiKeys/ApiKeys/ApiKeys.csproj"

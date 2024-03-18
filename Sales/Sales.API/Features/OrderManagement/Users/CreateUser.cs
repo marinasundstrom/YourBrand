@@ -8,7 +8,7 @@ using YourBrand.Sales.API.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Users;
 
-public record CreateUser(string Name, string Email) : IRequest<Result<UserInfoDto>>
+public record CreateUser(string Name, string Email, string? UserId = null) : IRequest<Result<UserInfoDto>>
 {
     public class Validator : AbstractValidator<CreateUser>
     {
@@ -35,13 +35,20 @@ public record CreateUser(string Name, string Email) : IRequest<Result<UserInfoDt
 
         public async Task<Result<UserInfoDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
-            string userId = currentUserService.UserId!;
+            var user = await userRepository.FindByIdAsync(currentUserService.UserId!, cancellationToken);
+
+            if (user is not null)
+            {
+                return Result.Success(user.ToDto2());
+            }
+
+            string userId = request.UserId ?? currentUserService.UserId!;
 
             userRepository.Add(new User(userId, request.Name, request.Email));
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var user = await userRepository.FindByIdAsync(userId, cancellationToken);
+            user = await userRepository.FindByIdAsync(userId, cancellationToken);
 
             if (user is null)
             {

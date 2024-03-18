@@ -40,6 +40,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sales.Contracts\Sales.Contracts.csproj" />
+    <ProjectReference
+      Include="..\..\UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj" />

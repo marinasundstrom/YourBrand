@@ -1,6 +1,5 @@
-﻿@page "/users/{UserId}/edit"
+﻿@page "/usermanagement/users/{UserId}/edit"
 @using System.ComponentModel.DataAnnotations
-@using IdentityService.Client
 @inject IUsersClient UsersClient
 @inject NavigationManager NavigationManager
 
@@ -23,11 +22,7 @@
 
                 <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
 
-                <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
-
                 <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
-
-                <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
 
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save changes</MudButton>
 
@@ -50,16 +45,12 @@
 
     public string? DisplayName { get; set; }
 
-    [Required]
-    public string SSN { get; set; } = null!;
 
     [Required]
     [EmailAddress]
     public string Email { get; set; } = null!;
 
-    public string Role { get; set; } = null!;
-
-    UserDto? user;
+    User? user;
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,25 +61,22 @@
         FirstName = result.FirstName;
         LastName = result.LastName;
         DisplayName = result.DisplayName;
-        SSN = result.Ssn;
         Email = result.Email;
-        Role = result.Role;
     }
 
     async Task OnSubmit()
     {
         try
         {
-            UserDto result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetailsDto
+            User result = await UsersClient.UpdateUserAsync(UserId, new UpdateUserDetails
             {
                 FirstName = FirstName,
                 LastName = LastName,
                 DisplayName = DisplayName,
-                Ssn = SSN,
                 Email = Email
             });
 
-            NavigationManager.NavigateTo($"/Users/{result.Id}");
+            NavigationManager.NavigateTo($"/usermanagement/users/{result.Id}");
         }
         catch (AccessTokenNotAvailableException exception)
         {

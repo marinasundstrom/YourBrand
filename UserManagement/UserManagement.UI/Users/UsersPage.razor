@@ -1,7 +1,6 @@
-﻿@page "/users"
+﻿@page "/usermanagement/users"
 @attribute [Authorize(Roles = "Administrator,Manager")]
-@using YourBrand.TimeReport.Shared
-@using IdentityService.Client
+@using UserManagement.Client
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IUsersClient UsersClient
@@ -12,29 +11,25 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewUserClicked">New User</MudButton>
 
-<MudTable T="UserDto" ServerData="@(new Func<TableState, Task<TableData<UserDto>>>(ServerReload))"
-          Hover="true" @ref="table" Class="mt-4" Elevation="25" OnRowClick="(e) => GotToUser(e.Item)">
+<MudTable T="User" ServerData="@(new Func<TableState, Task<TableData<User>>>(ServerReload))"
+          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToUser(e.Item)" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel T="UserDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="UserDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="UserDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="UserDto" SortLabel="Ssn">SSN</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="UserDto" SortLabel="Email">Email</MudTableSortLabel></MudTh>
-        <MudTh>Role</MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="Email">Email</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate Context="user">
         <MudTd DataLabel="First Name">@user.FirstName</MudTd>
         <MudTd DataLabel="Last Name">@user.LastName</MudTd>
         <MudTd DataLabel="Display Name">@user.DisplayName</MudTd>
-        <MudTd DataLabel="SSN">@user.Ssn</MudTd>
         <MudTd DataLabel="Email">@user.Email</MudTd>
-        <MudTd DataLabel="Role">@user.Role</MudTd>
         <MudTd>
             <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditUserClicked(user)" />
             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteUser(user)" />
@@ -52,7 +47,7 @@
 </MudTable>
 
 @code {
-    MudTable<UserDto> table;
+    MudTable<User> table;
     string searchString;
 
     protected override async Task OnInitializedAsync()
@@ -60,14 +55,14 @@
 
     }
 
-    private async Task<TableData<UserDto>> ServerReload(TableState state)
+    private async Task<TableData<User>> ServerReload(TableState state)
     {
         try
         {
             var page = await UsersClient.GetUsersAsync(state.Page, state.PageSize, searchString,
-                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityService.Client.SortDirection.Desc : IdentityService.Client.SortDirection.Asc);
+                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? UserManagement.Client.SortDirection.Desc : UserManagement.Client.SortDirection.Asc);
 
-            return new TableData<UserDto>() { TotalItems = page.TotalItems, Items = page.Items };
+            return new TableData<User>() { TotalItems = page.TotalItems, Items = page.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -83,22 +78,22 @@
         table.ReloadServerData();
     }
 
-    private void GotToUser(UserDto user)
+    private void GotToUser(User user)
     {
-        NavigationManager.NavigateTo($"/Users/{user.Id}"); ;
+        NavigationManager.NavigateTo($"/usermanagement/users/{user.Id}"); ;
     }
 
     private async Task OnNewUserClicked()
     {
-        NavigationManager.NavigateTo($"/Users/Create");
+        NavigationManager.NavigateTo($"/usermanagement/users/new");
     }
 
-    private async Task OnEditUserClicked(UserDto user)
+    private async Task OnEditUserClicked(User user)
     {
-        NavigationManager.NavigateTo($"/Users/{user.Id}/Edit");
+        NavigationManager.NavigateTo($"/usermanagement/users/{user.Id}/edit");
     }
 
-    private async Task DeleteUser(UserDto user)
+    private async Task DeleteUser(User user)
     {
         try
         {

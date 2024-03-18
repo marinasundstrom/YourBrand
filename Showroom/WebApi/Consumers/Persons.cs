@@ -2,20 +2,20 @@
 
 using MediatR;
 
-using YourBrand.HumanResources.Contracts;
+using YourBrand.UserManagement.Contracts;
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.Users.Commands;
 namespace YourBrand.Showroom.Consumers;
 
-public class ShowroomPersonCreatedConsumer : IConsumer<PersonCreated>
+public class ShowroomUserCreatedConsumer : IConsumer<UserCreated>
 {
     private readonly IMediator _mediator;
-    private readonly IRequestClient<GetPerson> _requestClient;
-    private readonly ILogger<ShowroomPersonCreatedConsumer> _logger;
+    private readonly IRequestClient<GetUser> _requestClient;
+    private readonly ILogger<ShowroomUserCreatedConsumer> _logger;
     private readonly ICurrentUserService _currentUserService;
 
-    public ShowroomPersonCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetPerson> requestClient, ILogger<ShowroomPersonCreatedConsumer> logger)
+    public ShowroomUserCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<ShowroomUserCreatedConsumer> logger)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;
@@ -23,62 +23,62 @@ public class ShowroomPersonCreatedConsumer : IConsumer<PersonCreated>
         _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<PersonCreated> context)
+    public async Task Consume(ConsumeContext<UserCreated> context)
     {
         var message = context.Message;
 
         _currentUserService.SetCurrentUser(message.CreatedById);
 
-        var messageR = await _requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, (message.CreatedById)));
+        var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new CreateUserCommand(message2.PersonId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
+        var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }
 }
 
-public class ShowroomPersonDeletedConsumer : IConsumer<PersonDeleted>
+public class ShowroomUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
 
-    public ShowroomPersonDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public ShowroomUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _currentUserService = currentUserService;
     }
 
-    public async Task Consume(ConsumeContext<PersonDeleted> context)
+    public async Task Consume(ConsumeContext<UserDeleted> context)
     {
         var message = context.Message;
 
         _currentUserService.SetCurrentUser(message.DeletedById);
 
-        await _mediator.Send(new DeleteUserCommand(message.PersonId));
+        await _mediator.Send(new DeleteUserCommand(message.UserId));
     }
 }
 
-public class ShowroomPersonUpdatedConsumer : IConsumer<PersonUpdated>
+public class ShowroomUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
-    private readonly IRequestClient<GetPerson> _requestClient;
+    private readonly IRequestClient<GetUser> _requestClient;
     private readonly ICurrentUserService _currentUserService;
 
-    public ShowroomPersonUpdatedConsumer(IMediator mediator, IRequestClient<GetPerson> requestClient, ICurrentUserService currentUserService)
+    public ShowroomUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
     {
         _mediator = mediator;
         _requestClient = requestClient;
         _currentUserService = currentUserService;
     }
 
-    public async Task Consume(ConsumeContext<PersonUpdated> context)
+    public async Task Consume(ConsumeContext<UserUpdated> context)
     {
         var message = context.Message;
 
         _currentUserService.SetCurrentUser(message.UpdatedById);
 
-        var messageR = await _requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, message.UpdatedById));
+        var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new UpdateUserCommand(message2.PersonId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
+        var result = await _mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }
 }

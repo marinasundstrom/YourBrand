@@ -1,15 +1,15 @@
-﻿@page "/users/create"
+﻿@page "/usermanagement/users/new"
 @using System.ComponentModel.DataAnnotations
-@using IdentityService.Client
 @inject IUsersClient UsersClient
 @inject IRolesClient RolesClient
+@inject IOrganizationsClient OrganizationsClient
 @inject NavigationManager NavigationManager
 
 @* <MudBreadcrumbs Items="_items"></MudBreadcrumbs> *@
 
-<AppPageTitle>Create user - YourBrand</AppPageTitle>
+<AppPageTitle>New user - YourBrand</AppPageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Create user</MudText>
+<MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">New user</MudText>
 
 <MudContainer Class="mt-16" MaxWidth="MaxWidth.ExtraSmall">
     <MudPaper Elevation="25" Class="pa-8">
@@ -17,17 +17,8 @@
         <EditForm Model="@this" OnValidSubmit="OnSubmit">
             <DataAnnotationsValidator />
 
-            <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
-
-            <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
-
-            <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
-
-            <MudTextField Label="SSN" Class="mb-6" Variant="Variant.Outlined" @bind-Value="SSN" For="() => SSN" />
-
-            <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
-
-            <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role" SearchFunc="SearchRole" ToStringFunc="(x) => x.Name">
+            <MudAutocomplete Label="Organization" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Organization"
+                For="() => Organization" SearchFunc="SearchOrganization" ToStringFunc="(x) => x.Name">
                 <ItemTemplate Context="context2">
                     <MudText Typo="Typo.body1">@context2.Name</MudText>
                 </ItemTemplate>
@@ -37,11 +28,21 @@
                 </ItemSelectedTemplate>
             </MudAutocomplete>
 
+            <MudTextField Label="First Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="FirstName" For="() => FirstName" />
+
+            <MudTextField Label="Last Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="LastName" For="() => LastName" />
+
+            <MudTextField Label="Display Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="DisplayName" For="() => DisplayName" />
+
+            <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
+
+            @*
             <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Password</MudText>
 
             <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
 
             <MudTextField Class="mb-6" InputType="InputType.Password" Label="Repeat new password" @bind-Value="RepeatPassword" Variant="Variant.Outlined" For="() => RepeatPassword" />
+            *@
 
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create</MudButton>
 
@@ -50,6 +51,8 @@
 </MudContainer>
 
 @code {
+    public Organization Organization { get; set; } = null!;
+
     [Required]
     public string FirstName { get; set; } = null!;
 
@@ -59,14 +62,10 @@
     public string? DisplayName { get; set; }
 
     [Required]
-    public string SSN { get; set; } = null!;
-
-    [Required]
-    public RoleDto Role { get; set; } = null!;
-
-    [Required]
     [EmailAddress]
     public string Email { get; set; } = null!;
+
+    /*
 
     [Required]
     public string Password { get; set; } = null!;
@@ -74,6 +73,8 @@
     [Required]
     [Compare(nameof(Password))]
     public string RepeatPassword { get; set; } = null!;
+
+    */
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -86,18 +87,16 @@
     {
         try
         {
-            UserDto result = await UsersClient.CreateUserAsync(new CreateUserDto
+            User result = await UsersClient.CreateUserAsync(new CreateUser
             {
+                OrganizationId = Organization.Id,
                 FirstName = FirstName,
                 LastName = LastName,
                 DisplayName = DisplayName,
-                Ssn = SSN,
-                Email = Email,
-                Role = Role.Name,
-                Password = Password
+                Email = Email
             });
 
-            NavigationManager.NavigateTo($"/Users/{result.Id}");
+            NavigationManager.NavigateTo($"/usermanagement/Users/{result.Id}");
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -105,11 +104,27 @@
         }
     }
 
-    async Task<IEnumerable<RoleDto>> SearchRole(string text)
+    async Task<IEnumerable<Role>> SearchRole(string text)
     {
         try
         {
             var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task<IEnumerable<Organization>> SearchOrganization(string text)
+    {
+        try
+        {
+            var results = await OrganizationsClient.GetOrganizationsAsync(0, 10, text, null, null);
+
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

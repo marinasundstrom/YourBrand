@@ -33,7 +33,7 @@ public class TimeReportPersonCreatedConsumer : IConsumer<PersonCreated>
         var messageR = await _requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, message.CreatedById));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new CreateUserCommand(message2.PersonId, message2.OrganizationId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
+        var result = await _mediator.Send(new CreateUserCommand(message2.PersonId, message2.OrganizationId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }
 }
 
@@ -80,6 +80,6 @@ public class TimeReportPersonUpdatedConsumer : IConsumer<PersonUpdated>
         var messageR = await _requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, (message.UpdatedById)));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new UpdateUserCommand(message2.PersonId, message2.FirstName, message2.LastName, message2.DisplayName, message2.SSN, message2.Email));
+        var result = await _mediator.Send(new UpdateUserCommand(message2.PersonId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }
 }

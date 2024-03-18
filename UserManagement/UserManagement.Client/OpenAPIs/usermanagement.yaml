@@ -1,0 +1,550 @@
+x-generator: NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: User Management
+  version: v1
+servers:
+- url: https://localhost:5113
+paths:
+  /Organizations:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganizations
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfOrganization'
+    post:
+      tags:
+      - Organizations
+      operationId: Organizations_CreateOrganization
+      requestBody:
+        x-name: createOrganizationDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganization'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+  /Organizations/{id}:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    delete:
+      tags:
+      - Organizations
+      operationId: Organizations_DeleteOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Organizations/{id}/Details:
+    put:
+      tags:
+      - Organizations
+      operationId: Organizations_UpdateOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: updateOrganizationDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganization'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+  /Roles:
+    get:
+      tags:
+      - Roles
+      operationId: Roles_GetRoles
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfRole'
+  /Sync:
+    post:
+      tags:
+      - Sync
+      operationId: Sync_SyncData
+      responses:
+        200:
+          description: ''
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /Users:
+    get:
+      tags:
+      - Users
+      operationId: Users_GetUsers
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfUser'
+    post:
+      tags:
+      - Users
+      operationId: Users_CreateUser
+      requestBody:
+        x-name: createUserDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /Users/{id}:
+    get:
+      tags:
+      - Users
+      operationId: Users_GetUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+      - Users
+      operationId: Users_DeleteUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Users/{id}/Roles:
+    get:
+      tags:
+      - Users
+      operationId: Users_GetUserRoles
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfRole'
+  /Users/{id}/Details:
+    put:
+      tags:
+      - Users
+      operationId: Users_UpdateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: updateUserDetailsDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDetails'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /Users/{id}/Role:
+    post:
+      tags:
+      - Users
+      operationId: Users_UpdateRole
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: updateUserRoleDtoDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRole'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+components:
+  schemas:
+    ItemsResultOfOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        totalItems:
+          type: integer
+          format: int32
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        friendlyName:
+          type: string
+          nullable: true
+    SortDirection:
+      type: string
+      description: ''
+      x-enumNames:
+      - Desc
+      - Asc
+      enum:
+      - Desc
+      - Asc
+    CreateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        friendlyName:
+          type: string
+          nullable: true
+    UpdateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    ItemsResultOfRole:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        totalItems:
+          type: integer
+          format: int32
+    Role:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    ItemsResultOfUser:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        totalItems:
+          type: integer
+          format: int32
+    User:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        organization:
+          $ref: '#/components/schemas/Organization'
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        email:
+          type: string
+        created:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+    CreateUser:
+      type: object
+      additionalProperties: false
+      properties:
+        organizationId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        title:
+          type: string
+        role:
+          type: string
+        ssn:
+          type: string
+        email:
+          type: string
+        reportsTo:
+          type: string
+          nullable: true
+        password:
+          type: string
+    UpdateUserDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        title:
+          type: string
+        ssn:
+          type: string
+        email:
+          type: string
+        reportsTo:
+          type: string
+          nullable: true
+    UpdateUserRole:
+      type: object
+      additionalProperties: false
+      properties:
+        role:
+          type: string

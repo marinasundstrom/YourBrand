@@ -47,4 +47,6 @@ public static class ServiceUrls
     public const string InventoryServiceUrl = $"{RootUrl}/inventory";
 
     public const string AnalyticsServiceUrl = $"{RootUrl}/analytics";
+
+    public const string UserManagementServiceUrl = $"{RootUrl}/usermanagement";
 }

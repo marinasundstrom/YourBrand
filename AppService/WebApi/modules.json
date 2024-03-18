@@ -83,5 +83,10 @@
         "Name": "Analytics",
         "Assembly": "Analytics.UI",
         "Enabled": true
+    },
+    {
+        "Name": "User Management",
+        "Assembly": "UserManagement.UI",
+        "Enabled": true
     }
 ]
