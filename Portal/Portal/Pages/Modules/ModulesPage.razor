@@ -7,11 +7,11 @@
 @inject IModulesClient ModulesClient
 @inject IDialogService DialogService
 
-<AppPageTitle>@T["Modules"] - YourBrand</AppPageTitle>
+<AppPageTitle>@T["Modules"]</AppPageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Modules"]</MudText>
 
-<MudButton OnClick="Refresh">Refresh</MudButton>
+<MudButton Variant="@Variant.Filled" Class="mb-4" OnClick="Reload">Reload app</MudButton>
 
 <MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
@@ -71,7 +71,7 @@
 
             module.Enabled = !module.Enabled;
 
-            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info, config => { config.Onclick = async (Snackbar snackbar) => await Refresh(); });
+            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info, config => { config.Onclick = async (Snackbar snackbar) => await Reload(); });
         }
         catch(Exception) 
         {
@@ -84,9 +84,9 @@
         //NavigationManager.NavigateTo($"/modules/{args.Item.Id}");
     }
 
-    private async Task Refresh() 
+    private async Task Reload() 
     {   
-        var r = await DialogService.ShowMessageBox("Refresh site", "Are you sure?", "Yes, refresh", "Abort");
+        var r = await DialogService.ShowMessageBox("Reload app", "Are you sure?", "Yes, reload", "Cancel");
 
         if(r.GetValueOrDefault()) 
         {
