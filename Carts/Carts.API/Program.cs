@@ -31,10 +31,6 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddDiscoveryClient();
 }
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
-    .AddApiVersioningServices();
-
 string GetCartsExpire20 = nameof(GetCartsExpire20);
 
 builder.Services.AddOutputCache(options =>
@@ -115,7 +111,7 @@ app.MapObservability();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 
 app.UseOutputCache();

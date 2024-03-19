@@ -24,11 +24,11 @@ public static class Endpoints
             .WithName($"Carts_{nameof(GetCarts)}")
             .CacheOutput(GetCartsExpire20);
 
+        group.MapGet("/GetByTag/{tag}", GetCartByTag)
+            .WithName($"Carts_{nameof(GetCartByTag)}");
+
         group.MapGet("/{id}", GetCartById)
             .WithName($"Carts_{nameof(GetCartById)}");
-
-        group.MapGet("/GetByTag/{id}", GetCartByTag)
-            .WithName($"Carts_{nameof(GetCartByTag)}");
 
         group.MapPost("/", CreateCart)
             .WithName($"Carts_{nameof(CreateCart)}");

@@ -45,9 +45,9 @@ public sealed class GetCartByTagConsumer(IMediator mediator) : IConsumer<GetCart
 {
     public async Task Consume(ConsumeContext<GetCartByTag> context)
     {
-        var id = context.Message.Tag;
+        var tag = context.Message.Tag;
 
-        var r = await mediator.Send(new Requests.GetCartByTag(id), context.CancellationToken);
+        var r = await mediator.Send(new Requests.GetCartByTag(tag), context.CancellationToken);
         var cart = r.GetValue();
 
         await context.RespondAsync(new GetCartByTagResponse { Cart = cart.Map() });

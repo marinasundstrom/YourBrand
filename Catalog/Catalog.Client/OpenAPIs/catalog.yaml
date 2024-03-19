@@ -1086,6 +1086,45 @@ paths:
                 $ref: '#/components/schemas/Product'
         400:
           description: ''
+  /v1/products/ByIds:
+    get:
+      tags:
+      - Products
+      - Products
+      operationId: Products_GetProductsByIds
+      parameters:
+      - name: ids
+        in: query
+        style: form
+        explode: true
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+        x-position: 1
+      - name: storeId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      - name: brandIdOrHandle
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
   /v1/products/{idOrHandle}:
     get:
       tags:

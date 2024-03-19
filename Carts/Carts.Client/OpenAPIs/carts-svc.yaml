@@ -4,305 +4,305 @@ info:
   title: Carts.API
   version: v1
 servers:
-  - url: https://localhost:7154
+- url: https://localhost:7154
 paths:
   /v1/carts:
     get:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_GetCarts
       parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 1
-          x-position: 1
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-          x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfCart"
+                $ref: '#/components/schemas/PagedResultOfCart'
     post:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_CreateCart
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateCartRequest"
+              $ref: '#/components/schemas/CreateCartRequest'
         required: true
         x-position: 1
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cart"
+                $ref: '#/components/schemas/Cart'
         404:
-          description: ""
+          description: ''
+  /v1/carts/GetByTag/{tag}:
+    get:
+      tags:
+      - Carts
+      - Carts
+      operationId: Carts_GetCartByTag
+      parameters:
+      - name: tag
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        404:
+          description: ''
   /v1/carts/{id}:
     get:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_GetCartById
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cart"
+                $ref: '#/components/schemas/Cart'
         404:
-          description: ""
-  /v1/carts/GetByTag:
-    get:
-      tags:
-        - Carts
-        - Carts
-      operationId: Carts_GetCartByTag
-      parameters:
-        - name: tag
-          in: query
-          required: true
-          schema:
-            type: string
-          x-position: 1
-      responses:
-        200:
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Cart"
-        404:
-          description: ""
+          description: ''
   /v1/carts/{id}/items:
     post:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_AddCartItem
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: cartItemRequest
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddCartItemRequest"
+              $ref: '#/components/schemas/AddCartItemRequest'
         required: true
         x-position: 2
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
   /v1/carts/{cartId}/items/{id}:
     get:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_GetCartItemById
       parameters:
-        - name: cartId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
     delete:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_RemoveCartItem
       parameters:
-        - name: cartId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/carts/{cartId}/items/{id}/price:
     put:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_UpdateCartItemPrice
       parameters:
-        - name: cartId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
-        - name: price
-          in: query
-          required: true
-          schema:
-            type: number
-            format: decimal
-          x-position: 3
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: price
+        in: query
+        required: true
+        schema:
+          type: number
+          format: decimal
+        x-position: 3
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
   /v1/carts/{cartId}/items/{id}/quantity:
     put:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_UpdateCartItemQuantity
       parameters:
-        - name: cartId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
-        - name: quantity
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int32
-          x-position: 3
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: quantity
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 3
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
   /v1/carts/{cartId}/items/{id}/data:
     put:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_UpdateCartItemData
       parameters:
-        - name: cartId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
-        - name: data
-          in: query
-          required: true
-          schema:
-            type: string
-          x-position: 3
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: data
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 3
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartItem"
+                $ref: '#/components/schemas/CartItem'
         404:
-          description: ""
+          description: ''
   /v1/carts/{cartId}/items:
     delete:
       tags:
-        - Carts
-        - Carts
+      - Carts
+      - Carts
       operationId: Carts_ClearCart
       parameters:
-        - name: cartId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
 components:
   schemas:
     PagedResultOfCart:
@@ -312,7 +312,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/Cart"
+            $ref: '#/components/schemas/Cart'
         total:
           type: integer
           format: int32
@@ -330,7 +330,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/CartItem"
+            $ref: '#/components/schemas/CartItem'
         created:
           type: string
           format: date-time
@@ -434,9 +434,3 @@ components:
         data:
           type: string
           nullable: true
-  securitySchemes:
-    JWT:
-      type: apiKey
-      description: "Type into the textbox: Bearer {your JWT token}."
-      name: Authorization
-      in: header

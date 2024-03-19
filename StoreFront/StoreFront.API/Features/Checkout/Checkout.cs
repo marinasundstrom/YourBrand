@@ -49,13 +49,76 @@ public sealed record Checkout(
 
             string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
 
-            var cart = await cartsClient.GetCartByTagAsync(tag);
+            Console.WriteLine("Tag: " + tag);
+
+            var cart = await cartsClient.GetCartByTagAsync(tag, cancellationToken);
 
             var items = new List<CreateOrderItem>();
 
+            await CreateOrderItems(cart, items, cancellationToken);
+
+            const int OrderStatusOpen = 2;
+
+            await _ordersClient.CreateOrderAsync(new CreateOrderRequest()
+            {
+                Status = OrderStatusOpen,
+                CustomerId = customerId?.ToString(),
+                BillingDetails = new BillingDetails
+                {
+                    FirstName = request.BillingDetails.FirstName,
+                    LastName = request.BillingDetails.LastName,
+                    Ssn = request.BillingDetails.SSN,
+                    Email = request.BillingDetails.Email,
+                    PhoneNumber = request.BillingDetails.PhoneNumber,
+                    Address = Map(request.BillingDetails.Address)
+                },
+                ShippingDetails = new ShippingDetails
+                {
+                    FirstName = request.ShippingDetails.FirstName,
+                    LastName = request.ShippingDetails.LastName,
+                    CareOf = request.ShippingDetails.CareOf,
+                    Address = Map(request.ShippingDetails.Address)
+                },
+                Items = items.ToList()
+            }, cancellationToken);
+
+            foreach (var item in items)
+            {
+                if (item.ItemId is null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    await productsClient1.ReserveItemsAsync("main-warehouse", item.ItemId, new YourBrand.Inventory.Client.ReserveItems() { Quantity = (int)item.Quantity });
+                }
+                catch (Exception e)
+                {
+                }
+            }
+
+            //await cartsClient.CheckoutAsync(cart.Id);
+            await cartsClient.ClearCartAsync(cart.Id);
+        }
+
+        private async Task CreateOrderItems(Carts.Cart cart, List<CreateOrderItem> items, CancellationToken cancellationToken)
+        {
+            var productIds = cart.Items
+                .Where(x => x.ProductId is not null)
+                .Select(x => x.ProductId.GetValueOrDefault())
+                .Distinct();
+
+            var products = await productsClient2.GetProductsByIdsAsync(productIds, null, null, cancellationToken);
+
             foreach (var cartItem in cart.Items)
             {
-                var product = await productsClient2.GetProductByIdAsync(cartItem.ProductId.ToString()!, cancellationToken);
+                var product = products.FirstOrDefault(x => x.Id == cartItem.ProductId);
+
+                if(product is null) 
+                {
+                    throw new Exception("Product not found");
+                }
 
                 var options = JsonSerializer.Deserialize<IEnumerable<Option>>(cartItem.Data!, new JsonSerializerOptions
                 {
@@ -125,7 +188,7 @@ public sealed record Checkout(
                     .Sum();
                     */
 
-                items.Add(new YourBrand.Sales.CreateOrderItem
+                items.Add(new CreateOrderItem
                 {
                     Description = product.Name,
                     ItemId = cartItem.ProductId?.ToString(),
@@ -137,50 +200,6 @@ public sealed record Checkout(
                     Discount = cartItem.RegularPrice is null ? null : cartItem.Price - cartItem.RegularPrice.GetValueOrDefault()
                 });
             }
-
-            const int OrderStatusOpen = 2;
-
-            await _ordersClient.CreateOrderAsync(new CreateOrderRequest()
-            {
-                Status = OrderStatusOpen,
-                CustomerId = customerId?.ToString(),
-                BillingDetails = new BillingDetails
-                {
-                    FirstName = request.BillingDetails.FirstName,
-                    LastName = request.BillingDetails.LastName,
-                    Ssn = request.BillingDetails.SSN,
-                    Email = request.BillingDetails.Email,
-                    PhoneNumber = request.BillingDetails.PhoneNumber,
-                    Address = Map(request.BillingDetails.Address)
-                },
-                ShippingDetails = new ShippingDetails
-                {
-                    FirstName = request.ShippingDetails.FirstName,
-                    LastName = request.ShippingDetails.LastName,
-                    CareOf = request.ShippingDetails.CareOf,
-                    Address = Map(request.ShippingDetails.Address)
-                },
-                Items = items.ToList()
-            }, cancellationToken);
-
-            foreach (var item in items)
-            {
-                if(item.ItemId is null) 
-                {
-                    continue;
-                }
-
-                try
-                {
-                    await productsClient1.ReserveItemsAsync("main-warehouse", item.ItemId, new YourBrand.Inventory.Client.ReserveItems() { Quantity = (int)item.Quantity });
-                }
-                catch (Exception e)
-                {
-                }
-            }
-
-            //await cartsClient.CheckoutAsync(cart.Id);
-            await cartsClient.ClearCartAsync(cart.Id);
         }
 
         private YourBrand.Sales.Address Map(AddressDto address)

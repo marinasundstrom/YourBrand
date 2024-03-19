@@ -97,7 +97,18 @@ public static class ServiceExtensions
         configureBuilder?.Invoke(builder);
 
         services.AddHttpClient<ICheckoutClient>("StoreFront")
-            .AddTypedClient<ICheckoutClient>((http, sp) => new YourBrand.StoreFront.CheckoutClient(http));
+            .AddTypedClient<ICheckoutClient>((http, sp) =>
+            {
+                var renderingContext = sp.GetRequiredService<RenderingContext>();
+                if (!renderingContext.IsPrerendering)
+                {
+                    var clientId = JsonSerializer.Deserialize<string>(
+                        sp.GetRequiredService<IJSInProcessRuntime>().Invoke<string>("getCid"));
+
+                    http.DefaultRequestHeaders.Add("X-Client-Id", clientId);
+                }
+                return new CheckoutClient(http);
+            });
 
         return services;
     }

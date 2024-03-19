@@ -46,6 +46,9 @@ public static partial class Endpoints
             .WithName($"Products_{nameof(GetProducts)}")
             .CacheOutput(OutputCachePolicyNames.GetProducts);
 
+        group.MapGet("/ByIds", GetProductsByIds)
+            .WithName($"Products_{nameof(GetProductsByIds)}");
+
         group.MapGet("/{idOrHandle}", GetProductById)
             .WithName($"Products_{nameof(GetProductById)}")
             .CacheOutput(OutputCachePolicyNames.GetProductById);
@@ -118,6 +121,12 @@ public static partial class Endpoints
         int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
         var pagedResult = await mediator.Send(new GetProducts(storeId, brandIdOrHandle, includeUnlisted, groupProducts, categoryPathOrId, searchTerm, page, pageSize, sortBy, sortDirection), cancellationToken);
+        return TypedResults.Ok(pagedResult);
+    }
+
+    private static async Task<Ok<IEnumerable<ProductDto>>> GetProductsByIds(long[] ids, string? storeId = null, string? brandIdOrHandle = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    {
+        var pagedResult = await mediator.Send(new GetProductsByIds(ids, storeId, brandIdOrHandle), cancellationToken);
         return TypedResults.Ok(pagedResult);
     }
 

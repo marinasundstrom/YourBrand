@@ -6,16 +6,17 @@ using FluentValidation;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
 
 public record GetCartByTag(string Tag) : IRequest<Result<Cart>>
 {
-    public class Validator : AbstractValidator<GetCartById>
+    public class Validator : AbstractValidator<GetCartByTag>
     {
         public Validator()
         {
-            RuleFor(x => x.Id).NotEmpty();
+            RuleFor(x => x.Tag).NotEmpty();
         }
     }
 
