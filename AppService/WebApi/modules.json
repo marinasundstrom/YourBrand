@@ -85,7 +85,7 @@
         "Enabled": true
     },
     {
-        "Name": "User Management",
+        "Name": "Identity Management",
         "Assembly": "IdentityManagement.UI",
         "Enabled": true
     }

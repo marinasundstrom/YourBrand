@@ -19,7 +19,7 @@ string MyAllowSpecificOrigins = "MyPolicy";
 
 var builder = WebApplication.CreateBuilder(args);
 
-string ServiceName = "User Management";
+string ServiceName = "Identity Management";
 string ServiceVersion = "1.0";
 
 // Add services to container

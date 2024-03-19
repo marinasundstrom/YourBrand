@@ -3,7 +3,7 @@
 Nginx has been replaced by YARP - the Proxy project.
 
 * Portal: https://localhost:5174/ (Actually the reverse proxy)
-* User Management: https://localhost:5040/
+* Identity Management: https://localhost:5040/
 * Store: https://localhost:7188/
 
 ## Run dependencies in Docker
