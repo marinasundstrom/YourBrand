@@ -104,7 +104,8 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ItemDialog.Id), dto?.Id);
+            parameters.Add(nameof(ItemDialog.WarehouseId), dto?.Warehouse.Id);
+            parameters.Add(nameof(ItemDialog.ItemId), dto?.Item.Id);
 
             var dialogReference = DialogService.Show<ItemDialog>(dto is null ? "New Item" : $"Update {dto.Item.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
@@ -128,7 +129,7 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(AdjustQuantityOnHandDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(AdjustQuantityOnHandDialog.ItemId), dto?.Item.Id);
 
             var dialogReference = DialogService.Show<AdjustQuantityOnHandDialog>("Adjust Quantity on Hand", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
@@ -141,7 +142,7 @@
            var tableData = GetTableData();
            var item = tableData.Items.First(x => x.Id == dto.Id);
 
-           var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto.Id);
+            var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto?.Item.Id);
 
             item.QuantityAvailable = item2.QuantityAvailable;
             item.QuantityOnHand = item2.QuantityOnHand;
@@ -161,7 +162,7 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(PickItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(PickItemsDialog.ItemId), dto?.Item.Id);
 
             var dialogReference = DialogService.Show<PickItemsDialog>("Pick items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
@@ -174,7 +175,7 @@
            var tableData = GetTableData();
            var item = tableData.Items.First(x => x.Id == dto.Id);
 
-           var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto.Id);
+            var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto?.Item.Id);
 
             item.QuantityAvailable = item2.QuantityAvailable;
             item.QuantityOnHand = item2.QuantityOnHand;
@@ -194,7 +195,7 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ReserveItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(ReserveItemsDialog.ItemId), dto?.Item.Id);
 
             var dialogReference = DialogService.Show<ReserveItemsDialog>("Reserve items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
@@ -207,7 +208,7 @@
            var tableData = GetTableData();
            var item = tableData.Items.First(x => x.Id == dto.Id);
 
-           var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto.Id);
+            var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto?.Item.Id);
 
             item.QuantityAvailable = item2.QuantityAvailable;
             item.QuantityOnHand = item2.QuantityOnHand;
@@ -227,7 +228,7 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ShipItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(ShipItemsDialog.ItemId), dto?.Item.Id);
 
             var dialogReference = DialogService.Show<ShipItemsDialog>("Ship items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
@@ -240,7 +241,7 @@
            var tableData = GetTableData();
            var item = tableData.Items.First(x => x.Id == dto.Id);
 
-           var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto.Id);
+            var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto?.Item.Id);
 
             item.QuantityAvailable = item2.QuantityAvailable;
             item.QuantityOnHand = item2.QuantityOnHand;
@@ -260,7 +261,7 @@
         try
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(ReceiveItemsDialog.ItemId), dto?.Id);
+            parameters.Add(nameof(ReceiveItemsDialog.ItemId), dto?.Item.Id);
 
             var dialogReference = DialogService.Show<ReceiveItemsDialog>("Receive items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
@@ -273,7 +274,7 @@
            var tableData = GetTableData();
            var item = tableData.Items.First(x => x.Id == dto.Id);
 
-           var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto.Id);
+            var item2 = await WarehouseItemsClient.GetItemAsync(Warehouse?.Id, dto?.Item.Id);
 
             item.QuantityAvailable = item2.QuantityAvailable;
             item.QuantityOnHand = item2.QuantityOnHand;

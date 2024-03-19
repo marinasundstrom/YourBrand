@@ -256,7 +256,7 @@ Delete
                 <MudTable T="OrderItemViewModel" @ref="table" Items="Model.Items" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
                     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateOrderItem(e.Item)">
                     <HeaderContent>
-                        <MudTh>Item Id</MudTh>
+                        <MudTh>Product Id</MudTh>
                         <MudTh>Description</MudTh>
                         <MudTh>Quantity</MudTh>
                         <MudTh>Unit</MudTh>
@@ -287,7 +287,7 @@ Delete
                         }
                     </HeaderContent>
                     <RowTemplate Context="orderItem">
-                        <MudTd DataLabel="Item Id">@orderItem.ItemId</MudTd>
+                        <MudTd DataLabel="Product Id"><a href="/products/@orderItem.ItemId">@orderItem.ItemId</a></MudTd>
                         <MudTd DataLabel="Description">@orderItem.Description</MudTd>
                         <MudTd DataLabel="Quantity">@orderItem.Quantity</MudTd>
                         <MudTd DataLabel="Unit">@orderItem.Unit</MudTd>

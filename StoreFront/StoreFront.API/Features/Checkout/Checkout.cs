@@ -19,7 +19,7 @@ public sealed record Checkout(
         private readonly YourBrand.Sales.IOrdersClient _ordersClient;
         private readonly YourBrand.Carts.ICartsClient cartsClient;
         //private readonly IItemsClient productsClient;
-        private readonly YourBrand.Inventory.Client.IWarehouseItemsClient productsClient1;
+        private readonly YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient;
         private readonly YourBrand.Catalog.IProductsClient productsClient2;
         private readonly ICurrentUserService currentUserService;
         //private readonly ICartHubService cartHubService;
@@ -28,7 +28,7 @@ public sealed record Checkout(
             YourBrand.Sales.IOrdersClient ordersClient,
             YourBrand.Carts.ICartsClient cartsClient,
             //YourBrand.Inventory.IItemsClient productsClient,
-            YourBrand.Inventory.Client.IWarehouseItemsClient productsClient1,
+            YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient,
             YourBrand.Catalog.IProductsClient productsClient2,
             //ICartHubService cartHubService,
             ICurrentUserService currentUserService)
@@ -36,7 +36,7 @@ public sealed record Checkout(
             _ordersClient = ordersClient;
             this.cartsClient = cartsClient;
             //this.productsClient = productsClient;
-            //this.productsClient1 = productsClient1;
+            this.warehouseItemsClient = warehouseItemsClient;
             this.productsClient2 = productsClient2;
             this.currentUserService = currentUserService;
             //this.cartHubService = cartHubService;
@@ -48,8 +48,6 @@ public sealed record Checkout(
             var clientId = currentUserService.ClientId;
 
             string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
-
-            Console.WriteLine("Tag: " + tag);
 
             var cart = await cartsClient.GetCartByTagAsync(tag, cancellationToken);
 
@@ -82,24 +80,39 @@ public sealed record Checkout(
                 Items = items.ToList()
             }, cancellationToken);
 
-            foreach (var item in items)
+            await UpdateInventory(cart, cancellationToken);
+
+            //await cartsClient.CheckoutAsync(cart.Id);
+            await cartsClient.ClearCartAsync(cart.Id);
+        }
+
+        private async Task UpdateInventory(Carts.Cart cart, CancellationToken cancellationToken)
+        {
+            var productIds = cart.Items
+                .Where(x => x.ProductId is not null)
+                .Select(x => x.ProductId.GetValueOrDefault())
+                .Distinct();
+
+            var products = await productsClient2.GetProductsByIdsAsync(productIds, null, null, cancellationToken);
+
+            foreach (var item in cart.Items)
             {
-                if (item.ItemId is null)
+                var product = products.FirstOrDefault(x => x.Id == item.ProductId);
+
+                if (product?.Sku is null)
                 {
                     continue;
                 }
 
-                try
+                try 
                 {
-                    await productsClient1.ReserveItemsAsync("main-warehouse", item.ItemId, new YourBrand.Inventory.Client.ReserveItems() { Quantity = (int)item.Quantity });
+                    await warehouseItemsClient.ReserveItemsAsync("main-warehouse", product.Sku, new YourBrand.Inventory.Client.ReserveItems() { Quantity = (int)item.Quantity });
                 }
-                catch (Exception e)
+                catch(Exception) 
                 {
+                    Console.WriteLine("Failed to reserve item");
                 }
             }
-
-            //await cartsClient.CheckoutAsync(cart.Id);
-            await cartsClient.ClearCartAsync(cart.Id);
         }
 
         private async Task CreateOrderItems(Carts.Cart cart, List<CreateOrderItem> items, CancellationToken cancellationToken)

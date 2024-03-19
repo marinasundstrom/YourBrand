@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Documents": {
+    "Inventory": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5150",

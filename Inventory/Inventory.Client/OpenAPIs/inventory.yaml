@@ -133,14 +133,15 @@ paths:
       responses:
         200:
           description: ''
-  /v1/WarehouseItems:
+  /v1/Warehouses/{warehouseId}/Items:
     get:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_GetItems
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -197,7 +198,8 @@ paths:
       operationId: WarehouseItems_CreateItem
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -216,14 +218,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseItem'
-  /v1/WarehouseItems/{id}:
+  /v1/Warehouses/{warehouseId}/Items/{id}:
     get:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_GetItem
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -246,7 +249,8 @@ paths:
       operationId: WarehouseItems_UpdateItem
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -273,7 +277,8 @@ paths:
       operationId: WarehouseItems_DeleteItem
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -286,14 +291,15 @@ paths:
       responses:
         200:
           description: ''
-  /v1/WarehouseItems/{id}/QuantityOnHand:
+  /v1/Warehouses/{warehouseId}/Items/{id}/QuantityOnHand:
     put:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_AdjustQuantityOnHand
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -314,14 +320,15 @@ paths:
       responses:
         200:
           description: ''
-  /v1/WarehouseItems/{id}/Reserve:
+  /v1/Warehouses/{warehouseId}/Items/{id}/Reserve:
     put:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_ReserveItems
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -342,14 +349,15 @@ paths:
       responses:
         200:
           description: ''
-  /v1/WarehouseItems/{id}/Pick:
+  /v1/Warehouses/{warehouseId}/Items/{id}/Pick:
     put:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_PickItems
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -370,14 +378,15 @@ paths:
       responses:
         200:
           description: ''
-  /v1/WarehouseItems/{id}/Ship:
+  /v1/Warehouses/{warehouseId}/Items/{id}/Ship:
     put:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_ShipItems
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -398,14 +407,15 @@ paths:
       responses:
         200:
           description: ''
-  /v1/WarehouseItems/{id}/Receive:
+  /v1/Warehouses/{warehouseId}/Items/{id}/Receive:
     put:
       tags:
       - WarehouseItems
       operationId: WarehouseItems_ReceiveItems
       parameters:
       - name: warehouseId
-        in: query
+        in: path
+        required: true
         schema:
           type: string
         x-position: 1
@@ -1002,8 +1012,6 @@ components:
       properties:
         itemId:
           type: string
-        warehouseId:
-          type: string
         location:
           type: string
         quantityOnHand:
@@ -1142,9 +1150,3 @@ components:
       properties:
         name:
           type: string
-  securitySchemes:
-    JWT:
-      type: apiKey
-      description: 'Type into the textbox: Bearer {your JWT token}.'
-      name: Authorization
-      in: header

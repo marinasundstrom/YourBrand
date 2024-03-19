@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
-public record PickWarehouseItems(string Id, int Quantity, bool FromReserved = false) : IRequest
+public record PickWarehouseItems(string WarehouseId, string Id, int Quantity, bool FromReserved = false) : IRequest
 {
     public class Handler : IRequestHandler<PickWarehouseItems>
     {
@@ -19,7 +19,7 @@ public record PickWarehouseItems(string Id, int Quantity, bool FromReserved = fa
 
         public async Task Handle(PickWarehouseItems request, CancellationToken cancellationToken)
         {
-            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
 
             if (item is null) throw new Exception();
 

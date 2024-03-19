@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
-public record DeleteWarehouseItem(string WarehouseItemId) : IRequest
+public record DeleteWarehouseItem(string WarehouseId, string Id) : IRequest
 {
     public class Handler : IRequestHandler<DeleteWarehouseItem>
     {
@@ -19,23 +19,13 @@ public record DeleteWarehouseItem(string WarehouseItemId) : IRequest
 
         public async Task Handle(DeleteWarehouseItem request, CancellationToken cancellationToken)
         {
-            /*
-            var invoice = await _context.WarehouseItems
-                //.Include(i => i.Addresses)
-                .AsSplitQuery()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.WarehouseItemId, cancellationToken);
+            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
 
-            if(invoice is null)
-            {
-                throw new Exception();
-            }
+            if (item is null) throw new Exception();
 
-            _context.WarehouseItems.Remove(invoice);
+            _context.WarehouseItems.Remove(item);
 
             await _context.SaveChangesAsync(cancellationToken);
-            */
-
         }
     }
 }

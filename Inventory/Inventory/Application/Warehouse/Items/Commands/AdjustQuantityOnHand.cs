@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
-public record AdjustQuantityOnHand(string Id, int NewQuantityOnHand) : IRequest
+public record AdjustQuantityOnHand(string WarehouseId, string Id, int NewQuantityOnHand) : IRequest
 {
     public class Handler : IRequestHandler<AdjustQuantityOnHand>
     {
@@ -19,7 +19,7 @@ public record AdjustQuantityOnHand(string Id, int NewQuantityOnHand) : IRequest
 
         public async Task Handle(AdjustQuantityOnHand request, CancellationToken cancellationToken)
         {
-            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var item = await _context.WarehouseItems.FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
 
             if (item is null) throw new Exception();
 

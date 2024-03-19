@@ -7,7 +7,7 @@ using YourBrand.Inventory.Application.Warehouses.Items;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Queries;
 
-public record GetWarehouseItem(string WarehouseItemId) : IRequest<WarehouseItemDto?>
+public record GetWarehouseItem(string WarehouseId, string Id) : IRequest<WarehouseItemDto?>
 {
     public class Handler : IRequestHandler<GetWarehouseItem, WarehouseItemDto?>
     {
@@ -27,7 +27,7 @@ public record GetWarehouseItem(string WarehouseItemId) : IRequest<WarehouseItemD
                 .ThenInclude(x => x.Site)
                 .AsSplitQuery()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == request.WarehouseItemId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.WarehouseId == request.WarehouseId && x.ItemId == request.Id, cancellationToken);
 
             return person?.ToDto();
         }

@@ -75,7 +75,7 @@
 
         if (Id is not null) 
         {
-            var item = await WarehouseItemsClient.GetItemAsync(WarehouseId, Id);
+            var item = await WarehouseItemsClient.GetItemAsync(WarehouseId, ItemId);
             Id = item.Id;
             Warehouse = item.Warehouse;
             Location = item.Location;
@@ -88,7 +88,6 @@
         {
             var item = await WarehouseItemsClient.CreateItemAsync(Warehouse?.Id, new CreateWarehouseItem {
                 ItemId = ItemId,
-                WarehouseId = Warehouse.Id,
                 Location = Location,
                 QuantityOnHand = QuantityOnHand,
                 QuantityThreshold = QuantityThreshold

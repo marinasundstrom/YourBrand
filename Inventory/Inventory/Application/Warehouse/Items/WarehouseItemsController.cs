@@ -14,7 +14,7 @@ namespace YourBrand.Inventory.Application.Warehouses.Items;
 
 [ApiController]
 [ApiVersion("1")]
-[Route("v{version:apiVersion}/[controller]")]
+[Route("v{version:apiVersion}/Warehouses/{warehouseId}/Items")]
 public class WarehouseItemsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -33,25 +33,25 @@ public class WarehouseItemsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<WarehouseItemDto?> GetItem(string warehouseId, string id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetWarehouseItem(id), cancellationToken);
+        return await _mediator.Send(new GetWarehouseItem(warehouseId, id), cancellationToken);
     }
 
     [HttpPost]
     public async Task<WarehouseItemDto> CreateItem(string warehouseId, CreateWarehouseItemDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new AddWarehouseItem(dto.ItemId, dto.WarehouseId, dto.Location, dto.QuantityOnHand, dto.QuantityThreshold), cancellationToken);
+        return await _mediator.Send(new AddWarehouseItem(dto.ItemId, warehouseId, dto.Location, dto.QuantityOnHand, dto.QuantityThreshold), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateItem(string warehouseId, string id, UpdateWarehouseItemDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateWarehouseItem(id, dto.Location), cancellationToken);
+        await _mediator.Send(new UpdateWarehouseItem(warehouseId, id, dto.Location), cancellationToken);
     }
 
     [HttpPut("{id}/QuantityOnHand")]
     public async Task AdjustQuantityOnHand(string warehouseId, string id, AdjustQuantityOnHandDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new AdjustQuantityOnHand(id, dto.Quantity), cancellationToken);
+        await _mediator.Send(new AdjustQuantityOnHand(warehouseId, id, dto.Quantity), cancellationToken);
     }
 
     [HttpPut("{id}/Reserve")]
@@ -63,25 +63,25 @@ public class WarehouseItemsController : ControllerBase
     [HttpPut("{id}/Pick")]
     public async Task PickItems(string warehouseId, string id, PickItemsDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new PickWarehouseItems(id, dto.Quantity, dto.FromReserved), cancellationToken);
+        await _mediator.Send(new PickWarehouseItems(warehouseId, id, dto.Quantity, dto.FromReserved), cancellationToken);
     }
 
     [HttpPut("{id}/Ship")]
     public async Task ShipItems(string warehouseId, string id, ShipItemsDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new ShipWarehouseItems(id, dto.Quantity, dto.FromPicked), cancellationToken);
+        await _mediator.Send(new ShipWarehouseItems(warehouseId, id, dto.Quantity, dto.FromPicked), cancellationToken);
     }
 
     [HttpPut("{id}/Receive")]
     public async Task ReceiveItems(string warehouseId, string id, ReceiveItemsDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new ReceiveWarehouseItems(id, dto.Quantity), cancellationToken);
+        await _mediator.Send(new ReceiveWarehouseItems(warehouseId, id, dto.Quantity), cancellationToken);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteItem(string warehouseId, string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteWarehouseItem(id), cancellationToken);
+        await _mediator.Send(new DeleteWarehouseItem(warehouseId, id), cancellationToken);
     }
 }
 
@@ -95,7 +95,7 @@ public record ShipItemsDto(int Quantity, bool FromPicked = false);
 
 public record ReceiveItemsDto(int Quantity);
 
-public record CreateWarehouseItemDto(string ItemId, string WarehouseId, string Location, int QuantityOnHand, int QuantityThreshold);
+public record CreateWarehouseItemDto(string ItemId, string Location, int QuantityOnHand, int QuantityThreshold);
 
 public record UpdateWarehouseItemDto(string Location);
 
