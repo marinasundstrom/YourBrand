@@ -41,6 +41,8 @@ builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configura
 
 builder.Services.AddProblemDetails();
 
+builder.Services.AddHttpContextAccessor();
+
 string GetCartsExpire20 = nameof(GetCartsExpire20);
 
 builder.Services.AddOutputCache(options =>

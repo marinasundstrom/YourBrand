@@ -8,6 +8,7 @@ using MassTransit;
 using YourBrand.Notifications.Client;
 using YourBrand.Inventory.Domain.Entities;
 using YourBrand.Notifications.Contracts;
+using YourBrand.Identity;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
@@ -22,15 +23,17 @@ public class WarehouseItemEventHandler
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly INotificationsClient _notificationsClient;
     private readonly ILogger<WarehouseItemEventHandler> _logger;
+    private readonly ICurrentUserService _currentUserService;
 
     public WarehouseItemEventHandler(
         IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient,
-        ILogger<WarehouseItemEventHandler> logger)
+        ILogger<WarehouseItemEventHandler> logger, ICurrentUserService currentUserService)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
         _notificationsClient = notificationsClient;
         _logger = logger;
+        _currentUserService = currentUserService;
     }
 
     public async Task Handle(WarehouseItemCreated notification, CancellationToken cancellationToken)
@@ -94,7 +97,7 @@ public class WarehouseItemEventHandler
             {
                 Title = "Inventory",
                 Text = $"Quantity available of {item.Item.Name} is below threshold.",
-                UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
+                UserId = item.CreatedById,
                 //Link = Link
             });
         }

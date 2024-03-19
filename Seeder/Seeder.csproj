@@ -9,8 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
     <ProjectReference Include="..\TimeReport\TimeReport.Client\TimeReport.Client.csproj" />
     <ProjectReference Include="..\IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj" />
   </ItemGroup>

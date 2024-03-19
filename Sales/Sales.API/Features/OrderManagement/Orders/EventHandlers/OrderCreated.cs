@@ -14,7 +14,7 @@ using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, INotificationsClient notificationsClient,
-    ILogger<OrderCreatedEventHandler> logger) : IDomainEventHandler<OrderCreated>
+    ILogger<OrderCreatedEventHandler> logger, ICurrentUserService currentUserService) : IDomainEventHandler<OrderCreated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
 
@@ -41,7 +41,7 @@ public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, I
             {
                 Title = "Sales",
                 Text = $"New order #{order.OrderNo}.",
-                UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
+                UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"
             });
         }

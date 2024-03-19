@@ -13,7 +13,8 @@ using YourBrand.Notifications.Client;
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository, 
-    ICurrentUserService currentUserService, IEmailService emailService, 
+    ICurrentUserService currentUserService, 
+    IEmailService emailService, 
     IOrderNotificationService orderNotificationService,
     INotificationsClient notificationsClient,
     ILogger<OrderStatusUpdatedEventHandler> logger) : IDomainEventHandler<OrderStatusUpdated>
@@ -54,7 +55,7 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
             {
                 Title = "Sales",
                 Text = $"New order #{order.OrderNo}.",
-                UserId = "29611515-7828-43a0-b805-6b48b6e22bba",
+                UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"
             });
         }
