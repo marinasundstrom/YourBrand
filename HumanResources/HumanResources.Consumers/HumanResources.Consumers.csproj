@@ -11,7 +11,7 @@
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference
-      Include="..\..\UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj" />
+      Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

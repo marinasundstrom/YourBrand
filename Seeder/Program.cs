@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.UserManagement;
-using YourBrand.UserManagement.Client;
+using YourBrand.IdentityManagement;
+using YourBrand.IdentityManagement.Client;
 
 //const string ApiKey = "asdsr34#34rswert35234aedae?2!";
 
@@ -54,9 +54,9 @@ static IServiceProvider BuildServiceProvider()
 {
     ServiceCollection services = new();
 
-    services.AddUserManagementClients((sp, http) =>
+    services.AddIdentityManagementClients((sp, http) =>
     {
-        http.BaseAddress = new Uri($"https://localhost:5174/api/usermanagement/");
+        http.BaseAddress = new Uri($"https://localhost:5174/api/identitymanagement/");
         //http.DefaultRequestHeaders.Add("X-API-Key", ApiKey);
     }, (builder) => { });
 

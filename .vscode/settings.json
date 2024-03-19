@@ -46,17 +46,6 @@
         {
             "splitTerminals": [
                 {
-                    "name": "IdentityService",
-                    "commands": [
-                        "dotnet run --project IdentityService/IdentityService/IdentityService.csproj"
-                    ],
-                    "shouldRunCommands": false
-                }
-            ]
-        },
-        {
-            "splitTerminals": [
-                {
                     "name": "AppService",
                     "commands": [
                         "dotnet run --project AppService/WebApi/WebApi.csproj"
@@ -68,9 +57,9 @@
         {
             "splitTerminals": [
                 {
-                    "name": "UserManagement",
+                    "name": "IdentityManagement",
                     "commands": [
-                        "dotnet run --project UserManagement/UserManagement/UserManagement.csproj"
+                        "dotnet run --project IdentityManagement/IdentityManagement/IdentityManagement.csproj"
                     ],
                     "shouldRunCommands": false
                 }

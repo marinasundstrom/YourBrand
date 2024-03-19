@@ -12,7 +12,7 @@
     <ProjectReference
       Include="..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
     <ProjectReference Include="..\TimeReport\TimeReport.Client\TimeReport.Client.csproj" />
-    <ProjectReference Include="..\UserManagement\UserManagement.Client\UserManagement.Client.csproj" />
+    <ProjectReference Include="..\IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "YourBrand.IdentityManagement": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:5040",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

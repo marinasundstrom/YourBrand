@@ -379,23 +379,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.Contracts", "Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.UI", "CustomerRelations\Customers\Customers.UI\Customers.UI.csproj", "{89847EB4-D265-413C-9B50-F800FD1F6DCA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserManagement", "UserManagement", "{01A79B1E-AA02-4109-A161-75499A9E395E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityManagement", "IdentityManagement", "{01A79B1E-AA02-4109-A161-75499A9E395E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement", "UserManagement\UserManagement\UserManagement.csproj", "{68284D5E-0CEE-4A27-927B-F8536197699A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement", "IdentityManagement\IdentityManagement\IdentityManagement.csproj", "{68284D5E-0CEE-4A27-927B-F8536197699A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Application", "UserManagement\UserManagement.Application\UserManagement.Application.csproj", "{8281AE6E-9E3F-4B1E-BDB4-86AB1E671736}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.Application", "IdentityManagement\IdentityManagement.Application\IdentityManagement.Application.csproj", "{8281AE6E-9E3F-4B1E-BDB4-86AB1E671736}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Client", "UserManagement\UserManagement.Client\UserManagement.Client.csproj", "{BA83160F-0E07-4CC0-A976-A2A748134B33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.Client", "IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj", "{BA83160F-0E07-4CC0-A976-A2A748134B33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Consumers", "UserManagement\UserManagement.Consumers\UserManagement.Consumers.csproj", "{6F773DF5-F9EA-4A96-A6A2-96E7C8A043C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.Consumers", "IdentityManagement\IdentityManagement.Consumers\IdentityManagement.Consumers.csproj", "{6F773DF5-F9EA-4A96-A6A2-96E7C8A043C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Contracts", "UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj", "{4E95AB0B-6237-487A-A28E-AD5879DB5C7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.Contracts", "IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj", "{4E95AB0B-6237-487A-A28E-AD5879DB5C7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Domain", "UserManagement\UserManagement.Domain\UserManagement.Domain.csproj", "{C2CE7357-9962-41F7-B465-C5FC0C3C2F27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.Domain", "IdentityManagement\IdentityManagement.Domain\IdentityManagement.Domain.csproj", "{C2CE7357-9962-41F7-B465-C5FC0C3C2F27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Infrastructure", "UserManagement\UserManagement.Infrastructure\UserManagement.Infrastructure.csproj", "{5081D636-A2B8-4C27-B1DA-BE8FA72AB8E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.Infrastructure", "IdentityManagement\IdentityManagement.Infrastructure\IdentityManagement.Infrastructure.csproj", "{5081D636-A2B8-4C27-B1DA-BE8FA72AB8E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.UI", "UserManagement\UserManagement.UI\UserManagement.UI.csproj", "{A607265B-E85D-437C-8016-765B67DCA0E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.UI", "IdentityManagement\IdentityManagement.UI\IdentityManagement.UI.csproj", "{A607265B-E85D-437C-8016-765B67DCA0E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

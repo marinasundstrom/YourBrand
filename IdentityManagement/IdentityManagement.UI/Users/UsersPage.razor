@@ -1,0 +1,115 @@
+﻿@page "/usermanagement/users"
+@attribute [Authorize]
+@* @attribute [Authorize(Roles = "Administrator,Manager")] *@
+@using IdentityManagement.Client
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IUsersClient UsersClient
+
+<AppPageTitle>Users - YourBrand</AppPageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Users</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewUserClicked">New User</MudButton>
+
+<MudTable T="User" ServerData="@(new Func<TableState, Task<TableData<User>>>(ServerReload))"
+          Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToUser(e.Item)" Elevation="25">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel T="User" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="User" SortLabel="Email">Email</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="user">
+        <MudTd DataLabel="First Name">@user.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@user.LastName</MudTd>
+        <MudTd DataLabel="Display Name">@user.DisplayName</MudTd>
+        <MudTd DataLabel="Email">@user.Email</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditUserClicked(user)" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteUser(user)" />
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    MudTable<User> table;
+    string searchString;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private async Task<TableData<User>> ServerReload(TableState state)
+    {
+        try
+        {
+            var page = await UsersClient.GetUsersAsync(state.Page, state.PageSize, searchString,
+                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityManagement.Client.SortDirection.Desc : IdentityManagement.Client.SortDirection.Asc);
+
+            return new TableData<User>() { TotalItems = page.TotalItems, Items = page.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null!;
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private void GotToUser(User user)
+    {
+        NavigationManager.NavigateTo($"/usermanagement/users/{user.Id}"); ;
+    }
+
+    private async Task OnNewUserClicked()
+    {
+        NavigationManager.NavigateTo($"/usermanagement/users/new");
+    }
+
+    private async Task OnEditUserClicked(User user)
+    {
+        NavigationManager.NavigateTo($"/usermanagement/users/{user.Id}/edit");
+    }
+
+    private async Task DeleteUser(User user)
+    {
+        try
+        {
+            var dialogResult = await DialogService.ShowMessageBox($"Delete {user.FirstName}?", "Are you sure?", "Yes", "No");
+
+            if (!dialogResult.GetValueOrDefault())
+                return;
+
+            await UsersClient.DeleteUserAsync(user.Id);
+
+            table.ReloadServerData();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

@@ -1,4 +1,4 @@
-﻿using YourBrand.UserManagement.Contracts;
+﻿using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Application.Users.Commands;
 

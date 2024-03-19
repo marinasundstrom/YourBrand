@@ -2,7 +2,7 @@
 
 using MediatR;
 
-using YourBrand.UserManagement.Contracts;
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.Users.Commands;

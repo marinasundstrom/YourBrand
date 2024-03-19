@@ -37,7 +37,7 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference
-      Include="..\..\UserManagement\UserManagement.Client\UserManagement.Client.csproj">
+      Include="..\..\IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\Showroom\Showroom.UI\Showroom.UI.csproj">
@@ -74,7 +74,7 @@
     <ProjectReference Include="..\..\HumanResources\HumanResources.UI\HumanResources.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\UserManagement\UserManagement.UI\UserManagement.UI.csproj">
+    <ProjectReference Include="..\..\IdentityManagement\IdentityManagement.UI\IdentityManagement.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\Catalog\Catalog.UI\Catalog.UI.csproj">

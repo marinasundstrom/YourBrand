@@ -27,7 +27,7 @@
     <ProjectReference
       Include="..\..\HumanResources\HumanResources.Client\HumanResources.Client.csproj" />
     <ProjectReference
-      Include="..\..\UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj" />
+      Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
     <ProjectReference
       Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj" />
      <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />

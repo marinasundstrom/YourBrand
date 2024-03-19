@@ -1,4 +1,4 @@
-﻿using YourBrand.UserManagement.Contracts;
+﻿using YourBrand.IdentityManagement.Contracts;
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Application.Users.Commands;
 

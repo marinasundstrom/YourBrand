@@ -12,7 +12,7 @@
     <ProjectReference Include="..\..\Finance\Formulas\Formulas.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference
-      Include="..\..\UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj" />
+      Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
     <ProjectReference
       Include="..\..\HumanResources\HumanResources.Contracts\HumanResources.Contracts.csproj"></ProjectReference>
     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />

@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 
 using MediatR;
-using YourBrand.UserManagement.Contracts;
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Application.Users.Commands;
 using YourBrand.Identity;

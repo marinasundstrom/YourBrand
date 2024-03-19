@@ -12,7 +12,7 @@ using Microsoft.JSInterop;
 
 using MudBlazor.Services;
 using YourBrand.AppService.Client;
-using YourBrand.UserManagement.Client;
+using YourBrand.IdentityManagement.Client;
 
 namespace YourBrand.Portal;
 
@@ -59,7 +59,7 @@ public static class ServiceExtensions
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/appservice/");
         });
 
-        services.AddUserManagementClients((sp, http) =>
+        services.AddIdentityManagementClients((sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"https://localhost:5040/");

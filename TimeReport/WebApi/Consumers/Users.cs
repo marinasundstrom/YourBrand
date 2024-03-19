@@ -2,7 +2,7 @@
 
 using MediatR;
 
-using YourBrand.UserManagement.Contracts;
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Users.Commands;
 using YourBrand.Tenancy;

@@ -1,4 +1,4 @@
-﻿using YourBrand.UserManagement.Contracts;
+﻿using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Orders.Application.Services;
 using YourBrand.Sales.API.Features.OrderManagement.Users;
 

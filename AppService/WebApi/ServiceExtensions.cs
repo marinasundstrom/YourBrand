@@ -8,7 +8,7 @@ using YourBrand.Infrastructure;
 using YourBrand.WebApi.Hubs;
 using YourBrand.WebApi.Services;
 
-using YourBrand.UserManagement.Client;
+using YourBrand.IdentityManagement.Client;
 
 namespace YourBrand.WebApi;
 
@@ -32,7 +32,7 @@ public static class ServiceExtensions
         services.AddScoped<INotificationClient, NotificationClient>();
         services.AddScoped<ISomethingClient, SomethingClient>();
 
-        //services.AddUserManagementClients();
+        //services.AddIdentityManagementClients();
 
         /*
         services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>

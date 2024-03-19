@@ -41,7 +41,7 @@ These services are essential for the function of YourBrand:
 * Proxy
 * Portal
 * AppService
-* UserManagement
+* IdentityManagement
 * HumanResources
 * ApiKeys
 
