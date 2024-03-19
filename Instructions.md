@@ -47,10 +47,18 @@ These services are essential for the function of YourBrand:
 
 ### Syncing user data
 
-Everytime a database is created and recerated, you must populate it with users.
+Everytime a database is created and recreated, you must populate it with users.
+
+Initial creation from seed:
 
 ```
-dotnet run --project Seeder/Seeder.csproj -- --sync-users
+dotnet run --project Seeder/Seeder.csproj -- --seed
+```
+
+To sync users to services (will make sure users have been created):
+
+```
+dotnet run --project Seeder/Seeder.csproj -- --sync
 ```
 
 The services must be running.
