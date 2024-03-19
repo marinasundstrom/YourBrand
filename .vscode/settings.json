@@ -68,6 +68,17 @@
         {
             "splitTerminals": [
                 {
+                    "name": "Notifications",
+                    "commands": [
+                        "dotnet run --project Notifications/Notifications/Notifications.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
                     "name": "ApiKeys",
                     "commands": [
                         "dotnet run --project ApiKeys/ApiKeys/ApiKeys.csproj"
@@ -280,17 +291,6 @@
                     "name": "TimeReport",
                     "commands": [
                         "dotnet run --project TimeReport/WebApi/WebApi.csproj"
-                    ],
-                    "shouldRunCommands": false
-                }
-            ]
-        },
-        {
-            "splitTerminals": [
-                {
-                    "name": "Notifications",
-                    "commands": [
-                        "dotnet run --project Notifications/Notifications/Notifications.csproj"
                     ],
                     "shouldRunCommands": false
                 }
