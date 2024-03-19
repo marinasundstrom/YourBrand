@@ -7,14 +7,9 @@ using YourBrand.Portal.Services;
 
 namespace YourBrand.Portal.Services;
 
-public class CurrentUserService : ICurrentUserService
+public class CurrentUserService(AuthenticationStateProvider authenticationStateProvider) : ICurrentUserService
 {
-    private readonly AuthenticationStateProvider _authenticationStateProvider;
-
-    public CurrentUserService(AuthenticationStateProvider authenticationStateProvider)
-    {
-        _authenticationStateProvider = authenticationStateProvider;
-    }
+    private readonly AuthenticationStateProvider _authenticationStateProvider = authenticationStateProvider;
 
     public async Task<string?> GetUserId()
     {

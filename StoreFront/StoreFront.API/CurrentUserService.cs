@@ -7,28 +7,23 @@ using Polly;
 
 namespace YourBrand.StoreFront.API;
 
-public sealed class CurrentUserService : ICurrentUserService
+public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
     private string? _currentUserId;
-    private HttpContext httpContext;
+    private readonly HttpContext _httpContext = httpContextAccessor.HttpContext!;
     private string? host;
 
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
-    {
-        httpContext = httpContextAccessor.HttpContext!;
-    }
+    public string? UserId => _currentUserId ??= _httpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-    public string? UserId => _currentUserId ??= httpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    public string? ClientId => _httpContext.Request.Headers["X-Client-Id"].FirstOrDefault();
 
-    public string? ClientId => httpContext.Request.Headers["X-Client-Id"].FirstOrDefault();
-
-    public string? SessionId => httpContext?.Request.Headers["X-Session-Id"].FirstOrDefault();
+    public string? SessionId => _httpContext?.Request.Headers["X-Session-Id"].FirstOrDefault();
 
     public int? CustomerNo
     {
         get
         {
-            var str = httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == "CustomerId")?.Value;
+            var str = _httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == "CustomerId")?.Value;
 
             if (str is null) return null;
 
@@ -40,7 +35,7 @@ public sealed class CurrentUserService : ICurrentUserService
     {
         get
         {
-            var parts = httpContext?.Request.Host.Host.Split('.');
+            var parts = _httpContext?.Request.Host.Host.Split('.');
             if (parts!.Count() > 2)
             {
                 return host ??= parts!.First();
@@ -49,18 +44,18 @@ public sealed class CurrentUserService : ICurrentUserService
         }
     }
 
-    public string? UserAgent => httpContext?.Request.Headers.UserAgent.ToString();
+    public string? UserAgent => _httpContext?.Request.Headers.UserAgent.ToString();
 
     public string? GetRemoteIPAddress(bool allowForwarded = true)
     {
         if (allowForwarded)
         {
-            string header = (httpContext.Request.Headers["CF-Connecting-IP"].FirstOrDefault() ?? httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault())!;
+            string header = (_httpContext.Request.Headers["CF-Connecting-IP"].FirstOrDefault() ?? _httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault())!;
             if (IPAddress.TryParse(header, out IPAddress? ip))
             {
                 return ip.ToString();
             }
         }
-        return httpContext.Connection.RemoteIpAddress?.ToString();
+        return _httpContext.Connection.RemoteIpAddress?.ToString();
     }
 }
