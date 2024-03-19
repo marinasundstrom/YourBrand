@@ -29,4 +29,10 @@
     <data name="Modules">
         <value>Modules</value>
     </data>
+    <data name="Notifications">
+        <value>Notifications</value>
+    </data>
+    <data name="Send notification">
+        <value>Send notification</value>
+    </data>
 </root>

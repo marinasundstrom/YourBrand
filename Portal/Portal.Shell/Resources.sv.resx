@@ -29,4 +29,10 @@
     <data name="Modules">
         <value>Moduler</value>
     </data>
+    <data name="Notifications">
+        <value>Aviseringar</value>
+    </data>
+    <data name="Send notification">
+        <value>Skicka avisering</value>
+    </data>
 </root>
