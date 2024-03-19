@@ -16,21 +16,21 @@
 <MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel T="Module" SortLabel="Enabled">@T["Header_Enabled"]</MudTableSortLabel>
+            <MudTableSortLabel T="Module" SortLabel="Enabled">@T["Enabled"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="Module" SortLabel="Name">@T["Header_Name"]</MudTableSortLabel>
+            <MudTableSortLabel T="Module" SortLabel="Name">@T["Name"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="Module" SortLabel="Assembly">@T["Header_Assembly"]</MudTableSortLabel>
+            <MudTableSortLabel T="Module" SortLabel="Assembly">@T["Assembly"]</MudTableSortLabel>
         </MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTh DataLabel="@T["Header_Enabled"]">
+        <MudTh DataLabel="@T["Enabled"]">
             <MudCheckBox Value="context.Enabled" ValueChanged="async (bool e) => await ToggleModule(context)" />
         </MudTh>
-        <MudTd DataLabel="@T["Header_Name"]">@context.Name</MudTd>
-        <MudTd DataLabel="@T["Header_Assembly"]">@context.Assembly</MudTd>
+        <MudTd DataLabel="@T["Name"]">@context.Name</MudTd>
+        <MudTd DataLabel="@T["Assembly"]">@context.Assembly</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         <MudText>@T["NoRecordsFound"]</MudText>
