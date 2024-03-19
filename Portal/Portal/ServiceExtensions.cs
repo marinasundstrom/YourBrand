@@ -11,8 +11,8 @@ using Microsoft.Extensions.Http;
 using Microsoft.JSInterop;
 
 using MudBlazor.Services;
-using YourBrand.IdentityService.Client;
 using YourBrand.AppService.Client;
+using YourBrand.UserManagement.Client;
 
 namespace YourBrand.Portal;
 
@@ -59,7 +59,7 @@ public static class ServiceExtensions
             http.BaseAddress = new Uri($"{navigationManager.BaseUri}api/appservice/");
         });
 
-        services.AddIdentityServiceClients((sp, http) =>
+        services.AddUserManagementClients((sp, http) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
             http.BaseAddress = new Uri($"https://localhost:5040/");

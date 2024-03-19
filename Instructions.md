@@ -3,7 +3,7 @@
 Nginx has been replaced by YARP - the Proxy project.
 
 * Portal: https://localhost:5174/ (Actually the reverse proxy)
-* Identity server: https://localhost:5040/
+* User Management: https://localhost:5040/
 * Store: https://localhost:7188/
 
 ## Run dependencies in Docker
@@ -39,8 +39,9 @@ Again, if you use VS Code, and you have the Restore Terminals extension installe
 These services are essential for the function of YourBrand:
 
 * Proxy
-* AppService (Portal)
-* IdentityService
+* Portal
+* AppService
+* UserManagement
 * HumanResources
 * ApiKeys
 
@@ -63,8 +64,8 @@ You have to create a company in the Portal, in ``Administration > Set up``.
 Default credentials:
 
 ```
-admin@email.com
-Abc123!?
+AliceSmith@email.com
+Pass123$
 ```
 
 These credentials are used when logging in for the first time.

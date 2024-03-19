@@ -1,5 +1,6 @@
 ﻿@page "/usermanagement/users"
-@attribute [Authorize(Roles = "Administrator,Manager")]
+@attribute [Authorize]
+@* @attribute [Authorize(Roles = "Administrator,Manager")] *@
 @using UserManagement.Client
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService

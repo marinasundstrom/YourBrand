@@ -1,10 +1,8 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.UserManagement.Application.Common.Interfaces;
-using YourBrand.UserManagement.Domain.Entities;
 using YourBrand.UserManagement.Domain.Exceptions;
 
 namespace YourBrand.UserManagement.Application.Users.Commands;

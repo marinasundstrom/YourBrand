@@ -1,13 +1,15 @@
-﻿namespace YourBrand.UserManagement.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class Role
+namespace YourBrand.UserManagement.Domain.Entities;
+
+public class Role : IdentityRole<string>
 {
     readonly HashSet<User> _users = new HashSet<User>();
     readonly HashSet<UserRole> _userRoles = new HashSet<UserRole>();
 
-    internal Role()
+    public Role()
     {
-
+        Id = Guid.NewGuid().ToString();
     }
 
     public Role(string name)
@@ -15,10 +17,6 @@ public class Role
         Id = Guid.NewGuid().ToString();
         Name = name;
     }
-
-    public string Id { get; private set; } = null!;
-
-    public string Name { get; private set; } = null!;
 
     public IReadOnlyCollection<User> Users => _users;
 

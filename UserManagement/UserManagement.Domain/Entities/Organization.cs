@@ -9,7 +9,7 @@ public class Organization : AuditableEntity
 
     private Organization() { }
 
-    public Organization(string id, string name, string friendlyName)
+    public Organization(string id, string name, string? friendlyName)
     {
         Id = id;
         Name = name;
@@ -18,7 +18,7 @@ public class Organization : AuditableEntity
         AddDomainEvent(new OrganizationCreated(Id));
     }
 
-    public Organization(string name, string friendlyName) : this(Guid.NewGuid().ToString(), name, friendlyName)
+    public Organization(string name, string? friendlyName) : this(Guid.NewGuid().ToString(), name, friendlyName)
     {
 
     }
@@ -27,7 +27,7 @@ public class Organization : AuditableEntity
 
     public string Name { get; private set; }
 
-    public string FriendlyName { get; private set; }
+    public string? FriendlyName { get; private set; }
 
     public string Currency { get; set; } = "SEK";
 

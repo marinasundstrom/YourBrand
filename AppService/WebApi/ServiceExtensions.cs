@@ -8,6 +8,8 @@ using YourBrand.Infrastructure;
 using YourBrand.WebApi.Hubs;
 using YourBrand.WebApi.Services;
 
+using YourBrand.UserManagement.Client;
+
 namespace YourBrand.WebApi;
 
 public static class ServiceExtensions
@@ -30,6 +32,9 @@ public static class ServiceExtensions
         services.AddScoped<INotificationClient, NotificationClient>();
         services.AddScoped<ISomethingClient, SomethingClient>();
 
+        //services.AddUserManagementClients();
+
+        /*
         services.AddHttpClient(nameof(IdentityService.Client.IUsersClient) + "2", (sp, http) =>
         {
             http.BaseAddress = new Uri($"https://localhost:5040/");
@@ -43,6 +48,7 @@ public static class ServiceExtensions
             http.DefaultRequestHeaders.Add("X-API-Key", "foobar");
         })
         .AddTypedClient<IdentityService.Client.IRolesClient>((http, sp) => new IdentityService.Client.RolesClient(http));
+        */
 
         return services;
     }

@@ -95,7 +95,7 @@ services.AddAuthorization();
 
 services.AddAuthenticationServices(configuration);
 
-var app = builder.Build();
+var app = builder.ConfigureServices();
 
 app.UseSerilogRequestLogging();
 
@@ -119,9 +119,13 @@ app.MapControllers();
 
 if (args.Contains("--seed"))
 {
-    await app.Services.SeedAsync();
+    await app.EnsureSeedData();
+
+    //await app.Services.SeedAsync();
 
     return;
 }
+
+app.ConfigurePipeline();
 
 app.Run();

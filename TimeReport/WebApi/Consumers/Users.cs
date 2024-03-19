@@ -2,7 +2,6 @@
 
 using MediatR;
 
-using YourBrand.IdentityService.Client;
 using YourBrand.UserManagement.Contracts;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Users.Commands;

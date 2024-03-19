@@ -51,6 +51,10 @@
     <ProjectReference Include="..\..\UserManagement\UserManagement.Contracts\UserManagement.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference
+      Include="..\..\UserManagement\UserManagement.Client\UserManagement.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

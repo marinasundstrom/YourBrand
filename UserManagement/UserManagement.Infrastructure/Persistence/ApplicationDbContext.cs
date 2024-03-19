@@ -16,7 +16,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.UserManagement.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
@@ -51,10 +51,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
     }
 
-    public DbSet<Role> Roles { get; set; } = null!;
-
-    public DbSet<User> Users { get; set; } = null!;
-
     public DbSet<Organization> Organizations { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -87,6 +83,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
         this.Set<OutboxMessage>().AddRange(outboxMessages);
 
-        return await base.SaveChangesAsync(cancellationToken);
+        var r = await base.SaveChangesAsync(cancellationToken);
+
+        entities.ToList().ForEach(x => x.ClearDomainEvents());
+
+        return r;
     }
 }

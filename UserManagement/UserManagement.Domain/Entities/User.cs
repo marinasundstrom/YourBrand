@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using Microsoft.AspNetCore.Identity;
+
 using YourBrand.UserManagement.Domain.Common;
 using YourBrand.UserManagement.Domain.Common.Interfaces;
 using YourBrand.UserManagement.Domain.Events;
@@ -8,12 +10,12 @@ using YourBrand.UserManagement.Domain.ValueObjects;
 namespace YourBrand.UserManagement.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationUser class
-public class User : AuditableEntity, ISoftDelete
+public class User : IdentityUser, IAuditableEntity, ISoftDelete
 {
     readonly HashSet<Role> _roles = new HashSet<Role>();
     readonly HashSet<UserRole> _userRoles = new HashSet<UserRole>();
 
-    internal User() { }
+    public User() { }
 
     public User(string firstName, string lastName, string? displayName, string email)
     {
@@ -23,10 +25,8 @@ public class User : AuditableEntity, ISoftDelete
         DisplayName = displayName;
         Email = email;
 
-        AddDomainEvent(new UserCreated(Id));
+        //AddDomainEvent(new UserCreated(Id));
     }
-
-    public string Id { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
 
@@ -34,9 +34,15 @@ public class User : AuditableEntity, ISoftDelete
 
     public string? DisplayName { get; set; }
 
-    public string? Email { get; set; }
-
     public Organization? Organization { get; set; }
+
+    public DateTime Created { get; set; }
+
+    public string? CreatedBy { get; set; }
+
+    public DateTime? LastModified { get; set; }
+
+    public string? LastModifiedBy { get; set; }
 
     public DateTime? Deleted { get; set; }
 

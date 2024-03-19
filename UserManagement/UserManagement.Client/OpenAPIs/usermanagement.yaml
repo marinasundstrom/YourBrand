@@ -4,7 +4,7 @@ info:
   title: User Management
   version: v1
 servers:
-- url: https://localhost:5113
+- url: https://localhost:5040
 paths:
   /Organizations:
     get:
@@ -394,6 +394,29 @@ paths:
       responses:
         200:
           description: ''
+  /Users/{id}/ChangePassword:
+    post:
+      tags:
+      - Users
+      operationId: Users_ChangePassword
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: changePasswordDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
 components:
   schemas:
     ItemsResultOfOrganization:
@@ -547,4 +570,12 @@ components:
       additionalProperties: false
       properties:
         role:
+          type: string
+    ChangePassword:
+      type: object
+      additionalProperties: false
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
           type: string

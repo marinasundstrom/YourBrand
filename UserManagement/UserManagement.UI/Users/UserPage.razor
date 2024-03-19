@@ -1,5 +1,5 @@
 ﻿@page "/usermanagement/users/{userId}"
-@attribute [Authorize(Roles = "Administrator,Manager")]
+@attribute [Authorize]
 @using YourBrand.Portal
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
