@@ -12,7 +12,7 @@
 @inject IStringLocalizer<TicketsPage> T
 
 <MudTable T="TicketDto" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<TicketDto>>>(ServerReload))" Elevation="0"
-          OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Breakpoint="Breakpoint.Sm" Dense="true" Hover="true" @ref="table" SortLabel="@T["SortBy"]">
+          OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Breakpoint="Breakpoint.Sm" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">@T["CreateTicket"]</MudButton>
 
@@ -58,10 +58,6 @@
         <MudTh>
             <MudTableSortLabel SortLabel="Created" T="TicketDto">@T["Created"]</MudTableSortLabel>
         </MudTh>
-
-        <MudTh>
-
-        </MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="@T["Id"]">@context.Id</MudTd>
@@ -72,9 +68,6 @@
         <MudTd DataLabel="@T["Impact"]">@T[context.Impact.ToString()]</MudTd>
         <MudTd DataLabel="@T["Assignee"]">@context.Assignee?.Name</MudTd>
         <MudTd DataLabel="@T["Created"]">@context.Created.ToLocalTime().ToString("g")</MudTd>
-        <MudTh>
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteTicket(context)" Disabled="selectMultiple"></MudIconButton>
-        </MudTh>
     </RowTemplate>
     <NoRecordsContent>
         <MudText>@T["NoMatchesFound"]</MudText>
