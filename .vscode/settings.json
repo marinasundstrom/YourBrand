@@ -103,7 +103,7 @@
                 {
                     "name": "Ticketing",
                     "commands": [
-                        "dotnet run --project CustomerRelations/Ticketing/Ticketing/Ticketing.csproj"
+                        "dotnet run --project CustomerRelations/Ticketing/Ticketing.Web/Ticketing.Web.csproj"
                     ],
                     "shouldRunCommands": false
                 }
