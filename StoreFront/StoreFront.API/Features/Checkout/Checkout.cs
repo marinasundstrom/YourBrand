@@ -49,7 +49,7 @@ public sealed record Checkout(
 
             string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
 
-            var cart = await cartsClient.GetCartByIdAsync("test");
+            var cart = await cartsClient.GetCartByTagAsync(tag);
 
             var items = new List<CreateOrderItem>();
 

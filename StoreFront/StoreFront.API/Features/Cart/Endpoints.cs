@@ -45,15 +45,34 @@ public static class Endpoints
         return app;
     }
 
-    private static async Task<Results<Ok<Features.Cart.Cart>, NotFound>> GetCart(MassTransitCartsClient cartsClient, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<Features.Cart.Cart>, NotFound>> GetCart(MassTransitCartsClient cartsClient, ICurrentUserService currentUserService, CancellationToken cancellationToken)
     {
-        var cart = await cartsClient.GetCartById("test", cancellationToken);
+        var customerId = currentUserService.CustomerNo;
+        var clientId = currentUserService.ClientId;
+
+        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+
+        Cart? cart = null;
+
+        try
+        {
+            cart = await cartsClient.GetCartByTag(tag, cancellationToken);
+        }
+        catch
+        {
+            cart = await cartsClient.CreateCart(tag, cancellationToken);
+        }
 
         return cart is not null ? TypedResults.Ok(cart) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<CartItem>, NotFound>> AddCartItem(AddCartItemRequest request, MassTransitCartsClient cartsClient, IProductsClient productsClient, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<CartItem>, NotFound>> AddCartItem(AddCartItemRequest request, MassTransitCartsClient cartsClient, IProductsClient productsClient, ICurrentUserService currentUserService, CancellationToken cancellationToken)
     {
+        var customerId = currentUserService.CustomerNo;
+        var clientId = currentUserService.ClientId;
+
+        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+
         var product = await productsClient.GetProductByIdAsync(request.ProductId.ToString()!, cancellationToken);
 
         string? data = request.Data;
@@ -85,24 +104,38 @@ public static class Endpoints
         PriceCalculator priceCalculator = new PriceCalculator();
         var (price, regularPrice) = priceCalculator.CalculatePrice(product, data);
 
+        var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
+
         var cartItem = await cartsClient.AddCartItem(
-            "test", product.Name, product.Image?.Url, request.ProductId, product.Handle, product.Description, price, product.VatRate, regularPrice, product.DiscountRate, request.Quantity, data, cancellationToken);
+            cart.Id, product.Name, product.Image?.Url, request.ProductId, product.Handle, product.Description, price, product.VatRate, regularPrice, product.DiscountRate, request.Quantity, data, cancellationToken);
 
         return cartItem is not null ? TypedResults.Ok(cartItem) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemQuantity(string cartItemId, UpdateCartItemQuantityRequest request, MassTransitCartsClient cartsClient, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemQuantity(string cartItemId, UpdateCartItemQuantityRequest request, MassTransitCartsClient cartsClient, ICurrentUserService currentUserService, CancellationToken cancellationToken)
     {
         if (request.Quantity <= 0) throw new ArgumentException("Invalid quantity", nameof(request));
 
-        var cartItem = await cartsClient.UpdateCartItemQuantity("test", cartItemId, request.Quantity, cancellationToken);
+        var customerId = currentUserService.CustomerNo;
+        var clientId = currentUserService.ClientId;
+
+        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+
+        var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
+
+        var cartItem = await cartsClient.UpdateCartItemQuantity(cart.Id, cartItemId, request.Quantity, cancellationToken);
 
         return cartItem is not null ? TypedResults.Ok(cartItem) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemData(string cartItemId, UpdateCartItemDataRequest request, MassTransitCartsClient cartsClient, IProductsClient productsClient, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemData(string cartItemId, UpdateCartItemDataRequest request, MassTransitCartsClient cartsClient, IProductsClient productsClient, ICurrentUserService currentUserService, CancellationToken cancellationToken)
     {
-        var cart = await cartsClient.GetCartById("test", cancellationToken);
+        var customerId = currentUserService.CustomerNo;
+        var clientId = currentUserService.ClientId;
+
+        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+
+        var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
         var cartItem = cart.Items.First(x => x.Id == cartItemId);
 
         var product = await productsClient.GetProductByIdAsync(cartItem.ProductId.ToString()!, cancellationToken);
@@ -110,22 +143,36 @@ public static class Endpoints
         PriceCalculator priceCalculator = new PriceCalculator();
         var (price, regularPrice) = priceCalculator.CalculatePrice(product, request.Data!);
 
-        cartItem = await cartsClient.UpdateCartItemPrice("test", cartItemId, price, cancellationToken);
-        cartItem = await cartsClient.UpdateCartItemData("test", cartItemId, request.Data, cancellationToken);
+        cartItem = await cartsClient.UpdateCartItemPrice(cart.Id, cartItemId, price, cancellationToken);
+        cartItem = await cartsClient.UpdateCartItemData(cart.Id, cartItemId, request.Data, cancellationToken);
 
         return cartItem is not null ? TypedResults.Ok(cartItem) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound>> RemoveCartItem(string cartItemId, MassTransitCartsClient cartsClient, CancellationToken cancellationToken)
+    private static async Task<Results<Ok, NotFound>> RemoveCartItem(string cartItemId, MassTransitCartsClient cartsClient, ICurrentUserService currentUserService, CancellationToken cancellationToken)
     {
-        await cartsClient.RemoveCartItem("test", cartItemId, cancellationToken);
+        var customerId = currentUserService.CustomerNo;
+        var clientId = currentUserService.ClientId;
+
+        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+
+        var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
+
+        await cartsClient.RemoveCartItem(cart.Id, cartItemId, cancellationToken);
 
         return TypedResults.Ok();
     }
 
-    private static async Task<Results<Ok, NotFound>> ClearCart(MassTransitCartsClient cartsClient, CancellationToken cancellationToken)
+    private static async Task<Results<Ok, NotFound>> ClearCart(MassTransitCartsClient cartsClient, ICurrentUserService currentUserService, CancellationToken cancellationToken)
     {
-        await cartsClient.ClearCart("test", cancellationToken);
+        var customerId = currentUserService.CustomerNo;
+        var clientId = currentUserService.ClientId;
+
+        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+
+        var cart = await cartsClient.GetCartById(tag, cancellationToken);
+
+        await cartsClient.ClearCart(cart.Id, cancellationToken);
 
         return TypedResults.Ok();
     }

@@ -38,7 +38,7 @@ builder.Services
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("WebAPI"));
 
-builder.Services.AddScoped<RenderingContext, ClientRenderingContext>();
+builder.Services.AddSingleton<RenderingContext, ClientRenderingContext>();
 
 var baseUri = new Uri(builder.HostEnvironment.BaseAddress + "storefront/");
 

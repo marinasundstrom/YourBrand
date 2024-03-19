@@ -8,12 +8,30 @@ public sealed class MassTransitCartsClient(
     IRequestClient<Carts.Contracts.UpdateCartItemPrice> updateCartItemPriceClient,
     IRequestClient<Carts.Contracts.UpdateCartItemQuantity> updateCartItemQuantityClient,
     IRequestClient<Carts.Contracts.UpdateCartItemData> updateCartItemDataClient,
-    IRequestClient<Carts.Contracts.RemoveCartItem> removeCartItemClient)
+    IRequestClient<Carts.Contracts.RemoveCartItem> removeCartItemClient,
+    IRequestClient<Carts.Contracts.GetCartByTag> getCartByTagClient,
+    IRequestClient<Carts.Contracts.CreateCart> createCartClient)
 {
     public async Task<Cart> GetCartById(string cartId, CancellationToken cancellationToken = default)
     {
         var response = await getCartByIdClient.GetResponse<Carts.Contracts.GetCartByIdResponse>(
             new Carts.Contracts.GetCartById { Id = cartId }, cancellationToken);
+
+        return response.Message.Cart.Map();
+    }
+
+    public async Task<Cart> GetCartByTag(string tag, CancellationToken cancellationToken = default)
+    {
+        var response = await getCartByTagClient.GetResponse<Carts.Contracts.GetCartByTagResponse>(
+            new Carts.Contracts.GetCartByTag { Tag = tag }, cancellationToken);
+
+        return response.Message.Cart.Map();
+    }
+
+    public async Task<Cart> CreateCart(string tag, CancellationToken cancellationToken = default)
+    {
+        var response = await createCartClient.GetResponse<Carts.Contracts.CreateCartResponse>(
+            new Carts.Contracts.CreateCart { Tag = tag }, cancellationToken);
 
         return response.Message.Cart.Map();
     }
@@ -44,7 +62,7 @@ public sealed class MassTransitCartsClient(
     {
         var request2 = new Carts.Contracts.UpdateCartItemPrice
         {
-            CartId = "test",
+            CartId = cartId,
             CartItemId = cartItemId,
             Price = price
         };
@@ -58,7 +76,7 @@ public sealed class MassTransitCartsClient(
     {
         var request2 = new Carts.Contracts.UpdateCartItemQuantity
         {
-            CartId = "test",
+            CartId = cartId,
             CartItemId = cartItemId,
             Quantity = quantity
         };
@@ -71,7 +89,7 @@ public sealed class MassTransitCartsClient(
     {
         var request2 = new Carts.Contracts.UpdateCartItemData
         {
-            CartId = "test",
+            CartId = cartId,
             CartItemId = cartItemId,
             Data = data
         };
@@ -84,7 +102,7 @@ public sealed class MassTransitCartsClient(
     {
         var request2 = new Carts.Contracts.RemoveCartItem
         {
-            CartId = "test",
+            CartId = cartId,
             CartItemId = cartItemId
         };
 
@@ -95,7 +113,7 @@ public sealed class MassTransitCartsClient(
     {
         var request2 = new Carts.Contracts.ClearCart
         {
-            CartId = "test"
+            CartId = cartId
         };
 
         var response = await removeCartItemClient.GetResponse<Carts.Contracts.ClearCartResponse>(request2, cancellationToken);

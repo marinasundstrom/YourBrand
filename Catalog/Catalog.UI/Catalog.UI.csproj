@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation"
       Version="3.2.0-rc1.20223.4" />
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.2" />
-    <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="ToastUIEditor" Version="0.1.2" />
   </ItemGroup>
 

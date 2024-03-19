@@ -21,18 +21,19 @@ namespace Client.Cart
         {
             CartService.CartUpdated += OnCartUpdated;
 
-            // If this component is initialized on the Basket page
-            // then that page will initiate the reload.
-            // This only applies to fresh navigations or reloads
-            // due to DOM preservation.
-
-            if (!NavigationManager.Uri.ToString().EndsWith("/basket"))
-            {
-                await CartService.InitializeAsync();
-            }
 
             if (RenderingContext.IsClient)
             {
+                // If this component is initialized on the Basket page
+                // then that page will initiate the reload.
+                // This only applies to fresh navigations or reloads
+                // due to DOM preservation.
+
+                if (!NavigationManager.Uri.ToString().EndsWith("/basket"))
+                {
+                    await CartService.InitializeAsync();
+                }
+                
                 await JSHost.ImportAsync("CartOffCanvas",
                 "../Cart/CartOffCanvas.razor.js");
 

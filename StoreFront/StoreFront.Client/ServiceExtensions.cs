@@ -1,6 +1,10 @@
 ﻿namespace YourBrand.StoreFront;
 
 using Microsoft.Extensions.DependencyInjection;
+using Blazored.LocalStorage;
+using BlazorApp;
+using Microsoft.JSInterop;
+using System.Text.Json;
 
 public static class ServiceExtensions
 {
@@ -20,7 +24,6 @@ public static class ServiceExtensions
         {
             http.BaseAddress = baseUrl;
         }, configureBuilder);
-
 
         services.AddBrandsClient((sp, http) =>
                 {
@@ -71,8 +74,20 @@ public static class ServiceExtensions
 
         configureBuilder?.Invoke(builder);
 
-        services.AddHttpClient<ICartClient>("StoreFront")
-            .AddTypedClient<ICartClient>((http, sp) => new YourBrand.StoreFront.CartClient(http));
+        services.AddHttpClient<ICartClient>("StoreFront", (sp, http) => {
+                var renderingContext = sp.GetRequiredService<RenderingContext>();
+                if (!renderingContext.IsPrerendering)
+                {
+                    var clientId = JsonSerializer.Deserialize<string>(
+                        sp.GetRequiredService<IJSInProcessRuntime>().Invoke<string>("getCid"));
+                        
+                    http.DefaultRequestHeaders.Add("X-Client-Id", clientId);
+                }
+            })
+            .AddTypedClient<ICartClient>((http, sp) =>
+            {
+                return new CartClient(http);
+            });
 
         return services;
     }
