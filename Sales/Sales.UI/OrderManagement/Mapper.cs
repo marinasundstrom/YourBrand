@@ -2,9 +2,9 @@
 
 using YourBrand.Sales;
 
-using static YourBrand.Sales.OrderManagerment.OrderItemViewModel;
+using static YourBrand.Sales.OrderManagement.OrderItemViewModel;
 
-namespace YourBrand.Sales.OrderManagerment;
+namespace YourBrand.Sales.OrderManagement;
 
 public static class Mapper
 {

@@ -12,7 +12,7 @@
 @inject IStringLocalizer<TicketsPage> T
 
 <MudTable T="TicketDto" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<TicketDto>>>(ServerReload))" Elevation="0"
-          OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]">
+          OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Breakpoint="Breakpoint.Sm" Dense="true" Hover="true" @ref="table" SortLabel="@T["SortBy"]">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">@T["CreateTicket"]</MudButton>
 
@@ -56,22 +56,7 @@
             <MudTableSortLabel SortLabel="Assignee" T="TicketDto">@T["Assignee"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="EstimatedHours" T="TicketDto">@T["EstimatedTime"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortLabel="RemainingHours" T="TicketDto">@T["RemainingTime"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
             <MudTableSortLabel SortLabel="Created" T="TicketDto">@T["Created"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortLabel="CreatedBy" T="TicketDto">@T["CreatedBy"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortLabel="LastModified" T="TicketDto">@T["LastModified"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortLabel="LastModifiedBy" T="TicketDto">@T["LastModifiedBy"]</MudTableSortLabel>
         </MudTh>
 
         <MudTh>
@@ -86,12 +71,7 @@
         <MudTd DataLabel="@T["Severity"]">@T[context.Severity.ToString()]</MudTd>
         <MudTd DataLabel="@T["Impact"]">@T[context.Impact.ToString()]</MudTd>
         <MudTd DataLabel="@T["Assignee"]">@context.Assignee?.Name</MudTd>
-        <MudTd DataLabel="@T["EstimatedTime"]">@(context.EstimatedHours is null ? null : TimeSpan.FromHours(context.EstimatedHours.GetValueOrDefault()).ToString("hh\\:mm"))</MudTd>
-        <MudTd DataLabel="@T["RemainingTime"]">@(context.RemainingHours is null ? null : TimeSpan.FromHours(context.RemainingHours.GetValueOrDefault()).ToString("hh\\:mm"))</MudTd>
         <MudTd DataLabel="@T["Created"]">@context.Created.ToLocalTime().ToString("g")</MudTd>
-        <MudTd DataLabel="@T["CreatedBy"]">@context.CreatedBy?.Name</MudTd>
-        <MudTd DataLabel="@T["LastModified"]">@context.LastModified?.ToLocalTime().ToString("g")</MudTd>
-        <MudTd DataLabel="@T["LastModifiedBy"]">@context.LastModifiedBy?.Name</MudTd>
         <MudTh>
             <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteTicket(context)" Disabled="selectMultiple"></MudIconButton>
         </MudTh>

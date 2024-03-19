@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace YourBrand.Sales.OrderManagerment
+namespace YourBrand.Sales.OrderManagement
 {
     using System;
 

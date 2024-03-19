@@ -7,7 +7,7 @@ using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using Microsoft.Extensions.Localization;
 
-using YourBrand.Sales.OrderManagerment;
+using YourBrand.Sales.OrderManagement;
 
 namespace YourBrand.Sales;
 

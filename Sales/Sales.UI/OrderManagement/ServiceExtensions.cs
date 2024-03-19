@@ -12,7 +12,7 @@ using YourBrand.Portal.Widgets;
 
 using Store = YourBrand.Portal.Services.Store;
 
-namespace YourBrand.Sales.OrderManagerment;
+namespace YourBrand.Sales.OrderManagement;
 
 public static class ServiceExtensions
 {

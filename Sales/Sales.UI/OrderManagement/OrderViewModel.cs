@@ -4,7 +4,7 @@ using Core;
 
 using YourBrand.Sales;
 
-namespace YourBrand.Sales.OrderManagerment;
+namespace YourBrand.Sales.OrderManagement;
 
 public class OrderViewModel
 {

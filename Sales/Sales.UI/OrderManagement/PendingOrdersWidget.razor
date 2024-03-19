@@ -2,7 +2,7 @@
 @inject IOrdersClient OrdersClient
 @inject NavigationManager NavigationManager
 
-<MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+<MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Dense="true"
           Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
 
     <HeaderContent>
