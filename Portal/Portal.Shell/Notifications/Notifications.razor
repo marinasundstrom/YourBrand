@@ -22,7 +22,7 @@
 
         <div class="d-flex justify-space-between align-center px-3">
             <MudText Typo="Typo.h6" Style="font-size: medium;"><b>@T["Notifications"]</b></MudText>
-            <MudIconButton Icon="@Icons.Outlined.Settings" Variant="Variant.Text" Color="Color.Primary" Class="pa-2"></MudIconButton> 
+            <MudIconButton Icon="@Icons.Outlined.Settings" Variant="Variant.Text" Color="Color.Inherit" Class="pa-2"></MudIconButton> 
         </div>
 
         <MudDivider Class="mt-1" />
@@ -46,11 +46,17 @@
                         <MudText Typo="Typo.body2">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
                     </MudMenuItem>
 
-                     <MudDivider />                 
+                    @if(notification != notifications.Last()) 
+                    {
+                        <MudDivider />                 
+                    }
                 }
 
                 @if (totalNotificationsCount > 5)
-                    {
+                {
+                     <MudDivider />                 
+
+
                     <div class="d-flex justify-center align-center px-2 py-2 relative">
                         <MudLink Class="mud-text-secondary my-2" Href="/notifications">@T["MoreNotifications"]</MudLink>
                     </div>

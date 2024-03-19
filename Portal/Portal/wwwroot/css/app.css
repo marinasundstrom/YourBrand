@@ -68,10 +68,6 @@ h1:focus {
     /* background-color: var(--mud-palette-appbar-background); */
 }
 
-.notification-unread {
-    background-color: #e0f7f9 !important;
-}
-
 .loading-progress {
     position: relative;
     display: block;
@@ -118,6 +114,11 @@ h1:focus {
     inset: auto auto calc(100% - 26px) calc(100% - 26px);
 }
 
+.notification-unread {
+    background-color: #c6c6c621 !important
+}
+
 .notifications-menu-list {
     width: 350px; /* 480px; */
+    padding-bottom: 0 !important;
 }
