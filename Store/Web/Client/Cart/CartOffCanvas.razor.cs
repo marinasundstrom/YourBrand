@@ -21,7 +21,6 @@ namespace Client.Cart
         {
             CartService.CartUpdated += OnCartUpdated;
 
-
             if (RenderingContext.IsClient)
             {
                 // If this component is initialized on the Basket page
@@ -33,7 +32,7 @@ namespace Client.Cart
                 {
                     await CartService.InitializeAsync();
                 }
-                
+  
                 await JSHost.ImportAsync("CartOffCanvas",
                 "../Cart/CartOffCanvas.razor.js");
 
