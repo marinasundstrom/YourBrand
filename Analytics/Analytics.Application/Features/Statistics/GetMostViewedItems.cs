@@ -41,6 +41,8 @@ public record GetMostViewedItems(DateTime? From = null, DateTime? To = null, boo
             var firstMonth = DateOnly.FromDateTime(firstDate);
             var lastMonth = DateOnly.FromDateTime(lastDate);
 
+            // Not right to group by Data!
+
             foreach (var eventGroup in events.GroupBy(x => x.Data).Take(10))
             {
                 var keyObj = System.Text.Json.JsonDocument.Parse(eventGroup.Key);
