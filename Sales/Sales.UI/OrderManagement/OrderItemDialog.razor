@@ -25,11 +25,11 @@
             <MudGrid>
 
                 <MudItem xs="12" md="6">
-                    <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate" Class="mt-4">
-                        <MudSelectItem Value="@(0.0)">Ingen</MudSelectItem>
-                        <MudSelectItem Value="@(0.06)">6%</MudSelectItem>
-                        <MudSelectItem Value="@(0.12)">12%</MudSelectItem>
-                        <MudSelectItem Value="@(0.25)">25%</MudSelectItem>
+                    <MudSelect T="double?" Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate" Class="mt-4">
+                        <MudSelectItem T="double?" Value="@(0.0)">Ingen</MudSelectItem>
+                        <MudSelectItem T="double?" Value="@(0.06)">6%</MudSelectItem>
+                        <MudSelectItem T="double?" Value="@(0.12)">12%</MudSelectItem>
+                        <MudSelectItem T="double?" Value="@(0.25)">25%</MudSelectItem>
                     </MudSelect>
                 </MudItem>
 
