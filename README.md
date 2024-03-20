@@ -1,22 +1,32 @@
 # YourBrand
 
-Check [Instructions](/Instructions.md) to run.
+Enterprise system for e-commerce and consulting services (Prototype).
 
-App for managing a consultancy business - from sales to running a project - A private business network.
+Modular solution with Portal and e-Shop apps.
 
-_**Info**: Parts of this project are used by the [eShop](https://github.com/marinasundstrom/eShop) project. So some projects here are outdated._
+## Getting started
 
-This project brings [TimeReport](https://github.com/marinasundstrom/timereport) and a re-imagined [Showroom](https://github.com/marinasundstrom/showroom) together into one product. 
+Read this [document](/docs/getting-started.md).
 
-It also led to including other projects like FinanceApp and Catalog (Product Catalog). And then some additional services where created. That is how we end up with a basic ERP.
+## Background
 
-This is a concept developed when learning building distributed applications. It is not production ready. But please, be inspired! :)
+The seed of this project was planted in 2018, with ["Showroom"](https://github.com/marinasundstrom/YourBrand) - a site for presenting consultants.
 
-Watch the [video](https://youtu.be/iL9s-bCr_r4).
+In the summer of 2021, I experimented with building a Point of Sale system. This was an exercise in software architecture and building distributed apps.
 
-Another [video](https://youtu.be/r0hApprPM1g) on Product Catalog.
+Later in the same year (2021), I created the projects "Accounting" (later ["Finance"](https://github.com/marinasundstrom/finance-app)) and ["Product Catalog"](https://github.com/marinasundstrom/product-catalog). Then, the ["TimeReport"](https://github.com/marinasundstrom/TimeReport) module - project management. These modules were later brought together into "YourBrand". From there they continued to evolve.
 
-Based on the [item-catalog](https://github.com/marinasundstrom/item-catalog) project - which at the moment is more evolved. I try to keep the common functionality in sync.
+In 2022, I forked "YourBrand" and decided to focus on building an e-commerce system - calling the project ["eShop"](https://github.com/marinasundstrom/eShop). I copied modules to a a new solution. Built the actual e-shop site. This project involved the Product Catalog, Order system, Customer relations, and Inventory.
+
+In the summer of 2023, I decided to start over with my e-shop system - the [new "YourBrand"](https://github.com/marinasundstrom/yourbrand_new_old). My objective was top build it with .NET 8 and modern Blazor, and to make it cloud-ready. I rewrote a few of the services, and I learned a lot about Azure from tinkering with that. But as the project progressed it felt like it was never going to be on par with the previous "eShop" project anytime soon. It would also get expensive to run in the cloud.
+
+So in 2024, despite thinking that I would never make any changes to the "YourBrand" codebase, I started to merge the modules back from the other solutions - from "eShop" and the new "YourBrand". And that made much more sense than to rewrite everything - especially when there was a lot that I loved about this code base - like the shell and module experience. Not to forget the Finance modules.
+
+This solution contains all these modules, plus a lot of improvements.
+
+I have always focused on having a solid developer experience. It should be easy to get up and running with no installs or additional configuration. This solution has the potential of running in the cloud and locally equally well.
+
+Earlier versions used the experimental Tye orchestrator, but that has been changed to Docker Compose for dependencies.
 
 ## Screenshots
 
@@ -57,7 +67,3 @@ Products
 <img src="/docs/overview.png" height="450"  alt="Overview"  /></a>
 
 <p>Architectural Overview</p>
-
-## Getting Started
-
-Read this [document](/docs/getting-started.md).

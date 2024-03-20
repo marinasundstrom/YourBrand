@@ -1,108 +1,85 @@
-This will be updated: Tye is not used anymore.
+# Getting started
 
-# Getting Started
+* Portal: https://localhost:5174/ (Actually the reverse proxy)
+* Identity Management: https://localhost:5040/
+* Store: https://localhost:7188/
 
-This guide is intended to be run from top-down.
+## Run dependencies in Docker
 
-All the necessary services have been configured in the ```docker-compose.deps.yml``` file.
+To run dependencies, like database, in Docker:
 
-## Prerequisites
-
-### Install the .NET 8 SDK
-
-Download and run the [installer](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
-
-### Install Docker Desktop
-
-Download it from [here](https://www.docker.com/products/docker-desktop).
-
-### Run and seed projects
-
-Each project has to be seeded  
-
-## Run the Docker services
-
-Open a terminal and navigate to the root/solution folder. 
-
-Run the following command:
-
-```sh
-docker-compose up docker-compose.deps.yml
+```
+docker compose -f docker-compose.deps.yml up -d
 ```
 
+## Seeding databases
 
-## Create the app databases
+You need to seed the database for each service.
 
-This will create and seed the main app database.
-
-In the source file ```Server/AppService/WebApi/Program.cs```, scroll down to the following line:
-
-```C#
-//await app.Services.SeedAsync();
+```
+dotnet run -- --seed
 ```
 
-Toggle the comment off.
+If you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service. Each with a command already specified.
 
-```C#
-await app.Services.SeedAsync();
+## Running services
+
+Just run each service:
+
+```
+dotnet run
 ```
 
-If you are in Watch mode, then the service will restart, and the uncommented code will execute.
+Again, if you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service. Just add the ``--seed`` to the command.
 
-Make sure to toggle the comment on again, or else the database will be recreated everytime you make a change to AppService.
+### Important service
 
-*This line of code has to be toggled off everytime the Domain model change in order for the database to be recreated.*
+These services are essential for the function of YourBrand:
 
-## Seed IdentityService database
+* Proxy
+* Portal
+* AppService
+* IdentityManagement
+* HumanResources
+* ApiKeys
 
-The following steps will seed the database.
+### Syncing user data
 
-In a terminal, go to the ```Server/IdentityService``` project directory.
+Everytime a database is created and recreated, you must populate it with users.
 
-Make sure that the database server is running. *(See previous steps)*
+Initial creation from seed:
 
-Run this command:
-
-```sh
-dotnet run -- /seed
+```
+dotnet run --project Seeder/Seeder.csproj -- --seed
 ```
 
-## Set up Azurite Storage Emulator
+To sync users to services (will make sure users have been created):
 
-To publicly expose Blobs via their URLs you have to change Azurite's configuration.
-
-*(This requires Azurite to have been run once for the files to be created)*
-
-Open the file ```WebApi/.data/azurite/__azurite_db_blob__.json```:
-
-Add the ```"publicAccess": "blob"``` key-value in the section shown below:
-
-```json
-        {
-            "name": "$CONTAINERS_COLLECTION$",
-            "data": [
-                {
-                    "accountName": "devstoreaccount1",
-                    "name": "images",
-                    "properties": {
-                        "etag": "\"0x1C839AE6CDF11F0\"",
-                        "lastModified": "2021-05-14T15:08:51.726Z",
-                        "leaseStatus": "unlocked",
-                        "leaseState": "available",
-                        "hasImmutabilityPolicy": false,
-                        "hasLegalHold": false,
-              --- >  "publicAccess": "blob" <---- 
-                    },
-                   // Omitted
-        },
+```
+dotnet run --project Seeder/Seeder.csproj -- --sync
 ```
 
-Then, restart Azurite. 
+The services must be running.
 
-Just restart the whole system. Exit Tye, and restart it.
+A ``CreateUser`` message will be published, and each service will consume that message, creating a local user if not already existing.
 
-## Launch the web app
+## Setting up a company
 
-In your browser, navigate to: ```https://localhost/```
+You have to create a company in the Portal, in ``Administration > Set up``.
 
-You are now ready.
+Default credentials:
+
+```
+AliceSmith@email.com
+Pass123$
+```
+
+These credentials are used when logging in for the first time.
+
+## DevTunnel
+
+To connect from remote:
+
+```
+devtunnel host -p 5174 -a
+```
