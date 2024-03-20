@@ -5,7 +5,7 @@ namespace YourBrand.RotRutService.Domain;
 
 public class RotRutCaseFactory
 {
-    public RotRutCase CreateRotRutCase(InvoiceDto invoice)
+    public RotRutCase CreateRotRutCase(Invoice invoice)
     {
         var domesticServices = invoice.DomesticService;
 
