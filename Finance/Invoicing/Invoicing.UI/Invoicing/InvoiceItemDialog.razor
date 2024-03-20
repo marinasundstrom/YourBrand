@@ -11,22 +11,6 @@
             <MudTextField Label="Description" @bind-Value="Model.Description" For="() => Model.Description" Class="mt-4">
             </MudTextField>
 
-            <MudGrid>
-
-                <MudItem xs="12" md="6">
-                    <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity" Class="mt-4">
-                    </MudNumericField>
-                </MudItem>
-
-                <MudItem xs="12" md="6">
-                    <MudSelect Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit" Class="mt-4">
-                        <MudSelectItem Value="@("pcs")">Pieces</MudSelectItem>
-                        <MudSelectItem Value="@("hours")">Hours</MudSelectItem>
-                    </MudSelect>
-                </MudItem>
-
-            </MudGrid>
-
             <MudNumericField Label="Unit Price" @bind-Value="Model.UnitPrice" For="() => Model.UnitPrice" Class="mt-4">
             </MudNumericField>
 
@@ -54,6 +38,22 @@
                         {
                             <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
                         }
+                    </MudSelect>
+                </MudItem>
+
+            </MudGrid>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity" Class="mt-4">
+                    </MudNumericField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit" Class="mt-4">
+                        <MudSelectItem Value="@("pcs")">Pieces</MudSelectItem>
+                        <MudSelectItem Value="@("hours")">Hours</MudSelectItem>
                     </MudSelect>
                 </MudItem>
 

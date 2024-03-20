@@ -12,24 +12,6 @@
                 Class="mt-4">
             </MudTextField>
 
-            <MudGrid>
-
-                <MudItem xs="12" md="6">
-                    <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity"
-                        Class="mt-4">
-                    </MudNumericField>
-                </MudItem>
-
-                <MudItem xs="12" md="6">
-                    <MudSelect Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit" Class="mt-4">
-                        <MudSelectItem Value="@(string.Empty)">Unspecified</MudSelectItem>
-                        <MudSelectItem Value="@("pcs")">Pieces</MudSelectItem>
-                        <MudSelectItem Value="@("hours")">Hours</MudSelectItem>
-                    </MudSelect>
-                </MudItem>
-
-            </MudGrid>
-
             <MudNumericField Label="Unit Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
             </MudNumericField>
 
@@ -44,20 +26,37 @@
 
                 <MudItem xs="12" md="6">
                     <MudSelect Label="VAT Rate" @bind-Value="Model.VatRate" For="() => Model.VatRate" Class="mt-4">
-                        <MudSelectItem Value="@((double?)0)">Ingen</MudSelectItem>
-                        <MudSelectItem Value="@((double?)0.06)">6%</MudSelectItem>
-                        <MudSelectItem Value="@((double?)0.12)">12%</MudSelectItem>
-                        <MudSelectItem Value="@((double?)0.25)">25%</MudSelectItem>
+                        <MudSelectItem Value="@(0.0)">Ingen</MudSelectItem>
+                        <MudSelectItem Value="@(0.06)">6%</MudSelectItem>
+                        <MudSelectItem Value="@(0.12)">12%</MudSelectItem>
+                        <MudSelectItem Value="@(0.25)">25%</MudSelectItem>
                     </MudSelect>
                 </MudItem>
 
                 <MudItem xs="12" md="6">
-                    <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType"
-                    Class="mt-4">
-                    @foreach (var status in Enum.GetValues<ProductType>())
-                    {
-                    <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
-                    }
+                    <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType" Class="mt-4">
+                        @foreach (var status in Enum.GetValues<ProductType>())
+                        {
+                            <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+            </MudGrid>
+
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudNumericField Label="Quantity" @bind-Value="Model.Quantity" For="() => Model.Quantity"
+                        Class="mt-4">
+                    </MudNumericField>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="Unit" @bind-Value="Model.Unit" For="() => Model.Unit" Class="mt-4">
+                        <MudSelectItem Value="@(string.Empty)">Unspecified</MudSelectItem>
+                        <MudSelectItem Value="@("pcs")">Pieces</MudSelectItem>
+                        <MudSelectItem Value="@("hours")">Hours</MudSelectItem>
                     </MudSelect>
                 </MudItem>
 

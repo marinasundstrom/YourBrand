@@ -120,9 +120,9 @@
                             <MudField Label="Total">@Model.Total.FormatCurrency(invoice.Currency)</MudField>
                         </MudItem>
 
-                        @* <MudItem xs="6" sm="6" md="6" lg="4">
+                        <MudItem xs="6" sm="6" md="6" lg="4">
                             <MudField Label="Discount">@Model.Discount.FormatCurrency(invoice.Currency)</MudField>
-                        </MudItem> *@
+                        </MudItem> 
 
                     </MudGrid>
                 } 
@@ -143,7 +143,7 @@
                         </RowTemplate>
                     </MudTable>
 
-                    @* <MudField Label="Discount" Class="mt-4">@Model.Discount.FormatCurrency(invoice.Currency)</MudField> *@
+                    <MudField Label="Discount" Class="mt-4">@Model.Discount.FormatCurrency(invoice.Currency)</MudField>
                 }
             </MudPaper>
 
