@@ -282,7 +282,11 @@
                 <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
                 <MudTd DataLabel="Product Type">@invoiceItem.ProductType</MudTd>
                 <MudTd DataLabel="Unit Price">@invoiceItem.UnitPrice.FormatCurrency(invoice.Currency)</MudTd>
-                <MudTd DataLabel="Quantity">@invoiceItem.Quantity</MudTd>
+                <MudTd DataLabel="Quantity">
+                    <MudNumericField T="double" Value="invoiceItem.Quantity"
+                       ValueChanged="async (v) => await UpdateInvoiceItemQuantity(invoiceItem, v)"
+                      Immediate="true" DebounceInterval="400" />
+                </MudTd>
                 <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
                 <MudTd DataLabel="VAT %">@(invoiceItem.VatRate * 100)%</MudTd>
                 <MudTd DataLabel="VAT">@invoiceItem.Vat.FormatCurrency(invoice.Currency)</MudTd>
@@ -327,7 +331,7 @@
 @code
 {
     bool isExpanded = true;
-    InvoiceDto? invoice;
+    Invoice? invoice;
     MudTable<InvoiceItemViewModel> table;
     bool loading = false;
     TransactionStatus? Status2;
@@ -590,7 +594,7 @@
         }
     }
 
-    private async Task DeleteInvoice(InvoiceDto invoice)
+    private async Task DeleteInvoice(Invoice invoice)
     {
         var result = await DialogService.ShowMessageBox("Delete draft invoice", "Are you sure?", "Yes", "No");
 
@@ -634,7 +638,7 @@
 
         if (result.Cancelled) return;
 
-        invoice.BillingDetails = (BillingDetailsDto)result.Data;
+        invoice.BillingDetails = (BillingDetails)result.Data;
     }
 
     async Task UpdateShippingDetails()
@@ -649,6 +653,23 @@
 
         if (result.Cancelled) return;
 
-        invoice.ShippingDetails = (ShippingDetailsDto)result.Data;
+        invoice.ShippingDetails = (ShippingDetails)result.Data;
     }
+
+    async Task UpdateInvoiceItemQuantity(InvoiceItemViewModel invoiceItem, double quantity) 
+    {
+        double oldValue = invoiceItem.Quantity;
+
+        try 
+        {
+            invoiceItem.Quantity = quantity;
+            await InvoicesClient.UpdateItemQuantityAsync(invoice.Id, invoiceItem.Id, new UpdateInvoiceItemQuantity() { Quantity = quantity });
+            Model.Update();
+        } 
+        catch 
+        {
+            invoiceItem.Quantity = oldValue;
+        }
+    }
+
 }

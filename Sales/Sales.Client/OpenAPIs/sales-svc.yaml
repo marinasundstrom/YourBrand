@@ -4,540 +4,576 @@ info:
   title: yourbrand-sales-svc
   version: v1
 servers:
-  - url: https://localhost:7155
+- url: https://localhost:5130
 paths:
   /v1/orders:
     get:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_GetOrders
       parameters:
-        - name: status
-          in: query
-          style: form
-          explode: true
-          schema:
-            type: array
-            nullable: true
-            items:
-              type: integer
-              format: int32
-          x-position: 1
-        - name: customerId
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 2
-        - name: ssn
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 3
-        - name: assigneeId
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 4
-        - name: page
-          in: query
-          schema:
+      - name: status
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
             type: integer
             format: int32
-            default: 1
-          x-position: 5
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-          x-position: 6
-        - name: sortBy
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 7
-        - name: sortDirection
-          in: query
-          schema:
+        x-position: 1
+      - name: customerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      - name: ssn
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: assigneeId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 5
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 6
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
             oneOf:
-              - nullable: true
-                oneOf:
-                  - $ref: "#/components/schemas/SortDirection"
-          x-position: 8
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 8
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfOrder"
+                $ref: '#/components/schemas/PagedResultOfOrder'
     post:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_CreateOrder
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateOrderRequest"
+              $ref: '#/components/schemas/CreateOrderRequest'
         required: true
         x-position: 1
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
+                $ref: '#/components/schemas/Order'
         404:
-          description: ""
+          description: ''
   /v1/orders/{id}:
     get:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_GetOrderById
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
+                $ref: '#/components/schemas/Order'
         404:
-          description: ""
+          description: ''
     delete:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_DeleteOrder
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/orders/getByNo/{orderNo}:
     get:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_GetOrderByNo
       parameters:
-        - name: orderNo
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-          x-position: 1
+      - name: orderNo
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
+                $ref: '#/components/schemas/Order'
         404:
-          description: ""
+          description: ''
   /v1/orders/draft:
     post:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_CreateDraftOrder
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateDraftOrderRequest"
+              $ref: '#/components/schemas/CreateDraftOrderRequest'
         required: true
         x-position: 1
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
+                $ref: '#/components/schemas/Order'
         404:
-          description: ""
+          description: ''
   /v1/orders/{id}/items:
     post:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_AddOrderItem
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddOrderItemRequest"
+              $ref: '#/components/schemas/AddOrderItemRequest'
         required: true
         x-position: 2
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderItem"
+                $ref: '#/components/schemas/OrderItem'
         404:
-          description: ""
+          description: ''
   /v1/orders/{id}/items/{itemId}:
     get:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_GetOrderItemById
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: itemId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderItem"
+                $ref: '#/components/schemas/OrderItem'
         404:
-          description: ""
+          description: ''
     put:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_UpdateOrderItem
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: itemId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateOrderItemRequest"
+              $ref: '#/components/schemas/UpdateOrderItemRequest'
         required: true
         x-position: 3
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderItem"
+                $ref: '#/components/schemas/OrderItem'
         404:
-          description: ""
+          description: ''
     delete:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_RemoveOrderItem
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: itemId
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
+  /v1/orders/{id}/items/{itemId}/quantity:
+    put:
+      tags:
+      - Orders
+      - Orders
+      operationId: Orders_UpdateOrderItemQuantity
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderItemQuantityRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        404:
+          description: ''
   /v1/orders/{id}/status:
     put:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_UpdateStatus
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: status
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int32
-          x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: status
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/orders/{id}/assignee:
     put:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_UpdateAssignedUser
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
-        - name: userId
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: userId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/orders/{id}/billingDetails:
     put:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_UpdateBillingDetails
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: billingDetails
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BillingDetails"
+              $ref: '#/components/schemas/BillingDetails'
         required: true
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/orders/{id}/shippingDetails:
     put:
       tags:
-        - Orders
-        - Orders
+      - Orders
+      - Orders
       operationId: Orders_UpdateShippingDetails
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: shippingDetails
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ShippingDetails"
+              $ref: '#/components/schemas/ShippingDetails'
         required: true
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
   /v1/orders/statuses:
     get:
       tags:
-        - OrderStatuses
-        - OrderStatuses
+      - OrderStatuses
+      - OrderStatuses
       operationId: OrderStatuses_GetOrderStatuses
       parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 1
-          x-position: 1
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-          x-position: 2
-        - name: searchTerm
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 3
-        - name: sortBy
-          in: query
-          schema:
-            type: string
-            nullable: true
-          x-position: 4
-        - name: sortDirection
-          in: query
-          schema:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
             oneOf:
-              - nullable: true
-                oneOf:
-                  - $ref: "#/components/schemas/SortDirection"
-          x-position: 5
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedResultOfOrderStatus"
+                $ref: '#/components/schemas/PagedResultOfOrderStatus'
     post:
       tags:
-        - OrderStatuses
-        - OrderStatuses
+      - OrderStatuses
+      - OrderStatuses
       operationId: OrderStatuses_CreateOrder
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateOrderStatus"
+              $ref: '#/components/schemas/CreateOrderStatus'
         required: true
         x-position: 1
       responses:
         201:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderStatus"
+                $ref: '#/components/schemas/OrderStatus'
         404:
-          description: ""
+          description: ''
   /v1/orders/statuses/{id}:
     get:
       tags:
-        - OrderStatuses
-        - OrderStatuses
+      - OrderStatuses
+      - OrderStatuses
       operationId: OrderStatuses_GetOrderStatusById
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderStatus"
+                $ref: '#/components/schemas/OrderStatus'
         404:
-          description: ""
+          description: ''
     post:
       tags:
-        - OrderStatuses
-        - OrderStatuses
+      - OrderStatuses
+      - OrderStatuses
       operationId: OrderStatuses_UpdateOrderStatus
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
       requestBody:
         x-name: request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateOrderStatus"
+              $ref: '#/components/schemas/UpdateOrderStatus'
         required: true
         x-position: 2
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
     delete:
       tags:
-        - OrderStatuses
-        - OrderStatuses
+      - OrderStatuses
+      - OrderStatuses
       operationId: OrderStatuses_DeleteOrderStatus
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-          x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
       responses:
         200:
-          description: ""
+          description: ''
         404:
-          description: ""
+          description: ''
 components:
   schemas:
     PagedResultOfOrder:
@@ -547,7 +583,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/Order"
+            $ref: '#/components/schemas/Order'
         total:
           type: integer
           format: int32
@@ -564,11 +600,11 @@ components:
           type: string
           format: date-time
         status:
-          $ref: "#/components/schemas/OrderStatus"
+          $ref: '#/components/schemas/OrderStatus'
         assigneeId:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/User"
+          - $ref: '#/components/schemas/User'
         customerId:
           type: string
           nullable: true
@@ -577,29 +613,29 @@ components:
         billingDetails:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/BillingDetails"
+          - $ref: '#/components/schemas/BillingDetails'
         shippingDetails:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ShippingDetails"
+          - $ref: '#/components/schemas/ShippingDetails'
         items:
           type: array
           items:
-            $ref: "#/components/schemas/OrderItem"
+            $ref: '#/components/schemas/OrderItem'
         subTotal:
           type: number
           format: decimal
         vatAmounts:
           type: array
           items:
-            $ref: "#/components/schemas/OrderVatAmount"
+            $ref: '#/components/schemas/OrderVatAmount'
         vat:
           type: number
           format: decimal
         discounts:
           type: array
           items:
-            $ref: "#/components/schemas/OrderDiscount"
+            $ref: '#/components/schemas/OrderDiscount'
         discount:
           type: number
           format: decimal
@@ -613,7 +649,7 @@ components:
         createdBy:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/User"
+          - $ref: '#/components/schemas/User'
         lastModified:
           type: string
           format: date-time
@@ -621,7 +657,7 @@ components:
         lastModifiedBy:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/User"
+          - $ref: '#/components/schemas/User'
     OrderStatus:
       type: object
       additionalProperties: false
@@ -660,7 +696,7 @@ components:
         email:
           type: string
         address:
-          $ref: "#/components/schemas/Address"
+          $ref: '#/components/schemas/Address'
     Address:
       type: object
       additionalProperties: false
@@ -695,7 +731,7 @@ components:
           type: string
           nullable: true
         address:
-          $ref: "#/components/schemas/Address"
+          $ref: '#/components/schemas/Address'
     OrderItem:
       type: object
       additionalProperties: false
@@ -740,7 +776,7 @@ components:
         createdBy:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/User"
+          - $ref: '#/components/schemas/User'
         lastModified:
           type: string
           format: date-time
@@ -748,7 +784,7 @@ components:
         lastModifiedBy:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/User"
+          - $ref: '#/components/schemas/User'
     OrderVatAmount:
       type: object
       additionalProperties: false
@@ -779,13 +815,13 @@ components:
           type: string
     SortDirection:
       type: string
-      description: ""
+      description: ''
       x-enumNames:
-        - Desc
-        - Asc
+      - Desc
+      - Asc
       enum:
-        - Desc
-        - Asc
+      - Desc
+      - Asc
     CreateOrderRequest:
       type: object
       additionalProperties: false
@@ -798,15 +834,15 @@ components:
           type: string
           nullable: true
         billingDetails:
-          $ref: "#/components/schemas/BillingDetails"
+          $ref: '#/components/schemas/BillingDetails'
         shippingDetails:
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/ShippingDetails"
+          - $ref: '#/components/schemas/ShippingDetails'
         items:
           type: array
           items:
-            $ref: "#/components/schemas/CreateOrderItem"
+            $ref: '#/components/schemas/CreateOrderItem'
     CreateOrderItem:
       type: object
       additionalProperties: false
@@ -907,6 +943,18 @@ components:
         notes:
           type: string
           nullable: true
+    UpdateOrderItemQuantityRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        itemId:
+          type: string
+          nullable: true
+        quantity:
+          type: number
+          format: double
     PagedResultOfOrderStatus:
       type: object
       additionalProperties: false
@@ -914,7 +962,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/OrderStatus"
+            $ref: '#/components/schemas/OrderStatus'
         total:
           type: integer
           format: int32
@@ -940,9 +988,3 @@ components:
         description:
           type: string
           nullable: true
-  securitySchemes:
-    JWT:
-      type: apiKey
-      description: "Type into the textbox: Bearer {your JWT token}."
-      name: Authorization
-      in: header

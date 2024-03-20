@@ -5,10 +5,13 @@ using YourBrand.Invoicing.Application.Queries;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 
 namespace YourBrand.Invoicing.Controllers;
 
-[Route("[controller]")]
+[ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class InvoicesController : ControllerBase 
 {
     private readonly IMediator _mediator;

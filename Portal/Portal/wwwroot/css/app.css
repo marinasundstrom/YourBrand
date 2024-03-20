@@ -123,3 +123,13 @@ h1:focus {
     width: 350px; /* 480px; */
     padding-bottom: 0 !important;
 }
+
+.mud-table.mud-sm-table .mud-input-control {
+    margin-top: 0;
+    width: 120px;
+}
+
+.mud-table.mud-sm-table .mud-input-control>.mud-input-control-input-container>div.mud-input.mud-input-text {
+    margin-top: 0;
+    font-size: .875rem;
+}

@@ -28,7 +28,16 @@ public class InvoiceItem
 
     public string InvoiceId { get; private set; }
 
+    public string Description { get; private set; } = null!;
+
+    public void UpdateDescription(string description)
+    {
+        Description = description;
+    }
+
     public string? ProductId { get; private set; }
+
+    public string? Sku { get; set; }
 
     public ProductType ProductType  { get; private set; }
 
@@ -40,14 +49,10 @@ public class InvoiceItem
         }
     }
 
-    public string Description { get; private set; } = null!;
-
-    public void UpdateDescription(string description) 
-    {
-        Description = description;
-    }
-
     public string Unit { get; private set; } = null!;
+
+
+    public string? UnitId { get; set; }
 
     public void UpdateUnit(string unit)
     {
@@ -77,6 +82,12 @@ public class InvoiceItem
             Price = unitPrice;
         }
     }
+
+    public decimal? RegularPrice { get; set; }
+
+    public double? DiscountRate { get; set; }
+
+    public decimal? Discount { get; set; }
 
     public double? VatRate { get; private set; }
 

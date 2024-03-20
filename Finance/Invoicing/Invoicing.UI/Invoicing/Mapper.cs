@@ -8,7 +8,7 @@ namespace YourBrand.Invoicing.Invoicing;
 
 public static class Mapper
 {
-    public static InvoiceViewModel ToModel(this InvoiceDto dto)
+    public static InvoiceViewModel ToModel(this Invoice dto)
     {
         var model = new InvoiceViewModel
         {
@@ -32,7 +32,7 @@ public static class Mapper
         return model;
     }
 
-    public static InvoiceItemViewModel ToModel(this InvoiceItemDto dto)
+    public static InvoiceItemViewModel ToModel(this InvoiceItem dto)
     {
         return new InvoiceItemViewModel
         {
@@ -50,7 +50,7 @@ public static class Mapper
         };
     }
 
-    public static InvoiceDomesticServiceViewModel ToModel(this InvoiceDomesticServiceDto dto)
+    public static InvoiceDomesticServiceViewModel ToModel(this InvoiceDomesticService dto)
     {
         return new InvoiceDomesticServiceViewModel
         {
@@ -61,9 +61,9 @@ public static class Mapper
         };
     }
 
-    public static InvoiceDomesticServiceDto ToDto(this InvoiceDomesticServiceViewModel dto)
+    public static InvoiceDomesticService To(this InvoiceDomesticServiceViewModel dto)
     {
-        return new InvoiceDomesticServiceDto
+        return new InvoiceDomesticService
         {
             Kind = dto.Kind.GetValueOrDefault(),
             Description = dto.Description,
@@ -84,11 +84,11 @@ public static class Mapper
             VatRate = vm.VatRate,
             IsTaxDeductibleService = vm.IsTaxDeductibleService,
             DomesticService = !vm.IsTaxDeductibleService? null
-             : vm.DomesticService?.ToDto()
+             : vm.DomesticService?.To()
         };
     }
 
-    public static InvoiceItemDomesticServiceViewModel ToModel(this InvoiceItemDomesticServiceDto dto)
+    public static InvoiceItemDomesticServiceViewModel ToModel(this InvoiceItemDomesticService dto)
     {
         return new InvoiceItemDomesticServiceViewModel()
         {
@@ -97,9 +97,9 @@ public static class Mapper
             HouseholdServiceType = dto.HouseholdServiceType
         };
     }
-    public static InvoiceItemDomesticServiceDto ToDto(this InvoiceItemDomesticServiceViewModel vm)
+    public static InvoiceItemDomesticService To(this InvoiceItemDomesticServiceViewModel vm)
     {
-        return new InvoiceItemDomesticServiceDto()
+        return new InvoiceItemDomesticService()
         {
             Kind = (DomesticServiceKind)vm.Kind.GetValueOrDefault(),
             HomeRepairAndMaintenanceServiceType = vm.HomeRepairAndMaintenanceServiceType,
@@ -119,7 +119,7 @@ public static class Mapper
             VatRate = dto.VatRate,
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
              /*DomesticService = dto.DomesticService is null ? null
-             : new InvoiceItemDomesticServiceDto()
+             : new InvoiceItemDomesticService()
              {
                  Kind = (DomesticServiceKind)dto.DomesticService.Kind,
                  HomeRepairAndMaintenanceServiceType = dto.DomesticService.HomeRepairAndMaintenanceServiceType,

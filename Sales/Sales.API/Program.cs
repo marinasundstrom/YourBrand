@@ -127,7 +127,7 @@ app.UseStatusCodePages();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.UseOpenApiAndSwaggerUi();
 }
 
 app.UseOutputCache();
@@ -156,7 +156,7 @@ try
 
         await context.Database.MigrateAsync();
 
-        //await context.Database.EnsureCreatedAsync();
+        await context.Database.EnsureCreatedAsync();
 
         if (args.Contains("--seed"))
         {   

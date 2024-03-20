@@ -60,7 +60,7 @@
         }        
     }
 
-    [Parameter] public InvoiceDomesticServiceDto? InvoiceDomesticService { get; set; }
+    [Parameter] public InvoiceDomesticService? InvoiceDomesticService { get; set; }
 
     protected override void OnInitialized()
     {
@@ -73,7 +73,7 @@
 
     async Task Submit()
     {
-        var dto = new InvoiceDomesticServiceDto {
+        var dto = new InvoiceDomesticService {
             Kind = Kind,
             Description = Description,
             Buyer = Buyer,

@@ -16,6 +16,8 @@ public class SeedData
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
 
+            /*
+
             if (!context.Invoices.Any())
             {
                 var invoice1 = new Invoice(DateTime.Now.Subtract(TimeSpan.FromDays(-10)), status: InvoiceStatus.Draft);
@@ -39,6 +41,8 @@ public class SeedData
 
                 await context.SaveChangesAsync();
             }
+
+            */
         }
     }
 }

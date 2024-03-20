@@ -84,6 +84,8 @@ public class Invoice : Entity
         }
     }
 
+    public string? CustomerId { get; set; }
+
     public string Currency { get; private set; }
 
     public void SetCurrency(string currency)
@@ -106,16 +108,17 @@ public class Invoice : Entity
         }
     }
 
-    //public string? CustomerId { get; private set; }
-
-    //public bool IsVatIncluded { get; set; }
+    public bool VatIncluded { get; set; }
 
     public decimal SubTotal { get; private set; }
 
-    public decimal Vat { get; private set; }
+    public double? VatRate { get; set; }
+
+    public decimal Vat { get; set; }
+
+    public decimal Discount { get; set; }
 
     public List<InvoiceVatAmount> VatAmounts { get; set; } = new List<InvoiceVatAmount>();
-
 
     public bool Rounding { get; set; }
 
@@ -196,7 +199,7 @@ public class Invoice : Entity
         Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
         Total = Items.Sum(x => x.Total);
         SubTotal = Total - Vat;
-        //Discount = Items.Sum(x => x.Discount.GetValueOrDefault());
+        Discount = Items.Sum(x => x.Discount.GetValueOrDefault());
 
         Rounded = null;
         if (Rounding) 

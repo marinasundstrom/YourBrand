@@ -19,7 +19,7 @@ public static class Mappings
     public static OrderItemDto ToDto(this OrderItem orderItem) => new(
         orderItem.Id,
         orderItem.Description,
-        orderItem.ItemId,
+        orderItem.ProductId,
         orderItem.Quantity,
         orderItem.Unit,
         orderItem.Price,

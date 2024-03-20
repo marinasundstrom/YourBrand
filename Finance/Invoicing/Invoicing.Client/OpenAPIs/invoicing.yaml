@@ -1,0 +1,925 @@
+﻿x-generator: NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Invoicing
+  version: v1
+servers:
+- url: https://localhost:5096
+paths:
+  /v1/invoices/{invoiceId}:
+    get:
+      tags:
+      - Invoices
+      - Invoices
+      operationId: Invoices_GetInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+    delete:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_DeleteInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /v1/invoices/ByNo/{invoiceNo}:
+    get:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_GetInvoiceByNo
+      parameters:
+      - name: invoiceNo
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/invoices/{invoiceNo}/billingDetails:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_UpdateBillingDetails
+      parameters:
+      - name: invoiceNo
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: billingDetails
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingDetails'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+  /v1/invoices/{invoiceNo}/shippingDetails:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_UpdateShippingDetails
+      parameters:
+      - name: invoiceNo
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: shippingDetails
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingDetails'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+  /v1/invoices/invoices/activateRotAndRut:
+    post:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_ActivateRotAndRut
+      parameters:
+      - name: invoiceId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceDomesticService'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/invoices/{invoiceId}/File:
+    get:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_GetInvoiceFile
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /v1/invoices/{invoiceId}/Items:
+    post:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_AddItem
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInvoiceItem'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceItem'
+  /v1/invoices/{invoiceId}/Items/{invoiceItemId}:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_UpdateItem
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: invoiceItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInvoiceItem'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceItem'
+    delete:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_DeleteInvoiceItem
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: invoiceItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/Items/{invoiceItemId}/quantity:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_UpdateItemQuantity
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: invoiceItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInvoiceItemQuantity'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceItem'
+  /v1/invoices:
+    post:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_CreateInvoice
+      requestBody:
+        x-name: command
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInvoice'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/invoices/{invoiceId}/Status:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetInvoiceStatus
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: status
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/InvoiceStatus'
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/PaidAmount:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetPaidAmount
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: amount
+        in: query
+        required: true
+        schema:
+          type: number
+          format: decimal
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/Date:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetDate
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/Type:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetType
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: type
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/InvoiceType'
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/DueDate:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetDueDate
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: dueDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/Reference:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetReference
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: reference
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/invoices/{invoiceId}/Note:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetNote
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: note
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/Invoices:
+    get:
+      tags:
+      - Invoices
+      operationId: Invoices_GetInvoices
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: type
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/InvoiceType'
+        x-position: 3
+      - name: status
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/InvoiceStatus'
+        x-position: 4
+      - name: reference
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfInvoice'
+components:
+  schemas:
+    Invoice:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        invoiceNo:
+          type: string
+          nullable: true
+        issueDate:
+          type: string
+          format: date-time
+          nullable: true
+        type:
+          $ref: '#/components/schemas/InvoiceType'
+        status:
+          $ref: '#/components/schemas/InvoiceStatus'
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+        currency:
+          type: string
+        reference:
+          type: string
+          nullable: true
+        note:
+          type: string
+          nullable: true
+        billingDetails:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BillingDetails'
+        shippingDetails:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ShippingDetails'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItem'
+        subTotal:
+          type: number
+          format: decimal
+        vatAmounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceVatAmount'
+        vat:
+          type: number
+          format: decimal
+        total:
+          type: number
+          format: decimal
+        paid:
+          type: number
+          format: decimal
+          nullable: true
+        domesticService:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceDomesticService'
+    InvoiceType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Invoice
+      - Cash
+      - Credit
+      enum:
+      - Invoice
+      - Cash
+      - Credit
+    InvoiceStatus:
+      type: string
+      description: ''
+      x-enumNames:
+      - Draft
+      - Sent
+      - Paid
+      - PartiallyPaid
+      - Overpaid
+      - Repaid
+      - PartiallyRepaid
+      - Reminder
+      - Void
+      enum:
+      - Draft
+      - Sent
+      - Paid
+      - PartiallyPaid
+      - Overpaid
+      - Repaid
+      - PartiallyRepaid
+      - Reminder
+      - Void
+    BillingDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        ssn:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        thoroughfare:
+          type: string
+        premises:
+          type: string
+          nullable: true
+        subPremises:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+        locality:
+          type: string
+        subAdministrativeArea:
+          type: string
+        administrativeArea:
+          type: string
+        country:
+          type: string
+    ShippingDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        careOf:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address'
+    InvoiceItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        productType:
+          $ref: '#/components/schemas/ProductType'
+        description:
+          type: string
+        price:
+          type: number
+          format: decimal
+        unit:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        quantity:
+          type: number
+          format: double
+        vat:
+          type: number
+          format: decimal
+        total:
+          type: number
+          format: decimal
+        isTaxDeductibleService:
+          type: boolean
+        domesticService:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceItemDomesticService'
+    ProductType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Good
+      - Service
+      enum:
+      - Good
+      - Service
+    InvoiceItemDomesticService:
+      type: object
+      additionalProperties: false
+      properties:
+        kind:
+          $ref: '#/components/schemas/DomesticServiceKind'
+        homeRepairAndMaintenanceServiceType:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/HomeRepairAndMaintenanceServiceType'
+        householdServiceType:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/HouseholdServiceType'
+    DomesticServiceKind:
+      type: string
+      description: ''
+      x-enumNames:
+      - HomeRepairAndMaintenanceServiceType
+      - HouseholdService
+      enum:
+      - HomeRepairAndMaintenanceServiceType
+      - HouseholdService
+    HomeRepairAndMaintenanceServiceType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Carpentry
+      - ElectricityWork
+      - GlassMetalWork
+      - Wallpapering
+      - DrainageWork
+      - Masonry
+      - WaterAndHeating
+      enum:
+      - Carpentry
+      - ElectricityWork
+      - GlassMetalWork
+      - Wallpapering
+      - DrainageWork
+      - Masonry
+      - WaterAndHeating
+    HouseholdServiceType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Childcare
+      - MovingService
+      - ItServices
+      - ClothingAndTextileCare
+      - PersonalCare
+      - RepairOfHoushouldAppliances
+      - SnowShoveling
+      - Cleaning
+      - Gardening
+      enum:
+      - Childcare
+      - MovingService
+      - ItServices
+      - ClothingAndTextileCare
+      - PersonalCare
+      - RepairOfHoushouldAppliances
+      - SnowShoveling
+      - Cleaning
+      - Gardening
+    InvoiceVatAmount:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        subTotal:
+          type: number
+          format: decimal
+        vat:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
+    InvoiceDomesticService:
+      type: object
+      additionalProperties: false
+      properties:
+        kind:
+          $ref: '#/components/schemas/DomesticServiceKind'
+        buyer:
+          type: string
+        description:
+          type: string
+        requestedAmount:
+          type: number
+          format: decimal
+        propertyDetails:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PropertyDetails'
+    PropertyDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        propertyDesignation:
+          type: string
+          nullable: true
+        apartmentNo:
+          type: string
+          nullable: true
+        organizationNo:
+          type: string
+          nullable: true
+    PropertyType:
+      type: string
+      description: ''
+      x-enumNames:
+      - HousingUnit
+      - CooperativeFlat
+      enum:
+      - HousingUnit
+      - CooperativeFlat
+    AddInvoiceItem:
+      type: object
+      additionalProperties: false
+      properties:
+        productType:
+          $ref: '#/components/schemas/ProductType'
+        description:
+          type: string
+        unitPrice:
+          type: number
+          format: decimal
+        unit:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        quantity:
+          type: number
+          format: double
+        isTaxDeductibleService:
+          type: boolean
+          nullable: true
+        domesticService:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceItemDomesticService'
+    UpdateInvoiceItem:
+      type: object
+      additionalProperties: false
+      properties:
+        productType:
+          $ref: '#/components/schemas/ProductType'
+        description:
+          type: string
+        unitPrice:
+          type: number
+          format: decimal
+        unit:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        quantity:
+          type: number
+          format: double
+        isTaxDeductibleService:
+          type: boolean
+    UpdateInvoiceItemQuantity:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: number
+          format: double
+    CreateInvoice:
+      type: object
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceStatus'
+        note:
+          type: string
+          nullable: true
+    ItemsResultOfInvoice:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+        totalItems:
+          type: integer
+          format: int32

@@ -69,15 +69,19 @@ public class Order : AggregateRoot<string>, IAuditable
 
     public decimal SubTotal { get; set; }
 
-    public double VatRate { get; set; }
+    public decimal Discount { get; set; }
 
     public List<OrderDiscount> Discounts { get; set; } = new List<OrderDiscount>();
 
-    public List<OrderVatAmount> VatAmounts { get; set; } = new List<OrderVatAmount>();
+    public double? VatRate { get; set; }
 
     public decimal? Vat { get; set; }
 
-    public decimal Discount { get; set; }
+    public List<OrderVatAmount> VatAmounts { get; set; } = new List<OrderVatAmount>();
+
+    public bool Rounding { get; set; }
+
+    public decimal? Rounded { get; set; }
 
     public decimal Total { get; set; }
 
@@ -114,10 +118,16 @@ public class Order : AggregateRoot<string>, IAuditable
         UpdateVatAmounts();
 
         VatRate = 0.25;
-        Vat = Items.Sum(x => x.Vat);
+        Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
         Total = Items.Sum(x => x.Total);
         SubTotal = VatIncluded ? (Total - Vat.GetValueOrDefault()) : Total;
         Discount = Items.Sum(x => x.Discount.GetValueOrDefault());
+
+        Rounded = null;
+        if (Rounding)
+        {
+            Rounded = Math.Round(0m, MidpointRounding.AwayFromZero);
+        }
     }
 
     private void UpdateVatAmounts()

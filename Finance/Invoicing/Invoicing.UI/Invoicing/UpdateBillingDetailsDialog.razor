@@ -100,21 +100,21 @@
 </EditForm>
 
 @code {
-    InvoiceItemDto? item;
+    InvoiceItem? item;
 
     [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter] public string? InvoiceId { get; set; }
 
-    [Parameter] public BillingDetailsDto? Model { get; set; } = null!;
+    [Parameter] public BillingDetails? Model { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
         if (Model is null)
         {
-            Model = new BillingDetailsDto()
+            Model = new BillingDetails()
                 {
-                    Address = new AddressDto()
+                    Address = new Address()
                 };
         }
     }

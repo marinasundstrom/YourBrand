@@ -10,7 +10,7 @@
 
 <MudButton Variant="Variant.Filled" Link="/invoices/new" Class="mb-2">New invoice</MudButton>
 
-<MudTable T="InvoiceDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+<MudTable T="Invoice" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
     <ToolBarContent>
         <MudSelect T="InvoiceType?" Label="Type" MultiSelection="true" @bind-Value="Type" SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
@@ -66,14 +66,14 @@
 
 @code
 {
-    MudTable<InvoiceDto> table;
+    MudTable<Invoice> table;
     bool loading = false;
     InvoiceType? Type;
     IEnumerable<InvoiceType?> selectedTypes = new List<InvoiceType?>();
     InvoiceStatus? Status;
     IEnumerable<InvoiceStatus?> selectedStatuses = new List<InvoiceStatus?>();
 
-    private async Task<TableData<InvoiceDto>> ServerReload(TableState state)
+    private async Task<TableData<Invoice>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -81,7 +81,7 @@
         {
             var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, selectedTypes.Select(s => (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus)s!), null);
 
-            return new TableData<InvoiceDto>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Invoice>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {
@@ -100,7 +100,7 @@
         await table.ReloadServerData();
     }
 
-    public async Task GoTo(InvoiceDto invoice)
+    public async Task GoTo(Invoice invoice)
     {
         NavigationManager.NavigateTo($"/invoices/{invoice.InvoiceNo}");
     }
@@ -117,7 +117,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task DeleteInvoice(InvoiceDto invoice)
+    private async Task DeleteInvoice(Invoice invoice)
     {
         var result = await DialogService.ShowMessageBox("Delete draft invoice", "Are you sure?", "Yes", "No");
 

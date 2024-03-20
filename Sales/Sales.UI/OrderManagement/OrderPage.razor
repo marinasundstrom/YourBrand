@@ -289,7 +289,11 @@ Delete
                     <RowTemplate Context="orderItem">
                         <MudTd DataLabel="Product Id"><a href="/products/@orderItem.ItemId">@orderItem.ItemId</a></MudTd>
                         <MudTd DataLabel="Description">@orderItem.Description</MudTd>
-                        <MudTd DataLabel="Quantity">@orderItem.Quantity</MudTd>
+                        <MudTd DataLabel="Quantity">
+                            <MudNumericField T="double" Value="orderItem.Quantity"
+                                ValueChanged="async (v) => await UpdateOrderItemQuantity(orderItem, v)"
+                                Immediate="true" DebounceInterval="400" />
+                        </MudTd>
                         <MudTd DataLabel="Unit">@orderItem.Unit</MudTd>
                         <MudTd DataLabel="Price">@orderItem.Price.FormatCurrency(order.Currency)</MudTd>
                         <MudTd DataLabel="Regular Price">@orderItem.RegularPrice?.FormatCurrency(order.Currency)</MudTd>
@@ -493,6 +497,22 @@ Delete
         if (result.Cancelled) return;
 
         order.ShippingDetails = (ShippingDetails)result.Data;
+    }
+
+    async Task UpdateOrderItemQuantity(OrderItemViewModel orderItem, double quantity) 
+    {
+        double oldValue = orderItem.Quantity;
+
+        try 
+        {
+            orderItem.Quantity = quantity;
+            await OrdersClient.UpdateOrderItemQuantityAsync(order.Id, orderItem.Id, new UpdateOrderItemQuantityRequest() { Quantity = quantity });
+            Model.Update();
+        } 
+        catch 
+        {
+            orderItem.Quantity = oldValue;
+        }
     }
 
     public async ValueTask DisposeAsync() 

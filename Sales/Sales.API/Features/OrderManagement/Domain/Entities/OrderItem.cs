@@ -5,7 +5,7 @@ namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 public class OrderItem : Entity<string>, IAuditable
 {
     internal OrderItem(string description,
-                       string? itemId,
+                       string? productId,
                        decimal price,
                        decimal? regularPrice,
                        double? discountRate,
@@ -16,7 +16,7 @@ public class OrderItem : Entity<string>, IAuditable
                        string? notes)
         : base(Guid.NewGuid().ToString())
     {
-        ItemId = itemId;
+        ProductId = productId;
         Description = description;
         Unit = unit;
         Price = price;
@@ -34,9 +34,15 @@ public class OrderItem : Entity<string>, IAuditable
 
     public string Description { get; set; } = null!;
 
-    public string? ItemId { get; set; } = null!;
+    public string? ProductId { get; set; }
+
+    public string? Sku { get; set; }
+
+    public ProductType ProductType  { get; set; }
 
     public string? Unit { get; set; }
+
+    public string? UnitId { get; set; }
 
     public decimal Price { get; set; }
 

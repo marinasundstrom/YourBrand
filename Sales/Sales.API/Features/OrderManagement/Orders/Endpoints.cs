@@ -53,14 +53,17 @@ public static class Endpoints
         group.MapPut("{id}/items/{itemId}", UpdateOrderItem)
             .WithName($"Orders_{nameof(UpdateOrderItem)}");
 
+        group.MapPut("{id}/items/{itemId}/quantity", UpdateOrderItemQuantity)
+            .WithName($"Orders_{nameof(UpdateOrderItemQuantity)}");
+
         group.MapPut("{id}/status", UpdateStatus)
-        .WithName($"Orders_{nameof(UpdateStatus)}");
+            .WithName($"Orders_{nameof(UpdateStatus)}");
 
         group.MapPut("{id}/assignee", UpdateAssignedUser)
             .WithName($"Orders_{nameof(UpdateAssignedUser)}");
 
         group.MapPut("{id}/billingDetails", UpdateBillingDetails)
-        .WithName($"Orders_{nameof(UpdateBillingDetails)}");
+            .WithName($"Orders_{nameof(UpdateBillingDetails)}");
 
         group.MapPut("{id}/shippingDetails", UpdateShippingDetails)
             .WithName($"Orders_{nameof(UpdateShippingDetails)}");
@@ -69,10 +72,7 @@ public static class Endpoints
 
     group.MapPut("{orderId}/items/{id}/price", UpdateOrderItemPrice)
         .WithName($"Orders_{nameof(UpdateOrderItemPrice)}");
-
-    group.MapPut("{orderId}/items/{id}/quantity", UpdateOrderItemQuantity)
-        .WithName($"Orders_{nameof(UpdateOrderItemQuantity)}");
-
+        
     group.MapPut("{orderId}/items/{id}/data", UpdateOrderItemData)
         .WithName($"Orders_{nameof(UpdateOrderItemData)}");
 
@@ -190,6 +190,19 @@ public static class Endpoints
         return TypedResults.Created(path, orderItem);
     }
 
+    private static async Task<Results<Ok<OrderItemDto>, NotFound>> UpdateOrderItemQuantity(string id, string itemId, UpdateOrderItemQuantityRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
+    {
+        var result = await mediator.Send(new UpdateOrderItemQuantity(id, itemId, request.Quantity), cancellationToken);
+
+        if (result.HasError(Errors.Orders.OrderNotFound))
+        {
+            return TypedResults.NotFound();
+        }
+
+        var orderItem = result.GetValue();
+
+        return TypedResults.Ok(orderItem);
+    }
 
     private static async Task<Results<Ok<OrderItemDto>, NotFound>> GetOrderItemById(string id, string itemId, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
