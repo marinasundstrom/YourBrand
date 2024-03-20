@@ -30,11 +30,14 @@
 
             </MudGrid>
 
-            <MudNumericField Label="Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
+            <MudNumericField Label="Unit Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
             </MudNumericField>
 
             <MudNumericField Label="Regular Price" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
                 Class="mt-4">
+            </MudNumericField>
+
+            <MudNumericField Label="Discount" Value="Model.Discount" For="() => Model.Discount" Class="mt-4" ReadOnly>
             </MudNumericField>
 
             <MudGrid>
@@ -48,15 +51,15 @@
                     </MudSelect>
                 </MudItem>
 
-                @*<MudItem xs="12" md="6">
-                <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType"
-                Class="mt-4">
-                @foreach (var status in Enum.GetValues<ProductType>())
-                {
-                <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
-                }
-                </MudSelect>
-                </MudItem>*@
+                <MudItem xs="12" md="6">
+                    <MudSelect Label="Product Type" @bind-Value="Model.ProductType" For="() => Model.ProductType"
+                    Class="mt-4">
+                    @foreach (var status in Enum.GetValues<ProductType>())
+                    {
+                    <MudSelectItem Value="@status">@Enum.GetName(typeof(ProductType), status)</MudSelectItem>
+                    }
+                    </MudSelect>
+                </MudItem>
 
             </MudGrid>
 

@@ -39,6 +39,8 @@ public class InvoiceItemViewModel
 
     public decimal LineTotal => UnitPrice * (decimal)Quantity;
 
+    public string? Notes { get; set; }
+
     public bool IsTaxDeductibleService { get; set; }
 
     public InvoiceItemDomesticServiceViewModel? DomesticService { get; set; }

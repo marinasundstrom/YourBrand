@@ -30,6 +30,13 @@
             <MudNumericField Label="Unit Price" @bind-Value="Model.UnitPrice" For="() => Model.UnitPrice" Class="mt-4">
             </MudNumericField>
 
+            <MudNumericField Label="Regular Price" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
+                Class="mt-4">
+            </MudNumericField>
+
+            <MudNumericField Label="Discount" Value="Model.Discount" For="() => Model.Discount" Class="mt-4" ReadOnly>
+            </MudNumericField>
+
             <MudGrid>
 
                 <MudItem xs="12" md="6">
@@ -60,7 +67,8 @@
 
             </MudGrid>
 
-
+            <MudTextField Label="Notes" Lines="5" @bind-Value="Model.Notes" For="() => Model.Notes" Class="mt-4">
+            </MudTextField>
 
             <MudCheckBox T="bool" Label="For tax deduction (ROT/RUT)"
                          @bind-Checked="Model.IsTaxDeductibleService" Class="mt-4"></MudCheckBox>
