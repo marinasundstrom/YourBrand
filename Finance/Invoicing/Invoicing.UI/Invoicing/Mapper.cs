@@ -39,10 +39,10 @@ public static class Mapper
             Id = dto.Id,
             Description = dto.Description,
             ProductType = dto.ProductType,
-            UnitPrice = dto.Price,
-            Unit = dto.Unit,
+            UnitPrice = dto.UnitPrice,
+            Unit = dto.Unit!,
             Quantity = dto.Quantity,
-            VatRate = dto.VatRate,
+            VatRate = dto.VatRate.GetValueOrDefault(),
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
             DomesticService = dto.DomesticService is null ? 
              new InvoiceItemDomesticServiceViewModel()

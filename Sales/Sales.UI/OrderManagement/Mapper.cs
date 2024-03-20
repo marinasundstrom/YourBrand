@@ -30,7 +30,7 @@ public static class Mapper
         return new OrderItemViewModel
         {
             Id = dto.Id,
-            ItemId = dto.ItemId,
+            ItemId = dto.ProductId,
             Description = dto.Description,
             Unit = dto.Unit ?? string.Empty,
             Quantity = dto.Quantity,

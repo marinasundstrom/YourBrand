@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Sales
+@using YourBrand.Customers
 @implements IAsyncDisposable
 @inject NavigationManager NavigationManager
 @inject IOrdersClient OrdersClient
@@ -35,7 +36,7 @@
             <MudPaper Elevation="25" Class="pa-4">
                 <MudGrid Class="mb-4">
 
-                    <MudItem xs="12" sm="12" md="6" lg="4">
+                    <MudItem xs="12" sm="12" md="6" lg="6">
                         <MudField Label="Date">@Model.Date?.ToString("yyyy-MM-dd")</MudField>
                     </MudItem>
 
@@ -45,6 +46,10 @@
                             <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
                                 OnClick="async () => await UpdateOrderStatus()"></MudIconButton>
                         </div>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <CustomerSelector />
                     </MudItem>
 
                     @*
@@ -87,10 +92,6 @@
                 }
                 </MudItem>
                 *@
-
-                    <MudItem xs="6" sm="6" md="6" lg="6">
-                        <MudField Label="Customer No">@order.CustomerId</MudField>
-                    </MudItem>
 
                 </MudGrid>
             </MudPaper>
@@ -253,25 +254,27 @@ Delete
                     <MudButton StartIcon="@Icons.Filled.Add" Variant="Variant.Text" OnClick="AddItem" Class="mb-2">Add item</MudButton>
                 }
 
-                <MudTable T="OrderItemViewModel" @ref="table" Items="Model.Items" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+                <MudTable T="OrderItemViewModel" @ref="table" Items="Model.Items" Dense="true" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
                     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateOrderItem(e.Item)">
                     <HeaderContent>
-                        <MudTh>Product Id</MudTh>
                         <MudTh>Description</MudTh>
-                        <MudTh>Quantity</MudTh>
-                        <MudTh>Unit</MudTh>
+                        <MudTh>Product Id</MudTh>
+                        <MudTh>SKU</MudTh>
+                        @* <MudTh>Product type</MudTh> *@
                         <MudTh>
                             <MudTableSortLabel SortBy="new Func<OrderItemViewModel, object>(x=>x.Price)">Price</MudTableSortLabel>
                         </MudTh>
-                        <MudTh>
+                        <MudTh>Unit</MudTh>
+                        @* <MudTh>
                             <MudTableSortLabel SortBy="new Func<OrderItemViewModel, object>(x=>x.RegularPrice)">Regular Price</MudTableSortLabel>
-                        </MudTh>
+                        </MudTh> *@
                         <MudTh>
                             <MudTableSortLabel SortBy="new Func<OrderItemViewModel, object>(x=>x.Discount)">Discount</MudTableSortLabel>
                         </MudTh>
-                        <MudTh>
+                        <MudTh>Quantity</MudTh>
+                        @* <MudTh>
                             <MudTableSortLabel SortBy="new Func<OrderItemViewModel, object>(x=>x.SubTotal)">Sub Total</MudTableSortLabel>
-                        </MudTh>
+                        </MudTh> *@
                         <MudTh>
                             <MudTableSortLabel SortBy="new Func<OrderItemViewModel, object>(x=>x.VatRate)">VAT Rate</MudTableSortLabel>
                         </MudTh>
@@ -287,19 +290,21 @@ Delete
                         }
                     </HeaderContent>
                     <RowTemplate Context="orderItem">
-                        <MudTd DataLabel="Product Id"><a href="/products/@orderItem.ItemId">@orderItem.ItemId</a></MudTd>
                         <MudTd DataLabel="Description">@orderItem.Description</MudTd>
+                        <MudTd DataLabel="Product Id"><a href="/products/@orderItem.ItemId">@orderItem.ItemId</a></MudTd>
+                        <MudTd DataLabel="SKU">@orderItem.Sku</MudTd>
+                        @* <MudTd DataLabel="Product type">@orderItem.ProductType</MudTd>*@
+                        <MudTd DataLabel="Unit price">@orderItem.Price.FormatCurrency(order.Currency)</MudTd>
+                        <MudTd DataLabel="Unit">@orderItem.Unit</MudTd>
+                    @* <MudTd DataLabel="Regular price">@orderItem.RegularPrice?.FormatCurrency(order.Currency)</MudTd>*@
+                        <MudTd DataLabel="Discount">@orderItem.Discount?.FormatCurrency(order.Currency)</MudTd>
                         <MudTd DataLabel="Quantity">
                             <MudNumericField T="double" Value="orderItem.Quantity"
                                 ValueChanged="async (v) => await UpdateOrderItemQuantity(orderItem, v)"
                                 Immediate="true" DebounceInterval="400" />
                         </MudTd>
-                        <MudTd DataLabel="Unit">@orderItem.Unit</MudTd>
-                        <MudTd DataLabel="Price">@orderItem.Price.FormatCurrency(order.Currency)</MudTd>
-                        <MudTd DataLabel="Regular Price">@orderItem.RegularPrice?.FormatCurrency(order.Currency)</MudTd>
-                        <MudTd DataLabel="Discount">@orderItem.Discount?.FormatCurrency(order.Currency)</MudTd>
-                        <MudTd DataLabel="SubTotal">@orderItem.SubTotal.FormatCurrency(order.Currency)</MudTd>
-                        <MudTd DataLabel="VAT Rate">@(orderItem.VatRate * 100)%</MudTd>
+                        @*<MudTd DataLabel="Sub total">@orderItem.SubTotal.FormatCurrency(order.Currency)</MudTd>*@
+                        <MudTd DataLabel="VAT %">@(orderItem.VatRate * 100)%</MudTd>
                         <MudTd DataLabel="VAT">@orderItem.Vat.FormatCurrency(order.Currency)</MudTd>
                         <MudTd DataLabel="Total">@orderItem.Total.FormatCurrency(order.Currency)</MudTd>
                         @if (Model.Status.Id == 1)

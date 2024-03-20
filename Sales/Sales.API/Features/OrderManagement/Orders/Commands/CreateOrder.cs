@@ -50,7 +50,7 @@ public sealed record CreateOrder(int? Status, string? CustomerId, BillingDetails
 
             order.StatusId = request.Status ?? OrderStatusDraft;
 
-            order.CustomerId = request.CustomerId;
+            //order.CustomerId = request.CustomerId;
 
             order.VatIncluded = true;
 

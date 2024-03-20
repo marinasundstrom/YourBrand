@@ -1,90 +1,122 @@
 [
     {
+        "Id": "",
         "Name": "Showroom",
         "Assembly": "Showroom.UI",
-        "Enabled": true
+        "Enabled": true,
+        "DependantOn": [ "Customers.UI"  ]
     },
     {
+        "Id": "",
         "Name": "Catalog",
         "Assembly": "Catalog.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Sales",
         "Assembly": "Sales.UI",
-        "Enabled": true
+        "Enabled": true,
+        "DependantOn": [
+            "Customers.UI"
+        ]
     },
     {
+        "Id": "",
         "Name": "Marketing",
         "Assembly": "Marketing.UI",
-        "Enabled": true
+        "Enabled": true,
+        "DependantOn": [
+            "Customers.UI"
+        ]
     },
     {
+        "Id": "",
         "Name": "TimeReport",
         "Assembly": "TimeReport.UI",
-        "Enabled": true
+        "Enabled": true,
+        "DependantOn": [
+            "Customers.UI",
+            "HumanResources.UI"
+        ]
     },
     {
+        "Id": "",
         "Name": "Invoicing",
         "Assembly": "Invoicing.UI",
-        "Enabled": true
+        "Enabled": true,
+        "DependantOn": [
+            "Customers.UI"
+        ]
     },
     {
+        "Id": "",
         "Name": "Transactions",
         "Assembly": "Transactions.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Payments",
         "Assembly": "Payments.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Accounting",
         "Assembly": "Accounting.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Documents",
         "Assembly": "Documents.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Messenger",
         "Assembly": "Messenger.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "RotRutService",
         "Assembly": "RotRutService.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Customers",
         "Assembly": "Customers.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Ticketing",
         "Assembly": "Ticketing.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "HumanResources",
         "Assembly": "HumanResources.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Inventory",
         "Assembly": "Inventory.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Analytics",
         "Assembly": "Analytics.UI",
         "Enabled": true
     },
     {
+        "Id": "",
         "Name": "Identity Management",
         "Assembly": "IdentityManagement.UI",
         "Enabled": true

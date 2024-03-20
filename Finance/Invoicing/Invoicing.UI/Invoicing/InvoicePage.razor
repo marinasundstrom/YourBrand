@@ -5,6 +5,7 @@
 @using YourBrand.Invoicing.Invoicing
 @using YourBrand.Payments.Client
 @using YourBrand.Transactions.Client
+@using YourBrand.Customers
 @implements IAsyncDisposable
 @inject NavigationManager NavigationManager
 @inject IInvoicesClient InvoicesClient
@@ -38,7 +39,7 @@
             </div>
 
             <MudGrid Class="mb-4">
-                <MudItem xs="12" sm="12" md="6" lg="3">
+                <MudItem xs="12" sm="12" md="6" lg="6">
                 @if (Model.Status >= InvoiceStatus.Sent)
                 {
                             <MudField Label="Date">@Model.Date?.ToString("yyyy-MM-dd")</MudField>
@@ -50,7 +51,7 @@
                 }
                 </MudItem>
 
-                <MudItem xs="12" sm="12" md="6" lg="3">
+                <MudItem xs="12" sm="12" md="6" lg="6">
                     <div class="d-flex">
                         <MudField Label="Status">@Model.Status</MudField>
                         <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
@@ -58,7 +59,7 @@
                     </div>
                 </MudItem>
 
-                <MudItem xs="12" sm="12" md="6" lg="3">
+                <MudItem xs="12" sm="12" md="6" lg="6">
                 @if (Model.Status >= InvoiceStatus.Sent)
                 {
                             <MudField Label="Due Date">@Model.DueDate?.ToString("yyyy-MM-dd")</MudField>
@@ -68,6 +69,10 @@
                             <MudDatePicker Label="Due Date" Date="@Model.DueDate" DateChanged="OnDueDateChanged" For="() => Model.DueDate">
                             </MudDatePicker>
                 }
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="6" lg="6">
+                    <CustomerSelector />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12">
@@ -262,14 +267,19 @@
             <MudButton StartIcon="@Icons.Filled.Add" Variant="Variant.Text" OnClick="AddItem" Class="mb-2">Add item</MudButton>
         }
 
-        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="false" Items="Model.Items" Hover="true" Elevation="0"
+        <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Model.Items" Hover="true" Elevation="0"
               Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateInvoiceItem(e.Item)">
             <HeaderContent>
                 <MudTh>Description</MudTh>
-                <MudTh>Product Type</MudTh>
-                <MudTh>Unit Price</MudTh>
-                <MudTh>Quantity</MudTh>
+                <MudTh>Product Id</MudTh>
+                <MudTh>SKU</MudTh>
+                @* <MudTh>Product Type</MudTh> *@
+                <MudTh>Unit price</MudTh>
                 <MudTh>Unit</MudTh>
+                @*<MudTh>Regular price</MudTh>*@
+                <MudTh>Discount</MudTh>
+                <MudTh>Quantity</MudTh>
+                @* <MudTh>Sub total</MudTh> *@
                 <MudTh>VAT %</MudTh>
                 <MudTh>VAT</MudTh>
                 <MudTh>Total</MudTh>
@@ -280,21 +290,26 @@
             </HeaderContent>
             <RowTemplate Context="invoiceItem">
                 <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
-                <MudTd DataLabel="Product Type">@invoiceItem.ProductType</MudTd>
-                <MudTd DataLabel="Unit Price">@invoiceItem.UnitPrice.FormatCurrency(invoice.Currency)</MudTd>
+                <MudTd DataLabel="Product Id"><a href="/products/@invoiceItem.ItemId">@invoiceItem.ItemId</a></MudTd>
+                <MudTd DataLabel="SKU">@invoiceItem.Sku</MudTd>              
+                @* <MudTd DataLabel="Product type">@invoiceItem.ProductType</MudTd> *@            
+                <MudTd DataLabel="Unit price">@invoiceItem.UnitPrice.FormatCurrency(invoice.Currency)</MudTd>
+                <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
+                @* <MudTd DataLabel="Regular price">@invoiceItem.RegularPrice?.FormatCurrency(invoice.Currency)</MudTd> *@
+                <MudTd DataLabel="Discount">@invoiceItem.Discount?.FormatCurrency(invoice.Currency)</MudTd>
                 <MudTd DataLabel="Quantity">
                     <MudNumericField T="double" Value="invoiceItem.Quantity"
                        ValueChanged="async (v) => await UpdateInvoiceItemQuantity(invoiceItem, v)"
                       Immediate="true" DebounceInterval="400" />
                 </MudTd>
-                <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
+                @* <MudTd DataLabel="Sub total">@invoiceItem.SubTotal.FormatCurrency(invoice.Currency)</MudTd> *@
                 <MudTd DataLabel="VAT %">@(invoiceItem.VatRate * 100)%</MudTd>
                 <MudTd DataLabel="VAT">@invoiceItem.Vat.FormatCurrency(invoice.Currency)</MudTd>
-                <MudTd DataLabel="Line Total">@invoiceItem.LineTotal.FormatCurrency(invoice.Currency)</MudTd>
+                <MudTd DataLabel="Total">@invoiceItem.LineTotal.FormatCurrency(invoice.Currency)</MudTd>
             @if (Model.Status == InvoiceStatus.Draft)
             {
                         <MudTd>
-                            <MudIconButton Icon="@Icons.Filled.Delete" OnClick="async () => await DeleteItem(invoiceItem)" />
+                            <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteItem(invoiceItem)" />
                         </MudTd>
             }
             </RowTemplate>

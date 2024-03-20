@@ -1,4 +1,5 @@
 using YourBrand.Invoicing.Domain.Entities;
+using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application;
 
@@ -6,7 +7,27 @@ public static class Mappings
 {
     public static InvoiceDto ToDto(this Invoice invoice) 
     {
-        return new InvoiceDto(invoice.Id, invoice.InvoiceNo, invoice.IssueDate, invoice.Type, invoice.Status, invoice.DueDate, invoice.Currency, invoice.Reference, invoice.Note, invoice.BillingDetails?.ToDto(), invoice.ShippingDetails?.ToDto(), invoice.Items.Select(i => i.ToDto()), invoice.SubTotal, invoice.VatAmounts.Select(x => new InvoiceVatAmountDto(x.Name, x.VatRate, x.SubTotal, x.Vat, x.Total)), invoice.Vat, invoice.Total, invoice.Paid, invoice.DomesticService?.ToDto());
+        return new InvoiceDto(
+            invoice.Id,
+            invoice.InvoiceNo, 
+            invoice.IssueDate, 
+            invoice.Type, 
+            invoice.Status, 
+            invoice.Customer?.ToDto(),
+            invoice.DueDate, 
+            invoice.Currency, 
+            invoice.Reference, 
+            invoice.Notes, 
+            invoice.BillingDetails?.ToDto(), 
+            invoice.ShippingDetails?.ToDto(), 
+            invoice.Items.Select(i => i.ToDto()), 
+            invoice.SubTotal, 
+            invoice.VatAmounts.Select(x => new InvoiceVatAmountDto(x.Name, x.VatRate, x.SubTotal, x.Vat, x.Total)), 
+            invoice.Vat, 
+            invoice.Discount,
+            invoice.Total, 
+            invoice.Paid, 
+            invoice.DomesticService?.ToDto());
     }
 
     public static InvoiceDomesticServiceDto ToDto(this Domain.Entities.InvoiceDomesticService domesticService) 
@@ -16,8 +37,26 @@ public static class Mappings
 
     public static InvoiceItemDto ToDto(this InvoiceItem item) 
     {
-        return new InvoiceItemDto(item.Id, item.ProductType, item.Description, item.Price, item.Unit, item.VatRate.GetValueOrDefault(), item.Quantity, item.Vat.GetValueOrDefault(), item.Total, item.IsTaxDeductibleService, item.DomesticService?.ToDto());
+        return new InvoiceItemDto(
+            item.Id, 
+            item.ProductType, 
+            item.Description,
+            item.ProductId,
+            item.Sku,
+            item.Price,
+            item.Unit, 
+            item.Discount,
+            item.RegularPrice,
+            item.VatRate.GetValueOrDefault(), 
+            item.Quantity, 
+            item.Vat.GetValueOrDefault(), 
+            item.Total, 
+            item.Notes,
+            item.IsTaxDeductibleService, 
+            item.DomesticService?.ToDto());
     }
+
+    public static CustomerDto ToDto(this Customer customer) => new CustomerDto(customer.Id, customer.CustomerNo, customer.Name);
 
     public static InvoiceItemDomesticServiceDto ToDto(this Domain.Entities.InvoiceItemDomesticService domesticService) 
     {

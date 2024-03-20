@@ -5,6 +5,7 @@ using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
 using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 
 using Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
@@ -61,11 +62,15 @@ public class Order : AggregateRoot<string>, IAuditable
         return false;
     }
 
-    public string? CustomerId { get; set; }
+    public Customer? Customer { get; set; }
 
     public bool VatIncluded { get; set; }
 
     public string Currency { get; set; } = "SEK";
+
+    public string? Reference { get; private set; }
+
+    public string? Notes { get; private set; }
 
     public decimal SubTotal { get; set; }
 
@@ -180,6 +185,16 @@ public class Order : AggregateRoot<string>, IAuditable
     public string? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
+}
+
+[Index(nameof(Id), nameof(CustomerNo))]
+public class Customer
+{
+    public string Id { get; set; }
+
+    public long CustomerNo { get; set; }
+
+    public string Name { get; set; }
 }
 
 public sealed class OrderDiscount

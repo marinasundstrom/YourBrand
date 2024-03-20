@@ -10,8 +10,9 @@ public record InvoiceDto(
     string? InvoiceNo,
     DateTime? IssueDate, 
     Domain.Enums.InvoiceType Type, 
-    Domain.Enums.InvoiceStatus Status, 
-    DateTime? DueDate, 
+    Domain.Enums.InvoiceStatus Status,
+    CustomerDto? Customer,
+    DateTime? DueDate,
     string Currency, 
     string? Reference, 
     string? Note,
@@ -20,13 +21,23 @@ public record InvoiceDto(
     IEnumerable<InvoiceItemDto> Items,
     decimal SubTotal,
     IEnumerable<InvoiceVatAmountDto> VatAmounts,
-    decimal Vat, 
+    decimal Vat,
+    decimal? Discount,
     decimal Total, 
     decimal? Paid, 
     InvoiceDomesticServiceDto? DomesticService);
 
-public sealed record InvoiceVatAmountDto(string Name, double VatRate, decimal SubTotal, decimal? Vat, decimal Total);
+public record CustomerDto(
+    string Id,
+    long CustomerNo,
+    string Name);
 
+public sealed record InvoiceVatAmountDto(
+    string Name, 
+    double VatRate, 
+    decimal SubTotal, 
+    decimal? Vat, 
+    decimal Total);
 
 public record InvoiceDomesticServiceDto(
     Domain.Entities.DomesticServiceKind Kind, 
@@ -38,13 +49,18 @@ public record InvoiceDomesticServiceDto(
 public record InvoiceItemDto(
     string Id, 
     ProductType ProductType, 
-    string Description, 
-    decimal Price, 
-    string Unit, 
-    double VatRate, 
+    string Description,
+    string? ProductId,
+    string? SKU,
+    decimal UnitPrice, 
+    string? Unit,
+    decimal? Discount,
+    decimal? RegularPrice,
+    double? VatRate,
     double Quantity,
-    decimal Vat,
+    decimal? Vat,
     decimal Total,
+    string? Notes,
     bool IsTaxDeductibleService,
     InvoiceItemDomesticServiceDto? DomesticService);
 

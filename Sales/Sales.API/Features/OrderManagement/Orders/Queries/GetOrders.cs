@@ -28,7 +28,7 @@ public record GetOrders(int[]? Status, string? CustomerId, string? SSN, string? 
 
             if (request.CustomerId is not null)
             {
-                query = query.Where(x => x.CustomerId == request.CustomerId);
+                query = query.Where(x => x.Customer.Id == request.CustomerId);
             }
 
             if (request.SSN is not null)

@@ -545,6 +545,10 @@ components:
           $ref: '#/components/schemas/InvoiceType'
         status:
           $ref: '#/components/schemas/InvoiceStatus'
+        customer:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
         dueDate:
           type: string
           format: date-time
@@ -579,6 +583,10 @@ components:
         vat:
           type: number
           format: decimal
+        discount:
+          type: number
+          format: decimal
+          nullable: true
         total:
           type: number
           format: decimal
@@ -624,6 +632,17 @@ components:
       - PartiallyRepaid
       - Reminder
       - Void
+    Customer:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        customerNo:
+          type: integer
+          format: int64
+        name:
+          type: string
     BillingDetails:
       type: object
       additionalProperties: false
@@ -686,23 +705,43 @@ components:
           $ref: '#/components/schemas/ProductType'
         description:
           type: string
-        price:
+        productId:
+          type: string
+          nullable: true
+        sku:
+          type: string
+          nullable: true
+        unitPrice:
           type: number
           format: decimal
         unit:
           type: string
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
         vatRate:
           type: number
           format: double
+          nullable: true
         quantity:
           type: number
           format: double
         vat:
           type: number
           format: decimal
+          nullable: true
         total:
           type: number
           format: decimal
+        notes:
+          type: string
+          nullable: true
         isTaxDeductibleService:
           type: boolean
         domesticService:

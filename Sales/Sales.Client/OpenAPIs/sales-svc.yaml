@@ -606,10 +606,17 @@ components:
           oneOf:
           - $ref: '#/components/schemas/User'
         customerId:
-          type: string
           nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
         currency:
           type: string
+        reference:
+          type: string
+          nullable: true
+        note:
+          type: string
+          nullable: true
         billingDetails:
           nullable: true
           oneOf:
@@ -680,6 +687,17 @@ components:
           type: string
         name:
           type: string
+    Customer:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        customerNo:
+          type: integer
+          format: int64
+        name:
+          type: string
     BillingDetails:
       type: object
       additionalProperties: false
@@ -738,20 +756,26 @@ components:
       properties:
         id:
           type: string
+        productType:
+          $ref: '#/components/schemas/ProductType'
         description:
           type: string
-        itemId:
+        productId:
           type: string
           nullable: true
-        quantity:
-          type: number
-          format: double
-        unit:
+        sku:
           type: string
           nullable: true
         unitPrice:
           type: number
           format: decimal
+        unit:
+          type: string
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
         regularPrice:
           type: number
           format: decimal
@@ -760,7 +784,10 @@ components:
           type: number
           format: double
           nullable: true
-        discount:
+        quantity:
+          type: number
+          format: double
+        vat:
           type: number
           format: decimal
           nullable: true
@@ -785,6 +812,15 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/User'
+    ProductType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Good
+      - Service
+      enum:
+      - 1
+      - 2
     OrderVatAmount:
       type: object
       additionalProperties: false

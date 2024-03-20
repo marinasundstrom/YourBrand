@@ -24,6 +24,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Sales.Client\Sales.Client.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
+    <ProjectReference
+      Include="..\..\CustomerRelations\Customers\Customers.Components\Customers.Components.csproj" />
     <ProjectReference Include="..\..\Utils\Utils.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />

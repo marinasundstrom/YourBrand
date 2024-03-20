@@ -8,10 +8,14 @@ public class OrderItemViewModel
 {
     public string? Id { get; set; }
 
+    public ProductType ProductType { get; set; }
+
     [Required]
     public string Description { get; set; } = null!;
 
     public string? ItemId { get; set; }
+
+    public string? Sku { get; set; }
 
     [Required]
     public decimal Price { get; set; }

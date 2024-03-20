@@ -7,25 +7,43 @@ namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
 
 public static class Mappings
 {
-    public static OrderDto ToDto(this Order order) => new OrderDto(order.Id, order.OrderNo, order.Date, order.Status.ToDto(), order.Assignee?.ToDto(), order.CustomerId, order.Currency,
+    public static OrderDto ToDto(this Order order) => new OrderDto(
+        order.Id, 
+        order.OrderNo, 
+        order.Date, 
+        order.Status.ToDto(), 
+        order.Assignee?.ToDto(),
+        order.Customer?.ToDto(),
+        order.Currency,
+        order.Reference,
+        order.Notes,
         order.BillingDetails?.ToDto(),
         order.ShippingDetails?.ToDto(),
-        order.Items.Select(x => x.ToDto()), order.SubTotal,
+        order.Items.Select(x => x.ToDto()), 
+        order.SubTotal,
         order.VatAmounts.Select(x => new OrderVatAmountDto(x.Name, x.Rate, x.SubTotal, x.Vat, x.Total)),
         order.Vat.GetValueOrDefault(),
         order.Discounts.Select(x => new OrderDiscountDto(x.Amount, x.Description)),
-        order.Discount, order.Total, order.Created, order.CreatedBy?.ToDto(), order.LastModified, order.LastModifiedBy?.ToDto());
+        order.Discount, 
+        order.Total, 
+        order.Created, 
+        order.CreatedBy?.ToDto(), 
+        order.LastModified, 
+        order.LastModifiedBy?.ToDto());
 
     public static OrderItemDto ToDto(this OrderItem orderItem) => new(
         orderItem.Id,
+        orderItem.ProductType,
         orderItem.Description,
         orderItem.ProductId,
-        orderItem.Quantity,
-        orderItem.Unit,
+        orderItem.Sku,
         orderItem.Price,
+        orderItem.Unit,    
+        orderItem.Discount,
         orderItem.RegularPrice,
         orderItem.VatRate,
-        orderItem.Discount,
+        orderItem.Quantity,
+        orderItem.Vat,
         orderItem.Total,
         orderItem.Notes,
         orderItem.Created,
@@ -34,6 +52,8 @@ public static class Mappings
         orderItem.LastModifiedBy?.ToDto());
 
     public static OrderStatusDto ToDto(this OrderStatus orderStatus) => new(orderStatus.Id, orderStatus.Name, orderStatus.Handle, orderStatus.Description);
+
+    public static CustomerDto ToDto(this Customer customer) => new CustomerDto(customer.Id, customer.CustomerNo, customer.Name);
 
     public static UserDto ToDto(this User user) => new(user.Id, user.Name);
 

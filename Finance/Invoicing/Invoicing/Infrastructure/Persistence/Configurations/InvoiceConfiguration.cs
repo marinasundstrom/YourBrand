@@ -16,6 +16,8 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);
 
+        builder.OwnsOne(x => x.Customer);
+
         builder.OwnsOne(x => x.BillingDetails, x => x.OwnsOne(z => z.Address));
 
         builder.OwnsOne(x => x.ShippingDetails, x => x.OwnsOne(z => z.Address));

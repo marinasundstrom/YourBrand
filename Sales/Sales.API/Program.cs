@@ -152,17 +152,18 @@ try
         var context = scope.ServiceProvider.GetRequiredService<SalesContext>();
         var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-        //await context.Database.EnsureDeletedAsync();
-
-        await context.Database.MigrateAsync();
-
-        await context.Database.EnsureCreatedAsync();
-
         if (args.Contains("--seed"))
-        {   
+        {
+            await context.Database.EnsureDeletedAsync();
+
+            await context.Database.EnsureCreatedAsync();
 
             await SeedData(context, configuration, logger);
             return;
+        }
+        else 
+        {
+            await context.Database.MigrateAsync();
         }
     }
 }

@@ -8,16 +8,24 @@ public class InvoiceItemViewModel
 {
     public string? Id { get; set; }
 
+    public ProductType ProductType { get; set; }
+
     [Required]
     public string Description { get; set; } = null!;
 
-    public ProductType ProductType { get; set; }
+    public string? ItemId { get; set; } = null!;
+
+    public string? Sku { get; set; } = null!;
 
     [Required]
     public decimal UnitPrice { get; set; }
 
     [Required]
     public string Unit { get; set; } = null!;
+
+    public decimal? RegularPrice { get; set; }
+
+    public decimal? Discount { get; set; }
 
     [Required]
     [Range(0.0001, double.MaxValue)]

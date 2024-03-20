@@ -105,6 +105,8 @@ public class InvoiceItem
 
     public decimal Total { get; private set; }
 
+    public string? Notes { get; private set; }
+
     public bool IsTaxDeductibleService { get; set; }
 
     public InvoiceItemDomesticService? DomesticService { get; set; }

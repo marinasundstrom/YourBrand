@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Domain.Events;
@@ -20,7 +22,7 @@ public class Invoice : Entity
         Type = type;
         Status = status;
         Currency = currency;
-        Note = note;
+        Notes = note;
 
         AddDomainEvent(new InvoiceCreated(Id));
     }
@@ -84,7 +86,7 @@ public class Invoice : Entity
         }
     }
 
-    public string? CustomerId { get; set; }
+    public Customer? Customer { get; set; }
 
     public string Currency { get; private set; }
 
@@ -156,14 +158,14 @@ public class Invoice : Entity
         */
     }
 
-    public string? Note { get; set; }
+    public string? Notes { get; set; }
 
     public void SetNote(string note)
     {
-        if (Note != note)
+        if (Notes != note)
         {
-            Note = note;
-            AddDomainEvent(new InvoiceNoteChanged(Id, Note));
+            Notes = note;
+            AddDomainEvent(new InvoiceNoteChanged(Id, Notes));
         }
     }
 
@@ -250,6 +252,16 @@ public class Invoice : Entity
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }
+}
+
+[Index(nameof(Id), nameof(CustomerNo))]
+public class Customer
+{
+    public string Id { get; set; }
+
+    public long CustomerNo { get; set; }
+
+    public string Name { get; set; }
 }
 
 public class InvoiceVatAmount
