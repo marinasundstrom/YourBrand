@@ -54,23 +54,25 @@ public class WarehouseItemEventHandler
 
     public async Task Handle(WarehouseItemQuantityAvailableUpdated notification, CancellationToken cancellationToken)
     {
-        await _publishEndpoint.Publish(new QuantityAvailableChanged(notification.ItemId, notification.WarehouseId, notification.Quantity));
-
         var item = await _context.WarehouseItems
-    .Include(x => x.Item)
-    .Include(x => x.Warehouse)
-    .ThenInclude(x => x.Site)
-    .FirstOrDefaultAsync(i => i.Id == notification.ItemId);
+            .Include(x => x.Item)
+            .Include(x => x.Warehouse)
+            .ThenInclude(x => x.Site)
+            .FirstOrDefaultAsync(i => i.Id == notification.ItemId);
 
-        if (item is not null)
+        if (item is null)
         {
-            if (notification.Quantity <= item.QuantityThreshold
-                && notification.OldQuantity > item.QuantityThreshold)
-            {
-                await SendEmail(item);
+            return;
+        }
 
-                await PostNotification(item);
-            }
+        await _publishEndpoint.Publish(new QuantityAvailableChanged(item.ItemId, notification.WarehouseId, notification.Quantity));
+
+        if (notification.Quantity <= item.QuantityThreshold
+                && notification.OldQuantity > item.QuantityThreshold)
+        {
+            await SendEmail(item);
+
+            await PostNotification(item);
         }
     }
 
