@@ -21,22 +21,22 @@
 
         <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@invoice.InvoiceNo</MudText>
 
+        <div class="mb-4">
+            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.InvoiceNo}/file")">
+                Download
+            </MudButton>
+
+        @if (invoice.Status == InvoiceStatus.Draft)
+        {
+                    <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">
+                        Delete
+                    </MudButton>
+        }
+        </div>
+
         <MudGrid>
             <MudItem xs="12" sm="12" md="6" lg="6">
         <MudPaper Elevation="25" Class="pa-4">
-
-            <div class="mb-4">
-                <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.InvoiceNo}/file")">
-                    Download
-                </MudButton>
-
-            @if (invoice.Status == InvoiceStatus.Draft)
-            {
-                        <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">
-                            Delete
-                        </MudButton>
-            }
-            </div>
 
             <MudGrid Class="mb-4">
                 <MudItem xs="12" sm="12" md="6" lg="6">
