@@ -126,7 +126,7 @@ public class Order : AggregateRoot<string>, IAuditable
         Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
         Total = Items.Sum(x => x.Total);
         SubTotal = VatIncluded ? (Total - Vat.GetValueOrDefault()) : Total;
-        Discount = Items.Sum(x => x.Discount.GetValueOrDefault());
+        Discount = Items.Sum(x => (decimal)x.Quantity * x.Discount.GetValueOrDefault());
 
         Rounded = null;
         if (Rounding)

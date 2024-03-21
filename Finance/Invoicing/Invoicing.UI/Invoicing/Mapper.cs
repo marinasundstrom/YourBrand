@@ -39,9 +39,11 @@ public static class Mapper
             Id = dto.Id,
             Description = dto.Description,
             ProductType = dto.ProductType,
+            ItemId = dto.ProductId,
             UnitPrice = dto.UnitPrice,
             Unit = dto.Unit!,
             Quantity = dto.Quantity,
+            RegularPrice = dto.UnitPrice + dto.Discount,
             VatRate = dto.VatRate.GetValueOrDefault(),
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
             DomesticService = dto.DomesticService is null ? 
@@ -78,9 +80,11 @@ public static class Mapper
         {
             Description = vm.Description,
             ProductType = vm.ProductType,
+            ProductId = vm.ItemId,
             UnitPrice = vm.UnitPrice,
             Unit = vm.Unit,
             Quantity = vm.Quantity,
+            Discount = vm.Discount,
             VatRate = vm.VatRate,
             IsTaxDeductibleService = vm.IsTaxDeductibleService,
             DomesticService = !vm.IsTaxDeductibleService? null
@@ -113,9 +117,11 @@ public static class Mapper
         {
             Description = dto.Description,
             ProductType = dto.ProductType,
+            ProductId = dto.ItemId,
             UnitPrice = dto.UnitPrice,
             Unit = dto.Unit,
             Quantity = dto.Quantity,
+            Discount = dto.Discount,
             VatRate = dto.VatRate,
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
              /*DomesticService = dto.DomesticService is null ? null

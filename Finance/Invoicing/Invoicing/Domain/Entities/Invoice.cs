@@ -171,9 +171,17 @@ public class Invoice : Entity
 
     public IReadOnlyList<InvoiceItem> Items => _items;
 
-    public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity)
+    public InvoiceItem AddItem(
+        ProductType productType, 
+        string description, 
+        string? productId,
+        decimal unitPrice, 
+        string unit, 
+        decimal? discount,
+        double vatRate, 
+        double quantity)
     {
-        var invoiceItem = new InvoiceItem(this, productType, description, unitPrice, unit, vatRate, quantity);
+        var invoiceItem = new InvoiceItem(this, productType, description, productId, unitPrice, unit, discount, vatRate, quantity);
         _items.Add(invoiceItem);
 
         Update();
@@ -201,7 +209,7 @@ public class Invoice : Entity
         Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
         Total = Items.Sum(x => x.Total);
         SubTotal = Total - Vat;
-        Discount = Items.Sum(x => x.Discount.GetValueOrDefault());
+        Discount = Items.Sum(x => (decimal)x.Quantity * x.Discount.GetValueOrDefault());
 
         Rounded = null;
         if (Rounding) 

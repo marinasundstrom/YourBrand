@@ -61,7 +61,7 @@ public class OrderViewModel
         }
     }
 
-    public decimal Discount => Items.Sum(x => x.Discount.GetValueOrDefault());
+    public decimal Discount => Items.Sum(x => (decimal)x.Quantity * x.Discount.GetValueOrDefault());
 
     public decimal? Paid { get; set; }
 

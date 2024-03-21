@@ -49,10 +49,12 @@ public sealed record UpdateOrderItem(string OrderId, string OrderItemId, string 
             orderItem.Unit = request.Unit;
             orderItem.Price = request.UnitPrice;
             orderItem.RegularPrice = request.RegularPrice;
+            orderItem.Discount = request.RegularPrice - request.UnitPrice;
             orderItem.VatRate = request.VatRate;
             orderItem.Quantity = request.Quantity;
             orderItem.Notes = request.Notes;
 
+            orderItem.Update();
             order.Update();
 
             await unitOfWork.SaveChangesAsync(cancellationToken);

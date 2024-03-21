@@ -200,7 +200,7 @@ group.MapGet("/{invoiceId}/File", async (string invoiceId, IMediator mediator, C
 group.MapPost("/{invoiceId}/Items", async (string invoiceId, 
     AddInvoiceItem dto, 
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(invoiceId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
@@ -208,7 +208,7 @@ group.MapPost("/{invoiceId}/Items", async (string invoiceId,
 group.MapPut("/{invoiceId}/Items/{invoiceItemId}", async (string invoiceId, string invoiceItemId,
     UpdateInvoiceItem dto,
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItem(invoiceId, invoiceItemId, dto.ProductType, dto.Description, dto.UnitPrice, dto.Unit, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItem(invoiceId, invoiceItemId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService), cancellationToken))
     .WithName("Invoices_UpdateItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
@@ -298,8 +298,8 @@ if(args.Contains("--seed"))
 
 app.Run();
 
-public record AddInvoiceItem(ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService);
+public record AddInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService);
 
-public record UpdateInvoiceItem(ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool IsTaxDeductibleService);
+public record UpdateInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService);
 
 public record UpdateInvoiceItemQuantity(double Quantity);

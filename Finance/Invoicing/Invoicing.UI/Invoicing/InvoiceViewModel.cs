@@ -47,7 +47,7 @@ public class InvoiceViewModel
 
     public List<InvoiceVatAmountViewModel> VatAmounts => _vatAmounts;
 
-    public decimal Discount => Items.Sum(i => i.Discount.GetValueOrDefault());
+    public decimal Discount => Items.Sum(i => (decimal)i.Quantity * i.Discount.GetValueOrDefault());
 
     public decimal SubTotal => Items.Sum(i => i.LineTotal) - Vat;
 

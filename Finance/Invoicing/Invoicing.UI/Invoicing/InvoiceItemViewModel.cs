@@ -20,24 +20,24 @@ public class InvoiceItemViewModel
     [Required]
     public decimal UnitPrice { get; set; }
 
-    [Required]
-    public string Unit { get; set; } = null!;
-
     public decimal? RegularPrice { get; set; }
 
-    public decimal? Discount { get; set; }
+    public decimal? Discount => RegularPrice is null ? null : RegularPrice.GetValueOrDefault() - UnitPrice;
 
     [Required]
     [Range(0.0001, double.MaxValue)]
     public double Quantity { get; set; } = 1;
 
+    [Required]
+    public string Unit { get; set; } = null!;
+
     public double VatRate { get; set; } = 0.25;
 
     public decimal SubTotal => LineTotal.GetSubTotal(VatRate);
 
-    public decimal Vat => LineTotal.GetVatFromTotal(VatRate);
+    public decimal Vat => Math.Round(LineTotal.GetVatFromTotal(VatRate), 2, MidpointRounding.AwayFromZero);
 
-    public decimal LineTotal => UnitPrice * (decimal)Quantity;
+    public decimal LineTotal => Math.Round(UnitPrice * (decimal)Quantity, 2, MidpointRounding.AwayFromZero);
 
     public string? Notes { get; set; }
 

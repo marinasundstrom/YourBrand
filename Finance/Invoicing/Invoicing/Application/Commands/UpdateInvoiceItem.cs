@@ -7,16 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
+public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
 {
-    public class Handler : IRequestHandler<UpdateInvoiceItem, InvoiceItemDto>
+    public class Handler(IInvoicingContext context) : IRequestHandler<UpdateInvoiceItem, InvoiceItemDto>
     {
-        private readonly IInvoicingContext _context;
-
-        public Handler(IInvoicingContext context)
-        {
-            _context = context;
-        }
+        private readonly IInvoicingContext _context = context;
 
         public async Task<InvoiceItemDto> Handle(UpdateInvoiceItem request, CancellationToken cancellationToken)
         {
@@ -41,12 +36,15 @@ public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductT
                 throw new Exception("Not found");
             }
 
+            item.ProductId = request.ProductId;
+
             item.UpdateProductType(request.ProductType);
             item.UpdateDescription(request.Description);
             item.UpdateUnitPrice(request.UnitPrice);
             item.UpdateUnit(request.Unit);
             item.UpdateVatRate(request.UnitPrice, request.VatRate);
             item.UpdateQuantity(request.Quantity);
+            item.Discount = request.Discount;
 
             item.IsTaxDeductibleService = request.IsTaxDeductibleService;
 

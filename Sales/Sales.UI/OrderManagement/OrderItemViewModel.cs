@@ -33,7 +33,7 @@ public class OrderItemViewModel
 
     public double? VatRate { get; set; } = 0.25;
 
-    public decimal SubTotal => Total - Vat;
+    public decimal SubTotal => Total.GetSubTotal(VatRate.GetValueOrDefault());
 
     public decimal Vat => Math.Round(Total.GetVatFromTotal(VatRate.GetValueOrDefault()), 2, MidpointRounding.AwayFromZero);
 

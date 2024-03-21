@@ -890,11 +890,18 @@ components:
           $ref: '#/components/schemas/ProductType'
         description:
           type: string
+        productId:
+          type: string
+          nullable: true
         unitPrice:
           type: number
           format: decimal
         unit:
           type: string
+        discount:
+          type: number
+          format: decimal
+          nullable: true
         vatRate:
           type: number
           format: double
@@ -916,11 +923,18 @@ components:
           $ref: '#/components/schemas/ProductType'
         description:
           type: string
+        productId:
+          type: string
+          nullable: true
         unitPrice:
           type: number
           format: decimal
         unit:
           type: string
+        discount:
+          type: number
+          format: decimal
+          nullable: true
         vatRate:
           type: number
           format: double
