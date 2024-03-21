@@ -6,6 +6,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Customers.Client;
 using YourBrand.Domain.Infrastructure;
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
@@ -15,7 +16,7 @@ using YourBrand.Sales.API.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Commands;
 
-public sealed record CreateOrder(int? Status, string? CustomerId, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, IEnumerable<CreateOrderItemDto> Items) : IRequest<Result<OrderDto>>
+public sealed record CreateOrder(int? Status, SetCustomerDto? Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, IEnumerable<CreateOrderItemDto> Items) : IRequest<Result<OrderDto>>
 {
     public sealed class Validator : AbstractValidator<CreateOrder>
     {
@@ -50,7 +51,16 @@ public sealed record CreateOrder(int? Status, string? CustomerId, BillingDetails
 
             order.StatusId = request.Status ?? OrderStatusDraft;
 
-            //order.CustomerId = request.CustomerId;
+            if (request.Customer is not null) 
+            {
+                if(order.Customer is null) 
+                {
+                    order.Customer = new Domain.Entities.Customer();
+                }
+
+                order.Customer.Id = request.Customer.Id;
+                order.Customer.Name = request.Customer.Name;
+            }
 
             order.VatIncluded = true;
 
@@ -123,3 +133,5 @@ public sealed record CreateOrder(int? Status, string? CustomerId, BillingDetails
         }
     }
 }
+
+public record SetCustomerDto(string Id, string Name);

@@ -334,6 +334,35 @@ paths:
       responses:
         200:
           description: ''
+  /v1/invoices/{invoiceId}/Customer:
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_SetCustomer
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: customer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetCustomer'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
   /v1/invoices/{invoiceId}/PaidAmount:
     put:
       tags:
@@ -965,6 +994,26 @@ components:
         note:
           type: string
           nullable: true
+        customer:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SetCustomer'
+    SetCustomer:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Result:
+      type: object
+      additionalProperties: false
+      properties:
+        isSuccess:
+          type: boolean
+        isFailure:
+          type: boolean
     ItemsResultOfInvoice:
       type: object
       additionalProperties: false

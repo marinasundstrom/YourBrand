@@ -9,7 +9,7 @@ public sealed record OrderDto(
     DateTime Date,
     OrderStatusDto Status, 
     UserDto? AssigneeId, 
-    CustomerDto? CustomerId, 
+    CustomerDto? Customer, 
     string Currency,
     string? Reference,
     string? Note,

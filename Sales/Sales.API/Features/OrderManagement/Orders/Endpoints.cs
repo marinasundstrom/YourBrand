@@ -59,6 +59,9 @@ public static class Endpoints
         group.MapPut("{id}/status", UpdateStatus)
             .WithName($"Orders_{nameof(UpdateStatus)}");
 
+        group.MapPut("{id}/customer", SetCustomer)
+            .WithName($"Orders_{nameof(SetCustomer)}");
+
         group.MapPut("{id}/assignee", UpdateAssignedUser)
             .WithName($"Orders_{nameof(UpdateAssignedUser)}");
 
@@ -116,7 +119,7 @@ public static class Endpoints
 
     private static async Task<Results<Created<OrderDto>, NotFound>> CreateOrder(CreateOrderRequest request, IMediator mediator, LinkGenerator linkGenerator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateOrder(request.Status, request.CustomerId, request.BillingDetails, request.ShippingDetails, request.Items), cancellationToken);
+        var result = await mediator.Send(new CreateOrder(request.Status, request.Customer, request.BillingDetails, request.ShippingDetails, request.Items), cancellationToken);
 
         if (result.HasError(Errors.Orders.OrderNotFound))
         {
@@ -224,6 +227,18 @@ public static class Endpoints
     private static async Task<Results<Ok, NotFound>> UpdateStatus(string id, int status, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
         var result = await mediator.Send(new UpdateStatus(id, status), cancellationToken);
+
+        if (result.HasError(Errors.Orders.OrderNotFound))
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok();
+    }
+
+    private static async Task<Results<Ok, NotFound>> SetCustomer(string id, SetCustomerDto customer, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    {
+        var result = await mediator.Send(new SetCustomer(id, customer.Id, customer.Name), cancellationToken);
 
         if (result.HasError(Errors.Orders.OrderNotFound))
         {

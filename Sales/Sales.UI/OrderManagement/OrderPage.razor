@@ -49,7 +49,7 @@
                     </MudItem>
 
                     <MudItem xs="12" sm="12" md="6" lg="6">
-                        <CustomerSelector />
+                        <CustomerSelector Value="customer" ValueChanged="OnCustomerChanged" />
                     </MudItem>
 
                     @*
@@ -144,54 +144,66 @@
         </MudItem>
     </MudGrid>
 
-    <MudExpansionPanels MultiExpansion="true" Elevation="25">
-        <MudExpansionPanel Text="Billing detail">
-            <TitleContent>
-                  <div class="d-flex flex-grow-1 gap-1">
-                    <MudText Typo="Typo.h5" Class="mb-1">Billing details</MudText>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateBillingDetails" Size="Size.Small" Class="ms-4" />
-                </div>
-            </TitleContent>
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="12" md="6" lg="6">
 
-            <ChildContent>
-                @if (order?.BillingDetails is not null)
-                {
-                    var address = order.BillingDetails.Address;
+        <MudExpansionPanels MultiExpansion="true" Elevation="25">
+            <MudExpansionPanel Text="Billing detail">
+                <TitleContent>
+                    <div class="d-flex flex-grow-1 gap-1">
+                        <MudText Typo="Typo.h5" Class="mb-1">Billing details</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateBillingDetails" Size="Size.Small" Class="ms-4" />
+                    </div>
+                </TitleContent>
 
-                    <MudText>@order.BillingDetails.FirstName @order.BillingDetails.LastName</MudText>
-                    <MudText>@order.BillingDetails.Ssn</MudText>
+                <ChildContent>
+                    @if (order?.BillingDetails is not null)
+                    {
+                        var address = order.BillingDetails.Address;
 
-                    <MudText Class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
-                    <MudText>@address.PostalCode @address.Locality</MudText>
-                    <MudText>@address.Country</MudText>
+                        <MudText>@order.BillingDetails.FirstName @order.BillingDetails.LastName</MudText>
+                        <MudText>@order.BillingDetails.Ssn</MudText>
 
-                    <MudText Class="mt-2">@order.BillingDetails.PhoneNumber</MudText>
-                    <MudText>@order.BillingDetails.Email</MudText>
-                }
-            </ChildContent>
-        </MudExpansionPanel>
-        <MudExpansionPanel Text="Shipping details">
-            <TitleContent>
-                  <div class="d-flex flex-grow-1 gap-1">
-                    <MudText Typo="Typo.h5" Class="mb-1">Shipping details</MudText>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateShippingDetails" Size="Size.Small" Class="ms-4" />
-                </div>
-            </TitleContent>
+                        <MudText Class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
+                        <MudText>@address.PostalCode @address.Locality</MudText>
+                        <MudText>@address.Country</MudText>
 
-            <ChildContent>
-                @if (order.ShippingDetails is not null)
-                {
-                    var address = order.ShippingDetails.Address;
+                        <MudText Class="mt-2">@order.BillingDetails.PhoneNumber</MudText>
+                        <MudText>@order.BillingDetails.Email</MudText>
+                    }
+                </ChildContent>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
 
-                    <MudText>@order.ShippingDetails.FirstName @order.ShippingDetails.LastName</MudText>
-                    <MudText class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
-                    <MudText>@address.PostalCode @address.Locality</MudText>
-                    <MudText>@address.Country</MudText>
-                }
-            </ChildContent>
-        </MudExpansionPanel>
-    </MudExpansionPanels>
+        </MudItem>
 
+        <MudItem xs="12" sm="12" md="6" lg="6">
+            <MudExpansionPanels MultiExpansion="true" Elevation="25">
+
+                <MudExpansionPanel Text="Shipping details">
+                    <TitleContent>
+                        <div class="d-flex flex-grow-1 gap-1">
+                            <MudText Typo="Typo.h5" Class="mb-1">Shipping details</MudText>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="UpdateShippingDetails" Size="Size.Small" Class="ms-4" />
+                        </div>
+                    </TitleContent>
+
+                    <ChildContent>
+                        @if (order.ShippingDetails is not null)
+                        {
+                            var address = order.ShippingDetails.Address;
+
+                            <MudText>@order.ShippingDetails.FirstName @order.ShippingDetails.LastName</MudText>
+                            <MudText class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
+                            <MudText>@address.PostalCode @address.Locality</MudText>
+                            <MudText>@address.Country</MudText>
+                        }
+                    </ChildContent>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudItem>
+
+    </MudGrid>
     @*
 
 <MudPaper Elevation="25" Class="pa-4">
@@ -366,6 +378,14 @@ Delete
         {
             order = await OrdersClient.CreateDraftOrderAsync(new CreateDraftOrderRequest());
 
+            if(order.Customer is not null) 
+            {
+                customer = new YourBrand.Customers.Client.Customer {
+                    Id = int.Parse(order.Customer.Id),
+                    Name = order.Customer.Name
+                };
+            }
+
             Model = order.ToModel();
 
             NavigationManager.NavigateTo($"/orders/{Model.Id}", replace: true);
@@ -385,12 +405,35 @@ Delete
     {
         order = await OrdersClient.GetOrderByNoAsync(OrderNo.GetValueOrDefault());
 
+        if(order.Customer is not null) 
+        {
+            customer = new YourBrand.Customers.Client.Customer {
+                Id = int.Parse(order.Customer.Id),
+                Name = order.Customer.Name
+            };
+        }
+
         Model = order.ToModel();
     }
 
     private async Task Submit()
     {
         await Task.CompletedTask;
+    }
+
+    YourBrand.Customers.Client.Customer? customer;
+
+    async Task OnCustomerChanged(YourBrand.Customers.Client.Customer customer) 
+    {
+        if(customer is null)
+            return;
+
+        await OrdersClient.SetCustomerAsync(order.Id, new SetCustomer {
+            Id = customer.Id.ToString(),
+            Name = customer.Name
+        });
+
+        this.customer = customer;
     }
 
     private async Task AddItem()

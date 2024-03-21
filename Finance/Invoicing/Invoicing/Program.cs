@@ -234,6 +234,13 @@ IMediator mediator, CancellationToken cancellationToken)
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
+group.MapPut("/{invoiceId}/Customer", async (string invoiceId, SetCustomerDto customer,
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetCustomer(invoiceId, customer.Id, customer.Name), cancellationToken))
+    .WithName("Invoices_SetCustomer")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
 group.MapPut("/{invoiceId}/PaidAmount", async (string invoiceId, decimal amount, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetPaidAmount(invoiceId, amount), cancellationToken))

@@ -34,7 +34,7 @@
         }
         </div>
 
-        <MudGrid>
+        <MudGrid Class="mb-4">
             <MudItem xs="12" sm="12" md="6" lg="6">
         <MudPaper Elevation="25" Class="pa-4">
 
@@ -72,7 +72,7 @@
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="6" lg="6">
-                    <CustomerSelector />
+                    <CustomerSelector Value="customer" ValueChanged="OnCustomerChanged" />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12">
@@ -205,7 +205,9 @@
             </MudItem>
         </MudGrid>
 
-         <MudExpansionPanels MultiExpansion="true" Class="mt-8" Elevation="25">
+<MudGrid Class="mb-4">
+<MudItem xs="12" sm="12" md="6" lg="6">
+    <MudExpansionPanels MultiExpansion="true" Elevation="25">
         <MudExpansionPanel Text="Billing detail">
             <TitleContent>
                   <div class="d-flex flex-grow-1 gap-1">
@@ -231,6 +233,11 @@
                 }
             </ChildContent>
         </MudExpansionPanel>
+    </MudExpansionPanels>
+      </MudItem>
+
+<MudItem xs="12" sm="12" md="6" lg="6">
+    <MudExpansionPanels MultiExpansion="true" Elevation="25">
         <MudExpansionPanel Text="Shipping details">
             <TitleContent>
                   <div class="d-flex flex-grow-1 gap-1">
@@ -252,6 +259,8 @@
             </ChildContent>
         </MudExpansionPanel>
     </MudExpansionPanels>
+      </MudItem>
+</MudGrid>
 
  <MudExpansionPanels MultiExpansion="true" Class="mt-4" Elevation="25">
         <MudExpansionPanel @bind-IsExpanded="isExpanded">
@@ -365,6 +374,14 @@
         {
             invoice = await InvoicesClient.GetInvoiceByNoAsync(InvoiceNo);
 
+            if(invoice.Customer is not null) 
+            {
+                customer = new YourBrand.Customers.Client.Customer {
+                    Id = int.Parse(invoice.Customer.Id),
+                    Name = invoice.Customer.Name
+                };
+            }
+
             Model = invoice.ToModel();
         }
         else
@@ -375,6 +392,14 @@
                     Status = InvoiceStatus.Draft
                 }
             );
+
+            if(invoice.Customer is not null) 
+            {
+                customer = new YourBrand.Customers.Client.Customer {
+                    Id = int.Parse(invoice.Customer.Id),
+                    Name = invoice.Customer.Name
+                };
+            }
 
             Model = invoice.ToModel();
 
@@ -481,6 +506,21 @@
     private async Task Submit()
     {
         await Task.CompletedTask;
+    }
+
+      YourBrand.Customers.Client.Customer? customer;
+
+    async Task OnCustomerChanged(YourBrand.Customers.Client.Customer customer) 
+    {
+        if(customer is null)
+            return;
+
+        await InvoicesClient.SetCustomerAsync(invoice.Id, new SetCustomer {
+            Id = customer.Id.ToString(),
+            Name = customer.Name
+        });
+
+        this.customer = customer;
     }
 
     private async Task AddItem()

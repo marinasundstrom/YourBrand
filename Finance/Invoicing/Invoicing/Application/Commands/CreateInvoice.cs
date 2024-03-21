@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note) : IRequest<InvoiceDto>
+public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note, SetCustomerDto? Customer) : IRequest<InvoiceDto>
 {
     public class Handler : IRequestHandler<CreateInvoice, InvoiceDto>
     {
@@ -34,6 +34,17 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note)
                 invoice.InvoiceNo = "1";
             }
 
+            if (request.Customer is not null)
+            {
+                if (invoice.Customer is null)
+                {
+                    invoice.Customer = new Domain.Entities.Customer();
+                }
+
+                invoice.Customer.Id = request.Customer.Id;
+                invoice.Customer.Name = request.Customer.Name;
+            }
+
             _context.Invoices.Add(invoice);
 
             await _context.SaveChangesAsync(cancellationToken);
@@ -42,3 +53,5 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note)
         }
     }
 }
+
+public record SetCustomerDto(string Id, string Name);
