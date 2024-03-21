@@ -8,24 +8,24 @@ public class RotRutCaseFactoryTest
     [Fact]
     public void CreateRotRutCase()
     {
-        var invoice = new InvoiceDto();
-        invoice.Items.Add(new InvoiceItemDto()
+        var invoice = new Invoice();
+        invoice.Items.Add(new InvoiceItem()
         {
             ProductType = ProductType.Service,
             Description = "Cleaning",
-            Price = 560,
+            UnitPrice = 560,
             Unit = "hours",
             VatRate = 0.25,
             Quantity = 2,
             Total = 1120,
             IsTaxDeductibleService = true,
-            DomesticService = new InvoiceItemDomesticServiceDto
+            DomesticService = new InvoiceItemDomesticService
             {
                 Kind = DomesticServiceKind.HouseholdService,
                 HouseholdServiceType = HouseholdServiceType.Cleaning
             }
         });
-        invoice.DomesticService = new InvoiceDomesticServiceDto {
+        invoice.DomesticService = new InvoiceDomesticService {
             Kind = DomesticServiceKind.HouseholdService,
             Description = "",
             Buyer = "76660",
