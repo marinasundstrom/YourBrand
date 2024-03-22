@@ -22,7 +22,7 @@
         <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@invoice.InvoiceNo</MudText>
 
         <div class="mb-4">
-            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.InvoiceNo}/file")">
+            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/v1/invoices/{invoice.Id}/file")">
                 Download
             </MudButton>
 
@@ -415,17 +415,24 @@
 
     public async Task Foo()
     {
-        var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, invoice.Id);
-        payment = paymentsResults.Items.FirstOrDefault();
-
-        if (payment is null)
+        try 
         {
-            return;
+            var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, invoice.Id);
+            payment = paymentsResults.Items.FirstOrDefault();
+
+            if (payment is null)
+            {
+                return;
+            }
+
+            StateHasChanged();
+
+            await InitPaymentHub(payment.Id);
         }
-
-        StateHasChanged();
-
-        await InitPaymentHub(payment.Id);
+        catch 
+        {
+            Snackbar.Add("Payment service unavailable", Severity.Error);
+        }
     }
 
     async Task ActivateRotRut()

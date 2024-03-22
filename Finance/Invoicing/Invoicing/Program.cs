@@ -185,13 +185,13 @@ group.MapPut("/{invoiceNo}/shippingDetails", async Task<Results<Ok, NotFound>> (
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPost("/invoices/{invoiceNo}/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
+group.MapPost("/invoices/{invoiceId}/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
     => await mediator.Send(new ActivateRotAndRut(invoiceId, dto)))
     .WithName("Invoices_ActivateRotAndRut")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapGet("/{invoiceId}/File", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
+group.MapGet("/invoices/{invoiceId}/file", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => Microsoft.AspNetCore.Http.Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
