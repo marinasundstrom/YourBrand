@@ -1,99 +1,72 @@
-@using System.Linq.Expressions
-@inject IStoresClient StoresClient
-@inject IDialogService DialogService
+@using YourBrand.Portal.Services
+@inject IStoreProvider StoreProvider
+@inject ISnackbar Snackbar
 @using YourBrand.Catalog
+@implements IDisposable
+@using Store = YourBrand.Portal.Services.Store
 
-<div class="d-flex flex-grow-1">
-    <div class="flex-1 d-flex">
-        <MudAutocomplete T="Store" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class"
-            Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchStores" ToStringFunc="(x) => x.Name"
-            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
-            <ItemTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
-            </ItemTemplate>
-
-            <ItemSelectedTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
-            </ItemSelectedTemplate>
-        </MudAutocomplete>
-    </div>
-
-    @if (ShowAddButton)
-    {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddStores" />
-    }
-</div>
+<MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+    PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+    <ActivatorContent>
+        <MudIconButton Class="me-1" Icon="@Icons.Material.Filled.Shop" Color="Color.Inherit" Edge="Edge.Start" />
+    </ActivatorContent>
+    <ChildContent>
+      @if(error) 
+      {
+        <MudMenuItem>
+            <MudText>Failed to load stores.</MudText>
+         </MudMenuItem>
+      }
+      else 
+      {
+            foreach (var item in items)
+            {
+                <MudMenuItem @key="@item" OnClick="async () => await StoreProvider.SetCurrentStore(item.Id)">
+                    <div class="d-flex">
+                        <MudIcon Icon="@(currentStore?.Id == item.Id ? Icons.Material.Filled.Check : null)"
+                            class="me-2" />
+                        <MudText Style="overflow: hidden; white-space: nowrap;">@item.Name</MudText>
+                    </div>
+                </MudMenuItem>
+            }
+        }
+    </ChildContent>
+</MudMenu>
 
 @code {
-    [Parameter]
-    public string Label { get; set; } = "Store";
+    bool error;
+    IEnumerable<YourBrand.Portal.Services.Store> items = Enumerable.Empty<YourBrand.Portal.Services.Store>();
+    YourBrand.Portal.Services.Store? currentStore;
 
-    [Parameter]
-    public Store Value { get; set; }
-
-    [Parameter]
-    public EventCallback<Store> ValueChanged { get; set; }
-
-    [Parameter]
-    public Expression<Func<Store>> For { get; set; }
-
-    [Parameter]
-    public string Style { get; set; }
-
-    [Parameter]
-    public string Class { get; set; }
-
-    [Parameter]
-    public Variant Variant { get; set; }
-
-    [Parameter]
-    public string StoresAreaId { get; set; }
-
-    [Parameter]
-    public bool ShowAddButton { get; set; }
-
-    async Task<IEnumerable<Store>> SearchStores(string text)
+    protected override async Task OnInitializedAsync()
     {
-        //try
-        //{
-        var results = await StoresClient.GetStoresAsync(0, 10, text, null, null);
-        return results.Items;
-        /*}
-        catch (AccessTokenNotAvailableException exception)
+        try 
         {
-        exception.Redirect();
-        }*/
+            StoreProvider.CurrentStoreChanged += OnCurrentStoreChanged;
 
-        return null;
+            items = await StoreProvider.GetAvailableStoresAsync();
+
+            StateHasChanged();
+        }
+        catch 
+        {
+            error = true;
+        }
     }
 
-    async Task AddStores()
+    private void OnCurrentStoreChanged(object? sender, EventArgs e)
     {
-        /*try
-        {*/
-        var parameters = new DialogParameters();
+        currentStore = StoreProvider.CurrentStore;
 
-        var type = System.Reflection.Assembly.Load("Showroom.UI")
-        .GetType("YourBrand.Catalog.Stores.StoresDialog");
+        if (currentStore is null) return;
 
-        var dialogReference = DialogService.Show(type, "New Stores", parameters, new DialogOptions
-            {
-                //FullScreen = true,
-                MaxWidth = MaxWidth.ExtraLarge
-            });
+        StateHasChanged();
 
-        var result = await dialogReference.Result;
+        Snackbar.Add($"Your store is: {currentStore.Name}");
+    }
 
-        if (result.Cancelled)
-            return;
-
-        Value = (Store)result.Data;
-
-        await ValueChanged.InvokeAsync(Value);
-        /*}
-        catch (AccessTokenNotAvailableException exception)
-        {
-        exception.Redirect();
-        }*/
+    public void Dispose()
+    {
+        StoreProvider.CurrentStoreChanged -= OnCurrentStoreChanged;
     }
 }
