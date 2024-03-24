@@ -41,7 +41,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         //await Task.WhenAll(batch.Invoices.Select(x => HandleInvoice(x, context.CancellationToken)));
     }
 
-    private async Task HandleInvoice(Invoice i, CancellationToken cancellationToken)
+    private async Task HandleInvoice(YourBrand.Invoicing.Contracts.Invoice i, CancellationToken cancellationToken)
     {
         // Get invoice
         // Register entries
@@ -56,7 +56,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         await CreateVerificationFromInvoice(invoice, cancellationToken);
     }
 
-    private async Task CreateVerificationFromInvoice(InvoiceDto invoice, CancellationToken cancellationToken)
+    private async Task CreateVerificationFromInvoice(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
     {
         var entries = _entriesFactory.CreateEntriesFromInvoice(invoice);
 
@@ -77,7 +77,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         }
     }
 
-    private async Task UploadDocuments(InvoiceDto invoice, int journalEntryId)
+    private async Task UploadDocuments(YourBrand.Invoicing.Client.Invoice invoice, int journalEntryId)
     {
         MemoryStream stream, stream2;
 

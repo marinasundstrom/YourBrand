@@ -84,6 +84,22 @@ public static class Config
 
                 // scopes that client has access to
                 AllowedScopes = { "profile", "email", "myapi", "catalogapi", "cartsapi", "salesapi" },
+            },
+            new Duende.IdentityServer.Models.Client
+            {
+                ClientId = "accountant",
+
+                // no interactive user, use the clientid/secret for authentication
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                // secret for authentication
+                ClientSecrets =
+                {
+                    new Secret("foobar123!".Sha256())
+                },
+
+                // scopes that client has access to
+                AllowedScopes = { "profile", "email", "myapi" },
             }
         ];
 }

@@ -29,13 +29,13 @@ public class EntriesFactory
             entries.AddRange(new[] {
                         new CreateEntry
                         {
-                            AccountNo = GetVatAccount(productType, vatRate),
+                            AccountNo = GetVatAccount(productType, vatRate.GetValueOrDefault()),
                             Description = string.Empty,
                             Credit = vat
                         },
                         new CreateEntry
                         {
-                            AccountNo = GetIncomeAccount(productType, vatRate),
+                            AccountNo = GetIncomeAccount(productType, vatRate.GetValueOrDefault()),
                             Description = string.Empty,
                             Credit = subTotal
                         }

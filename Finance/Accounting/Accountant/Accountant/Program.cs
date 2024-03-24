@@ -21,6 +21,7 @@ using Serilog;
 
 using YourBrand;
 using YourBrand.Extensions;
+using YourBrand.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,17 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddSingleton<ITokenProvider, AzureADClientCredentialsTokenProvider>();
+}
+else
+{
+    builder.Services.AddSingleton<ITokenProvider, IdentityServerClientCredentialsTokenProvider>();
+}
+
+builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+
 builder.Services.AddAccountingClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/accounting/");
@@ -72,7 +84,10 @@ builder.Services.AddAccountingClients((sp, http) =>
 builder.Services.AddInvoicingClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/invoicing/");
-});
+}, (builder) =>
+        {
+            builder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        });
 
 builder.Services.AddPaymentsClients((sp, http) =>
 {
@@ -100,11 +115,18 @@ builder.Services.AddHangfire(configuration => configuration
 
 builder.Services.AddHangfireServer();
 
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
 app.MapObservability();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!");
 

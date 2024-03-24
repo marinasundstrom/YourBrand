@@ -33,7 +33,7 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
         await CreateRotRutCase(invoice, context.CancellationToken);
     }
 
-    private async Task CreateRotRutCase(InvoiceDto invoice, CancellationToken cancellationToken)
+    private async Task CreateRotRutCase(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
     {
         var domesticServices = invoice?.DomesticService;
 
