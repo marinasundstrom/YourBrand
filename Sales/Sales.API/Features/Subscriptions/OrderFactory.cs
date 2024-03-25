@@ -34,6 +34,16 @@ public class OrderFactory
         targetOrder.UpdateStatus(1);
         targetOrder.StatusDate = DateTimeOffset.UtcNow;
 
+        if (order?.Customer is not null)
+        {
+            targetOrder.Customer = new Customer
+            {
+                Id = order.Customer.Id,
+                Name = order.Customer.Name,
+                CustomerNo = order.Customer.CustomerNo
+            };
+        }
+
         targetOrder.Parent = order;
         targetOrder.Subscription = order.Subscription;
         targetOrder.Notes = order?.Notes;
@@ -46,6 +56,15 @@ public class OrderFactory
     {
         targetOrder.UpdateStatus(1);
         targetOrder.StatusDate = DateTimeOffset.UtcNow;
+
+        if(orderItem.Order?.Customer is not null) 
+        {
+            targetOrder.Customer = new Customer {
+                Id = orderItem.Order.Customer.Id,
+                Name = orderItem.Order.Customer.Name,
+                CustomerNo = orderItem.Order.Customer.CustomerNo
+            };
+        }
 
         targetOrder.Parent = orderItem.Order;
         targetOrder.Subscription = orderItem.Subscription ?? orderItem.Order.Subscription;

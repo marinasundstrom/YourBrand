@@ -12,6 +12,11 @@ public class UnitTest2
     {
         Order order = new()
         {
+            Customer = new Customer {
+                Id = "foobar",
+                CustomerNo = 1337,
+                Name = "ACME"
+            },
             BillingDetails = new Sales.API.Features.OrderManagement.Domain.ValueObjects.BillingDetails()
             {
                 FirstName = "Test",
