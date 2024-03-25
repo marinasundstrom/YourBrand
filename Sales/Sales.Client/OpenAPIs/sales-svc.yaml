@@ -744,6 +744,22 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/Subscription'
+        plannedStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        plannedEndDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualEndDate:
+          type: string
+          format: date-time
+          nullable: true
         billingDetails:
           nullable: true
           oneOf:

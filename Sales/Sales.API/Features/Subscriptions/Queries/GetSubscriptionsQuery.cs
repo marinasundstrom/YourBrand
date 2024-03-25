@@ -30,6 +30,7 @@ public record GetSubscriptionsQuery : IRequest<PagedResult<SubscriptionDto>>
         {
             var subscriptions = await salesContext.Subscriptions
                 .Include(x => x.SubscriptionPlan)
+                .Include(x => x.Order)
                 .AsNoTracking()
                 .ToListAsync();
 

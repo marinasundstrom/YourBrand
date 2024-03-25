@@ -33,7 +33,7 @@
 
     <MudGrid Class="mb-4">
         <MudItem xs="12" sm="12" md="6" lg="6">
-            <MudPaper Elevation="25" Class="pa-4 mb-8">
+            <MudPaper Elevation="25" Class="pa-4">
                 <MudGrid Class="mb-4">
 
                     <MudItem xs="12" sm="12" md="6" lg="6">
@@ -115,6 +115,46 @@
 
                 </MudGrid>
             </MudPaper>
+
+
+        <MudExpansionPanels MultiExpansion="true" Elevation="25" Class="mt-8">
+            <MudExpansionPanel Text="Billing detail">
+                <TitleContent>
+                    <div class="d-flex flex-grow-1 gap-1">
+                        <MudText Typo="Typo.h5" Class="mb-1">Planning</MudText>
+                    </div>
+                </TitleContent>
+
+                <ChildContent>
+                    <MudGrid Class="mb-4">
+
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudDatePicker Label="Planned Start" Date="@order.PlannedStartDate?.Date" Class="mb-2">
+
+                            </MudDatePicker>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudDatePicker Label="Planned End" Date="@order.PlannedEndDate?.Date" Class="mb-2">
+
+                            </MudDatePicker>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudDatePicker Label="Actual Start" Date="@order.ActualStartDate?.Date" Class="mb-2">
+
+                            </MudDatePicker>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudDatePicker Label="Actual End" Date="@order.ActualEndDate?.Date" Class="mb-2">
+
+                            </MudDatePicker>
+                                   </MudItem>
+                        </MudGrid>
+                    </ChildContent>
+                        </MudExpansionPanel>
+                </MudExpansionPanels>
         </MudItem>
 
         <MudItem xs="12" sm="12" md="6" lg="6" Elevation="25">
