@@ -2,17 +2,20 @@
 
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 using YourBrand.Sales.API.Features.OrderManagement.Users;
+using YourBrand.Sales.Features.Subscriptions;
 
 public sealed record OrderDto(
     string Id, 
     int OrderNo, 
     DateTime Date,
+    ParentOrderDto? Parent,
     OrderStatusDto Status, 
     UserDto? AssigneeId, 
     CustomerDto? Customer, 
     string Currency,
     string? Reference,
     string? Note,
+    SubscriptionDto? Subscription,
     BillingDetailsDto? BillingDetails, 
     ShippingDetailsDto? ShippingDetails, 
     IEnumerable<OrderItemDto> Items, 
@@ -26,6 +29,18 @@ public sealed record OrderDto(
     UserDto? CreatedBy,
     DateTimeOffset? LastModified,
     UserDto? LastModifiedBy);
+
+public record ParentOrderDto(
+    string Id,
+    int OrderNo,
+    DateTime Date
+);
+
+public record OrderShortDto(
+    string Id,
+    int OrderNo,
+    DateTime Date
+);
 
 public record CustomerDto(
     string Id,
@@ -49,6 +64,7 @@ public sealed record OrderItemDto(
     string Description, 
     string? ProductId,
     string? SKU,
+    SubscriptionDto? Subscription,
     decimal UnitPrice,
     string? Unit,
     decimal? Discount,

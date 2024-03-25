@@ -1,0 +1,111 @@
+﻿@using YourBrand.Sales
+@inject ISubscriptionsClient SubscriptionsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@page "/subscriptions"
+
+<AppPageTitle>Subscriptions</AppPageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Subscriptions</MudText>
+
+<MudButton Variant="Variant.Filled" Link="/subscriptions/new" Class="mb-2">New subscription</MudButton>
+
+<MudTable T="Subscription" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+    <ToolBarContent>
+        @* <MudSelect T="SubscriptionType?" Label="Type" MultiSelection="true" @bind-Value="Type"
+        SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
+        @foreach (var type in Enum.GetValues<SubscriptionType>())
+        {
+        <MudSelectItem T="SubscriptionType?" Value="@type">@Enum.GetName(typeof(SubscriptionType), type)</MudSelectItem>
+        }
+        </MudSelect> *@
+        <MudSpacer />
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T="Subscription" SortLabel="Id">Id</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Subscription" SortLabel="Plan">Plan</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Subscription" SortLabel="StartDate">Start Date</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Subscription" SortLabel="EndDate">End Date</MudTableSortLabel>
+        </MudTh>
+        @*<MudTh></MudTh>*@
+    </HeaderContent>
+    <RowTemplate Context="subscription">
+        <MudTd DataLabel="Id">@subscription.Id</MudTd>
+        <MudTd DataLabel="Plan">@subscription.Plan.Name</MudTd>
+        <MudTd DataLabel="Start Date">@subscription.StartDate.ToString("g")</MudTd>
+        <MudTd DataLabel="End Date">@subscription.EndDate?.ToString("g")</MudTd>
+        @*<MudTd>
+            @if (subscription.Status.Id == 1)
+            {
+                <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small"
+                    OnClick="async (e) => await DeleteSubscription(subscription)" />
+            }
+        </MudTd>*@
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    CancellationTokenSource cts = new();
+    MudTable<YourBrand.Sales.Subscription> table;
+    bool loading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private async Task<TableData<Subscription>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await SubscriptionsClient.GetSubscriptionsAsync(cts.Token);
+
+            return new TableData<Subscription>() { TotalItems = result.Total, Items = result.Items };
+        }
+        catch
+        {
+            return new TableData<Subscription>();
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    public async Task GoTo(Subscription subscription)
+    {
+        NavigationManager.NavigateTo($"/subscriptions/{subscription.Id}");
+    }
+
+    /*
+    private async Task DeleteSubscription(Subscription subscription)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft subscription", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await SubscriptionsClient.DeleteSubscriptionAsync(subscription.Id);
+        await table.ReloadServerData();
+    }
+    */
+}

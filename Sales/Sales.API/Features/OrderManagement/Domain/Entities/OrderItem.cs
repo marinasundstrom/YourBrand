@@ -1,9 +1,13 @@
 using Core;
 
+using YourBrand.Sales.Domain.Entities;
+
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
 public class OrderItem : Entity<string>, IAuditable
 {
+    internal OrderItem() : base(Guid.NewGuid().ToString())  {}
+
     internal OrderItem(string description,
                        string? productId,
                        decimal price,
@@ -30,7 +34,7 @@ public class OrderItem : Entity<string>, IAuditable
         Update();
     }
 
-    public Order? Order { get; private set; }
+    public Order? Order { get; internal set; }
 
     public string Description { get; set; } = null!;
 
@@ -39,6 +43,10 @@ public class OrderItem : Entity<string>, IAuditable
     public string? Sku { get; set; }
 
     public ProductType ProductType  { get; set; }
+
+    public Subscription? Subscription { get; set; }
+
+    public Guid? SubscriptionId { get; set; }
 
     public string? Unit { get; set; }
 

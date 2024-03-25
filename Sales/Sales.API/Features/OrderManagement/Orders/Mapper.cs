@@ -2,21 +2,24 @@
 using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.API.Features.OrderManagement.Users;
+using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
 
 public static class Mappings
 {
-    public static OrderDto ToDto(this Order order) => new OrderDto(
-        order.Id, 
-        order.OrderNo, 
-        order.Date, 
+    public static OrderDto ToDto(this Order order) => new (
+        order.Id,
+        order.OrderNo,
+        order.Date,
+        order.Parent?.ToParentDto(),
         order.Status.ToDto(), 
         order.Assignee?.ToDto(),
         order.Customer?.ToDto(),
         order.Currency,
         order.Reference,
         order.Notes,
+        order.Subscription?.ToDto(),
         order.BillingDetails?.ToDto(),
         order.ShippingDetails?.ToDto(),
         order.Items.Select(x => x.ToDto()), 
@@ -31,12 +34,23 @@ public static class Mappings
         order.LastModified, 
         order.LastModifiedBy?.ToDto());
 
+    public static ParentOrderDto ToParentDto(this Order order) => new (
+        order.Id,
+        order.OrderNo,
+        order.Date);
+
+    public static OrderShortDto ToShortDto(this Order order) => new (
+        order.Id,
+        order.OrderNo,
+        order.Date);
+
     public static OrderItemDto ToDto(this OrderItem orderItem) => new(
         orderItem.Id,
         orderItem.ProductType,
         orderItem.Description,
         orderItem.ProductId,
         orderItem.Sku,
+        orderItem.Subscription?.ToDto(),
         orderItem.Price,
         orderItem.Unit,    
         orderItem.Discount,

@@ -8,6 +8,7 @@ using YourBrand.Sales.API.Features.OrderManagement.Orders.Items;
 using YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
 using YourBrand.Sales.API.Features.OrderManagement.Orders.Queries;
 using YourBrand.Sales.API.Models;
+using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
 
@@ -84,12 +85,16 @@ public static class Endpoints
         group.MapDelete("{id}/items/{itemId}", RemoveOrderItem)
             .WithName($"Orders_{nameof(RemoveOrderItem)}");
 
+        group.MapPost("{id}/generate", GenerateSubscriptionOrders)
+                    .WithName($"Orders_{nameof(GenerateSubscriptionOrders)}")
+                    .AllowAnonymous();
+
         return app;
     }
 
-    private static async Task<Ok<PagedResult<OrderDto>>> GetOrders(int[]? status, string? customerId, string? ssn, string? assigneeId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    private static async Task<Ok<PagedResult<OrderDto>>> GetOrders(int[]? status, string? customerId, string? ssn, string? assigneeId, Guid? subscriptionId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        var result = await mediator.Send(new GetOrders(status, customerId, ssn, assigneeId, page, pageSize, sortBy, sortDirection), cancellationToken);
+        var result = await mediator.Send(new GetOrders(status, customerId, ssn, assigneeId, subscriptionId, page, pageSize, sortBy, sortDirection), cancellationToken);
         return TypedResults.Ok(result.GetValue());
     }
 
@@ -284,6 +289,12 @@ public static class Endpoints
         return TypedResults.Ok();
     }
 
+    private static async Task<Results<Ok, NotFound>> GenerateSubscriptionOrders(string id, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    {
+        await mediator.Send(new GenerateSubscriptionOrders(id), cancellationToken);
+
+        return TypedResults.Ok();
+    }
 
     /*
 

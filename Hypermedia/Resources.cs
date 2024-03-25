@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 using NJsonSchema.NewtonsoftJson.Converters;
 
-//using YourBrand.Orders.Models;
+//using YourBrand.Sales.Models;
 
 [JsonConverter(typeof(JsonInheritanceConverter), "_type")]
 [KnownType(typeof(Resource<>))]

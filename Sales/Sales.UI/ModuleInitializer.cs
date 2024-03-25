@@ -8,6 +8,7 @@ using YourBrand.Portal.Navigation;
 using Microsoft.Extensions.Localization;
 
 using YourBrand.Sales.OrderManagement;
+using YourBrand.Sales.Subscriptions;
 
 namespace YourBrand.Sales;
 
@@ -30,5 +31,6 @@ public class ModuleInitializer : IModuleInitializer
     public static void ConfigureServices(IServiceProvider services)
     {
         services.UseOrderManagement();
+        services.UseSubscriptions();
     }
 }

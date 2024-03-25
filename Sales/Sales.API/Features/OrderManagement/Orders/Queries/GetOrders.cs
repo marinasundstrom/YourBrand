@@ -6,11 +6,11 @@ using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.API.Features.OrderManagement.Repositories;
 using YourBrand.Sales.API.Models;
 
-using YourBrand.Orders.Application.Common;
+using YourBrand.Sales.Features.Common;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Queries;
 
-public record GetOrders(int[]? Status, string? CustomerId, string? SSN, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<Result<PagedResult<OrderDto>>>
+public record GetOrders(int[]? Status, string? CustomerId, string? SSN, string? AssigneeId, Guid? SubscriptionId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<Result<PagedResult<OrderDto>>>
 {
     public class Handler(IOrderRepository orderRepository) : IRequestHandler<GetOrders, Result<PagedResult<OrderDto>>>
     {
@@ -39,6 +39,11 @@ public record GetOrders(int[]? Status, string? CustomerId, string? SSN, string? 
             if (request.AssigneeId is not null)
             {
                 query = query.Where(x => x.AssigneeId == request.AssigneeId);
+            }
+
+            if (request.SubscriptionId is not null)
+            {
+                query = query.Where(x => x.SubscriptionId == request.SubscriptionId);
             }
 
             var totalCount = await query.CountAsync(cancellationToken);

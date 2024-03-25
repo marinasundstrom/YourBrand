@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.API.Persistence.Configurations;
 
@@ -27,5 +28,9 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.OwnsMany(x => x.VatAmounts, x => x.ToJson());
 
         builder.OwnsMany(x => x.Discounts, x => x.ToJson());
+
+        // builder.HasOne(s => s.Subscription!)
+        //     .WithOne()
+        //     .HasForeignKey<Order>(s => s.SubscriptionId);
     }
 }

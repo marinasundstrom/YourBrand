@@ -12,9 +12,9 @@ public class UnitTest1
 
         };
 
-        order.AddItem(null, "Item 1", 3, null, 100m, 0.25, null, null, null, null);
+        order.AddItem("Item 1", null, 250m, null, null, null, 3, null, 0.25, null);
 
-        order.AddItem(null, "Item 2", 1, null, 100m, 0.14, null, null, null, null);
+        order.AddItem("Item 1", null, 250m, null, null, null, 1, null, 0.14, null);
 
         var sumOfOrderItemVat = order.Items.Sum(x => x.Vat);
 

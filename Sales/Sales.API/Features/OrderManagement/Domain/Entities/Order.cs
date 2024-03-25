@@ -6,6 +6,7 @@ using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 
 using Core;
 using Microsoft.EntityFrameworkCore;
+using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
@@ -20,6 +21,8 @@ public class Order : AggregateRoot<string>, IAuditable
 
     public int OrderNo { get; set; }
 
+    public Order? Parent { get; set; }
+
     public string CompanyId { get; private set; } = "ACME";
 
     public DateTime Date { get; private set; } = DateTime.Now;
@@ -28,12 +31,15 @@ public class Order : AggregateRoot<string>, IAuditable
 
     public int StatusId { get; set; } = 1;
 
+    public DateTimeOffset? StatusDate { get; set; }
+
     public bool UpdateStatus(int status)
     {
         var oldStatus = StatusId;
         if (status != oldStatus)
         {
             StatusId = status;
+            StatusDate = DateTimeOffset.UtcNow;
 
             AddDomainEvent(new OrderUpdated(Id));
             AddDomainEvent(new OrderStatusUpdated(Id, status, oldStatus));
@@ -62,6 +68,22 @@ public class Order : AggregateRoot<string>, IAuditable
         return false;
     }
 
+    public Subscription? Subscription { get; set; }
+    public Guid? SubscriptionId { get; set; }
+
+    public DateTime? PlannedStartDate { get; set; }
+    public DateTime? PlannedEndDate { get; set; }
+    public DateTime? ActualStartDate { get; set; }
+    public DateTime? ActualEndDate { get; set; }
+
+    public Order SetPlannedDates(DateTime start, DateTime? end)
+    {
+        this.PlannedStartDate = start;
+        this.PlannedEndDate = end;
+
+        return this;
+    }
+
     public Customer? Customer { get; set; }
 
     public bool VatIncluded { get; set; }
@@ -70,7 +92,7 @@ public class Order : AggregateRoot<string>, IAuditable
 
     public string? Reference { get; private set; }
 
-    public string? Notes { get; private set; }
+    public string? Notes { get; set; }
 
     public decimal SubTotal { get; set; }
 
@@ -109,6 +131,16 @@ public class Order : AggregateRoot<string>, IAuditable
                        string? notes)
     {
         var orderItem = new OrderItem(description, itemId!, price, regularPrice, discountRate, discount, quantity, unit, vatRate, notes);
+        orderItem.Order = this;
+        _items.Add(orderItem);
+
+        Update();
+
+        return orderItem;
+    }
+
+    public OrderItem AddItem(OrderItem orderItem) 
+    {
         _items.Add(orderItem);
 
         Update();

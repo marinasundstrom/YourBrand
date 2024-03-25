@@ -1,0 +1,187 @@
+﻿@using YourBrand.Sales
+@inject ISubscriptionsClient SubscriptionsClient
+@inject IOrdersClient OrdersClient
+@inject IOrderStatusesClient OrderStatusesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@page "/subscriptions/{Id}"
+
+@if (subscription is null) 
+{
+
+}
+else 
+{
+    <AppPageTitle>Subscription @Id</AppPageTitle>
+
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Subscription @Id</MudText>
+
+    <MudPaper Class="pa-8 mb-8">
+        <MudGrid Class="mb-4">
+            <MudItem xs="12" sm="12" md="12" lg="12">
+                <MudField Label="Plan" Class="mb-2">
+                    <a href="@($"/subscriptions/plans/{subscription.Plan.Id}")">
+                        @subscription.Plan.Name (@subscription.Plan.Id)
+                    </a>
+                </MudField>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6" lg="6">
+                <MudField Label="Start date" Class="mb-2">@subscription.StartDate.ToString("g")</MudField>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6" lg="6">
+                <MudField Label="End date" Class="mb-2">@subscription.EndDate?.ToString("g")</MudField>
+            </MudItem>
+
+            @if (subscription.Order is not null)
+            {
+                <MudItem xs="12" sm="12" md="6" lg="6">
+                    <a href="@($"/orders/{subscription.Order.OrderNo}")">Order @subscription.Order.OrderNo</a>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudPaper>
+
+    <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+        Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+        <ToolBarContent>
+            @* <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
+            SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
+            @foreach (var type in Enum.GetValues<OrderType>())
+            {
+            <MudSelectItem T="OrderType?" Value="@type">@Enum.GetName(typeof(OrderType), type)</MudSelectItem>
+            }
+            </MudSelect> *@
+            <MudSpacer />
+            <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
+                SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"
+                ToStringFunc="(o) => o.Name" Class="mt-0">
+                @foreach (var status in orderStatuses)
+                {
+                    <MudSelectItem T="OrderStatus?" Value="@status">@status.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel T="Order" SortLabel="OrderNo">#</MudTableSortLabel>
+            </MudTh>
+            @*<MudTh>Type</MudTh>*@
+            <MudTh>
+                <MudTableSortLabel T="Order" SortLabel="Date">Date</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel>
+            </MudTh>
+            <MudTh>Sub Total</MudTh>
+            <MudTh>VAT</MudTh>
+            <MudTh>Discount</MudTh>
+            <MudTh>
+                <MudTableSortLabel T="Order" SortLabel="Total">Total</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel T="Order" SortLabel="Created">Created</MudTableSortLabel>
+            </MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="order">
+            <MudTd DataLabel="Id">@order.OrderNo</MudTd>
+            @*<MudTd DataLabel="Type">@order.Type</MudTd>*@
+            <MudTd DataLabel="Date">@order.Date.ToString("yyyy-MM-dd")</MudTd>
+            <MudTd DataLabel="Status">@order.Status.Name</MudTd>
+            <MudTd DataLabel="Sub Total">@order.SubTotal.FormatCurrency(order.Currency)</MudTd>
+            <MudTd DataLabel="VAT">@order.Vat.FormatCurrency(order.Currency)</MudTd>
+            <MudTd DataLabel="Discount">@order.Discount?.FormatCurrency(order.Currency)</MudTd>
+            <MudTd DataLabel="Total">@order.Total.FormatCurrency(order.Currency)</MudTd>
+            <MudTd DataLabel="Created">@order.Created.ToString("yyyy-MM-dd")</MudTd>
+            <MudTd>
+                @*
+                <MudIconButton Icon="@Icons.Filled.FileDownload" Size="Size.Small"
+                Link="@($"/api/invoicing/orders/{order.OrderNo}/file")" @onclick:stopPropagation /> *@
+                @if (order.Status.Id == 1)
+                {
+                    <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small"
+                        OnClick="async (e) => await DeleteOrder(order)" />
+                }
+            </MudTd>
+        </RowTemplate>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+@code
+{
+    Subscription? subscription;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    CancellationTokenSource cts = new();
+    MudTable<YourBrand.Sales.Order> table;
+    bool loading = false;
+    OrderStatus? Status;
+    IEnumerable<OrderStatus> orderStatuses = new List<OrderStatus>();
+    IEnumerable<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(Guid.Parse(Id));
+
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
+    }
+
+    private async Task<TableData<Order>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await OrdersClient.GetOrdersAsync(selectedStatuses?.Select(x => x.Id), null, null, null, Guid.Parse(Id), state.Page +
+            1,
+            state.PageSize,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
+            YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cts.Token);
+
+            return new TableData<Order>() { TotalItems = result.Total, Items = result.Items };
+        }
+        catch
+        {
+            return new TableData<Order>();
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    public async Task GoTo(Order order)
+    {
+        NavigationManager.NavigateTo($"/orders/{order.OrderNo}");
+    }
+
+    private async Task OnSelectedValuesChanged(IEnumerable<OrderStatus?> selectedValues)
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+
+    private async Task DeleteOrder(Order order)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft order", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await OrdersClient.DeleteOrderAsync(order.Id);
+        await table.ReloadServerData();
+    }
+}

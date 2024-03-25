@@ -2,9 +2,9 @@
 
 using MediatR;
 
-using ValidationException = YourBrand.Orders.Application.Exceptions.ValidationException;
+using ValidationException = YourBrand.Sales.Features.Exceptions.ValidationException;
 
-namespace YourBrand.Orders.Application.Behaviors;
+namespace YourBrand.Sales.Features.Behaviors;
 
 public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class, IRequest<TResponse>

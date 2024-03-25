@@ -28,8 +28,13 @@ public sealed class OrderRepository : IOrderRepository
     public async Task<Order?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         return await dbSet
+            .Include(i => i.Parent)
             .Include(i => i.Status)
+            .Include(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
             .Include(i => i.Items)
+            .ThenInclude(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
             .Include(i => i.Assignee)
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)
@@ -39,8 +44,13 @@ public sealed class OrderRepository : IOrderRepository
     public async Task<Order?> FindByNoAsync(int orderNo, CancellationToken cancellationToken = default)
     {
         return await dbSet
+            .Include(i => i.Parent)
             .Include(i => i.Status)
+            .Include(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
             .Include(i => i.Items)
+            .ThenInclude(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
             .Include(i => i.Assignee)
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)
@@ -50,8 +60,13 @@ public sealed class OrderRepository : IOrderRepository
     public IQueryable<Order> GetAll(ISpecification<Order> specification)
     {
         return dbSet
+            .Include(i => i.Parent)
             .Include(i => i.Status)
+            .Include(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
             .Include(i => i.Items)
+            .ThenInclude(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
             .Include(i => i.Assignee)
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)

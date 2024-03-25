@@ -35,7 +35,7 @@
 
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel T="Order" SortLabel="Id">Id</MudTableSortLabel>
+            <MudTableSortLabel T="Order" SortLabel="OrderNo">#</MudTableSortLabel>
         </MudTh>
         @*<MudTh>Type</MudTh>*@
         <MudTh>
@@ -104,7 +104,8 @@
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(selectedStatuses?.Select(x => x.Id), null, null, null, state.Page + 1,
+            var result = await OrdersClient.GetOrdersAsync(selectedStatuses?.Select(x => x.Id), null, null, null, null, state.Page +
+            1,
             state.PageSize,
             state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
             state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?

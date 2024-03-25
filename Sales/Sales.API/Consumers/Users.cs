@@ -1,5 +1,5 @@
 ﻿using YourBrand.IdentityManagement.Contracts;
-using YourBrand.Orders.Application.Services;
+using YourBrand.Sales.Features.Services;
 using YourBrand.Sales.API.Features.OrderManagement.Users;
 
 using MassTransit;

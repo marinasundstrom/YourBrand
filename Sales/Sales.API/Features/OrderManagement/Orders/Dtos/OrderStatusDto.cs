@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using YourBrand.Orders.Application;
+using YourBrand.Sales.Features;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
 

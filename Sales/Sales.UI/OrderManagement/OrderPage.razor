@@ -33,7 +33,7 @@
 
     <MudGrid Class="mb-4">
         <MudItem xs="12" sm="12" md="6" lg="6">
-            <MudPaper Elevation="25" Class="pa-4">
+            <MudPaper Elevation="25" Class="pa-4 mb-8">
                 <MudGrid Class="mb-4">
 
                     <MudItem xs="12" sm="12" md="6" lg="6">
@@ -51,6 +51,26 @@
                     <MudItem xs="12" sm="12" md="6" lg="6">
                         <CustomerSelector Value="customer" ValueChanged="OnCustomerChanged" />
                     </MudItem>
+
+                    @if(order.Parent is not null) 
+                    {
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                             <MudField Label="Parent order" Class="mb-2">
+                                <a href="@($"/orders/{order.Parent.OrderNo}")">@order.Parent.OrderNo</a>
+                            </MudField>
+                        </MudItem>
+                    }
+
+                    @if(order.Subscription is not null) 
+                    {
+                        <MudItem xs="12" sm="12" md="12" lg="12">
+                            <MudField Label="Subscription" Class="mb-2">
+                                <a href="@($"/subscriptions/{order.Subscription.Id}")">
+                                    @order.Subscription.Plan.Name (@order.Subscription.Plan.Id)
+                                </a>
+                            </MudField>
+                        </MudItem>
+                    }
 
                     @*
 

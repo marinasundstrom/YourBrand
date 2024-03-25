@@ -6,7 +6,7 @@
           Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
 
     <HeaderContent>
-        <MudTh><MudTableSortLabel T="Order" SortLabel="Id">Id</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Order" SortLabel="Id">#</MudTableSortLabel></MudTh>
         @*<MudTh>Type</MudTh>*@
         <MudTh><MudTableSortLabel InitialDirection="MudBlazor.SortDirection.Ascending" T="Order" SortLabel="Date">Date</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel></MudTh>
@@ -50,7 +50,7 @@
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(new int [] { 2 }, null, null, null, state.Page + 1, state.PageSize,
+            var result = await OrdersClient.GetOrdersAsync(new int [] { 2 }, null, null, null, null, state.Page + 1, state.PageSize,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
             state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
             YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cts.Token);

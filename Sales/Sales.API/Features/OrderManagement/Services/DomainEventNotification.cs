@@ -3,7 +3,7 @@
 using YourBrand.Domain;
 using YourBrand.Sales.API.Features.OrderManagement.Domain;
 
-namespace YourBrand.Orders.Application.Services;
+namespace YourBrand.Sales.Features.Services;
 
 public sealed class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
 {

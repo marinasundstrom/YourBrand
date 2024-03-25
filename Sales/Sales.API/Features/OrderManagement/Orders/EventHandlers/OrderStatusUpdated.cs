@@ -4,8 +4,8 @@ using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
 using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.API.Features.OrderManagement.Repositories;
 
-using YourBrand.Orders.Application.Common;
-using YourBrand.Orders.Application.Services;
+using YourBrand.Sales.Features.Common;
+using YourBrand.Sales.Features.Services;
 using YourBrand.Domain;
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 using YourBrand.Notifications.Client;

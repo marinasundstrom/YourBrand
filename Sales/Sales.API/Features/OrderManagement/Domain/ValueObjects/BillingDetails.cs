@@ -8,4 +8,17 @@ public record BillingDetails
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
     public Address Address { get; set; } = new Address();
+
+    public BillingDetails? Copy()
+    {
+        return new BillingDetails
+        {
+            FirstName = FirstName,
+            LastName = LastName,
+            SSN = SSN,
+            PhoneNumber = PhoneNumber,
+            Email = Email,
+            Address = Address.Copy()
+        };
+    }
 }

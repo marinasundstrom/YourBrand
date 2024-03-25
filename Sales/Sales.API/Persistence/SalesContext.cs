@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.API.Persistence;
 
@@ -54,6 +55,10 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
     public DbSet<OrderStatus> OrderStatuses { get; set; }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<Subscription> Subscriptions { get; set; }
+    
+    public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
 #nullable restore
 }

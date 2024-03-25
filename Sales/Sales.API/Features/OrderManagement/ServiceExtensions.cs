@@ -4,7 +4,8 @@ using MediatR;
 
 using YourBrand.Sales.API.Features.OrderManagement.Orders;
 
-using YourBrand.Orders.Application.Behaviors;
+using YourBrand.Sales.Features.Behaviors;
+using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales.API.Features.OrderManagement;
 
@@ -20,6 +21,8 @@ public static class ServiceExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddValidatorsFromAssembly(typeof(ServiceExtensions).Assembly);
+
+        services.AddSubscriptions();
 
         return services;
     }

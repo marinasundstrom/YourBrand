@@ -42,26 +42,33 @@ paths:
           type: string
           nullable: true
         x-position: 4
+      - name: subscriptionId
+        in: query
+        schema:
+          type: string
+          format: guid
+          nullable: true
+        x-position: 5
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 5
+        x-position: 6
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 6
+        x-position: 7
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 7
+        x-position: 8
       - name: sortDirection
         in: query
         schema:
@@ -69,7 +76,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 8
+        x-position: 9
       responses:
         200:
           description: ''
@@ -463,6 +470,24 @@ paths:
           description: ''
         404:
           description: ''
+  /v1/orders/{id}/generate:
+    post:
+      tags:
+      - Orders
+      - Orders
+      operationId: Orders_GenerateSubscriptionOrders
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
   /v1/orders/statuses:
     get:
       tags:
@@ -600,6 +625,74 @@ paths:
           description: ''
         404:
           description: ''
+  /v1/subscriptionPlans:
+    get:
+      tags:
+      - SubscriptionsPlans
+      - SubscriptionPlans
+      operationId: SubscriptionPlans_GetSubscriptionPlans
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfSubscriptionPlan'
+  /v1/subscriptionPlans/{id}:
+    get:
+      tags:
+      - SubscriptionsPlans
+      - SubscriptionPlans
+      operationId: SubscriptionPlans_GetSubscriptionPlanById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionPlan'
+  /v1/subscriptions:
+    get:
+      tags:
+      - Subscriptions
+      - Subscriptions
+      operationId: Subscriptions_GetSubscriptions
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfSubscription'
+  /v1/subscriptions/{id}:
+    get:
+      tags:
+      - Subscriptions
+      - Subscriptions
+      operationId: Subscriptions_GetSubscriptionById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
 components:
   schemas:
     PagedResultOfOrder:
@@ -625,6 +718,10 @@ components:
         date:
           type: string
           format: date-time
+        parent:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ParentOrder'
         status:
           $ref: '#/components/schemas/OrderStatus'
         assigneeId:
@@ -643,6 +740,10 @@ components:
         note:
           type: string
           nullable: true
+        subscription:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Subscription'
         billingDetails:
           nullable: true
           oneOf:
@@ -691,6 +792,18 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/User'
+    ParentOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
     OrderStatus:
       type: object
       additionalProperties: false
@@ -724,6 +837,57 @@ components:
           format: int64
         name:
           type: string
+    Subscription:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        plan:
+          $ref: '#/components/schemas/SubscriptionPlanShort'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        order:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/OrderShort'
+        orderItemId:
+          type: string
+          nullable: true
+    SubscriptionPlanShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+    OrderShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
     BillingDetails:
       type: object
       additionalProperties: false
@@ -792,6 +956,10 @@ components:
         sku:
           type: string
           nullable: true
+        subscription:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Subscription'
         unitPrice:
           type: number
           format: decimal
@@ -1059,3 +1227,41 @@ components:
         description:
           type: string
           nullable: true
+    PagedResultOfSubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionPlan'
+        total:
+          type: integer
+          format: int32
+    SubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+    PagedResultOfSubscription:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        total:
+          type: integer
+          format: int32

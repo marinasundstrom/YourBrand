@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 
 using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
 
-using YourBrand.Orders.Application.Services;
+using YourBrand.Sales.Features.Services;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
 

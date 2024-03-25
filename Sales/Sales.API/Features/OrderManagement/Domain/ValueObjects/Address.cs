@@ -27,4 +27,18 @@ public record Address
     public string AdministrativeArea { get; set; }
 
     public string Country { get; set; }
+
+    public Address Copy()
+    {
+        return new Address {
+            Thoroughfare = Thoroughfare,
+            Premises = Premises,
+            SubPremises = SubPremises,
+            PostalCode = PostalCode,
+            Locality = Locality,
+            SubAdministrativeArea = SubAdministrativeArea,
+            AdministrativeArea = AdministrativeArea,
+            Country = Country
+        };
+    }
 }

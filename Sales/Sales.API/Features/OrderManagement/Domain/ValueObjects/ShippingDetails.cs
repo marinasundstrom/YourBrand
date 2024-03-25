@@ -1,4 +1,5 @@
-﻿namespace YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+﻿
+namespace YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 
 public record ShippingDetails
 {
@@ -6,4 +7,14 @@ public record ShippingDetails
     public string LastName { get; set; }
     public string? CareOf { get; set; }
     public Address Address { get; set; } = new Address();
+
+    public ShippingDetails? Copy()
+    {
+        return new ShippingDetails {
+            FirstName = FirstName,
+            LastName = LastName,
+            CareOf = CareOf,
+            Address = Address.Copy()
+        };
+    }
 }

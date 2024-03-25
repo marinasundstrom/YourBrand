@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Orders.Application.Services;
+﻿namespace YourBrand.Sales.Features.Services;
 
 public interface IEmailService
 {

@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Orders.Application.Common;
+using YourBrand.Sales.Features.Common;
 
-namespace YourBrand.Orders.Application.Features.Users;
+namespace YourBrand.Sales.Features.Features.Users;
 
 /*
 [ApiController]
