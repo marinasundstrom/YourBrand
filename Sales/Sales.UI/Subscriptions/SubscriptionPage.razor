@@ -47,6 +47,7 @@ else
     <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
         Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
         <ToolBarContent>
+            <MudText Typo="Typo.h5" Class="mb-1">Orders</MudText>
             @* <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
             SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
             @foreach (var type in Enum.GetValues<OrderType>())
