@@ -503,7 +503,11 @@ Delete
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
 
-        var dialogRef = DialogService.Show<OrderItemDialog>("New Item", dialogParameters);
+        var dialogRef = DialogService.Show<OrderItemDialog>("New Item", dialogParameters, new DialogOptions {
+            FullWidth = true,
+            MaxWidth = MaxWidth.Medium,
+            CloseButton = true
+        });
 
         var result = await dialogRef.Result;
 
@@ -526,7 +530,11 @@ Delete
         dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
         dialogParameters.Add(nameof(OrderItemDialog.Model), model);
 
-        var dialogRef = DialogService.Show<OrderItemDialog>("Update Item", dialogParameters);
+        var dialogRef = DialogService.Show<OrderItemDialog>("Update Item", dialogParameters, new DialogOptions {
+            FullWidth = true,
+            MaxWidth = MaxWidth.Medium,
+            CloseButton = true
+        });
 
         var result = await dialogRef.Result;
 

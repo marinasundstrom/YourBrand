@@ -59,7 +59,8 @@ public class OrderFactory
 
         if(orderItem.Order?.Customer is not null) 
         {
-            targetOrder.Customer = new Customer {
+            targetOrder.Customer = new Customer 
+            {
                 Id = orderItem.Order.Customer.Id,
                 Name = orderItem.Order.Customer.Name,
                 CustomerNo = orderItem.Order.Customer.CustomerNo
@@ -90,5 +91,8 @@ public class OrderFactory
         targetOrderItem.Discount = orderItem.Discount;
         targetOrderItem.DiscountRate = orderItem.DiscountRate;
         targetOrderItem.Notes = orderItem?.Notes;
+
+        targetOrderItem.SubscriptionPlan = orderItem!.SubscriptionPlan;
+        targetOrderItem.Subscription = orderItem!.Subscription;
     }
 }

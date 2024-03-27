@@ -130,14 +130,16 @@ public class SubscriptionOrderDateGenerator
                 {
                     if (subscriptionPlan.OnDayOfWeek is null)
                     {
-                        yearsBuilder = yearsBuilder.OnMonths((Dates.Recurring.Month)subscriptionPlan.InMonth.GetValueOrDefault());
-                        yearsBuilder = yearsBuilder.OnDay(subscriptionPlan.OnDay.GetValueOrDefault());
+                        yearsBuilder = yearsBuilder
+                            .OnMonths((Dates.Recurring.Month)subscriptionPlan.InMonth.GetValueOrDefault())
+                            .OnDay(subscriptionPlan.OnDay.GetValueOrDefault());
                     }
                     else
                     {
-                        yearsBuilder = yearsBuilder.OnMonths((Dates.Recurring.Month)subscriptionPlan.InMonth.GetValueOrDefault());
-                        yearsBuilder = yearsBuilder.OnOrdinalWeek((Ordinal)subscriptionPlan.OnDay.GetValueOrDefault());
-                        yearsBuilder = yearsBuilder.OnDay(subscriptionPlan.OnDayOfWeek.GetValueOrDefault());
+                        yearsBuilder = yearsBuilder
+                            .OnMonths((Dates.Recurring.Month)subscriptionPlan.InMonth.GetValueOrDefault())
+                            .OnOrdinalWeek((Ordinal)subscriptionPlan.OnDay.GetValueOrDefault())
+                            .OnDay(subscriptionPlan.OnDayOfWeek.GetValueOrDefault());
                     }
                 }
                 else

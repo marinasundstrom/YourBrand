@@ -1,0 +1,140 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Sales
+@using YourBrand.Catalog
+@inject IOrdersClient OrdersClient
+@inject ISubscriptionsClient SubscriptionsClient
+@using Humanizer
+
+<EditForm Model="@Model" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 600px; overflow-y: scroll">
+
+                <MudText Typo="Typo.body1" Class="mb-4">@Model.GetDescription()</MudText>
+
+                <MudSelect T="Recurrence" Label="Recurrence" @bind-Value="Model.Recurrence" Variant="Variant.Outlined" ToStringFunc="x => x.ToString()" For="() => Model.Recurrence" Class="mb-4">
+                    @foreach (var item in Enum.GetValues<Recurrence>())
+                    {
+                        <MudSelectItem T="Recurrence" Value="@item" />
+                    }
+                </MudSelect>
+
+                @if (Model.Recurrence == Recurrence.Daily) 
+                {
+                    <MudSelect T="int?" Label="Every" @bind-Value="Model.EveryDays" Variant="Variant.Outlined"
+                        ToStringFunc="x => x.ToString()" For="() => Model.EveryDays" Class="mb-4">
+                        @for (int i = 1; i < 31; i++)
+                        {
+                            int y = i;
+
+                            <MudSelectItem T="int?" Value="@i">@(y == 1 ? string.Empty : y.Ordinalize()) day</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+                else if (Model.Recurrence == Recurrence.Weekly)
+                {
+                    <MudNumericField Variant="Variant.Outlined" Immediate="true" Label="Every weeks"
+                        @bind-Value="Model.EveryWeeks"                      For="() => Model.EveryWeeks" Class="mb-4">
+                    </MudNumericField>
+
+                    <MudText Typo="Typo.body2" Class="mb-2">On weekdays</MudText>
+
+                    <MudToggleGroup T="YourBrand.Sales.DayOfWeek" SelectionMode="SelectionMode.MultiSelection" @bind-Values="Model.OnWeekDays2" Class="mb-4">
+                    @foreach (var weekday in Enum.GetValues<YourBrand.Sales.DayOfWeek>().Skip(1))
+                    {
+                        var wd = weekday;
+
+                        <MudToggleItem T="YourBrand.Sales.DayOfWeek" Value="@wd" Text="@wd.ToString().Substring(0, 3)" />
+                    }                          
+                    </MudToggleGroup>
+                }
+                else if (Model.Recurrence == Recurrence.Monthly)
+                {
+                    <MudNumericField Variant="Variant.Outlined" Immediate="true" Label="Every months" @bind-Value="Model.EveryMonths"
+                        For="() => Model.EveryMonths" Class="mb-4">
+                    </MudNumericField>
+
+                    <MudSelect T="int?" Label="Nth" @bind-Value="Model.OnDay" Variant="Variant.Outlined"
+                        ToStringFunc="x => x.ToString()" For="() => Model.OnDay" Class="mb-4">
+                        @for (int i = 1; i <= 4; i++)
+                        {
+                            int y = i;
+
+                            <MudSelectItem T="int?" Value="@y">@y.Ordinalize()</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudSelect T="Sales.DayOfWeek?" Label="Day of week" @bind-Value="Model.OnDayOfWeek"
+                        Variant="Variant.Outlined" ToStringFunc="x => x.ToString()" For="() => Model.OnDayOfWeek"
+                        Class="mb-4">
+                        @foreach (var dayOfWeek in Enum.GetValues<Sales.DayOfWeek>())
+                        {
+                            <MudSelectItem T="Sales.DayOfWeek?" Value="@dayOfWeek">@dayOfWeek</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+                else if (Model.Recurrence == Recurrence.Yearly)
+                {
+                    <MudNumericField Variant="Variant.Outlined" Immediate="true" Label="Every years" @bind-Value="Model.EveryYears" For="() => Model.EveryMonths"
+                        Class="mb-4">
+                    </MudNumericField>
+
+                    <MudSelect T="Month?" Label="Month" @bind-Value="Model.InMonth" Variant="Variant.Outlined"
+                        ToStringFunc="x => x.ToString()" For="() => Model.InMonth" Class="mb-4">
+                        @foreach (var month in Enum.GetValues<Month>())
+                        {
+                            <MudSelectItem T="Month?" Value="@month" />
+                        }
+                    </MudSelect>
+
+                    <MudSelect T="int?" Label="Nth" @bind-Value="Model.OnDay" Variant="Variant.Outlined"
+                        ToStringFunc="x => x.ToString()" For="() => Model.OnDay" Class="mb-4">
+                        @for (int i = 1; i <= 4; i++)
+                        {
+                            int y = i;
+
+                            <MudSelectItem T="int?" Value="@y">@y.Ordinalize()</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudSelect T="Sales.DayOfWeek?" Label="Day of week" @bind-Value="Model.OnDayOfWeek" Variant="Variant.Outlined"
+                        ToStringFunc="x => x.ToString()" For="() => Model.OnDayOfWeek" Class="mb-4">
+                        @foreach (var dayOfWeek in Enum.GetValues<Sales.DayOfWeek>())
+                        {
+                            <MudSelectItem T="Sales.DayOfWeek?" Value="@dayOfWeek">@dayOfWeek</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+
+            </MudContainer>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public SubscriptionPlanViewModel? Model { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Model is null)
+        {
+            Model = new SubscriptionPlanViewModel();
+        }
+    }
+
+    async Task Submit()
+    {
+
+        MudDialog.Close();
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

@@ -12,6 +12,8 @@ public static class ServiceExtensions
 
         services.AddSubscriptionsClient(configureClient, configureBuilder);
 
+        services.AddSubscriptionPlansClient(configureClient, configureBuilder);
+
         return services;
     }
 
@@ -47,6 +49,18 @@ public static class ServiceExtensions
 
         services.AddHttpClient<ISubscriptionsClient>("SalesAPI")
             .AddTypedClient<ISubscriptionsClient>((http, sp) => new YourBrand.Sales.SubscriptionsClient(http));
+
+        return services;
+    }
+
+    public static IServiceCollection AddSubscriptionPlansClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
+    {
+        IHttpClientBuilder builder = services.AddHttpClient("SalesAPI", configureClient);
+
+        configureBuilder?.Invoke(builder);
+
+        services.AddHttpClient<ISubscriptionPlansClient>("SalesAPI")
+            .AddTypedClient<ISubscriptionPlansClient>((http, sp) => new YourBrand.Sales.SubscriptionPlansClient(http));
 
         return services;
     }

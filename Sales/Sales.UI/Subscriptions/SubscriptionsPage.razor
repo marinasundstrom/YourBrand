@@ -9,7 +9,9 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Subscriptions</MudText>
 
-<MudButton Variant="Variant.Filled" Link="/subscriptions/new" Class="mb-2">New subscription</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="CreateSubscription" Class="mb-2">New subscription</MudButton>
+
+<MudButton Variant="Variant.Filled" OnClick="CreateSubscriptionPlan" Class="mb-2">New subscription plan</MudButton>
 
 <MudTable T="Subscription" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
@@ -108,4 +110,48 @@
         await table.ReloadServerData();
     }
     */
+
+    private async Task CreateSubscription() 
+    {
+        var dialogParameters = new DialogParameters();
+        //dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
+
+        var dialogRef = DialogService.Show<CreateSubscription>("New subscription", dialogParameters, new DialogOptions
+            {
+                FullWidth = true,
+                MaxWidth = MaxWidth.Small,
+                CloseButton = true
+            });
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled)
+            return;
+
+        var order = (Order)result.Data;
+
+        NavigationManager.NavigateTo($"/orders/{order.OrderNo}");
+    }
+
+    private async Task CreateSubscriptionPlan()
+    {
+        var dialogParameters = new DialogParameters();
+        //dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
+
+        var dialogRef = DialogService.Show<Plans.CreateSubscriptionPlan>("New subscription plan", dialogParameters, new DialogOptions
+            {
+                FullWidth = true,
+                MaxWidth = MaxWidth.Small,
+                CloseButton = true
+            });
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled)
+            return;
+
+        var order = (Order)result.Data;
+
+        //NavigationManager.NavigateTo($"/orders/{order.OrderNo}");
+    }
 }

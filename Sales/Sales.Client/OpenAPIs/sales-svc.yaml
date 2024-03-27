@@ -876,6 +876,49 @@ components:
         orderItemId:
           type: string
           nullable: true
+        autoRenew:
+          type: boolean
+        recurrence:
+          $ref: '#/components/schemas/Recurrence'
+        everyDays:
+          type: integer
+          format: int32
+          nullable: true
+        everyWeeks:
+          type: integer
+          format: int32
+          nullable: true
+        onWeekDays:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/WeekDays'
+        everyMonths:
+          type: integer
+          format: int32
+          nullable: true
+        everyYears:
+          type: integer
+          format: int32
+          nullable: true
+        onDay:
+          type: integer
+          format: int32
+          nullable: true
+        onDayOfWeek:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/DayOfWeek'
+        inMonth:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Month'
+        startTime:
+          type: string
+          format: duration
+        duration:
+          type: string
+          format: duration
+          nullable: true
     SubscriptionPlanShort:
       type: object
       additionalProperties: false
@@ -904,6 +947,89 @@ components:
         date:
           type: string
           format: date-time
+    Recurrence:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Daily
+      - Weekly
+      - Monthly
+      - Yearly
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+    WeekDays:
+      type: integer
+      description: ''
+      x-enumFlags: true
+      x-enumNames:
+      - None
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+      enum:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+    DayOfWeek:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+    Month:
+      type: integer
+      description: ''
+      x-enumNames:
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+      enum:
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+      - 64
+      - 128
+      - 256
+      - 512
+      - 1024
+      - 2048
     BillingDetails:
       type: object
       additionalProperties: false
@@ -972,6 +1098,10 @@ components:
         sku:
           type: string
           nullable: true
+        subscriptionPlan:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SubscriptionPlan'
         subscription:
           nullable: true
           oneOf:
@@ -1031,6 +1161,65 @@ components:
       enum:
       - 1
       - 2
+    SubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        autoRenew:
+          type: boolean
+        recurrence:
+          $ref: '#/components/schemas/Recurrence'
+        everyDays:
+          type: integer
+          format: int32
+          nullable: true
+        everyWeeks:
+          type: integer
+          format: int32
+          nullable: true
+        onWeekDays:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/WeekDays'
+        everyMonths:
+          type: integer
+          format: int32
+          nullable: true
+        everyYears:
+          type: integer
+          format: int32
+          nullable: true
+        onDay:
+          type: integer
+          format: int32
+          nullable: true
+        onDayOfWeek:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/DayOfWeek'
+        inMonth:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Month'
+        startTime:
+          type: string
+          format: duration
+        duration:
+          type: string
+          format: duration
+          nullable: true
     OrderVatAmount:
       type: object
       additionalProperties: false
@@ -1143,6 +1332,10 @@ components:
         itemId:
           type: string
           nullable: true
+        subscriptionPlanId:
+          type: string
+          format: guid
+          nullable: true
         quantity:
           type: number
           format: double
@@ -1174,6 +1367,10 @@ components:
           type: string
         itemId:
           type: string
+          nullable: true
+        subscriptionPlanId:
+          type: string
+          format: guid
           nullable: true
         quantity:
           type: number
@@ -1254,22 +1451,6 @@ components:
         total:
           type: integer
           format: int32
-    SubscriptionPlan:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          format: guid
-        name:
-          type: string
-        productId:
-          type: string
-          nullable: true
-        price:
-          type: number
-          format: decimal
-          nullable: true
     PagedResultOfSubscription:
       type: object
       additionalProperties: false

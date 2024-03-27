@@ -44,6 +44,10 @@ public class OrderItem : Entity<string>, IAuditable
 
     public ProductType ProductType  { get; set; }
 
+    public SubscriptionPlan? SubscriptionPlan { get; set; }
+
+    public Guid? SubscriptionPlanId { get; set; }
+
     public Subscription? Subscription { get; set; }
 
     public Guid? SubscriptionId { get; set; }

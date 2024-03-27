@@ -62,7 +62,7 @@
     {
         try
         {
-            var result = await ProductsClient.GetProductsAsync(StoreId, BrandId, true, true, text, null, 0,
+            var result = await ProductsClient.GetProductsAsync(StoreId, BrandId, true, true, text, null, 1,
         10, null, null);
 
             return result.Items;

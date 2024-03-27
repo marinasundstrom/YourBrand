@@ -11,7 +11,7 @@ using YourBrand.Sales.API.Persistence;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
 
-public sealed record UpdateOrderItem(string OrderId, string OrderItemId, string Description, string? ProductId, double Quantity, string? Unit, decimal UnitPrice, decimal? RegularPrice, double VatRate, decimal? Discount, string? Notes) : IRequest<Result<OrderItemDto>>
+public sealed record UpdateOrderItem(string OrderId, string OrderItemId, string Description, string? ProductId, Guid? SubscriptionPlanId, double Quantity, string? Unit, decimal UnitPrice, decimal? RegularPrice, double VatRate, decimal? Discount, string? Notes) : IRequest<Result<OrderItemDto>>
 {
     public sealed class Validator : AbstractValidator<UpdateOrderItem>
     {
@@ -46,6 +46,7 @@ public sealed record UpdateOrderItem(string OrderId, string OrderItemId, string 
 
             orderItem.Description = request.Description;
             orderItem.ProductId = request.ProductId;
+            orderItem.SubscriptionPlanId = request.SubscriptionPlanId;
             orderItem.Unit = request.Unit;
             orderItem.Price = request.UnitPrice;
             orderItem.RegularPrice = request.RegularPrice;

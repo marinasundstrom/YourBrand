@@ -54,6 +54,7 @@ public static class Mappings
         orderItem.Description,
         orderItem.ProductId,
         orderItem.Sku,
+        orderItem.SubscriptionPlan?.ToDto(),
         orderItem.Subscription?.ToDto(),
         orderItem.Price,
         orderItem.Unit,    

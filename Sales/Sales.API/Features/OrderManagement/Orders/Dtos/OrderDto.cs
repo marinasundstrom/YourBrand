@@ -68,6 +68,7 @@ public sealed record OrderItemDto(
     string Description, 
     string? ProductId,
     string? SKU,
+    SubscriptionPlanDto? SubscriptionPlan,
     SubscriptionDto? Subscription,
     decimal UnitPrice,
     string? Unit,

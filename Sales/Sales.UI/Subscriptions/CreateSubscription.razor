@@ -1,0 +1,76 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Sales
+@using YourBrand.Catalog
+@inject IOrdersClient OrdersClient
+@inject ISubscriptionsClient SubscriptionsClient
+
+<EditForm Model="@Model" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 600px; overflow-y: scroll">
+
+                <ProductSelector Variant="Variant.Outlined" @bind-Value="Model.Product" For="() => Model.Product"
+                    Class="mb-4" />
+
+                <SubscriptionPlanSelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Model.SubscriptionPlan"
+                    For="() => Model.SubscriptionPlan" />
+
+            @* <MudNumericField Label="Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mb-4">
+            </MudNumericField> *@
+
+                <YourBrand.Customers.CustomerSelector Variant="Variant.Outlined" Class="mb-4"
+                    @bind-Value="Model.Customer"                For="() => Model.Customer" />
+
+                <MudTextField Variant="Variant.Outlined" Label="Notes" Lines="5" @bind-Value="Model.Notes"
+                    For="() => Model.Notes" Class="mb-4">
+            </MudTextField>
+
+            </MudContainer>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public SubscriptionViewModel? Model { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Model is null)
+        {
+            Model = new SubscriptionViewModel();
+        }
+    }
+
+    async Task Submit()
+    {
+        var order = await OrdersClient.CreateOrderAsync(new CreateOrderRequest 
+        {
+            Customer = new SetCustomer
+            {
+                Id = Model.Customer.Id.ToString(),
+                Name = Model.Customer.Name      
+            },
+            Items = [
+                new CreateOrderItem 
+                {
+                    Description = Model.Product.Name,
+                    ItemId = Model.Product.Id.ToString(),
+                    UnitPrice = Model.Product.Price,
+                    Quantity = 1
+                }
+            ]
+        });
+
+        MudDialog.Close(order);
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

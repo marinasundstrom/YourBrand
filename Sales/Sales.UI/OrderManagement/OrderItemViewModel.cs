@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 using Core;
 
+using YourBrand.Catalog;
+
 namespace YourBrand.Sales.OrderManagement;
 
 public class OrderItemViewModel
@@ -13,7 +15,11 @@ public class OrderItemViewModel
     [Required]
     public string Description { get; set; } = null!;
 
+    public Product? Product { get; set; }
+
     public string? ItemId { get; set; }
+
+    public SubscriptionPlan? SubscriptionPlan { get; set; }
 
     public string? Sku { get; set; }
 

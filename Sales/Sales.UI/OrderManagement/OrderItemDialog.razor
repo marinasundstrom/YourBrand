@@ -1,21 +1,25 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using YourBrand.Sales
+@using YourBrand.Catalog
 @inject IOrdersClient OrdersClient
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
 
-    <MudDialog>
+    <MudDialog DisableSidePadding="true">
         <DialogContent>
+            <MudContainer Style="max-height: 600px; overflow-y: scroll">
 
             <MudTextField Label="Description" @bind-Value="Model.Description" For="() => Model.Description"
                 Class="mt-4">
             </MudTextField>
 
+            <ProductSelector @bind-Value="Model.Product" For="() => Model.Product" Class="mt-4" />
+
             <MudNumericField Label="Unit Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
             </MudNumericField>
 
-            <MudNumericField Label="Regular Price" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
+            <MudNumericField Label="Regular Price" Max="@(Model.Price - 1)" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
                 Class="mt-4">
             </MudNumericField>
 
@@ -62,6 +66,8 @@
 
             </MudGrid>
 
+            <SubscriptionPlanSelector Class="mt-4" @bind-Value="Model.SubscriptionPlan" For="() => Model.SubscriptionPlan" />
+
             <MudGrid>
 
                 <MudItem xs="12" md="6">
@@ -72,7 +78,7 @@
 
             <MudTextField Label="Notes" Lines="5" @bind-Value="Model.Notes" For="() => Model.Notes" Class="mt-4">
             </MudTextField>
-
+            </MudContainer>
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>

@@ -32,6 +32,12 @@ public static class Mapper
             Id = dto.Id,
             ItemId = dto.ProductId,
             Description = dto.Description,
+            Product = dto.ProductId is null ? null : new Catalog.Product 
+            {
+                Id = 1,
+                Name = dto.Description
+            },
+            SubscriptionPlan = dto.SubscriptionPlan,
             Unit = dto.Unit ?? string.Empty,
             Quantity = dto.Quantity,
             Price = dto.UnitPrice,
@@ -46,8 +52,9 @@ public static class Mapper
     {
         return new AddOrderItemRequest
         {
-            ItemId = vm.ItemId,
+            ItemId = vm.Product?.Id.ToString(),
             Description = vm.Description,
+            SubscriptionPlanId = vm.SubscriptionPlan?.Id,
             Unit = vm.Unit,
             Quantity = vm.Quantity,
             UnitPrice = vm.Price,
@@ -63,7 +70,8 @@ public static class Mapper
         return new UpdateOrderItemRequest
         {
             Description = dto.Description,
-            ItemId = dto.ItemId,
+            ItemId = dto.Product?.Id.ToString(),
+            SubscriptionPlanId = dto.SubscriptionPlan?.Id,
             Notes = dto.Notes,
             UnitPrice = dto.Price,
             RegularPrice = dto.RegularPrice,

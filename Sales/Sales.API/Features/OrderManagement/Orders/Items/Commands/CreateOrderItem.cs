@@ -13,7 +13,7 @@ using static YourBrand.Sales.API.Features.OrderManagement.Domain.Errors.Orders;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
 
-public sealed record CreateOrderItem(string OrderId, string Description, string? ProductId, double Quantity, string? Unit, decimal UnitPrice, decimal? RegularPrice, double? VatRate, decimal? Discount, string? Notes) : IRequest<Result<OrderItemDto>>
+public sealed record CreateOrderItem(string OrderId, string Description, string? ProductId, Guid? SubscriptionPlanId, double Quantity, string? Unit, decimal UnitPrice, decimal? RegularPrice, double? VatRate, decimal? Discount, string? Notes) : IRequest<Result<OrderItemDto>>
 {
     public sealed class Validator : AbstractValidator<CreateOrderItem>
     {
@@ -41,6 +41,8 @@ public sealed record CreateOrderItem(string OrderId, string Description, string?
             }
 
             var orderItem = order.AddItem(request.Description, request.ProductId, request.UnitPrice, request.RegularPrice, null, request.Discount, request.Quantity, request.Unit, request.VatRate, request.Notes);
+
+            orderItem.SubscriptionPlanId = request.SubscriptionPlanId;
 
             order.Update();
 

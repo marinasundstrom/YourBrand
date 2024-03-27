@@ -64,7 +64,7 @@ public sealed record CreateOrder(int? Status, SetCustomerDto? Customer, BillingD
 
             order.VatIncluded = true;
 
-            order.BillingDetails = new BillingDetails
+            order.BillingDetails = request.BillingDetails is null ? null : new BillingDetails
             {
                 FirstName = request.BillingDetails.FirstName,
                 LastName = request.BillingDetails.LastName,

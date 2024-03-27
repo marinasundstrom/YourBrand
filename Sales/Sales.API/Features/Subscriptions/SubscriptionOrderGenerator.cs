@@ -82,7 +82,7 @@ public class SubscriptionOrderGenerator(
                 foreach (var orderItem in order.Items)
                 {
                     /*
-                    if (orderItem.Subscription is not null)
+                    if (orderItem.SubscriptionPlan is not null)
                     {
                         throw new Exception($"Nested subscriptions not allowed (OrderItem.Id: {orderItem.Id})");
                     }
