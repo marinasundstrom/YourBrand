@@ -12,7 +12,7 @@ public static class Endpoints
 {
     public static IEndpointRouteBuilder MapSubscriptionPlanEndpoints(this IEndpointRouteBuilder app)
     {
-        var versionedApi = app.NewVersionedApi("SubscriptionsPlans");
+        var versionedApi = app.NewVersionedApi("SubscriptionPlans");
 
         var group = versionedApi.MapGroup("/v{version:apiVersion}/subscriptionPlans")
             .WithTags("SubscriptionPlans")

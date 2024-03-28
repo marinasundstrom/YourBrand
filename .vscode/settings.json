@@ -26,7 +26,7 @@
                 {
                     "name": "Proxy",
                     "commands": [
-                        "dotnet run --project Proxy/Proxy.csproj"
+                        "dotnet run --project src/Proxy/Proxy.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -37,7 +37,7 @@
                 {
                     "name": "Portal",
                     "commands": [
-                        "dotnet run --project Portal/Portal/Portal.csproj"
+                        "dotnet run --project src/Portal/Portal/Portal.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -48,7 +48,7 @@
                 {
                     "name": "AppService",
                     "commands": [
-                        "dotnet run --project AppService/WebApi/WebApi.csproj"
+                        "dotnet run --project src/AppService/WebApi/WebApi.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -59,7 +59,18 @@
                 {
                     "name": "IdentityManagement",
                     "commands": [
-                        "dotnet run --project IdentityManagement/IdentityManagement/IdentityManagement.csproj"
+                        "dotnet run --project src/IdentityManagement/IdentityManagement/IdentityManagement.csproj"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Sync organizations and users",
+                    "commands": [
+                        "dotnet run --project src/Seeder/Seeder.csproj -- --sync"
                     ],
                     "shouldRunCommands": false
                 }
@@ -70,7 +81,7 @@
                 {
                     "name": "Notifications",
                     "commands": [
-                        "dotnet run --project Notifications/Notifications/Notifications.csproj"
+                        "dotnet run --project src/Notifications/Notifications/Notifications.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -81,7 +92,7 @@
                 {
                     "name": "ApiKeys",
                     "commands": [
-                        "dotnet run --project ApiKeys/ApiKeys/ApiKeys.csproj"
+                        "dotnet run --project src/ApiKeys/ApiKeys/ApiKeys.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -92,7 +103,7 @@
                 {
                     "name": "Customers",
                     "commands": [
-                        "dotnet run --project CustomerRelations/Customers/Customers/Customers.csproj"
+                        "dotnet run --project src/CustomerRelations/Customers/Customers/Customers.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -103,7 +114,7 @@
                 {
                     "name": "Ticketing",
                     "commands": [
-                        "dotnet run --project CustomerRelations/Ticketing/Ticketing.Web/Ticketing.Web.csproj"
+                        "dotnet run --project src/CustomerRelations/Ticketing/Ticketing.Web/Ticketing.Web.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -114,7 +125,7 @@
                 {
                     "name": "Commerce",
                     "commands": [
-                        "dotnet run --project Commerce/Server/Commerce.Server.csproj"
+                        "dotnet run --project src/Commerce/Server/Commerce.Server.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -125,7 +136,7 @@
                 {
                     "name": "HumanResources",
                     "commands": [
-                        "dotnet run --project HumanResources/HumanResources/HumanResources.csproj"
+                        "dotnet run --project src/HumanResources/HumanResources/HumanResources.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -136,7 +147,7 @@
                 {
                     "name": "Catalog",
                     "commands": [
-                        "dotnet run --project Catalog/Catalog/Catalog.csproj"
+                        "dotnet run --project src/Catalog/Catalog/Catalog.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -147,7 +158,7 @@
                 {
                     "name": "Sales",
                     "commands": [
-                        "dotnet run --project Sales/Sales.API/Sales.API.csproj"
+                        "dotnet run --project src/Sales/Sales.API/Sales.API.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -158,7 +169,7 @@
                 {
                     "name": "Marketing",
                     "commands": [
-                        "dotnet run --project Marketing/Marketing/Marketing.csproj"
+                        "dotnet run --project src/Marketing/Marketing/Marketing.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -169,7 +180,7 @@
                 {
                     "name": "Inventory",
                     "commands": [
-                        "dotnet run --project Inventory/Inventory/Inventory.csproj"
+                        "dotnet run --project src/Inventory/Inventory/Inventory.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -180,7 +191,7 @@
                 {
                     "name": "Accounting",
                     "commands": [
-                        "dotnet run --project Finance/Accounting/Accounting/WebApi/WebApi.csproj"
+                        "dotnet run --project src/Finance/Accounting/Accounting/WebApi/WebApi.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -191,7 +202,7 @@
                 {
                     "name": "Accountant",
                     "commands": [
-                        "dotnet run --project Finance/Accounting/Accountant/Accountant/Accountant.csproj"
+                        "dotnet run --project src/Finance/Accounting/Accountant/Accountant/Accountant.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -202,7 +213,7 @@
                 {
                     "name": "Transactions",
                     "commands": [
-                        "dotnet run --project Finance/Transactions/Transactions/Transactions.csproj"
+                        "dotnet run --project src/Finance/Transactions/Transactions/Transactions.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -213,7 +224,7 @@
                 {
                     "name": "Payments",
                     "commands": [
-                        "dotnet run --project Finance/Payments/Payments/Payments.csproj"
+                        "dotnet run --project src/Finance/Payments/Payments/Payments.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -224,7 +235,7 @@
                 {
                     "name": "Invoicing",
                     "commands": [
-                        "dotnet run --project Finance/Invoicing/Invoicing/Invoicing.csproj"
+                        "dotnet run --project src/Finance/Invoicing/Invoicing/Invoicing.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -235,7 +246,7 @@
                 {
                     "name": "RotRutService",
                     "commands": [
-                        "dotnet run --project Finance/RotRutService/RotRutService/RotRutService.csproj"
+                        "dotnet run --project src/Finance/RotRutService/RotRutService/RotRutService.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -246,7 +257,7 @@
                 {
                     "name": "Documents",
                     "commands": [
-                        "dotnet run --project Documents/Documents/Documents.csproj"
+                        "dotnet run --project src/Documents/Documents/Documents.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -257,7 +268,7 @@
                 {
                     "name": "Email",
                     "commands": [
-                        "dotnet run --project EmailService/EmailService/EmailService.csproj"
+                        "dotnet run --project src/EmailService/EmailService/EmailService.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -268,7 +279,7 @@
                 {
                     "name": "Messenger",
                     "commands": [
-                        "dotnet run --project Messenger/Messenger/Messenger.csproj"
+                        "dotnet run --project src/Messenger/Messenger/Messenger.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -279,7 +290,7 @@
                 {
                     "name": "Showroom",
                     "commands": [
-                        "dotnet run --project Showroom/WebApi/WebApi.csproj"
+                        "dotnet run --project src/Showroom/WebApi/WebApi.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -290,7 +301,7 @@
                 {
                     "name": "TimeReport",
                     "commands": [
-                        "dotnet run --project TimeReport/WebApi/WebApi.csproj"
+                        "dotnet run --project src/TimeReport/WebApi/WebApi.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -301,7 +312,7 @@
                 {
                     "name": "Analytics",
                     "commands": [
-                        "dotnet run --project Analytics/Analytics.Web/Analytics.Web.csproj"
+                        "dotnet run --project src/Analytics/Analytics.Web/Analytics.Web.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -312,7 +323,7 @@
                 {
                     "name": "StoreFront",
                     "commands": [
-                        "dotnet run --project StoreFront/StoreFront.API/StoreFront.API.csproj"
+                        "dotnet run --project src/StoreFront/StoreFront.API/StoreFront.API.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -323,7 +334,7 @@
                 {
                     "name": "Carts",
                     "commands": [
-                        "dotnet run --project Carts/Carts.API/Carts.API.csproj"
+                        "dotnet run --project src/Carts/Carts.API/Carts.API.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -334,7 +345,7 @@
                 {
                     "name": "Store",
                     "commands": [
-                        "dotnet run --project Store/Web/Server/BlazorApp.csproj"
+                        "dotnet run --project src/Store/Web/Server/BlazorApp.csproj"
                     ],
                     "shouldRunCommands": false
                 }
@@ -345,7 +356,7 @@
                 {
                     "name": "Store IdentityService",
                     "commands": [
-                        "dotnet run --project IdentityService2/IdentityService2.csproj"
+                        "dotnet run --project src/IdentityService2/IdentityService2.csproj"
                     ],
                     "shouldRunCommands": false
                 }
