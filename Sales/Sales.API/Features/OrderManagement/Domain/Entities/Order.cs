@@ -7,10 +7,11 @@ using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using Core;
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Features.Common;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
-public class Order : AggregateRoot<string>, IAuditable
+public class Order : AggregateRoot<string>, IAuditable, IHasTenant
 {
     readonly HashSet<OrderItem> _items = new HashSet<OrderItem>();
 
@@ -18,7 +19,9 @@ public class Order : AggregateRoot<string>, IAuditable
     {
         StatusId = 1;
     }
-    
+
+    public TenantId? TenantId { get; set; }
+
     public string OrganizationId { get; private set; } = "ACME";
 
     public int OrderNo { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.Common;
 
 namespace YourBrand.Sales.API.Persistence.Interceptors;
 
@@ -10,13 +11,16 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
+    private readonly ITenantService _tenantService;
 
     public AuditableEntitySaveChangesInterceptor(
         ICurrentUserService currentUserService,
-        IDateTime dateTime)
+        IDateTime dateTime,
+        ITenantService tenantService)
     {
         _currentUserService = currentUserService;
         _dateTime = dateTime;
+        _tenantService = tenantService;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -43,6 +47,11 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
             {
                 entry.Entity.CreatedById = _currentUserService.UserId!;
                 entry.Entity.Created = _dateTime.Now;
+
+                if (entry.Entity is IHasTenant e)
+                {
+                    e.TenantId = _tenantService.TenantId; // "None";
+                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {

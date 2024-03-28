@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Contracts;
 using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters
+public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters, IHasTenant
 {
     public Subscription() : base(Guid.NewGuid())
     {
 
     }
+
+    public TenantId? TenantId { get; set; }
 
     public int? CustomerId { get; set; }
 

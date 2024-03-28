@@ -1,14 +1,18 @@
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters
+public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters, IHasTenant
 {
     public SubscriptionPlan() : base(Guid.NewGuid())
     {
 
     }
+
+
+    public TenantId? TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

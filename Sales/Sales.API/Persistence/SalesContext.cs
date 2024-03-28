@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.Common;
 
@@ -39,8 +40,6 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
         {
             try 
             {
-Console.WriteLine(clrType);
-
                 var entityTypeBuilder = modelBuilder.Entity(clrType);
 
                 var parameter = Expression.Parameter(clrType, "entity");
@@ -57,13 +56,14 @@ Console.WriteLine(clrType);
                 {
                     if (queryFilter is null)
                     {
-                        queryFilter = tenantFilter;
+                        queryFilter = Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant)));
                     }
                     else
                     {
                         queryFilter = Expression.AndAlso(
                             queryFilter,
-                            Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant)))).Expand();
+                             Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))))
+                            .Expand();
                     }
                 }
 
@@ -116,9 +116,7 @@ Console.WriteLine(clrType);
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        //configurationBuilder.Properties<TodoId>().HaveConversion<TodoIdConverter>();
-        //configurationBuilder.Properties<UserId>().HaveConversion<UserIdConverter>();
-        //configurationBuilder.Properties<TenantId>().HaveConversion<TenantIdConverter>();
+        configurationBuilder.Properties<TenantId>().HaveConversion<TenantIdConverter>();
     }
 
 #nullable disable

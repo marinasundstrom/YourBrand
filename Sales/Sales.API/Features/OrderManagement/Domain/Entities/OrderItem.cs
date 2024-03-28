@@ -1,10 +1,11 @@
 using Core;
 
+using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
-public class OrderItem : Entity<string>, IAuditable
+public class OrderItem : Entity<string>, IAuditable, IHasTenant
 {
     internal OrderItem() : base(Guid.NewGuid().ToString())  {}
 
@@ -33,6 +34,8 @@ public class OrderItem : Entity<string>, IAuditable
 
         Update();
     }
+
+    public TenantId? TenantId { get; set; }
 
     public Order? Order { get; internal set; }
 

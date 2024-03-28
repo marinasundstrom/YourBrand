@@ -20,7 +20,7 @@ public static class Config
     public static IEnumerable<ApiResource> ApiResources =>
         [
                 // the api requires the role claim
-                new ApiResource("myapi", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
+                new ApiResource("myapi", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "organization"])
                 {
                     Scopes = ["myapi"]
                 },
@@ -42,7 +42,7 @@ public static class Config
                 {
                     Scopes = ["cartsapi"]
                 },
-                new ApiResource("salesapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role])
+                new ApiResource("salesapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "organization"])
                 {
                     Scopes = ["salesapi"]
                 }
@@ -50,8 +50,8 @@ public static class Config
 
     public static IEnumerable<ApiScope> ApiScopes =>
         [
-            // the api requires the role claim
-            new ApiScope("myapi", "Access the api"),
+            // the api requires the claims
+            new ApiScope("myapi", "Access the api", [ "role", "organization" ]),
             new ApiScope("catalogapi", "Access the Catalog API"),
             new ApiScope("cartsapi", "Access the Carts API"),
             new ApiScope("salesapi", "Access the Carts API")

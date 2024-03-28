@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
 using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
-public class OrderStatus : Entity<int>, IAuditable
+public class OrderStatus : Entity<int>, IAuditable, IHasTenant
 {
     protected OrderStatus()
     {
@@ -16,6 +17,8 @@ public class OrderStatus : Entity<int>, IAuditable
         Handle = handle;
         Description = description;
     }
+
+    public TenantId? TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 
