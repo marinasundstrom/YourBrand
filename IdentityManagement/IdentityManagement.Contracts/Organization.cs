@@ -8,6 +8,8 @@ public record CreateOrganization
     public string? FriendlyName { get; init; }
 }
 
+public record GetOrganization(string OrganizationId, string RequestedById);
+
 public record CreateOrganizationResponse(string Id, string Name, string? FriendlyName);
 
 public record OrganizationCreated(string OrganizationId, string Name, string CreatedById);

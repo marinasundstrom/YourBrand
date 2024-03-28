@@ -5,11 +5,11 @@ using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
 namespace YourBrand.Sales.API.Persistence.Configurations;
 
-public sealed class UserConfiguration : IEntityTypeConfiguration<User>
+public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Organization> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable("Organizations");
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
@@ -20,5 +20,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Ignore(e => e.DomainEvents);
+
     }
 }

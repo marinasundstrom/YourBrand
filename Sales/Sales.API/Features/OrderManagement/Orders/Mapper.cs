@@ -2,6 +2,7 @@
 using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.API.Features.OrderManagement.Users;
+using YourBrand.Sales.API.Features.OrderManagement.Organizations;
 using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
@@ -109,4 +110,8 @@ public static class Mappings
 
     public static CurrencyAmountDto ToDto(this CurrencyAmount currencyAmount) => new(currencyAmount.Currency, currencyAmount.Amount);
 
+
+    public static OrganizationDto ToDto(this Organization user) => new(user.Id, user.Name);
+
+    public static OrganizationDto ToDto2(this Organization user) => new(user.Id, user.Name);
 }

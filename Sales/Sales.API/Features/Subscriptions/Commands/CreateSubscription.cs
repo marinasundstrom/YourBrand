@@ -39,6 +39,8 @@ public record CreateSubscription(string ProductId, Guid SubscriptionPlanId, stri
 
             order.AddItem(); */
 
+            var order = new Order();
+
             await salesContext.SaveChangesAsync();
         }
     }

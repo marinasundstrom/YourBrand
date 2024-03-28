@@ -23,4 +23,9 @@ public static class Errors
     {
         public static readonly Error UserNotFound = new Error(nameof(UserNotFound), "User not found", string.Empty);
     }
+
+    public static class Organizations
+    {
+        public static readonly Error OrganizationNotFound = new Error(nameof(OrganizationNotFound), "Organization not found", string.Empty);
+    }
 }

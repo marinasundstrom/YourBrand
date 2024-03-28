@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer.Models;
+
 using IdentityModel;
 
 namespace YourBrand.IdentityManagement;
@@ -9,7 +10,8 @@ public static class Config
               [
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Email()
+                new IdentityResources.Email(),
+                new IdentityResource("organization", ["organization"])
 
               // let's include the role claim in the profile
               //new ProfileWithRoleIdentityResource(),
@@ -64,9 +66,9 @@ public static class Config
                 RequirePkce = true,
                 RequireClientSecret = false,
                 AllowedCorsOrigins = { "https://localhost:5174" },
-                AllowedScopes = { "openid", "profile", "email", "myapi" },
-                RedirectUris = { "https://localhost:5174/authentication/login-callback" },
-                PostLogoutRedirectUris = { "https://localhost:5174/" },
+                AllowedScopes = [ "openid", "profile", "email", "myapi", "organization" ],
+                RedirectUris = [ "https://localhost:5174/authentication/login-callback" ],
+                PostLogoutRedirectUris = [ "https://localhost:5174/" ],
                 Enabled = true
             },
             new Duende.IdentityServer.Models.Client
@@ -78,12 +80,12 @@ public static class Config
 
                 // secret for authentication
                 ClientSecrets =
-                {
+                [
                     new Secret("foobar123!".Sha256())
-                },
+                ],
 
                 // scopes that client has access to
-                AllowedScopes = { "profile", "email", "myapi", "catalogapi", "cartsapi", "salesapi" },
+                AllowedScopes = [ "profile", "email", "myapi", "catalogapi", "cartsapi", "salesapi" ],
             },
             new Duende.IdentityServer.Models.Client
             {
@@ -94,12 +96,12 @@ public static class Config
 
                 // secret for authentication
                 ClientSecrets =
-                {
+                [
                     new Secret("foobar123!".Sha256())
-                },
+                ],
 
                 // scopes that client has access to
-                AllowedScopes = { "profile", "email", "myapi" },
+                AllowedScopes = [ "profile", "email", "myapi" ],
             }
         ];
 }

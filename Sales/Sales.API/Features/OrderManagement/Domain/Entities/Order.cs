@@ -18,12 +18,10 @@ public class Order : AggregateRoot<string>, IAuditable
     {
         StatusId = 1;
     }
+    
+    public string OrganizationId { get; private set; } = "ACME";
 
     public int OrderNo { get; set; }
-
-    public Order? Parent { get; set; }
-
-    public string CompanyId { get; private set; } = "ACME";
 
     public DateTime Date { get; private set; } = DateTime.Now;
 
@@ -49,6 +47,7 @@ public class Order : AggregateRoot<string>, IAuditable
 
         return false;
     }
+    public Order? Parent { get; set; }
 
     public User? Assignee { get; private set; }
 

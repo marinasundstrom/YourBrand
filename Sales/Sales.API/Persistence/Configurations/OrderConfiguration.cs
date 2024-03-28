@@ -12,7 +12,7 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.ToTable("Orders");
 
-        //builder.HasKey(o => new { o.CompanyId , o.OrderNo });
+        builder.HasAlternateKey(o => new { o.OrganizationId , o.OrderNo });
 
         builder.HasMany(order => order.Items)
             .WithOne(orderItem => orderItem.Order)
@@ -32,5 +32,8 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         // builder.HasOne(s => s.Subscription!)
         //     .WithOne()
         //     .HasForeignKey<Order>(s => s.SubscriptionId);
+
+        builder.Ignore(e => e.DomainEvents);
+
     }
 }

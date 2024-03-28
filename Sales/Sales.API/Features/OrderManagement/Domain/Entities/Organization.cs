@@ -1,23 +1,15 @@
 namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
 
-public class User : AggregateRoot<string>, IAuditable
+public class Organization : AggregateRoot<string>, IAuditable
 {
-    public User(string id, string organizationId, string name, string email)
+    public Organization(string id, string name)
         : base(id)
     {
         Id = id;
-        OrganizationId = organizationId;
         Name = name;
-        Email = email;
     }
 
     public string Name { get; set; }
-
-    public Organization Organization { get; set; }
-
-    public string OrganizationId { get; set; }
-
-    public string Email { get; set; }
 
     public User? CreatedBy { get; set; }
 

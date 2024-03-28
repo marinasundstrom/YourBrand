@@ -21,6 +21,7 @@ using YourBrand.Extensions;
 using YourBrand.Sales.API;
 using Serilog;
 using System.Reflection;
+using YourBrand.Sales.Features.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +90,8 @@ builder.Services
     .AddPersistence(builder.Configuration);
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddScoped<ITenantService, TenantService>();
 
 builder.Services.AddNotificationsClients((sp, http) =>
 {

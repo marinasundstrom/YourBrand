@@ -34,7 +34,7 @@ public class SalesUserCreatedConsumer : IConsumer<UserCreated>
             var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
             var message2 = messageR.Message;
 
-            var result = await _mediator.Send(new API.Features.OrderManagement.Users.CreateUser($"{message2.FirstName} {message2.LastName}", message2.Email, message2.UserId));
+            var result = await _mediator.Send(new API.Features.OrderManagement.Users.CreateUser($"{message2.FirstName} {message2.LastName}", message2.Email, message.OrganizationId, message2.UserId));
         }
         catch(Exception e) 
         {

@@ -15,5 +15,8 @@ public sealed class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
         // builder.HasOne(s => s.Subscription!)
         //     .WithOne()
         //     .HasForeignKey<OrderItem>(s => s.SubscriptionId);
+
+        builder.Ignore(e => e.DomainEvents);
+
     }
 }
