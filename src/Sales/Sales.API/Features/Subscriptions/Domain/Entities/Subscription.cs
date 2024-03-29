@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Contracts;
 using YourBrand.Sales.Domain.Enums;
 

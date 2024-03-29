@@ -1,3 +1,3 @@
-namespace YourBrand.Sales.API.Features.OrderManagement.Organizations;
+namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
 public sealed record OrganizationDto(string Id, string Name);

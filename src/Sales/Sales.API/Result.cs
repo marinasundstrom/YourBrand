@@ -1,4 +1,4 @@
-namespace YourBrand.Sales.API;
+namespace YourBrand.Sales;
 
 public static class Results
 {

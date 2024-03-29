@@ -2,12 +2,12 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.API;
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
-using YourBrand.Sales.API.Models;
+using YourBrand.Sales;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Models;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Organizations;
+namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
 public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrganizationDto>>
 {

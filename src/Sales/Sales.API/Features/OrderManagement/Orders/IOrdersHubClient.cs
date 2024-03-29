@@ -1,6 +1,6 @@
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
+namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
 public interface IOrdersHubClient
 {

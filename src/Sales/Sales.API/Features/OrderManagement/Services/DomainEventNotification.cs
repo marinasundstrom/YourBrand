@@ -1,7 +1,7 @@
 ﻿using MediatR;
 
 using YourBrand.Domain;
-using YourBrand.Sales.API.Features.OrderManagement.Domain;
+using YourBrand.Sales.Features.OrderManagement.Domain;
 
 namespace YourBrand.Sales.Features.Services;
 

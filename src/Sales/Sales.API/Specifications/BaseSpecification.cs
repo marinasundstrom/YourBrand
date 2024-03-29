@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 using LinqKit;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Specifications;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Specifications;
 
 public abstract class BaseSpecification<T> : ISpecification<T>
 {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 using YourBrand.Sales.Domain.Entities;
 
-namespace YourBrand.Sales.API.Persistence.Configurations;
+namespace YourBrand.Sales.Persistence.Configurations;
 
 public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
 {

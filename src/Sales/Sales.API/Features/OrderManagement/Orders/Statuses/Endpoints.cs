@@ -2,15 +2,15 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Commands;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Queries;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses.Commands;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses.Queries;
-using YourBrand.Sales.API.Models;
+using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
+using YourBrand.Sales.Features.OrderManagement.Orders.Queries;
+using YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Commands;
+using YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
+using YourBrand.Sales.Models;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses;
 
 public static class Endpoints
 {

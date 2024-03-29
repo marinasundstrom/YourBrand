@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Sales.API.Contracts;
+﻿namespace YourBrand.Sales.Contracts;
 
 public record UpdateStatus(string OrderId, OrderStatus Status);
 

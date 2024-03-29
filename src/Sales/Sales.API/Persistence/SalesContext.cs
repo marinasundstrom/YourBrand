@@ -5,12 +5,12 @@ using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Persistence;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.Common;
 
-namespace YourBrand.Sales.API.Persistence;
+namespace YourBrand.Sales.Persistence;
 
 public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
 {

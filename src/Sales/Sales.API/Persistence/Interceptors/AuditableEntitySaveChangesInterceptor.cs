@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 using YourBrand.Sales.Features.Common;
 
-namespace YourBrand.Sales.API.Persistence.Interceptors;
+namespace YourBrand.Sales.Persistence.Interceptors;
 
 public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {

@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Sales.API.Features.OrderManagement.Domain;
+﻿namespace YourBrand.Sales.Features.OrderManagement.Domain;
 
 public static class Extensions
 {

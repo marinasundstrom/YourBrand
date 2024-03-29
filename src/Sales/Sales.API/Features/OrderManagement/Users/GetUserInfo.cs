@@ -2,10 +2,10 @@
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Users;
+namespace YourBrand.Sales.Features.OrderManagement.Users;
 
 public record GetUserInfo() : IRequest<Result<UserInfoDto>>
 {

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
+namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
 public interface IOrdersHub
 {

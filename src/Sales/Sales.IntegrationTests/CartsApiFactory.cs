@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Respawn;
 
-using YourBrand.Sales.API.Persistence;
+using YourBrand.Sales.Persistence;
 
 using Testcontainers.SqlEdge;
 

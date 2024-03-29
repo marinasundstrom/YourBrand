@@ -1,4 +1,4 @@
-﻿using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+﻿using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Features.Subscriptions;

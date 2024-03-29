@@ -5,7 +5,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.API.Persistence;
+using YourBrand.Sales.Persistence;
 using YourBrand.Sales.Contracts;
 using YourBrand.Sales.Domain.Entities;
 

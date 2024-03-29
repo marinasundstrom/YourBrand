@@ -1,4 +1,4 @@
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
 public abstract class AggregateRoot<TId> : Entity<TId>
     where TId : notnull

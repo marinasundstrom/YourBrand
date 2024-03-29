@@ -5,13 +5,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Infrastructure;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-using static YourBrand.Sales.API.Results;
-using static YourBrand.Sales.API.Features.OrderManagement.Domain.Errors.Orders;
+using static YourBrand.Sales.Results;
+using static YourBrand.Sales.Features.OrderManagement.Domain.Errors.Orders;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 
 public sealed record CreateOrderItem(string OrderId, string Description, string? ProductId, Guid? SubscriptionPlanId, double Quantity, string? Unit, decimal UnitPrice, decimal? RegularPrice, double? VatRate, decimal? Discount, string? Notes) : IRequest<Result<OrderItemDto>>
 {

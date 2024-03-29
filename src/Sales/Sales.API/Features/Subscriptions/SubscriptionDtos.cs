@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Features.Subscriptions;

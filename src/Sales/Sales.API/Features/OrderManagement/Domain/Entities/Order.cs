@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 
-using YourBrand.Sales.API;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales;
+using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 
 using Core;
 using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.Common;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
 public class Order : AggregateRoot<string>, IAuditable, IHasTenant
 {

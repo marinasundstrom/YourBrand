@@ -1,3 +1,3 @@
-﻿namespace YourBrand.Sales.API.Features.OrderManagement.Domain;
+﻿namespace YourBrand.Sales.Features.OrderManagement.Domain;
 
 public record Error(string Id, string Title, string Detail);

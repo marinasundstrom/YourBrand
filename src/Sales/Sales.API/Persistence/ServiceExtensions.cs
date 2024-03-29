@@ -2,15 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
-using YourBrand.Sales.API.Persistence.Interceptors;
-using YourBrand.Sales.API.Persistence.Repositories;
-using YourBrand.Sales.API.Persistence.Repositories.Mocks;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Persistence.Interceptors;
+using YourBrand.Sales.Persistence.Repositories;
+using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 using YourBrand.Domain.Persistence;
 using YourBrand.Domain.Persistence.Interceptors;
 
-namespace YourBrand.Sales.API.Persistence;
+namespace YourBrand.Sales.Persistence;
 
 public static class ServiceExtensions
 {

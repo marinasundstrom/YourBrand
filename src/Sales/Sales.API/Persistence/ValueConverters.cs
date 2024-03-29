@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 
-namespace YourBrand.Sales.API.Persistence;
+namespace YourBrand.Sales.Persistence;
 internal sealed class TenantIdConverter : ValueConverter<TenantId, string>
 {
     public TenantIdConverter()

@@ -2,7 +2,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.API.Persistence;
+using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 

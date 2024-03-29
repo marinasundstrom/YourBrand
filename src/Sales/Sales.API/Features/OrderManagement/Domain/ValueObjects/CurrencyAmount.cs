@@ -1,4 +1,4 @@
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 
 public sealed class CurrencyAmount : ValueObject
 {

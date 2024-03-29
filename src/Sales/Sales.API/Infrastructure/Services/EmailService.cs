@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Logging;
 
-namespace YourBrand.Sales.API.Infrastructure.Services;
+namespace YourBrand.Sales.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {

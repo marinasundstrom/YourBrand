@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 using Newtonsoft.Json.Converters;
 
-namespace YourBrand.Sales.API;
+namespace YourBrand.Sales;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum SortDirection

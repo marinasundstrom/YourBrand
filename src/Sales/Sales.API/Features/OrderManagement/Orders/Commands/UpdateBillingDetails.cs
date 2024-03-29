@@ -2,11 +2,11 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Commands;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
 public sealed record UpdateBillingDetails(string Id, BillingDetailsDto BillingDetails) : IRequest<Result>
 {

@@ -1,7 +1,7 @@
-﻿namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
+﻿namespace YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Users;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Users;
 using YourBrand.Sales.Features.Subscriptions;
 
 public sealed record OrderDto(

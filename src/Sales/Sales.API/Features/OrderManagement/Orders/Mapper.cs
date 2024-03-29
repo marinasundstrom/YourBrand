@@ -1,11 +1,11 @@
-﻿using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Users;
-using YourBrand.Sales.API.Features.OrderManagement.Organizations;
+﻿using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Users;
+using YourBrand.Sales.Features.OrderManagement.Organizations;
 using YourBrand.Sales.Features.Subscriptions;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders;
+namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
 public static class Mappings
 {

@@ -2,10 +2,10 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Commands;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
 public sealed record SetCustomer(string Id, string CustomerId, string Name) : IRequest<Result>
 {

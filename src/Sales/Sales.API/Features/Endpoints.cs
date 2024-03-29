@@ -1,7 +1,7 @@
-using YourBrand.Sales.API.Features.OrderManagement;
-using YourBrand.Sales.API.Features.Subscriptions;
+using YourBrand.Sales.Features.OrderManagement;
+using YourBrand.Sales.Features.Subscriptions;
 
-namespace YourBrand.Sales.API.Features;
+namespace YourBrand.Sales.Features;
 
 public static class Endpoints
 {

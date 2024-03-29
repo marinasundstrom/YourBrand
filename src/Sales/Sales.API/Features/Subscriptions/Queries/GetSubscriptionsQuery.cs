@@ -7,11 +7,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Sales.Features.Subscriptions;
-using YourBrand.Sales.API.Models;
+using YourBrand.Sales.Models;
 using YourBrand.Sales.Domain.Entities;
 
 using static YourBrand.Sales.Features.Subscriptions.Mappings;
-using YourBrand.Sales.API.Persistence;
+using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 

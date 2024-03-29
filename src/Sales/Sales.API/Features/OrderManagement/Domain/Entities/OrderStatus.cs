@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
 public class OrderStatus : Entity<int>, IAuditable, IHasTenant
 {

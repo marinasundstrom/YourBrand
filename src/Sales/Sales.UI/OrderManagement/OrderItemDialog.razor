@@ -19,7 +19,7 @@
             <MudNumericField Label="Unit Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
             </MudNumericField>
 
-            <MudNumericField Label="Regular Price" Max="@(Model.Price - 1)" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
+            <MudNumericField Label="Regular Price" Immediate="true" Min="@(Model.Price + 1)" @bind-Value="Model.RegularPrice" For="() => Model.RegularPrice"
                 Class="mt-4">
             </MudNumericField>
 

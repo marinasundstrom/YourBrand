@@ -7,18 +7,18 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.API.Features;
-using YourBrand.Sales.API.Features.OrderManagement;
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Infrastructure;
-using YourBrand.Sales.API.Persistence;
+using YourBrand.Sales.Features;
+using YourBrand.Sales.Features.OrderManagement;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Infrastructure;
+using YourBrand.Sales.Persistence;
 using YourBrand.Notifications.Client;
 
 using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
-using YourBrand.Sales.API;
+using YourBrand.Sales;
 using Serilog;
 using System.Reflection;
 using YourBrand.Sales.Features.Common;

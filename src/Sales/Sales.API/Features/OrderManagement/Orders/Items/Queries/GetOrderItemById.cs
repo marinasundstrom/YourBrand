@@ -1,9 +1,9 @@
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Items;
 
 public sealed record GetOrderItemById(string OrderId, string OrderItemId) : IRequest<Result<OrderItemDto>>
 {

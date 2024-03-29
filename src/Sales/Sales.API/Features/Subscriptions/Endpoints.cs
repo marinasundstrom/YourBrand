@@ -1,12 +1,12 @@
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses;
-using YourBrand.Sales.API.Models;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Orders.Statuses;
+using YourBrand.Sales.Models;
 using YourBrand.Sales.Features.Subscriptions;
 using YourBrand.Sales.Features.Subscriptions.Plans;
 
-namespace YourBrand.Sales.API.Features.Subscriptions;
+namespace YourBrand.Sales.Features.Subscriptions;
 
 public static class Endpoints
 {

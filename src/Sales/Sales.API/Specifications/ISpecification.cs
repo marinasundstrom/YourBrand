@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Specifications;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Specifications;
 
 public interface ISpecification<T>
 {

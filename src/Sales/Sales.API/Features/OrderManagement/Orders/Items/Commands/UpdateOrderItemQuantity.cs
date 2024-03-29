@@ -2,10 +2,10 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 
 public sealed record UpdateOrderItemQuantity(string OrderId, string OrderItemId, double Quantity) : IRequest<Result<OrderItemDto>>
 {

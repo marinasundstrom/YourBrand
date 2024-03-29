@@ -5,11 +5,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Infrastructure;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
-using YourBrand.Sales.API.Persistence;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Persistence;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 
 public sealed record UpdateOrderItem(string OrderId, string OrderItemId, string Description, string? ProductId, Guid? SubscriptionPlanId, double Quantity, string? Unit, decimal UnitPrice, decimal? RegularPrice, double VatRate, decimal? Discount, string? Notes) : IRequest<Result<OrderItemDto>>
 {

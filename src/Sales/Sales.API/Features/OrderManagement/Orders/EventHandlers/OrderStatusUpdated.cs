@@ -1,16 +1,16 @@
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 using YourBrand.Sales.Features.Common;
 using YourBrand.Sales.Features.Services;
 using YourBrand.Domain;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 using YourBrand.Notifications.Client;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.EventHandlers;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository, 
     ICurrentUserService currentUserService, 

@@ -2,7 +2,7 @@
 
 using YourBrand.Domain;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
     where TId : notnull

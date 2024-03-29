@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Sales.Domain.Entities;
 
-namespace YourBrand.Sales.API.Persistence.Configurations;
+namespace YourBrand.Sales.Persistence.Configurations;
 
 public class SubscriptionPlanConfiguration : IEntityTypeConfiguration<SubscriptionPlan>
 {

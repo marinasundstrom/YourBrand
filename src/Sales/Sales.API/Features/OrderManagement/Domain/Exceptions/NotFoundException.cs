@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Exceptions;
+﻿namespace YourBrand.Sales.Features.OrderManagement.Domain.Exceptions;
 
 public class NotFoundException : Exception
 {

@@ -1,13 +1,13 @@
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 using YourBrand.Sales.Features.Common;
 using YourBrand.Sales.Features.Services;
 using YourBrand.Domain;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.EventHandlers;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderUpdatedEventHandler(IOrderRepository orderRepository, IOrderNotificationService orderNotificationService) : IDomainEventHandler<OrderUpdated>
 {

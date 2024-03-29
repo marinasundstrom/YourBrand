@@ -2,11 +2,11 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Users;
+namespace YourBrand.Sales.Features.OrderManagement.Users;
 
 public record CreateUser(string Name, string Email, string OrganizationId, string? UserId = null) : IRequest<Result<UserInfoDto>>
 {

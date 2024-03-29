@@ -1,10 +1,10 @@
 ﻿using YourBrand.Domain;
 using YourBrand.Domain.Infrastructure;
-using YourBrand.Sales.API.Features.OrderManagement.Domain;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Infrastructure.Services;
+using YourBrand.Sales.Features.OrderManagement.Domain;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Infrastructure.Services;
 
-namespace YourBrand.Sales.API.Persistence.Repositories.Mocks;
+namespace YourBrand.Sales.Persistence.Repositories.Mocks;
 
 public sealed class MockUnitOfWork : IUnitOfWork
 {

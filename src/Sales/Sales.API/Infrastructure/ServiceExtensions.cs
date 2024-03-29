@@ -1,8 +1,8 @@
-﻿using YourBrand.Sales.API.Infrastructure.Services;
+﻿using YourBrand.Sales.Infrastructure.Services;
 
 using YourBrand.Domain.Infrastructure;
 
-namespace YourBrand.Sales.API.Infrastructure;
+namespace YourBrand.Sales.Infrastructure;
 
 public static class ServiceExtensions
 {

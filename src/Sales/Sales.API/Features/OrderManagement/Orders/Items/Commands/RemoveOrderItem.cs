@@ -2,12 +2,12 @@
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-using static YourBrand.Sales.API.Results;
-using static YourBrand.Sales.API.Features.OrderManagement.Domain.Errors.Orders;
+using static YourBrand.Sales.Results;
+using static YourBrand.Sales.Features.OrderManagement.Domain.Errors.Orders;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Items.Commands;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 
 public sealed record RemoveOrderItem(string OrderId, string OrderItemId) : IRequest<Result>
 {

@@ -2,16 +2,16 @@
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Events;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 using YourBrand.Sales.Features.Common;
 using YourBrand.Sales.Features.Services;
 using YourBrand.Domain;
 using YourBrand.Notifications.Client;
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.EventHandlers;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, INotificationsClient notificationsClient,
     ILogger<OrderCreatedEventHandler> logger, ICurrentUserService currentUserService) : IDomainEventHandler<OrderCreated>

@@ -2,11 +2,11 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.API.Models;
+using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Models;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses.Queries;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 
 public record GetOrderStatusesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrderStatusDto>>
 {

@@ -1,10 +1,10 @@
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses;
-using YourBrand.Sales.API.Models;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Orders.Statuses;
+using YourBrand.Sales.Models;
 using YourBrand.Sales.Features.Subscriptions;
-using YourBrand.Sales.API;
+using YourBrand.Sales;
 
 namespace YourBrand.Sales.Features.Subscriptions.Plans;
 

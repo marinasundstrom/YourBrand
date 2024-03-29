@@ -1,9 +1,9 @@
 using Core;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Entities;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
 public class OrderItem : Entity<string>, IAuditable, IHasTenant
 {

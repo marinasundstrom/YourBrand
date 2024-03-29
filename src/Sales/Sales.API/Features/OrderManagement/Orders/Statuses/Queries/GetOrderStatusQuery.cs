@@ -8,9 +8,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders.Dtos;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Orders.Statuses.Queries;
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 
 public record GetOrderStatusQuery(int Id) : IRequest<OrderStatusDto?>
 {

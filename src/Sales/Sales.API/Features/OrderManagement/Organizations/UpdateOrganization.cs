@@ -2,10 +2,10 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
-using YourBrand.Sales.API.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Organizations;
+namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
 public record UpdateOrganization(string OrganizationId, string Name) : IRequest<Result<OrganizationDto>>
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using YourBrand.Sales.Features.Subscriptions;
 using YourBrand.Sales.Contracts;
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.API.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Orders;
 using Quartz.Xml.JobSchedulingData20;
 
 namespace YourBrand.Sales.Features.Subscriptions;

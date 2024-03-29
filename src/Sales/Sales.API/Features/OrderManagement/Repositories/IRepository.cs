@@ -1,8 +1,8 @@
-﻿using YourBrand.Sales.API.Features.OrderManagement.Domain.Entities;
+﻿using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
-using YourBrand.Sales.API.Features.OrderManagement.Domain.Specifications;
+using YourBrand.Sales.Features.OrderManagement.Domain.Specifications;
 
-namespace YourBrand.Sales.API.Features.OrderManagement.Repositories;
+namespace YourBrand.Sales.Features.OrderManagement.Repositories;
 
 public interface IRepository<T, TId>
     where T : AggregateRoot<TId>

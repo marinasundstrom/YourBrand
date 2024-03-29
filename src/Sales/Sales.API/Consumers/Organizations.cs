@@ -1,11 +1,11 @@
 ﻿using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Sales.Features.Services;
-using YourBrand.Sales.API.Features.OrderManagement.Users;
+using YourBrand.Sales.Features.OrderManagement.Users;
 
 using MassTransit;
 
 using MediatR;
-using YourBrand.Sales.API.Features.OrderManagement.Organizations;
+using YourBrand.Sales.Features.OrderManagement.Organizations;
 
 namespace YourBrand.Sales.Consumers;
 
@@ -35,7 +35,7 @@ public class SalesOrganizationCreatedConsumer : IConsumer<OrganizationCreated>
             var messageR = await _requestClient.GetResponse<GetOrganizationResponse>(new GetOrganization(message.OrganizationId, (message.CreatedById)));
             var message2 = messageR.Message;
 
-            var result = await _mediator.Send(new API.Features.OrderManagement.Organizations.CreateOrganization(message.OrganizationId, message.Name));
+            var result = await _mediator.Send(new Sales.Features.OrderManagement.Organizations.CreateOrganization(message.OrganizationId, message.Name));
         }
         catch(Exception e) 
         {
