@@ -17,13 +17,13 @@ public class UnitTest2
                 CustomerNo = 1337,
                 Name = "ACME"
             },
-            BillingDetails = new Sales.API.Features.OrderManagement.Domain.ValueObjects.BillingDetails()
+            BillingDetails = new Sales.Features.OrderManagement.Domain.ValueObjects.BillingDetails()
             {
                 FirstName = "Test",
                 LastName = "Testsson",
                 SSN = "12345",
                 Email = "test@email.com",
-                Address = new Sales.API.Features.OrderManagement.Domain.ValueObjects.Address
+                Address = new Sales.Features.OrderManagement.Domain.ValueObjects.Address
                 {
                     Thoroughfare = "Testgatan",
                     Premises = "1",
@@ -34,10 +34,10 @@ public class UnitTest2
                     Country = "Testland"
                 }
             },
-            ShippingDetails = new Sales.API.Features.OrderManagement.Domain.ValueObjects.ShippingDetails() {
+            ShippingDetails = new Sales.Features.OrderManagement.Domain.ValueObjects.ShippingDetails() {
                 FirstName = "Test",
                 LastName = "Testsson",
-                Address = new Sales.API.Features.OrderManagement.Domain.ValueObjects.Address {
+                Address = new Sales.Features.OrderManagement.Domain.ValueObjects.Address {
                     Thoroughfare = "Testgatan",
                     Premises = "1",
                     PostalCode = "12345",

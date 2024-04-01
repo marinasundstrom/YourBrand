@@ -34,7 +34,9 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
 
     public string? DisplayName { get; set; }
 
-    public Organization? Organization { get; set; }
+    public Tenant? Tenant { get; set; }
+
+    public Organization? Organization => Organizations.FirstOrDefault();
 
     public DateTime Created { get; set; }
 
@@ -53,4 +55,8 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
     public IReadOnlyCollection<UserRole> UserRoles => _userRoles;
 
     public void AddToRole(Role role) => _roles.Add(role);
+
+    public IEnumerable<Organization> Organizations { get; set; }
+
+    public IEnumerable<OrganizationUser> OrganizationUsers { get; set; }
 }

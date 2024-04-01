@@ -28,7 +28,7 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
         {
             var user = await _context.Users
                 .Include(u => u.Roles)   
-                .Include(u => u.Organization)
+                .Include(u => u.Organizations)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 

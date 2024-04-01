@@ -24,6 +24,6 @@ public class GetOrganizationConsumer : IConsumer<GetOrganization>
 
         var organization = await _mediator.Send(new YourBrand.IdentityManagement.Application.Organizations.Queries.GetOrganizationQuery(message.OrganizationId));
 
-        await context.RespondAsync(new GetOrganizationResponse(organization.Id, organization.Name, organization.FriendlyName));
+        await context.RespondAsync(new GetOrganizationResponse(organization.Id, organization.Tenant.Id, organization.Name, organization.FriendlyName));
     }
 }

@@ -11,7 +11,7 @@ public static class Config
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-                new IdentityResource("organization", ["organization"])
+                new IdentityResource("tenant", ["tenant_id"])
 
               // let's include the role claim in the profile
               //new ProfileWithRoleIdentityResource(),
@@ -20,7 +20,7 @@ public static class Config
     public static IEnumerable<ApiResource> ApiResources =>
         [
                 // the api requires the role claim
-                new ApiResource("myapi", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "organization"])
+                new ApiResource("myapi", "The Web Api", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "tenant_id"])
                 {
                     Scopes = ["myapi"]
                 },
@@ -42,7 +42,7 @@ public static class Config
                 {
                     Scopes = ["cartsapi"]
                 },
-                new ApiResource("salesapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "organization"])
+                new ApiResource("salesapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "tenant_id"])
                 {
                     Scopes = ["salesapi"]
                 }
@@ -51,7 +51,7 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         [
             // the api requires the claims
-            new ApiScope("myapi", "Access the api", [ "role", "organization" ]),
+            new ApiScope("myapi", "Access the api", [ "role", "tenant_id" ]),
             new ApiScope("catalogapi", "Access the Catalog API"),
             new ApiScope("cartsapi", "Access the Carts API"),
             new ApiScope("salesapi", "Access the Carts API")
@@ -66,7 +66,7 @@ public static class Config
                 RequirePkce = true,
                 RequireClientSecret = false,
                 AllowedCorsOrigins = { "https://localhost:5174" },
-                AllowedScopes = [ "openid", "profile", "email", "myapi", "organization" ],
+                AllowedScopes = [ "openid", "profile", "email", "myapi", "tenant" ],
                 RedirectUris = [ "https://localhost:5174/authentication/login-callback" ],
                 PostLogoutRedirectUris = [ "https://localhost:5174/" ],
                 Enabled = true

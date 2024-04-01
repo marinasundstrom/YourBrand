@@ -11,13 +11,15 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
+        //builder.HasAlternateKey(o => new { o.OrganizationId, o.SubscriptionNo });
+
         builder.Ignore(e => e.DomainEvents);
 
         builder.HasQueryFilter(e => e.Deleted == null);
 
         builder.HasOne(s => s.Order!)
-          .WithOne()
-          .HasForeignKey<Subscription>(s => s.OrderId);
+            .WithOne()
+            .HasForeignKey<Subscription>(s => s.OrderId);
 
         builder.HasOne(s => s.OrderItem!)
             .WithOne()

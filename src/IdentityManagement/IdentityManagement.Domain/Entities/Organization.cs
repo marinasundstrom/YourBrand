@@ -29,7 +29,7 @@ public class Organization : AuditableEntity
 
     public string? FriendlyName { get; private set; }
 
-    public string Currency { get; set; } = "SEK";
+    public Tenant Tenant { get; set; }
 
     public IReadOnlyCollection<User> Users => _users;
 
@@ -40,4 +40,18 @@ public class Organization : AuditableEntity
             Name = name;
         }
     }
+
+    public void AddUser(User user)
+    {
+        //_users.Add(user);
+
+        OrganizationUsers.Add(new OrganizationUser 
+        {
+            Tenant = Tenant,
+            Organization = this,
+            User = user
+        });
+    }
+
+    public List<OrganizationUser> OrganizationUsers { get; set; } = new List<OrganizationUser>();
 }

@@ -3,12 +3,13 @@ using FluentValidation;
 using MediatR;
 
 using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Users;
 
-public record CreateUser(string Name, string Email, string OrganizationId, string? UserId = null) : IRequest<Result<UserInfoDto>>
+public record CreateUser(string Name, string Email, string? TenantId, string? UserId = null) : IRequest<Result<UserInfoDto>>
 {
     public class Validator : AbstractValidator<CreateUser>
     {
@@ -44,7 +45,10 @@ public record CreateUser(string Name, string Email, string OrganizationId, strin
 
             string userId = request.UserId ?? currentUserService.UserId!;
 
-            userRepository.Add(new User(userId, request.OrganizationId, request.Name, request.Email));
+            userRepository.Add(new User(userId, request.Name, request.Email)
+            {
+                TenantId = request.TenantId
+            });
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -3,4 +3,6 @@
 public interface ITenantService
 {
     string? TenantId { get; }
+
+    void SetTenantId(string tenantId);
 }

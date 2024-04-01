@@ -47,7 +47,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
 
             var users = await query
                 .Include(u => u.Roles)
-                .Include(u => u.Organization)
+                .Include(u => u.Organizations)
                 .ToListAsync(cancellationToken);
 
             var dtos = users.Select(user => user.ToDto());

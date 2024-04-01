@@ -41,7 +41,7 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
                 throw new Exception();
             }
                 
-            user.Organization = organization;
+            //user.Organization = organization;
 
             var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == request.Role, cancellationToken);
 
@@ -56,12 +56,12 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
 
             user = await _context.Users
                .Include(u => u.Roles)
-               .Include(u => u.Organization)
+               .Include(u => u.Organizations)
                .AsNoTracking()
                .AsSplitQuery()
                .FirstAsync(x => x.Id == user.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserCreated(user.Id, user.Organization!.Id, _currentUserService.UserId));
+            await _eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization!.Id, _currentUserService.UserId));
 
             return user.ToDto();
         }

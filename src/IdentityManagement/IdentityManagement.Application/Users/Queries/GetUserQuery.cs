@@ -22,8 +22,9 @@ public record GetUserQuery(string UserId) : IRequest<UserDto>
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
+                .Include(u => u.Tenant)
                 .Include(u => u.Roles)
-                .Include(u => u.Organization)
+                .Include(u => u.Organizations)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);

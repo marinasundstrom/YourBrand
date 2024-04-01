@@ -11,7 +11,7 @@ public class EntriesFactoryTest
     [Fact]
     public void SimpleInvoice()
     {
-        InvoiceDto invoice = GetInvoice();
+        Invoice invoice = GetInvoice();
 
         var cls = new EntriesFactory();
         var entries = cls.CreateEntriesFromInvoice(invoice);
@@ -25,7 +25,7 @@ public class EntriesFactoryTest
     [Fact]
     public void InvoiceForRutService()
     {
-        InvoiceDto invoice = GetInvoiceRut();
+        Invoice invoice = GetInvoiceRut();
 
         var cls = new EntriesFactory();
         var entries = cls.CreateEntriesFromInvoice(invoice);
@@ -39,7 +39,7 @@ public class EntriesFactoryTest
     [Fact]
     public void InvoiceForRutServiceWithMaterial()
     {
-        InvoiceDto invoice = GetInvoiceRut2();
+        Invoice invoice = GetInvoiceRut2();
 
         var cls = new EntriesFactory();
         var entries = cls.CreateEntriesFromInvoice(invoice);
@@ -50,14 +50,14 @@ public class EntriesFactoryTest
         (debit - credit).ShouldBe(0);
     }
 
-    private static InvoiceDto GetInvoice()
+    private static Invoice GetInvoice()
     {
-        var invoice = new InvoiceDto();
-        invoice.Items.Add(new InvoiceItemDto()
+        var invoice = new Invoice();
+        invoice.Items.Add(new InvoiceItem()
         {
             ProductType = ProductType.Service,
             Description = "Item 1",
-            Price = 560,
+            UnitPrice = 560,
             Unit = "pcs",
             VatRate = 0.25,
             Quantity = 2,
@@ -70,26 +70,26 @@ public class EntriesFactoryTest
     }
 
 
-    private static InvoiceDto GetInvoiceRut()
+    private static Invoice GetInvoiceRut()
     {
-        var invoice = new InvoiceDto();
-        invoice.Items.Add(new InvoiceItemDto()
+        var invoice = new Invoice();
+        invoice.Items.Add(new InvoiceItem()
         {
             ProductType = ProductType.Service,
             Description = "Cleaning",
-            Price = 560,
+            UnitPrice = 560,
             Unit = "hours",
             VatRate = 0.25,
             Quantity = 2,
             Total = 1120,
             IsTaxDeductibleService = true,
-            DomesticService = new InvoiceItemDomesticServiceDto
+            DomesticService = new InvoiceItemDomesticService
             {
                 Kind = DomesticServiceKind.HouseholdService,
                 HouseholdServiceType = HouseholdServiceType.Cleaning
             }
         });
-        invoice.DomesticService = new InvoiceDomesticServiceDto
+        invoice.DomesticService = new InvoiceDomesticService
         {
             Kind = DomesticServiceKind.HouseholdService,
             Description = "",
@@ -102,37 +102,37 @@ public class EntriesFactoryTest
         return invoice;
     }
 
-    private static InvoiceDto GetInvoiceRut2()
+    private static Invoice GetInvoiceRut2()
     {
-        var invoice = new InvoiceDto();
-        invoice.Items.Add(new InvoiceItemDto()
+        var invoice = new Invoice();
+        invoice.Items.Add(new InvoiceItem()
         {
             ProductType = ProductType.Service,
             Description = "Cleaning",
-            Price = 560,
+            UnitPrice = 560,
             Unit = "hours",
             VatRate = 0.25,
             Quantity = 2,
             Total = 1120,
             IsTaxDeductibleService = true,
-            DomesticService = new InvoiceItemDomesticServiceDto
+            DomesticService = new InvoiceItemDomesticService
             {
                 Kind = DomesticServiceKind.HouseholdService,
                 HouseholdServiceType = HouseholdServiceType.Cleaning
             }
         });
-        invoice.Items.Add(new InvoiceItemDto()
+        invoice.Items.Add(new InvoiceItem()
         {
             ProductType = ProductType.Good,
             Description = "Material",
-            Price = 100,
+            UnitPrice = 100,
             Unit = "pcs",
             VatRate = 0.25,
             Quantity = 1,
             Total = 100,
             IsTaxDeductibleService = true
         });
-        invoice.DomesticService = new InvoiceDomesticServiceDto
+        invoice.DomesticService = new InvoiceDomesticService
         {
             Kind = DomesticServiceKind.HouseholdService,
             Description = "",

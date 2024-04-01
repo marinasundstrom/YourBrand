@@ -8,7 +8,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
-public record CreateOrganization(string Id, string Name) : IRequest<Result<OrganizationDto>>
+public record CreateOrganization(string Id, string Name, string TenantId) : IRequest<Result<OrganizationDto>>
 {
     public class Validator : AbstractValidator<CreateOrganization>
     {
@@ -33,7 +33,10 @@ public record CreateOrganization(string Id, string Name) : IRequest<Result<Organ
 
         public async Task<Result<OrganizationDto>> Handle(CreateOrganization request, CancellationToken cancellationToken)
         {
-            organizationRepository.Add(new Organization(request.Id, request.Name));
+            organizationRepository.Add(new Organization(request.Id, request.Name) 
+            {
+               TenantId = request.TenantId
+            });
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -46,7 +46,6 @@ public record SyncDataCommand() : IRequest
             {
                 await _eventPublisher.PublishEvent(new PersonCreated(user.Id, _currentUserService.UserId));
             }
-
         }
     }
 }

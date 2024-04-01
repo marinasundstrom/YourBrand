@@ -46,7 +46,7 @@ public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRe
                .AsSplitQuery()
                .FirstAsync(x => x.Id == organization.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _currentOrganizationService.UserId));
+            await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Tenant.Id, organization.Name, _currentOrganizationService.UserId));
 
             return organization.ToDto();
         }

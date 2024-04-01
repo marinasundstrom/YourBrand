@@ -10,7 +10,7 @@ public sealed class TenantService : ITenantService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? TenantId => _tenantId ??= _httpContextAccessor.HttpContext?.User?.FindFirst("organization")?.Value;
+    public string? TenantId => _tenantId ??= _httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value;
 
-    //     public string? TenantId => _httpContextAccessor?.HttpContext?.Request.Headers["TenantId"].SingleOrDefault();
+    public void SetTenantId(string tenantId) => _tenantId = tenantId;
 }

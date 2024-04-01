@@ -26,12 +26,15 @@ public sealed class OrganizationRepository : IOrganizationRepository
 
     public async Task<Organization?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
+        return await dbSet
+            .Include(x => x.Users)
+            .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }
 
     public IQueryable<Organization> GetAll(ISpecification<Organization> specification)
     {
-        return dbSet.Where(specification.Criteria);
+        return dbSet
+            .Include(x => x.Users).Where(specification.Criteria);
     }
 
     public void Add(Organization organization)

@@ -60,7 +60,9 @@ public sealed record Checkout(
             await _ordersClient.CreateOrderAsync(new CreateOrderRequest()
             {
                 Status = OrderStatusOpen,
-                CustomerId = customerId?.ToString(),
+                Customer = new SetCustomer {
+                    Id = customerId?.ToString()
+                },
                 BillingDetails = new BillingDetails
                 {
                     FirstName = request.BillingDetails.FirstName,

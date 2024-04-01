@@ -23,8 +23,8 @@ public class CreateUserConsumer : IConsumer<CreateUser>
     {
         var message = context.Message;
 
-        var user = await _mediator.Send(new CreateUserCommand(message.OrganizationId, message.FirstName, message.LastName, message.DisplayName, message.Role, message.Email));
+        var user = await _mediator.Send(new CreateUserCommand(message.TenantId, message.FirstName, message.LastName, message.DisplayName, message.Role, message.Email));
 
-        await context.RespondAsync(new CreateUserResponse(user.Id, user.Organization.Id, user.FirstName, user.LastName, user.DisplayName, user.Email));
+        await context.RespondAsync(new CreateUserResponse(user.Id, user.Tenant.Id, null!, user.FirstName, user.LastName, user.DisplayName, user.Email));
     }
 }

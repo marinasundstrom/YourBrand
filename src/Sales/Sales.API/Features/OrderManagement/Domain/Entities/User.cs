@@ -1,21 +1,22 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
+using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+
 namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
-public class User : AggregateRoot<string>, IAuditable
+public class User : AggregateRoot<string>, IAuditable, IHasTenant
 {
-    public User(string id, string organizationId, string name, string email)
+    public User(string id, string name, string email)
         : base(id)
     {
         Id = id;
-        OrganizationId = organizationId;
         Name = name;
         Email = email;
     }
 
     public string Name { get; set; }
 
-    public Organization Organization { get; set; }
-
-    public string OrganizationId { get; set; }
+    public TenantId? TenantId { get; set; }
 
     public string Email { get; set; }
 
@@ -30,4 +31,8 @@ public class User : AggregateRoot<string>, IAuditable
     public string? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
+
+    public List<Organization> Organizations { get; set; }
+
+    public List<OrganizationUser> OrganizationUsers { get; set; }
 }

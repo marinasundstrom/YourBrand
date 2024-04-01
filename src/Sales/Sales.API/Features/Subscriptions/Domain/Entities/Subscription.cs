@@ -19,6 +19,10 @@ public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParam
 
     public TenantId? TenantId { get; set; }
 
+    //public string OrganizationId { get; set; }
+
+    public int SubscriptionNo { get; set; }
+
     public int? CustomerId { get; set; }
 
     public Order? Order { get; set; }

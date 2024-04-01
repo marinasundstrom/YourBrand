@@ -51,7 +51,11 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string, Identi
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
     }
 
-    public DbSet<Organization> Organizations { get; set; } = null!;
+    public DbSet<Tenant> Tenants { get; set; } = default!;
+
+    public DbSet<Organization> Organizations { get; set; } = default!;
+
+    public DbSet<OrganizationUser> OrganizationUsers { get; set; } = default!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

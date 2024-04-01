@@ -6,6 +6,7 @@ using MassTransit;
 
 using MediatR;
 using YourBrand.Sales.Features.OrderManagement.Organizations;
+using YourBrand.Sales.Features.Common;
 
 namespace YourBrand.Sales.Consumers;
 
@@ -32,10 +33,7 @@ public class SalesOrganizationCreatedConsumer : IConsumer<OrganizationCreated>
 
             //_currentUserService.SetCurrentUser(message.CreatedById);
 
-            var messageR = await _requestClient.GetResponse<GetOrganizationResponse>(new GetOrganization(message.OrganizationId, (message.CreatedById)));
-            var message2 = messageR.Message;
-
-            var result = await _mediator.Send(new Sales.Features.OrderManagement.Organizations.CreateOrganization(message.OrganizationId, message.Name));
+            var result = await _mediator.Send(new Sales.Features.OrderManagement.Organizations.CreateOrganization(message.OrganizationId, message.Name, message.TenantId));
         }
         catch(Exception e) 
         {
@@ -89,5 +87,26 @@ public class SalesOrganizationUpdatedConsumer : IConsumer<OrganizationUpdated>
         var message2 = messageR.Message;
 
         var result = await _mediator.Send(new UpdateOrganization(message2.Id, message2.Name));
+    }
+}
+
+public class SalesOrganizationUserAddedConsumer : IConsumer<OrganizationUserAdded>
+{
+    private readonly IMediator _mediator;
+    private readonly ITenantService _tenantService;
+
+    public SalesOrganizationUserAddedConsumer(IMediator mediator, ITenantService tenantService)
+    {
+        _mediator = mediator;
+        _tenantService = tenantService;
+    }
+
+    public async Task Consume(ConsumeContext<OrganizationUserAdded> context)
+    {
+        var message = context.Message;
+
+        _tenantService.SetTenantId(message.TenantId);
+
+        var result = await _mediator.Send(new AddUserToOrganization(message.OrganizationId, message.UserId));
     }
 }

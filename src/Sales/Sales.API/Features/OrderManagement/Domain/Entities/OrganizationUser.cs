@@ -1,19 +1,26 @@
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
-
 namespace YourBrand.Sales.Features.OrderManagement.Domain.Entities;
 
-public class Organization : AggregateRoot<string>, IAuditable, IHasTenant
+public class OrganizationUser : AggregateRoot<string>, IAuditable
 {
-    public Organization(string id, string name)
+    public OrganizationUser()
+        : base(Guid.NewGuid().ToString())
+    {
+        
+    }
+
+    public OrganizationUser(string id)
         : base(id)
     {
         Id = id;
-        Name = name;
     }
 
-    public TenantId? TenantId { get; set; }
+    public string OrganizationId { get; set; }
 
-    public string Name { get; set; }
+    public Organization Organization { get; set; }
+
+    public string UserId { get; set; }
+
+    public User User { get; set; }
 
     public User? CreatedBy { get; set; }
 
@@ -26,8 +33,4 @@ public class Organization : AggregateRoot<string>, IAuditable, IHasTenant
     public string? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
-
-    public List<User> Users { get; set; }
-
-    public List<OrganizationUser> OrganizationUsers { get; set; }
 }

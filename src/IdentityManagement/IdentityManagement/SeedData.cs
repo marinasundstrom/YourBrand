@@ -18,7 +18,16 @@ public static class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var organization = new Organization("ACME Inc", null);
+            var tenant = new Tenant("ACME Inc", null);
+
+            context.Tenants.Add(tenant);
+
+            context.SaveChanges();
+
+            var organization = new Organization("ACME Testville", null) 
+            { 
+                Tenant = tenant 
+            };
 
             context.Organizations.Add(organization);
 
@@ -39,8 +48,12 @@ public static class SeedData
                     UserName = "alice",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
-                    Organization = organization
+                    Tenant = tenant,
+                    //Organization = organization
                 };
+
+                organization.AddUser(alice);
+
                 var result = userMgr.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
@@ -52,7 +65,7 @@ public static class SeedData
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim("organization", alice.Organization.Id)
+                            new Claim("tenant_id", alice.Tenant.Id)
                         ]).Result;
                 if (!result.Succeeded)
                 {
@@ -75,8 +88,12 @@ public static class SeedData
                     UserName = "bob",
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true,
-                    Organization = organization
+                    Tenant = tenant,
+                    //Organization = organization
                 };
+
+                organization.AddUser(bob);
+
                 var result = userMgr.CreateAsync(bob, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
@@ -88,7 +105,7 @@ public static class SeedData
                             new Claim(JwtClaimTypes.GivenName, "Bob"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                            new Claim("organization", bob.Organization.Id)
+                            new Claim("tenant_id", bob.Tenant.Id)
                         ]).Result;
                 if (!result.Succeeded)
                 {
