@@ -2,7 +2,7 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
@@ -19,11 +19,7 @@ public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto Shippin
     }
 
     public sealed class Handler(IOrderRepository orderRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateShippingDetails, Result>
-    {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUserRepository userRepository = userRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
+    {        
         public async Task<Result> Handle(UpdateShippingDetails request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

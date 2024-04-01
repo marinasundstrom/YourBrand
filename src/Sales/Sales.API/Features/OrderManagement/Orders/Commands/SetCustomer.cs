@@ -19,9 +19,6 @@ public sealed record SetCustomer(string Id, string CustomerId, string Name) : IR
 
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<SetCustomer, Result>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
         public async Task<Result> Handle(SetCustomer request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

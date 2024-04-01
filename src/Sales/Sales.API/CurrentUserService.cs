@@ -1,5 +1,7 @@
 using System.Security.Claims;
 
+namespace YourBrand.Sales;
+
 public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;

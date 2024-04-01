@@ -6,20 +6,14 @@ using YourBrand.Sales;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 using YourBrand.Sales.Models;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
 public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrganizationDto>>
 {
-    public class Handler : IRequestHandler<GetOrganizations, PagedResult<OrganizationDto>>
+    public class Handler(IOrganizationRepository organizationRepository) : IRequestHandler<GetOrganizations, PagedResult<OrganizationDto>>
     {
-        private readonly IOrganizationRepository organizationRepository;
-
-        public Handler(IOrganizationRepository organizationRepository)
-        {
-            this.organizationRepository = organizationRepository;
-        }
-
         public async Task<PagedResult<OrganizationDto>> Handle(GetOrganizations request, CancellationToken cancellationToken)
         {
             var query = organizationRepository.GetAll();

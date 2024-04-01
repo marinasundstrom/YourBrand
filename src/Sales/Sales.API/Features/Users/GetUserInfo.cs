@@ -4,6 +4,7 @@ using MediatR;
 
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Users;
 
@@ -16,17 +17,8 @@ public record GetUserInfo() : IRequest<Result<UserInfoDto>>
         }
     }
 
-    public class Handler : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
+    public class Handler(IUserRepository userRepository, ICurrentUserService currentUserService) : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
     {
-        private readonly IUserRepository userRepository;
-        private readonly ICurrentUserService currentUserService;
-
-        public Handler(IUserRepository userRepository, ICurrentUserService currentUserService)
-        {
-            this.userRepository = userRepository;
-            this.currentUserService = currentUserService;
-        }
-
         public async Task<Result<UserInfoDto>> Handle(GetUserInfo request, CancellationToken cancellationToken)
         {
             var user = await userRepository.FindByIdAsync(currentUserService.UserId!, cancellationToken);

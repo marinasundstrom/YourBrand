@@ -2,10 +2,11 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Users;
 
@@ -21,19 +22,8 @@ public record CreateUser(string Name, string Email, string? TenantId, string? Us
         }
     }
 
-    public class Handler : IRequestHandler<CreateUser, Result<UserInfoDto>>
+    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<CreateUser, Result<UserInfoDto>>
     {
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly ICurrentUserService currentUserService;
-
-        public Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-        {
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
-            this.currentUserService = currentUserService;
-        }
-
         public async Task<Result<UserInfoDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
             var user = await userRepository.FindByIdAsync(request.UserId!, cancellationToken);

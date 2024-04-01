@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Specifications;
+using YourBrand.Sales.Domain.Specifications;
 
 namespace YourBrand.Sales.Persistence;
 

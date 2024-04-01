@@ -19,9 +19,6 @@ public sealed record UpdateStatus(string Id, int StatusId) : IRequest<Result>
 
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateStatus, Result>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
         public async Task<Result> Handle(UpdateStatus request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

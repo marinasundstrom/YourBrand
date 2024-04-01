@@ -19,8 +19,6 @@ public record GetOrderById(string Id) : IRequest<Result<OrderDto>>
 
     public class Handler(IOrderRepository orderRepository) : IRequestHandler<GetOrderById, Result<OrderDto>>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-
         public async Task<Result<OrderDto>> Handle(GetOrderById request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

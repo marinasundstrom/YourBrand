@@ -5,8 +5,8 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Persistence;
 using YourBrand.Sales.Domain.Entities;
@@ -73,9 +73,9 @@ public record CreateSubscription(string ProductId, Guid SubscriptionPlanId, stri
             await salesContext.SaveChangesAsync();
         }
 
-        private Sales.Features.OrderManagement.Domain.ValueObjects.Address Map(AddressDto address)
+        private Sales.Domain.ValueObjects.Address Map(AddressDto address)
         {
-            return new Sales.Features.OrderManagement.Domain.ValueObjects.Address()
+            return new Sales.Domain.ValueObjects.Address()
             {
                 Thoroughfare = address.Thoroughfare,
                 Premises = address.Premises,

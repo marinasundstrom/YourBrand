@@ -1,3 +1,3 @@
-﻿global using YourBrand.Sales.Features.OrderManagement.Domain;
+﻿global using YourBrand.Sales.Domain;
 
-global using YourBrand.Sales.Features.Services;
+global using YourBrand.Sales.Services;

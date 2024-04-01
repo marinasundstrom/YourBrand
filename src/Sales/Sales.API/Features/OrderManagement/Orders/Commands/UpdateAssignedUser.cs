@@ -19,10 +19,6 @@ public sealed record UpdateAssignedUser(string Id, string? UserId) : IRequest<Re
 
     public sealed class Handler(IOrderRepository orderRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateAssignedUser, Result>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUserRepository userRepository = userRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
         public async Task<Result> Handle(UpdateAssignedUser request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

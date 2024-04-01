@@ -1,4 +1,4 @@
-﻿using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+﻿using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Carts.UnitTests;
 

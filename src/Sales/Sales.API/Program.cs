@@ -21,7 +21,7 @@ using YourBrand.Extensions;
 using YourBrand.Sales;
 using Serilog;
 using System.Reflection;
-using YourBrand.Sales.Features.Common;
+using YourBrand.Sales;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -159,7 +159,7 @@ try
         {
             var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
             tenantService.SetTenantId(AcmeTenant.TenantId);
-            
+
             await context.Database.EnsureDeletedAsync();
 
             await context.Database.EnsureCreatedAsync();

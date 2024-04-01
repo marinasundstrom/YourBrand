@@ -2,9 +2,10 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
@@ -18,19 +19,8 @@ public record CreateOrganization(string Id, string Name, string TenantId) : IReq
         }
     }
 
-    public class Handler : IRequestHandler<CreateOrganization, Result<OrganizationDto>>
+    public class Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<CreateOrganization, Result<OrganizationDto>>
     {
-        private readonly IOrganizationRepository organizationRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly ICurrentUserService currentUserService;
-
-        public Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-        {
-            this.organizationRepository = organizationRepository;
-            this.unitOfWork = unitOfWork;
-            this.currentUserService = currentUserService;
-        }
-
         public async Task<Result<OrganizationDto>> Handle(CreateOrganization request, CancellationToken cancellationToken)
         {
             organizationRepository.Add(new Organization(request.Id, request.Name) 

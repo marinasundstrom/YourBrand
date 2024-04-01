@@ -4,6 +4,7 @@ using MediatR;
 
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
@@ -16,19 +17,8 @@ public record DeleteOrganization(string OrganizationId) : IRequest<Result<Delete
         }
     }
 
-    public class Handler : IRequestHandler<DeleteOrganization, Result>
+    public class Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<DeleteOrganization, Result>
     {
-        private readonly IOrganizationRepository organizationRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService currentUserService;
-
-        public Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-        {
-            this.organizationRepository = organizationRepository;
-            _unitOfWork = unitOfWork;
-            this.currentUserService = currentUserService;
-        }
-
         public async Task<Result> Handle(DeleteOrganization request, CancellationToken cancellationToken)
         {
             var user = await organizationRepository.FindByIdAsync(request.OrganizationId!, cancellationToken);
@@ -40,7 +30,7 @@ public record DeleteOrganization(string OrganizationId) : IRequest<Result<Delete
 
             organizationRepository.Remove(user);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(user.ToDto2());
         }

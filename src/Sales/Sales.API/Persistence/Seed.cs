@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Features.Subscriptions;

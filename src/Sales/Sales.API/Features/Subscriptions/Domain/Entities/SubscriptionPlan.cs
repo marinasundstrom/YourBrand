@@ -1,5 +1,5 @@
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Domain.Entities;

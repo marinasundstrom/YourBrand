@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.Specifications;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.Specifications;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Persistence.Repositories.Mocks;

@@ -9,7 +9,7 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 using static YourBrand.Sales.Results;
-using static YourBrand.Sales.Features.OrderManagement.Domain.Errors.Orders;
+using static YourBrand.Sales.Domain.Errors.Orders;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 
@@ -28,9 +28,6 @@ public sealed record CreateOrderItem(string OrderId, string Description, string?
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
         : IRequestHandler<CreateOrderItem, Result<OrderItemDto>>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
         public async Task<Result<OrderItemDto>> Handle(CreateOrderItem request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.OrderId, cancellationToken);

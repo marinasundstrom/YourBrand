@@ -4,7 +4,7 @@ using System.Linq;
 
 using YourBrand.Sales.Features.Orders;
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 

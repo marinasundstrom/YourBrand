@@ -5,8 +5,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Infrastructure;
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
@@ -26,10 +26,6 @@ public sealed record CreateDraftOrder() : IRequest<Result<OrderDto>>
 
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-        private readonly IDomainEventDispatcher domainEventDispatcher = domainEventDispatcher;
-
         public async Task<Result<OrderDto>> Handle(CreateDraftOrder request, CancellationToken cancellationToken)
         {
             var order = new Order();

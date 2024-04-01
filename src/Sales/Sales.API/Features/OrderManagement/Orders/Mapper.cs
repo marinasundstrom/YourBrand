@@ -1,5 +1,5 @@
-﻿using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
+﻿using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Users;
 using YourBrand.Sales.Features.OrderManagement.Organizations;

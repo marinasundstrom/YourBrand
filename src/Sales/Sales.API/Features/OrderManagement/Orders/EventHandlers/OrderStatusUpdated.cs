@@ -1,14 +1,15 @@
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-using YourBrand.Sales.Features.Common;
-using YourBrand.Sales.Features.Services;
+using YourBrand.Sales;
+using YourBrand.Sales.Services;
 using YourBrand.Domain;
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Notifications.Client;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 

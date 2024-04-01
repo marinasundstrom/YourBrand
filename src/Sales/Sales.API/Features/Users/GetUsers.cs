@@ -11,15 +11,8 @@ namespace YourBrand.Sales.Features.OrderManagement.Users;
 
 public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<UserDto>>
 {
-    public class Handler : IRequestHandler<GetUsers, PagedResult<UserDto>>
+    public class Handler(IUserRepository userRepository) : IRequestHandler<GetUsers, PagedResult<UserDto>>
     {
-        private readonly IUserRepository userRepository;
-
-        public Handler(IUserRepository userRepository)
-        {
-            this.userRepository = userRepository;
-        }
-
         public async Task<PagedResult<UserDto>> Handle(GetUsers request, CancellationToken cancellationToken)
         {
             var query = userRepository.GetAll();

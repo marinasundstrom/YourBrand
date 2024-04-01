@@ -2,7 +2,7 @@
 
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Events;
+using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
@@ -19,9 +19,6 @@ public sealed record DeleteOrder(string Id) : IRequest<Result>
 
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<DeleteOrder, Result>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
         public async Task<Result> Handle(DeleteOrder request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

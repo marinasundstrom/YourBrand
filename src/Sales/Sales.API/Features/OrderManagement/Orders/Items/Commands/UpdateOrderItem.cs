@@ -25,9 +25,6 @@ public sealed record UpdateOrderItem(string OrderId, string OrderItemId, string 
 
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateOrderItem, Result<OrderItemDto>>
     {
-        private readonly IOrderRepository orderRepository = orderRepository;
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
-
         public async Task<Result<OrderItemDto>> Handle(UpdateOrderItem request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.OrderId, cancellationToken);

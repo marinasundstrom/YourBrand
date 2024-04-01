@@ -4,7 +4,7 @@ using YourBrand.Sales.Features.OrderManagement.Users;
 using MassTransit;
 
 using MediatR;
-using YourBrand.Sales.Features.Common;
+using YourBrand.Sales;
 
 namespace YourBrand.Sales.Consumers;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Features.Orders;

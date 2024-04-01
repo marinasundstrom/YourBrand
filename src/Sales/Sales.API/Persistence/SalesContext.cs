@@ -5,10 +5,10 @@ using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Persistence;
-using YourBrand.Sales.Features.OrderManagement.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Features.Common;
+using YourBrand.Sales.Domain.ValueObjects;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Persistence;
 

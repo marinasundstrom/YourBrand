@@ -4,6 +4,7 @@ using MediatR;
 
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Users;
 
@@ -16,19 +17,8 @@ public record UpdateUser(string UserId, string Name, string Email) : IRequest<Re
         }
     }
 
-    public class Handler : IRequestHandler<UpdateUser, Result<UserInfoDto>>
+    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<UpdateUser, Result<UserInfoDto>>
     {
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService currentUserService;
-
-        public Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-        {
-            this.userRepository = userRepository;
-            _unitOfWork = unitOfWork;
-            this.currentUserService = currentUserService;
-        }
-
         public async Task<Result<UserInfoDto>> Handle(UpdateUser request, CancellationToken cancellationToken)
         {
             var user = await userRepository.FindByIdAsync(request.UserId!, cancellationToken);
@@ -41,7 +31,7 @@ public record UpdateUser(string UserId, string Name, string Email) : IRequest<Re
             user.Name = request.Name;
             user.Email = request.Name;
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(user.ToDto2());
         }

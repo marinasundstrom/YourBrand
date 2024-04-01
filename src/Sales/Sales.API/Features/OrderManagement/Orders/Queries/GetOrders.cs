@@ -6,7 +6,7 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 using YourBrand.Sales.Models;
 
-using YourBrand.Sales.Features.Common;
+using YourBrand.Sales;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Queries;
 
