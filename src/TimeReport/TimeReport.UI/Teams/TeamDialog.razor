@@ -44,18 +44,18 @@
 
     async Task OnSubmit()
     {
-        TeamDto? result = null;
+        Team? result = null;
 
         if (TeamId is null)
         {
-            result = await TeamsClient.CreateTeamAsync(new CreateTeamDto
+            result = await TeamsClient.CreateTeamAsync(new CreateTeam
             {
                 Name = Name
             });
         }
         else
         {/*
-            result = await TeamsClient.UpdateProjectAsync(TeamId, new UpdateProjectDto
+            result = await TeamsClient.UpdateProjectAsync(TeamId, new UpdateProject
             {
                 Name = Name,
                 Description = Description

@@ -11,7 +11,7 @@
 
             <MudTextField Label="@(T["Name"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
-            <MudAutocomplete T="ActivityTypeDto" Label="Activity Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ActivityType" SearchFunc="@Search1"
+            <MudAutocomplete T="ActivityType" Label="Activity Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ActivityType" SearchFunc="@Search1"
                                  For="() => ActivityType"
                                  ToStringFunc="u => u?.Name"
                                  ResetValueOnEmptyText="true"
@@ -43,7 +43,7 @@
     public string Name { get; set; }
 
     [Required]
-    public ActivityTypeDto ActivityType { get; set; }
+    public ActivityType ActivityType { get; set; }
 
     public string? Description { get; set; }
 
@@ -64,11 +64,11 @@
 
     async Task OnSubmit()
     {
-        ActivityDto? result = null;
+        Activity? result = null;
 
         if (ActivityId is null)
         {
-            result = await ActivitiesClient.CreateActivityAsync(ProjectId, new CreateActivityDto
+            result = await ActivitiesClient.CreateActivityAsync(ProjectId, new CreateActivity
             {
                 Name = Name,
                 ActivityTypeId = ActivityType.Id,
@@ -78,7 +78,7 @@
         }
         else
         {
-            result = await ActivitiesClient.UpdateActivityAsync(ActivityId, new UpdateActivityDto
+            result = await ActivitiesClient.UpdateActivityAsync(ActivityId, new UpdateActivity
             {
                 Name = Name,
                 ActivityTypeId = ActivityType.Id,
@@ -90,7 +90,7 @@
         Modal.Close(DialogResult.Ok(result));
     }
 
-    private async Task<IEnumerable<ActivityTypeDto>> Search1(string value)
+    private async Task<IEnumerable<ActivityType>> Search1(string value)
     {
         var page = await ActivityTypesClient.GetActivityTypesAsync(0, 10, null!, value, null, null);
 

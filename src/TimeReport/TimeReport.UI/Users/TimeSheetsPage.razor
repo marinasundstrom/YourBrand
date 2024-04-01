@@ -12,7 +12,7 @@
 
 @* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTimeSheetClicked">New TimeSheet</MudButton> *@
 
-<MudTable T="TimeSheetDto" ServerData="@(new Func<TableState, Task<TableData<TimeSheetDto>>>(ServerReload))" Elevation="25"
+<MudTable T="TimeSheet" ServerData="@(new Func<TableState, Task<TableData<TimeSheet>>>(ServerReload))" Elevation="25"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTimeSheet(e.Item)" GroupBy="@_groupDefinition">
     <ToolBarContent>
         <MudSpacer />
@@ -20,11 +20,11 @@
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="Year">Year</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="Week">Week</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="User.FirstName">First Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="User.LastName">Last Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="TimeSheetDto" SortLabel="Status">Status</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheet" SortLabel="Year">Year</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheet" SortLabel="Week">Week</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheet" SortLabel="User.FirstName">First Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheet" SortLabel="User.LastName">Last Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="TimeSheet" SortLabel="Status">Status</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <GroupHeaderTemplate Context="c">
@@ -39,9 +39,9 @@
         <MudTd DataLabel="Last Name">@timeSheet.User.LastName</MudTd>
         <MudTd DataLabel="Status">@timeSheet.Status</MudTd>
         <MudTd>
-            @if (timeSheet.Status == TimeSheetStatusDto.Open || timeSheet.Status == TimeSheetStatusDto.Closed)
+            @if (timeSheet.Status == TimeSheetStatus.Open || timeSheet.Status == TimeSheetStatus.Closed)
             { 
-                <MudIconButton Icon="@(timeSheet.Status == TimeSheetStatusDto.Closed ? Icons.Material.Filled.LockReset : Icons.Material.Filled.LockOpen)" OnClick="async () => await ToggleStatus(timeSheet)" />
+                <MudIconButton Icon="@(timeSheet.Status == TimeSheetStatus.Closed ? Icons.Material.Filled.LockReset : Icons.Material.Filled.LockOpen)" OnClick="async () => await ToggleStatus(timeSheet)" />
             }
             @* <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTimeSheetClicked(timeSheet)" /> *@
             @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
@@ -59,10 +59,10 @@
 </MudTable>
 
 @code {
-    MudTable<TimeSheetDto> table;
+    MudTable<TimeSheet> table;
     string searchString;
 
-    private TableGroupDefinition<TimeSheetDto> _groupDefinition = new()
+    private TableGroupDefinition<TimeSheet> _groupDefinition = new()
     {
         GroupName = "Week",
         Indentation = false,
@@ -78,7 +78,7 @@
 
     }
 
-    private async Task<TableData<TimeSheetDto>> ServerReload(TableState state)
+    private async Task<TableData<TimeSheet>> ServerReload(TableState state)
     {
         var user = (await authenticationStateTask).User;
         var userId = user.FindFirst(x => x.Type.Contains("sub")).Value;
@@ -86,22 +86,22 @@
         var page = await TimeSheetsClient.GetTimeSheetsAsync(state.Page, state.PageSize, null, userId, searchString,
         state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
-        return new TableData<TimeSheetDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        return new TableData<TimeSheet>() { TotalItems = page.TotalItems, Items = page.Items };
     }
 
-    async Task ToggleStatus(TimeSheetDto timeSheet)
+    async Task ToggleStatus(TimeSheet timeSheet)
     {
-        if(timeSheet.Status == TimeSheetStatusDto.Closed)
+        if(timeSheet.Status == TimeSheetStatus.Closed)
         {
             await TimeSheetsClient.OpenWeekAsync(timeSheet.Id);
 
-            timeSheet.Status = TimeSheetStatusDto.Open;
+            timeSheet.Status = TimeSheetStatus.Open;
         }
         else
         {
             await TimeSheetsClient.CloseWeekAsync(timeSheet.Id);
 
-            timeSheet.Status = TimeSheetStatusDto.Closed;
+            timeSheet.Status = TimeSheetStatus.Closed;
         }
     }
 
@@ -111,7 +111,7 @@
         table.ReloadServerData();
     }
 
-    private void GotToTimeSheet(TimeSheetDto timeSheet)
+    private void GotToTimeSheet(TimeSheet timeSheet)
     {
         NavigationManager.NavigateTo($"/timeSheet/{timeSheet.Year}/{timeSheet.Week}?userId={timeSheet.User.Id}");
     }
@@ -131,7 +131,7 @@
         */
     }
 
-    private async Task OnEditTimeSheetClicked(TimeSheetDto timeSheet)
+    private async Task OnEditTimeSheetClicked(TimeSheet timeSheet)
     {
         /*
     DialogParameters parameters = new();

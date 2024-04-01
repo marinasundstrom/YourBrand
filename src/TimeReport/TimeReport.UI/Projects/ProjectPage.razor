@@ -29,13 +29,13 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewActivityClicked">New activity</MudButton>
 
-    <MudTable T="ActivityDto" ServerData="@(new Func<TableState, Task<TableData<ActivityDto>>>(ServerReload))"
+    <MudTable T="Activity" ServerData="@(new Func<TableState, Task<TableData<Activity>>>(ServerReload))"
               Hover="true" @ref="table" Class="mt-4" Elevation="25">
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="ActivityType">Type</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="ActivityDto" SortLabel="HourlyRate">Hourly Rate</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Activity" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Activity" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Activity" SortLabel="ActivityType">Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Activity" SortLabel="HourlyRate">Hourly Rate</MudTableSortLabel></MudTh>
             <MudTh></MudTh>
         </HeaderContent>
         <RowTemplate Context="activity">
@@ -63,12 +63,12 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddExpenseClicked">New expense</MudButton>
 
-    <MudTable T="ExpenseDto" ServerData="@(new Func<TableState, Task<TableData<ExpenseDto>>>(ServerReload3))"
+    <MudTable T="Expense" ServerData="@(new Func<TableState, Task<TableData<Expense>>>(ServerReload3))"
               Hover="true" @ref="table3" Class="mt-4 mb-2" OnRowClick="e => GotToExpense(e.Item)" Elevation="25">
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="ExpenseDto" SortLabel="Date">Date</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="ExpenseDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="ExpenseDto" SortLabel="Amount">Amount</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Expense" SortLabel="Date">Date</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Expense" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Expense" SortLabel="Amount">Amount</MudTableSortLabel></MudTh>
             <MudTh>Attachment</MudTh>
             <MudTh></MudTh>
         </HeaderContent>
@@ -102,7 +102,7 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddMembershipClicked">New member</MudButton>
 
-    <MudTable T="ProjectMembershipDto" ServerData="@(new Func<TableState, Task<TableData<ProjectMembershipDto>>>(ServerReload2))"
+    <MudTable T="ProjectMembership" ServerData="@(new Func<TableState, Task<TableData<ProjectMembership>>>(ServerReload2))"
               Hover="true" @ref="table2" Class="mt-4 mb-2" OnRowClick="e => GotToMember(e.Item)" Elevation="25">
         <HeaderContent>
             <MudTh>Name</MudTh>
@@ -142,11 +142,11 @@ else
 
 @code {
     string currency = "SEK";
-    ProjectDto? project;
+    Project? project;
     Data? data;
-    MudTable<ActivityDto> table;
-    MudTable<ProjectMembershipDto> table2;
-    MudTable<ExpenseDto> table3;
+    MudTable<Activity> table;
+    MudTable<ProjectMembership> table2;
+    MudTable<Expense> table3;
     StatisticsSummary statisticsSummary;
 
     private ChartOptions options = new ChartOptions()
@@ -175,28 +175,28 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummary2Async(ProjectId);
     }
 
-    private async Task<TableData<ActivityDto>> ServerReload(TableState state)
+    private async Task<TableData<Activity>> ServerReload(TableState state)
     {
         var result = await ActivitiesClient.GetActivitiesAsync(state.Page, state.PageSize, ProjectId, null, null,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
-        return new TableData<ActivityDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        return new TableData<Activity>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
-    private async Task<TableData<ProjectMembershipDto>> ServerReload2(TableState state)
+    private async Task<TableData<ProjectMembership>> ServerReload2(TableState state)
     {
         var result = await ProjectsClient.GetProjectMembershipsAsync(ProjectId, state.Page, state.PageSize,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
-        return new TableData<ProjectMembershipDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        return new TableData<ProjectMembership>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
-    private async Task<TableData<ExpenseDto>> ServerReload3(TableState state)
+    private async Task<TableData<Expense>> ServerReload3(TableState state)
     {
         var result = await ExpensesClient.GetExpensesAsync(state.Page, state.PageSize, ProjectId, null,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
-        return new TableData<ExpenseDto>() { TotalItems = result.TotalItems, Items = result.Items };
+        return new TableData<Expense>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
     private async Task OnNewActivityClicked()
@@ -214,7 +214,7 @@ else
         table.ReloadServerData();
     }
 
-    private async Task OnEditActivityClicked(ActivityDto activity)
+    private async Task OnEditActivityClicked(Activity activity)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(ActivityDialog.ActivityId), activity.Id);
@@ -244,7 +244,7 @@ else
         table2.ReloadServerData();
     }
 
-    private async Task OnEditMembershipClicked(ProjectMembershipDto membership)
+    private async Task OnEditMembershipClicked(ProjectMembership membership)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(MembershipDialog.ProjectId), membership.Project.Id);
@@ -260,7 +260,7 @@ else
         table2.ReloadServerData();
     }
 
-    async Task DeleteMembership(ProjectMembershipDto membership)
+    async Task DeleteMembership(ProjectMembership membership)
     {
         var modalResult = await DialogService.ShowMessageBox($"Revoke the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -273,7 +273,7 @@ else
         table2.ReloadServerData();
     }
 
-    private void GotToMember(ProjectMembershipDto membership)
+    private void GotToMember(ProjectMembership membership)
     {
         NavigationManager.NavigateTo($"/users/{membership.User.Id}");
     }
@@ -295,7 +295,7 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
     }
 
-    private async Task OnEditExpenseClicked(ExpenseDto expense)
+    private async Task OnEditExpenseClicked(Expense expense)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(ExpenseDialog.ProjectId), expense.Project.Id);
@@ -313,7 +313,7 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
     }
 
-    async Task DeleteExpense(ExpenseDto expense)
+    async Task DeleteExpense(Expense expense)
     {
         var modalResult = await DialogService.ShowMessageBox($"Delete the expense?", "This cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -328,7 +328,7 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
     }
 
-    private void GotToExpense(ExpenseDto expense)
+    private void GotToExpense(Expense expense)
     {
         //NavigationManager.NavigateTo($"/users/{membership.User.Id}");
     }

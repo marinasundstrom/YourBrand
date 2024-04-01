@@ -6,7 +6,7 @@ namespace YourBrand.TimeReport.TimeSheets;
 
 public class ActivityModel
 {
-    public ActivityDto? Activity { get; set; }
+    public Activity? Activity { get; set; }
 
     [ValidateComplexType]
     public List<EntryModel> Entries { get; set; } = new List<EntryModel>();
@@ -25,5 +25,5 @@ public class EntryModel
 
     public string? Description { get; set; }
 
-    public EntryStatusDto Status { get; set; }
+    public EntryStatus Status { get; set; }
 }

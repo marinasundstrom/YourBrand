@@ -23,6 +23,8 @@ public record CreateProjectCommand(string Name, string? Description, string Orga
         {
             var project = new Project(request.Name, request.Description);
 
+            project.Organization = await _context.Organizations.FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
+
             _context.Projects.Add(project);
 
             await _context.SaveChangesAsync(cancellationToken);

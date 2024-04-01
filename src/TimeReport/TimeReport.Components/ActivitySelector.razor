@@ -4,7 +4,7 @@
 
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
-        <MudAutocomplete T="ActivityDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+        <MudAutocomplete T="Activity" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
             For="For" SearchFunc="SearchActivitys" ToStringFunc="(x) => x.Name"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
@@ -29,13 +29,13 @@
     public string Label { get; set; } = "Activity";
 
     [Parameter]
-    public ActivityDto Value { get; set; }
+    public Activity Value { get; set; }
 
     [Parameter]
-    public EventCallback<ActivityDto> ValueChanged { get; set; }
+    public EventCallback<Activity> ValueChanged { get; set; }
 
     [Parameter]
-    public Expression<Func<ActivityDto>> For { get; set; }
+    public Expression<Func<Activity>> For { get; set; }
 
     [Parameter]
     public string Style { get; set; }
@@ -55,7 +55,7 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<ActivityDto>> SearchActivitys(string text)
+    async Task<IEnumerable<Activity>> SearchActivitys(string text)
     {
         try
         {
@@ -89,7 +89,7 @@
             if(result.Cancelled)
                 return;
 
-            Value = (ActivityDto)result.Data;
+            Value = (Activity)result.Data;
 
             await ValueChanged.InvokeAsync(Value);
         }

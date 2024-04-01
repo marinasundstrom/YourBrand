@@ -6,7 +6,7 @@
 
     <MudDialog>
         <DialogContent>
-            <MudAutocomplete T="ProjectDto" Label="Project" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Project" SearchFunc="@Search"
+            <MudAutocomplete T="Project" Label="Project" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Project" SearchFunc="@Search"
                              For="() => Project"
                              ToStringFunc="p => p?.Name"
                              ResetValueOnEmptyText="true"
@@ -28,7 +28,7 @@
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
     [Required]
-    public ProjectDto Project { get; set; }
+    public Project Project { get; set; }
 
     public DateRange SelectedDateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
 
@@ -43,7 +43,7 @@
         Modal.Close();
     }
 
-    private async Task<IEnumerable<ProjectDto>> Search(string value)
+    private async Task<IEnumerable<Project>> Search(string value)
     {
         var page = await ProjectsClient.GetProjectsAsync(0, 10, null, value, null, null);
 

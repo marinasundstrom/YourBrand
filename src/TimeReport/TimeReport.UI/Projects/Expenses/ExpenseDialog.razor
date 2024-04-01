@@ -10,7 +10,7 @@
 
             <MudDatePicker Label="Date" Class="mb-6" Variant="Variant.Outlined" @bind-Date="Date" For="() => Date" />
 
-            <MudAutocomplete T="ExpenseTypeDto" Label="Expense Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ExpenseType" SearchFunc="@Search1"
+            <MudAutocomplete T="ExpenseType" Label="Expense Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ExpenseType" SearchFunc="@Search1"
                                  For="() => ExpenseType"
                                  ToStringFunc="u => u?.Name"
                                  ResetValueOnEmptyText="true"
@@ -53,7 +53,7 @@
     [Parameter] public string? ExpenseId { get; set; }
 
     [Required]
-    public ExpenseTypeDto ExpenseType { get; set; } = null!;
+    public ExpenseType ExpenseType { get; set; } = null!;
 
     [Required]
     public DateTime? Date { get; set; } = DateTime.Now.Date;
@@ -76,7 +76,7 @@
         }
     }
 
-    private async Task<IEnumerable<ExpenseTypeDto>> Search1(string value)
+    private async Task<IEnumerable<ExpenseType>> Search1(string value)
     {
         var page = await ExpenseTypesClient.GetExpenseTypesAsync(0, 10, null!, value, null, null);
 
@@ -85,11 +85,11 @@
 
     async Task OnSubmit()
     {
-        ExpenseDto? result = null;
+        Expense? result = null;
 
         if (ExpenseId is null)
         {
-            result = await ExpensesClient.CreateExpenseAsync(ProjectId, new CreateExpenseDto
+            result = await ExpensesClient.CreateExpenseAsync(ProjectId, new CreateExpense
             {
                 Date = Date.GetValueOrDefault().Date,
                 ExpenseTypeId = ExpenseType.Id,
@@ -99,7 +99,7 @@
         }
         else
         {
-            result = await ExpensesClient.UpdateExpenseAsync(ExpenseId, new UpdateExpenseDto
+            result = await ExpensesClient.UpdateExpenseAsync(ExpenseId, new UpdateExpense
             {
                 Date = Date.GetValueOrDefault().Date,
                 //ExpenseTypeId = ExpenseType.Id,

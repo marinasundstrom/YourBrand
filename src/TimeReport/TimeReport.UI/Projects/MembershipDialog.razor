@@ -10,7 +10,7 @@
             @if (MembershipId is null)
             {
 
-                <MudAutocomplete T="UserDto" Label="User" Class="mb-6" Variant="Variant.Outlined" @bind-Value="User" SearchFunc="@Search1"
+                <MudAutocomplete T="User" Label="User" Class="mb-6" Variant="Variant.Outlined" @bind-Value="User" SearchFunc="@Search1"
                                  For="() => User"
                                  ToStringFunc="u => u?.GetDisplayName()"
                                  ResetValueOnEmptyText="true"
@@ -35,7 +35,7 @@
     [Parameter] public string? MembershipId { get; set; }
 
     [Required]
-    public UserDto User { get; set; }
+    public User User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,24 +49,24 @@
 
     async Task OnSubmit()
     {
-        ProjectMembershipDto? result = null;
+        ProjectMembership? result = null;
 
         if (MembershipId is null)
         {
-            result = await ProjectsClient.CreateProjectMembershipAsync(ProjectId, new CreateProjectMembershipDto
+            result = await ProjectsClient.CreateProjectMembershipAsync(ProjectId, new CreateProjectMembership
             {
                 UserId = User.Id
             });
         }
         else
         {
-            result = await ProjectsClient.UpdateProjectMembershipAsync(ProjectId, MembershipId, new UpdateProjectMembershipDto());
+            result = await ProjectsClient.UpdateProjectMembershipAsync(ProjectId, MembershipId, new UpdateProjectMembership());
         }
 
         Modal.Close(DialogResult.Ok(result));
     }
 
-    private async Task<IEnumerable<UserDto>> Search1(string value)
+    private async Task<IEnumerable<User>> Search1(string value)
     {
         var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
 

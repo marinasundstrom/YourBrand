@@ -13,7 +13,7 @@
             
             @if (Activities is not null)
             {
-                <MudSelect T="ActivityDto" Label="Activity" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Activity" ToStringFunc="x => x?.Name"
+                <MudSelect T="Activity" Label="Activity" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Activity" ToStringFunc="x => x?.Name"
                            For="() => Activity">
                     @foreach (var activity in Activities)
                     {
@@ -35,10 +35,10 @@
     public string? UserId { get; set; }
 
     [Parameter]
-    public IEnumerable<ProjectDto> Projects { get; set; }
+    public IEnumerable<Project> Projects { get; set; }
 
     [Parameter]
-    public IEnumerable<ActivityDto> Activities { get; set; }
+    public IEnumerable<Activity> Activities { get; set; }
 
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
@@ -49,21 +49,21 @@
     public int Week { get; set; }
 
     [Required]
-    public ProjectDto? Project { get; set; }
+    public Project? Project { get; set; }
 
     [Required]
-    public ActivityDto? Activity { get; set; }
+    public Activity? Activity { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
 
     }
 
-    private async Task OnProjectChanged(ProjectDto project)
+    private async Task OnProjectChanged(Project project)
     {
         if(project is null)
         {
-            Activities = Array.Empty<ActivityDto>();
+            Activities = Array.Empty<Activity>();
             Project = null;
             Activity = null;
 

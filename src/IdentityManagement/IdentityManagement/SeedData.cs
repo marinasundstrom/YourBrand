@@ -28,7 +28,7 @@ public static class SeedData
 
             context.SaveChanges();
 
-            var organization = new Organization("ACME Testville", null)
+            var organization = new Organization(TenantConstants.OrganizationId, TenantConstants.OrganizationName, null)
             {
                 Tenant = tenant
             };

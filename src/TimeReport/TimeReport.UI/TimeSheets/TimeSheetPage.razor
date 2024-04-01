@@ -40,7 +40,7 @@
                   GroupBy="@_groupDefinition" Elevation="25">
 
             <ToolBarContent>
-                <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatusDto.Open">New activity</MudButton>
+                <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatus.Open">New activity</MudButton>
                 <MudButton StartIcon="@Icons.Material.Filled.List" Class="me-2">Templates</MudButton>
                 <AuthorizeView Roles="Administrator,Manager" Context="usersList">
                     <UserSelector Label="User" Variant="Variant.Outlined" Value="User" ValueChanged="OnUserChanged"
@@ -53,7 +53,7 @@
                 }
                 <MudText Typo="@Typo.body1" Class="ms-4 me-2"><b>Status:</b> </MudText>
                 <MudText Typo="@Typo.body1" Class="me-4">@timeSheet?.Status</MudText>
-                @if (timeSheet?.Status == TimeSheetStatusDto.Open)
+                @if (timeSheet?.Status == TimeSheetStatus.Open)
                 {
                     <MudIconButton Icon="@Icons.Material.Filled.Close" @onclick="OnCloseClicked"></MudIconButton>
                 }
@@ -88,7 +88,7 @@
                 {
                     <MudTd DataLabel="@entry.Date.DayOfWeek.ToString()">
                         <div @onclick="() => FocusEntry(activityLine, entry)">
-                            <MudNumericField Disabled="@(timeSheet.Status != TimeSheetStatusDto.Open || entry.Status == EntryStatusDto.Locked)" T="double?" Class="@((IsWeekend(entry.Date) ? "weekendEntry" : null) + " " + IsEntrySelectedCss(entry))" Immediate="true" DebounceInterval="debounceInterval" Value="entry.Hours" ValueChanged="(value) => OnHoursChanged(value, activityLine, entry)" Variant="Variant.Filled" Margin="Margin.Dense" HideSpinButtons="true" />
+                            <MudNumericField Disabled="@(timeSheet.Status != TimeSheetStatus.Open || entry.Status == EntryStatus.Locked)" T="double?" Class="@((IsWeekend(entry.Date) ? "weekendEntry" : null) + " " + IsEntrySelectedCss(entry))" Immediate="true" DebounceInterval="debounceInterval" Value="entry.Hours" ValueChanged="(value) => OnHoursChanged(value, activityLine, entry)" Variant="Variant.Filled" Margin="Margin.Dense" HideSpinButtons="true" />
                         </div>
                     </MudTd>
                 }
@@ -96,7 +96,7 @@
                     <span>@activityLine.TotalHours h</span>
                 </MudTd>
                 <MudTd>
-                    @if (timeSheet?.Status == TimeSheetStatusDto.Open)
+                    @if (timeSheet?.Status == TimeSheetStatus.Open)
                     {
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteActivity(activityLine)" />
                     }
@@ -122,7 +122,7 @@
             <MudCard Class="mt-4">
                 <MudCardContent>
                     <MudText Typo="@Typo.h6" Class="mb-2">@selectedActivity.Activity.Project.Name: @selectedActivity.Activity.Name - @selectedEntry.Date.ToShortDateString()</MudText>
-                    <MudTextField Disabled="@(timeSheet.Status != TimeSheetStatusDto.Open || selectedEntry.Status == EntryStatusDto.Locked)" T="string?" Immediate="true" DebounceInterval="debounceInterval" Value="selectedEntry.Description" ValueChanged="(value) => OnDescriptionChanged(value, selectedActivity, selectedEntry)" Variant="Variant.Filled" Label="Description" Lines="3" />
+                    <MudTextField Disabled="@(timeSheet.Status != TimeSheetStatus.Open || selectedEntry.Status == EntryStatus.Locked)" T="string?" Immediate="true" DebounceInterval="debounceInterval" Value="selectedEntry.Description" ValueChanged="(value) => OnDescriptionChanged(value, selectedActivity, selectedEntry)" Variant="Variant.Filled" Label="Description" Lines="3" />
                 </MudCardContent>
             </MudCard>
         }
@@ -138,11 +138,11 @@ else
     double debounceInterval = 500;
 
     bool isLoading = false;
-    TimeSheetDto timeSheet;
-    IEnumerable<ActivityDto> activities = null;
+    TimeSheet timeSheet;
+    IEnumerable<Activity> activities = null;
 
-    UserDto? User { get; set; }
-    IEnumerable<UserDto> Users { get; set; } = null;
+    User? User { get; set; }
+    IEnumerable<User> Users { get; set; } = null;
 
     List<ActivityModel>? ActivitiesModels { get; } = new List<ActivityModel>();
 
@@ -274,7 +274,7 @@ else
                         Id = null,
                         Date = dayDate,
                         Hours = null,
-                        Status = value.GetValueOrDefault() ? EntryStatusDto.Locked : EntryStatusDto.Unlocked
+                        Status = value.GetValueOrDefault() ? EntryStatus.Locked : EntryStatus.Unlocked
                     };
 
                     activityModel.Entries.Add(entryModel);
@@ -331,7 +331,7 @@ else
 
             Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(value));
 
-            entryModel.Status = value.GetValueOrDefault() ? EntryStatusDto.Locked : EntryStatusDto.Unlocked;
+            entryModel.Status = value.GetValueOrDefault() ? EntryStatus.Locked : EntryStatus.Unlocked;
         }
     }
 
@@ -360,7 +360,7 @@ else
         }
     }
 
-    async Task OnUserChanged(UserDto user)
+    async Task OnUserChanged(User user)
     {
         if (user is null) return;
 
@@ -426,7 +426,7 @@ else
                 {
                     var a = activity.Activity;
 
-                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntryDto
+                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntry
                     {
                         ProjectId = a.Project.Id,
                         ActivityId = a.Id,
@@ -441,7 +441,7 @@ else
                 }
                 else
                 {
-                    await TimeSheetsClient.UpdateEntryAsync(timeSheet.Id, entry.Id, new UpdateEntryDto
+                    await TimeSheetsClient.UpdateEntryAsync(timeSheet.Id, entry.Id, new UpdateEntry
                     {
                         Hours = value,
                         Description = entry.Description
@@ -482,7 +482,7 @@ else
                 {
                     var a = activity.Activity;
 
-                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntryDto
+                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntry
                     {
                         ProjectId = a.Project.Id,
                         ActivityId = a.Id,
@@ -495,7 +495,7 @@ else
                 }
                 else
                 {
-                    await TimeSheetsClient.UpdateEntryDetailsAsync(timeSheet.Id, entry.Id, new UpdateEntryDetailsDto
+                    await TimeSheetsClient.UpdateEntryDetailsAsync(timeSheet.Id, entry.Id, new UpdateEntryDetails
                     {
                         Description = value
                     });
@@ -526,9 +526,9 @@ else
             return;
         try
         {
-            await TimeSheetsClient.UpdateTimeSheetStatusAsync(timeSheet.Id, (int)TimeSheetStatusDto.Closed);
+            await TimeSheetsClient.UpdateTimeSheetStatusAsync(timeSheet.Id, (int)TimeSheetStatus.Closed);
 
-            timeSheet.Status = TimeSheetStatusDto.Closed;
+            timeSheet.Status = TimeSheetStatus.Closed;
         }
         catch (ApiException<ProblemDetails> e)
         {
@@ -563,7 +563,7 @@ else
                 {
                     var value = timeSheet?.Months.Any(x => entryModel.Date.Month == x.Month);
 
-                    entryModel.Status = value.GetValueOrDefault() ? EntryStatusDto.Locked : EntryStatusDto.Unlocked;
+                    entryModel.Status = value.GetValueOrDefault() ? EntryStatus.Locked : EntryStatus.Unlocked;
                 }
             }
             */
@@ -591,7 +591,7 @@ else
             var entries = ActivitiesModels.SelectMany(a => a.Entries);
 
             return entries.Any()
-                && entries.All(e => e.Status == EntryStatusDto.Unlocked)
+                && entries.All(e => e.Status == EntryStatus.Unlocked)
                     && timeSheet.From.Month != timeSheet.To.Month || timeSheet != null
                     && ISOWeek.ToDateTime(Year.GetValueOrDefault(), Week.GetValueOrDefault(), DayOfWeek.Sunday).Day == DateTime.DaysInMonth(timeSheet.To.Year, timeSheet.To.Month);
         }

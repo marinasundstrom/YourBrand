@@ -23,16 +23,16 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewProjectClicked">New project</MudButton>
 
-<MudTable T="ProjectDto" ServerData="@(new Func<TableState, Task<TableData<ProjectDto>>>(ServerReload))"
-          Hover="true" @ref="table" OnRowClick="(TableRowClickEventArgs<ProjectDto> project) => GotToProject(project.Item)" Class="mt-4 mb-4" Elevation="25">
+<MudTable T="Project" ServerData="@(new Func<TableState, Task<TableData<Project>>>(ServerReload))"
+          Hover="true" @ref="table" OnRowClick="(TableRowClickEventArgs<Project> project) => GotToProject(project.Item)" Class="mt-4 mb-4" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel T="ProjectDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="ProjectDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Project" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Project" SortLabel="Description">Description</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate Context="project">
@@ -68,7 +68,7 @@
 </MudPaper>
 
 @code {
-    MudTable<ProjectDto> table;
+    MudTable<Project> table;
     StatisticsSummary statisticsSummary;
     string searchString;
 
@@ -96,12 +96,12 @@
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
     }
 
-    private async Task<TableData<ProjectDto>> ServerReload(TableState state)
+    private async Task<TableData<Project>> ServerReload(TableState state)
     {
         var page = await ProjectsClient.GetProjectsAsync(state.Page, state.PageSize, null, searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
-        return new TableData<ProjectDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        return new TableData<Project>() { TotalItems = page.TotalItems, Items = page.Items };
     }
 
     private void OnSearch(string text)
@@ -110,7 +110,7 @@
         table.ReloadServerData();
     }
 
-    private void GotToProject(ProjectDto project)
+    private void GotToProject(Project project)
     {
         NavigationManager.NavigateTo($"/projects/{project.Id}");
     }
@@ -127,7 +127,7 @@
         table.ReloadServerData();
     }
 
-    private async Task OnEditProjectClicked(ProjectDto project)
+    private async Task OnEditProjectClicked(Project project)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(ProjectDialog.ProjectId), project.Id);
