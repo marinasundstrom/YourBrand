@@ -1,9 +1,6 @@
 ﻿using MediatR;
 
-using Microsoft.Extensions.Logging;
-
 using YourBrand.Transactions.Application.Common.Interfaces;
-using YourBrand.Transactions.Application.Common.Models;
 using YourBrand.Transactions.Domain.Common;
 
 namespace YourBrand.Transactions.Infrastructure.Services;

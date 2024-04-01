@@ -1,19 +1,16 @@
 ﻿using System.Globalization;
 
-using YourBrand.Accounting.Client;
-
-using YourBrand.Finance.Client;
-
-using YourBrand.Invoicing.Client;
-
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using MudBlazor;
 using MudBlazor.Services;
 
-using YourBrand.Transactions.Client;
+using YourBrand.Accounting.Client;
+using YourBrand.Finance.Client;
+using YourBrand.Invoicing.Client;
 using YourBrand.Payments.Client;
+using YourBrand.Transactions.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

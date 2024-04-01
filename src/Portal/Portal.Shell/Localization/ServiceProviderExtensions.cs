@@ -7,7 +7,6 @@ using Microsoft.JSInterop;
 using MudBlazor;
 
 using YourBrand.Portal.AppBar;
-using YourBrand.Portal.Localization;
 
 namespace YourBrand.Portal.Localization;
 

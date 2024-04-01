@@ -58,7 +58,7 @@ public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDis
                 ClusterId = app,
                 Destinations = _discoveryClient.GetInstances(app)
                 .Select(x =>
-                    (  ServiceId: Guid.NewGuid().ToString(),
+                    (ServiceId: Guid.NewGuid().ToString(),
                         new DestinationConfig()
                         {
                             Address = $"https://{x.Host}:{x.Port}"

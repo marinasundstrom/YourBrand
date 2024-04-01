@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.ApiKeys;
+using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
 using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Commands;
 using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Queries;
-using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Controllers;
 

@@ -1,7 +1,5 @@
 ﻿using YourBrand.Messenger.Application.Messages.Queries;
 
-using MediatR;
-
 
 namespace YourBrand.Messenger.Application;
 

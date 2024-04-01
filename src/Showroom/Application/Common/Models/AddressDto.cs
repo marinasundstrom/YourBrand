@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.Showroom.Application.Common.Models;
+﻿namespace YourBrand.Showroom.Application.Common.Models;
 
 public record AddressDto
 (
@@ -11,4 +10,3 @@ public record AddressDto
     string AdminArea,
     string Country
 );
-

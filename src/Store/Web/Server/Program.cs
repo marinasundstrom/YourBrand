@@ -1,17 +1,21 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.RateLimiting;
 
 using Azure.Identity;
 
 using BlazorApp;
+using BlazorApp.Brands;
 using BlazorApp.Cart;
 using BlazorApp.Data;
 using BlazorApp.Extensions;
 using BlazorApp.ProductCategories;
 using BlazorApp.Products;
-using BlazorApp.Brands;
 
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Blazored.Toast;
+
+using Client.Analytics;
 
 using HealthChecks.UI.Client;
 
@@ -21,22 +25,15 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Http.Resilience;
 
 using Serilog;
 
-using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.StoreFront;
-using System.IdentityModel.Tokens.Jwt;
-using Client.Analytics;
-using Blazored.LocalStorage;
-using Blazored.SessionStorage;
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 

@@ -1,10 +1,10 @@
-using YourBrand.Catalog.Domain.Entities;
-using YourBrand.Catalog.Persistence;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Features.ProductManagement.Products.Images;
+using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record CreateProductVariant(long ProductId, CreateProductVariantData Data) : IRequest<ProductDto>

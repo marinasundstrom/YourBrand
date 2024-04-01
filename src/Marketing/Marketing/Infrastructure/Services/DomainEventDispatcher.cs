@@ -1,11 +1,7 @@
-﻿using YourBrand.Marketing.Application.Common.Interfaces;
-using YourBrand.Marketing.Application.Common.Models;
-using YourBrand.Marketing.Domain.Common;
+﻿using MediatR;
+
+using YourBrand.Marketing.Application.Common.Interfaces;
 using YourBrand.Marketing.Domain;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Marketing.Infrastructure.Services;
 

@@ -1,17 +1,16 @@
 ﻿using System.Text;
 
+using MassTransit;
+
+using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.Documents.Application.Services;
 using YourBrand.Documents.Contracts;
 using YourBrand.Documents.Domain.Entities;
 using YourBrand.Documents.Domain.Enums;
 using YourBrand.Documents.Infrastructure.Persistence;
-
-using MassTransit;
-using MassTransit.MessageData;
-
-using Microsoft.EntityFrameworkCore;
-
-using Newtonsoft.Json;
 
 namespace YourBrand.Documents.Consumers;
 

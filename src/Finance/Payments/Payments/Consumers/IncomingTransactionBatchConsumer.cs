@@ -13,7 +13,7 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
     private readonly IPaymentsContext _context;
     private readonly ITransactionsClient _transactionsClient;
 
-    public IncomingTransactionBatchConsumer(IPaymentsContext context, ITransactionsClient transactionsClient) 
+    public IncomingTransactionBatchConsumer(IPaymentsContext context, ITransactionsClient transactionsClient)
     {
         _context = context;
         _transactionsClient = transactionsClient;
@@ -31,7 +31,7 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
 
     private async Task HandleTransaction(Transaction transaction, CancellationToken cancellationToken)
     {
-        if(transaction.Reference == "Skatteverket") 
+        if (transaction.Reference == "Skatteverket")
         {
             await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
             return;
@@ -41,7 +41,7 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
             .Include(p => p.Captures)
             .FirstOrDefaultAsync(p => p.Reference == transaction.Reference);
 
-        if(payment is null)
+        if (payment is null)
         {
             await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Unknown);
         }
@@ -51,7 +51,7 @@ public class IncomingTransactionBatchConsumer : IConsumer<IncomingTransactionBat
 
             var amountCaptured = payment.AmountCaptured;
 
-            if(amountCaptured == payment.Amount)
+            if (amountCaptured == payment.Amount)
             {
                 payment.SetStatus(Domain.Enums.PaymentStatus.Captured);
             }

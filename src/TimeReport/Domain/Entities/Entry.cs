@@ -1,6 +1,5 @@
 ﻿
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;

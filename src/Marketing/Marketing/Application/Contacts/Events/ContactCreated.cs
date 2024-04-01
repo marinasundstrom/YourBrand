@@ -1,13 +1,6 @@
-using YourBrand.Marketing.Application.Common.Models;
+using YourBrand.Marketing.Application.Common.Interfaces;
 using YourBrand.Marketing.Domain;
 using YourBrand.Marketing.Domain.Events;
-
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Marketing.Application.Common.Interfaces;
-
-using YourBrand.Marketing.Application.Common;
 
 namespace YourBrand.Marketing.Application.Contacts.Events;
 

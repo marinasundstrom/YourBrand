@@ -59,4 +59,3 @@ public class OrganizationsController : ControllerBase
 public record CreateOrganizationDto(string Id, string Name);
 
 public record UpdateOrganizationDto(string Name);
-

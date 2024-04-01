@@ -1,19 +1,16 @@
-﻿using System;
+﻿using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Scrutor;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Infrastructure.Persistence;
-using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
-using YourBrand.TimeReport.Infrastructure.Services;
-using Quartz;
-using YourBrand.TimeReport.Infrastructure.BackgroundJobs;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Repositories;
 using YourBrand.TimeReport.Infrastructure.Idempotence;
-using MediatR;
-using Scrutor;
+using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
+using YourBrand.TimeReport.Infrastructure.Services;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
@@ -38,11 +35,11 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }

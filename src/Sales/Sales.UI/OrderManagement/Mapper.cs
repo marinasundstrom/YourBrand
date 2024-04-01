@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualBasic;
-
-using YourBrand.Sales;
-
-using static YourBrand.Sales.OrderManagement.OrderItemViewModel;
-
-namespace YourBrand.Sales.OrderManagement;
+﻿namespace YourBrand.Sales.OrderManagement;
 
 public static class Mapper
 {
@@ -32,7 +26,7 @@ public static class Mapper
             Id = dto.Id,
             ItemId = dto.ProductId,
             Description = dto.Description,
-            Product = dto.ProductId is null ? null : new Catalog.Product 
+            Product = dto.ProductId is null ? null : new Catalog.Product
             {
                 Id = 1,
                 Name = dto.Description

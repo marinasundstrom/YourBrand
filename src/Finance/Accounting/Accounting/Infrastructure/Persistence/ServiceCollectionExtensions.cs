@@ -1,9 +1,8 @@
-using YourBrand.Accounting.Application.Common.Interfaces;
-using YourBrand.Accounting.Domain;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;

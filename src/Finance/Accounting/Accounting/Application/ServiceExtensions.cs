@@ -1,9 +1,7 @@
-﻿using YourBrand.Accounting.Application.Accounts.Queries;
-
-using MediatR;
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using YourBrand.Accounting.Application.Accounts.Queries;
 
 namespace YourBrand.Accounting.Application;
 

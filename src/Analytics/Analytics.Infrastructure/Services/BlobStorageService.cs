@@ -1,4 +1,3 @@
-using YourBrand.Analytics.Application.Services;
 using Azure.Storage.Blobs;
 
 namespace YourBrand.Analytics.Infrastructure.Services;

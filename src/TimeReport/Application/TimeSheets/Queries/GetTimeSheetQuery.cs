@@ -1,13 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
-using YourBrand.TimeReport.Application.Users;
 using YourBrand.TimeReport.Domain;
-using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;

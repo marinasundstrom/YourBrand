@@ -1,6 +1,6 @@
-using YourBrand.Catalog.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Domain.Entities;
 
 namespace YourBrand.Catalog.Persistence;
 

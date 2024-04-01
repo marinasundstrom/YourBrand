@@ -11,7 +11,7 @@ namespace YourBrand.Application.Users.Commands;
 public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
-    { 
+    {
         readonly IAppServiceContext _context;
 
         public UpdateUserCommandHandler(IAppServiceContext context)

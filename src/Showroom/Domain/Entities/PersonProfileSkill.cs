@@ -21,7 +21,7 @@ public class PersonProfileSkill : AuditableEntity, ISoftDelete
     public SkillLevel? Level { get; set; }
 
     public string? Comment { get; set; }
-    
+
     public Link? Link { get; set; }
 
     public List<PersonProfile> PersonProfiles { get; set; } = new List<PersonProfile>();

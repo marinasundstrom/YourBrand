@@ -11,7 +11,7 @@ public class ActivityTypeConfiguration : IEntityTypeConfiguration<ActivityType>
     public void Configure(EntityTypeBuilder<ActivityType> builder)
     {
         builder.ToTable("ActivityTypes");
-        
+
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasOne(x => x.CreatedBy)

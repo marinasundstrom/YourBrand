@@ -1,7 +1,4 @@
-﻿
-using YourBrand.IdentityManagement.Domain.Entities;
-
-namespace YourBrand.IdentityManagement.Domain.Common.Interfaces;
+﻿namespace YourBrand.IdentityManagement.Domain.Common.Interfaces;
 
 public interface IAuditableEntity
 {

@@ -36,7 +36,7 @@ public record GetSkillAreasQuery(int Page = 0, int PageSize = 10, int? IndustryI
             if (request.IndustryId is not null)
             {
                 result = result.Where(p =>
-                    p.Industry.Id  == request.IndustryId);
+                    p.Industry.Id == request.IndustryId);
             }
 
             if (request.SearchString is not null)
@@ -50,7 +50,7 @@ public record GetSkillAreasQuery(int Page = 0, int PageSize = 10, int? IndustryI
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result.OrderBy(x => x.Name);
             }

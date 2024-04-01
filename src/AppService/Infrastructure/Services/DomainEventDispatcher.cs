@@ -1,12 +1,9 @@
-﻿using System;
-
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.Application.Common.Models;
-using YourBrand.Domain.Common;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
+
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Common;
 
 namespace YourBrand.Infrastructure.Services;
 

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace YourBrand.Catalog.Features.Brands;
+﻿namespace YourBrand.Catalog.Features.Brands;
 
 public record BrandDto
 (

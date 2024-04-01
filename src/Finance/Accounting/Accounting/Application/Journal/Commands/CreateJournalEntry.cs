@@ -1,9 +1,9 @@
-﻿using YourBrand.Accounting.Application.Common.Interfaces;
-using YourBrand.Accounting.Domain.Events;
+﻿using MediatR;
 
-using MediatR;
-using YourBrand.Accounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Application.Journal.Commands;
 
@@ -45,7 +45,7 @@ public record CreateJournalEntryCommand(string Description, int? InvoiceNo, List
 
                 LedgerEntry entry = null!;
 
-                if(entryDto.Credit is not null)
+                if (entryDto.Credit is not null)
                 {
                     entry = journalEntry.AddCreditEntry(account, entryDto.Credit.GetValueOrDefault(), entryDto.Description);
                 }

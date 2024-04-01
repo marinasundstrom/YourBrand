@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
 using YourBrand.Domain;
-using YourBrand.Sales.Domain;
 
 namespace YourBrand.Sales.Services;
 

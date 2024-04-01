@@ -2,7 +2,6 @@
 
 using Newtonsoft.Json;
 
-using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain;
 using YourBrand.Transactions.Domain.Common;
 using YourBrand.Transactions.Domain.Entities;
@@ -29,7 +28,7 @@ public class TransactionsContext : DbContext, ITransactionsContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.Domain.Outbox;
+﻿namespace YourBrand.Domain.Outbox;
 
 public sealed class OutboxMessage
 {

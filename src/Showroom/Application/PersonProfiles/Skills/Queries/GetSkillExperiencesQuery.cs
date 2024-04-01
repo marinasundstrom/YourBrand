@@ -43,16 +43,16 @@ public record GetSkillExperiencesQuery(string PersonProfileId, string Id) : IReq
                .AsNoTracking()
                .ToArrayAsync(cancellationToken);
 
-               var experiences = new List<SkillExperienceDto>(); 
+            var experiences = new List<SkillExperienceDto>();
 
-               foreach(var personProfileExperience in personProfileExperiences) 
-               {
-                    var hasSkill = personProfileExperience.Skills.Any(x => x.PersonProfileSkill.Id == personProfileSkill.Id);
-                    if(hasSkill) 
-                    {
-                        experiences.Add(new SkillExperienceDto(personProfileExperience.Id, personProfileExperience.Company.Name, personProfileExperience.Title, personProfileExperience.StartDate, personProfileExperience.EndDate));
-                    }
-               }
+            foreach (var personProfileExperience in personProfileExperiences)
+            {
+                var hasSkill = personProfileExperience.Skills.Any(x => x.PersonProfileSkill.Id == personProfileSkill.Id);
+                if (hasSkill)
+                {
+                    experiences.Add(new SkillExperienceDto(personProfileExperience.Id, personProfileExperience.Company.Name, personProfileExperience.Title, personProfileExperience.StartDate, personProfileExperience.EndDate));
+                }
+            }
 
             if (personProfileSkill is null)
             {

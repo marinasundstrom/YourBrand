@@ -1,11 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
 
-using Microsoft.AspNetCore.Identity;
-
-using YourBrand.IdentityManagement.Domain.Common;
 using YourBrand.IdentityManagement.Domain.Common.Interfaces;
-using YourBrand.IdentityManagement.Domain.Events;
-using YourBrand.IdentityManagement.Domain.ValueObjects;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
@@ -35,7 +30,7 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
     public string? DisplayName { get; set; }
 
     public Tenant? Tenant { get; set; }
-    
+
     public string? TenantId { get; set; }
 
     public Organization? Organization => Organizations.FirstOrDefault();

@@ -1,11 +1,11 @@
-using YourBrand.Carts.API.Domain.Entities;
-using YourBrand.Carts.API.Persistence;
-
 using FluentValidation;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Carts.API.Domain.Entities;
+using YourBrand.Carts.API.Persistence;
 
 namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
 

@@ -2,10 +2,10 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Contracts;
 using YourBrand.IdentityManagement.Domain.Exceptions;
-using YourBrand.Identity;
 
 namespace YourBrand.IdentityManagement.Application.Users.Commands;
 
@@ -27,7 +27,7 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
         public async Task<UserDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .Include(u => u.Roles)   
+                .Include(u => u.Roles)
                 .Include(u => u.Organizations)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);

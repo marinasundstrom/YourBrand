@@ -1,9 +1,5 @@
 ﻿
-using YourBrand.Application.Common.Interfaces;
-
 using MediatR;
-
-using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Notifications.Client;
 

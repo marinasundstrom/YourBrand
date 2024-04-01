@@ -1,10 +1,8 @@
-﻿using YourBrand.Customers.Domain;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Customers.Application.Customers;
-using YourBrand.Customers.Application.Common.Models;
+
+using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Entities;
 
 namespace YourBrand.Customers.Application.Customers.Queries;

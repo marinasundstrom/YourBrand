@@ -4,14 +4,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Users.Queries;
 
 public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
-    { 
+    {
         readonly IShowroomContext _context;
 
         public GetUserQueryHandler(IShowroomContext context)

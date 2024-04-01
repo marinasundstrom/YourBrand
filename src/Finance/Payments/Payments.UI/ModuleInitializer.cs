@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Portal;
-using YourBrand.Payments.Client;
-using YourBrand.Portal.Modules;
-using YourBrand.Portal.Navigation;
 using Microsoft.Extensions.Localization;
+
+using YourBrand.Payments.Client;
+using YourBrand.Portal;
+using YourBrand.Portal.Modules;
 
 namespace YourBrand.Payments;
 

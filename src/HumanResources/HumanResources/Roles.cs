@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.HumanResources;
+﻿namespace YourBrand.HumanResources;
 
 public static class Roles
 {

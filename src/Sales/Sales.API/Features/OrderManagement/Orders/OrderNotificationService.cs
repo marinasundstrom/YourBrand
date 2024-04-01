@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.SignalR;
 
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
-using YourBrand.Sales.Services;
-
 namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
 public class OrderNotificationService : IOrderNotificationService

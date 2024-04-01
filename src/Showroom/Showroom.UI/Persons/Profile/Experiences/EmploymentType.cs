@@ -1,17 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YourBrand.Showroom.Persons.Profile.Experiences
+namespace YourBrand.Showroom.Persons.Profile.Experiences;
+
+public enum EmploymentType
 {
-    public enum EmploymentType 
-    {
-        [Display(Name = "Contract")]
-        Contract,
+    [Display(Name = "Contract")]
+    Contract,
 
-        [Display(Name = "Full-time")]
-        FullTime,
+    [Display(Name = "Full-time")]
+    FullTime,
 
-        [Display(Name = "Part-time")]
-        PartTime
-    }
+    [Display(Name = "Part-time")]
+    PartTime
 }
-

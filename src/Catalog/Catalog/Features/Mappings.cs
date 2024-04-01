@@ -1,4 +1,3 @@
-using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Features.Brands;
 using YourBrand.Catalog.Features.Currencies;
 using YourBrand.Catalog.Features.ProductManagement;

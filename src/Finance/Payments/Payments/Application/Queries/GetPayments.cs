@@ -1,6 +1,4 @@
-﻿using MassTransit;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -22,12 +20,12 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
 
         public async Task<ItemsResult<PaymentDto>> Handle(GetPayments request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
@@ -44,7 +42,7 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
                 query = query.Where(i => statuses.Any(s => s == (int)i.Status));
             }
 
-            if(request.InvoiceId is not null) 
+            if (request.InvoiceId is not null)
             {
                 string invoiceId = request.InvoiceId;
                 query = query.Where(i => i.InvoiceId == invoiceId);

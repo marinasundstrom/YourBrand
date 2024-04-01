@@ -1,12 +1,10 @@
-﻿using YourBrand.Accounting.Client;
+﻿using MassTransit;
 
+using YourBrand.Accountant.Domain;
+using YourBrand.Accounting.Client;
 using YourBrand.Documents.Client;
-
 using YourBrand.Invoicing.Client;
 using YourBrand.Invoicing.Contracts;
-
-using MassTransit;
-using YourBrand.Accountant.Domain;
 
 namespace YourBrand.Accountant.Consumers;
 
@@ -67,11 +65,11 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             Entries = entries.ToList(),
         }, cancellationToken);
 
-        try 
+        try
         {
             await UploadDocuments(invoice, journalEntryId);
         }
-        catch(Exception e) 
+        catch (Exception e)
         {
             _logger.LogError(e, "Failed to add verification to journal entry,");
         }

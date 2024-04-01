@@ -1,14 +1,10 @@
-﻿using System;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Notifications.Domain.Entities;
-using YourBrand.Notifications.Infrastructure;
 using YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 using YourBrand.Notifications.Infrastructure.Persistence.Outbox;
 
@@ -32,7 +28,7 @@ public class WorkerContext : DbContext, IWorkerContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Accounting.Application.Common;
+
 using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Domain.Common;
 using YourBrand.Accounting.Infrastructure.Persistence;

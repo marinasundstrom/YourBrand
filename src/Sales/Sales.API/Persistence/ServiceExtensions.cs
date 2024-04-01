@@ -1,14 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Sales.Features.OrderManagement.Repositories;
-using YourBrand.Sales.Persistence.Interceptors;
-using YourBrand.Sales.Persistence.Repositories;
-using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 using YourBrand.Domain.Persistence;
 using YourBrand.Domain.Persistence.Interceptors;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Persistence.Interceptors;
+using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 namespace YourBrand.Sales.Persistence;
 

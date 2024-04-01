@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 

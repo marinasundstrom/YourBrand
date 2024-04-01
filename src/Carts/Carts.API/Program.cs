@@ -1,8 +1,5 @@
 ﻿using Azure.Identity;
 
-using YourBrand.Carts.API.Features.CartsManagement;
-using YourBrand.Carts.API.Persistence;
-
 using HealthChecks.UI.Client;
 
 using MassTransit;
@@ -10,13 +7,15 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 using Steeltoe.Discovery.Client;
 
 using YourBrand;
-using YourBrand.Extensions;
 using YourBrand.Carts.API;
-
-using Serilog;
+using YourBrand.Carts.API.Features.CartsManagement;
+using YourBrand.Carts.API.Persistence;
+using YourBrand.Extensions;
 
 string ServiceName = "Carts.API";
 

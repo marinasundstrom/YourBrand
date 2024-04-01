@@ -1,9 +1,6 @@
-using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Payments.Application.Common.Interfaces;
-using YourBrand.Payments.Application.Common.Models;
 using YourBrand.Payments.Domain;
 using YourBrand.Payments.Domain.Events;
 using YourBrand.Payments.Hubs;
@@ -27,7 +24,7 @@ public class PaymentCreatedHandler : IDomainEventHandler<PaymentCreated>
             .Payments
             .FirstOrDefaultAsync(i => i.Id == notification.PaymentId);
 
-        if(payment is not null) 
+        if (payment is not null)
         {
 
         }

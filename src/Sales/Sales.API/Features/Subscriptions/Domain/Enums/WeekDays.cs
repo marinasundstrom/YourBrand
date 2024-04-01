@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.Sales.Domain.Enums;
+﻿namespace YourBrand.Sales.Domain.Enums;
 
 [Flags]
 public enum WeekDays : byte

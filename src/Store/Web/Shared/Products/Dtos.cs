@@ -1,7 +1,7 @@
 ﻿namespace BlazorApp.Products;
 
-using BlazorApp.ProductCategories;
 using BlazorApp.Brands;
+using BlazorApp.ProductCategories;
 
 public sealed record Product(long Id, string Name, Brand? brand, ProductCategoryParent? Category, ProductImage? Image, IEnumerable<ProductImage> Images, string Description, decimal Price, double? VatRate, decimal? RegularPrice, double? DiscountRate, string Handle, bool HasVariants, IEnumerable<ProductAttribute> Attributes, IEnumerable<ProductOption> Options);
 

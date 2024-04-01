@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Teams.Commands;

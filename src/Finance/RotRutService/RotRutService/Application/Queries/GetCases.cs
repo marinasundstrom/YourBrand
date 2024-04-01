@@ -1,14 +1,10 @@
-﻿
-using YourBrand.RotRutService.Application;
-using YourBrand.RotRutService.Domain;
-using YourBrand.RotRutService.Domain.Enums;
-
-using MassTransit;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Entities;
+using YourBrand.RotRutService.Domain.Enums;
 
 namespace YourBrand.RotRutService.Application.Queries;
 
@@ -25,12 +21,12 @@ public record GetCases(int Page = 0, int PageSize = 10, DomesticServiceKind? Kin
 
         public async Task<ItemsResult<RotRutCaseDto>> Handle(GetCases request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
@@ -41,12 +37,12 @@ public record GetCases(int Page = 0, int PageSize = 10, DomesticServiceKind? Kin
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
 
-            if(request.Kind is not null) 
+            if (request.Kind is not null)
             {
                 query = query.Where(i => i.Kind == request.Kind);
             }
 
-            if(request.Status?.Any() ?? false) 
+            if (request.Status?.Any() ?? false)
             {
                 var statuses = request.Status.Select(x => (int)x);
                 query = query.Where(i => statuses.Any(s => s == (int)i.Status));
@@ -54,7 +50,7 @@ public record GetCases(int Page = 0, int PageSize = 10, DomesticServiceKind? Kin
 
             int totalItems = await query.CountAsync(cancellationToken);
 
-            query = query         
+            query = query
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);
 

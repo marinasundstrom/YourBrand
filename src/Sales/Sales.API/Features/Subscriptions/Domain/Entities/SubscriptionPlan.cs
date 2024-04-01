@@ -1,6 +1,5 @@
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Domain.Enums;
+using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 

@@ -1,14 +1,11 @@
-using YourBrand.Marketing.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Marketing.Application.Contacts;
-using YourBrand.Marketing.Application.Contacts.Queries;
+
 using YourBrand.Marketing.Application.Contacts.Commands;
-using YourBrand.Marketing.Application.Common.Models;
-using Asp.Versioning;
+using YourBrand.Marketing.Application.Contacts.Queries;
 
 namespace YourBrand.Marketing.Application.Contacts;
 
@@ -58,4 +55,3 @@ public class ContactsController : ControllerBase
 public record CreateContactDto(string FirstName, string LastName, string SSN, string CampaignId);
 
 public record UpdateContactDto(string FirstName, string LastName, string SSN, string CampaignId);
-

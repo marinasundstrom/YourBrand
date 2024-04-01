@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+
 using YourBrand.Analytics.Infrastructure;
 
 namespace YourBrand.Analytics.Infrastructure;

@@ -1,16 +1,13 @@
-using YourBrand.Inventory.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using YourBrand.Inventory.Application.Items.Queries;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Inventory.Application.Items;
+
 using YourBrand.Inventory.Application.Items.Commands;
+using YourBrand.Inventory.Application.Items.Queries;
 using YourBrand.Inventory.Application.Warehouses.Items;
 using YourBrand.Inventory.Application.Warehouses.Items.Queries;
-using YourBrand.Inventory.Application.Common.Models;
-using Asp.Versioning;
 
 namespace YourBrand.Inventory.Application.Items;
 
@@ -67,4 +64,3 @@ public class ItemsController : ControllerBase
 public record CreateItemDto(string Id, string Name, ItemTypeDto Type, string GroupId, string Unit);
 
 public record UpdateItemDto(string Id, string Name, string GroupId, string Unit);
-

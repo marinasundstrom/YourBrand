@@ -1,6 +1,4 @@
 using YourBrand.Ticketing.Application.Common;
-using YourBrand.Ticketing.Application.Services;
-using YourBrand.Ticketing.Domain.Entities;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
@@ -20,4 +18,3 @@ public sealed class TicketDeletedEventHandler : IDomainEventHandler<TicketDelete
         await ticketNotificationService.Deleted(notification.TicketId, notification.Title);
     }
 }
-

@@ -1,15 +1,13 @@
-using YourBrand.Customers.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Customers.Application.Addresses;
-using YourBrand.Customers.Application.Organizations.Queries;
-using YourBrand.Customers.Application.Organizations.Commands;
-using YourBrand.Customers.Application.Common.Models;
-using Microsoft.AspNetCore.Http;
 using YourBrand.Customers.Application.Commands;
-using Asp.Versioning;
+using YourBrand.Customers.Application.Organizations.Commands;
+using YourBrand.Customers.Application.Organizations.Queries;
 
 namespace YourBrand.Customers.Application.Organizations;
 

@@ -1,12 +1,10 @@
 
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.Application.Common.Models;
-using YourBrand.Domain;
-using YourBrand.Identity;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Identity;
 
 namespace YourBrand.Application.Modules;
 
@@ -30,16 +28,17 @@ public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
                 await File.ReadAllTextAsync("modules.json", cancellationToken)
             )!;
             */
-            
+
             return await _appServiceContext.Modules
             //.Where(x => x.Enabled)
             .OrderBy(x => x.Index)
-            .Select(x => new ModuleDto {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Assembly = x.Assembly,
-                    Enabled = x.Enabled
-                }).ToListAsync(cancellationToken);
+            .Select(x => new ModuleDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Assembly = x.Assembly,
+                Enabled = x.Enabled
+            }).ToListAsync(cancellationToken);
         }
     }
 }

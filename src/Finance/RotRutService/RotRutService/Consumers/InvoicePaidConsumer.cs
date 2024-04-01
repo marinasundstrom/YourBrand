@@ -1,11 +1,8 @@
-﻿using YourBrand.Accounting.Client;
+﻿using MassTransit;
 
-using YourBrand.Documents.Client;
-
+using YourBrand.Accounting.Client;
 using YourBrand.Invoicing.Client;
 using YourBrand.Invoicing.Contracts;
-
-using MassTransit;
 using YourBrand.RotRutService.Domain;
 
 namespace YourBrand.RotRutService.Consumers;

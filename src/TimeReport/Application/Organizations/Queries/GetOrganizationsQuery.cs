@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Organizations
 .Queries;

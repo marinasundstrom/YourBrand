@@ -1,6 +1,4 @@
-﻿
-using YourBrand.Domain.Common;
-using System.Text.Json;
+﻿using YourBrand.Domain.Common;
 
 namespace YourBrand.Domain.Entities;
 

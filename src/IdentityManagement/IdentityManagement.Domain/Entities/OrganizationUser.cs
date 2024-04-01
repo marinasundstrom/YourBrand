@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
 public class OrganizationUser

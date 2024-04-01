@@ -1,11 +1,6 @@
-﻿using System;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.EventHandlers;

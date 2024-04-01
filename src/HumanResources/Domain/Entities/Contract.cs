@@ -2,7 +2,7 @@ using YourBrand.HumanResources.Domain.ValueObjects;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
-public class Contract 
+public class Contract
 {
     private Contract()
     {
@@ -20,7 +20,7 @@ public class Contract
     public string Id { get; private set; }
 
     public DateTime Date { get; private set; }
-    
+
     public Organization Organization { get; private set; }
 
     public Person Person { get; private set; } = null!;

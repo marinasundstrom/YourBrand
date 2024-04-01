@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -9,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Customers.Application.Services;
 using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Entities;
-using YourBrand.Customers.Domain.ValueObjects;
 
 namespace YourBrand.Customers.Features.Customers.Import;
 
@@ -30,25 +28,26 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
         }
 
         public async Task<Result<CustomerImportResult>> Handle(ImportCustomers request, CancellationToken cancellationToken)
-        {     
-            List<string> diagnostics = new ();
+        {
+            List<string> diagnostics = new();
 
-            var customerRecords = JsonSerializer.Deserialize<CustomerRecord[]>(request.Stream, new JsonSerializerOptions {
+            var customerRecords = JsonSerializer.Deserialize<CustomerRecord[]>(request.Stream, new JsonSerializerOptions
+            {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = {
                     new JsonStringEnumConverter()
                 }
             })!;
 
-            foreach(CustomerRecord customerRecord in customerRecords) 
+            foreach (CustomerRecord customerRecord in customerRecords)
             {
                 Customer? customer = null;
 
-                if(customerRecord is OrganizationCustomerRecord org) 
+                if (customerRecord is OrganizationCustomerRecord org)
                 {
                     var exists = await _context.Organizations.AnyAsync(x => x.OrganizationNo == org.OrgNo, cancellationToken);
 
-                    if(exists) 
+                    if (exists)
                     {
                         diagnostics.Add($"Customer with Org No {org.OrgNo} already exists");
                         continue;
@@ -58,11 +57,11 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
 
                     customer = organization;
                 }
-                else if(customerRecord is IndividualCustomerRecord ind) 
+                else if (customerRecord is IndividualCustomerRecord ind)
                 {
                     var exists = await _context.Persons.AnyAsync(x => x.Ssn == ind.Ssn, cancellationToken);
 
-                    if(exists) 
+                    if (exists)
                     {
                         diagnostics.Add($"Customer with SSN {ind.Ssn} already exists");
                         continue;
@@ -73,16 +72,17 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
                     customer = person;
                 }
 
-                if(customer is null) continue;
+                if (customer is null) continue;
 
                 customer.Name = customerRecord.Name!;
                 customer.Phone = customerRecord.Phone;
                 customer.PhoneMobile = customerRecord.PhoneMobile;
                 customer.Email = customerRecord.Email;
 
-                foreach(var address in customerRecord.Addresses) 
+                foreach (var address in customerRecord.Addresses)
                 {
-                    var a = new Address {
+                    var a = new Address
+                    {
                         Type = (Domain.Enums.AddressType)address.Type,
                         Thoroughfare = address.Thoroughfare,
                         Premises = address.Premises,
@@ -91,12 +91,12 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
                         Locality = address.Locality,
                         SubAdministrativeArea = address.SubAdministrativeArea,
                         AdministrativeArea = address.AdministrativeArea,
-                        Country = address.Country 
+                        Country = address.Country
                     };
                     customer.AddAddress(a);
                 }
 
-                _context.Customers.Add(customer);           
+                _context.Customers.Add(customer);
             }
 
             await _context.SaveChangesAsync(cancellationToken);

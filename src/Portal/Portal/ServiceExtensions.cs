@@ -1,18 +1,13 @@
-﻿using System;
-using System.Globalization;
-
-using YourBrand.Portal.Services;
-using YourBrand.Portal;
+﻿using System.Globalization;
 
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
 using Microsoft.JSInterop;
 
 using MudBlazor.Services;
+
 using YourBrand.AppService.Client;
 using YourBrand.IdentityManagement.Client;
+using YourBrand.Portal.Services;
 
 namespace YourBrand.Portal;
 

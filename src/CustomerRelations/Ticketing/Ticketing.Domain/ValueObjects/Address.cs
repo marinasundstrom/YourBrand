@@ -1,7 +1,3 @@
-using YourBrand.Ticketing.Domain;
-using YourBrand.Ticketing.Domain.Entities;
-using YourBrand.Ticketing.Domain.Events;
-
 namespace YourBrand.Ticketing.Domain.ValueObjects;
 
 public class Address

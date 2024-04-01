@@ -12,7 +12,7 @@ public record SetPaymentStatus(string PaymentId, PaymentStatus Status) : IReques
     public class Handler : IRequestHandler<SetPaymentStatus>
     {
         private readonly IPaymentsContext _context;
-        
+
         public Handler(IPaymentsContext context)
         {
             _context = context;

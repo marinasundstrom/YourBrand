@@ -1,5 +1,4 @@
 using YourBrand.Marketing.Domain.Enums;
-using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Domain.Entities;
 

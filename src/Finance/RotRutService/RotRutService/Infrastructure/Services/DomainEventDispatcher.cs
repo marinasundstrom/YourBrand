@@ -1,10 +1,7 @@
-﻿using YourBrand.RotRutService.Application.Common.Interfaces;
-using YourBrand.RotRutService.Application.Common.Models;
+﻿using MediatR;
+
+using YourBrand.RotRutService.Application.Common.Interfaces;
 using YourBrand.RotRutService.Domain.Common;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
 
 namespace YourBrand.RotRutService.Infrastructure.Services;
 

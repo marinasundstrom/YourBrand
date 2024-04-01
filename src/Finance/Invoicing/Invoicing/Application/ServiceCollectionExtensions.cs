@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace YourBrand.Invoicing.Application;
 
 public static class ServiceCollectionExtensions

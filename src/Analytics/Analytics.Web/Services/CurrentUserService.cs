@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+
 using YourBrand.Analytics.Application.Services;
 
 namespace YourBrand.Analytics.Web.Services;

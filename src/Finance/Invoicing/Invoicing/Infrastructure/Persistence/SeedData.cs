@@ -1,7 +1,4 @@
-﻿using YourBrand.Invoicing.Domain.Entities;
-using YourBrand.Invoicing.Domain.Enums;
-
-namespace YourBrand.Invoicing.Infrastructure.Persistence;
+﻿namespace YourBrand.Invoicing.Infrastructure.Persistence;
 
 public class SeedData
 {

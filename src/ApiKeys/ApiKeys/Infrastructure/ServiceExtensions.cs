@@ -1,14 +1,16 @@
 ﻿
-using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
+using MediatR;
+
+using Quartz;
+
+using Scrutor;
 
 using YourBrand.ApiKeys.Application.Common.Interfaces;
-using YourBrand.ApiKeys.Infrastructure.Persistence;
-using YourBrand.ApiKeys.Infrastructure.Services;
-using Quartz;
 using YourBrand.ApiKeys.Infrastructure.BackgroundJobs;
-using MediatR;
 using YourBrand.ApiKeys.Infrastructure.Idempotence;
-using Scrutor;
+using YourBrand.ApiKeys.Infrastructure.Persistence;
+using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
+using YourBrand.ApiKeys.Infrastructure.Services;
 
 namespace YourBrand.ApiKeys.Infrastructure;
 
@@ -32,7 +34,7 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }
@@ -49,11 +51,11 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }

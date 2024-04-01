@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -53,7 +51,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
                 entry.Entity.CreatedById = _currentUserService.UserId;
                 entry.Entity.Created = _dateTime.Now;
 
-                if(entry.Entity is IHasTenant hasTenant) 
+                if (entry.Entity is IHasTenant hasTenant)
                 {
                     hasTenant.OrganizationId = _tenantService.OrganizationId!;
                 }

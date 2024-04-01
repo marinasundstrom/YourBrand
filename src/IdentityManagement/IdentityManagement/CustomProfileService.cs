@@ -9,7 +9,7 @@ namespace YourBrand.IdentityManagement;
 
 public sealed class CustomProfileService : IProfileService
 {
-    private UserManager<Domain.Entities.User> _userManager;
+    private readonly UserManager<Domain.Entities.User> _userManager;
 
     public CustomProfileService(UserManager<Domain.Entities.User> userManager)
     {
@@ -20,7 +20,7 @@ public sealed class CustomProfileService : IProfileService
     {
         var user = await _userManager.GetUserAsync(context.Subject);
 
-        
+
 
         var claims = new List<Claim>
         {

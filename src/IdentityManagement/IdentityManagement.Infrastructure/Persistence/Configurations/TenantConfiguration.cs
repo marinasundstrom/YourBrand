@@ -15,7 +15,7 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
             .HasMany(x => x.Organizations)
             .WithOne(x => x.Tenant)
             .OnDelete(DeleteBehavior.ClientCascade);
-            
+
         builder
             .HasMany(x => x.Users)
             .WithOne(x => x.Tenant)

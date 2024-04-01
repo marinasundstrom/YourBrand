@@ -1,8 +1,4 @@
-﻿using System;
-
-using MassTransit;
-using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.Identity;
+﻿using MassTransit;
 
 namespace YourBrand.IdentityManagement.Consumers;
 

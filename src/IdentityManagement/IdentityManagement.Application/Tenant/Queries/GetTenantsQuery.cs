@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Application.Common.Models;
-using YourBrand.IdentityManagement.Domain.Entities;
 
 namespace YourBrand.IdentityManagement.Application.Tenants.Queries;
 

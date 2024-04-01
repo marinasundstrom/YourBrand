@@ -1,4 +1,3 @@
-using System;
 using YourBrand.Analytics.Domain.ValueObjects;
 
 namespace YourBrand.Analytics.Domain.Entities;

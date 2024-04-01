@@ -25,7 +25,7 @@ public class EntriesFactory
 
             var vat = group.Sum(i => i.Vat);
             var subTotal = group.Sum(i => i.Total - i.Vat);
-             
+
             entries.AddRange(new[] {
                         new CreateEntry
                         {
@@ -150,4 +150,3 @@ public class EntriesFactory
         throw new Exception();
     }
 }
-

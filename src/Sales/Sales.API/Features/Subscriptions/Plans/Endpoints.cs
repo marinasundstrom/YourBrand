@@ -1,10 +1,6 @@
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Orders;
-using YourBrand.Sales.Features.OrderManagement.Orders.Statuses;
 using YourBrand.Sales.Models;
-using YourBrand.Sales.Features.Subscriptions;
-using YourBrand.Sales;
 
 namespace YourBrand.Sales.Features.Subscriptions.Plans;
 

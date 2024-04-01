@@ -4,8 +4,6 @@ using MediatR;
 
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
-using YourBrand.Sales.Persistence.Repositories.Mocks;
-using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 
@@ -36,7 +34,7 @@ public record AddUserToOrganization(string OrganizationId, string UserId) : IReq
                 return Result.Failure<OrganizationDto>(Errors.Users.UserNotFound);
             }
 
-            if(organization.Users.Contains(user)) 
+            if (organization.Users.Contains(user))
             {
                 return Result.Success(organization.ToDto());
             }

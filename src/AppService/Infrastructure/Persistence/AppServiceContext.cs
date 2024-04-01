@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
 
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Domain.Common;
 using YourBrand.Domain.Entities;
-using YourBrand.Infrastructure;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using YourBrand.Infrastructure.Persistence.Interceptors;
 using YourBrand.Infrastructure.Persistence.Outbox;
-using Newtonsoft.Json;
 
 namespace YourBrand.Infrastructure.Persistence;
 
@@ -31,7 +28,7 @@ public class AppServiceContext : DbContext, IAppServiceContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

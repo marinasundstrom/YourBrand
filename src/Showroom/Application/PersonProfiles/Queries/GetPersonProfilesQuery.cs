@@ -72,7 +72,7 @@ public record GetPersonProfilesAsync(int Page = 0, int PageSize = 10, string? Or
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result
                     .OrderBy(x => x.FirstName)

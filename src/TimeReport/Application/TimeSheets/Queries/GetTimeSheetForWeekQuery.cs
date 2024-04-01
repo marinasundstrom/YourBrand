@@ -5,11 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
-using YourBrand.TimeReport.Application.Users;
-using YourBrand.TimeReport.Application.Users.Commands;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Repositories;
@@ -51,7 +47,7 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
             if (timeSheet is null)
             {
                 User? user = await _userRepository.GetUser(userId!, cancellationToken);
-                
+
                 userId = user?.Id;
 
                 var startDate = ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);

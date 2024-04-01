@@ -1,12 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-using AspNetCore.Authentication.ApiKey;
-
-using YourBrand.ApiKeys;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
+using YourBrand.ApiKeys;
 
 namespace YourBrand.Messenger.Authentication;
 
@@ -61,4 +59,3 @@ public static class ServiceExtensions
         return services;
     }
 }
-

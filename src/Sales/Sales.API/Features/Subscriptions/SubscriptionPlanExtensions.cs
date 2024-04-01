@@ -1,6 +1,4 @@
-﻿using System;
-
-using Humanizer;
+﻿using Humanizer;
 
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;

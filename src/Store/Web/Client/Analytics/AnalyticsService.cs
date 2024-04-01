@@ -71,7 +71,7 @@ public sealed class AnalyticsService : IDisposable
             catch (Exception)
             {
                 // Retry
-                
+
                 await localStorageService.RemoveItemAsync("cid");
 
                 await Init();
@@ -86,7 +86,7 @@ public sealed class AnalyticsService : IDisposable
     private ValueTask OnLocationChanging(LocationChangingContext arg)
     {
         referrer = navigationManager.Uri;
-     
+
         return ValueTask.CompletedTask;
     }
 

@@ -1,11 +1,6 @@
-
-using Asp.Versioning.Builder;
-
-using YourBrand.Catalog.Model;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Mvc;
+using YourBrand.Catalog.Model;
 
 namespace YourBrand.Catalog.Features.Currencies;
 

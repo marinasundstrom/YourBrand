@@ -1,12 +1,12 @@
-﻿using YourBrand.Inventory.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Inventory.Infrastructure.Persistence.Interceptors;
 using YourBrand.Inventory.Infrastructure.Persistence.Outbox;
-using Newtonsoft.Json;
 
 namespace YourBrand.Inventory.Infrastructure.Persistence;
 
@@ -28,7 +28,7 @@ public class InventoryContext : DbContext, IInventoryContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

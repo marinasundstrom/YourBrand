@@ -1,6 +1,6 @@
-using YourBrand.ApiKeys.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.ApiKeys.Domain.Entities;
 
 namespace YourBrand.ApiKeys.Application.Common.Interfaces;
 

@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+
 using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Ticketing.Infrastructure.Services;

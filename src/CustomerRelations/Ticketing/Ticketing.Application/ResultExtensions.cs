@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using YourBrand.Ticketing.Domain;
 
 namespace YourBrand.Ticketing.Application;
 

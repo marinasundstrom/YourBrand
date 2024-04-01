@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Users;
 using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
@@ -24,7 +23,7 @@ public record GetProjectMembershipQuery(string ProjectId, string MembershipId) :
         {
             var project = await _context.Projects
                 .Include(x => x.Organization)
-                .Include(p => p.Memberships)     
+                .Include(p => p.Memberships)
                 .Include(p => p.Memberships)
                 .ThenInclude(m => m.User)
                 .AsSplitQuery()

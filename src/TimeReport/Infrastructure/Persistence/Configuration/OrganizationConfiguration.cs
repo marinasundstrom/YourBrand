@@ -1,8 +1,8 @@
 ﻿
-using YourBrand.TimeReport.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 

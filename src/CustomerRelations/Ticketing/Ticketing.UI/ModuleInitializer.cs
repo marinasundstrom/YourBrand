@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Ticketing;
-using YourBrand.Ticketing.Client;
-using YourBrand.Portal.Navigation;
-using YourBrand.Portal.Modules;
 using Microsoft.Extensions.Localization;
+
 using YourBrand.Portal;
+using YourBrand.Portal.Modules;
+using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Widgets;
+using YourBrand.Ticketing.Client;
 
 namespace YourBrand.Ticketing;
 
@@ -37,7 +36,7 @@ public class ModuleInitializer : IModuleInitializer
         var group = navManager.GetGroup("customer-relations") ?? navManager.CreateGroup("customer-relations", () => t["Customer relations"]);
         group.RequiresAuthorization = true;
 
-        var group2 = group.GetGroup("customer-support") ?? group.CreateGroup("customer-support", () => t["Support"],  MudBlazor.Icons.Material.Filled.Support);
+        var group2 = group.GetGroup("customer-support") ?? group.CreateGroup("customer-support", () => t["Support"], MudBlazor.Icons.Material.Filled.Support);
 
         group2.CreateItem("board", () => t["Board"], MudBlazor.Icons.Material.Filled.TableView, "/Tickets/Board");
 

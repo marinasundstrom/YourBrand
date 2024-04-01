@@ -12,7 +12,7 @@ public record DocumentRenamed : DomainEvent
     }
 
     public string DocumentId { get; }
-    
+
     public string NewName { get; }
 
     public string OldName { get; }

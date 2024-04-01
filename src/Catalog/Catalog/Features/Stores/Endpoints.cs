@@ -1,13 +1,8 @@
-
-using Asp.Versioning.Builder;
+using MediatR;
 
 using YourBrand.Catalog.Features.Stores.Commands;
 using YourBrand.Catalog.Features.Stores.Queries;
 using YourBrand.Catalog.Model;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
 
 namespace YourBrand.Catalog.Features.Stores;
 

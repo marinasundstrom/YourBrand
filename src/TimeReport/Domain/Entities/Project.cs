@@ -15,7 +15,7 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
 
     protected Project()
     {
-        
+
     }
 
     public Project(string name, string? description)
@@ -66,7 +66,7 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
     public void AddTeam(Team team) => _projectTeams.Add(new ProjectTeam(team));
 
     public void RemoveTeam(Team team) => _teams.Remove(team);
- 
+
     public DateTime? Deleted { get; set; }
 
     public string? DeletedById { get; set; }

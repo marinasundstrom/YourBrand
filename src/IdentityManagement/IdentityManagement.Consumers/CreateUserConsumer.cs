@@ -2,9 +2,9 @@
 
 using MediatR;
 
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Users.Commands;
 using YourBrand.IdentityManagement.Contracts;
-using YourBrand.Identity;
 
 namespace YourBrand.IdentityManagement.Consumers;
 

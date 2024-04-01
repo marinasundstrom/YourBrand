@@ -1,8 +1,4 @@
-﻿using System;
-
-using YourBrand.Customers.Domain.Events;
-
-namespace YourBrand.Customers.Domain.Entities;
+﻿namespace YourBrand.Customers.Domain.Entities;
 
 public class Person : Customer
 {

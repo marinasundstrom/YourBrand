@@ -44,9 +44,9 @@ public sealed record CreateOrder(int? Status, SetCustomerDto? Customer, BillingD
 
             order.StatusId = request.Status ?? OrderStatusDraft;
 
-            if (request.Customer is not null) 
+            if (request.Customer is not null)
             {
-                if(order.Customer is null) 
+                if (order.Customer is null)
                 {
                     order.Customer = new Domain.Entities.Customer();
                 }

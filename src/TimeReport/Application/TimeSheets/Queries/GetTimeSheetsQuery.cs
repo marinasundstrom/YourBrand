@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Application.Projects;
-using YourBrand.TimeReport.Application.Users;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Repositories;
@@ -39,7 +37,7 @@ public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? Projec
                 query = query.Where(timeSheet => timeSheet.Activities.Any(x => x.Project.Id == request.ProjectId));
             }
 
-             if (request.UserId is not null)
+            if (request.UserId is not null)
             {
                 query = query.Where(timeSheet => timeSheet.UserId == request.UserId);
             }

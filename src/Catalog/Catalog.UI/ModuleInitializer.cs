@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+
+using MudBlazor;
 
 using YourBrand.Portal;
+using YourBrand.Portal.AppBar;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
-using Microsoft.Extensions.Localization;
 using YourBrand.Portal.Services;
-using YourBrand.Portal.AppBar;
-using MudBlazor;
 
 namespace YourBrand.Catalog;
 

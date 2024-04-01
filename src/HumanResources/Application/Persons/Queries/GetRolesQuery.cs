@@ -5,14 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Application.Common.Models;
-using YourBrand.HumanResources.Domain.Entities;
 
 namespace YourBrand.HumanResources.Application.Persons.Queries;
 
 public record GetRolesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
     public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, ItemsResult<RoleDto>>
-    { 
+    {
         readonly IApplicationDbContext _context;
 
         public GetRolesQueryHandler(IApplicationDbContext context)

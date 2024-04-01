@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Ticketing.Domain;
 
-public  static partial class Errors
+public static partial class Errors
 {
     public static class Tickets
     {

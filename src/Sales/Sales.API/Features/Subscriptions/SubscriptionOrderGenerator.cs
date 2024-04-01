@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.Orders;
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
@@ -104,11 +99,11 @@ public class SubscriptionOrderGenerator(
                     }
                     else
                     { */
-                        // Item part of Main Delivery
+                    // Item part of Main Delivery
 
-                        var targetOrderItem = orderFactory.CreateOrderItem(orderItem);
+                    var targetOrderItem = orderFactory.CreateOrderItem(orderItem);
 
-                        subOrder.AddItem(targetOrderItem);
+                    subOrder.AddItem(targetOrderItem);
                     //}
                 }
 

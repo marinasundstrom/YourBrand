@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Marketing.Client;
-
 namespace YourBrand.Marketing.Client;
 
 public static class ServiceExtensions
@@ -13,7 +11,7 @@ public static class ServiceExtensions
             .AddContactsClient(configureClient, builder)
             .AddCampaignsClient(configureClient, builder)
             .AddDiscountsClient(configureClient, builder);
-            //.AddAddressesClient(configureClient, builder);
+        //.AddAddressesClient(configureClient, builder);
 
         return services;
     }

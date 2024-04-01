@@ -44,8 +44,8 @@ public class Organization : AuditableEntity, ISoftDelete
         project.Organization = this;
     }
 
-    public string Id { get; private set; } 
-    
+    public string Id { get; private set; }
+
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }

@@ -1,11 +1,10 @@
-using YourBrand.Marketing.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Marketing.Application.Addresses.Queries;
-using YourBrand.Marketing.Application.Common.Models;
-using Asp.Versioning;
 
 namespace YourBrand.Marketing.Application.Addresses;
 

@@ -1,12 +1,9 @@
-﻿using System;
-
-using YourBrand.Accounting.Application.Common.Interfaces;
-using YourBrand.Accounting.Application.Common.Models;
-using YourBrand.Accounting.Domain.Common;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain.Common;
 
 namespace YourBrand.Accounting.Infrastructure.Services;
 

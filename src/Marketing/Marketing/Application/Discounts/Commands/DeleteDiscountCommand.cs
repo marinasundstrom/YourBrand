@@ -1,7 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Marketing.Application.Common.Interfaces;
+
 using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Discounts.Commands;

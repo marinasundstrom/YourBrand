@@ -2,11 +2,10 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Application.Users;
 using YourBrand.IdentityManagement.Contracts;
 using YourBrand.IdentityManagement.Domain.Exceptions;
-using YourBrand.Identity;
 
 namespace YourBrand.IdentityManagement.Application.Organizations.Commands;
 

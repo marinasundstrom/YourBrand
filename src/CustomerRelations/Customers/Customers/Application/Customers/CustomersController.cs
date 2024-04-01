@@ -1,16 +1,11 @@
-﻿using YourBrand.Customers.Application;
+﻿using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Customers.Application.Customers.Queries;
-using YourBrand.Customers.Application.Common.Models;
-using YourBrand.Customers.Application.Organizations;
-using YourBrand.Customers.Application.Organizations.Queries;
-using YourBrand.Customers.Application.Customers;
 using YourBrand.Customers.Features.Customers.Import;
-using Microsoft.AspNetCore.Http;
-using Asp.Versioning;
 
 namespace YourBrand.Customers.Application.Customers;
 
@@ -46,11 +41,11 @@ public class CustomersController
     {
         return await _mediator.Send(new GetCustomerBySSN(ssn), cancellationToken);
     }
-    
+
     [HttpPost("ImportCustomers")]
     [ProducesResponseType(typeof(CustomerImportResult), StatusCodes.Status200OK)]
     public async Task<ActionResult> ImportCustomers(IFormFile file, CancellationToken cancellationToken)
-    {   
+    {
         var result = await _mediator.Send(new ImportCustomers(file.OpenReadStream()), cancellationToken);
         return this.HandleResult(result);
     }

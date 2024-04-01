@@ -1,18 +1,19 @@
-﻿using System;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Quartz;
+
+using Scrutor;
+
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
+using YourBrand.IdentityManagement.Infrastructure.BackgroundJobs;
+using YourBrand.IdentityManagement.Infrastructure.Idempotence;
 using YourBrand.IdentityManagement.Infrastructure.Persistence;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 using YourBrand.IdentityManagement.Infrastructure.Services;
-using Quartz;
-using YourBrand.IdentityManagement.Infrastructure.BackgroundJobs;
-using MediatR;
-using YourBrand.IdentityManagement.Infrastructure.Idempotence;
-using Scrutor;
 
 namespace YourBrand.IdentityManagement.Infrastructure;
 
@@ -36,7 +37,7 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }
@@ -52,17 +53,17 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }
 
         services.AddTransient<IDateTime, DateTimeService>();
-        
+
         return services;
     }
 }

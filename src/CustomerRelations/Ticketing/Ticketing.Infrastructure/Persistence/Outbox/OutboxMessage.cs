@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
+﻿namespace YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
 
 public sealed class OutboxMessage
 {
@@ -16,4 +14,3 @@ public sealed class OutboxMessage
 
     public string? Error { get; set; }
 }
-

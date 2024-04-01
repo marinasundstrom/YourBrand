@@ -1,11 +1,11 @@
-﻿using YourBrand.Catalog.Common;
+﻿using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Common;
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Model;
 using YourBrand.Catalog.Persistence;
-
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Catalog.Features.Brands.Queries;
 

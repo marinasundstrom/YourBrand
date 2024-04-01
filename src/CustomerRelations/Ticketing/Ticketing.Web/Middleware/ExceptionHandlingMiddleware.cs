@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
+
 using YourBrand.Ticketing.Application.Exceptions;
 using YourBrand.Ticketing.Domain.Exceptions;
+
 using ApplicationException = YourBrand.Ticketing.Domain.Exceptions.ApplicationException;
 
 namespace YourBrand.Ticketing.Web.Middleware;

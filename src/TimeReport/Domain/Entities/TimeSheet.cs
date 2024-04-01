@@ -70,7 +70,7 @@ public class TimeSheet : AuditableEntity, ISoftDelete
         return tsActivity;
     }
 
-    public void DeleteActivity(TimeSheetActivity activity) 
+    public void DeleteActivity(TimeSheetActivity activity)
     {
         foreach (var entry in _entries.ToArray().Where(e => e.Status == EntryStatus.Unlocked))
         {

@@ -4,8 +4,6 @@ using MediatR;
 
 using YourBrand.HumanResources.Contracts;
 using YourBrand.Identity;
-using YourBrand.Tenancy;
-using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Organizations.Commands;
 
 namespace YourBrand.TimeReport.Consumers;

@@ -1,11 +1,4 @@
-﻿using System;
-
-using MediatR;
-
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Notifications.Application.Notifications.Queries;
+﻿using YourBrand.Notifications.Application.Notifications.Queries;
 
 namespace YourBrand.Notifications.Application;
 

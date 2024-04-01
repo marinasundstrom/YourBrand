@@ -1,13 +1,8 @@
-using YourBrand.Marketing.Application.Common.Models;
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Marketing.Application.Common.Interfaces;
 using YourBrand.Marketing.Domain;
 using YourBrand.Marketing.Domain.Events;
-
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Marketing.Application.Common.Interfaces;
-
-using YourBrand.Marketing.Application;
-
-using YourBrand.Marketing.Application.Common;
 
 namespace YourBrand.Marketing.Application.Addresses.Events;
 

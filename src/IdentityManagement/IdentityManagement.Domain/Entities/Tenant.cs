@@ -36,7 +36,7 @@ public class Tenant : AuditableEntity
 
     public void ChangeName(string name)
     {
-        if(Name != name) 
+        if (Name != name)
         {
             Name = name;
         }

@@ -1,18 +1,15 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Application.PersonProfiles;
-using YourBrand.Showroom.Application.CompetenceAreas;
-using YourBrand.Showroom.Application.Users;
-using YourBrand.Showroom.Application.Common.Models;
-using YourBrand.Showroom.Application.Organizations;
-using YourBrand.Showroom.Application.PersonProfiles.Experiences;
-using YourBrand.Showroom.Application.Skills;
-using YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 using YourBrand.Showroom.Application.Cases;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Companies;
+using YourBrand.Showroom.Application.CompetenceAreas;
 using YourBrand.Showroom.Application.Industries;
+using YourBrand.Showroom.Application.Organizations;
+using YourBrand.Showroom.Application.PersonProfiles;
+using YourBrand.Showroom.Application.PersonProfiles.Experiences;
+using YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
+using YourBrand.Showroom.Application.Skills;
+using YourBrand.Showroom.Application.Users;
 
 namespace YourBrand.Showroom.Application;
 
@@ -64,7 +61,7 @@ public static class Mapper
 
     public static ExperienceDto ToDto(this Domain.Entities.PersonProfileExperience experience)
     {
-        return new ExperienceDto(experience.Id, experience.Employment?.Employer?.Name, experience.Title, experience.Company.ToDto(), experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description, 
+        return new ExperienceDto(experience.Id, experience.Employment?.Employer?.Name, experience.Title, experience.Company.ToDto(), experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description,
             experience.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
     }
 
@@ -90,7 +87,7 @@ public static class Mapper
 
     public static CaseDto ToDto(this Domain.Entities.Case @case, IUrlHelper urlHelper)
     {
-        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.CaseProfiles.Select(x => x.ToDto(urlHelper)), 
+        return new CaseDto(@case.Id, @case.Status.ToString(), @case.Description, @case.CaseProfiles.Select(x => x.ToDto(urlHelper)),
             new CasePricingDto(@case.Pricing.HourlyPrice, @case.Pricing.Hours, @case.Pricing.Total));
     }
 
@@ -98,7 +95,7 @@ public static class Mapper
     {
         return new CaseProfileDto(caseProfile.Id, caseProfile.PersonProfile.ToDto(urlHelper), caseProfile.Presentation);
     }
-    
+
     public static CompanyDto ToDto(this Domain.Entities.Company company)
     {
         return new CompanyDto(company.Id, company.Name, company.Logo, company.Link, company.Industry.ToDto());

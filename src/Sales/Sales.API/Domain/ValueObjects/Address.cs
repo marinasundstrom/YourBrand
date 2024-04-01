@@ -1,7 +1,3 @@
-using YourBrand.Sales.Domain;
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.Events;
-
 namespace YourBrand.Sales.Domain.ValueObjects;
 
 public record Address
@@ -30,7 +26,8 @@ public record Address
 
     public Address Copy()
     {
-        return new Address {
+        return new Address
+        {
             Thoroughfare = Thoroughfare,
             Premises = Premises,
             SubPremises = SubPremises,

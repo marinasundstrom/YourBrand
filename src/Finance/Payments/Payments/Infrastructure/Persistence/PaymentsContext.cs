@@ -2,7 +2,6 @@
 
 using Newtonsoft.Json;
 
-using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain;
 using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Domain.Entities;
@@ -29,7 +28,7 @@ public class PaymentsContext : DbContext, IPaymentsContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using YourBrand.Analytics.Application.Services;
 
 namespace YourBrand.Analytics.Application.Hubs;
 

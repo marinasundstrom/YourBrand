@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
+
 using YourBrand.Analytics.Application.Exceptions;
 using YourBrand.Analytics.Domain.Exceptions;
+
 using ApplicationException = YourBrand.Analytics.Domain.Exceptions.ApplicationException;
 
 namespace YourBrand.Analytics.Web.Middleware;

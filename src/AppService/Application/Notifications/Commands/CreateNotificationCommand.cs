@@ -23,7 +23,8 @@ public sealed record CreateNotificationCommand(
 
         public async Task Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
-            await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto {
+            await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+            {
                 Title = request.Title,
                 Text = request.Text,
                 Link = request.Link,

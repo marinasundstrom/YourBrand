@@ -1,14 +1,11 @@
-using YourBrand.Marketing.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Marketing.Application.Discounts;
-using YourBrand.Marketing.Application.Discounts.Queries;
+
 using YourBrand.Marketing.Application.Discounts.Commands;
-using YourBrand.Marketing.Application.Common.Models;
-using Asp.Versioning;
+using YourBrand.Marketing.Application.Discounts.Queries;
 
 namespace YourBrand.Marketing.Application.Discounts;
 

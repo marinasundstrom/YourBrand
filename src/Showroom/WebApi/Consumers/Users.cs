@@ -2,9 +2,8 @@
 
 using MediatR;
 
-using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Identity;
-using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Showroom.Application.Users.Commands;
 namespace YourBrand.Showroom.Consumers;
 

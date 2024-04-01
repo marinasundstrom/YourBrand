@@ -58,4 +58,3 @@ public class SkillsController : ControllerBase
 public record CreateSkillDto(string Name, string SkillAreaId);
 
 public record UpdateSkillDto(string Name, string SkillAreaId);
-

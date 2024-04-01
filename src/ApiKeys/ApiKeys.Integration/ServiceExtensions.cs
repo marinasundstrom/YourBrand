@@ -1,10 +1,9 @@
 ﻿
 using AspNetCore.Authentication.ApiKey;
 
-using YourBrand.ApiKeys.Client;
-
-using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+
+using YourBrand.ApiKeys.Client;
 
 namespace YourBrand.ApiKeys;
 
@@ -34,11 +33,10 @@ public static class ServiceExtensions
         return services;
     }
 
-    private static IServiceCollection AddApiApplicationService(this IServiceCollection services) 
+    private static IServiceCollection AddApiApplicationService(this IServiceCollection services)
     {
         services.AddScoped<IApiApplicationContext, ApiApplicationContext>();
 
         return services;
     }
 }
-

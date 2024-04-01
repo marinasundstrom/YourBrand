@@ -1,15 +1,13 @@
-using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
-using YourBrand.Ticketing.Application;
+
 using YourBrand.Ticketing.Application.Common;
-using YourBrand.Ticketing.Application.Tickets.Commands;
+using YourBrand.Ticketing.Application.Features.Tickets.Commands;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 using YourBrand.Ticketing.Application.Features.Tickets.Queries;
-using YourBrand.Ticketing.Application.Features.Tickets.Commands;
+using YourBrand.Ticketing.Application.Tickets.Commands;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 

@@ -1,10 +1,8 @@
 ﻿
-using YourBrand.Invoicing.Application;
+using MediatR;
+
 using YourBrand.Invoicing.Domain;
 using YourBrand.Invoicing.Domain.Enums;
-
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
@@ -25,11 +23,11 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note,
 
             invoice.Id = Guid.NewGuid().ToString();
 
-            try 
+            try
             {
                 invoice.InvoiceNo = (_context.Invoices.Select(x => x.InvoiceNo).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
             }
-            catch 
+            catch
             {
                 invoice.InvoiceNo = "1";
             }

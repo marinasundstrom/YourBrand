@@ -1,10 +1,6 @@
-using System.Globalization;
-
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Infrastructure;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
@@ -43,7 +39,7 @@ public static class Seed
 
             await context.SaveChangesAsync();
         }
-        
+
         if (!context.ActivityTypes.Any())
         {
             context.ActivityTypes.Add(new ActivityType("Chargeable", null));

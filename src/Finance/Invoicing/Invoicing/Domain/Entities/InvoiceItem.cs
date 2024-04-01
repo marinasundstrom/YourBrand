@@ -4,7 +4,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class InvoiceItem 
+public class InvoiceItem
 {
     private InvoiceItem()
     {
@@ -41,7 +41,7 @@ public class InvoiceItem
 
     public string? Sku { get; set; }
 
-    public ProductType ProductType  { get; private set; }
+    public ProductType ProductType { get; private set; }
 
     public void UpdateProductType(ProductType productType)
     {
@@ -66,7 +66,7 @@ public class InvoiceItem
 
     public double Quantity { get; private set; }
 
-    public void UpdateQuantity(double quantity) 
+    public void UpdateQuantity(double quantity)
     {
         Quantity = quantity;
 
@@ -74,7 +74,7 @@ public class InvoiceItem
 
         Invoice?.Update();
     }
-    
+
     public decimal Price { get; private set; }
 
     public void UpdateUnitPrice(decimal unitPrice)
@@ -95,7 +95,7 @@ public class InvoiceItem
 
     public decimal? Vat { get; private set; }
 
-    public void UpdateVatRate(decimal unitPrice, double vatRate) 
+    public void UpdateVatRate(decimal unitPrice, double vatRate)
     {
         Price = unitPrice;
         VatRate = vatRate;
@@ -125,7 +125,7 @@ public record InvoiceItemDomesticService(DomesticServiceKind Kind, HomeRepairAnd
 /* , double Hours, decimal LaborCost, decimal MaterialCost, decimal OtherCosts, decimal RequestedAmount */
 
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-public enum PropertyType 
+public enum PropertyType
 {
     [Display(Name = "Villa")]
     HousingUnit = 1,
@@ -135,7 +135,7 @@ public enum PropertyType
 }
 
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-public enum DomesticServiceKind 
+public enum DomesticServiceKind
 {
     [Display(Name = "ROT")]
     HomeRepairAndMaintenanceServiceType = 1,
@@ -147,7 +147,7 @@ public enum DomesticServiceKind
 [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum HomeRepairAndMaintenanceServiceType
 {
-    [Display(Name = "Bygg")]    
+    [Display(Name = "Bygg")]
     Carpentry,
 
     [Display(Name = "El")]
@@ -177,7 +177,7 @@ public enum HouseholdServiceType
 
     [Display(Name = "Flyttjänst")]
     MovingService,
-    
+
     [Display(Name = "It-tjänster")]
     ItServices,
 

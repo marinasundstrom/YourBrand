@@ -9,7 +9,6 @@ using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.Companies;
 using YourBrand.Showroom.Application.Companies.Commands;
 using YourBrand.Showroom.Application.Companies.Queries;
-using YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
@@ -59,4 +58,3 @@ public class CompaniesController : ControllerBase
 public record CreateCompanyDto(string Name, int IndustryId);
 
 public record UpdateCompanyDto(string Name, int IndustryId);
-

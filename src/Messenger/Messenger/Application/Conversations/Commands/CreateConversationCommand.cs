@@ -1,15 +1,13 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Application.Conversations.Queries;
-using YourBrand.Messenger.Contracts;
-using YourBrand.Messenger.Domain.Entities;
-
 using MassTransit;
 
 using MediatR;
+
 using YourBrand.Identity;
-using YourBrand.Messenger.Domain.Repositories;
+using YourBrand.Messenger.Contracts;
 using YourBrand.Messenger.Domain;
+using YourBrand.Messenger.Domain.Entities;
+using YourBrand.Messenger.Domain.Repositories;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 
@@ -34,7 +32,8 @@ public record CreateConversationCommand(string? Title) : IRequest<ConversationDt
         {
             var userId = _currentUserService.UserId;
 
-            var conversation = new Conversation() {
+            var conversation = new Conversation()
+            {
                 Id = Guid.NewGuid().ToString(),
                 Title = request.Title
             };

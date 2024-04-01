@@ -1,11 +1,6 @@
-﻿using System.Security.Claims;
-
-using IdentityModel;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.IdentityManagement.Domain.Entities;
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 

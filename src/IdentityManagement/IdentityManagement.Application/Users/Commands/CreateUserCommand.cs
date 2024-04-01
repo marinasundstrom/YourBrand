@@ -1,17 +1,11 @@
-﻿
-using System.Security.Claims;
+﻿using MediatR;
 
-using IdentityModel;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Contracts;
 using YourBrand.IdentityManagement.Domain.Entities;
-using YourBrand.Identity;
 
 namespace YourBrand.IdentityManagement.Application.Users.Commands;
 
@@ -40,16 +34,16 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
             {
                 throw new Exception();
             }
-                
+
             //user.Organization = organization;
 
             var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == request.Role, cancellationToken);
 
-            if(role is not null) 
+            if (role is not null)
             {
                 user.AddToRole(role);
             }
-            
+
             _context.Users.Add(user);
 
             await _context.SaveChangesAsync(cancellationToken);

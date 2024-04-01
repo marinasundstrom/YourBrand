@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Inventory.Domain;
 
 namespace YourBrand.Inventory.Application.Sites.Commands;

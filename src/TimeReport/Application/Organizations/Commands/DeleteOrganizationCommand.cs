@@ -1,7 +1,5 @@
 ﻿using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Repositories;
 
@@ -28,7 +26,7 @@ public record DeleteOrganizationCommand(string Id) : IRequest
             if (organization is null) throw new Exception();
 
             _organizationRepository.RemoveOrganization(organization);
-           
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         }

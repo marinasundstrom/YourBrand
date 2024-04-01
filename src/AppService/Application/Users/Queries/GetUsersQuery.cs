@@ -12,7 +12,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
 {
 
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Results<UserDto>>
-    { 
+    {
         readonly IAppServiceContext _context;
 
         public GetUsersQueryHandler(IAppServiceContext context)
@@ -25,7 +25,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
             var query = _context.Users
                 .OrderBy(p => p.Created)
                 .AsNoTracking();
-                //.AsSplitQuery();
+            //.AsSplitQuery();
 
             if (request.SearchString is not null)
             {

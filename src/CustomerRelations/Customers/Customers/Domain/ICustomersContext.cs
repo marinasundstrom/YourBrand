@@ -1,6 +1,6 @@
-﻿using YourBrand.Customers.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Customers.Domain.Entities;
 
 namespace YourBrand.Customers.Domain;
 

@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+
 using LinqKit;
 
 namespace YourBrand.Analytics.Domain.Specifications;

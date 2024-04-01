@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Analytics.Infrastructure.Services;

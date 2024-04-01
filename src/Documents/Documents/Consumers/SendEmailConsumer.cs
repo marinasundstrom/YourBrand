@@ -1,7 +1,7 @@
-﻿using YourBrand.Documents.Application.Services;
-using YourBrand.Documents.Contracts;
+﻿using MassTransit;
 
-using MassTransit;
+using YourBrand.Documents.Application.Services;
+using YourBrand.Documents.Contracts;
 
 namespace YourBrand.Documents.Consumers;
 

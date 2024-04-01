@@ -1,12 +1,12 @@
-﻿using YourBrand.Invoicing.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.Invoicing.Domain;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Invoicing.Infrastructure.Persistence.Interceptors;
 using YourBrand.Invoicing.Infrastructure.Persistence.Outbox;
-using Newtonsoft.Json;
 
 namespace YourBrand.Invoicing.Infrastructure.Persistence;
 
@@ -28,7 +28,7 @@ public class InvoicingContext : DbContext, IInvoicingContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

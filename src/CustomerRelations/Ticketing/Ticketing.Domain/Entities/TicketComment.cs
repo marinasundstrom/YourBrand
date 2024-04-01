@@ -1,6 +1,3 @@
-using YourBrand.Ticketing.Domain.Enums;
-using YourBrand.Ticketing.Domain.Events;
-
 namespace YourBrand.Ticketing.Domain.Entities;
 
 public class TicketComment : Entity<int>, IAuditable

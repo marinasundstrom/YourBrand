@@ -1,6 +1,6 @@
-using YourBrand.Catalog.Domain.Enums;
-using YourBrand.Catalog.Domain.Entities;
 using Core;
+
+using YourBrand.Catalog.Domain.Enums;
 
 namespace YourBrand.Catalog.Domain.Entities;
 

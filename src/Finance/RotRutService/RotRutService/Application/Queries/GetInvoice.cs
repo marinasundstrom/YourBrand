@@ -1,11 +1,4 @@
-﻿using YourBrand.RotRutService.Application.Queries;
-using YourBrand.RotRutService.Domain;
-
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
-
-namespace YourBrand.RotRutService.Application.Queries;
+﻿namespace YourBrand.RotRutService.Application.Queries;
 
 /*
 public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>

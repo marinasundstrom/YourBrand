@@ -1,8 +1,4 @@
-﻿using System;
-
-using YourBrand.Analytics.Domain;
-
-using MediatR;
+﻿using MediatR;
 
 namespace YourBrand.Analytics.Application.Common.Models;
 

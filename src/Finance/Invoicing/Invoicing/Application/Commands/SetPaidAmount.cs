@@ -1,9 +1,9 @@
-﻿using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Domain.Enums;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 

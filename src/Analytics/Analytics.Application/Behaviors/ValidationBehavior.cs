@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using ValidationException = YourBrand.Analytics.Application.Exceptions.ValidationException;
 
 namespace YourBrand.Analytics.Application.Behaviors;

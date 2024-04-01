@@ -1,18 +1,18 @@
-﻿using YourBrand.IdentityManagement.Application;
-using YourBrand.IdentityManagement.Infrastructure;
-using YourBrand.IdentityManagement.Infrastructure.Persistence;
+﻿using MassTransit;
 
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
-using YourBrand.IdentityManagement.Consumers;
-using YourBrand.IdentityManagement;
 
 using Serilog;
 
+using Steeltoe.Discovery.Client;
+
 using YourBrand;
 using YourBrand.Extensions;
-using Steeltoe.Discovery.Client;
+using YourBrand.IdentityManagement;
+using YourBrand.IdentityManagement.Application;
+using YourBrand.IdentityManagement.Consumers;
+using YourBrand.IdentityManagement.Infrastructure;
 
 string MyAllowSpecificOrigins = "MyPolicy";
 

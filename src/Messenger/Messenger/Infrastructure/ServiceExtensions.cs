@@ -1,10 +1,8 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Infrastructure.Persistence;
-using YourBrand.Messenger.Infrastructure.Persistence.Interceptors;
-using YourBrand.Messenger.Infrastructure.Services;
 using Quartz;
+
 using YourBrand.Messenger.Infrastructure.BackgroundJobs;
+using YourBrand.Messenger.Infrastructure.Persistence;
 
 namespace YourBrand.Messenger.Infrastructure;
 
@@ -28,7 +26,7 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }

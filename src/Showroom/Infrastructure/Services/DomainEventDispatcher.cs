@@ -1,12 +1,9 @@
-﻿using System;
-
-using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Application.Common.Models;
-using YourBrand.Showroom.Domain.Common;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
+
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Infrastructure.Services;
 

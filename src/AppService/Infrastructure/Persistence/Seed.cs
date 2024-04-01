@@ -1,9 +1,7 @@
-using YourBrand.Domain.Entities;
-using YourBrand.Infrastructure.Persistence;
-
 using Microsoft.Extensions.DependencyInjection;
+
 using YourBrand.Application.Modules;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using YourBrand.Domain.Entities;
 
 namespace YourBrand.Infrastructure.Persistence;
 
@@ -73,7 +71,8 @@ public static class Seed
 
         context.Set<WidgetArea>().Add(new WidgetArea("dashboard", "Dashboard"));
 
-        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null) {
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
+        {
             WidgetId = "analytics.engagements",
             WidgetAreaId = "dashboard"
         });

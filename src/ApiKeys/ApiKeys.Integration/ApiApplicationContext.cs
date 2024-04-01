@@ -1,7 +1,5 @@
 using System.Security.Claims;
 
-using IdentityModel;
-
 using Microsoft.AspNetCore.Http;
 
 namespace YourBrand.ApiKeys;

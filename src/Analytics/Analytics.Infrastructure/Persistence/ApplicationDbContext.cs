@@ -1,9 +1,6 @@
 ﻿using System.Linq.Expressions;
+
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using YourBrand.Analytics.Domain.Entities;
-using YourBrand.Analytics.Infrastructure.Persistence.Interceptors;
-using YourBrand.Analytics.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Analytics.Infrastructure.Persistence;
 

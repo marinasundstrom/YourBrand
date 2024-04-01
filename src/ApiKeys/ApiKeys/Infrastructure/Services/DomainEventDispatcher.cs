@@ -1,9 +1,8 @@
 ﻿
-using YourBrand.ApiKeys.Application.Common.Interfaces;
-using YourBrand.ApiKeys.Application.Common.Models;
-using YourBrand.ApiKeys.Domain.Common;
-
 using MediatR;
+
+using YourBrand.ApiKeys.Application.Common.Interfaces;
+using YourBrand.ApiKeys.Domain.Common;
 
 namespace YourBrand.ApiKeys.Infrastructure.Services;
 

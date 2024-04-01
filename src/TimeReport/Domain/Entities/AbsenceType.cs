@@ -4,7 +4,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class AbsenceType: AuditableEntity, ISoftDelete
+public class AbsenceType : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = null!;
 

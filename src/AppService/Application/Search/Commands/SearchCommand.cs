@@ -1,14 +1,9 @@
-
-using System.Data.Common;
-
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.Application.Common.Models;
-using YourBrand.Domain.Entities;
-using YourBrand.Domain.Events;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Common.Models;
 
 namespace YourBrand.Application.Search.Commands;
 

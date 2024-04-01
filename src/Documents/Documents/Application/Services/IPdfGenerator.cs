@@ -1,8 +1,7 @@
 ﻿
-namespace YourBrand.Documents.Application.Services
+namespace YourBrand.Documents.Application.Services;
+
+public interface IPdfGenerator
 {
-    public interface IPdfGenerator
-    {
-        Task<Stream> GeneratePdfFromHtmlAsync(string html, Uri? baseUrlOrPath = null);
-    }
+    Task<Stream> GeneratePdfFromHtmlAsync(string html, Uri? baseUrlOrPath = null);
 }

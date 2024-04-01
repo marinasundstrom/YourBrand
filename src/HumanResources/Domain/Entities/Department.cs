@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.HumanResources.Domain.Entities;
 
-public class Department 
+public class Department
 {
     readonly HashSet<Person> _persons = new HashSet<Person>();
 

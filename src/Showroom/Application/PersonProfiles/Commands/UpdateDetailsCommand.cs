@@ -1,12 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Domain.Entities;
-using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
@@ -39,7 +34,7 @@ public record UpdateDetailsCommand(string Id, PersonProfileDetailsDto Details) :
             personProfile.BirthDate = request.Details.BirthDate;
             personProfile.Location = request.Details.Location;
             personProfile.IndustryId = request.Details.IndustryId;
-            personProfile.OrganizationId= request.Details.OrganizationId;
+            personProfile.OrganizationId = request.Details.OrganizationId;
             personProfile.CompetenceAreaId = request.Details.CompetenceAreaId;
 
             await _context.SaveChangesAsync(cancellationToken);

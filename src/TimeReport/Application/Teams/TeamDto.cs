@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using YourBrand.TimeReport.Application;
-using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Application.Users;
+﻿using YourBrand.TimeReport.Application.Users;
 
 namespace YourBrand.TimeReport.Application.Teams
 ;

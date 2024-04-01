@@ -1,15 +1,12 @@
-using Asp.Versioning.Builder;
-
-using YourBrand.Catalog.Domain.Entities;
-using YourBrand.Catalog.Features.ProductManagement.Attributes;
-using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
-using YourBrand.Catalog.Model;
-
 using FluentValidation;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Http.HttpResults;
+
+using YourBrand.Catalog.Features.ProductManagement.Attributes;
+using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
+using YourBrand.Catalog.Model;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 

@@ -38,7 +38,7 @@ public record GetCompaniesQuery(int Page = 0, int PageSize = 10, int? IndustryId
             if (request.IndustryId is not null)
             {
                 result = result.Where(p =>
-                    p.Industry.Id  == request.IndustryId);
+                    p.Industry.Id == request.IndustryId);
             }
 
             if (request.SearchString is not null)
@@ -53,7 +53,7 @@ public record GetCompaniesQuery(int Page = 0, int PageSize = 10, int? IndustryId
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result.OrderBy(x => x.Name);
             }

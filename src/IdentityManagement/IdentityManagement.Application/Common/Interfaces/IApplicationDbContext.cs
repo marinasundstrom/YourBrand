@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityManagement.Domain.Entities;
 
@@ -14,7 +13,7 @@ public interface IApplicationDbContext
     DbSet<OrganizationUser> OrganizationUsers { get; }
 
     DbSet<Role> Roles { get; }
-    
+
     DbSet<User> Users { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

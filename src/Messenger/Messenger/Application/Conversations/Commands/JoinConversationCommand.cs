@@ -1,15 +1,11 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Domain.Entities;
-
 using MassTransit;
 
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
-using YourBrand.Messenger.Domain.Repositories;
 using YourBrand.Messenger.Domain;
+using YourBrand.Messenger.Domain.Repositories;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 
@@ -38,7 +34,7 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
 
             var conversation = await _conversationRepository.GetConversation(request.ConversationId!, cancellationToken);
 
-            if(conversation is null)
+            if (conversation is null)
             {
                 throw new Exception();
             }

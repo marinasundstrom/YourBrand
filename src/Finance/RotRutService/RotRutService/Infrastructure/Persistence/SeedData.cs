@@ -1,7 +1,4 @@
-﻿using YourBrand.RotRutService.Domain.Entities;
-using YourBrand.RotRutService.Domain.Enums;
-
-namespace YourBrand.RotRutService.Infrastructure.Persistence;
+﻿namespace YourBrand.RotRutService.Infrastructure.Persistence;
 
 public class SeedData
 {

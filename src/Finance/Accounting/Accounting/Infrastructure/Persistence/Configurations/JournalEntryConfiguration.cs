@@ -1,7 +1,7 @@
-﻿using YourBrand.Accounting.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 

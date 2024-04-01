@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +6,6 @@ using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Persistence;
-using YourBrand.Sales.Domain.Entities;
-
-using static YourBrand.Sales.Features.Subscriptions.Mappings;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
@@ -21,17 +15,18 @@ public record CreateSubscription(string ProductId, Guid SubscriptionPlanId, stri
     {
         public async Task Handle(CreateSubscription request, CancellationToken cancellationToken)
         {
-            var subscriptionPlan = await  salesContext.SubscriptionPlans.FirstOrDefaultAsync(x => x.Id == request.SubscriptionPlanId);
+            var subscriptionPlan = await salesContext.SubscriptionPlans.FirstOrDefaultAsync(x => x.Id == request.SubscriptionPlanId);
 
-            var subscription = new Subscription() 
+            var subscription = new Subscription()
             {
                 SubscriptionPlan = subscriptionPlan!,
-                
+
             };
 
             var order = new Order()
             {
-                Customer = new Customer {
+                Customer = new Customer
+                {
                     Id = request.CustomerId
                 }
             };

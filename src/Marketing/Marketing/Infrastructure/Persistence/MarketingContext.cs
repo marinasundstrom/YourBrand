@@ -1,12 +1,12 @@
-﻿using YourBrand.Marketing.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.Marketing.Domain;
 using YourBrand.Marketing.Domain.Common;
 using YourBrand.Marketing.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Marketing.Infrastructure.Persistence.Interceptors;
 using YourBrand.Marketing.Infrastructure.Persistence.Outbox;
-using Newtonsoft.Json;
 
 namespace YourBrand.Marketing.Infrastructure.Persistence;
 
@@ -28,7 +28,7 @@ public class MarketingContext : DbContext, IMarketingContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 
@@ -45,7 +45,7 @@ public class MarketingContext : DbContext, IMarketingContext
 
     public DbSet<Campaign> Campaigns { get; set; } = null!;
 
-    public DbSet<Address> Addresses { get; set; }  = null!;
+    public DbSet<Address> Addresses { get; set; } = null!;
 
     public DbSet<Discount> Discounts { get; set; } = null!;
 

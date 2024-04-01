@@ -1,14 +1,10 @@
-﻿using System;
-using System.Net.Http.Headers;
-
-using YourBrand.Application.Common.Interfaces;
-
-using MediatR;
+﻿using System.Net.Http.Headers;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using YourBrand.Notifications.Client;
+
 using YourBrand.Identity;
+using YourBrand.Notifications.Client;
 
 namespace YourBrand.Application;
 

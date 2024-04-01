@@ -1,7 +1,6 @@
-using YourBrand.Inventory.Domain;
-using YourBrand.Inventory.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Inventory.Infrastructure.Persistence;

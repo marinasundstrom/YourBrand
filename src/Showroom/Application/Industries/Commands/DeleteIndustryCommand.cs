@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Industries.Commands;
@@ -24,7 +25,7 @@ public record DeleteIndustryCommand(int Id) : IRequest
             if (industry is null) throw new Exception();
 
             context.Industries.Remove(industry);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

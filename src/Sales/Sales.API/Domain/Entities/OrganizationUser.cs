@@ -5,7 +5,7 @@ public class OrganizationUser : AggregateRoot<string>, IAuditable
     public OrganizationUser()
         : base(Guid.NewGuid().ToString())
     {
-        
+
     }
 
     public OrganizationUser(string id)

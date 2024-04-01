@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-
-using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Domain.Enums;
+using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
@@ -11,8 +8,8 @@ public class SubscriptionDto : Domain.Entities.ISubscriptionParameters
     public Guid Id { get; set; }
     public SubscriptionPlanShortDto Plan { get; set; }
     public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get;  set; }
-    public OrderShortDto? Order { get;  set; }
+    public DateTime? EndDate { get; set; }
+    public OrderShortDto? Order { get; set; }
     public string? OrderItemId { get; set; }
     public bool AutoRenew { get; set; }
     public Recurrence Recurrence { get; set; }

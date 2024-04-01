@@ -1,5 +1,3 @@
-using YourBrand.Analytics.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

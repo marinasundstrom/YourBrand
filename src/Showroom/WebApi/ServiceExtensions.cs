@@ -1,9 +1,5 @@
-﻿using System;
-
-using YourBrand.Identity;
-using YourBrand.Showroom.Application;
+﻿using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Infrastructure;
 
 using YourBrand.Showroom.WebApi.Services;
 

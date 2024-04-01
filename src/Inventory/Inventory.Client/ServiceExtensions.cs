@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Inventory.Client;
-
 namespace YourBrand.Inventory.Client;
 
 public static class ServiceExtensions

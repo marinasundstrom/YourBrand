@@ -1,11 +1,8 @@
-﻿using System;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
-using YourBrand.HumanResources.Application.Common.Models;
 using YourBrand.HumanResources.Domain.Common;
 
 namespace YourBrand.HumanResources.Infrastructure.Services;

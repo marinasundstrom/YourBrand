@@ -14,7 +14,7 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<Absence>
 
         builder.Property(x => x.Date)
             .HasConversion<DateTime?>(
-                x => x == null ? null : x.GetValueOrDefault().ToDateTime(TimeOnly.Parse("01:00")), 
+                x => x == null ? null : x.GetValueOrDefault().ToDateTime(TimeOnly.Parse("01:00")),
                 x => x == null ? null : DateOnly.FromDateTime(x.GetValueOrDefault()));
 
         builder.HasQueryFilter(i => i.Deleted == null);

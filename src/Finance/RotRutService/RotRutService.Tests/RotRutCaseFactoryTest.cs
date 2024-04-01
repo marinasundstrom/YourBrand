@@ -25,7 +25,8 @@ public class RotRutCaseFactoryTest
                 HouseholdServiceType = HouseholdServiceType.Cleaning
             }
         });
-        invoice.DomesticService = new InvoiceDomesticService {
+        invoice.DomesticService = new InvoiceDomesticService
+        {
             Kind = DomesticServiceKind.HouseholdService,
             Description = "",
             Buyer = "76660",

@@ -6,8 +6,6 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 using YourBrand.Sales.Models;
 
-using YourBrand.Sales;
-
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Queries;
 
 public record GetOrders(int[]? Status, string? CustomerId, string? SSN, string? AssigneeId, Guid? SubscriptionId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<Result<PagedResult<OrderDto>>>

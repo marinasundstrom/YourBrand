@@ -1,15 +1,15 @@
-using YourBrand.Inventory.Domain.Entities;
 using YourBrand.Inventory.Application.Items;
 using YourBrand.Inventory.Application.Items.Groups;
 using YourBrand.Inventory.Application.Sites;
 using YourBrand.Inventory.Application.Warehouses;
 using YourBrand.Inventory.Application.Warehouses.Items;
+using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Application;
 
-public static class Mappings 
+public static class Mappings
 {
-    public static ItemDto ToDto(this Item item) 
+    public static ItemDto ToDto(this Item item)
     {
         return new ItemDto(
             item.Id,
@@ -22,14 +22,14 @@ public static class Mappings
             item.Discontinued);
     }
 
-    public static ItemGroupDto ToDto(this ItemGroup itemGroup) 
+    public static ItemGroupDto ToDto(this ItemGroup itemGroup)
     {
         return new ItemGroupDto(
             itemGroup.Id,
             itemGroup.Name);
     }
 
-    public static WarehouseDto ToDto(this Warehouse item) 
+    public static WarehouseDto ToDto(this Warehouse item)
     {
         return new WarehouseDto(
             item.Id,
@@ -37,7 +37,7 @@ public static class Mappings
             item.Site.ToDto());
     }
 
-    public static WarehouseItemDto ToDto(this WarehouseItem item) 
+    public static WarehouseItemDto ToDto(this WarehouseItem item)
     {
         return new WarehouseItemDto(
             item.Id,
@@ -51,7 +51,7 @@ public static class Mappings
             item.QuantityThreshold);
     }
 
-    public static SiteDto ToDto(this Site item) 
+    public static SiteDto ToDto(this Site item)
     {
         return new SiteDto(
             item.Id,

@@ -1,13 +1,3 @@
-using MassTransit;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-using YourBrand.Sales;
-
 namespace YourBrand.Sales.Features.Features.Users;
 
 /*

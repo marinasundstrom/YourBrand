@@ -37,7 +37,7 @@ public class Organization : AuditableEntity
 
     public void ChangeName(string name)
     {
-        if(Name != name) 
+        if (Name != name)
         {
             Name = name;
         }
@@ -47,7 +47,7 @@ public class Organization : AuditableEntity
     {
         //_users.Add(user);
 
-        OrganizationUsers.Add(new OrganizationUser 
+        OrganizationUsers.Add(new OrganizationUser
         {
             Tenant = Tenant,
             Organization = this,

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Contracts;
+﻿using Contracts;
 
 using MassTransit;
 

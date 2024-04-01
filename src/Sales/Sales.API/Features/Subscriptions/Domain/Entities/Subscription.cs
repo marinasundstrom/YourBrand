@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Newtonsoft.Json;
-
-using YourBrand.Sales.Domain.Entities;
+﻿using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Domain.ValueObjects;
-using YourBrand.Sales.Contracts;
-using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Domain.Entities;
 

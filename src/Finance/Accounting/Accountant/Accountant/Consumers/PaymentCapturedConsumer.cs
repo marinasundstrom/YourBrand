@@ -1,11 +1,9 @@
-﻿using YourBrand.Accounting.Client;
+﻿using MassTransit;
 
+using YourBrand.Accounting.Client;
 using YourBrand.Invoicing.Client;
-
-using MassTransit;
-
-using YourBrand.Payments.Contracts;
 using YourBrand.Payments.Client;
+using YourBrand.Payments.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 

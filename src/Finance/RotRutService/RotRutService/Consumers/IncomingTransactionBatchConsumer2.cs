@@ -1,10 +1,7 @@
 ﻿using MassTransit;
 
-using Microsoft.EntityFrameworkCore;
-
 using YourBrand.Accounting.Client;
 using YourBrand.RotRutService.Domain;
-using YourBrand.RotRutService.Domain.Entities;
 using YourBrand.Transactions.Client;
 using YourBrand.Transactions.Contracts;
 

@@ -1,8 +1,8 @@
 ﻿
+using Microsoft.AspNetCore.SignalR;
+
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.WebApi.Hubs;
-
-using Microsoft.AspNetCore.SignalR;
 
 namespace YourBrand.WebApi.Services;
 

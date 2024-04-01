@@ -38,7 +38,7 @@ public class ApiKeyProvider : IApiKeyProvider
 
             //Console.WriteLine(result.Status);
 
-            if(result.Status != Client.ApiKeyAuthCode.Authorized)
+            if (result.Status != Client.ApiKeyAuthCode.Authorized)
             {
                 throw new Exception("Invalid token");
             }

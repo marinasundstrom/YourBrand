@@ -11,4 +11,3 @@ public record DocumentExpired : DomainEvent
 
     public string DocumentId { get; }
 }
-

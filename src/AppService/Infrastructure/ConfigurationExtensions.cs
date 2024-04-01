@@ -8,7 +8,7 @@ public static class ConfigurationExtensions
     {
         var connectionString = configuration.GetConnectionString(name);
 
-        if(connectionString is null)
+        if (connectionString is null)
         {
             return null;
         }

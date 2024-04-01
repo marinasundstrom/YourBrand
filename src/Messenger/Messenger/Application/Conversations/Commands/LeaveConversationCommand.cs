@@ -1,14 +1,11 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-
 using MassTransit;
 
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
-using YourBrand.Messenger.Domain.Repositories;
 using YourBrand.Messenger.Domain;
+using YourBrand.Messenger.Domain.Repositories;
 
 namespace YourBrand.Messenger.Application.Conversations.Commands;
 
@@ -41,7 +38,7 @@ public record LeaveConversationCommand(string? ConversationId) : IRequest
             }
 
             var participant = conversation.Participants.FirstOrDefault(x => x.Id == request.ConversationId);
-            
+
             if (participant is null)
             {
                 throw new Exception();

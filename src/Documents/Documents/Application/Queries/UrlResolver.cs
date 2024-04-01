@@ -4,7 +4,7 @@ namespace YourBrand.Documents.Application.Queries;
 
 public class UrlResolver : IUrlResolver
 {
-    private IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public UrlResolver(IHttpContextAccessor httpContextAccessor)
     {

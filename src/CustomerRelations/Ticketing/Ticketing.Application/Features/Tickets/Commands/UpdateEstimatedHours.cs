@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+
 using MediatR;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;

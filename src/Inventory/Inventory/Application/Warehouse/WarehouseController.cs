@@ -1,9 +1,11 @@
+using Asp.Versioning;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using YourBrand.Inventory.Application.Warehouses.Queries;
+
 using YourBrand.Inventory.Application.Warehouses.Commands;
-using Asp.Versioning;
+using YourBrand.Inventory.Application.Warehouses.Queries;
 
 namespace YourBrand.Inventory.Application.Warehouses;
 
@@ -53,4 +55,3 @@ public class WarehousesController : ControllerBase
 public record CreateWarehouseDto(string Name, string SiteId);
 
 public record UpdateWarehouseDto(string Name, string SiteId);
-

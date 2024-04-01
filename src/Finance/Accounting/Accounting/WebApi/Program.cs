@@ -1,32 +1,29 @@
 ﻿using System.Globalization;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-
-using YourBrand.Accounting.Application;
-using YourBrand.Accounting.Application.Common.Interfaces;
-using YourBrand.Accounting.Infrastructure;
-using YourBrand.Accounting.Infrastructure.Persistence;
-using YourBrand.Accounting.Services;
 
 using Azure.Identity;
 using Azure.Storage.Blobs;
-
-using YourBrand.Documents.Client;
 
 using MassTransit;
 
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
-using YourBrand.Identity;
 
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Accounting;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Accounting;
+using YourBrand.Accounting.Application;
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Infrastructure;
+using YourBrand.Accounting.Infrastructure.Persistence;
+using YourBrand.Accounting.Services;
+using YourBrand.Documents.Client;
+using YourBrand.Extensions;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -138,7 +135,7 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     Console.WriteLine("Seeding");
 

@@ -1,14 +1,11 @@
-using YourBrand.Inventory.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using YourBrand.Inventory.Application.Items.Groups.Queries;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Inventory.Application.Items.Groups;
+
 using YourBrand.Inventory.Application.Items.Groups.Commands;
-using YourBrand.Inventory.Application.Common.Models;
-using Asp.Versioning;
+using YourBrand.Inventory.Application.Items.Groups.Queries;
 
 namespace YourBrand.Inventory.Application.Items.Groups;
 
@@ -58,4 +55,3 @@ public class GroupsController : ControllerBase
 public record CreateGroupDto(string Name);
 
 public record UpdateGroupDto(string Name);
-

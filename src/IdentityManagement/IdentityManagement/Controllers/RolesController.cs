@@ -1,18 +1,11 @@
-
-using AspNetCore.Authentication.ApiKey;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.ApiKeys;
 using YourBrand.IdentityManagement.Application.Common.Models;
 using YourBrand.IdentityManagement.Application.Users;
-using YourBrand.IdentityManagement.Application.Users.Commands;
 using YourBrand.IdentityManagement.Application.Users.Queries;
-using YourBrand.IdentityManagement.Domain.Exceptions;
 
 namespace YourBrand.IdentityManagement;
 

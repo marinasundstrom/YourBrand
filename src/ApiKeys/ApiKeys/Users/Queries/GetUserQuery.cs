@@ -1,16 +1,16 @@
 ﻿
-using YourBrand.ApiKeys.Application.Common.Interfaces;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.ApiKeys.Application.Common.Interfaces;
 
 namespace YourBrand.ApiKeys.Application.Users.Queries;
 
 public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
-    { 
+    {
         readonly IApiKeysContext _context;
 
         public GetUserQueryHandler(IApiKeysContext context)

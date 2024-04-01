@@ -1,12 +1,8 @@
-﻿using YourBrand.Marketing.Domain;
-
-using MassTransit;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Marketing.Application.Common.Models;
+using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Addresses.Queries;
 

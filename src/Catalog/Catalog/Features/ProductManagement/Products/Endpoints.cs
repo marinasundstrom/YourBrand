@@ -1,4 +1,8 @@
-using Asp.Versioning.Builder;
+using FluentValidation;
+
+using MediatR;
+
+using Microsoft.AspNetCore.Http.HttpResults;
 
 using YourBrand.Catalog.Features.Brands;
 using YourBrand.Catalog.Features.ProductManagement.Attributes;
@@ -6,21 +10,11 @@ using YourBrand.Catalog.Features.ProductManagement.Import;
 using YourBrand.Catalog.Features.ProductManagement.Options;
 using YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 using YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
+using YourBrand.Catalog.Features.ProductManagement.Products.Images;
 using YourBrand.Catalog.Features.ProductManagement.Products.Options;
 using YourBrand.Catalog.Features.Stores;
 using YourBrand.Catalog.Model;
-
-using FluentValidation;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Http.HttpResults;
-
-using OpenTelemetry.Trace;
-
 using YourBrand.Extensions;
-using YourBrand.Catalog.Features.ProductManagement.Products.Images;
-using Microsoft.AspNetCore.Mvc;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 

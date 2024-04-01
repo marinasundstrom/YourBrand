@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+
 using YourBrand.Ticketing.Infrastructure;
 
 namespace YourBrand.Ticketing.Infrastructure;

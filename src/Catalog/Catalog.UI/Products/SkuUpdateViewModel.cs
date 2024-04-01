@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 using MudBlazor;
 
-using YourBrand.Catalog;
-
 namespace YourBrand.Catalog.Products;
 
 public class SkuUpdateViewModel(IProductsClient productsClient, ISnackbar snackbar)

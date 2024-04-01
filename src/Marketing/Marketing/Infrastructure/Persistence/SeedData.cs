@@ -23,7 +23,7 @@ public class SeedData
                     PhoneMobile = "072423123",
                     Email = "test@test.com",
                     Address = new Domain.ValueObjects.Address(
-                        Thoroughfare:"Baker Street",
+                        Thoroughfare: "Baker Street",
                         SubPremises: null,
                         Premises: "42",
                         PostalCode: "4534 23",

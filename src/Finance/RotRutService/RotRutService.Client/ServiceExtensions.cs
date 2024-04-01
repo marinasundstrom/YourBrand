@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.RotRutService.Client;
-
 namespace YourBrand.RotRutService.Client;
 
 public static class ServiceExtensions

@@ -1,8 +1,4 @@
-﻿using System;
-
-using YourBrand.TimeReport.Client;
-
-namespace YourBrand.TimeReport;
+﻿namespace YourBrand.TimeReport;
 
 public static class UserDtoExtensions
 {

@@ -1,14 +1,10 @@
-﻿using System;
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Infrastructure.Persistence;
-using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
-using YourBrand.TimeReport.Infrastructure.Services;
 using Quartz;
+
 using YourBrand.TimeReport.Infrastructure.BackgroundJobs;
+using YourBrand.TimeReport.Infrastructure.Persistence;
 
 namespace YourBrand.TimeReport.Infrastructure;
 
@@ -32,7 +28,7 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }

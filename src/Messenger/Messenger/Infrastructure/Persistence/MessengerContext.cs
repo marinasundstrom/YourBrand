@@ -1,12 +1,12 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Domain.Common;
 using YourBrand.Messenger.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using YourBrand.Messenger.Infrastructure.Persistence.Interceptors;
-using Newtonsoft.Json;
 using YourBrand.Messenger.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence;
@@ -29,7 +29,7 @@ public class MessengerContext : DbContext, IMessengerContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

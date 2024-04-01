@@ -12,7 +12,7 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
     public class Handler : IRequestHandler<SetTransactionStatus>
     {
         private readonly ITransactionsContext _context;
-        
+
         public Handler(ITransactionsContext context)
         {
             _context = context;

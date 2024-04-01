@@ -1,6 +1,4 @@
-﻿using YourBrand.Marketing.Domain.Enums;
-
-namespace YourBrand.Marketing.Application.Contacts;
+﻿namespace YourBrand.Marketing.Application.Contacts;
 
 public record ContactAddressDto(
     // Street

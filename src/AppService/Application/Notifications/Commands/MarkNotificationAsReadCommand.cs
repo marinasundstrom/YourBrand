@@ -1,13 +1,4 @@
-
-using System.Data.Common;
-
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.Domain.Entities;
-using YourBrand.Domain.Events;
-
 using MediatR;
-
-using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Notifications.Client;
 

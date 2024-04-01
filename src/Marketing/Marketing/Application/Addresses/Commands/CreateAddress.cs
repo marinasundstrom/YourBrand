@@ -1,8 +1,7 @@
 ﻿
-using YourBrand.Marketing.Domain;
-
 using MediatR;
-using YourBrand.Marketing.Application.Contacts;
+
+using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Addresses.Commands;
 

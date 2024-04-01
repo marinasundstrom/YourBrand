@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Sales.Domain.Entities;
+﻿using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 

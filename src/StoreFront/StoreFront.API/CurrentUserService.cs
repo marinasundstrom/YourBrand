@@ -1,10 +1,6 @@
 ﻿using System.Net;
 using System.Security.Claims;
 
-using Microsoft.AspNetCore.Http;
-
-using Polly;
-
 namespace YourBrand.StoreFront.API;
 
 public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService

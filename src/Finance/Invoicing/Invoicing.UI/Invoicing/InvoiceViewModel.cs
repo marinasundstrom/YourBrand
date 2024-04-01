@@ -6,8 +6,8 @@ namespace YourBrand.Invoicing.Invoicing;
 
 public class InvoiceViewModel
 {
-    private List<InvoiceItemViewModel> _items = new List<InvoiceItemViewModel>();
-    private List<InvoiceVatAmountViewModel> _vatAmounts = new List<InvoiceVatAmountViewModel>();
+    private readonly List<InvoiceItemViewModel> _items = new List<InvoiceItemViewModel>();
+    private readonly List<InvoiceVatAmountViewModel> _vatAmounts = new List<InvoiceVatAmountViewModel>();
 
     public string Id { get; set; }
 
@@ -53,9 +53,9 @@ public class InvoiceViewModel
 
     public decimal Vat => Items.Sum(i => i.LineTotal.GetVatFromTotal(i.VatRate));
 
-    public decimal Total 
+    public decimal Total
     {
-        get 
+        get
         {
             var total = Items.Sum(i => i.LineTotal);
             total -= DomesticService?.RequestedAmount.GetValueOrDefault() ?? 0;
@@ -101,7 +101,7 @@ public class InvoiceViewModel
             {
                 vatAmount.Vat = 0;
             }
- 
+
             vatAmount.Vat += item.Vat;
             vatAmount.Total += item.LineTotal;
         }

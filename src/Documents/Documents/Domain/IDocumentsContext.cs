@@ -1,6 +1,7 @@
-﻿using YourBrand.Documents.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Domain.Entities;
+
 using Directory = YourBrand.Documents.Domain.Entities.Directory;
 
 namespace YourBrand.Documents.Domain;

@@ -1,8 +1,8 @@
-﻿using YourBrand.Accounting.Application.Common.Interfaces;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Ledger.Queries;
 
@@ -19,16 +19,16 @@ public record GetLedgerEntriesQuery(int? AccountNo = null, int? VerificationId =
 
         public async Task<LedgerEntriesResult> Handle(GetLedgerEntriesQuery request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
-            
+
             var query = context.LedgerEntries
                    .Include(e => e.JournalEntry)
                    .Include(e => e.Account)

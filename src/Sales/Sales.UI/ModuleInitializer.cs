@@ -2,11 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Portal;
-using YourBrand.Sales;
 using YourBrand.Portal.Modules;
-using YourBrand.Portal.Navigation;
-using Microsoft.Extensions.Localization;
-
 using YourBrand.Sales.OrderManagement;
 using YourBrand.Sales.Subscriptions;
 

@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using YourBrand.Sales.Features.Subscriptions;
-using YourBrand.Sales.Contracts;
-using YourBrand.Sales.Domain.Entities;
+﻿using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.OrderManagement.Orders;
-using Quartz.Xml.JobSchedulingData20;
+using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
@@ -32,7 +27,7 @@ public static class Mappings
             Name = subscriptionPlan.Name,
             ProductId = subscriptionPlan.ItemId,
             Price = subscriptionPlan.Price,
-            
+
             AutoRenew = subscriptionPlan.AutoRenew,
             Recurrence = subscriptionPlan.Recurrence,
             EveryDays = subscriptionPlan.EveryDays,

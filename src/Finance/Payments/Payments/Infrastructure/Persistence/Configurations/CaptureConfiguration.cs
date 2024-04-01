@@ -1,7 +1,7 @@
-using YourBrand.Payments.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.Payments.Domain.Entities;
 
 namespace YourBrand.Payments.Infrastructure.Persistence.Configurations;
 

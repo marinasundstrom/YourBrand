@@ -1,10 +1,9 @@
-﻿using YourBrand.IdentityManagement.Contracts;
-using YourBrand.Sales.Features.OrderManagement.Users;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
-using YourBrand.Sales;
+
+using YourBrand.IdentityManagement.Contracts;
+using YourBrand.Sales.Features.OrderManagement.Users;
 
 namespace YourBrand.Sales.Consumers;
 
@@ -12,7 +11,7 @@ public class SalesUserCreatedConsumer(IMediator mediator, ICurrentUserService cu
 {
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
-        try 
+        try
         {
             var message = context.Message;
 
@@ -25,9 +24,9 @@ public class SalesUserCreatedConsumer(IMediator mediator, ICurrentUserService cu
 
             var result = await mediator.Send(new Sales.Features.OrderManagement.Users.CreateUser($"{message2.FirstName} {message2.LastName}", message2.Email, message.TenantId, message2.UserId));
         }
-        catch(Exception e) 
+        catch (Exception e)
         {
-            logger.LogError(e, "FOO"); 
+            logger.LogError(e, "FOO");
         }
     }
 }

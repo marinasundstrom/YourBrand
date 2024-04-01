@@ -1,10 +1,6 @@
 using System.Globalization;
 using System.Reflection;
 
-using YourBrand.Catalog.Domain.Entities;
-using YourBrand.Catalog.Features.ProductManagement.Products;
-using YourBrand.Catalog.Persistence;
-
 using CsvHelper;
 using CsvHelper.Configuration;
 
@@ -12,7 +8,10 @@ using MediatR;
 
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Features.ProductManagement.Products.Images;
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Import;
 

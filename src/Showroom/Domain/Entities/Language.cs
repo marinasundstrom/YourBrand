@@ -1,6 +1,6 @@
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Language 
+public class Language
 {
     public string Id { get; set; }
 

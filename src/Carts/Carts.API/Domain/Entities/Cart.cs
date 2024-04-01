@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace YourBrand.Carts.API.Domain.Entities;
 
 public sealed class Cart

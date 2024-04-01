@@ -1,15 +1,14 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Contracts;
-using YourBrand.Messenger.Domain.Entities;
-
 using MassTransit;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Identity;
-using YourBrand.Messenger.Domain.Events;
+using YourBrand.Messenger.Application.Common.Interfaces;
+using YourBrand.Messenger.Contracts;
+using YourBrand.Messenger.Domain.Entities;
 
 namespace YourBrand.Messenger.Application.Messages.Commands;
 
@@ -35,18 +34,18 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(i => i.Id == request.ConversationId, cancellationToken);
 
-            if (conversation is null) 
+            if (conversation is null)
             {
                 throw new Exception();
             }
 
-            if(!conversation.Participants.Any(x => x.UserId == _currentUserService.UserId)) 
+            if (!conversation.Participants.Any(x => x.UserId == _currentUserService.UserId))
             {
                 throw new Exception();
             }
 
             var message = new Message(request.Text, request.ReplyToId);
-            
+
             conversation.AddMessage(message);
 
             await context.SaveChangesAsync(cancellationToken);

@@ -1,10 +1,10 @@
 ﻿
-using YourBrand.ApiKeys.Application.Common.Interfaces;
-using YourBrand.ApiKeys.Domain.Exceptions;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.ApiKeys.Application.Common.Interfaces;
+using YourBrand.ApiKeys.Domain.Exceptions;
 
 namespace YourBrand.ApiKeys.Application.Users.Commands;
 

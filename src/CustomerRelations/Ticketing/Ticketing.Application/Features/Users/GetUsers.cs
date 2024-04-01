@@ -1,5 +1,7 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Users;

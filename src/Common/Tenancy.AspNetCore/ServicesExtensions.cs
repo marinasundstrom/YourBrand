@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.Tenancy;
 
@@ -13,4 +11,3 @@ public static class ServicesExtensions
         return services;
     }
 }
-

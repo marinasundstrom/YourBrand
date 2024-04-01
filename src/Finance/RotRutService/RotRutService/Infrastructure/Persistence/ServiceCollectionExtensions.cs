@@ -1,7 +1,6 @@
-using YourBrand.RotRutService.Domain;
-using YourBrand.RotRutService.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.RotRutService.Infrastructure.Persistence;

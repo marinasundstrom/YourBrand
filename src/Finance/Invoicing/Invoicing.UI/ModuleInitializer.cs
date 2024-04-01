@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Portal;
-using YourBrand.Invoicing.Client;
-using YourBrand.Portal.Navigation;
-using YourBrand.Portal.Modules;
 using Microsoft.Extensions.Localization;
+
+using YourBrand.Invoicing.Client;
+using YourBrand.Portal;
+using YourBrand.Portal.Modules;
+using YourBrand.Portal.Navigation;
 
 namespace YourBrand.Invoicing;
 

@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
@@ -37,7 +36,7 @@ public record UpdateActivityTypeCommand(string ActivityId, string Name, string? 
             Organization organization = await _context.Organizations
                     .AsSplitQuery()
                     .FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
-               
+
             if (request.ProjectId is not null)
             {
                 project = await _context.Projects

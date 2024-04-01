@@ -1,6 +1,3 @@
-using YourBrand.Ticketing.Domain;
-using YourBrand.Ticketing.Domain.Events;
-
 namespace YourBrand.Ticketing.Domain.Entities;
 
 public class Address : Entity<string>, IAuditable

@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects;
-using YourBrand.TimeReport.Application.Users;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Users.Queries;
 

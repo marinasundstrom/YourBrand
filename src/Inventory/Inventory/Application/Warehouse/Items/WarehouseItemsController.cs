@@ -1,14 +1,11 @@
-using YourBrand.Inventory.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using YourBrand.Inventory.Application.Warehouses.Items.Queries;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Inventory.Application.Warehouses.Items;
+
 using YourBrand.Inventory.Application.Warehouses.Items.Commands;
-using YourBrand.Inventory.Application.Common.Models;
-using Asp.Versioning;
+using YourBrand.Inventory.Application.Warehouses.Items.Queries;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items;
 
@@ -98,4 +95,3 @@ public record ReceiveItemsDto(int Quantity);
 public record CreateWarehouseItemDto(string ItemId, string Location, int QuantityOnHand, int QuantityThreshold);
 
 public record UpdateWarehouseItemDto(string Location);
-

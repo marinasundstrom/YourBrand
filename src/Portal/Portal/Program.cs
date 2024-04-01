@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
+using System.Reflection;
 
-using YourBrand.Portal;
-using YourBrand.Portal.Theming;
 using Blazored.LocalStorage;
 
-using YourBrand.Portal.Navigation;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
+using YourBrand.Portal;
 using YourBrand.Portal.Modules;
-using System.Reflection;
-using Humanizer.Localisation;
-using Microsoft.Extensions.Localization;
-using YourBrand.TimeReport.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

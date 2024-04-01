@@ -1,8 +1,8 @@
-﻿using YourBrand.Marketing.Domain;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Addresses.Commands;
 

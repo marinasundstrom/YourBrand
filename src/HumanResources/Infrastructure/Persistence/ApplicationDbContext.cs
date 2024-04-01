@@ -1,13 +1,9 @@
-﻿
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Common;
-using YourBrand.HumanResources.Domain.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Entities;
 using YourBrand.HumanResources.Infrastructure.Persistence.Configurations;
 using YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;

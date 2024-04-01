@@ -1,10 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
-using MudBlazor;
-
 using YourBrand.Portal.AppBar;
-using YourBrand.Portal.Theming;
 
 namespace YourBrand.Portal.Notifications;
 

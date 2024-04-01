@@ -1,6 +1,4 @@
-using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Enums;
-using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Domain.Entities;
 

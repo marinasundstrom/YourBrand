@@ -1,8 +1,8 @@
-﻿using YourBrand.Accounting.Application.Common.Interfaces;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Journal.Queries;
 

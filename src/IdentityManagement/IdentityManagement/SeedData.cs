@@ -1,9 +1,12 @@
 ﻿using System.Security.Claims;
+
 using IdentityModel;
-using YourBrand.IdentityManagement.Domain.Entities;
+
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+
 using Serilog;
+
+using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 namespace YourBrand.IdentityManagement;
@@ -24,9 +27,9 @@ public static class SeedData
 
             context.SaveChanges();
 
-            var organization = new Organization("ACME Testville", null) 
-            { 
-                Tenant = tenant 
+            var organization = new Organization("ACME Testville", null)
+            {
+                Tenant = tenant
             };
 
             context.Organizations.Add(organization);
@@ -43,7 +46,7 @@ public static class SeedData
             {
                 alice = new User
                 {
-                    FirstName  = "Alice",
+                    FirstName = "Alice",
                     LastName = "Smith",
                     UserName = "alice",
                     Email = "AliceSmith@email.com",

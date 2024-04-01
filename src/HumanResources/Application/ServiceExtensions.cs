@@ -1,8 +1,4 @@
-﻿using System;
-
-using MediatR;
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.HumanResources.Application.Persons.Commands;

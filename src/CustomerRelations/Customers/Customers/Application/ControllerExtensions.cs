@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using YourBrand.Customers.Application;
+
 using YourBrand.Customers.Domain;
 
 namespace YourBrand.Customers.Application;

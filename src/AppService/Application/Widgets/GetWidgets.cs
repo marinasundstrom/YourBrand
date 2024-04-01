@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;

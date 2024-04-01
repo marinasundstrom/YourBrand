@@ -1,18 +1,11 @@
-
-using AspNetCore.Authentication.ApiKey;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.ApiKeys;
 using YourBrand.HumanResources.Application.Common.Models;
 using YourBrand.HumanResources.Application.Persons;
-using YourBrand.HumanResources.Application.Persons.Commands;
 using YourBrand.HumanResources.Application.Persons.Queries;
-using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources;
 

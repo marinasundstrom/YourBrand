@@ -1,14 +1,11 @@
-﻿using YourBrand.RotRutService.Domain;
-using YourBrand.RotRutService.Domain.Enums;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Accounting.Client;
-using YourBrand.Transactions.Client;
+using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Entities;
-using Unit = MediatR.Unit;
-using RotRut;
+using YourBrand.Transactions.Client;
 
 namespace YourBrand.RotRutService.Application.Commands;
 
@@ -18,7 +15,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
     {
         private readonly IRotRutContext _context;
         private readonly IJournalEntriesClient _verificationsClient;
-        private ITransactionsClient _transactionsClient;
+        private readonly ITransactionsClient _transactionsClient;
 
         public Handler(IRotRutContext context, IJournalEntriesClient verificationsClient, ITransactionsClient transactionsClient)
         {
@@ -29,15 +26,15 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
 
         public async Task Handle(ReadRotRutResponse request, CancellationToken cancellationToken)
         {
-            foreach(var beslut in request.BeslutJson.Beslut) 
+            foreach (var beslut in request.BeslutJson.Beslut)
             {
-                foreach(var arende in beslut.Arenden) 
+                foreach (var arende in beslut.Arenden)
                 {
                     var rotRutCase = await _context.RotRutCases
-                        .Where(x => x.Status ==  RotRutCaseStatus.RequestSent)
+                        .Where(x => x.Status == RotRutCaseStatus.RequestSent)
                         .FirstOrDefaultAsync(x => x.InvoiceNo == arende.Fakturanummer, cancellationToken);
 
-                    if(rotRutCase is null) 
+                    if (rotRutCase is null)
                     {
                         continue;
                     }
@@ -65,17 +62,17 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                         InvoiceNo = rotRutCase.InvoiceNo,
                         Entries = entries2
                     }, cancellationToken);
-                    
+
                     rotRutCase.ReceivedAmount = Convert.ToDecimal(arende.GodkantBelopp);
                     rotRutCase.Status = RotRutCaseStatus.RequestConfirmed;
 
-                    if (rotRutCase.RequestedAmount > rotRutCase.RequestedAmount) 
+                    if (rotRutCase.RequestedAmount > rotRutCase.RequestedAmount)
                     {
                         // Kräv pengat tillbaka!
                     }
                 }
             }
-            
+
             await _context.SaveChangesAsync();
 
 

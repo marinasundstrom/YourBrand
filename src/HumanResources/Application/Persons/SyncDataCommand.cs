@@ -31,7 +31,7 @@ public record SyncDataCommand() : IRequest
                 .AsSplitQuery()
                 .ToListAsync(cancellationToken);
 
-            foreach(var organization in organizations) 
+            foreach (var organization in organizations)
             {
                 await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _currentUserService.UserId));
             }
@@ -42,7 +42,7 @@ public record SyncDataCommand() : IRequest
                 .AsSplitQuery()
                 .ToListAsync(cancellationToken);
 
-            foreach(var user in users) 
+            foreach (var user in users)
             {
                 await _eventPublisher.PublishEvent(new PersonCreated(user.Id, _currentUserService.UserId));
             }

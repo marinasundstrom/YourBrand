@@ -1,8 +1,10 @@
 ﻿using MediatR;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Quartz;
-using YourBrand.Ticketing.Application.Common;
+
 using YourBrand.Ticketing.Infrastructure.BackgroundJobs;
 using YourBrand.Ticketing.Infrastructure.Idempotence;
 using YourBrand.Ticketing.Infrastructure.Persistence;

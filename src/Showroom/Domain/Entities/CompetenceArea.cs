@@ -5,7 +5,7 @@ namespace YourBrand.Showroom.Domain.Entities;
 public class CompetenceArea : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; } = null!;
-    public string Name { get; set; }  = null!;
+    public string Name { get; set; } = null!;
 
     public CompetenceArea? Parent { get; set; }
 

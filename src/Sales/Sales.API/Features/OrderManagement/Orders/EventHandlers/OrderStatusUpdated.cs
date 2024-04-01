@@ -1,21 +1,14 @@
-using MediatR;
-
-using YourBrand.Sales.Domain.Events;
-using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.Features.OrderManagement.Repositories;
-
-using YourBrand.Sales;
-using YourBrand.Sales.Services;
 using YourBrand.Domain;
-using YourBrand.Sales.Domain.Entities;
 using YourBrand.Notifications.Client;
-using YourBrand.Sales.Services;
+using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.Events;
+using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
-public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository, 
-    ICurrentUserService currentUserService, 
-    IEmailService emailService, 
+public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository,
+    ICurrentUserService currentUserService,
+    IEmailService emailService,
     IOrderNotificationService orderNotificationService,
     INotificationsClient notificationsClient,
     ILogger<OrderStatusUpdatedEventHandler> logger) : IDomainEventHandler<OrderStatusUpdated>
@@ -35,7 +28,7 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
 
         await orderNotificationService.StatusUpdated(order.OrderNo, order.Status.ToDto());
 
-        if(order.StatusId == 2) 
+        if (order.StatusId == 2)
         {
             await PostNotification(order);
         }

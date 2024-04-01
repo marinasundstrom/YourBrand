@@ -1,11 +1,14 @@
+using MediatR;
+
+using Quartz;
+
+using Scrutor;
+
 using YourBrand.Inventory.Application.Common.Interfaces;
+using YourBrand.Inventory.Infrastructure.BackgroundJobs;
+using YourBrand.Inventory.Infrastructure.Idempotence;
 using YourBrand.Inventory.Infrastructure.Persistence;
 using YourBrand.Inventory.Infrastructure.Services;
-using Quartz;
-using YourBrand.Inventory.Infrastructure.BackgroundJobs;
-using MediatR;
-using YourBrand.Inventory.Infrastructure.Idempotence;
-using Scrutor;
 
 namespace YourBrand.Inventory.Infrastructure;
 
@@ -23,7 +26,7 @@ public static class ServiceCollectionExtensions
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }
@@ -44,7 +47,7 @@ public static class ServiceCollectionExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }

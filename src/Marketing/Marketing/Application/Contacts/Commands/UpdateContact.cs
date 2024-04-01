@@ -1,9 +1,9 @@
 ﻿
-using YourBrand.Marketing.Domain;
+using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
-using MediatR;
-using YourBrand.Marketing.Application.Contacts;
+using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Contacts.Commands;
 

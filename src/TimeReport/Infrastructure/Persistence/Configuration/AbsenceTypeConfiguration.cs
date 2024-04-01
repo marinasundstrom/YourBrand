@@ -11,7 +11,7 @@ public class AbsenceTypeConfiguration : IEntityTypeConfiguration<AbsenceType>
     public void Configure(EntityTypeBuilder<AbsenceType> builder)
     {
         builder.ToTable("AbsenceTypes");
-        
+
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasOne(x => x.CreatedBy)

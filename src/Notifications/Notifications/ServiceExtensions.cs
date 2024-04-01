@@ -1,9 +1,5 @@
-﻿using System;
-
-using YourBrand.Identity;
-using YourBrand.Notifications.Application;
+﻿using YourBrand.Identity;
 using YourBrand.Notifications.Application.Common.Interfaces;
-using YourBrand.Notifications.Infrastructure;
 using YourBrand.Notifications.Services;
 
 namespace YourBrand.Notifications;

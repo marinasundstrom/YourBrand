@@ -1,34 +1,25 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
-using Azure.Identity;
+﻿using Azure.Identity;
 using Azure.Storage.Blobs;
-
-using YourBrand.Showroom.Application;
-using YourBrand.Showroom.Infrastructure;
-using YourBrand.Showroom.Infrastructure.Persistence;
-using YourBrand.Showroom.WebApi;
 
 using MassTransit;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
-
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using YourBrand.ApiKeys;
 
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Showroom;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.ApiKeys;
+using YourBrand.Extensions;
+using YourBrand.Showroom;
+using YourBrand.Showroom.Application;
+using YourBrand.Showroom.Infrastructure;
+using YourBrand.Showroom.Infrastructure.Persistence;
+using YourBrand.Showroom.WebApi;
 
 
 var builder = WebApplication.CreateBuilder(args);

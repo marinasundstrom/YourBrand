@@ -1,30 +1,19 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using MassTransit;
 
-using Azure.Identity;
-
-using YourBrand.HumanResources.Application;
-using YourBrand.HumanResources.Infrastructure;
-using YourBrand.HumanResources.Infrastructure.Persistence;
-
-using MassTransit;
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
-
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using YourBrand.HumanResources.Consumers;
-using YourBrand.HumanResources;
 
 using Serilog;
 
+using Steeltoe.Discovery.Client;
+
 using YourBrand;
 using YourBrand.Extensions;
-using Steeltoe.Discovery.Client;
+using YourBrand.HumanResources;
+using YourBrand.HumanResources.Application;
+using YourBrand.HumanResources.Consumers;
+using YourBrand.HumanResources.Infrastructure;
+using YourBrand.HumanResources.Infrastructure.Persistence;
 
 string MyAllowSpecificOrigins = "MyPolicy";
 

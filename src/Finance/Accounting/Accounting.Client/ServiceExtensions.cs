@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Accounting.Client;
-
 namespace YourBrand.Accounting.Client;
 
 public static class ServiceExtensions

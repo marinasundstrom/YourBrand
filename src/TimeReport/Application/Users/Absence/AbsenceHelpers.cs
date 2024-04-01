@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.TimeReport.Application.Users.Absence;
+﻿namespace YourBrand.TimeReport.Application.Users.Absence;
 
 public static class AbsenceHelpers
 {

@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
 
 using Polly;
@@ -70,4 +70,3 @@ public sealed class ProcessOutboxMessagesJob : IJob
         await dbContext.SaveChangesAsync(context.CancellationToken);
     }
 }
-

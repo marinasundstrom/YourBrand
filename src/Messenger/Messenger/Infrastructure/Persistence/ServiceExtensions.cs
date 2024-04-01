@@ -1,16 +1,15 @@
 ﻿
+using MediatR;
+
+using Scrutor;
+
 using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Infrastructure.Persistence;
-using YourBrand.Messenger.Infrastructure.Persistence.Interceptors;
-using YourBrand.Messenger.Infrastructure.Services;
-using Quartz;
-using YourBrand.Messenger.Infrastructure.BackgroundJobs;
 using YourBrand.Messenger.Domain;
 using YourBrand.Messenger.Domain.Repositories;
-using YourBrand.Messenger.Infrastructure.Persistence.Repositories;
 using YourBrand.Messenger.Infrastructure.Idempotence;
-using MediatR;
-using Scrutor;
+using YourBrand.Messenger.Infrastructure.Persistence.Interceptors;
+using YourBrand.Messenger.Infrastructure.Persistence.Repositories;
+using YourBrand.Messenger.Infrastructure.Services;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence;
 
@@ -33,11 +32,11 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }

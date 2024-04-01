@@ -1,6 +1,6 @@
-﻿using YourBrand.RotRutService.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.RotRutService.Domain.Entities;
 
 namespace YourBrand.RotRutService.Domain;
 

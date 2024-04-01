@@ -45,4 +45,3 @@ public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHan
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
-

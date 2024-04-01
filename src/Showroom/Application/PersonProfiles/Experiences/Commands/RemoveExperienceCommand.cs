@@ -1,14 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Domain.Entities;
-using YourBrand.Showroom.Domain.Exceptions;
 using YourBrand.Showroom.Events.Enums;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;

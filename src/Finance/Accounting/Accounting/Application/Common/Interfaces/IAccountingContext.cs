@@ -1,7 +1,6 @@
-﻿using YourBrand.Accounting.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Application.Common.Interfaces;
 

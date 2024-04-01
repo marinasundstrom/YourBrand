@@ -7,8 +7,8 @@ using YourBrand.ApiKeys;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.Projects.ProjectGroups;
-using YourBrand.TimeReport.Application.Projects.ProjectGroups.Queries;
 using YourBrand.TimeReport.Application.Projects.ProjectGroups.Commands;
+using YourBrand.TimeReport.Application.Projects.ProjectGroups.Queries;
 
 namespace YourBrand.TimeReport.Controllers;
 

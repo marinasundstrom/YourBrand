@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace YourBrand.IdentityManagement.Contracts;
 
-namespace YourBrand.IdentityManagement.Contracts;
-
-public record CreateTenant 
+public record CreateTenant
 {
-    public string Name{ get; init; }
+    public string Name { get; init; }
     public string? FriendlyName { get; init; }
 }
 

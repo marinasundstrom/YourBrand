@@ -1,17 +1,18 @@
-﻿using System;
-
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.Infrastructure.Persistence;
-using YourBrand.Infrastructure.Services;
+﻿using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using YourBrand.Infrastructure.Persistence.Interceptors;
+
 using Quartz;
-using YourBrand.Infrastructure.BackgroundJobs;
-using MediatR;
-using YourBrand.Infrastructure.Idempotence;
+
 using Scrutor;
+
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Infrastructure.BackgroundJobs;
+using YourBrand.Infrastructure.Idempotence;
+using YourBrand.Infrastructure.Persistence;
+using YourBrand.Infrastructure.Persistence.Interceptors;
+using YourBrand.Infrastructure.Services;
 
 namespace YourBrand.Infrastructure;
 

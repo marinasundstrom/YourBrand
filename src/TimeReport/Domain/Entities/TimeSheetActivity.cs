@@ -26,7 +26,7 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete
 
     }
 
-    public string Id { get; private set; } = null!; 
+    public string Id { get; private set; } = null!;
 
     public TimeSheet TimeSheet { get; private set; } = null!;
 

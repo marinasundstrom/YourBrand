@@ -2,8 +2,8 @@
 
 using MediatR;
 
-using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Identity;
+using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.IdentityManagement.Consumers;
 

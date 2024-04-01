@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.HumanResources.Application.Common.Interfaces;
+﻿using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Services;
 using YourBrand.Identity;
 

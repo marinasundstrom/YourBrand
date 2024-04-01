@@ -1,8 +1,3 @@
-using System.Net;
-using System.Net.Http.Headers;
-
-using Azure.Core;
-
 namespace YourBrand.Authentication;
 
 public interface ITokenProvider

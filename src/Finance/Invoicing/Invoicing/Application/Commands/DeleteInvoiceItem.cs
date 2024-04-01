@@ -1,11 +1,9 @@
 
-using YourBrand.Invoicing.Application;
-using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Domain.Enums;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
@@ -26,7 +24,7 @@ public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IReque
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            if(invoice is null) 
+            if (invoice is null)
             {
                 throw new Exception("Not found");
             }
@@ -34,7 +32,7 @@ public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IReque
             var item = invoice.Items.First(i => i.Id == request.InvoiceItemId);
 
             invoice.DeleteItem(item);
-            
+
             await _context.SaveChangesAsync(cancellationToken);
 
         }

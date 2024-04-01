@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Persistence;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 

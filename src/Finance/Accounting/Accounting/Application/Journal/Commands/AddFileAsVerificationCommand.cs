@@ -1,9 +1,9 @@
-﻿using YourBrand.Accounting.Application.Common.Interfaces;
-using YourBrand.Accounting.Domain.Entities;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
+using YourBrand.Accounting.Domain.Entities;
 
 using static YourBrand.Accounting.Application.Shared;
 

@@ -1,7 +1,7 @@
-﻿using YourBrand.RotRutService.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.RotRutService.Domain.Entities;
 
 namespace YourBrand.RotRutService.Infrastructure.Persistence.Configurations;
 

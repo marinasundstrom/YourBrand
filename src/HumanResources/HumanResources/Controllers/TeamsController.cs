@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.HumanResources.Application.Common.Models;
 using YourBrand.HumanResources.Application.Teams;
-using YourBrand.HumanResources.Application.Teams.Queries;
 using YourBrand.HumanResources.Application.Teams.Commands;
+using YourBrand.HumanResources.Application.Teams.Queries;
 using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources;
@@ -84,7 +84,7 @@ public class TeamsController : Controller
             return NotFound();
         }
     }
-   
+
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteTeam(string id, CancellationToken cancellationToken)

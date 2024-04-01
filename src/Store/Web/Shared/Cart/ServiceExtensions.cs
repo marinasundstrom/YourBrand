@@ -1,5 +1,3 @@
-using BlazorApp.Cart;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlazorApp.Cart;

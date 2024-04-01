@@ -2,9 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.ApiKeys.Client;
 
-public static class ServiceExtensions 
+public static class ServiceExtensions
 {
-    public static IServiceCollection AddApiKeyClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null) 
+    public static IServiceCollection AddApiKeyClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
             .AddHttpClient(nameof(IApiKeysClient), configureClient)

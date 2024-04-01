@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MediatR;
+
+using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Documents.Application;
 using YourBrand.Documents.Application.Commands;
-using YourBrand.Documents.Contracts;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-using YourBrand.Documents.Application.Queries;
 using YourBrand.Documents.Application.Common.Models;
+using YourBrand.Documents.Application.Queries;
+using YourBrand.Documents.Contracts;
 
 namespace YourBrand.Documents.Controllers;
 

@@ -6,10 +6,16 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.Json;
 
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Payments;
 using YourBrand.Payments.Application;
 using YourBrand.Payments.Application.Commands;
-using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Application.Queries;
 using YourBrand.Payments.Application.Services;
 using YourBrand.Payments.Domain.Enums;
@@ -17,14 +23,6 @@ using YourBrand.Payments.Hubs;
 using YourBrand.Payments.Infrastructure;
 using YourBrand.Payments.Infrastructure.Persistence;
 using YourBrand.Transactions.Client;
-
-using Serilog;
-
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Payments;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -164,7 +162,7 @@ app.MapHub<PaymentsHub>("/hubs/payments");
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

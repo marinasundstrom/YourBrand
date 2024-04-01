@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.HumanResources.Client;
+﻿using YourBrand.HumanResources.Client;
 
 namespace YourBrand.HumanResources;
 

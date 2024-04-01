@@ -24,12 +24,12 @@ public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Statu
 
         public async Task<ItemsResult<TransactionDto>> Handle(GetTransactions request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
@@ -45,7 +45,7 @@ public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Statu
                 var statuses = request.Status.Select(x => (int)x);
                 query = query.Where(i => statuses.Any(s => s == (int)i.Status));
             }
-            
+
             int totalItems = await query.CountAsync(cancellationToken);
 
             query = query

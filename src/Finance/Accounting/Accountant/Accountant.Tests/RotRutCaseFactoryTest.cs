@@ -1,8 +1,7 @@
-﻿using YourBrand.Accountant.Domain;
+﻿using Shouldly;
 
+using YourBrand.Accountant.Domain;
 using YourBrand.Invoicing.Client;
-
-using Shouldly;
 
 namespace Accountant.Tests;
 

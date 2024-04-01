@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-using Core;
-
 using YourBrand.Catalog;
 
 namespace YourBrand.Sales.Subscriptions;
 
-public class SubscriptionViewModel 
+public class SubscriptionViewModel
 {
     [Required]
     public Product Product { get; set; }

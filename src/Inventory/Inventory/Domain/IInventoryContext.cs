@@ -1,6 +1,6 @@
-﻿using YourBrand.Inventory.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Domain;
 

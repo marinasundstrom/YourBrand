@@ -1,12 +1,9 @@
-using YourBrand.Transactions.Application.Common.Models;
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain;
 using YourBrand.Transactions.Domain.Events;
-
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Transactions.Hubs;
-using YourBrand.Transactions.Application.Common.Interfaces;
 
 namespace YourBrand.Transactions.Application.Events;
 
@@ -27,7 +24,7 @@ public class TransactionStatusChangedHandler : IDomainEventHandler<TransactionSt
             .Transactions
             .FirstOrDefaultAsync(i => i.Id == notification.TransactionId);
 
-        if(transaction is not null) 
+        if (transaction is not null)
         {
             await _transactionsHubClient.TransactionStatusUpdated(transaction.Id, transaction.Status);
         }

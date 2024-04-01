@@ -1,8 +1,6 @@
-﻿using YourBrand.Accounting.Domain.Entities;
-using YourBrand.Accounting.Domain.Enums;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
 
@@ -55,7 +53,7 @@ public static class Seed
     private static void DoSeedVerifications(AccountingContext context)
     {
         InsertMoney(context);
-        
+
         YouSendAnInvoiceToCustomer(context);
         TheCustomerPaysTheInvoice(context);
         YouReceiveAInvoice(context);
@@ -69,11 +67,11 @@ public static class Seed
     private static void InsertMoney(AccountingContext context)
     {
         var verification = new JournalEntry(
-            DateTime.Now.Subtract(TimeSpan.FromDays(19)), 
+            DateTime.Now.Subtract(TimeSpan.FromDays(19)),
             "Du sätter in egna pengar på företagskontot");
 
         context.JournalEntries.Add(verification);
-        
+
         verification.AddEntries(new[] {
              new LedgerEntry
              {

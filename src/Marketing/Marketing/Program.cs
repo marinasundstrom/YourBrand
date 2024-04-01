@@ -2,33 +2,19 @@
 
 using MassTransit;
 
-using MediatR;
-
-using YourBrand.Marketing.Application;
-using YourBrand.Marketing.Application.Addresses;
-using YourBrand.Marketing.Application.Addresses.Commands;
-using YourBrand.Marketing.Application.Addresses.Queries;
-using YourBrand.Marketing.Application.Common.Interfaces;
-using YourBrand.Marketing.Application.Contacts.Commands;
-using YourBrand.Marketing.Application.Contacts.Queries;
-using YourBrand.Marketing.Infrastructure;
-using YourBrand.Marketing.Infrastructure.Persistence;
-using YourBrand.Marketing.Application.Contacts;
-using YourBrand.Documents.Client;
-using YourBrand.Payments.Client;
-using YourBrand.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Marketing;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Documents.Client;
+using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Marketing;
+using YourBrand.Marketing.Application;
+using YourBrand.Marketing.Infrastructure;
+using YourBrand.Marketing.Infrastructure.Persistence;
+using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

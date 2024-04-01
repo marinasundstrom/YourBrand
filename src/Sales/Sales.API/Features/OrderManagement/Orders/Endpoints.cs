@@ -7,8 +7,8 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Orders.Items;
 using YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 using YourBrand.Sales.Features.OrderManagement.Orders.Queries;
-using YourBrand.Sales.Models;
 using YourBrand.Sales.Features.Subscriptions;
+using YourBrand.Sales.Models;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders;
 

@@ -11,8 +11,8 @@ namespace YourBrand.TimeReport.Domain.Tests;
 
 public class TimeSheetTest
 {
-    private Activity _activity = null!;
-    private User _user = null!;
+    private readonly Activity _activity = null!;
+    private readonly User _user = null!;
 
     public TimeSheetTest()
     {
@@ -63,7 +63,8 @@ public class TimeSheetTest
         var date = ISOWeek.ToDateTime(year + 1, week + 2, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
 
-        Assert.Throws<InvalidOperationException>(() => {
+        Assert.Throws<InvalidOperationException>(() =>
+        {
             var entry = timeSheetActivity.AddEntry(dateOnly, 7, null);
         });
     }
@@ -106,7 +107,8 @@ public class TimeSheetTest
 
         var entry = timeSheetActivity.AddEntry(dateOnly, 7, null);
 
-        Assert.Throws<InvalidOperationException>(() => {
+        Assert.Throws<InvalidOperationException>(() =>
+        {
             var entry2 = timeSheetActivity.AddEntry(dateOnly, 2, null);
         });
     }

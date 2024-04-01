@@ -13,7 +13,7 @@ public class Transaction : Entity
 
     public Transaction(string? id, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
     {
-        if(amount <= 0) 
+        if (amount <= 0)
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }
@@ -37,7 +37,7 @@ public class Transaction : Entity
 
     public void UpdateReference(string reference)
     {
-        if(Reference != reference) 
+        if (Reference != reference)
         {
             Reference = reference;
             AddDomainEvent(new TransactionReferenceUpdated(Id, reference));
@@ -54,7 +54,7 @@ public class Transaction : Entity
 
     public void SetStatus(TransactionStatus status)
     {
-        if(Status != status) 
+        if (Status != status)
         {
             Status = status;
             AddDomainEvent(new TransactionStatusChanged(Id, status));

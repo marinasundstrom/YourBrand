@@ -1,12 +1,9 @@
 ﻿
-using YourBrand.ApiKeys.Application;
-using YourBrand.ApiKeys.Application.Commands;
-using YourBrand.ApiKeys.Application.Common.Models;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using YourBrand.ApiKeys.Application.Commands;
 
 namespace YourBrand.ApiKeys.WebApi.Controllers;
 
@@ -27,7 +24,7 @@ public class ApiKeysController : Controller
     public async Task<ActionResult<ApiKeyResult>> CheckApiKey(CheckApiKeyRequest request, [FromHeader(Name = "X-Secret")] string secret, CancellationToken cancellationToken = default)
     {
         string origin = Request.Headers["origin"];
-        return Ok(await _mediator.Send(new CheckApiKeyCommand(request.ApiKey, origin, secret,  request.RequestedResources), cancellationToken));
+        return Ok(await _mediator.Send(new CheckApiKeyCommand(request.ApiKey, origin, secret, request.RequestedResources), cancellationToken));
     }
 }
 

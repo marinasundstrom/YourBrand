@@ -1,12 +1,7 @@
 
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.Application.Common.Models;
-using YourBrand.Domain;
-using YourBrand.Identity;
-
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Identity;
 
 namespace YourBrand.Application.Notifications.Queries;
 

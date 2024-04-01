@@ -1,5 +1,4 @@
 ﻿using YourBrand.Accounting.Domain.Common;
-using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Domain.Events;
 

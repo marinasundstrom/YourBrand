@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.IdentityManagement;
+﻿namespace YourBrand.IdentityManagement;
 
 public static class Roles
 {

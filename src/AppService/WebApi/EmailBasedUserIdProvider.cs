@@ -1,7 +1,5 @@
 using System.Security.Claims;
 
-using YourBrand.WebApi;
-
 using Microsoft.AspNetCore.SignalR;
 
 public class EmailBasedUserIdProvider : IUserIdProvider

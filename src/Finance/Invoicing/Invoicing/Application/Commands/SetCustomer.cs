@@ -2,12 +2,9 @@ using FluentValidation;
 
 using MediatR;
 
-
-using YourBrand.Invoicing.Contracts;
-using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Domain.Enums;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
@@ -28,7 +25,7 @@ public sealed record SetCustomer(string Id, string CustomerId, string Name) : IR
             var invoice = await context.Invoices
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if(invoice is null)
+            if (invoice is null)
             {
                 throw new Exception();
             }

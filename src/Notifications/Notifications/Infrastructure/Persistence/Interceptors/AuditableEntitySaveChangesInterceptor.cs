@@ -1,13 +1,10 @@
-﻿using System;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-using YourBrand.Notifications.Domain.Common;
-
-using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Identity;
+using YourBrand.Notifications.Application.Common.Interfaces;
+using YourBrand.Notifications.Domain.Common;
 
 namespace YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 

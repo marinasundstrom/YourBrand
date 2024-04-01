@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+
 using YourBrand.Ticketing.Application;
 using YourBrand.Ticketing.Consumers;
 using YourBrand.Ticketing.Infrastructure;

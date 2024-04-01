@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Teams
 .Queries;
@@ -44,7 +36,7 @@ public record GetTeamMembershipsQuery(string Id, int Page = 0, int PageSize = 10
 
             if (request.SearchString is not null)
             {
-                result = result.Where(o => 
+                result = result.Where(o =>
                     o.User.FirstName.ToLower().Contains(request.SearchString.ToLower()) ||
                     o.User.LastName.ToLower().Contains(request.SearchString.ToLower()));
             }

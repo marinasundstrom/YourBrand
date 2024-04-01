@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Dates.Recurring;
+﻿using Dates.Recurring;
 using Dates.Recurring.Builders;
 using Dates.Recurring.Type;
 

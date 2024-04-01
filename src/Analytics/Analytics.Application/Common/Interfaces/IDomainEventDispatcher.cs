@@ -1,6 +1,4 @@
-﻿using YourBrand.Analytics.Domain;
-
-namespace YourBrand.Analytics.Application.Common.Interfaces;
+﻿namespace YourBrand.Analytics.Application.Common.Interfaces;
 
 public interface IDomainEventDispatcher
 {

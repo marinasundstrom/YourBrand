@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Messenger.Client;
+﻿using YourBrand.Messenger.Client;
 
 namespace YourBrand.Messenger;
 

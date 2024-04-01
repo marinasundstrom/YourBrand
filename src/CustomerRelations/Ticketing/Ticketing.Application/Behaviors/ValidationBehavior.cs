@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using ValidationException = YourBrand.Ticketing.Application.Exceptions.ValidationException;
 
 namespace YourBrand.Ticketing.Application.Behaviors;

@@ -1,8 +1,8 @@
 ﻿
-using YourBrand.ApiKeys.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.ApiKeys.Domain.Entities;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Configurations;
 

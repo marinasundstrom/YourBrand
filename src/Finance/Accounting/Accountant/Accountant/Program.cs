@@ -1,27 +1,23 @@
-﻿using Microsoft.Data.SqlClient;
-
-using YourBrand.Accountant;
-using YourBrand.Accountant.Consumers;
-using YourBrand.Accountant.Services;
-
-using YourBrand.Accounting.Client;
-
-using YourBrand.Documents.Client;
-
-using Hangfire;
+﻿using Hangfire;
 using Hangfire.SqlServer;
 
-using YourBrand.Invoicing.Client;
-
 using MassTransit;
-using YourBrand.Payments.Client;
-using YourBrand.Accountant.Domain;
+
+using Microsoft.Data.SqlClient;
 
 using Serilog;
 
 using YourBrand;
-using YourBrand.Extensions;
+using YourBrand.Accountant;
+using YourBrand.Accountant.Consumers;
+using YourBrand.Accountant.Domain;
+using YourBrand.Accountant.Services;
+using YourBrand.Accounting.Client;
 using YourBrand.Authentication;
+using YourBrand.Documents.Client;
+using YourBrand.Extensions;
+using YourBrand.Invoicing.Client;
+using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

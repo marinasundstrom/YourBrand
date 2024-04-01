@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.IdentityManagement.Client;
+﻿using YourBrand.IdentityManagement.Client;
 
 namespace YourBrand.IdentityManagement;
 

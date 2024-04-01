@@ -1,13 +1,12 @@
-using YourBrand.Showroom.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+
+using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.Common.Interfaces;
 
 public interface IShowroomContext
 {
-    DbSet<Company> Companies { get; } 
+    DbSet<Company> Companies { get; }
 
     DbSet<PersonProfile> PersonProfiles { get; }
 
@@ -36,7 +35,7 @@ public interface IShowroomContext
     DbSet<PersonProfileEducation> PersonProfileEducation { get; }
 
     DbSet<PersonProfileLanguage> PersonProfileLanguages { get; }
-    
+
     DbSet<PersonProfileIndustryExperiences> PersonProfileIndustryExperiences { get; }
 
     DbSet<Language> Languages { get; }

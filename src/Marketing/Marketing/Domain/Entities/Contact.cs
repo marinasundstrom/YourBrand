@@ -1,15 +1,10 @@
-﻿using System;
-
-using YourBrand.Marketing.Domain.Entities;
-using YourBrand.Marketing.Domain.Enums;
-using YourBrand.Marketing.Domain.Events;
-using YourBrand.Marketing.Domain.ValueObjects;
+﻿using YourBrand.Marketing.Domain.Enums;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
 public class Contact : Entity<string>, IAuditable
 {
-    private HashSet<Discount> discounts = new HashSet<Discount>();
+    private readonly HashSet<Discount> discounts = new HashSet<Discount>();
 
 #nullable disable
 

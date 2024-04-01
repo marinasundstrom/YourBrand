@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Skills.Commands;
@@ -24,7 +25,7 @@ public record RemoveSkillCommand(string Id) : IRequest
             if (skill is null) throw new Exception();
 
             context.PersonProfileSkills.Remove(skill);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

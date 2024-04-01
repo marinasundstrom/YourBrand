@@ -1,15 +1,13 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-
-using YourBrand.Application.Notifications;
-using YourBrand.Application.Notifications.Commands;
-using YourBrand.Application.Notifications.Queries;
+﻿using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Asp.Versioning;
+
+using YourBrand.Application.Notifications;
+using YourBrand.Application.Notifications.Commands;
+using YourBrand.Application.Notifications.Queries;
 
 namespace YourBrand.WebApi.Controllers;
 
@@ -54,11 +52,11 @@ public class NotificationsController : Controller
     public async Task<ActionResult> CreateNotification(CreateNotificationDto createNotificationDto, CancellationToken cancellationToken)
     {
         await _mediator.Send(new CreateNotificationCommand(
-            createNotificationDto.Title, 
-            createNotificationDto.Text, 
-            createNotificationDto.Link, 
-            createNotificationDto.UserId, 
-            createNotificationDto.ScheduledFor), 
+            createNotificationDto.Title,
+            createNotificationDto.Text,
+            createNotificationDto.Link,
+            createNotificationDto.UserId,
+            createNotificationDto.ScheduledFor),
             cancellationToken);
 
         return Ok();

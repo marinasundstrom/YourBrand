@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using YourBrand.Analytics;
 using YourBrand.StoreFront.API;
 

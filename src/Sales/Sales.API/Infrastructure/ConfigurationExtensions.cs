@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-using YourBrand.Sales.Infrastructure;
+﻿using YourBrand.Sales.Infrastructure;
 
 namespace YourBrand.Sales.Infrastructure;
 

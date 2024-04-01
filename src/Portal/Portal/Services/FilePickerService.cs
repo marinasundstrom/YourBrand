@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.Portal.Services;
+﻿namespace YourBrand.Portal.Services;
 
 public class FilePickerService : IFilePickerService
 {

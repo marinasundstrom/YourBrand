@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace YourBrand.IdentityManagement.Contracts;
 
-namespace YourBrand.IdentityManagement.Contracts;
-
-public record CreateOrganization 
+public record CreateOrganization
 {
-    public string Name{ get; init; }
+    public string Name { get; init; }
     public string? FriendlyName { get; init; }
 }
 
@@ -27,4 +25,3 @@ public record OrganizationUserAdded(string TenantId, string OrganizationId, stri
 public record RemoveOrganizationUser(string OrganizationId, string UserId);
 
 public record OrganizationUserRemoved(string OrganizationId, string UserId);
-

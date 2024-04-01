@@ -1,8 +1,8 @@
-using YourBrand.Documents.Application;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+
+using YourBrand.Documents.Application;
 using YourBrand.Documents.Application.Queries;
 
 namespace YourBrand.Documents.Controllers;

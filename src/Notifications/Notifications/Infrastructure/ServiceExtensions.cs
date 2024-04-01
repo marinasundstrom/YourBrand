@@ -1,12 +1,15 @@
-﻿using YourBrand.Notifications.Application.Common.Interfaces;
+﻿using MediatR;
+
+using Quartz;
+
+using Scrutor;
+
+using YourBrand.Notifications.Application.Common.Interfaces;
+using YourBrand.Notifications.Infrastructure.BackgroundJobs;
+using YourBrand.Notifications.Infrastructure.Idempotence;
 using YourBrand.Notifications.Infrastructure.Persistence;
 using YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 using YourBrand.Notifications.Infrastructure.Services;
-using Quartz;
-using YourBrand.Notifications.Infrastructure.BackgroundJobs;
-using MediatR;
-using YourBrand.Notifications.Infrastructure.Idempotence;
-using Scrutor;
 
 namespace YourBrand.Notifications.Infrastructure;
 
@@ -30,7 +33,7 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }
@@ -52,7 +55,7 @@ public static class ServiceExtensions
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }

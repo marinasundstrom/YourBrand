@@ -1,7 +1,8 @@
 using FluentValidation;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Tickets.Commands;
 

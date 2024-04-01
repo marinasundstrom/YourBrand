@@ -1,10 +1,7 @@
-﻿using YourBrand.Inventory.Application.Common.Interfaces;
-using YourBrand.Inventory.Application.Common.Models;
+﻿using MediatR;
+
+using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Domain.Common;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Inventory.Infrastructure.Services;
 

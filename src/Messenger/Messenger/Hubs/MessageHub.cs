@@ -1,14 +1,14 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Contracts;
-
 using MassTransit;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+
 using YourBrand.Identity;
+using YourBrand.Messenger.Application.Common.Interfaces;
+using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Hubs;
 
@@ -51,7 +51,7 @@ public class MessageHub : Hub<IMessageClient>
         });
     }
 
-    public async Task SendMessage(string conversationId, string text, string? replyToId) 
+    public async Task SendMessage(string conversationId, string text, string? replyToId)
     {
         _currentUserService.SetCurrentUser(this.Context.User!);
 
@@ -65,14 +65,14 @@ public class MessageHub : Hub<IMessageClient>
         await _bus.Publish(new MarkMessageAsRead(_currentUserService.GetAccessToken()!, conversationId, id));
     }
 
-    public async Task EditMessage(string conversationId, string id, string text) 
+    public async Task EditMessage(string conversationId, string id, string text)
     {
         _currentUserService.SetCurrentUser(this.Context.User!);
 
         await _bus.Publish(new UpdateMessage(_currentUserService.GetAccessToken()!, conversationId, id, text));
     }
 
-    public async Task DeleteMessage(string conversationId, string id) 
+    public async Task DeleteMessage(string conversationId, string id)
     {
         _currentUserService.SetCurrentUser(this.Context.User!);
 

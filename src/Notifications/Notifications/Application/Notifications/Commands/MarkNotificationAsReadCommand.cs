@@ -1,13 +1,8 @@
-
-using System.Data.Common;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
-using YourBrand.Notifications.Domain.Entities;
-using YourBrand.Notifications.Domain.Events;
 
 namespace YourBrand.Notifications.Application.Notifications.Commands;
 

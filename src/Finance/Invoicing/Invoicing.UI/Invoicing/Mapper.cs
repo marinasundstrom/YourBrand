@@ -1,8 +1,4 @@
-﻿using Microsoft.VisualBasic;
-
-using YourBrand.Invoicing.Client;
-
-using static YourBrand.Invoicing.Invoicing.InvoiceItemViewModel;
+﻿using YourBrand.Invoicing.Client;
 
 namespace YourBrand.Invoicing.Invoicing;
 
@@ -46,7 +42,7 @@ public static class Mapper
             RegularPrice = dto.UnitPrice + dto.Discount,
             VatRate = dto.VatRate.GetValueOrDefault(),
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
-            DomesticService = dto.DomesticService is null ? 
+            DomesticService = dto.DomesticService is null ?
              new InvoiceItemDomesticServiceViewModel()
              : dto.DomesticService.ToModel()
         };
@@ -87,7 +83,7 @@ public static class Mapper
             Discount = vm.Discount,
             VatRate = vm.VatRate,
             IsTaxDeductibleService = vm.IsTaxDeductibleService,
-            DomesticService = !vm.IsTaxDeductibleService? null
+            DomesticService = !vm.IsTaxDeductibleService ? null
              : vm.DomesticService?.To()
         };
     }
@@ -124,14 +120,14 @@ public static class Mapper
             Discount = dto.Discount,
             VatRate = dto.VatRate,
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
-             /*DomesticService = dto.DomesticService is null ? null
-             : new InvoiceItemDomesticService()
-             {
-                 Kind = (DomesticServiceKind)dto.DomesticService.Kind,
-                 HomeRepairAndMaintenanceServiceType = dto.DomesticService.HomeRepairAndMaintenanceServiceType,
-                 HouseholdServiceType = dto.DomesticService.HouseholdServiceType
-             }
-           */
+            /*DomesticService = dto.DomesticService is null ? null
+            : new InvoiceItemDomesticService()
+            {
+                Kind = (DomesticServiceKind)dto.DomesticService.Kind,
+                HomeRepairAndMaintenanceServiceType = dto.DomesticService.HomeRepairAndMaintenanceServiceType,
+                HouseholdServiceType = dto.DomesticService.HouseholdServiceType
+            }
+          */
         };
     }
 }

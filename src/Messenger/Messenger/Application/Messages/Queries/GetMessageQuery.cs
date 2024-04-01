@@ -1,10 +1,10 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Contracts;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Messenger.Application.Common.Interfaces;
+using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Application.Messages.Queries;
 

@@ -15,7 +15,7 @@ public class Service : AuditableEntity, ISoftDelete
     public string Secret { get; set; } = Guid.NewGuid().ToUrlFriendlyString();
 
     public List<Resource> Resources { get; set; } = new List<Resource>();
-    
+
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

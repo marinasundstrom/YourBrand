@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.Customers;
+﻿namespace YourBrand.Customers;
 using YourBrand.Customers.Client;
 
 public static class AddressFormatter

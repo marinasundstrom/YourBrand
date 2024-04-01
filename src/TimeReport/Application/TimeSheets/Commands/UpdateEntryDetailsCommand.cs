@@ -1,18 +1,10 @@
-﻿using System;
+﻿using MediatR;
 
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
-
-using YourBrand.TimeReport.Application.Activities;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Domain.Repositories;
-
-using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 

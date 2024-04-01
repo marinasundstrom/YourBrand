@@ -1,13 +1,10 @@
-﻿using System;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Domain.Common;
-using YourBrand.IdentityManagement.Domain.Common.Interfaces;
 using YourBrand.Identity;
+using YourBrand.IdentityManagement.Application.Common.Interfaces;
+using YourBrand.IdentityManagement.Domain.Common.Interfaces;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Accounting.Application.Accounts;
+﻿using YourBrand.Accounting.Application.Accounts;
 using YourBrand.Accounting.Application.Journal;
 
 namespace YourBrand.Accounting.Application.Ledger;

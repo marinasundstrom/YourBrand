@@ -1,12 +1,7 @@
-﻿using System;
+﻿using MediatR;
 
 using YourBrand.Documents.Application.Common.Interfaces;
-using YourBrand.Documents.Application.Common.Models;
 using YourBrand.Documents.Domain.Common;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Documents.Infrastructure.Services;
 

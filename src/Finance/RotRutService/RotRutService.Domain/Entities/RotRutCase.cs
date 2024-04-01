@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.RotRutService.Domain.Common;
+﻿using YourBrand.RotRutService.Domain.Common;
 using YourBrand.RotRutService.Domain.Enums;
 
 namespace YourBrand.RotRutService.Domain.Entities;
@@ -23,7 +21,7 @@ public class RotRutCase : AuditableEntity
         InvoiceNo = invoiceId;
         OtherCosts = otherCosts;
         Hours = hours;
-        MaterialCost = materialCost; 
+        MaterialCost = materialCost;
         ReceivedAmount = receivedAmount;
     }
 
@@ -34,19 +32,19 @@ public class RotRutCase : AuditableEntity
     public DomesticServiceKind Kind { get; private set; }
 
     public RotRutCaseStatus Status { get; set; }
-    
+
     public string Buyer { get; private set; }
 
     public DateTime PaymentDate { get; private set; }
-    
+
     public decimal LaborCost { get; private set; }
 
     public decimal PaidAmount { get; private set; }
 
     public decimal RequestedAmount { get; private set; }
-    
+
     public int InvoiceNo { get; private set; }
-    
+
     public decimal OtherCosts { get; private set; }
 
     public double Hours { get; private set; }

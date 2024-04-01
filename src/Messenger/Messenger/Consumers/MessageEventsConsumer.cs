@@ -1,14 +1,14 @@
-﻿using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Contracts;
-using YourBrand.Messenger.Hubs;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Identity;
+using YourBrand.Messenger.Application.Common.Interfaces;
+using YourBrand.Messenger.Contracts;
+using YourBrand.Messenger.Hubs;
 
 namespace YourBrand.Messenger.Consumers;
 

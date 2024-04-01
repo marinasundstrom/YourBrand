@@ -1,12 +1,13 @@
 ﻿
-using YourBrand.Domain.Common;
 using System.Text.Json;
+
+using YourBrand.Domain.Common;
 
 namespace YourBrand.Domain.Entities;
 
 public sealed class Widget : AuditableEntity
 {
-    private Widget() 
+    private Widget()
     {
 
     }
@@ -47,9 +48,9 @@ public sealed class Widget : AuditableEntity
 
 public sealed class WidgetArea : AuditableEntity
 {
-    HashSet<Widget> widgets = new HashSet<Widget>();
+    readonly HashSet<Widget> widgets = new HashSet<Widget>();
 
-    private WidgetArea() 
+    private WidgetArea()
     {
 
     }
@@ -66,12 +67,12 @@ public sealed class WidgetArea : AuditableEntity
 
     public IReadOnlyCollection<Widget> Widgets => widgets;
 
-    public void AddWidget(Widget widget) 
+    public void AddWidget(Widget widget)
     {
         widgets.Add(widget);
     }
 
-    public void RemoveWidget(Widget widget) 
+    public void RemoveWidget(Widget widget)
     {
         widgets.Remove(widget);
     }

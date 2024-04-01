@@ -1,17 +1,17 @@
 ﻿
-using YourBrand.ApiKeys.Application.Common.Interfaces;
-using YourBrand.ApiKeys.Domain.Exceptions;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.ApiKeys.Application.Common.Interfaces;
+using YourBrand.ApiKeys.Domain.Exceptions;
 
 namespace YourBrand.ApiKeys.Application.Users.Commands;
 
 public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Email) : IRequest<UserDto>
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
-    { 
+    {
         readonly IApiKeysContext _context;
 
         public UpdateUserCommandHandler(IApiKeysContext context)

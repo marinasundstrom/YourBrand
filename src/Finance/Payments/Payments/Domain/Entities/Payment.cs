@@ -15,7 +15,7 @@ public class Payment : AuditableEntity
 
     public Payment(string invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
     {
-        if(amount <= 0)
+        if (amount <= 0)
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }
@@ -35,7 +35,7 @@ public class Payment : AuditableEntity
 
     public void SetStatus(PaymentStatus status)
     {
-        if(Status != status)
+        if (Status != status)
         {
             Status = status;
 
@@ -65,7 +65,7 @@ public class Payment : AuditableEntity
 
     public IReadOnlyCollection<Capture> Captures => _captures;
 
-    public void RegisterCapture(DateTime date, decimal amount, string? transactionId) 
+    public void RegisterCapture(DateTime date, decimal amount, string? transactionId)
     {
         var capture = new Capture(date, amount, transactionId);
 

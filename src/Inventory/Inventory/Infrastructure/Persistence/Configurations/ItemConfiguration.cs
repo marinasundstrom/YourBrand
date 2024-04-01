@@ -1,7 +1,7 @@
-﻿using YourBrand.Inventory.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Infrastructure.Persistence.Configurations;
 

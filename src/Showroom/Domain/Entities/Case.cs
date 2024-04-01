@@ -33,7 +33,7 @@ public class Location : AuditableEntity, ISoftDelete
     public User? DeletedBy { get; set; }
 }
 
-public class CasePricing 
+public class CasePricing
 {
     public decimal? HourlyPrice { get; set; }
     public double? Hours { get; set; }

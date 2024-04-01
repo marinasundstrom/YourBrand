@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using YourBrand.Analytics.Application;
-using YourBrand.Analytics.Domain;
 
 namespace YourBrand.Analytics.Application;
 

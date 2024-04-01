@@ -5,14 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Domain.Common;
-using YourBrand.IdentityManagement.Domain.Common.Interfaces;
 using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Configurations;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Outbox;
-using YourBrand.Identity;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 

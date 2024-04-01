@@ -1,10 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
-using Core;
-
-using YourBrand.Catalog;
-using YourBrand.Sales.Subscriptions.Plans;
-
 namespace YourBrand.Sales.Subscriptions.Plans;
 
 public class SubscriptionPlanViewModel : ISubscriptionParameters
@@ -15,13 +8,13 @@ public class SubscriptionPlanViewModel : ISubscriptionParameters
 
     public int? EveryWeeks { get; set; } = 1;
 
-    public YourBrand.Sales.WeekDays? OnWeekDays 
+    public YourBrand.Sales.WeekDays? OnWeekDays
     {
-        get 
+        get
         {
             WeekDays days = 0;
 
-            foreach(var day in OnWeekDays2 ?? Enumerable.Empty<DayOfWeek>()) 
+            foreach (var day in OnWeekDays2 ?? Enumerable.Empty<DayOfWeek>())
             {
                 var d = Enum.Parse<WeekDays>(day.ToString());
 
@@ -46,7 +39,7 @@ public class SubscriptionPlanViewModel : ISubscriptionParameters
 
     public int? EveryMonths { get; set; } = 1;
 
-    public int? EveryYears{ get; set; } = 1;
+    public int? EveryYears { get; set; } = 1;
 
     public int? OnDay { get; set; } = 1;
 
@@ -55,7 +48,7 @@ public class SubscriptionPlanViewModel : ISubscriptionParameters
     public Month? InMonth { get; set; } = Month.January;
 
     public TimeSpan StartTime { get; set; }
-    
+
     public TimeSpan? Duration { get; set; }
 
     public bool AutoRenew { get; set; }

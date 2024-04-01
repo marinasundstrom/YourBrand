@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace YourBrand.Messenger.Contracts;
+﻿namespace YourBrand.Messenger.Contracts;
 
 public record PostMessage(string AccessToken, string ConversationId, string Text, string? ReplyToId = null);
 

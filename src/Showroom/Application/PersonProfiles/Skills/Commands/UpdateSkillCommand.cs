@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 using YourBrand.Showroom.Domain.Enums;

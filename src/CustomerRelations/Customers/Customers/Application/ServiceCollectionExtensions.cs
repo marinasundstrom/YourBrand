@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace YourBrand.Customers.Application;
 
 public static class ServiceCollectionExtensions

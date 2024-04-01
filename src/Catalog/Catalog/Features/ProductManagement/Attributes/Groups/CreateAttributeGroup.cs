@@ -1,7 +1,7 @@
+using MediatR;
+
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Persistence;
-
-using MediatR;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Groups;
 

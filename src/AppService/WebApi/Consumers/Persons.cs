@@ -1,10 +1,10 @@
 ﻿using MassTransit;
 
 using MediatR;
-using YourBrand.IdentityManagement.Contracts;
-using YourBrand.Application.Common.Interfaces;
+
 using YourBrand.Application.Users.Commands;
 using YourBrand.Identity;
+using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.Consumers;
 
@@ -25,7 +25,7 @@ public class AppServiceUserCreatedConsumer : IConsumer<UserCreated>
 
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
-        try 
+        try
         {
             var message = context.Message;
 
@@ -36,9 +36,9 @@ public class AppServiceUserCreatedConsumer : IConsumer<UserCreated>
 
             var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
         }
-        catch(Exception e) 
+        catch (Exception e)
         {
-        _logger.LogError(e, "FOO"); 
+            _logger.LogError(e, "FOO");
         }
     }
 }

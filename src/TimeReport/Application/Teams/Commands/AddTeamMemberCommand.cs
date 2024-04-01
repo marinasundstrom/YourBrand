@@ -3,7 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Teams
 .Commands;

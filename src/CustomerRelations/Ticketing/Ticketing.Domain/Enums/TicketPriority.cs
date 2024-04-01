@@ -1,6 +1,6 @@
 namespace YourBrand.Ticketing.Domain.Enums;
 
-public enum TicketPriority 
+public enum TicketPriority
 {
     Critical = 1,
     High = 2,

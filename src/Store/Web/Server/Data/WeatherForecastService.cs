@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace BlazorApp.Data;
 
 public sealed class WeatherForecastService : IWeatherForecastService

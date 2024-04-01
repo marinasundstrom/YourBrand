@@ -27,7 +27,7 @@ public record UpdateOrganizationCommand(string PersonId, string FirstName, strin
         public async Task<PersonDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var person = await _context.Persons
-                .Include(u => u.Roles)   
+                .Include(u => u.Roles)
                 .Include(u => u.Organization)
                 .Include(u => u.Department)
                 .AsSplitQuery()

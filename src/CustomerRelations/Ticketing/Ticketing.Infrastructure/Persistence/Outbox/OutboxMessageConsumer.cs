@@ -6,4 +6,3 @@ public sealed class OutboxMessageConsumer
 
     public required string Consumer { get; set; }
 }
-

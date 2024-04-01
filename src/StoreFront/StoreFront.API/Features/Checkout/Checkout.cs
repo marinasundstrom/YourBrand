@@ -1,11 +1,9 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 using MediatR;
 
-using YourBrand.StoreFront.API.Features.Cart;
-
 using YourBrand.Sales;
+using YourBrand.StoreFront.API.Features.Cart;
 
 namespace YourBrand.StoreFront.API.Features.Checkout;
 
@@ -60,7 +58,8 @@ public sealed record Checkout(
             await _ordersClient.CreateOrderAsync(new CreateOrderRequest()
             {
                 Status = OrderStatusOpen,
-                Customer = new SetCustomer {
+                Customer = new SetCustomer
+                {
                     Id = customerId?.ToString()
                 },
                 BillingDetails = new BillingDetails
@@ -106,11 +105,11 @@ public sealed record Checkout(
                     continue;
                 }
 
-                try 
+                try
                 {
                     await warehouseItemsClient.ReserveItemsAsync("main-warehouse", product.Sku, new YourBrand.Inventory.Client.ReserveItems() { Quantity = (int)item.Quantity });
                 }
-                catch(Exception) 
+                catch (Exception)
                 {
                     Console.WriteLine("Failed to reserve item");
                 }
@@ -130,7 +129,7 @@ public sealed record Checkout(
             {
                 var product = products.FirstOrDefault(x => x.Id == cartItem.ProductId);
 
-                if(product is null) 
+                if (product is null)
                 {
                     throw new Exception("Product not found");
                 }
@@ -261,4 +260,3 @@ public sealed record Checkout(
         }
     }
 }
-

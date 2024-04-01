@@ -1,6 +1,6 @@
-using YourBrand.Carts.API.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Carts.API.Domain.Entities;
 
 namespace YourBrand.Carts.API.Persistence;
 

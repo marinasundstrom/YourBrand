@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.XPath;
 
 namespace YourBrand.Showroom;
@@ -31,7 +26,7 @@ public static class StringExt
                                new XmlReaderSettings()
                                {
                                    ConformanceLevel = ConformanceLevel.Fragment
-                               // for multiple roots
+                                   // for multiple roots
                                }))
             {
                 doc = new XPathDocument(xr);

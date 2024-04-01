@@ -1,14 +1,4 @@
-using System.Text.Json;
-
-using MassTransit;
-
 using MediatR;
-
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-
-using YourBrand.Carts;
-using YourBrand.Catalog;
 
 namespace YourBrand.StoreFront.API.Features.Checkout;
 

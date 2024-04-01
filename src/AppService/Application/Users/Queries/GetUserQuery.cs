@@ -4,14 +4,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
-using YourBrand.Domain.Exceptions;
 
 namespace YourBrand.Application.Users.Queries;
 
 public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
-    { 
+    {
         readonly IAppServiceContext _context;
 
         public GetUserQueryHandler(IAppServiceContext context)

@@ -1,11 +1,10 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using YourBrand.Ticketing.Application;
+
 using YourBrand.Ticketing.Application.Common;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-using YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 

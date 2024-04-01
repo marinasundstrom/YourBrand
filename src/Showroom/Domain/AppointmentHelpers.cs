@@ -1,4 +1,4 @@
-public static class AppointmentHelpers 
+public static class AppointmentHelpers
 {
     public static IEnumerable<(DateTime Start, DateTime? End)[]> Overlappings(this IEnumerable<(DateTime Start, DateTime? End)> meetings)
     {
@@ -13,7 +13,7 @@ public static class AppointmentHelpers
         }
     }
 
-    public static bool OverlapsWith(this (DateTime Start, DateTime? End) x, (DateTime Start, DateTime? End) y) 
+    public static bool OverlapsWith(this (DateTime Start, DateTime? End) x, (DateTime Start, DateTime? End) y)
     {
         return x.Start < y.Start ? x.End > y.Start : y.End > x.Start;
     }

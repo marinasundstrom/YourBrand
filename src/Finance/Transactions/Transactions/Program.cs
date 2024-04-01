@@ -6,24 +6,21 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.Json;
 
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Transactions;
 using YourBrand.Transactions.Application;
 using YourBrand.Transactions.Application.Commands;
-using YourBrand.Transactions.Application.Common.Interfaces;
-using YourBrand.Transactions.Application.Queries;
 using YourBrand.Transactions.Application.Services;
 using YourBrand.Transactions.Domain.Enums;
 using YourBrand.Transactions.Hubs;
 using YourBrand.Transactions.Infrastructure;
 using YourBrand.Transactions.Infrastructure.Persistence;
-
-using Serilog;
-
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Transactions;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -146,7 +143,7 @@ app.MapHub<TransactionsHub>("/hubs/transactions");
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

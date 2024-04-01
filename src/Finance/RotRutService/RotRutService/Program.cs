@@ -1,35 +1,26 @@
-﻿using YourBrand.Documents.Client;
-
-using YourBrand.RotRutService.Application;
-using YourBrand.RotRutService.Application.Common.Interfaces;
-using YourBrand.RotRutService.Application.Queries;
-using YourBrand.RotRutService.Application.Commands;
-using YourBrand.RotRutService.Domain.Enums;
-using YourBrand.RotRutService.Infrastructure;
+﻿using System.Text.Json.Serialization;
 
 using MassTransit;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.Json;
-using YourBrand.RotRutService.Infrastructure.Persistence;
-using System.Text.Json.Serialization;
-using YourBrand.Payments.Client;
-using YourBrand.Transactions.Client;
-using YourBrand.Accounting.Client;
-using YourBrand.Invoicing.Client;
-using YourBrand.RotRutService.Domain.Entities;
-using YourBrand.RotRutService.Domain;
-using YourBrand.Identity;
-
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.RotRutService;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Accounting.Client;
+using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Invoicing.Client;
+using YourBrand.Payments.Client;
+using YourBrand.RotRutService;
+using YourBrand.RotRutService.Application;
+using YourBrand.RotRutService.Application.Commands;
+using YourBrand.RotRutService.Domain;
+using YourBrand.RotRutService.Infrastructure;
+using YourBrand.RotRutService.Infrastructure.Persistence;
+using YourBrand.Transactions.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -145,7 +136,7 @@ app.MapGet("/RutFile", async (string? name, IMediator mediator)
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

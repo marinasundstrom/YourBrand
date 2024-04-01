@@ -1,10 +1,8 @@
-using Asp.Versioning.Builder;
-
-using YourBrand.Catalog.Model;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Http.HttpResults;
+
+using YourBrand.Catalog.Model;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 

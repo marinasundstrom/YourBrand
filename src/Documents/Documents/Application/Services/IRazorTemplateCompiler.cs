@@ -1,14 +1,13 @@
 ﻿
-namespace YourBrand.Documents.Application.Services
+namespace YourBrand.Documents.Application.Services;
+
+public interface IRazorTemplateCompiler
 {
-    public interface IRazorTemplateCompiler
-    {
-        Task<string> RenderAsync(string templateKey, object model);
+    Task<string> RenderAsync(string templateKey, object model);
 
-        Task<string> CompileAndRenderAsync(string templateKey, string template, object model);
+    Task<string> CompileAndRenderAsync(string templateKey, string template, object model);
 
-        bool HasCachedTemplate(string templateKey);
+    bool HasCachedTemplate(string templateKey);
 
-        bool RemoveTemplateFromCache(string templateKey);
-    }
+    bool RemoveTemplateFromCache(string templateKey);
 }

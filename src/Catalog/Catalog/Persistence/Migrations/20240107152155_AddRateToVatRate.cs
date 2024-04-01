@@ -2,28 +2,27 @@
 
 #nullable disable
 
-namespace YourBrand.Catalog.Persistence.Migrations
+namespace YourBrand.Catalog.Persistence.Migrations;
+
+/// <inheritdoc />
+public partial class AddRateToVatRate : Migration
 {
     /// <inheritdoc />
-    public partial class AddRateToVatRate : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<double>(
-                name: "Rate",
-                table: "VatRates",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
-        }
+        migrationBuilder.AddColumn<double>(
+            name: "Rate",
+            table: "VatRates",
+            type: "float",
+            nullable: false,
+            defaultValue: 0.0);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Rate",
-                table: "VatRates");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "Rate",
+            table: "VatRates");
     }
 }

@@ -1,6 +1,3 @@
-
-using System.Data.Common;
-
 using MediatR;
 
 using YourBrand.Notifications.Application.Common.Interfaces;

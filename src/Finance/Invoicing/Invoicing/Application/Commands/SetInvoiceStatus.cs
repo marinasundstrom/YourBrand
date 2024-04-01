@@ -1,14 +1,9 @@
-﻿
-using YourBrand.Invoicing.Contracts;
-using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Domain.Enums;
-
-using MassTransit;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 

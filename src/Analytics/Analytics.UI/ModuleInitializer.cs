@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 
-using YourBrand.Portal;
 using YourBrand.Analytics.Client;
+using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
-using Microsoft.Extensions.Localization;
 using YourBrand.Portal.Widgets;
 
 namespace YourBrand.Analytics;

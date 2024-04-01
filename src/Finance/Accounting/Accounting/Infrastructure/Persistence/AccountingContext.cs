@@ -1,12 +1,12 @@
-﻿using YourBrand.Accounting.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Domain.Common;
 using YourBrand.Accounting.Domain.Entities;
 using YourBrand.Accounting.Infrastructure.Persistence.Configurations;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
-using Newtonsoft.Json;
 using YourBrand.Accounting.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
@@ -28,7 +28,7 @@ public class AccountingContext : DbContext, IAccountingContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

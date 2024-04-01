@@ -1,12 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 
-using Azure.Core;
-
-using IdentityModel.Client;
-
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
 
 namespace YourBrand.Authentication;
 

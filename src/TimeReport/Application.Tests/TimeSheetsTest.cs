@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using YourBrand.TimeReport.Application.TimeSheets.Queries;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +8,13 @@ using NSubstitute;
 using Shouldly;
 
 using Xunit;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Application.TimeSheets;
-using YourBrand.TimeReport.Domain.Repositories;
+using YourBrand.TimeReport.Application.TimeSheets.Queries;
 using YourBrand.TimeReport.Domain;
+using YourBrand.TimeReport.Domain.Entities;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace Tests;
 

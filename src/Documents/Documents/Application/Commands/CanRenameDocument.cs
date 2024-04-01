@@ -1,6 +1,8 @@
-using YourBrand.Documents.Domain;
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Documents.Domain;
 
 namespace YourBrand.Documents.Application.Commands;
 

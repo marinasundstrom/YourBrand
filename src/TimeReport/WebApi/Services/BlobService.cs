@@ -1,6 +1,4 @@
-﻿using System;
-
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 

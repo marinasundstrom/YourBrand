@@ -4,11 +4,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.ApiKeys;
 using YourBrand.Showroom.Application.Cases;
 using YourBrand.Showroom.Application.Cases.Commands;
 using YourBrand.Showroom.Application.Cases.Queries;
-using YourBrand.ApiKeys;
+using YourBrand.Showroom.Application.Common.Models;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 

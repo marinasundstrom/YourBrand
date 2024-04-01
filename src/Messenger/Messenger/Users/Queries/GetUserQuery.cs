@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Domain.Exceptions;
 using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Application.Users.Queries;
@@ -19,7 +18,7 @@ public class GetUserQuery : IRequest<UserDto>
     public string UserId { get; }
 
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
-    { 
+    {
         readonly IMessengerContext _context;
 
         public GetUserQueryHandler(IMessengerContext context)

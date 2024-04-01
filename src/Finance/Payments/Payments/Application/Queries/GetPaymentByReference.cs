@@ -1,11 +1,8 @@
-﻿using MassTransit;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Payments.Domain;
-using YourBrand.Payments.Domain.Enums;
 
 namespace YourBrand.Payments.Application.Queries;
 

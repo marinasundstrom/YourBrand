@@ -1,10 +1,10 @@
-using YourBrand.Carts.Contracts;
-
 using MassTransit;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Carts.Contracts;
 
 namespace YourBrand.Carts.API.Features.CartsManagement.Consumers;
 

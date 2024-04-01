@@ -1,32 +1,24 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
-using Azure.Identity;
+﻿using Azure.Identity;
 using Azure.Storage.Blobs;
-
-using YourBrand.Application;
-using YourBrand.Infrastructure;
-using YourBrand.Infrastructure.Persistence;
-using YourBrand.WebApi;
-using YourBrand.WebApi.Hubs;
 
 using MassTransit;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
-
-using NSwag;
-using NSwag.Generation.Processors.Security;
 
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Application;
+using YourBrand.Extensions;
+using YourBrand.Infrastructure;
+using YourBrand.Infrastructure.Persistence;
+using YourBrand.WebApi;
+using YourBrand.WebApi.Hubs;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 

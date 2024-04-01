@@ -1,6 +1,6 @@
 namespace YourBrand.TimeReport.Application.Reports.Queries;
 
-public enum ReportMode 
+public enum ReportMode
 {
     User,
     Project

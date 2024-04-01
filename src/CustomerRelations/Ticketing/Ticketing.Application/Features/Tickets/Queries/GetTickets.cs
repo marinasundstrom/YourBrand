@@ -1,8 +1,9 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Ticketing.Application.Common;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 

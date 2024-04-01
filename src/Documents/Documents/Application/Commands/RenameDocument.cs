@@ -1,8 +1,7 @@
-using YourBrand.Documents.Infrastructure.Persistence;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Documents.Domain;
 
 namespace YourBrand.Documents.Application.Commands;
@@ -24,7 +23,7 @@ public record RenameDocument(string DocumentId, string NewName) : IRequest
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
-            if(document is null) 
+            if (document is null)
             {
                 throw new Exception("Document not found.");
             }

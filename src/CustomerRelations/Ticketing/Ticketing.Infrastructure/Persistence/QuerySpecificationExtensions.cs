@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Ticketing.Domain.Specifications;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;

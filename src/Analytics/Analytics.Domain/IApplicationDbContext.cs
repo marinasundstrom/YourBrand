@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 using YourBrand.Analytics.Domain.Entities;
 
 namespace YourBrand.Analytics.Domain;

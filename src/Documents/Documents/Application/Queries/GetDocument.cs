@@ -1,8 +1,8 @@
-using YourBrand.Documents.Infrastructure.Persistence;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Documents.Infrastructure.Persistence;
 
 namespace YourBrand.Documents.Application.Queries;
 

@@ -1,6 +1,6 @@
-using YourBrand.Messenger.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Messenger.Domain.Entities;
 
 namespace YourBrand.Messenger.Application.Common.Interfaces;
 

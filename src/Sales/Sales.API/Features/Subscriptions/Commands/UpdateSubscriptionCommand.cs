@@ -1,15 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Sales.Persistence;
-using YourBrand.Sales.Contracts;
-using YourBrand.Sales.Domain.Entities;
-
-using static YourBrand.Sales.Features.Subscriptions.Mappings;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 

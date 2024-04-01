@@ -1,10 +1,10 @@
-using YourBrand.Catalog.Persistence;
-
 using MassTransit;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using MediatR;
-using YourBrand.Ticketing.Application.Common;
-using YourBrand.Ticketing.Application.Services;
+﻿using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
@@ -26,4 +23,3 @@ public sealed class TicketCreatedEventHandler : IDomainEventHandler<TicketCreate
         await ticketNotificationService.Created(ticket.Id, ticket.Subject);
     }
 }
-

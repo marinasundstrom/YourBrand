@@ -1,14 +1,8 @@
-﻿
-using System.Security.Claims;
-
-using IdentityModel;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
-using YourBrand.HumanResources.Contracts;
 using YourBrand.HumanResources.Domain.Entities;
 using YourBrand.Identity;
 
@@ -34,7 +28,7 @@ public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRe
         public async Task<OrganizationDto> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = new Organization(
-                 request.Name, 
+                 request.Name,
                  request.FriendlyName ?? request.Name.ToLower().Replace(' ', '-'));
 
             _context.Organizations.Add(organization);

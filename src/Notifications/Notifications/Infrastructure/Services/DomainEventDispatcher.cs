@@ -1,11 +1,6 @@
-﻿using System;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
+﻿using MediatR;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
-using YourBrand.Notifications.Application.Common.Models;
 using YourBrand.Notifications.Domain.Common;
 
 namespace YourBrand.Notifications.Infrastructure.Services;

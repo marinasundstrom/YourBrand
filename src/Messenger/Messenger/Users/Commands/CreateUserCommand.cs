@@ -31,7 +31,7 @@ public class CreateUserCommand : IRequest<UserDto>
     public string Email { get; }
 
     public class CreateUserCommand1Handler : IRequestHandler<CreateUserCommand, UserDto>
-    { 
+    {
         readonly IMessengerContext _context;
 
         public CreateUserCommand1Handler(IMessengerContext context)
@@ -43,7 +43,7 @@ public class CreateUserCommand : IRequest<UserDto>
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
 
-            if(user is not null) 
+            if (user is not null)
             {
                 return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.LastModified);
             }

@@ -26,7 +26,7 @@ public record CancelPayment(string PaymentId) : IRequest
         {
             var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Id == request.PaymentId);
 
-            if(payment is null) 
+            if (payment is null)
             {
                 throw new Exception();
             }

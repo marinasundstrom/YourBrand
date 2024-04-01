@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Skills.SkillAreas.Commands;
@@ -24,7 +25,7 @@ public record DeleteSkillAreaCommand(string Id) : IRequest
             if (skillArea is null) throw new Exception();
 
             context.SkillAreas.Remove(skillArea);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

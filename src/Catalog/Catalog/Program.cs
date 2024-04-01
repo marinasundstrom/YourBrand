@@ -1,28 +1,28 @@
 ﻿using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using YourBrand.Catalog.Common;
-using YourBrand.Catalog.Features;
-using YourBrand.Catalog.Features.ProductManagement.Products;
-using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
-using YourBrand.Catalog.Persistence;
-
 using FluentValidation;
 
 using HealthChecks.UI.Client;
 
 using MassTransit;
+
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
+using Serilog;
+
 using Steeltoe.Discovery.Client;
 
 using YourBrand;
-using YourBrand.Extensions;
 using YourBrand.Catalog;
-
-using Serilog;
+using YourBrand.Catalog.Common;
+using YourBrand.Catalog.Features;
+using YourBrand.Catalog.Features.ProductManagement.Products;
+using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
+using YourBrand.Catalog.Persistence;
+using YourBrand.Extensions;
 
 string ServiceName = "Catalog";
 

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using MudBlazor;
 
 using YourBrand.Portal.Services;
-using YourBrand.Catalog;
 
 namespace YourBrand.Catalog.Products;
 

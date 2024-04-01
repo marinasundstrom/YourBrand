@@ -1,7 +1,4 @@
-﻿using System;
-
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.Entities;
+﻿using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Features.Orders;
 
@@ -57,9 +54,9 @@ public class OrderFactory
         targetOrder.UpdateStatus(1);
         targetOrder.StatusDate = DateTimeOffset.UtcNow;
 
-        if(orderItem.Order?.Customer is not null) 
+        if (orderItem.Order?.Customer is not null)
         {
-            targetOrder.Customer = new Customer 
+            targetOrder.Customer = new Customer
             {
                 Id = orderItem.Order.Customer.Id,
                 Name = orderItem.Order.Customer.Name,

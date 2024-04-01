@@ -1,16 +1,17 @@
 ﻿
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Entities;
-
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.ApiKeys.Application.Users.Commands;
 
 public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Email) : IRequest<UserDto>
 {
     public class CreateUserCommand1Handler : IRequestHandler<CreateUserCommand, UserDto>
-    { 
+    {
         readonly IApiKeysContext _context;
 
         public CreateUserCommand1Handler(IApiKeysContext context)
@@ -22,7 +23,7 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
 
-            if(user is not null) 
+            if (user is not null)
             {
                 return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.LastModified);
             }

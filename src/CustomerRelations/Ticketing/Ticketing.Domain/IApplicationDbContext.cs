@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 using YourBrand.Ticketing.Domain.Entities;
 
 namespace YourBrand.Ticketing.Domain;

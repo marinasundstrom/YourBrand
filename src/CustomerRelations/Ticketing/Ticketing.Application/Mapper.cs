@@ -1,13 +1,12 @@
-﻿using YourBrand.Ticketing.Application.Features.Users;
-using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+﻿using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+using YourBrand.Ticketing.Application.Features.Users;
 using YourBrand.Ticketing.Domain.Enums;
-using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Application;
 
 public static partial class Mappings
 {
-    public static TicketDto ToDto(this Ticket ticket) => new (
+    public static TicketDto ToDto(this Ticket ticket) => new(
         ticket.Id,
         ticket.Requester,
         ticket.Subject,

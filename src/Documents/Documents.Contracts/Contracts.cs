@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Documents.Contracts;
+﻿namespace Documents.Contracts;
 
 public record DocumentType(string Id, string Name);
 

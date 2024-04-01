@@ -2,7 +2,6 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;

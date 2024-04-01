@@ -45,26 +45,26 @@ public record GetSkillsQuery(string PersonProfileId, int Page = 0, int? PageSize
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result.OrderBy(x => x.Skill.Name);
             }
 
             IQueryable<PersonProfileSkill> items = null!;
 
-            if(request.PageSize is null) 
+            if (request.PageSize is null)
             {
                 items = result
                     .Include(x => x.Skill)
-                    .ThenInclude(x => x.Area) 
+                    .ThenInclude(x => x.Area)
                     .ThenInclude(x => x.Industry)
                     .AsQueryable();
             }
-            else 
+            else
             {
                 items = result
                     .Include(x => x.Skill)
-                    .ThenInclude(x => x.Area) 
+                    .ThenInclude(x => x.Area)
                     .ThenInclude(x => x.Industry)
                     .Skip((request.Page) * request.PageSize.GetValueOrDefault())
                     .Take(request.PageSize.GetValueOrDefault());

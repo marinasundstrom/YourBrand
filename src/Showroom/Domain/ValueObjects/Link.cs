@@ -1,3 +1,3 @@
 namespace YourBrand.Showroom.Domain.ValueObjects;
 
-public record Link (string Title, string Href);
+public record Link(string Title, string Href);

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Inventory.Domain.Entities;
-using YourBrand.Inventory.Domain;
-using YourBrand.Inventory.Application.Common.Models;
-using MediatR;
 using YourBrand.Identity;
+using YourBrand.Inventory.Domain;
+using YourBrand.Inventory.Domain.Entities;
 
 namespace YourBrand.Inventory.Application.Warehouses.Queries;
 

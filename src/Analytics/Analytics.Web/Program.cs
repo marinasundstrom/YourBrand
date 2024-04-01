@@ -1,35 +1,27 @@
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.RateLimiting;
+
+using Azure.Identity;
+using Azure.Storage.Blobs;
+
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
+using Microsoft.Extensions.Azure;
+
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
 using YourBrand.Analytics.Application;
 using YourBrand.Analytics.Application.Services;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Web;
 using YourBrand.Analytics.Web.Middleware;
 using YourBrand.Analytics.Web.Services;
-using Microsoft.Extensions.Azure;
-using Azure.Storage.Blobs;
-using Azure.Identity;
-using Microsoft.Extensions.Caching.Memory;
-using Steeltoe.Discovery.Client;
-
-using Serilog;
-
-using YourBrand;
 using YourBrand.Extensions;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
@@ -189,7 +181,7 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
     if (dbProviderName!.Contains("SqlServer"))
     {
         //await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync(); 
+        await context.Database.EnsureCreatedAsync();
 
         try
         {

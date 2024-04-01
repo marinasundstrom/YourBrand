@@ -1,15 +1,15 @@
 ﻿using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.Features.OrderManagement.Users;
 using YourBrand.Sales.Features.OrderManagement.Organizations;
+using YourBrand.Sales.Features.OrderManagement.Users;
 using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
 public static class Mappings
 {
-    public static OrderDto ToDto(this Order order) => new (
+    public static OrderDto ToDto(this Order order) => new(
         order.Id,
         order.OrderNo,
         order.Date,
@@ -27,24 +27,24 @@ public static class Mappings
         order.ActualEndDate,
         order.BillingDetails?.ToDto(),
         order.ShippingDetails?.ToDto(),
-        order.Items.Select(x => x.ToDto()), 
+        order.Items.Select(x => x.ToDto()),
         order.SubTotal,
         order.VatAmounts.Select(x => new OrderVatAmountDto(x.Name, x.Rate, x.SubTotal, x.Vat, x.Total)),
         order.Vat.GetValueOrDefault(),
         order.Discounts.Select(x => new OrderDiscountDto(x.Amount, x.Description)),
-        order.Discount, 
-        order.Total, 
-        order.Created, 
-        order.CreatedBy?.ToDto(), 
-        order.LastModified, 
+        order.Discount,
+        order.Total,
+        order.Created,
+        order.CreatedBy?.ToDto(),
+        order.LastModified,
         order.LastModifiedBy?.ToDto());
 
-    public static ParentOrderDto ToParentDto(this Order order) => new (
+    public static ParentOrderDto ToParentDto(this Order order) => new(
         order.Id,
         order.OrderNo,
         order.Date);
 
-    public static OrderShortDto ToShortDto(this Order order) => new (
+    public static OrderShortDto ToShortDto(this Order order) => new(
         order.Id,
         order.OrderNo,
         order.Date);
@@ -58,7 +58,7 @@ public static class Mappings
         orderItem.SubscriptionPlan?.ToDto(),
         orderItem.Subscription?.ToDto(),
         orderItem.Price,
-        orderItem.Unit,    
+        orderItem.Unit,
         orderItem.Discount,
         orderItem.RegularPrice,
         orderItem.VatRate,

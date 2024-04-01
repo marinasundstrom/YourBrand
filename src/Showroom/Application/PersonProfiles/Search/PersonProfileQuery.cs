@@ -23,7 +23,7 @@ public class QuerySkill
 {
     public string SkillId { get; set; }
 
-    public SkillLevel Level{ get; set; }
+    public SkillLevel Level { get; set; }
 }
 
 public class QueryExperience

@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MediatR;
 using Asp.Versioning;
-using YourBrand.StoreFront.API;
 
-namespace  YourBrand.StoreFront.Application.Features.Analytics;
+using MediatR;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace YourBrand.StoreFront.Application.Features.Analytics;
 
 [ApiController]
 [ApiVersion("1")]

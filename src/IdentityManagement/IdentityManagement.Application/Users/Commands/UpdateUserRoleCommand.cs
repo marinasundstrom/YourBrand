@@ -3,7 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Domain.Exceptions;
 
 namespace YourBrand.IdentityManagement.Application.Users.Commands;
 

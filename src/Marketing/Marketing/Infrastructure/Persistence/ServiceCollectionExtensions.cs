@@ -1,7 +1,6 @@
-using YourBrand.Marketing.Domain;
-using YourBrand.Marketing.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Marketing.Domain;
 using YourBrand.Marketing.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Marketing.Infrastructure.Persistence;

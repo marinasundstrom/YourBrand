@@ -5,13 +5,13 @@ using YourBrand.Sales.Features.OrderManagement.Users;
 using YourBrand.Sales.Features.Subscriptions;
 
 public sealed record OrderDto(
-    string Id, 
-    int OrderNo, 
+    string Id,
+    int OrderNo,
     DateTime Date,
     ParentOrderDto? Parent,
-    OrderStatusDto Status, 
-    UserDto? AssigneeId, 
-    CustomerDto? Customer, 
+    OrderStatusDto Status,
+    UserDto? AssigneeId,
+    CustomerDto? Customer,
     string Currency,
     string? Reference,
     string? Note,
@@ -20,16 +20,16 @@ public sealed record OrderDto(
     DateTime? PlannedEndDate,
     DateTime? ActualStartDate,
     DateTime? ActualEndDate,
-    BillingDetailsDto? BillingDetails, 
-    ShippingDetailsDto? ShippingDetails, 
-    IEnumerable<OrderItemDto> Items, 
-    decimal SubTotal, 
-    IEnumerable<OrderVatAmountDto> VatAmounts, 
-    decimal Vat, 
-    IEnumerable<OrderDiscountDto> Discounts, 
+    BillingDetailsDto? BillingDetails,
+    ShippingDetailsDto? ShippingDetails,
+    IEnumerable<OrderItemDto> Items,
+    decimal SubTotal,
+    IEnumerable<OrderVatAmountDto> VatAmounts,
+    decimal Vat,
+    IEnumerable<OrderDiscountDto> Discounts,
     decimal? Discount,
-    decimal Total, 
-    DateTimeOffset Created, 
+    decimal Total,
+    DateTimeOffset Created,
     UserDto? CreatedBy,
     DateTimeOffset? LastModified,
     UserDto? LastModifiedBy);
@@ -52,20 +52,20 @@ public record CustomerDto(
     string Name);
 
 public sealed record OrderVatAmountDto(
-    string Name, 
-    double VatRate, 
-    decimal SubTotal, 
-    decimal? Vat, 
+    string Name,
+    double VatRate,
+    decimal SubTotal,
+    decimal? Vat,
     decimal Total);
 
 public sealed record OrderDiscountDto(
-    decimal Amount, 
+    decimal Amount,
     string Description);
 
 public sealed record OrderItemDto(
     string Id,
     ProductType ProductType,
-    string Description, 
+    string Description,
     string? ProductId,
     string? SKU,
     SubscriptionPlanDto? SubscriptionPlan,
@@ -77,9 +77,9 @@ public sealed record OrderItemDto(
     double? VatRate,
     double Quantity,
     decimal? Vat,
-    decimal Total, 
-    string? Notes, 
-    DateTimeOffset Created, 
-    UserDto? CreatedBy, 
-    DateTimeOffset? LastModified, 
+    decimal Total,
+    string? Notes,
+    DateTimeOffset Created,
+    UserDto? CreatedBy,
+    DateTimeOffset? LastModified,
     UserDto? LastModifiedBy);

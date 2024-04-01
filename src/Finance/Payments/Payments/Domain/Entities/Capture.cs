@@ -1,5 +1,4 @@
 using YourBrand.Payments.Domain.Common;
-using YourBrand.Payments.Domain.Events;
 
 namespace YourBrand.Payments.Domain.Entities;
 

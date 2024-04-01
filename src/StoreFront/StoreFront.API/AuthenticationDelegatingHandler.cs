@@ -1,12 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
 
-using Azure.Core;
-
-using IdentityModel.Client;
-
-using Microsoft.Identity.Client;
-
 public class AuthenticationDelegatingHandler : DelegatingHandler
 {
     private readonly ITokenProvider _tokenProvider;

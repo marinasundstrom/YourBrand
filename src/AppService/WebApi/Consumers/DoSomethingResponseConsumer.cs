@@ -1,13 +1,8 @@
-﻿using System;
-
-using YourBrand.Application.Common.Interfaces;
-using YourBrand.WebApi;
-
-using Contracts;
+﻿using Contracts;
 
 using MassTransit;
 
-using Microsoft.AspNetCore.SignalR;
+using YourBrand.Application.Common.Interfaces;
 
 namespace YourBrand.Consumers;
 

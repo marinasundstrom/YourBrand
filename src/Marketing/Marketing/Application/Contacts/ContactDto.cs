@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Marketing.Application.Campaigns;
+﻿using YourBrand.Marketing.Application.Campaigns;
 
 namespace YourBrand.Marketing.Application.Contacts;
 

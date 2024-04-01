@@ -1,11 +1,5 @@
-﻿
-using YourBrand.Documents.Application.Common.Models;
+﻿using YourBrand.Documents.Application.Common.Interfaces;
 using YourBrand.Documents.Domain.Events;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
-using YourBrand.Documents.Application.Common.Interfaces;
 
 namespace YourBrand.Documents.Application.Events;
 

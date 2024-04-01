@@ -1,5 +1,3 @@
-using System;
-using YourBrand.Analytics.Domain.Events;
 using YourBrand.Analytics.Domain.Enums;
 
 namespace YourBrand.Analytics.Domain.Entities;

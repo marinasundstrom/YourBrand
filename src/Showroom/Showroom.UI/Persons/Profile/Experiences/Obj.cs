@@ -1,9 +1,5 @@
-﻿using System;
+﻿using YourBrand.Showroom.Client;
 
-using YourBrand.Showroom.Client;
+namespace YourBrand.Showroom.Persons.Profile.Experiences;
 
-namespace YourBrand.Showroom.Persons.Profile.Experiences
-{
-    public record Obj(ExperienceDto experience, bool isSub);
-}
-
+public record Obj(ExperienceDto experience, bool isSub);

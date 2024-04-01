@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Application.Projects;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Queries;
 

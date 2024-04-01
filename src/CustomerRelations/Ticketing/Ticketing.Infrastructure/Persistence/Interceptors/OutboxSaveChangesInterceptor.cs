@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+
 using Newtonsoft.Json;
+
 using YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Interceptors;

@@ -1,12 +1,12 @@
+using System.Text.Json;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Domain.ValueObjects;
-using YourBrand.Showroom.Infrastructure.Persistence;
-
-using Microsoft.Extensions.DependencyInjection;
-using YourBrand.Showroom.TestData;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using YourBrand.Showroom.Events.Enums;
+using YourBrand.Showroom.TestData;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -266,9 +266,10 @@ My career began back in 2014, when I was working as a software developer for a l
         {
             var company = await context.Companies.FirstOrDefaultAsync(x => x.Name == experience.Company);
 
-            if(company is null) 
+            if (company is null)
             {
-                company = new Company() {
+                company = new Company()
+                {
                     Id = Guid.NewGuid().ToString(),
                     Name = experience.Company,
                     Industry = await context.Industries.FirstAsync(x => x.Name == experience.Industry),
@@ -288,9 +289,10 @@ My career began back in 2014, when I was working as a software developer for a l
 
             var employment = await context.Employments.FirstOrDefaultAsync(x => x.Employer.Name == experience.Employer);
 
-            if(employment is null) 
+            if (employment is null)
             {
-                employment = new Employment() {
+                employment = new Employment()
+                {
                     Id = Guid.NewGuid().ToString(),
                     Employer = await context.Companies.FirstAsync(x => x.Name == experience.Employer),
                     Title = experience.Title, // Incorrect
@@ -321,7 +323,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 Company = company,
                 Location = experience.Location,
                 Title = experience.Title,
-                Employment = employment, 
+                Employment = employment,
                 EmploymentType = experience.EmploymentType,
                 StartDate = experience.StartDate,
                 EndDate = experience.EndDate,

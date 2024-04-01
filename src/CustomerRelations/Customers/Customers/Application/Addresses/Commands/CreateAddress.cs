@@ -1,8 +1,7 @@
 ﻿
-using YourBrand.Customers.Domain;
-
 using MediatR;
-using YourBrand.Customers.Application.Persons;
+
+using YourBrand.Customers.Domain;
 
 namespace YourBrand.Customers.Application.Addresses.Commands;
 

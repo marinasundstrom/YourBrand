@@ -1,11 +1,10 @@
-using YourBrand.Transactions.Application.Common.Models;
+using MassTransit;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain;
 using YourBrand.Transactions.Domain.Events;
-
-using MediatR;
-using MassTransit;
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Transactions.Application.Common.Interfaces;
 
 namespace YourBrand.Transactions.Application.Events;
 
@@ -26,10 +25,10 @@ public class TransactionReferenceUpdatedHandler : IDomainEventHandler<Transactio
             .Transactions
             .FirstOrDefaultAsync(i => i.Id == notification.TransactionId);
 
-        if(t is not null) 
+        if (t is not null)
         {
             await _publishEndpoint.Publish(
-                new Contracts.IncomingTransactionBatch(new [] { new Contracts.Transaction(t.Id, t.Date, (Contracts.TransactionStatus)t.Status, t.From!, t.Reference!, t.Currency, t.Amount) }));
+                new Contracts.IncomingTransactionBatch(new[] { new Contracts.Transaction(t.Id, t.Date, (Contracts.TransactionStatus)t.Status, t.From!, t.Reference!, t.Currency, t.Amount) }));
         }
     }
 }

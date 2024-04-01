@@ -53,7 +53,7 @@ public class Team : AuditableEntity
 
     public void RemoveMember(Person person)
     {
-        
+
         AddDomainEvent(new TeamMemberRemoved(Id, person.Id));
         _members.Remove(person);
     }

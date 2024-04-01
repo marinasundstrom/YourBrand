@@ -1,20 +1,18 @@
 using BlazorApp;
-
+using BlazorApp.Brands;
 using BlazorApp.Cart;
 using BlazorApp.ProductCategories;
 using BlazorApp.Products;
-using BlazorApp.Brands;
 
-using Blazored.Toast;
-
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http.Resilience;
-
-using YourBrand.StoreFront;
-using Client.Analytics;
 using Blazored.LocalStorage;
 using Blazored.SessionStorage;
+using Blazored.Toast;
+
+using Client.Analytics;
+
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
+using YourBrand.StoreFront;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 

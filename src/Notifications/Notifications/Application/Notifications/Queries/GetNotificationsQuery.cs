@@ -4,8 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
-using YourBrand.Notifications.Application.Common.Models;
-using YourBrand.Notifications.Domain;
 
 namespace YourBrand.Notifications.Application.Notifications.Queries;
 

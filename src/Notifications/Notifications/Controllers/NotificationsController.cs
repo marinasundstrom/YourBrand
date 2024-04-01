@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Notifications.Application.Common.Interfaces;
-using YourBrand.Notifications.Application.Common.Models;
 using YourBrand.Notifications.Application.Notifications;
 using YourBrand.Notifications.Application.Notifications.Commands;
 using YourBrand.Notifications.Application.Notifications.Queries;

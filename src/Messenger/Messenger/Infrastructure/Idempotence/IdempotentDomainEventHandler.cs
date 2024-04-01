@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Messenger.Application.Common;
+
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Domain.Common;
 using YourBrand.Messenger.Infrastructure.Persistence;

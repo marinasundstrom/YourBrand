@@ -1,6 +1,5 @@
-﻿using YourBrand.Sales.Infrastructure.Services;
-
-using YourBrand.Domain.Infrastructure;
+﻿using YourBrand.Domain.Infrastructure;
+using YourBrand.Sales.Infrastructure.Services;
 
 namespace YourBrand.Sales.Infrastructure;
 

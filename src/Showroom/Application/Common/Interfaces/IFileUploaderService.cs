@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.Showroom.Application.Common.Interfaces;
+﻿namespace YourBrand.Showroom.Application.Common.Interfaces;
 
 public interface IFileUploaderService
 {

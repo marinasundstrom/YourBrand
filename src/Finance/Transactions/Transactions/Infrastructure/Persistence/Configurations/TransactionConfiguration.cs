@@ -1,7 +1,7 @@
-﻿using YourBrand.Transactions.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.Transactions.Domain.Entities;
 
 namespace YourBrand.Transactions.Infrastructure.Persistence.Configurations;
 

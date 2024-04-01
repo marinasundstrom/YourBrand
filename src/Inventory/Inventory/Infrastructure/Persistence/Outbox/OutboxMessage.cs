@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.Inventory.Infrastructure.Persistence.Outbox;
+﻿namespace YourBrand.Inventory.Infrastructure.Persistence.Outbox;
 
 public sealed class OutboxMessage
 {

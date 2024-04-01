@@ -1,14 +1,15 @@
-using YourBrand.Inventory.Domain;
-using YourBrand.Inventory.Domain.Events;
-using YourBrand.Inventory.Application.Common.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Inventory.Application.Common;
-using YourBrand.Inventory.Contracts;
 using MassTransit;
-using YourBrand.Notifications.Client;
-using YourBrand.Inventory.Domain.Entities;
-using YourBrand.Notifications.Contracts;
+
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Identity;
+using YourBrand.Inventory.Application.Common.Interfaces;
+using YourBrand.Inventory.Contracts;
+using YourBrand.Inventory.Domain;
+using YourBrand.Inventory.Domain.Entities;
+using YourBrand.Inventory.Domain.Events;
+using YourBrand.Notifications.Client;
+using YourBrand.Notifications.Contracts;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 

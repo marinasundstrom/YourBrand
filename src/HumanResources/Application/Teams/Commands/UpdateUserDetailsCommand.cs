@@ -3,7 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
-using YourBrand.HumanResources.Contracts;
 using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources.Application.Teams.Commands;

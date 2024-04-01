@@ -92,7 +92,7 @@ public class TimeSheetsController : ControllerBase
         try
         {
             var result = await _mediator.Send(new UpdateEntryCommand(timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
-            
+
             return result switch
             {
                 Ok(EntryDto value) => Ok(value),

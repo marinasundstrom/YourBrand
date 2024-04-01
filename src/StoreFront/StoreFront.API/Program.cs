@@ -1,9 +1,7 @@
-﻿using Azure.Identity;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using YourBrand.Carts;
-
-using YourBrand.Catalog;
-using YourBrand.Inventory.Client;
+using Azure.Identity;
 
 using HealthChecks.UI.Client;
 
@@ -12,24 +10,24 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 
+using YourBrand;
+using YourBrand.Analytics.Client;
+using YourBrand.Carts;
+using YourBrand.Catalog;
+using YourBrand.Extensions;
+using YourBrand.Inventory.Client;
+using YourBrand.Sales;
 using YourBrand.StoreFront.API;
+using YourBrand.StoreFront.API.Features.Brands;
 using YourBrand.StoreFront.API.Features.Cart;
+using YourBrand.StoreFront.API.Features.Checkout;
 using YourBrand.StoreFront.API.Features.Products;
 using YourBrand.StoreFront.API.Persistence;
-using YourBrand.StoreFront.API.Features.Brands;
-
-using YourBrand;
-using YourBrand.Extensions;
-using YourBrand.Sales;
-using YourBrand.StoreFront.API.Features.Checkout;
-
-using Serilog;
-using YourBrand.Analytics.Client;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 
 string ServiceName = "StoreFront.API";
 
@@ -236,7 +234,8 @@ static void AddClients(WebApplicationBuilder builder)
         }
     });
 
-    var salesApiHttpClient = builder.Services.AddSalesClients((sp, http) => {
+    var salesApiHttpClient = builder.Services.AddSalesClients((sp, http) =>
+    {
         http.BaseAddress = new Uri(builder.Configuration["yourbrand:sales-svc:url"]!);
     },
     clientBuilder =>
@@ -267,7 +266,8 @@ static void AddClients(WebApplicationBuilder builder)
         }
     });
 
-    var analyticsApiHttpClient = builder.Services.AddAnalyticsClients((sp, http) => {
+    var analyticsApiHttpClient = builder.Services.AddAnalyticsClients((sp, http) =>
+    {
         http.BaseAddress = new Uri(builder.Configuration["yourbrand:analytics-svc:url"]!);
     },
     clientBuilder =>

@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.Application.Users.Queries;
 public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<UserDto>>
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Results<UserDto>>
-    { 
+    {
         readonly IShowroomContext _context;
 
         public GetUsersQueryHandler(IShowroomContext context)
@@ -24,7 +24,7 @@ public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchStrin
             var query = _context.Users
                 .OrderBy(p => p.Created)
                 .AsNoTracking();
-                //.AsSplitQuery();
+            //.AsSplitQuery();
 
             if (request.SearchString is not null)
             {

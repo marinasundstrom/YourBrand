@@ -1,8 +1,6 @@
-﻿using System;
-
-using YourBrand.Inventory.Domain.Common;
-using YourBrand.Inventory.Domain.Events;
+﻿using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Enums;
+using YourBrand.Inventory.Domain.Events;
 
 namespace YourBrand.Inventory.Domain.Entities;
 
@@ -33,7 +31,7 @@ public class WarehouseItem : AuditableEntity
     public string Location { get; set; }
 
     public WarehouseItemAvailability Availability { get; set; }
-    
+
     /// <summary>
     /// This number is the total you have physically available (including Qty Reserved),
     /// minus any items that have already been “picked” in a sales order (i.e. what’s still on your inventory shelves).
@@ -76,7 +74,7 @@ public class WarehouseItem : AuditableEntity
         QuantityPicked += quantity;
         QuantityOnHand -= quantity;
 
-        if(fromReserved) 
+        if (fromReserved)
         {
             QuantityReserved -= quantity;
             //AddDomainEvent(new WarehouseItemQuantityReservedUpdated(Id, WarehouseId, quantity));
@@ -92,7 +90,7 @@ public class WarehouseItem : AuditableEntity
         var oldQuantityOnHand = QuantityOnHand;
         var oldQuantityAvailable = QuantityAvailable;
 
-        if(fromPicked) 
+        if (fromPicked)
         {
             QuantityPicked -= quantity;
             AddDomainEvent(new WarehouseItemsPicked(Id, WarehouseId, quantity));

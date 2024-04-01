@@ -19,7 +19,7 @@ public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto Shippin
     }
 
     public sealed class Handler(IOrderRepository orderRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateShippingDetails, Result>
-    {        
+    {
         public async Task<Result> Handle(UpdateShippingDetails request, CancellationToken cancellationToken)
         {
             var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);

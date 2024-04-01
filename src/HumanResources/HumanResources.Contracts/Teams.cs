@@ -1,5 +1,3 @@
-using System;
-
 namespace YourBrand.HumanResources.Contracts;
 
 public record TeamCreated(string TeamId, string OrganizationId, string Name, string Description, string CreatedById);

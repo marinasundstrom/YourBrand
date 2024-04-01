@@ -1,8 +1,8 @@
-using YourBrand.Catalog.Persistence;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Groups;
 

@@ -1,7 +1,6 @@
-﻿namespace YourBrand.Accountant.Services
+﻿namespace YourBrand.Accountant.Services;
+
+public interface IReminderService
 {
-    public interface IReminderService
-    {
-        Task IssueReminders();
-    }
+    Task IssueReminders();
 }

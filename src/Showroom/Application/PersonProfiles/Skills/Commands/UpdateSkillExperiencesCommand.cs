@@ -30,7 +30,7 @@ public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkill
 
                 if (experience.Checked)
                 {
-                    if (skill is null) 
+                    if (skill is null)
                     {
                         exp.Skills.Add(new Domain.Entities.PersonProfileExperienceSkill()
                         {

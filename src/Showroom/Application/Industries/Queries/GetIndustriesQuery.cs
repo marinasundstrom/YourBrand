@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.Common.Models;
-using YourBrand.Showroom.Application.Industries;
 using YourBrand.Showroom.Domain.Entities;
-using YourBrand.Showroom.Domain.Exceptions;
 
 namespace YourBrand.Showroom.Application.Industries.Queries;
 
@@ -51,7 +43,7 @@ public record GetIndustriesQuery(int Page = 0, int PageSize = 10, string? Search
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result.OrderBy(x => x.Name);
             }

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.TimeReport.Application.Common;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Infrastructure.Persistence;

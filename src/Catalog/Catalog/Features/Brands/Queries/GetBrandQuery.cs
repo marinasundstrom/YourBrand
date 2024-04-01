@@ -1,9 +1,9 @@
-﻿using YourBrand.Catalog.Common;
-using YourBrand.Catalog.Persistence;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Common;
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.Brands.Queries;
 

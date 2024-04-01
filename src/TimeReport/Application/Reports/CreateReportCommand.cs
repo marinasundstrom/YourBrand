@@ -45,7 +45,7 @@ public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime 
 
             var entries = await query.ToListAsync(cancellationToken);
 
-            if(!entries.Any())
+            if (!entries.Any())
             {
                 return Stream.Null;
             }
@@ -55,25 +55,25 @@ public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime 
             using (var package = new ExcelPackage())
             {
                 IEnumerable<IGrouping<string, Entry>> entryGroups = default!;
-                
-                if(request.Mode == ReportMode.User) 
+
+                if (request.Mode == ReportMode.User)
                 {
                     entryGroups = entries.GroupBy(x => x.UserId);
                 }
-                else if(request.Mode == ReportMode.Project) 
+                else if (request.Mode == ReportMode.Project)
                 {
                     entryGroups = entries.GroupBy(x => x.Project.Id);
                 }
 
-                foreach(var entryGroup in entryGroups) 
+                foreach (var entryGroup in entryGroups)
                 {
                     string worksheetName = default!;
 
-                    if(request.Mode == ReportMode.User) 
+                    if (request.Mode == ReportMode.User)
                     {
                         worksheetName = $"{entryGroup.First().User.FirstName} {entryGroup.First().User.LastName}";
                     }
-                    else if(request.Mode == ReportMode.Project) 
+                    else if (request.Mode == ReportMode.Project)
                     {
                         worksheetName = entryGroup.First().Project.Name;
                     }
@@ -88,14 +88,14 @@ public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime 
                     {
                         int headerRow = row;
 
-                        if(request.Mode == ReportMode.User) 
+                        if (request.Mode == ReportMode.User)
                         {
                             worksheet.Cells[row++, 1]
                                 .LoadFromCollection(new[] { new { Project = project.Key.Name } });
-                            
+
                             headerRow = row - 1;
                         }
-                        
+
                         var activityGroups = project.GroupBy(x => x.Activity);
 
                         foreach (var activityGroup in activityGroups)
@@ -109,12 +109,12 @@ public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime 
 
                             row += data.Count();
 
-                            if(request.Mode == ReportMode.User)
+                            if (request.Mode == ReportMode.User)
                             {
                                 worksheet.Cells[headerRow, 5]
                                     .Value = data.Sum(e => e.Hours.GetValueOrDefault());
                             }
-                            else 
+                            else
                             {
                                 worksheet.Cells[row++, 5]
                                     .Value = data.Sum(e => e.Hours.GetValueOrDefault());

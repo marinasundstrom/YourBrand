@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Models;
-using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 

@@ -4,30 +4,24 @@ using MassTransit;
 
 using MediatR;
 
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Documents.Client;
+using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Inventory;
 using YourBrand.Inventory.Application;
-using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Application.Items.Commands;
 using YourBrand.Inventory.Application.Items.Queries;
 using YourBrand.Inventory.Infrastructure;
 using YourBrand.Inventory.Infrastructure.Persistence;
-using YourBrand.Inventory.Application.Items;
-using YourBrand.Documents.Client;
-using YourBrand.Payments.Client;
 using YourBrand.Notifications.Client;
-using YourBrand.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
+using YourBrand.Payments.Client;
+
 using ItemDto = YourBrand.Inventory.Application.Items.ItemDto;
-
-using Serilog;
-
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Inventory;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,7 +101,7 @@ builder.Services.AddPaymentsClients((sp, http) =>
 builder.Services.AddNotificationsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/notifications/");
-}, b => {});
+}, b => { });
 
 var app = builder.Build();
 

@@ -1,9 +1,6 @@
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
-
-using YourBrand.Sales;
-using YourBrand.Sales.Services;
-using YourBrand.Domain;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 

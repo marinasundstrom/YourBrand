@@ -1,17 +1,7 @@
-
-using AspNetCore.Authentication.ApiKey;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.HumanResources.Application.Common.Models;
-using YourBrand.HumanResources.Application.Teams;
-using YourBrand.HumanResources.Application.Teams.Queries;
-using YourBrand.HumanResources.Application.Teams.Commands;
-using YourBrand.HumanResources.Domain.Exceptions;
 using YourBrand.HumanResources.Application.Users.Commands;
 
 namespace YourBrand.HumanResources;
@@ -29,7 +19,7 @@ public class SyncController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> SyncData(CancellationToken cancellationToken) 
+    public async Task<ActionResult> SyncData(CancellationToken cancellationToken)
     {
         await _mediator.Send(new SyncDataCommand(), cancellationToken);
         return Ok();

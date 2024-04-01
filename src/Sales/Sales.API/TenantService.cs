@@ -1,5 +1,3 @@
-using YourBrand.Sales;
-
 namespace YourBrand.Sales;
 
 public sealed class TenantService : ITenantService

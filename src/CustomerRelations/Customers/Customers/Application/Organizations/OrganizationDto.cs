@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Customers.Application.Addresses;
+﻿using YourBrand.Customers.Application.Addresses;
 
 namespace YourBrand.Customers.Application.Organizations;
 

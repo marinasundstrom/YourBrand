@@ -1,7 +1,7 @@
 
 namespace YourBrand.Showroom.Domain.Enums;
 
-public enum LanguageProficiency 
+public enum LanguageProficiency
 {
     Elementary = 1,
     LimitedWorking,

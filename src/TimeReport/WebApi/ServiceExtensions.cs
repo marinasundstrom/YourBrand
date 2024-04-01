@@ -1,5 +1,4 @@
-﻿using System;
-using YourBrand.Invoicing.Client;
+﻿using YourBrand.Invoicing.Client;
 
 namespace YourBrand.TimeReport;
 
@@ -15,4 +14,3 @@ public static class ServiceExtensions
         return services;
     }
 }
-

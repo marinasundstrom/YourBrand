@@ -1,9 +1,9 @@
-using YourBrand.Catalog.Domain.Entities;
-using YourBrand.Catalog.Persistence;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog.Domain.Entities;
+using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record UpdateProductVariant(long ProductId, long ProductVariantId, UpdateProductVariantData Data) : IRequest<ProductDto>

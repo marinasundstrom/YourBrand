@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Analytics.Application.Common;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Infrastructure.Persistence.Outbox;

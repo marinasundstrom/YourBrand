@@ -14,7 +14,7 @@ public enum PaymentStatus
     Cancelled
 }
 
-public enum PaymentMethod 
+public enum PaymentMethod
 {
     PlusGiro
 }

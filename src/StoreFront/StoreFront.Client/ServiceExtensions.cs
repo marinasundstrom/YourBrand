@@ -1,8 +1,10 @@
 ﻿namespace YourBrand.StoreFront;
 
-using Microsoft.Extensions.DependencyInjection;
-using BlazorApp;
 using System.Text.Json;
+
+using BlazorApp;
+
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 
 public static class ServiceExtensions

@@ -1,8 +1,8 @@
-﻿using YourBrand.Application.Common.Interfaces;
-
-using Contracts;
+﻿using Contracts;
 
 using MassTransit;
+
+using YourBrand.Application.Common.Interfaces;
 
 namespace YourBrand.Consumers;
 

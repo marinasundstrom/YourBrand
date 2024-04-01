@@ -3,7 +3,6 @@ using MediatR;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain;
-using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Domain.Repositories;
 

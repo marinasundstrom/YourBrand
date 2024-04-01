@@ -1,12 +1,6 @@
-using YourBrand.Inventory.Application.Common.Models;
+using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Domain.Events;
-
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Inventory.Application.Common.Interfaces;
-using YourBrand.Inventory.Application.Common;
 
 namespace YourBrand.Inventory.Application.Items.Events;
 

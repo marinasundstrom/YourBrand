@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 
 using YourBrand.Messenger.Client;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using YourBrand.Portal;
-using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Modules;
-using Microsoft.Extensions.Localization;
+using YourBrand.Portal.Navigation;
 
 namespace YourBrand.Messenger;
 

@@ -1,6 +1,4 @@
-﻿using YourBrand.Ticketing.Infrastructure.Services;
-
-namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories.Mocks;
+﻿namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories.Mocks;
 
 public sealed class MockUnitOfWork : IUnitOfWork
 {

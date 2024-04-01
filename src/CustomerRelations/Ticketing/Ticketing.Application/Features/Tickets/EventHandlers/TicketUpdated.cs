@@ -1,6 +1,4 @@
-using MediatR;
 using YourBrand.Ticketing.Application.Common;
-using YourBrand.Ticketing.Application.Services;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 

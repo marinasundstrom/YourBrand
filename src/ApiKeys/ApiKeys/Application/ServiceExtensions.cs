@@ -1,7 +1,4 @@
-﻿
-using YourBrand.ApiKeys.Application.Commands;
-
-using MediatR;
+﻿using YourBrand.ApiKeys.Application.Commands;
 
 namespace YourBrand.ApiKeys.Application;
 

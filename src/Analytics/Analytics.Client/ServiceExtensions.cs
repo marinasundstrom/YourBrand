@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Analytics.Client;
-
 namespace YourBrand.Analytics.Client;
 
 public static class ServiceExtensions

@@ -1,6 +1,3 @@
-using YourBrand.Sales.Domain;
-using YourBrand.Sales.Domain.Events;
-
 namespace YourBrand.Sales.Domain.Entities;
 
 public class Address

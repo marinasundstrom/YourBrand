@@ -1,15 +1,11 @@
-﻿using System;
-
-using YourBrand.Showroom.Application.CompetenceAreas;
-using YourBrand.Showroom.Application.Industries;
-using YourBrand.Showroom.Application.Organizations;
+﻿using YourBrand.Showroom.Application.Industries;
 
 namespace YourBrand.Showroom.Application.Companies;
 
 public record CompanyDto(
     string Id,
     string Name,
-    string? Logo, 
+    string? Logo,
     string? Link,
     IndustryDto Industry
 );

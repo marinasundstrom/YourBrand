@@ -1,9 +1,5 @@
-
-using AspNetCore.Authentication.ApiKey;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -80,7 +76,7 @@ public class OrganizationsController : Controller
             return NotFound();
         }
     }
-    
+
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteOrganization(string id, CancellationToken cancellationToken)

@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Inventory.Domain.Common;
+﻿using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Enums;
 
 namespace YourBrand.Inventory.Domain.Entities;
@@ -22,7 +20,7 @@ public class Item : AuditableEntity
     public string Id { get; set; }
 
     public string Name { get; set; } = null!;
-    
+
     public ItemType Type { get; set; }
 
     public string? GTIN { get; set; }

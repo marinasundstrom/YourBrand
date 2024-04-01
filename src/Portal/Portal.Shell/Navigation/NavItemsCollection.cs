@@ -2,7 +2,7 @@ namespace YourBrand.Portal.Navigation;
 
 public abstract class NavItemsCollection
 {
-    private List<INavItem> _items = new List<INavItem>();
+    private readonly List<INavItem> _items = new List<INavItem>();
 
     public IReadOnlyList<INavItem> Items => _items;
 

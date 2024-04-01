@@ -33,7 +33,7 @@ public class GetUsersQuery : IRequest<Results<UserDto>>
     public Application.Common.Models.SortDirection? SortDirection { get; }
 
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Results<UserDto>>
-    { 
+    {
         readonly IMessengerContext _context;
 
         public GetUsersQueryHandler(IMessengerContext context)
@@ -46,7 +46,7 @@ public class GetUsersQuery : IRequest<Results<UserDto>>
             var query = _context.Users
                 .OrderBy(p => p.Created)
                 .AsNoTracking();
-                //.AsSplitQuery();
+            //.AsSplitQuery();
 
             if (request.SearchString is not null)
             {

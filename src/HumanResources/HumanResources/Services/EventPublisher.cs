@@ -1,11 +1,6 @@
-using System;
-
 using MassTransit;
 
-using Microsoft.EntityFrameworkCore;
-
 using YourBrand.HumanResources.Application.Common.Interfaces;
-using YourBrand.HumanResources.Domain.Entities;
 
 namespace YourBrand.HumanResources.Services;
 

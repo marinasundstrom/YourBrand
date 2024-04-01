@@ -1,7 +1,4 @@
-﻿
-using YourBrand.HumanResources.Domain.Entities;
-
-namespace YourBrand.HumanResources.Domain.Common.Interfaces;
+﻿namespace YourBrand.HumanResources.Domain.Common.Interfaces;
 
 public interface IAuditableEntity
 {

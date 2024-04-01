@@ -1,11 +1,5 @@
-﻿
-using System.Security.Claims;
+﻿using MediatR;
 
-using IdentityModel;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
@@ -40,7 +34,7 @@ public record CreatePersonCommand(string OrganizationId, string FirstName, strin
 
             person.AddToRole(role);
 
-            if(request.ReportsTo != null)
+            if (request.ReportsTo != null)
             {
                 var manager = await _context.Persons.FirstAsync(x => x.Id == request.ReportsTo);
                 person.ReportsTo = manager;
@@ -51,7 +45,7 @@ public record CreatePersonCommand(string OrganizationId, string FirstName, strin
             await _context.SaveChangesAsync(cancellationToken);
 
             person = await _context.Persons
-               .Include(u => u.Roles)   
+               .Include(u => u.Roles)
                .Include(u => u.Organization)
                .Include(u => u.Department)
                .AsNoTracking()

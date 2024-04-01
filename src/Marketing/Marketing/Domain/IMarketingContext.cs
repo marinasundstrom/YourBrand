@@ -1,6 +1,6 @@
-﻿using YourBrand.Marketing.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Marketing.Domain.Entities;
 
 namespace YourBrand.Marketing.Domain;
 

@@ -1,14 +1,10 @@
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-
-using YourBrand.Catalog.Persistence;
-
 using MassTransit;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
+
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Images;
 

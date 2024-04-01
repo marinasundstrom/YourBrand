@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 
+using Newtonsoft.Json;
+
+using YourBrand.ApiKeys;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Entities;
-using YourBrand.Showroom.Infrastructure;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using YourBrand.ApiKeys;
 using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
 using YourBrand.Showroom.Infrastructure.Persistence.Outbox;
-using Newtonsoft.Json;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -35,7 +32,7 @@ public class ShowroomContext : DbContext, IShowroomContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 
@@ -68,19 +65,19 @@ public class ShowroomContext : DbContext, IShowroomContext
 
     public DbSet<Skill> Skills { get; set; } = null!;
 
-    public DbSet<PersonProfileSkill> PersonProfileSkills { get;  set; } = null!;
+    public DbSet<PersonProfileSkill> PersonProfileSkills { get; set; } = null!;
 
-    public DbSet<PersonProfileExperience> PersonProfileExperiences { get;  set; } = null!;
+    public DbSet<PersonProfileExperience> PersonProfileExperiences { get; set; } = null!;
 
-    public DbSet<PersonProfileExperienceSkill> PersonProfileExperienceSkills { get;  set; } = null!;
+    public DbSet<PersonProfileExperienceSkill> PersonProfileExperienceSkills { get; set; } = null!;
 
-    public DbSet<PersonProfileEducation> PersonProfileEducation { get;  set; } = null!;
+    public DbSet<PersonProfileEducation> PersonProfileEducation { get; set; } = null!;
 
-    public DbSet<PersonProfileLanguage> PersonProfileLanguages { get;  set; } = null!;
+    public DbSet<PersonProfileLanguage> PersonProfileLanguages { get; set; } = null!;
 
-    public DbSet<PersonProfileIndustryExperiences> PersonProfileIndustryExperiences { get;  set; } = null!;
+    public DbSet<PersonProfileIndustryExperiences> PersonProfileIndustryExperiences { get; set; } = null!;
 
-    public DbSet<Language> Languages { get;  set; } = null!;
+    public DbSet<Language> Languages { get; set; } = null!;
 
     public DbSet<Industry> Industries { get; set; } = null!;
 

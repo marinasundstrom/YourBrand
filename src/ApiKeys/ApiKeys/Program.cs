@@ -1,20 +1,17 @@
 ﻿
+using MassTransit;
+
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
 using YourBrand.ApiKeys;
 using YourBrand.ApiKeys.Application;
 using YourBrand.ApiKeys.Authentication;
 using YourBrand.ApiKeys.Infrastructure;
 using YourBrand.ApiKeys.Infrastructure.Persistence;
-
-using MassTransit;
-
-using NSwag;
-using NSwag.Generation.Processors.Security;
-
-using Serilog;
-
-using YourBrand;
 using YourBrand.Extensions;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,7 +64,7 @@ services.AddAuthWithApiKey();
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
-    
+
     x.AddConsumers(typeof(Program).Assembly);
     x.UsingRabbitMq((context, cfg) =>
     {

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
-using YourBrand.Ticketing.Application.Services;
+
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;

@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace YourBrand.Payments.Application;
 
 public static class ServiceCollectionExtensions

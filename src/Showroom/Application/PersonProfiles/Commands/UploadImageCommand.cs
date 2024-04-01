@@ -1,9 +1,9 @@
 
-using YourBrand.Showroom.Application.Common.Interfaces;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 

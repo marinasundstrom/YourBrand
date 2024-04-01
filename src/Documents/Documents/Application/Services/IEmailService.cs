@@ -1,8 +1,7 @@
 ﻿
-namespace YourBrand.Documents.Application.Services
+namespace YourBrand.Documents.Application.Services;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task SendEmail(string recipient, string subject, string body);
-    }
+    Task SendEmail(string recipient, string subject, string body);
 }

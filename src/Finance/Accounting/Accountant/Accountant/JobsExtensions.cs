@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Hangfire;
 
 using YourBrand.Accountant.Services;
-
-using Hangfire;
 
 namespace YourBrand.Accountant;
 

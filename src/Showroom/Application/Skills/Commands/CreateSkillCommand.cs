@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Skills.Commands;
@@ -36,7 +37,7 @@ public record CreateSkillCommand(string Name, string SkillAreaId) : IRequest<Ski
 
             skill = await context
                .Skills
-               .Include(x => x.Area)      
+               .Include(x => x.Area)
                .ThenInclude(x => x.Industry)
                .AsNoTracking()
                .FirstAsync(c => c.Id == skill.Id, cancellationToken);

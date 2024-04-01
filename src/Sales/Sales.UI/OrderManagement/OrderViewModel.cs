@@ -2,14 +2,12 @@
 
 using Core;
 
-using YourBrand.Sales;
-
 namespace YourBrand.Sales.OrderManagement;
 
 public class OrderViewModel
 {
-    private List<OrderItemViewModel> _items = new List<OrderItemViewModel>();
-    private List<OrderVatAmountViewModel> _vatAmounts = new List<OrderVatAmountViewModel>();
+    private readonly List<OrderItemViewModel> _items = new List<OrderItemViewModel>();
+    private readonly List<OrderVatAmountViewModel> _vatAmounts = new List<OrderVatAmountViewModel>();
 
     public int Id { get; set; }
 

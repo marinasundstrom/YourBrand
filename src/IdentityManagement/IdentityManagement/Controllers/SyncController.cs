@@ -1,14 +1,7 @@
-
-using AspNetCore.Authentication.ApiKey;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.IdentityManagement.Application.Common.Models;
-using YourBrand.IdentityManagement.Domain.Exceptions;
 using YourBrand.IdentityManagement.Application.Users.Commands;
 
 namespace YourBrand.IdentityManagement;
@@ -26,7 +19,7 @@ public class SyncController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> SyncData(CancellationToken cancellationToken) 
+    public async Task<ActionResult> SyncData(CancellationToken cancellationToken)
     {
         await _mediator.Send(new SyncDataCommand(), cancellationToken);
         return Ok();

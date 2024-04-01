@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace YourBrand.Showroom.Application.PersonProfiles;
+﻿namespace YourBrand.Showroom.Application.PersonProfiles;
 
 public abstract class PersonProfileViewModelDto
 {

@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Persistence;
 
@@ -38,7 +36,7 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            try 
+            try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);
 
@@ -76,8 +74,8 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
 
                 entityTypeBuilder.HasQueryFilter(queryFilterLambda);
             }
-            catch(InvalidOperationException exc) 
-                when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned")) 
+            catch (InvalidOperationException exc)
+                when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
             {
                 Console.WriteLine("Skipping owned type");
             }
@@ -130,7 +128,7 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
     public DbSet<User> Users { get; set; }
 
     public DbSet<Subscription> Subscriptions { get; set; }
-    
+
     public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
 #nullable restore

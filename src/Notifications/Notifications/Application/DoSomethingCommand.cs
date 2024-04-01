@@ -1,6 +1,4 @@
-﻿using System;
-
-using MediatR;
+﻿using MediatR;
 
 namespace YourBrand.Notifications.Application;
 

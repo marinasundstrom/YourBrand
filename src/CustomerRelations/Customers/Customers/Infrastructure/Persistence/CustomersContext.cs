@@ -1,11 +1,11 @@
-﻿using YourBrand.Customers.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Common;
 using YourBrand.Customers.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Customers.Infrastructure.Persistence.Interceptors;
-using Newtonsoft.Json;
 using YourBrand.Customers.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Customers.Infrastructure.Persistence;
@@ -28,7 +28,7 @@ public class CustomersContext : DbContext, ICustomersContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 
@@ -47,7 +47,7 @@ public class CustomersContext : DbContext, ICustomersContext
 
     public DbSet<Organization> Organizations { get; set; } = null!;
 
-    public DbSet<Address> Addresses { get; set; }  = null!;
+    public DbSet<Address> Addresses { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

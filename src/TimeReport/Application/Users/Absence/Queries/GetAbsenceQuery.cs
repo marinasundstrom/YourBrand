@@ -4,9 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
-
-using static YourBrand.TimeReport.Application.Users.Absence.AbsenceHelpers;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 

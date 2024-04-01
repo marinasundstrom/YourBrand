@@ -1,12 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System.Linq;
 using System.Text.Json;
-
-using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 
 using NSubstitute;
@@ -24,7 +20,7 @@ var builder = new ConfigurationBuilder()
 
 var configuration = builder.Build();
 
-ServiceCollection services = new ();
+ServiceCollection services = new();
 services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program)));
 services.AddLogging();
 services.AddInfrastructure(configuration);
@@ -49,7 +45,7 @@ var experiences = await context.PersonProfileExperiences
 var experiences2 = experiences
     .OrderByDescending(x => x.StartDate)
     .ThenBy(x => x.Current)
-    .Select(experience => 
+    .Select(experience =>
     new
     {
         Title = experience.Title,

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.TimeReport.Infrastructure.Persistence.Outbox;
+﻿namespace YourBrand.TimeReport.Infrastructure.Persistence.Outbox;
 
 public sealed class OutboxMessage
 {

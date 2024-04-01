@@ -1,35 +1,27 @@
 ﻿using System.Text.Json.Serialization;
 
+using Azure.Identity;
+using Azure.Storage.Blobs;
+
 using MassTransit;
 
-using MediatR;
-
-using YourBrand.Customers.Application;
-using YourBrand.Customers.Application.Addresses;
-using YourBrand.Customers.Application.Addresses.Commands;
-using YourBrand.Customers.Application.Addresses.Queries;
-using YourBrand.Customers.Application.Common.Interfaces;
-using YourBrand.Customers.Application.Persons.Commands;
-using YourBrand.Customers.Application.Persons.Queries;
-using YourBrand.Customers.Infrastructure;
-using YourBrand.Customers.Infrastructure.Persistence;
-using YourBrand.Customers.Application.Persons;
-using YourBrand.Documents.Client;
-using YourBrand.Payments.Client;
-using YourBrand.Identity;
+using Microsoft.Extensions.Azure;
 
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-using YourBrand.Customers;
-using YourBrand.Customers.Application.Commands;
-using YourBrand.Customers.Application.Services;
-using YourBrand.Customers.Infrastructure.Services;
-using Microsoft.Extensions.Azure;
-using Azure.Storage.Blobs;
-using Azure.Identity;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Customers;
+using YourBrand.Customers.Application;
+using YourBrand.Customers.Application.Services;
+using YourBrand.Customers.Infrastructure;
+using YourBrand.Customers.Infrastructure.Persistence;
+using YourBrand.Customers.Infrastructure.Services;
+using YourBrand.Documents.Client;
+using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -137,7 +129,7 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

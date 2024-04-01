@@ -1,5 +1,4 @@
-﻿using System;
-namespace YourBrand.Showroom.Domain.Exceptions;
+﻿namespace YourBrand.Showroom.Domain.Exceptions;
 
 public class DomainException : Exception
 {

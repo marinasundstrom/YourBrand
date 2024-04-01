@@ -3,8 +3,6 @@ using Azure.Storage.Blobs.Models;
 
 using YourBrand.Catalog.Persistence;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Images;
 
 public interface IProductImageUploader

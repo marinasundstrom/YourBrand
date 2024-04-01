@@ -1,11 +1,15 @@
-﻿using FluentValidation;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using YourBrand.Analytics.Application.Behaviors;
-using YourBrand.Analytics.Application.Hubs;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json;
+
+using FluentValidation;
+
+using MediatR;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using YourBrand.Analytics.Application.Behaviors;
 using YourBrand.Analytics.Application.Features.Tracking;
+using YourBrand.Analytics.Application.Hubs;
 
 namespace YourBrand.Analytics.Application;
 

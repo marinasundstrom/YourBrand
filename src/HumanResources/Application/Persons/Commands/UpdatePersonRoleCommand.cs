@@ -1,11 +1,8 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.HumanResources.Application.Common.Interfaces;
-using YourBrand.HumanResources.Domain.Entities;
-using YourBrand.HumanResources.Domain.Exceptions;
 
 namespace YourBrand.HumanResources.Application.Persons.Commands;
 

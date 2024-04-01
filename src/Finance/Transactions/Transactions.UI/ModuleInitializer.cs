@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
+using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
-using YourBrand.Portal;
 using YourBrand.Transactions.Client;
 
 namespace YourBrand.Transactions;

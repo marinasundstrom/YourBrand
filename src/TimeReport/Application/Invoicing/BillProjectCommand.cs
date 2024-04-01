@@ -1,6 +1,4 @@
-﻿using System;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -45,11 +43,11 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
             var invoice = await _invoicesClient.CreateInvoiceAsync(new CreateInvoice()
             {
-                 Date = DateTime.Now,
-                 Note = entriesByActivity.First().Key.Project.Name
+                Date = DateTime.Now,
+                Note = entriesByActivity.First().Key.Project.Name
             });
 
-            foreach(var entryGroup in entriesByActivity)
+            foreach (var entryGroup in entriesByActivity)
             {
                 var description = entryGroup.Key.Name;
                 var hourlyRate = entryGroup.Key.HourlyRate.GetValueOrDefault();
@@ -58,7 +56,8 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
                 await _invoicesClient.AddItemAsync(
                     invoice.Id,
-                    new AddInvoiceItem {
+                    new AddInvoiceItem
+                    {
                         ProductType = ProductType.Service,
                         Description = description,
                         UnitPrice = hourlyRate.GetVatFromTotal(0.25),
@@ -73,4 +72,3 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
         }
     }
 }
-

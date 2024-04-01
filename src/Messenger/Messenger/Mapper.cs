@@ -6,7 +6,7 @@ public static class Mapper
 {
     public static UserDto ToDto(this Domain.Entities.User user)
     {
-        return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName,  user.Email, user.Created, user.Deleted);
+        return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.Deleted);
     }
 
     public static Contracts.MessageDto ToDto(this Domain.Entities.Message message)

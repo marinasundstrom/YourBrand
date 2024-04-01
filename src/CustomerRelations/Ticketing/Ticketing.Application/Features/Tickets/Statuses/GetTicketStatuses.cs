@@ -1,8 +1,9 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Ticketing.Application.Common;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 
@@ -23,7 +24,7 @@ public record GetTicketStatuses(string? SearchTerm, int Page = 1, int PageSize =
 
             var totalCount = await query.CountAsync(cancellationToken);
 
-            if(!string.IsNullOrEmpty(request.SearchTerm))
+            if (!string.IsNullOrEmpty(request.SearchTerm))
             {
                 query = query.Where(x => x.Name.ToLower().Contains(request.SearchTerm.ToLower()));
             }

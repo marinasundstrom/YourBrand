@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-using YourBrand.Sales.Domain.Events;
-using YourBrand.Sales.Domain.ValueObjects;
+﻿using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 

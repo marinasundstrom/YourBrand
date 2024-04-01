@@ -67,11 +67,11 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
 
             IQueryable<PersonProfileExperience> items = null!;
 
-            if(request.PageSize is null) 
+            if (request.PageSize is null)
             {
                 items = result.AsQueryable();
             }
-            else 
+            else
             {
                 items = result
                     .Skip((request.Page) * request.PageSize.GetValueOrDefault())
@@ -79,7 +79,7 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
             }
 
             return new Results<ExperienceDto>(
-                items.Select(e => e.ToDto()), 
+                items.Select(e => e.ToDto()),
                 totalCount);
         }
     }

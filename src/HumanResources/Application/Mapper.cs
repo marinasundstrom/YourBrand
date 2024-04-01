@@ -1,10 +1,7 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-using YourBrand.HumanResources.Application.Teams;
-using YourBrand.HumanResources.Application.Persons;
-using YourBrand.HumanResources.Domain.Entities;
 using YourBrand.HumanResources.Application.Organizations;
+using YourBrand.HumanResources.Application.Persons;
+using YourBrand.HumanResources.Application.Teams;
+using YourBrand.HumanResources.Domain.Entities;
 
 namespace YourBrand.HumanResources.Application;
 

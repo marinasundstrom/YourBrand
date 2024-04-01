@@ -2,7 +2,7 @@
 
 namespace YourBrand.Showroom.Domain.Common;
 
-public abstract class AuditableEntity: Entity
+public abstract class AuditableEntity : Entity
 {
     public DateTime Created { get; set; }
 

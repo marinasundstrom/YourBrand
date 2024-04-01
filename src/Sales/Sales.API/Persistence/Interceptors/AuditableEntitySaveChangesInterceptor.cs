@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Persistence.Interceptors;
 
@@ -50,7 +49,7 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
 
                 if (entry.Entity is IHasTenant e)
                 {
-                    if(e.TenantId is null) 
+                    if (e.TenantId is null)
                     {
                         e.TenantId = _tenantService.TenantId;
                     }

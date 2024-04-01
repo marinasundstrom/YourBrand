@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Domain.ValueObjects;
-
-using Core;
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales;
 
 namespace YourBrand.Sales.Domain.Entities;
 
@@ -141,7 +135,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant
         return orderItem;
     }
 
-    public OrderItem AddItem(OrderItem orderItem) 
+    public OrderItem AddItem(OrderItem orderItem)
     {
         _items.Add(orderItem);
 

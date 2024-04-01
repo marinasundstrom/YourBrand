@@ -1,17 +1,13 @@
 using Asp.Versioning;
 
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-
-using Newtonsoft.Json.Schema;
 
 using NJsonSchema;
 using NJsonSchema.Generation;
 
 using NSwag;
 using NSwag.AspNetCore;
-using NSwag.Generation;
 using NSwag.Generation.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
@@ -24,8 +20,8 @@ public static class OpenApiExtensions
         new(2, 0)
     ];
 
-    public static IServiceCollection AddOpenApi(this IServiceCollection services, 
-        string documentTitle, 
+    public static IServiceCollection AddOpenApi(this IServiceCollection services,
+        string documentTitle,
         IEnumerable<ApiVersion>? apiVersions = null,
         Action<AspNetCoreOpenApiDocumentGeneratorSettings>? setting = null)
     {
@@ -64,7 +60,7 @@ public static class OpenApiExtensions
         return services;
     }
 
-    public static AspNetCoreOpenApiDocumentGeneratorSettings AddJwtSecurity(this AspNetCoreOpenApiDocumentGeneratorSettings settings) 
+    public static AspNetCoreOpenApiDocumentGeneratorSettings AddJwtSecurity(this AspNetCoreOpenApiDocumentGeneratorSettings settings)
     {
         settings.AddSecurity("JWT", new OpenApiSecurityScheme
         {
@@ -106,13 +102,13 @@ public static class OpenApiExtensions
         Action<OpenApiDocumentMiddlewareSettings>? configureOpenApi = null,
         Action<SwaggerUiSettings>? configureSwaggerUi = null)
     {
-        app.UseOpenApi(options => 
+        app.UseOpenApi(options =>
         {
             configureOpenApi?.Invoke(options);
 
-            options.Path = "/swagger/{documentName}/swagger.yaml"; 
+            options.Path = "/swagger/{documentName}/swagger.yaml";
         });
-        
+
         app.UseSwaggerUi(options =>
         {
             configureSwaggerUi?.Invoke(options);

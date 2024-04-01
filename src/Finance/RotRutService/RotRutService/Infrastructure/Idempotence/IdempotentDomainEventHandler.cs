@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.RotRutService.Application.Common;
+
 using YourBrand.RotRutService.Application.Common.Interfaces;
 using YourBrand.RotRutService.Domain.Common;
 using YourBrand.RotRutService.Infrastructure.Persistence;

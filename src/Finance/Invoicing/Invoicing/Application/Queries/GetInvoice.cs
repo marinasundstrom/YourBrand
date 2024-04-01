@@ -1,9 +1,8 @@
-﻿using YourBrand.Invoicing.Application.Queries;
-using YourBrand.Invoicing.Domain;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Queries;
 

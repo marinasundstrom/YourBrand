@@ -1,7 +1,4 @@
-﻿
-using AspNetCore.Authentication.ApiKey;
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 namespace YourBrand.ApiKeys.Authentication;
@@ -38,4 +35,3 @@ public static class ServiceExtensions
         return services;
     }
 }
-

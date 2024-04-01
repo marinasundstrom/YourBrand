@@ -1,5 +1,4 @@
 ﻿using YourBrand.Identity;
-using YourBrand.Messenger.Application.Common.Interfaces;
 
 namespace YourBrand.Messenger;
 

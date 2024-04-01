@@ -1,7 +1,4 @@
-﻿using System;
-
-using YourBrand.Domain.Common;
-using YourBrand.Domain.Events;
+﻿using YourBrand.Domain.Common;
 
 namespace YourBrand.Domain.Entities;
 

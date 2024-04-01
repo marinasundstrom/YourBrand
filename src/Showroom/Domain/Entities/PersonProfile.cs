@@ -1,5 +1,3 @@
-using System;
-
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Enums;
 
@@ -9,9 +7,9 @@ public class PersonProfile : AuditableEntity, ISoftDelete
 {
     public string Id { get; set; }
 
-    public string FirstName { get; set; }  = null!;
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; set; }  = null!;
+    public string LastName { get; set; } = null!;
 
     public string? DisplayName { get; set; }
 
@@ -31,23 +29,23 @@ public class PersonProfile : AuditableEntity, ISoftDelete
 
     public string OrganizationId { get; set; } = null!;
 
-    public CompetenceArea CompetenceArea { get; set; }  = null!;
+    public CompetenceArea CompetenceArea { get; set; } = null!;
 
     public string CompetenceAreaId { get; set; } = null!;
-    
+
     public Availability Availability { get; set; } = Availability.Available;
 
     public string? ProfileImage { get; set; }
 
-    public string Headline { get; set; }  = null!;
+    public string Headline { get; set; } = null!;
 
-    public string ShortPresentation { get; set; }  = null!;
+    public string ShortPresentation { get; set; } = null!;
 
-    public string Presentation { get; set; }  = null!;
+    public string Presentation { get; set; } = null!;
 
     public string? ProfileVideo { get; set; }
 
-    public User? Manager { get; set; }  = null!;
+    public User? Manager { get; set; } = null!;
 
     public string? ManagerId { get; set; } = null!;
 
@@ -64,7 +62,7 @@ public class PersonProfile : AuditableEntity, ISoftDelete
     public List<Skill> Skills { get; set; } = new List<Skill>();
 
     public List<PersonProfileSkill> PersonProfileSkills { get; set; } = new List<PersonProfileSkill>();
-    
+
     public List<Employment> Employments { get; set; } = new List<Employment>();
 
     public DateTime? Deleted { get; set; }

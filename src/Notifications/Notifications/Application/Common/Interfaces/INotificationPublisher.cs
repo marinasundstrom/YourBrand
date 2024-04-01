@@ -1,5 +1,4 @@
-﻿using YourBrand.Notifications.Application.Common.Interfaces;
-using YourBrand.Notifications.Domain.Entities;
+﻿using YourBrand.Notifications.Domain.Entities;
 
 namespace YourBrand.Notifications.Application.Common.Interfaces;
 

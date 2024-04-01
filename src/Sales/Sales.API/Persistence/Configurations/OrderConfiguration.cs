@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Persistence.Configurations;
 
@@ -14,7 +13,7 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasIndex(x => x.TenantId);
 
-        builder.HasAlternateKey(o => new { o.OrganizationId , o.OrderNo });
+        builder.HasAlternateKey(o => new { o.OrganizationId, o.OrderNo });
 
         builder.HasMany(order => order.Items)
             .WithOne(orderItem => orderItem.Order)

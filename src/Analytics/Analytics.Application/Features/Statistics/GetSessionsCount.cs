@@ -1,4 +1,5 @@
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Analytics.Application.Features.Statistics;

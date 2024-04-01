@@ -1,13 +1,11 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Contracts;
-using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Domain.Exceptions;
-using YourBrand.Identity;
 
 namespace YourBrand.IdentityManagement.Application.Organizations.Commands;
 

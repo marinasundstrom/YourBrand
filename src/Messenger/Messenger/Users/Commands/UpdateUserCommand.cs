@@ -4,8 +4,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Domain.Exceptions;
 using YourBrand.Messenger.Contracts;
+using YourBrand.Messenger.Domain.Exceptions;
 
 namespace YourBrand.Messenger.Application.Users.Commands;
 
@@ -31,7 +31,7 @@ public class UpdateUserCommand : IRequest<UserDto>
     public string Email { get; }
 
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
-    { 
+    {
         readonly IMessengerContext _context;
 
         public UpdateUserCommandHandler(IMessengerContext context)

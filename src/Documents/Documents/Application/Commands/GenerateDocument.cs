@@ -1,10 +1,10 @@
-﻿using YourBrand.Documents.Contracts;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
 
 using Newtonsoft.Json;
+
+using YourBrand.Documents.Contracts;
 
 namespace YourBrand.Documents.Application.Commands;
 

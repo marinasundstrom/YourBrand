@@ -1,9 +1,8 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Application.Common.Models;
-using YourBrand.Messenger.Domain.Common;
-
 using MediatR;
+
+using YourBrand.Messenger.Application.Common.Interfaces;
+using YourBrand.Messenger.Domain.Common;
 
 namespace YourBrand.Messenger.Infrastructure.Services;
 

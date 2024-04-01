@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Documents.Application.Common.Interfaces;
+using Newtonsoft.Json;
+
 using YourBrand.Documents.Domain;
 using YourBrand.Documents.Domain.Common;
 using YourBrand.Documents.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Documents.Infrastructure.Persistence.Interceptors;
 using YourBrand.Documents.Infrastructure.Persistence.Outbox;
-using Newtonsoft.Json;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
@@ -30,7 +28,7 @@ public class DocumentsContext : DbContext, IDocumentsContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

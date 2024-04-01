@@ -1,21 +1,14 @@
-﻿using System;
+﻿using MediatR;
 
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
-
-using YourBrand.TimeReport.Application.Activities;
+using YourBrand.Identity;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
+using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Exceptions;
-
-using static YourBrand.TimeReport.Application.TimeSheets.Constants;
-using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
-using YourBrand.Tenancy;
-using YourBrand.Identity;
 using YourBrand.TimeReport.Domain.Repositories;
-using YourBrand.TimeReport.Domain;
+
+using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
+using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 

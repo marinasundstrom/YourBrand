@@ -5,17 +5,18 @@ using Azure.Storage.Blobs;
 
 using MassTransit;
 
-using MediatR;
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
-using Microsoft.IdentityModel.Tokens;
 
-using NSwag;
-using NSwag.Generation.Processors.Security;
+using Serilog;
 
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
 using YourBrand.ApiKeys;
+using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.TimeReport;
 using YourBrand.TimeReport.Application;
 using YourBrand.TimeReport.Application.Common.Interfaces;
@@ -23,14 +24,6 @@ using YourBrand.TimeReport.Hubs;
 using YourBrand.TimeReport.Infrastructure;
 using YourBrand.TimeReport.Infrastructure.Persistence;
 using YourBrand.TimeReport.Services;
-using YourBrand.Tenancy;
-using YourBrand.Identity;
-
-using Serilog;
-
-using YourBrand;
-using YourBrand.Extensions;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

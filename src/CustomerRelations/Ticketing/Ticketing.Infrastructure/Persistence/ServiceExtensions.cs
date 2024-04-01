@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using YourBrand.Ticketing.Infrastructure.Persistence.Interceptors;
 using YourBrand.Ticketing.Infrastructure.Persistence.Repositories;
 

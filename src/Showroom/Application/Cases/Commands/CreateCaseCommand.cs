@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Cases.Commands;
@@ -31,9 +32,9 @@ public record CreateCaseCommand(string? Description, CasePricing? Pricing) : IRe
 
             var pricing = request.Pricing;
 
-            if(pricing is not null) 
+            if (pricing is not null)
             {
-                @case.Pricing = new Domain.Entities.CasePricing 
+                @case.Pricing = new Domain.Entities.CasePricing
                 {
                     HourlyPrice = pricing.HourlyPrice,
                     Hours = pricing.Hours,
@@ -45,7 +46,7 @@ public record CreateCaseCommand(string? Description, CasePricing? Pricing) : IRe
 
             await context.SaveChangesAsync(cancellationToken);
 
-            @case = await context.Cases          
+            @case = await context.Cases
                 .Include(c => c.CaseProfiles)
                 .Include(c => c.CreatedBy)
                 .Include(c => c.LastModifiedBy)

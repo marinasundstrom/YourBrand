@@ -1,9 +1,9 @@
 
-using YourBrand.ApiKeys.Application.Common.Interfaces;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Enums;
 
 namespace YourBrand.ApiKeys.Application.Commands;

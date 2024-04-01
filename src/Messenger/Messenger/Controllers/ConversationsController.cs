@@ -1,19 +1,18 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Application.Common.Models;
-using YourBrand.Messenger.Application.Conversations.Commands;
-using YourBrand.Messenger.Application.Conversations.Queries;
-using YourBrand.Messenger.Application.Messages.Commands;
-using YourBrand.Messenger.Application.Messages.Queries;
-using YourBrand.Messenger.Contracts;
-
 using MassTransit;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Identity;
+using YourBrand.Messenger.Application.Common.Models;
+using YourBrand.Messenger.Application.Conversations.Commands;
+using YourBrand.Messenger.Application.Conversations.Queries;
+using YourBrand.Messenger.Application.Messages.Commands;
+using YourBrand.Messenger.Application.Messages.Queries;
+using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.WebApi.Controllers;
 

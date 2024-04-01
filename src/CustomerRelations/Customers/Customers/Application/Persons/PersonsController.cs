@@ -1,15 +1,12 @@
-using YourBrand.Customers.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Customers.Application.Addresses;
-using YourBrand.Customers.Application.Persons.Queries;
-using YourBrand.Customers.Application.Persons;
 using YourBrand.Customers.Application.Persons.Commands;
-using YourBrand.Customers.Application.Common.Models;
-using Microsoft.AspNetCore.Http;
-using Asp.Versioning;
+using YourBrand.Customers.Application.Persons.Queries;
 
 namespace YourBrand.Customers.Application.Persons;
 

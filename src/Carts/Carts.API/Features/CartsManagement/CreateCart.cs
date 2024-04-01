@@ -1,7 +1,7 @@
+using MediatR;
+
 using YourBrand.Carts.API.Domain.Entities;
 using YourBrand.Carts.API.Persistence;
-
-using MediatR;
 
 namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
 

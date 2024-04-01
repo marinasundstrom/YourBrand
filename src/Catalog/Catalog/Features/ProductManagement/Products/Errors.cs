@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-using MassTransit.Transports;
-
-namespace YourBrand.Catalog.Features.ProductManagement.Products;
+﻿namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
 public static class Errors
 {

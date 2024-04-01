@@ -1,9 +1,8 @@
 using Asp.Versioning;
 
-using MassTransit;
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Application.Common.Models;

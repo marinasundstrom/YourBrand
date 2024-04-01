@@ -1,7 +1,4 @@
-using MassTransit;
 //using MediatR;
-using YourBrand.Analytics.Contracts;
-
 namespace YourBrand.Analytics.Consumers;
 
 /*

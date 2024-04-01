@@ -1,9 +1,6 @@
 ﻿using MediatR;
 
-using Microsoft.Extensions.Logging;
-
 using YourBrand.Payments.Application.Common.Interfaces;
-using YourBrand.Payments.Application.Common.Models;
 using YourBrand.Payments.Domain.Common;
 
 namespace YourBrand.Payments.Infrastructure.Services;

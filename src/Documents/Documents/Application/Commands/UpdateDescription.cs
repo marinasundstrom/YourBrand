@@ -1,8 +1,7 @@
-﻿using YourBrand.Documents.Infrastructure.Persistence;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Documents.Domain;
 
 namespace YourBrand.Documents.Application.Commands;

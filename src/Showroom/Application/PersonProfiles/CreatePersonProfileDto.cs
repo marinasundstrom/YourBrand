@@ -10,7 +10,7 @@ public class CreatePersonProfileDto
 
     public string OrganizationId { get; set; }
 
-    public int IndustryId  { get; set; }
+    public int IndustryId { get; set; }
 
     public string CompetenceAreaId { get; set; }
 

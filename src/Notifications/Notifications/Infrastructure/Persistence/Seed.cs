@@ -1,8 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Notifications.Domain.Entities;
-using YourBrand.Notifications.Infrastructure.Persistence;
-
 namespace YourBrand.Notifications.Infrastructure.Persistence;
 
 public static class Seed

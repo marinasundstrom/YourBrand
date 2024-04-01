@@ -3,10 +3,8 @@ using FluentValidation;
 using MediatR;
 
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
-using YourBrand.Sales.Services;
 
 namespace YourBrand.Sales.Features.OrderManagement.Users;
 

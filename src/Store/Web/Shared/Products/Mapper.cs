@@ -1,7 +1,7 @@
 namespace BlazorApp.Products;
 
-using BlazorApp.ProductCategories;
 using BlazorApp.Brands;
+using BlazorApp.ProductCategories;
 
 public static class Mapper
 {

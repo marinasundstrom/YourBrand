@@ -1,6 +1,4 @@
-﻿using YourBrand.Marketing.Domain.Events;
-
-namespace YourBrand.Marketing.Domain.Entities;
+﻿namespace YourBrand.Marketing.Domain.Entities;
 
 public class Campaign : Entity<string>, IAuditable
 {

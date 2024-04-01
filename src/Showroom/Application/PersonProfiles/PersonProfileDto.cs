@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Showroom.Application.CompetenceAreas;
+﻿using YourBrand.Showroom.Application.CompetenceAreas;
 using YourBrand.Showroom.Application.Industries;
 using YourBrand.Showroom.Application.Organizations;
 

@@ -1,11 +1,8 @@
 using MassTransit;
 
-using MediatR;
-
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Payments.Application.Common.Interfaces;
-using YourBrand.Payments.Application.Common.Models;
 using YourBrand.Payments.Domain;
 using YourBrand.Payments.Domain.Events;
 using YourBrand.Payments.Hubs;
@@ -32,7 +29,7 @@ public class PaymentCapturedHandler : IDomainEventHandler<PaymentCaptured>
             .Include(c => c.Captures)
             .FirstOrDefaultAsync(i => i.Id == notification.PaymentId);
 
-        if (payment is not null) 
+        if (payment is not null)
         {
             var capture = payment.Captures.FirstOrDefault(c => c.Id == notification.CaptureId);
 

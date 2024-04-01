@@ -1,17 +1,8 @@
-using YourBrand.RotRutService.Application.Common.Models;
-//using YourBrand.RotRutService.Contracts;
-using YourBrand.RotRutService.Domain;
-using YourBrand.RotRutService.Domain.Enums;
 //using YourBrand.RotRutService.Domain.Events;
 
-using MassTransit;
-
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
-using YourBrand.Payments.Client;
-using YourBrand.RotRutService.Domain.Events;
 using YourBrand.RotRutService.Application.Common.Interfaces;
+//using YourBrand.RotRutService.Contracts;
+using YourBrand.RotRutService.Domain.Events;
 
 namespace YourBrand.RotRutService.Application.Events;
 

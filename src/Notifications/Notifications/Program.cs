@@ -1,27 +1,20 @@
-﻿using Microsoft.Data.SqlClient;
-
-using Hangfire;
+﻿using Hangfire;
 using Hangfire.SqlServer;
 
 using MassTransit;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Data.SqlClient;
 
-using NSwag;
-using NSwag.Generation.Processors.Security;
+using Serilog;
 
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Extensions;
 using YourBrand.Notifications;
 using YourBrand.Notifications.Application;
 using YourBrand.Notifications.Infrastructure;
 using YourBrand.Notifications.Infrastructure.Persistence;
-
-using Serilog;
-
-using YourBrand;
-using YourBrand.Extensions;
-using Microsoft.IdentityModel.Logging;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

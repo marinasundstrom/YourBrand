@@ -5,7 +5,7 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class ReportingPeriod : AuditableEntity
 {
-    private HashSet<Entry> _entries = new HashSet<Entry>();
+    private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
     public ReportingPeriod(User user, int year, int month)
     {

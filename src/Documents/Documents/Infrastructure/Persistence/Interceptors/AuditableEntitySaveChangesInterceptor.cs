@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -63,7 +61,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
                     entry.State = EntityState.Modified;
                 }
 
-                if(entry.Entity is IDeletable e2)
+                if (entry.Entity is IDeletable e2)
                 {
                     entry.Entity.AddDomainEvent(e2.GetDeleteEvent());
                 }

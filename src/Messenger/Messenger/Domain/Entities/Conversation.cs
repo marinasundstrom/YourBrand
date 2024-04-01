@@ -22,9 +22,9 @@ public class Conversation : AuditableEntity, ISoftDelete
 
     public IReadOnlyCollection<Message> Messages => _messages;
 
-    public void AddMessage(Message message) 
+    public void AddMessage(Message message)
     {
-         _messages.Add(message);
+        _messages.Add(message);
         message.AddDomainEvent(new MessagePostedEvent(Id, message.Id));
     }
 
@@ -32,7 +32,7 @@ public class Conversation : AuditableEntity, ISoftDelete
     {
         message.Text = String.Empty;
         _messages.Remove(message);
-         message.AddDomainEvent(new MessageDeletedEvent(Id, message.Id));
+        message.AddDomainEvent(new MessageDeletedEvent(Id, message.Id));
     }
 
     public DateTime? Deleted { get; set; }

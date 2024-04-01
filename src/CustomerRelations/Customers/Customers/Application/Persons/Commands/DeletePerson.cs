@@ -1,8 +1,6 @@
-﻿using YourBrand.Customers.Domain;
+﻿using MediatR;
 
-using MediatR;
-
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Customers.Domain;
 
 namespace YourBrand.Customers.Application.Persons.Commands;
 

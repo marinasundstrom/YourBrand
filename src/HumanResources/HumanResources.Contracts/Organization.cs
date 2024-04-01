@@ -1,10 +1,8 @@
-﻿using System;
+﻿namespace YourBrand.HumanResources.Contracts;
 
-namespace YourBrand.HumanResources.Contracts;
-
-public record CreateOrganization 
+public record CreateOrganization
 {
-    public string Name{ get; init; }
+    public string Name { get; init; }
     public string? FriendlyName { get; init; }
 }
 

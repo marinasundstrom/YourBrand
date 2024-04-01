@@ -1,6 +1,6 @@
-using Asp.Versioning;
-
 using System.Reflection;
+
+using Asp.Versioning;
 
 namespace YourBrand.Catalog;
 

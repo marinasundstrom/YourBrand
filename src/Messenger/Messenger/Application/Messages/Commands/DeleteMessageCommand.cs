@@ -1,13 +1,10 @@
 ﻿
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Contracts;
-
 using MassTransit;
 
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
+using YourBrand.Messenger.Contracts;
 using YourBrand.Messenger.Domain;
 using YourBrand.Messenger.Domain.Repositories;
 
@@ -42,7 +39,7 @@ public record DeleteMessageCommand(string ConversationId, string MessageId) : IR
 
             if (message is null) throw new Exception();
 
-            if (!IsAuthorizedToDelete(message)) 
+            if (!IsAuthorizedToDelete(message))
             {
                 throw new UnauthorizedAccessException("Unauthorized");
             }

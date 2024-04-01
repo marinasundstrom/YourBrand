@@ -1,9 +1,6 @@
 using Blazored.LocalStorage;
 
-using YourBrand.Catalog;
 using YourBrand.Portal.Services;
-
-using Store = YourBrand.Portal.Services.Store;
 
 namespace YourBrand.Catalog;
 

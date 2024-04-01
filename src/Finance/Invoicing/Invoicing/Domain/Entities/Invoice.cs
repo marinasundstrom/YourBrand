@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
@@ -172,13 +170,13 @@ public class Invoice : Entity
     public IReadOnlyList<InvoiceItem> Items => _items;
 
     public InvoiceItem AddItem(
-        ProductType productType, 
-        string description, 
+        ProductType productType,
+        string description,
         string? productId,
-        decimal unitPrice, 
-        string unit, 
+        decimal unitPrice,
+        string unit,
         decimal? discount,
-        double vatRate, 
+        double vatRate,
         double quantity)
     {
         var invoiceItem = new InvoiceItem(this, productType, description, productId, unitPrice, unit, discount, vatRate, quantity);
@@ -212,7 +210,7 @@ public class Invoice : Entity
         Discount = Items.Sum(x => (decimal)x.Quantity * x.Discount.GetValueOrDefault());
 
         Rounded = null;
-        if (Rounding) 
+        if (Rounding)
         {
             Rounded = Math.Round(0m, MidpointRounding.AwayFromZero);
         }
@@ -286,10 +284,11 @@ public class InvoiceVatAmount
 }
 
 public record InvoiceDomesticService(
-    Domain.Entities.DomesticServiceKind Kind, 
+    Domain.Entities.DomesticServiceKind Kind,
     string Buyer,
     string Description,
-    decimal RequestedAmount) {
+    decimal RequestedAmount)
+{
     public PropertyDetails? PropertyDetails { get; set; }
 };
 

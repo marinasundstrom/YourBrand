@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-using YourBrand.HumanResources.Domain.Common;
+﻿using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Events;
-using YourBrand.HumanResources.Domain.ValueObjects;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 

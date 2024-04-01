@@ -1,11 +1,9 @@
 ﻿
-using YourBrand.Customers.Domain;
-
 using MediatR;
-using YourBrand.Customers.Application.Persons;
+
 using YourBrand.Customers.Application.Addresses;
+using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Entities;
-using YourBrand.Customers.Domain.ValueObjects;
 
 namespace YourBrand.Customers.Application.Persons.Commands;
 

@@ -1,5 +1,7 @@
 using MassTransit;
+
 using MediatR;
+
 using YourBrand.Ticketing.Contracts;
 
 namespace YourBrand.Ticketing.Consumers;

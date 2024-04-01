@@ -1,11 +1,10 @@
-﻿using YourBrand.IdentityManagement.Contracts;
-using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Application.Users.Commands;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
+
 using YourBrand.Identity;
+using YourBrand.IdentityManagement.Contracts;
+using YourBrand.Messenger.Application.Users.Commands;
 
 namespace YourBrand.Messenger.Consumers;
 
@@ -26,7 +25,7 @@ public class MessengerUserCreatedConsumer : IConsumer<UserCreated>
 
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
-        try 
+        try
         {
             var message = context.Message;
 
@@ -37,9 +36,9 @@ public class MessengerUserCreatedConsumer : IConsumer<UserCreated>
 
             var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
         }
-        catch(Exception e) 
+        catch (Exception e)
         {
-        _logger.LogError(e, "FOO"); 
+            _logger.LogError(e, "FOO");
         }
     }
 }

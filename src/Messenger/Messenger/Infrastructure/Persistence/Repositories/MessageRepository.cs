@@ -19,9 +19,9 @@ sealed class MessageRepository : IMessageRepository
         return _context.Messages.Where(m => m.ConversationId == conversationId);
     }
 
-    public async Task<Message?> GetMessage(string messageId, CancellationToken cancellationToken = default) 
+    public async Task<Message?> GetMessage(string messageId, CancellationToken cancellationToken = default)
     {
-         return await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId, cancellationToken);
+        return await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId, cancellationToken);
     }
 
     public void DeleteMessage(Message message)

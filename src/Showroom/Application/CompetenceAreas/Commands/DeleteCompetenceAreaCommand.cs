@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.CompetenceAreas.Commands;
@@ -24,7 +25,7 @@ public record DeleteCompetenceAreaCommand(string Id) : IRequest
             if (comepetenceArea is null) throw new Exception();
 
             context.CompetenceAreas.Remove(comepetenceArea);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

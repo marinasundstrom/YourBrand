@@ -1,9 +1,8 @@
-﻿using YourBrand.Invoicing.Application.Queries;
-using YourBrand.Invoicing.Domain;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
@@ -26,12 +25,12 @@ public record DeleteInvoice(string InvoiceId) : IRequest
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            if(invoice is null)
+            if (invoice is null)
             {
                 throw new Exception();
             }
 
-            if(invoice.Status != Domain.Enums.InvoiceStatus.Draft)
+            if (invoice.Status != Domain.Enums.InvoiceStatus.Draft)
             {
                 throw new Exception();
             }

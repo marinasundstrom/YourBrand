@@ -1,10 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-
 using Microsoft.AspNetCore.Components.Forms;
 
 using MudBlazor;
-
-using YourBrand.Catalog;
 
 namespace YourBrand.Catalog.Products;
 

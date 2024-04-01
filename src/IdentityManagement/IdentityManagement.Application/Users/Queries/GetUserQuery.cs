@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Domain.Entities;
 
 namespace YourBrand.IdentityManagement.Application.Users.Queries;
 

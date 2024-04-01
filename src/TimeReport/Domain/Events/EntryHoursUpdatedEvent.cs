@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.TimeReport.Domain.Common;
+﻿using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 

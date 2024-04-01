@@ -1,22 +1,18 @@
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.RateLimiting;
 
 using HealthChecks.UI.Client;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
+using Serilog;
 
-using YourBrand.Extensions;
+using Steeltoe.Discovery.Client;
 
 using YourBrand;
+using YourBrand.Extensions;
 using YourBrand.Ticketing;
 using YourBrand.Ticketing.Application;
 using YourBrand.Ticketing.Application.Services;
@@ -24,9 +20,6 @@ using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Web;
 using YourBrand.Ticketing.Web.Middleware;
 using YourBrand.Ticketing.Web.Services;
-
-using Serilog;
-using Steeltoe.Discovery.Client;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 Activity.ForceDefaultIdFormat = true;

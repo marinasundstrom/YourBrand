@@ -1,5 +1,6 @@
-using YourBrand.Customers.Application.Services;
 using Azure.Storage.Blobs;
+
+using YourBrand.Customers.Application.Services;
 
 namespace YourBrand.Customers.Infrastructure.Services;
 

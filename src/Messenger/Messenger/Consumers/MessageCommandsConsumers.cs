@@ -1,11 +1,11 @@
-﻿using YourBrand.Messenger.Application.Common.Interfaces;
-using YourBrand.Messenger.Application.Messages.Commands;
-using YourBrand.Messenger.Contracts;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
+
 using YourBrand.Identity;
+using YourBrand.Messenger.Application.Common.Interfaces;
+using YourBrand.Messenger.Application.Messages.Commands;
+using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Consumers;
 

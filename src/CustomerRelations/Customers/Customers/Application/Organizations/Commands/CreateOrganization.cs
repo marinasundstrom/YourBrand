@@ -1,10 +1,8 @@
 ﻿
-using YourBrand.Customers.Domain;
-
 using MediatR;
-using YourBrand.Customers.Application.Organizations;
+
 using YourBrand.Customers.Application.Addresses;
-using YourBrand.Customers.Domain.ValueObjects;
+using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Entities;
 
 namespace YourBrand.Customers.Application.Organizations.Commands;

@@ -13,7 +13,7 @@ public record TimeSheetActivityDeletedEvent : DomainEvent
     }
 
     public string TimeSheetId { get; }
-    
+
     public string TimeSheetActivityId { get; }
 
     public string ActivityId { get; }

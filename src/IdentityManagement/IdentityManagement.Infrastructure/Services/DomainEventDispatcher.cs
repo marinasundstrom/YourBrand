@@ -1,11 +1,8 @@
-﻿using System;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
 
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Application.Common.Models;
 using YourBrand.IdentityManagement.Domain.Common;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Services;

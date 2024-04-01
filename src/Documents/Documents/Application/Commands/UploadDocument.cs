@@ -1,11 +1,10 @@
-﻿using YourBrand.Documents.Application.Services;
-using YourBrand.Documents.Infrastructure.Persistence;
+﻿using MediatR;
 
-using MediatR;
-using YourBrand.Documents.Domain;
-using YourBrand.Documents.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Documents.Application.Queries;
+using YourBrand.Documents.Application.Services;
+using YourBrand.Documents.Domain;
 
 namespace YourBrand.Documents.Application.Commands;
 
@@ -42,7 +41,7 @@ public record UploadDocument(string Name, string ContentType, Stream Stream, str
                 var e = Path.GetExtension(request.Name);
                 name = $"{n} (2){e}";
             }
-            
+
             var directory = await _context.Directories
              .Include(x => x.Documents)
              .AsSplitQuery()

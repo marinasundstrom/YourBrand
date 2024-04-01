@@ -9,6 +9,6 @@ public class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityR
 {
     public void Configure(EntityTypeBuilder<IdentityRoleClaim<string>> builder)
     {
-        builder.ToTable("RoleClaims"); 
+        builder.ToTable("RoleClaims");
     }
 }

@@ -1,12 +1,11 @@
-﻿using YourBrand.Catalog;
-using YourBrand.Catalog.Common;
-using YourBrand.Catalog.Features.VatRates;
-using YourBrand.Catalog.Model;
-using YourBrand.Catalog.Persistence;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Catalog;
+using YourBrand.Catalog.Common;
+using YourBrand.Catalog.Model;
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.VatRates;
 

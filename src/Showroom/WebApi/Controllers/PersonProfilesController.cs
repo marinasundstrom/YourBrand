@@ -119,7 +119,7 @@ public class PersonProfilesController : ControllerBase
     {
         await _mediator.Send(
             new UpdateExperienceCommand(id, experienceId,
-            dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType,  dto.StartDate, dto.EndDate, dto.Description),
+            dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType, dto.StartDate, dto.EndDate, dto.Description),
             cancellationToken);
     }
 

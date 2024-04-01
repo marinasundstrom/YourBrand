@@ -1,27 +1,21 @@
-﻿using Azure.Identity;
-
-using HealthChecks.UI.Client;
+﻿using System.Reflection;
 
 using MassTransit;
 
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.Features;
-using YourBrand.Sales.Features.OrderManagement;
-using YourBrand.Sales.Features.OrderManagement.Orders;
-using YourBrand.Sales.Infrastructure;
-using YourBrand.Sales.Persistence;
-using YourBrand.Notifications.Client;
+using Serilog;
 
 using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
+using YourBrand.Notifications.Client;
 using YourBrand.Sales;
-using Serilog;
-using System.Reflection;
-using YourBrand.Sales;
+using YourBrand.Sales.Features;
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Infrastructure;
+using YourBrand.Sales.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -167,7 +161,7 @@ try
             await SeedData(context, configuration, logger);
             return;
         }
-        else 
+        else
         {
             await context.Database.MigrateAsync();
         }

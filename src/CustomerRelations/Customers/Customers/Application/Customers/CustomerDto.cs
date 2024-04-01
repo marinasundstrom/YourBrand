@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Customers.Application.Addresses;
+﻿using YourBrand.Customers.Application.Addresses;
 using YourBrand.Customers.Domain.Enums;
 
 namespace YourBrand.Customers.Application.Customers;

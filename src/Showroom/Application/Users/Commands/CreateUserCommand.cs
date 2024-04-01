@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.Application.Users.Commands;
 public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
-    { 
+    {
         readonly IShowroomContext _context;
 
         public CreateUserCommandHandler(IShowroomContext context)
@@ -23,7 +23,7 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
 
-            if(user is not null) 
+            if (user is not null)
             {
                 return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.LastModified);
             }

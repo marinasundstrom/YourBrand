@@ -3,10 +3,8 @@
 using MediatR;
 
 using YourBrand.HumanResources.Contracts;
-using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Users.Commands;
-using YourBrand.Tenancy;
 using YourBrand.Identity;
+using YourBrand.TimeReport.Application.Users.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 

@@ -1,10 +1,10 @@
 using Asp.Versioning;
 
-using YourBrand.Catalog.Persistence;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+
+using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 

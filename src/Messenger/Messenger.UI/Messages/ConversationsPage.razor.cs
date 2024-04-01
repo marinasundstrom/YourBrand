@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using YourBrand.Messenger.Client;
+
 using MudBlazor;
+
+using YourBrand.Messenger.Client;
 
 namespace YourBrand.Messenger.Messages;
 
@@ -15,7 +17,7 @@ public partial class ConversationsPage
         {
             var results = await ConversationsClient.GetConversationsAsync(state.Page, state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ? global::YourBrand.Messenger.Client.SortDirection.Asc : global::YourBrand.Messenger.Client.SortDirection.Desc);
             return new TableData<ConversationDto>()
-            {TotalItems = results.TotalCount, Items = results.Items};
+            { TotalItems = results.TotalCount, Items = results.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {

@@ -1,11 +1,11 @@
-﻿using YourBrand.RotRutService.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Common;
 using YourBrand.RotRutService.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.RotRutService.Infrastructure.Persistence.Interceptors;
-using Newtonsoft.Json;
 using YourBrand.RotRutService.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.RotRutService.Infrastructure.Persistence;
@@ -28,7 +28,7 @@ public class RotRutContext : DbContext, IRotRutContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 

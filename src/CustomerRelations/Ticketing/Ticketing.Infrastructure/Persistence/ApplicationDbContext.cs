@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;

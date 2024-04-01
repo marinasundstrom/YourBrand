@@ -1,7 +1,4 @@
-﻿using System;
-
-using YourBrand.Inventory.Application.Warehouses;
-using YourBrand.Inventory.Application.Items;
+﻿using YourBrand.Inventory.Application.Items;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items;
 

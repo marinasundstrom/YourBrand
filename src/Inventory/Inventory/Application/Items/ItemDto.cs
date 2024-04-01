@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Inventory.Application.Items.Groups;
+﻿using YourBrand.Inventory.Application.Items.Groups;
 
 namespace YourBrand.Inventory.Application.Items;
 

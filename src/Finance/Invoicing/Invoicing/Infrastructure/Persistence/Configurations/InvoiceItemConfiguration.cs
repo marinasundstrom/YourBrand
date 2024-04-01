@@ -1,7 +1,7 @@
-using YourBrand.Invoicing.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.Invoicing.Domain.Entities;
 
 namespace YourBrand.Invoicing.Infrastructure.Persistence.Configurations;
 

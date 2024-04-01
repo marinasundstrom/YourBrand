@@ -1,6 +1,8 @@
 ﻿using MassTransit;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Ticketing.Contracts;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;

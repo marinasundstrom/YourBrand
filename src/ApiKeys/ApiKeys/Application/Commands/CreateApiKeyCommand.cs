@@ -1,7 +1,7 @@
 ﻿
-using YourBrand.ApiKeys.Application.Common.Interfaces;
-
 using MediatR;
+
+using YourBrand.ApiKeys.Application.Common.Interfaces;
 
 namespace YourBrand.ApiKeys.Application.Commands;
 

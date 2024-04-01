@@ -1,9 +1,9 @@
-using YourBrand.Carts.API.Domain.Entities;
-using YourBrand.Carts.API.Features.CartsManagement.Requests;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Http.HttpResults;
+
+using YourBrand.Carts.API.Domain.Entities;
+using YourBrand.Carts.API.Features.CartsManagement.Requests;
 
 namespace YourBrand.Carts.API.Features.CartsManagement;
 

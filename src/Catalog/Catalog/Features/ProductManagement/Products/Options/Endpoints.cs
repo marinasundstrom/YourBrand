@@ -1,17 +1,9 @@
-
-using Asp.Versioning.Builder;
-
-using YourBrand.Catalog.Features.ProductManagement.Options;
-using YourBrand.Catalog.Features.ProductManagement.Products.Options;
-using YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
-using YourBrand.Catalog.Model;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+
+using YourBrand.Catalog.Features.ProductManagement.Options;
+using YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 

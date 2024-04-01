@@ -1,8 +1,5 @@
 ﻿using YourBrand.Domain;
 using YourBrand.Domain.Infrastructure;
-using YourBrand.Sales.Domain;
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Infrastructure.Services;
 
 namespace YourBrand.Sales.Persistence.Repositories.Mocks;
 

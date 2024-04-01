@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace YourBrand.RotRutService.Application;
 
 public static class ServiceCollectionExtensions

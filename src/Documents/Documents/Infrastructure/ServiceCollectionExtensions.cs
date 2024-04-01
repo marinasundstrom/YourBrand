@@ -1,11 +1,14 @@
+using MediatR;
+
+using Quartz;
+
+using Scrutor;
+
 using YourBrand.Documents.Application.Common.Interfaces;
+using YourBrand.Documents.Infrastructure.BackgroundJobs;
+using YourBrand.Documents.Infrastructure.Idempotence;
 using YourBrand.Documents.Infrastructure.Persistence;
 using YourBrand.Documents.Infrastructure.Services;
-using Quartz;
-using YourBrand.Documents.Infrastructure.BackgroundJobs;
-using MediatR;
-using YourBrand.Documents.Infrastructure.Idempotence;
-using Scrutor;
 
 namespace YourBrand.Documents.Infrastructure;
 
@@ -19,11 +22,11 @@ public static class ServiceCollectionExtensions
 
         RemoveFaultyDomainEventHandlerRegistrations(services);
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }
@@ -44,7 +47,7 @@ public static class ServiceCollectionExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }

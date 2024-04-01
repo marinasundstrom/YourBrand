@@ -4,9 +4,9 @@ public abstract record Option<T> : IDisposable
 {
     public sealed record Some(T Value) : Option<T>;
 
-    public sealed record None : Option<T> 
+    public sealed record None : Option<T>
     {
-        internal None() {}
+        internal None() { }
     }
 
     public T GetValueOrDefault()

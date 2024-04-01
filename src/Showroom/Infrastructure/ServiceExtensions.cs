@@ -1,17 +1,18 @@
-﻿using System;
-
-using YourBrand.Showroom.Application.Common.Interfaces;
-using YourBrand.Showroom.Infrastructure.Persistence;
-using YourBrand.Showroom.Infrastructure.Services;
+﻿using MediatR;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
+
 using Quartz;
-using YourBrand.Showroom.Infrastructure.BackgroundJobs;
-using MediatR;
-using YourBrand.Showroom.Infrastructure.Idempotence;
+
 using Scrutor;
+
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Infrastructure.BackgroundJobs;
+using YourBrand.Showroom.Infrastructure.Idempotence;
+using YourBrand.Showroom.Infrastructure.Persistence;
+using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
+using YourBrand.Showroom.Infrastructure.Services;
 
 namespace YourBrand.Showroom.Infrastructure;
 
@@ -35,7 +36,7 @@ public static class ServiceExtensions
                 configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
-            services.AddQuartzHostedService();
+        services.AddQuartzHostedService();
 
         return services;
     }
@@ -52,11 +53,11 @@ public static class ServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        try 
+        try
         {
             services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
         }
-        catch(DecorationException exc) //when (exc.Message.Contains("Could not find any registered services for type"))
+        catch (DecorationException exc) //when (exc.Message.Contains("Could not find any registered services for type"))
         {
             Console.WriteLine(exc);
         }

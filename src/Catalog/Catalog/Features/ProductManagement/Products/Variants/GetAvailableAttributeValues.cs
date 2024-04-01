@@ -1,12 +1,6 @@
-using YourBrand.Catalog.Domain.Entities;
-using YourBrand.Catalog.Features.ProductManagement.Attributes;
-using YourBrand.Catalog.Persistence;
-
-using MassTransit.Clients;
-
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Catalog.Features.ProductManagement.Attributes;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 

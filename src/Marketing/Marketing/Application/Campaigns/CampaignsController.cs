@@ -1,14 +1,11 @@
-using YourBrand.Marketing.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Marketing.Application.Campaigns;
-using YourBrand.Marketing.Application.Campaigns.Queries;
+
 using YourBrand.Marketing.Application.Campaigns.Commands;
-using YourBrand.Marketing.Application.Common.Models;
-using Asp.Versioning;
+using YourBrand.Marketing.Application.Campaigns.Queries;
 
 namespace YourBrand.Marketing.Application.Campaigns;
 
@@ -58,4 +55,3 @@ public class CampaignsController : ControllerBase
 public record CreateCampaignDto(string Name);
 
 public record UpdateCampaignDto(string Name);
-

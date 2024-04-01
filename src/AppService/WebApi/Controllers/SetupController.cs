@@ -1,14 +1,11 @@
 ﻿
-using YourBrand.Application.Common.Models;
-using YourBrand.Application.Search;
-using YourBrand.Application.Search.Commands;
+using Asp.Versioning;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Application.Setup;
-using Asp.Versioning;
 
 namespace YourBrand.WebApi.Controllers;
 

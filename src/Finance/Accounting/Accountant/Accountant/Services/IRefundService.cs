@@ -1,7 +1,6 @@
-﻿namespace YourBrand.Accountant.Services
+﻿namespace YourBrand.Accountant.Services;
+
+public interface IRefundService
 {
-    public interface IRefundService
-    {
-        Task CheckForRefund();
-    }
+    Task CheckForRefund();
 }

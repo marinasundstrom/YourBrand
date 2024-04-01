@@ -1,7 +1,6 @@
-using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
 using YourBrand.Invoicing.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Invoicing.Infrastructure.Persistence;

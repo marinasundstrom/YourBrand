@@ -1,37 +1,30 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System.Text.Json.Serialization;
 
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
+using MassTransit;
+using MassTransit.MessageData;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
+
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
 using YourBrand.Documents;
 using YourBrand.Documents.Application;
-using YourBrand.Documents.Application.Commands;
-using YourBrand.Documents.Application.Common.Interfaces;
-using YourBrand.Documents.Application.Common.Models;
 using YourBrand.Documents.Application.Queries;
 using YourBrand.Documents.Application.Services;
 using YourBrand.Documents.Consumers;
 using YourBrand.Documents.Contracts;
 using YourBrand.Documents.Infrastructure;
 using YourBrand.Documents.Infrastructure.Persistence;
-
-using MassTransit;
-using MassTransit.MessageData;
-
-using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
-using System.Globalization;
-using YourBrand.Identity;
-
-using Serilog;
-
-using YourBrand;
 using YourBrand.Extensions;
-using Steeltoe.Discovery.Client;
+using YourBrand.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -240,7 +233,7 @@ app.MapPost("/UploadDocument", async ([FromBody] UploadDocument model, IMediator
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

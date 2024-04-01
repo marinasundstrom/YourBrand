@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Notifications.Application.Common.Models;
+﻿using YourBrand.Notifications.Application.Common.Models;
 
 namespace YourBrand.Notifications.Application.Notifications;
 

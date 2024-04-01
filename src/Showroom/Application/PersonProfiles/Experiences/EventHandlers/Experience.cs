@@ -9,7 +9,7 @@ public class ExperienceHandler : IDomainEventHandler<ExperienceAdded>, IDomainEv
 {
     private readonly IShowroomContext _context;
 
-    public ExperienceHandler(IShowroomContext context) 
+    public ExperienceHandler(IShowroomContext context)
     {
         _context = context;
     }
@@ -29,17 +29,17 @@ public class ExperienceHandler : IDomainEventHandler<ExperienceAdded>, IDomainEv
         await Update(notification.PersonProfileExperienceId, notification.PersonProfileId, notification.IndustryId, cancellationToken);
     }
 
-    private async Task Update(string personProfileExperienceId, string personProfileId, int industryId, CancellationToken cancellationToken) 
-    {        
+    private async Task Update(string personProfileExperienceId, string personProfileId, int industryId, CancellationToken cancellationToken)
+    {
         var experiences = _context.PersonProfileExperiences
             .Where(x => x.PersonProfile.Id == personProfileId && x.Company.Industry.Id == industryId)
             .OrderBy(x => x.StartDate);
 
 
-        if(!await experiences.AnyAsync(cancellationToken)) 
+        if (!await experiences.AnyAsync(cancellationToken))
         {
-            var pfie2 = await _context.PersonProfileIndustryExperiences.FirstOrDefaultAsync(x => x.PersonProfile.Id == personProfileId && x.Industry.Id == industryId, cancellationToken); 
-            if(pfie2 is not null) 
+            var pfie2 = await _context.PersonProfileIndustryExperiences.FirstOrDefaultAsync(x => x.PersonProfile.Id == personProfileId && x.Industry.Id == industryId, cancellationToken);
+            if (pfie2 is not null)
             {
                 _context.PersonProfileIndustryExperiences.Remove(pfie2);
             }
@@ -51,12 +51,13 @@ public class ExperienceHandler : IDomainEventHandler<ExperienceAdded>, IDomainEv
 
         var yearsOfExperience = experiences.Sum(x => (x.EndDate ?? DateTime.Now).Year - x.StartDate.Year);
 
-        var pfie = await _context.PersonProfileIndustryExperiences.FirstOrDefaultAsync(x => x.PersonProfile.Id == personProfileId && x.Industry.Id == industryId, cancellationToken); 
-        if(pfie is null) 
+        var pfie = await _context.PersonProfileIndustryExperiences.FirstOrDefaultAsync(x => x.PersonProfile.Id == personProfileId && x.Industry.Id == industryId, cancellationToken);
+        if (pfie is null)
         {
-            pfie = new Domain.Entities.PersonProfileIndustryExperiences() {
+            pfie = new Domain.Entities.PersonProfileIndustryExperiences()
+            {
                 Id = Guid.NewGuid().ToString(),
-                PersonProfile  = await _context.PersonProfiles.FirstAsync(x => x.Id == personProfileId, cancellationToken)
+                PersonProfile = await _context.PersonProfiles.FirstAsync(x => x.Id == personProfileId, cancellationToken)
             };
             _context.PersonProfileIndustryExperiences.Add(pfie);
         }

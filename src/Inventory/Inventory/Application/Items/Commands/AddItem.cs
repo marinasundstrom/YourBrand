@@ -1,10 +1,10 @@
 ﻿
-using YourBrand.Inventory.Domain;
-
 using MediatR;
-using YourBrand.Inventory.Application.Items;
-using YourBrand.Inventory.Domain.Enums;
+
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Inventory.Domain;
+using YourBrand.Inventory.Domain.Enums;
 
 namespace YourBrand.Inventory.Application.Items.Commands;
 

@@ -1,14 +1,11 @@
-using YourBrand.Inventory.Application;
+using Asp.Versioning;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using YourBrand.Inventory.Application.Sites.Queries;
-using Microsoft.AspNetCore.Authorization;
-using YourBrand.Inventory.Application.Sites;
+
 using YourBrand.Inventory.Application.Sites.Commands;
-using YourBrand.Inventory.Application.Common.Models;
-using Asp.Versioning;
+using YourBrand.Inventory.Application.Sites.Queries;
 
 namespace YourBrand.Inventory.Application.Sites;
 
@@ -58,4 +55,3 @@ public class SitesController : ControllerBase
 public record CreateSiteDto(string Name, bool CreateWarehouse);
 
 public record UpdateSiteDto(string Name);
-

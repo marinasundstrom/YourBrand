@@ -1,21 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 using MudBlazor;
-
-using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Messenger.Messages;
 
 public partial class NewConversationDialog
 {
-    FormModel model = new FormModel();
-    
+    readonly FormModel model = new FormModel();
+
     public class FormModel
     {
         [Required]
         [StringLength(60, ErrorMessage = "Title length can't be more than 8.")]
-        public string Title { get; set; } = null !;
+        public string Title { get; set; } = null!;
     }
 
     [CascadingParameter]

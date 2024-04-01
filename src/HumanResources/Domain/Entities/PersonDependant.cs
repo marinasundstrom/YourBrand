@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.HumanResources.Domain.Entities;
 
-public class PersonDependant 
+public class PersonDependant
 {
     private PersonDependant()
     {

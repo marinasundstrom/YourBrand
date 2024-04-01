@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.Accounting.Application.Accounts;
+﻿namespace YourBrand.Accounting.Application.Accounts;
 
 public class AccountDto
 {

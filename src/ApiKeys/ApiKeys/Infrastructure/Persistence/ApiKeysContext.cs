@@ -1,12 +1,12 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
+
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Common;
 using YourBrand.ApiKeys.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
-using Newtonsoft.Json;
 using YourBrand.ApiKeys.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence;
@@ -29,7 +29,7 @@ public class ApiKeysContext : DbContext, IApiKeysContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 
@@ -54,9 +54,9 @@ public class ApiKeysContext : DbContext, IApiKeysContext
 
     public DbSet<User> Users { get; set; } = null!;
 
-#nullable restore 
+#nullable restore
 
-   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entities = ChangeTracker
                         .Entries<Entity>()

@@ -1,6 +1,5 @@
 ﻿
 using YourBrand.Documents.Application.Common.Interfaces;
-using YourBrand.Documents.Application.Common.Models;
 using YourBrand.Documents.Domain.Events;
 
 namespace YourBrand.Documents.Application.Events;

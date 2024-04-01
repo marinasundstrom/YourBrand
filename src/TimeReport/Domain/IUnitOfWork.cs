@@ -1,5 +1,3 @@
-using YourBrand.TimeReport.Domain.Entities;
-
 namespace YourBrand.TimeReport.Domain;
 
 public interface IUnitOfWork

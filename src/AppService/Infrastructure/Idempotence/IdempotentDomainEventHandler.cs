@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Application.Common;
+
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Domain.Common;
 using YourBrand.Infrastructure.Persistence;

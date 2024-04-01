@@ -1,6 +1,4 @@
-﻿using Blazored.LocalStorage;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.Portal.Theming;
 

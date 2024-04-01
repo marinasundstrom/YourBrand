@@ -1,7 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Inventory.Application.Common.Interfaces;
+
 using YourBrand.Inventory.Domain;
 
 namespace YourBrand.Inventory.Application.Warehouses.Commands;

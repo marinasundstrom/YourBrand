@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.TimeReport.Domain.Entities;
+﻿using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Domain;
 

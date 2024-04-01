@@ -1,5 +1,3 @@
-using YourBrand.Analytics.Domain.Events;
-
 namespace YourBrand.Analytics.Domain.Enums;
 
 public enum AddressType

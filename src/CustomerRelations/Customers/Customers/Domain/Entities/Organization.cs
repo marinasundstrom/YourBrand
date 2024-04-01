@@ -1,7 +1,4 @@
-﻿using YourBrand.Customers.Domain;
-using YourBrand.Customers.Domain.Events;
-
-namespace YourBrand.Customers.Domain.Entities;
+﻿namespace YourBrand.Customers.Domain.Entities;
 
 public class Organization : Customer
 {

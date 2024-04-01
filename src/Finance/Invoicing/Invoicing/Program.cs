@@ -1,32 +1,29 @@
-﻿using YourBrand.Documents.Client;
-
-using YourBrand.Invoicing.Application;
-using YourBrand.Invoicing.Application.Common.Interfaces;
-using YourBrand.Invoicing.Application.Queries;
-using YourBrand.Invoicing.Application.Commands;
-using YourBrand.Invoicing.Domain.Enums;
-using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Infrastructure;
+﻿using System.Text.Json.Serialization;
 
 using MassTransit;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.Json;
-using YourBrand.Invoicing.Infrastructure.Persistence;
-using System.Text.Json.Serialization;
-using YourBrand.Payments.Client;
-using YourBrand.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.Invoicing;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Documents.Client;
+using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Invoicing;
+using YourBrand.Invoicing.Application;
+using YourBrand.Invoicing.Application.Commands;
+using YourBrand.Invoicing.Application.Queries;
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Enums;
+using YourBrand.Invoicing.Infrastructure;
+using YourBrand.Invoicing.Infrastructure.Persistence;
+using YourBrand.Payments.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -197,8 +194,8 @@ group.MapGet("/invoices/{invoiceId}/file", async (string invoiceId, IMediator me
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);
 
-group.MapPost("/{invoiceId}/Items", async (string invoiceId, 
-    AddInvoiceItem dto, 
+group.MapPost("/{invoiceId}/Items", async (string invoiceId,
+    AddInvoiceItem dto,
     IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
@@ -227,7 +224,7 @@ group.MapPost("", async (CreateInvoice command, IMediator mediator, Cancellation
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Status", async (string invoiceId, InvoiceStatus status, 
+group.MapPut("/{invoiceId}/Status", async (string invoiceId, InvoiceStatus status,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetInvoiceStatus(invoiceId, status), cancellationToken))
     .WithName("Invoices_SetInvoiceStatus")
@@ -241,42 +238,42 @@ IMediator mediator, CancellationToken cancellationToken)
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/PaidAmount", async (string invoiceId, decimal amount, 
+group.MapPut("/{invoiceId}/PaidAmount", async (string invoiceId, decimal amount,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetPaidAmount(invoiceId, amount), cancellationToken))
     .WithName("Invoices_SetPaidAmount")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Date", async (string invoiceId, DateTime date, 
+group.MapPut("/{invoiceId}/Date", async (string invoiceId, DateTime date,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetDate(invoiceId, date), cancellationToken))
     .WithName("Invoices_SetDate")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Type", async (string invoiceId, InvoiceType type, 
+group.MapPut("/{invoiceId}/Type", async (string invoiceId, InvoiceType type,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetType(invoiceId, type), cancellationToken))
     .WithName("Invoices_SetType")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/DueDate", async (string invoiceId, DateTime dueDate, 
+group.MapPut("/{invoiceId}/DueDate", async (string invoiceId, DateTime dueDate,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetDueDate(invoiceId, dueDate), cancellationToken))
     .WithName("Invoices_SetDueDate")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Reference", async (string invoiceId, string? reference, 
+group.MapPut("/{invoiceId}/Reference", async (string invoiceId, string? reference,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetReference(invoiceId, reference), cancellationToken))
     .WithName("Invoices_SetReference")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Note", async (string invoiceId, string? note, 
+group.MapPut("/{invoiceId}/Note", async (string invoiceId, string? note,
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetNote(invoiceId, note), cancellationToken))
     .WithName("Invoices_SetNote")
@@ -297,7 +294,7 @@ group.MapDelete("/{invoiceId}/Items/{invoiceItemId}", async (string invoiceId, s
 
 app.MapControllers();
 
-if(args.Contains("--seed")) 
+if (args.Contains("--seed"))
 {
     await SeedData.EnsureSeedData(app);
     return;

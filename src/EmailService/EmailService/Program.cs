@@ -1,15 +1,14 @@
 ﻿using MassTransit;
 
-using YourBrand.Notifications.Consumers;
-using YourBrand.Notifications.Services;
-
 using Serilog;
 
-using YourBrand;
-using YourBrand.Extensions;
-
-using YourBrand.EmailService;
 using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.EmailService;
+using YourBrand.Extensions;
+using YourBrand.Notifications.Consumers;
+using YourBrand.Notifications.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

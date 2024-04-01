@@ -2,10 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
+using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
-using YourBrand.Portal;
-using YourBrand.Showroom.Client;
 
 namespace YourBrand.Showroom;
 
@@ -36,7 +35,7 @@ public class ModuleInitializer : IModuleInitializer
         group2.RequiresAuthorization = true;
 
         var group = group2.CreateGroup("showroom", () => resources["Consultants"], MudBlazor.Icons.Material.Filled.People);
-        
+
         group.CreateItem("search", () => resources["Search"], MudBlazor.Icons.Material.Filled.Search, "/profiles/find");
         group.CreateItem("profiles", () => resources["Profiles"], MudBlazor.Icons.Material.Filled.Person, "/profiles");
         group.CreateItem("cases", () => resources["Cases"], MudBlazor.Icons.Material.Filled.Task, "/cases");

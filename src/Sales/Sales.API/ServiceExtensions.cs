@@ -2,9 +2,8 @@
 
 using MediatR;
 
-using YourBrand.Sales.Features.OrderManagement.Orders;
-
 using YourBrand.Sales.Behaviors;
+using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.Subscriptions;
 
 namespace YourBrand.Sales;

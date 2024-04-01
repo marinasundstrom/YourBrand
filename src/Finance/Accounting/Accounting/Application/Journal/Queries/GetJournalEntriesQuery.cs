@@ -1,8 +1,8 @@
-﻿using YourBrand.Accounting.Application.Common.Interfaces;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Journal.Queries;
 
@@ -19,16 +19,16 @@ public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10, int? Invoi
 
         public async Task<JournalEntryResult> Handle(GetJournalEntriesQuery request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
-            
+
             var query = context.JournalEntries
                 .Include(x => x.Entries)
                 .Include(x => x.Verifications)
@@ -37,7 +37,7 @@ public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10, int? Invoi
                 .AsSplitQuery()
                 .AsQueryable();
 
-            if(request.InvoiceNo is not null) 
+            if (request.InvoiceNo is not null)
             {
                 query = query.Where(x => x.InvoiceNo == request.InvoiceNo);
             }

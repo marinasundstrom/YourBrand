@@ -1,9 +1,3 @@
-using Microsoft.AspNetCore.Components;
-
-using MudBlazor;
-
-using YourBrand.Catalog;
-
 namespace YourBrand.Catalog.Products;
 
 public static class Test

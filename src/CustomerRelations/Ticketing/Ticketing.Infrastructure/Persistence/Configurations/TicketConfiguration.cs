@@ -13,6 +13,6 @@ public sealed class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder
             .HasMany(x => x.Items)
             .WithOne(x => x.Issue)
-            .OnDelete(DeleteBehavior.Cascade); */ 
+            .OnDelete(DeleteBehavior.Cascade); */
     }
 }

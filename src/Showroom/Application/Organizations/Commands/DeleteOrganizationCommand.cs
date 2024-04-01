@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.Application.Organizations.Commands;
@@ -24,7 +25,7 @@ public record DeleteOrganizationCommand(string Id) : IRequest
             if (organization is null) throw new Exception();
 
             context.Organizations.Remove(organization);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

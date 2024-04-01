@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace YourBrand.Showroom.Application.Industries;
+﻿namespace YourBrand.Showroom.Application.Industries;
 
 public record IndustryDto
 (

@@ -10,7 +10,8 @@ public record ShippingDetails
 
     public ShippingDetails? Copy()
     {
-        return new ShippingDetails {
+        return new ShippingDetails
+        {
             FirstName = FirstName,
             LastName = LastName,
             CareOf = CareOf,

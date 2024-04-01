@@ -1,14 +1,13 @@
-using YourBrand.Invoicing.Application.Common.Models;
+using MassTransit;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Contracts;
 using YourBrand.Invoicing.Domain;
 using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Domain.Events;
-
-using MassTransit;
-
-using Microsoft.EntityFrameworkCore;
 using YourBrand.Payments.Client;
-using YourBrand.Invoicing.Application.Common.Interfaces;
 
 namespace YourBrand.Invoicing.Application.Events;
 

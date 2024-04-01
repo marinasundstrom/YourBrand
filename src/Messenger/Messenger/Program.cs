@@ -1,21 +1,18 @@
 ﻿
+using MassTransit;
+
+using Serilog;
+
+using Steeltoe.Discovery.Client;
+
+using YourBrand;
+using YourBrand.Extensions;
 using YourBrand.Messenger;
 using YourBrand.Messenger.Application;
 using YourBrand.Messenger.Authentication;
 using YourBrand.Messenger.Hubs;
 using YourBrand.Messenger.Infrastructure;
 using YourBrand.Messenger.Infrastructure.Persistence;
-
-using MassTransit;
-
-using NSwag;
-using NSwag.Generation.Processors.Security;
-
-using Serilog;
-
-using YourBrand;
-using YourBrand.Extensions;
-using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +31,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => 
+    .AddOpenApi(ServiceName, ApiVersions.All, settings =>
     {
         settings
             .AddApiKeySecurity()

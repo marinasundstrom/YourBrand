@@ -1,16 +1,7 @@
-using Blazored.LocalStorage;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
-using MudBlazor;
-
-using YourBrand.Portal.AppBar;
 using YourBrand.Portal.Navigation;
-using YourBrand.Portal.Services;
-using YourBrand.Portal.Widgets;
-
-using Store = YourBrand.Portal.Services.Store;
 
 namespace YourBrand.Sales.Subscriptions;
 

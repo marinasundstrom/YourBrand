@@ -1,13 +1,12 @@
-﻿using System;
+﻿namespace YourBrand.IdentityManagement.Contracts;
 
-namespace YourBrand.IdentityManagement.Contracts;
-
-public record CreateUser {
+public record CreateUser
+{
     public string OrganizationId { get; init; }
-    public string TenantId { get; init; } 
-    public string FirstName { get; init; } 
-    public string LastName { get; init; } 
-    public string? DisplayName { get; init; } 
+    public string TenantId { get; init; }
+    public string FirstName { get; init; }
+    public string LastName { get; init; }
+    public string? DisplayName { get; init; }
     public string Role { get; init; }
     public string? Email { get; init; }
 };

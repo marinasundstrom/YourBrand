@@ -10,7 +10,7 @@ public class Resource : AuditableEntity, ISoftDelete
     public string? Description { get; set; } = null!;
 
     public Service Service { get; set; }
-    
+
     public DateTime? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

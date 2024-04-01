@@ -1,5 +1,4 @@
 ﻿using YourBrand.Application.Common.Interfaces;
-using YourBrand.Infrastructure;
 namespace YourBrand.WebApi.Services;
 
 public class UrlHelper : IUrlHelper

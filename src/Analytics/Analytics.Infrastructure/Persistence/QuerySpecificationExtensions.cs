@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Analytics.Domain.Specifications;
 
 namespace YourBrand.Analytics.Infrastructure.Persistence;

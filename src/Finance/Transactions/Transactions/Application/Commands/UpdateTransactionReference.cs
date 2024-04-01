@@ -15,7 +15,7 @@ public record UpdateTransactionReference(string TransactionId, string Reference)
     {
         private readonly ITransactionsContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
-        
+
         public Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint)
         {
             _context = context;
@@ -26,8 +26,8 @@ public record UpdateTransactionReference(string TransactionId, string Reference)
         {
             var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
-            if(transaction.Status != Domain.Enums.TransactionStatus.Unknown
-                && transaction.Status != Domain.Enums.TransactionStatus.Unverified) 
+            if (transaction.Status != Domain.Enums.TransactionStatus.Unknown
+                && transaction.Status != Domain.Enums.TransactionStatus.Unverified)
             {
                 throw new Exception("Cannot change reference.");
             }

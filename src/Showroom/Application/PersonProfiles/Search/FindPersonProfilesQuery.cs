@@ -44,7 +44,7 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
             }
             */
 
-            if(request.Query is not null) 
+            if (request.Query is not null)
             {
                 var query = request.Query;
 
@@ -63,19 +63,19 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
                     result = result.Where(p => p.CompetenceAreaId == query.CompetenceAreaId);
                 }
 
-                if(query.Skills?.Any() ?? false) 
+                if (query.Skills?.Any() ?? false)
                 {
-                    foreach(var skill in request.Query.Skills) 
+                    foreach (var skill in request.Query.Skills)
                     {
                         result = result.Where(p => p.PersonProfileSkills.Any(x => x.SkillId == skill.SkillId && x.Level >= skill.Level));
                     }
                 }
 
-                if(query.Experiences?.Any() ?? false) 
+                if (query.Experiences?.Any() ?? false)
                 {
-                    foreach(var industry in request.Query.Experiences) 
+                    foreach (var industry in request.Query.Experiences)
                     {
-                        result = result.Where(p => 
+                        result = result.Where(p =>
                             p.IndustryExperience
                             .Where(x => x.Industry.Id == industry.IndustryId)
                             .Where(x => x.Years >= industry.Years).Any());
@@ -98,7 +98,7 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
             {
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
-            else 
+            else
             {
                 result = result
                     .OrderBy(x => x.FirstName)

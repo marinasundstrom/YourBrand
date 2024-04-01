@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.Commands;

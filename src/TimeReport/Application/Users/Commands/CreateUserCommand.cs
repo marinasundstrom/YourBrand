@@ -26,7 +26,7 @@ public record CreateUserCommand(string? Id, string OrganizationId, string FirstN
                 .Include(x => x.Organization)
                 .FirstOrDefaultAsync(u => u.Id == request.Id);
 
-            if(user is not null) 
+            if (user is not null)
             {
                 return user.ToDto();
             }

@@ -1,6 +1,5 @@
-using YourBrand.ApiKeys.Domain.Events;
 using YourBrand.ApiKeys.Application.Common.Interfaces;
-using YourBrand.ApiKeys.Domain;
+using YourBrand.ApiKeys.Domain.Events;
 
 namespace YourBrand.ApiKeys.Application.Events;
 

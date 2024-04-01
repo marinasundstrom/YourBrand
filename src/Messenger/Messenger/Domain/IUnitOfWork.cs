@@ -1,5 +1,3 @@
-using YourBrand.Messenger.Domain.Entities;
-
 namespace YourBrand.Messenger.Domain;
 
 public interface IUnitOfWork

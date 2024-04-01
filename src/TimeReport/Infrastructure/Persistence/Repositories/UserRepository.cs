@@ -27,6 +27,6 @@ public sealed class UserRepository : IUserRepository
 
     public void RemoveUser(User user)
     {
-        _context.Users.Remove(user);    
+        _context.Users.Remove(user);
     }
 }

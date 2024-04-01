@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Teams
@@ -25,7 +26,7 @@ public record DeleteTeamCommand(string Id) : IRequest
             if (team is null) throw new Exception();
 
             context.Teams.Remove(team);
-           
+
             await context.SaveChangesAsync(cancellationToken);
 
         }

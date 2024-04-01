@@ -1,9 +1,8 @@
-﻿using System;
-namespace YourBrand.TimeReport.Domain.Exceptions;
+﻿namespace YourBrand.TimeReport.Domain.Exceptions;
 
 public class DomainException : Exception
 {
-    private string stackTrace;
+    private readonly string stackTrace;
 
     public DomainException(string title, string details)
         : base(title)

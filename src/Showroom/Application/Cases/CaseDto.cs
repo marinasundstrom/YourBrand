@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace YourBrand.Showroom.Application.Cases;
+﻿namespace YourBrand.Showroom.Application.Cases;
 
 public record CaseDto
 (

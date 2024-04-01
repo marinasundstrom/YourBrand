@@ -1,13 +1,11 @@
-using YourBrand.Documents.Client;
-
-using YourBrand.Invoicing.Application;
-using YourBrand.Invoicing.Domain;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
+
+using YourBrand.Documents.Client;
+using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
@@ -30,7 +28,7 @@ public record GenerateInvoiceFile(string InvoiceId) : IRequest<Stream>
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            if(invoice is null) 
+            if (invoice is null)
             {
                 throw new Exception();
             }

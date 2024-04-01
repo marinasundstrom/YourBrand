@@ -1,6 +1,8 @@
 using MediatR;
-using YourBrand.HumanResources.Application.Common.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.HumanResources.Application.Common.Interfaces;
 namespace YourBrand.HumanResources.Application.Teams.Commands;
 
 public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
@@ -34,7 +36,7 @@ public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
             await context.SaveChangesAsync(cancellationToken);
 
             await _eventPublisher.PublishEvent(new Contracts.TeamMemberAdded(team.Id, user.Id));
-            
+
         }
     }
-} 
+}

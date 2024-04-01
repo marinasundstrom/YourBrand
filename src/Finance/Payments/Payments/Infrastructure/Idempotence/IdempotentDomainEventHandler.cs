@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Payments.Application.Common;
+
 using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Infrastructure.Persistence;

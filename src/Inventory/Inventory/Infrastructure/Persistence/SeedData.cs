@@ -22,7 +22,7 @@ public class SeedData
 
                 var t1 = new Item("TS-B-S", "T-Shirt Blue Small", Domain.Enums.ItemType.Inventory, "Foo1", clothes.Id, "pc");
                 var t2 = new Item("TS-B-M", "T-Shirt Blue Medium", Domain.Enums.ItemType.Inventory, "Foo2", clothes.Id, "pc");
-                var t3 = new Item("TS-B-L", "T-Shirt Blue Large", Domain.Enums.ItemType.Inventory, "Foo3",clothes.Id, "pc");
+                var t3 = new Item("TS-B-L", "T-Shirt Blue Large", Domain.Enums.ItemType.Inventory, "Foo3", clothes.Id, "pc");
 
                 context.Items.Add(t1);
                 context.Items.Add(t2);
@@ -39,7 +39,7 @@ public class SeedData
                 await context.SaveChangesAsync();
 
                 var wt1 = new WarehouseItem(t1.Id, warehouse.Id, "1-2-3", 100);
-                var wt2 = new WarehouseItem(t2.Id, warehouse.Id,"1-2-4", 100);
+                var wt2 = new WarehouseItem(t2.Id, warehouse.Id, "1-2-4", 100);
                 var wt3 = new WarehouseItem(t3.Id, warehouse.Id, "1-2-5", 100);
 
                 context.WarehouseItems.Add(wt1);

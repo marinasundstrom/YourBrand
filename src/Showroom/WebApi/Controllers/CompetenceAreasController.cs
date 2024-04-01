@@ -9,7 +9,6 @@ using YourBrand.Showroom.Application.Common.Models;
 using YourBrand.Showroom.Application.CompetenceAreas;
 using YourBrand.Showroom.Application.CompetenceAreas.Commands;
 using YourBrand.Showroom.Application.CompetenceAreas.Queries;
-using YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
 
@@ -59,4 +58,3 @@ public class CompetenceAreasController : ControllerBase
 public record CreateCompetenceAreaDto(string Name);
 
 public record UpdateCompetenceAreaDto(string Name);
-

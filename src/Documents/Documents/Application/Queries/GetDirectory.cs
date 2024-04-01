@@ -1,8 +1,8 @@
-﻿using YourBrand.Documents.Infrastructure.Persistence;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Documents.Infrastructure.Persistence;
 
 namespace YourBrand.Documents.Application.Queries;
 
@@ -32,7 +32,7 @@ public record GetDirectory(string Path) : IRequest<DirectoryDto?>
 
             return directory is null
                 ? null
-                : directory.ToDto(_urlResolver.GetUrl); 
+                : directory.ToDto(_urlResolver.GetUrl);
         }
     }
 }

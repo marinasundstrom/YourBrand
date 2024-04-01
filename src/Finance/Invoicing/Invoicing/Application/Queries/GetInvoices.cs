@@ -1,13 +1,9 @@
-﻿
-using YourBrand.Invoicing.Application;
-using YourBrand.Invoicing.Domain;
-using YourBrand.Invoicing.Domain.Enums;
-
-using MassTransit;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Queries;
 
@@ -24,12 +20,12 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
 
         public async Task<ItemsResult<InvoiceDto>> Handle(GetInvoices request, CancellationToken cancellationToken)
         {
-            if(request.PageSize < 0) 
+            if (request.PageSize < 0)
             {
                 throw new Exception("Page Size cannot be negative.");
             }
 
-            if(request.PageSize > 100) 
+            if (request.PageSize > 100)
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
@@ -40,18 +36,18 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
 
-            if(request.Reference is not null) 
+            if (request.Reference is not null)
             {
                 query = query.Where(i => i.Reference!.ToLower().Contains(request.Reference.ToLower()));
             }
 
-            if(request.Types?.Any() ?? false) 
+            if (request.Types?.Any() ?? false)
             {
                 var types = request.Types.Select(x => (int)x);
                 query = query.Where(i => types.Any(s => s == (int)i.Type));
             }
 
-            if(request.Status?.Any() ?? false) 
+            if (request.Status?.Any() ?? false)
             {
                 var statuses = request.Status.Select(x => (int)x);
                 query = query.Where(i => statuses.Any(s => s == (int)i.Status));
@@ -59,7 +55,7 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
 
             int totalItems = await query.CountAsync(cancellationToken);
 
-            query = query         
+            query = query
                 .Include(i => i.Items)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);

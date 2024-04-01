@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +22,7 @@ public class ModuleLoader
         _serviceProvider = serviceProvider;
     }
 
-    static ModuleLoader() 
+    static ModuleLoader()
     {
         _moduleInitializerInterface = typeof(IModuleInitializer);
     }

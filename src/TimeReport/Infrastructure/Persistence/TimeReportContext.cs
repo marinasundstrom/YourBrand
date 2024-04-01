@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 using Newtonsoft.Json;
 
@@ -8,7 +7,6 @@ using YourBrand.ApiKeys;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
@@ -40,7 +38,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); 
+        optionsBuilder.EnableSensitiveDataLogging();
 #endif
     }
 
@@ -77,7 +75,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     public DbSet<ProjectMembership> ProjectMemberships { get; set; } = null!;
 
-    public DbSet<ProjectTeam> ProjectTeams{ get; set; } = null!;
+    public DbSet<ProjectTeam> ProjectTeams { get; set; } = null!;
 
     public DbSet<Expense> Expenses { get; set; } = null!;
 

@@ -1,9 +1,5 @@
-
-using AspNetCore.Authentication.ApiKey;
-
 using MediatR;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -88,7 +84,7 @@ public class UsersController : Controller
             return NotFound();
         }
     }
-    
+
     [HttpPost("{id}/Role")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> UpdateRole(string id, UpdateUserRoleDto updateUserRoleDtoDto, CancellationToken cancellationToken)

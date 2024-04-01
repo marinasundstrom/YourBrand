@@ -1,10 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
+
 using Polly;
 using Polly.Retry;
+
 using Quartz;
+
 using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
 
@@ -65,4 +68,3 @@ public sealed class ProcessOutboxMessagesJob : IJob
         await dbContext.SaveChangesAsync(context.CancellationToken);
     }
 }
-

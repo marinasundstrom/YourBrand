@@ -4,8 +4,8 @@ using MediatR;
 
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
-using static YourBrand.Sales.Results;
 using static YourBrand.Sales.Domain.Errors.Orders;
+using static YourBrand.Sales.Results;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 

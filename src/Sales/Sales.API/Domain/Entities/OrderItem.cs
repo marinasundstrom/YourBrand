@@ -1,13 +1,12 @@
 using Core;
 
 using YourBrand.Sales.Domain.ValueObjects;
-using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Domain.Entities;
 
 public class OrderItem : Entity<string>, IAuditable, IHasTenant
 {
-    internal OrderItem() : base(Guid.NewGuid().ToString())  {}
+    internal OrderItem() : base(Guid.NewGuid().ToString()) { }
 
     internal OrderItem(string description,
                        string? productId,
@@ -45,7 +44,7 @@ public class OrderItem : Entity<string>, IAuditable, IHasTenant
 
     public string? Sku { get; set; }
 
-    public ProductType ProductType  { get; set; }
+    public ProductType ProductType { get; set; }
 
     public SubscriptionPlan? SubscriptionPlan { get; set; }
 

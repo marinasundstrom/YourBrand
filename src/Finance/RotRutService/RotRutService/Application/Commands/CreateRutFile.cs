@@ -1,13 +1,15 @@
-using YourBrand.RotRutService.Domain;
-using YourBrand.RotRutService.Domain.Enums;
+using System.Text;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using RotRut;
 using RotRut.Begaran;
 using RotRut.Begaran.Rut;
-using RotRut;
-using System.Text;
+
+using YourBrand.RotRutService.Domain;
+using YourBrand.RotRutService.Domain.Enums;
 
 namespace YourBrand.RotRutService.Application.Commands;
 

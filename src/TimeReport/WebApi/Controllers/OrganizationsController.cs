@@ -58,4 +58,3 @@ public class OrganizationsController : ControllerBase
 public record CreateOrganizationDto(string Name, string? ParentOrganizationId);
 
 public record UpdateOrganizationDto(string Name);
-

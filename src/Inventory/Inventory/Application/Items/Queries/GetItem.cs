@@ -1,9 +1,8 @@
-﻿using YourBrand.Inventory.Domain;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Inventory.Application.Items;
+
+using YourBrand.Inventory.Domain;
 
 namespace YourBrand.Inventory.Application.Items.Queries;
 

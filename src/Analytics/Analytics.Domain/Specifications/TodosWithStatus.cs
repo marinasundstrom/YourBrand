@@ -1,8 +1,4 @@
-﻿using System;
-using YourBrand.Analytics.Domain.Entities;
-using YourBrand.Analytics.Domain.Enums;
-
-namespace YourBrand.Analytics.Domain.Specifications;
+﻿namespace YourBrand.Analytics.Domain.Specifications;
 
 /*
 public class TodosWithStatus : BaseSpecification<Todo>
@@ -13,4 +9,3 @@ public class TodosWithStatus : BaseSpecification<Todo>
     }
 }
 */
-

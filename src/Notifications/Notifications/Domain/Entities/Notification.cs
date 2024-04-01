@@ -1,6 +1,4 @@
-﻿using System;
-
-using YourBrand.Notifications.Domain.Common;
+﻿using YourBrand.Notifications.Domain.Common;
 
 namespace YourBrand.Notifications.Domain.Entities;
 

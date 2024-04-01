@@ -1,11 +1,4 @@
-using System;
 using System.Data;
-using System.Security.Claims;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-
-using YourBrand.Portal.Services;
 
 namespace YourBrand.Portal.Widgets;
 

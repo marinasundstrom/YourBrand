@@ -1,7 +1,7 @@
-﻿using YourBrand.Documents.Domain.Entities;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using YourBrand.Documents.Domain.Entities;
 
 namespace YourBrand.Documents.Infrastructure.Persistence.Configurations;
 

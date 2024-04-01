@@ -1,7 +1,7 @@
-﻿using YourBrand.Documents.Domain.Entities;
-using YourBrand.Documents.Domain.Enums;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using YourBrand.Documents.Domain.Entities;
+using YourBrand.Documents.Domain.Enums;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
@@ -93,7 +93,7 @@ Hello, @Model.Name!"
 
                 context.DocumentTemplates.Add(documentTemplate);
 
-                                documentTemplate = new DocumentTemplate()
+                documentTemplate = new DocumentTemplate()
                 {
                     Id = "reminder2",
                     Name = "Reminder 2",

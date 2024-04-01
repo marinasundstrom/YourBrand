@@ -1,30 +1,28 @@
-﻿using System;
-
-using YourBrand.Invoicing.Domain.Entities;
+﻿using YourBrand.Invoicing.Domain.Entities;
 using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application;
 
 public record InvoiceDto(
-    string Id, 
+    string Id,
     string? InvoiceNo,
-    DateTime? IssueDate, 
-    Domain.Enums.InvoiceType Type, 
+    DateTime? IssueDate,
+    Domain.Enums.InvoiceType Type,
     Domain.Enums.InvoiceStatus Status,
     CustomerDto? Customer,
     DateTime? DueDate,
-    string Currency, 
-    string? Reference, 
+    string Currency,
+    string? Reference,
     string? Note,
-    BillingDetailsDto? BillingDetails, 
+    BillingDetailsDto? BillingDetails,
     ShippingDetailsDto? ShippingDetails,
     IEnumerable<InvoiceItemDto> Items,
     decimal SubTotal,
     IEnumerable<InvoiceVatAmountDto> VatAmounts,
     decimal Vat,
     decimal? Discount,
-    decimal Total, 
-    decimal? Paid, 
+    decimal Total,
+    decimal? Paid,
     InvoiceDomesticServiceDto? DomesticService);
 
 public record CustomerDto(
@@ -33,26 +31,26 @@ public record CustomerDto(
     string Name);
 
 public sealed record InvoiceVatAmountDto(
-    string Name, 
-    double VatRate, 
-    decimal SubTotal, 
-    decimal? Vat, 
+    string Name,
+    double VatRate,
+    decimal SubTotal,
+    decimal? Vat,
     decimal Total);
 
 public record InvoiceDomesticServiceDto(
-    Domain.Entities.DomesticServiceKind Kind, 
+    Domain.Entities.DomesticServiceKind Kind,
     string Buyer,
     string Description,
     decimal RequestedAmount,
     PropertyDetailsDto? PropertyDetails);
 
 public record InvoiceItemDto(
-    string Id, 
-    ProductType ProductType, 
+    string Id,
+    ProductType ProductType,
     string Description,
     string? ProductId,
     string? SKU,
-    decimal UnitPrice, 
+    decimal UnitPrice,
     string? Unit,
     decimal? Discount,
     decimal? RegularPrice,

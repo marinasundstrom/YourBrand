@@ -1,14 +1,4 @@
-
-using Asp.Versioning.Builder;
-
-using YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
-using YourBrand.Catalog.Model;
-
 using MediatR;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 

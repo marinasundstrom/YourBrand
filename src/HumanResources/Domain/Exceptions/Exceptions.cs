@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourBrand.HumanResources.Domain.Exceptions;
+﻿namespace YourBrand.HumanResources.Domain.Exceptions;
 
 public class DomainException : Exception
 {

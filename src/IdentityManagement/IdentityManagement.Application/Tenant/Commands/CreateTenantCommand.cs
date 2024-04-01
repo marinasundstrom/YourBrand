@@ -1,16 +1,10 @@
-﻿
-using System.Security.Claims;
-
-using IdentityModel;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Contracts;
-using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.Identity;
+using YourBrand.IdentityManagement.Application.Common.Interfaces;
+using YourBrand.IdentityManagement.Domain.Entities;
 
 using TenantCreated = YourBrand.IdentityManagement.Contracts.TenantCreated;
 
@@ -34,7 +28,7 @@ public record CreateTenantCommand(string Name, string? FriendlyName) : IRequest<
         public async Task<TenantDto> Handle(CreateTenantCommand request, CancellationToken cancellationToken)
         {
             var tenant = new Tenant(
-                 request.Name, 
+                 request.Name,
                  request.FriendlyName ?? request.Name.ToLower().Replace(' ', '-'));
 
             _context.Tenants.Add(tenant);

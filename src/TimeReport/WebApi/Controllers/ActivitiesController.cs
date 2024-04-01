@@ -113,4 +113,4 @@ public class ActivitiesController : ControllerBase
 
 public record class CreateActivityDto(string Name, string ActivityTypeId, string? Description, decimal? HourlyRate);
 
-public record class UpdateActivityDto(string Name, string ActivityTypeId,string? Description, decimal? HourlyRate);
+public record class UpdateActivityDto(string Name, string ActivityTypeId, string? Description, decimal? HourlyRate);

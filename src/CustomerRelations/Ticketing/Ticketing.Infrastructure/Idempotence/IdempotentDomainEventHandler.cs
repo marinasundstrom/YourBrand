@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Ticketing.Application.Common;
 using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
@@ -45,4 +46,3 @@ public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHan
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
-

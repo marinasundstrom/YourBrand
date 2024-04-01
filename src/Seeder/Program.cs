@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.IdentityManagement;
 using YourBrand.IdentityManagement.Client;
 
 //const string ApiKey = "asdsr34#34rswert35234aedae?2!";
@@ -20,7 +19,8 @@ if (args.ToArray().Contains("--seed"))
     var organizationsClient = services.GetRequiredService<IOrganizationsClient>();
     var usersClient = services.GetRequiredService<IUsersClient>();
 
-    var organization = organizationsClient.CreateOrganizationAsync(new CreateOrganization {
+    var organization = organizationsClient.CreateOrganizationAsync(new CreateOrganization
+    {
         Name = "ACME Inc.",
         FriendlyName = "ACME Inc."
     });
@@ -33,21 +33,21 @@ if (args.ToArray().Contains("--seed"))
         Email = "admin@email.com"
     });
 
-/*
-    var alice = usersClient.CreateUserAsync(new CreateUser
-    {
-        FirstName = "Alice",
-        LastName = "Smith",
-        Email = "AliceSmith@email.com"
-    });
+    /*
+        var alice = usersClient.CreateUserAsync(new CreateUser
+        {
+            FirstName = "Alice",
+            LastName = "Smith",
+            Email = "AliceSmith@email.com"
+        });
 
-    var bob = usersClient.CreateUserAsync(new CreateUser
-    {
-        FirstName = "Bob",
-        LastName = "Smith",
-        Email = "BobSmith@email.com"
-    });
-*/
+        var bob = usersClient.CreateUserAsync(new CreateUser
+        {
+            FirstName = "Bob",
+            LastName = "Smith",
+            Email = "BobSmith@email.com"
+        });
+    */
 }
 
 static IServiceProvider BuildServiceProvider()

@@ -3,11 +3,11 @@
 using YourBrand.Ticketing.Application.Features.Users;
 
 public sealed record TicketDto(
-    int Id, 
+    int Id,
     string Requester,
-    string Subject, 
-    string? Description, 
-    TicketStatusDto Status, 
+    string Subject,
+    string? Description,
+    TicketStatusDto Status,
     UserDto? Assignee,
     DateTime? LastMessage,
     string? Text,
@@ -15,11 +15,11 @@ public sealed record TicketDto(
     TicketPriorityDto Priority,
     TicketSeverityDto Severity,
     TicketImpactDto Impact,
-    double? EstimatedHours, 
+    double? EstimatedHours,
     double? RemainingHours,
     IEnumerable<TagDto> Tags,
     IEnumerable<AttachmentDto> Attachments,
-    DateTimeOffset Created, 
-    UserDto? CreatedBy, 
-    DateTimeOffset? LastModified, 
+    DateTimeOffset Created,
+    UserDto? CreatedBy,
+    DateTimeOffset? LastModified,
     UserDto? LastModifiedBy);

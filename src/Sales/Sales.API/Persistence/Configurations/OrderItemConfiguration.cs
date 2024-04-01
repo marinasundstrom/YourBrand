@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Persistence.Configurations;
 

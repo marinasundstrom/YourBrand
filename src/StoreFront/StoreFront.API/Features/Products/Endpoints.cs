@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-
-using YourBrand.StoreFront.API.Features.Products.Categories;
 
 using YourBrand.Catalog;
+using YourBrand.StoreFront.API.Features.Products.Categories;
 
 namespace YourBrand.StoreFront.API.Features.Products;
 

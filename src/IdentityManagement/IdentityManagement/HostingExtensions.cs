@@ -1,9 +1,12 @@
 using Duende.IdentityServer;
-using YourBrand.IdentityManagement.Infrastructure.Persistence;
-using YourBrand.IdentityManagement.Domain.Entities;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using Serilog;
+
+using YourBrand.IdentityManagement.Domain.Entities;
+using YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 namespace YourBrand.IdentityManagement;
 
@@ -35,7 +38,7 @@ internal static class HostingExtensions
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<User>();
-            //.AddProfileService<CustomProfileService>();
+        //.AddProfileService<CustomProfileService>();
 
         builder.Services.AddAuthentication()
             .AddGoogle(options =>

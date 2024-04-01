@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+
 using YourBrand.Analytics.Application.Hubs;
 
 namespace YourBrand.Analytics.Application;

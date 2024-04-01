@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using YourBrand.Customers.Domain.Common;
 
 namespace YourBrand.Customers.Domain.Entities;

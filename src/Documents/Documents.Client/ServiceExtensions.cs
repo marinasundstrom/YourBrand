@@ -10,7 +10,7 @@ public static class ServiceExtensions
             .AddDirectoriesClient(configureClient, builder)
             .AddDocumentsClient(configureClient, builder);
 
-        return services; 
+        return services;
     }
 
     public static IServiceCollection AddDirectoriesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)

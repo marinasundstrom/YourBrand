@@ -1,10 +1,7 @@
-﻿using YourBrand.Invoicing.Application.Common.Interfaces;
-using YourBrand.Invoicing.Application.Common.Models;
+﻿using MediatR;
+
+using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Domain.Common;
-
-using MediatR;
-
-using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Invoicing.Infrastructure.Services;
 

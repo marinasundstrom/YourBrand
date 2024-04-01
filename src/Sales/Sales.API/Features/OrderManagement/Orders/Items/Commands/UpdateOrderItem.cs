@@ -2,12 +2,8 @@
 
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
-using YourBrand.Domain.Infrastructure;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
-using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 

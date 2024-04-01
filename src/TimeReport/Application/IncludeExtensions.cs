@@ -1,12 +1,10 @@
-using System.Linq.Expressions;
-
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application;
 
-public static class IncludeExtensions 
+public static class IncludeExtensions
 {
     public static IQueryable<Activity> IncludeAll(this IQueryable<Activity> source)
     {

@@ -8,7 +8,7 @@ public enum CaseStatus
     Closed
 }
 
-public enum Availability 
+public enum Availability
 {
     Unavailable,
     Available

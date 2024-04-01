@@ -1,6 +1,5 @@
-﻿using System;
-using System.Net;
-using MediatR;
+﻿using MediatR;
+
 using YourBrand.Analytics;
 using YourBrand.StoreFront.API;
 

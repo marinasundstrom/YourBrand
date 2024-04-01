@@ -1,9 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Security.Claims;
 
 using Microsoft.AspNetCore.Components.Authorization;
-using YourBrand.Portal.Services;
 
 namespace YourBrand.Portal.Services;
 
@@ -16,7 +14,7 @@ public class CurrentUserService(AuthenticationStateProvider authenticationStateP
         ClaimsPrincipal user = await GetUser();
 
 #if DEBUG
-       //Console.WriteLine("Claims: {0}", System.Text.Json.JsonSerializer.Serialize(user.Claims.Select(x => x.Type + " " + x.Value)));
+        //Console.WriteLine("Claims: {0}", System.Text.Json.JsonSerializer.Serialize(user.Claims.Select(x => x.Type + " " + x.Value)));
 #endif
 
         var name = user?.FindFirst("sub")?.Value;
@@ -61,10 +59,9 @@ public class CurrentUserService(AuthenticationStateProvider authenticationStateP
         return user;
     }
 
-    public async Task<string?> GetOrganizationId() 
+    public async Task<string?> GetOrganizationId()
     {
         ClaimsPrincipal user = await GetUser();
         return user?.FindFirst("organizationId")?.Value;
-    } 
+    }
 }
-

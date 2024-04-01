@@ -1,6 +1,6 @@
-using YourBrand.Documents.Domain;
-
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Documents.Domain;
 using YourBrand.Documents.Infrastructure.Persistence.Interceptors;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
     {
         const string ConnectionStringKey = "mssql";
 
-        var connectionString = YourBrand.Documents.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Documents") 
+        var connectionString = YourBrand.Documents.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Documents")
             ?? configuration.GetConnectionString("DefaultConnection");
 
         Console.WriteLine(connectionString);

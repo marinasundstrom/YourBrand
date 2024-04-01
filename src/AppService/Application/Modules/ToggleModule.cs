@@ -4,8 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
-using YourBrand.Application.Common.Models;
-using YourBrand.Domain;
 using YourBrand.Identity;
 
 namespace YourBrand.Application.Modules;
@@ -27,7 +25,7 @@ public record ToggleModule(Guid Id) : IRequest
         {
             var module = await _appServiceContext.Modules.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if(module is not null) 
+            if (module is not null)
             {
                 module.Enabled = !module.Enabled;
 

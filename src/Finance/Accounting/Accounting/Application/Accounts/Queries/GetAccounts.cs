@@ -1,9 +1,9 @@
 ﻿
-using YourBrand.Accounting.Application.Common.Interfaces;
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Accounting.Application.Common.Interfaces;
 
 using static YourBrand.Accounting.Application.Accounts.Mappings;
 

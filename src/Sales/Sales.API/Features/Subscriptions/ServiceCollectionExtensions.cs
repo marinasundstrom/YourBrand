@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-using YourBrand.Sales.Features.Orders;
+﻿using YourBrand.Sales.Features.Orders;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
