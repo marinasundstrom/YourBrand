@@ -18,7 +18,9 @@ public static class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var tenant = new Tenant("ACME Inc", null);
+            var tenantId = "e2dc3bf2-1619-46bf-bcc9-cfc169ca7e78";
+
+            var tenant = new Tenant(tenantId, "ACME Inc", null);
 
             context.Tenants.Add(tenant);
 
