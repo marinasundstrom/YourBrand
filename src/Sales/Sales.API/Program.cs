@@ -152,7 +152,7 @@ try
         if (args.Contains("--seed"))
         {
             var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-            tenantService.SetTenantId(AcmeTenant.TenantId);
+            tenantService.SetTenantId(TenantConstants.TenantId);
 
             await context.Database.EnsureDeletedAsync();
 

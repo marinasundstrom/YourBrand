@@ -22,7 +22,7 @@ public static class SeedData
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var tenant = new Tenant(AcmeTenant.TenantId, "ACME Inc", null);
+            var tenant = new Tenant(TenantConstants.TenantId, TenantConstants.TenantName, null);
 
             context.Tenants.Add(tenant);
 

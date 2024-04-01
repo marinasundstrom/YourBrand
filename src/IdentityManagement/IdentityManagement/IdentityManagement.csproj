@@ -25,8 +25,7 @@
 
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer"
-      Version="8.0.0-*" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="8.0.0-*" />
 
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.1" />
 
@@ -41,8 +40,7 @@
     <ProjectReference Include="..\IdentityManagement.Application\IdentityManagement.Application.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference
-      Include="..\IdentityManagement.Infrastructure\IdentityManagement.Infrastructure.csproj">
+    <ProjectReference Include="..\IdentityManagement.Infrastructure\IdentityManagement.Infrastructure.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj">
@@ -59,5 +57,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
+    <ProjectReference Include="..\..\Common\SampleTenant\SampleTenant.csproj" />
   </ItemGroup>
 </Project>
