@@ -14,7 +14,7 @@
                 Class="mt-4">
             </MudTextField>
 
-            <ProductSelector @bind-Value="Model.Product" For="() => Model.Product" Class="mt-4" />
+            <ProductSelector Value="@Model.Product" ValueChanged="OnProductChanged" For="() => Model.Product" Class="mt-4" />
 
             <MudNumericField Label="Unit Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mt-4">
             </MudNumericField>
@@ -102,6 +102,14 @@
         {
             Model = new OrderItemViewModel();
         }
+    }
+
+    private void OnProductChanged(Product product) 
+    {
+        Model.Product = product;
+
+        Model.Price = product.Price;
+        Model.RegularPrice = product.RegularPrice;
     }
 
     async Task Submit()
