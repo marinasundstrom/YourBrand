@@ -37,7 +37,8 @@ public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
                 Id = x.Id,
                 Name = x.Name,
                 Assembly = x.Assembly,
-                Enabled = x.Enabled
+                Enabled = x.Enabled,
+                DependantOn = x.DependantOn
             }).ToListAsync(cancellationToken);
         }
     }

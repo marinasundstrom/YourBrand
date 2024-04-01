@@ -9,4 +9,6 @@ public class ModuleDto
     public string Assembly { get; set; }
 
     public bool Enabled { get; set; }
+
+    public IEnumerable<string> DependantOn { get; set; }
 }

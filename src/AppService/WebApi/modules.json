@@ -1,37 +1,39 @@
 [
     {
-        "Id": "",
+        "Id": "63ca1b89-0676-4ba7-81ff-4a78325ea1bc",
         "Name": "Showroom",
         "Assembly": "Showroom.UI",
         "Enabled": true,
         "DependantOn": [ "Customers.UI"  ]
     },
     {
-        "Id": "",
+        "Id": "211b86e8-9f20-4d57-84b7-2a75f6c7eeac",
         "Name": "Catalog",
         "Assembly": "Catalog.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "b04416ff-3f86-4314-a6b9-414952ecf428",
         "Name": "Sales",
         "Assembly": "Sales.UI",
         "Enabled": true,
         "DependantOn": [
-            "Customers.UI"
+            "Customers.UI",
+            "Catalog.UI"
         ]
     },
     {
-        "Id": "",
+        "Id": "2f74261e-18d7-4888-a72b-66d3844de5f9",
         "Name": "Marketing",
         "Assembly": "Marketing.UI",
         "Enabled": true,
         "DependantOn": [
-            "Customers.UI"
+            "Customers.UI",
+            "Catalog.UI"
         ]
     },
     {
-        "Id": "",
+        "Id": "b3a8bfa1-c79e-4ec7-8c63-da974d76cdfe",
         "Name": "TimeReport",
         "Assembly": "TimeReport.UI",
         "Enabled": true,
@@ -41,82 +43,83 @@
         ]
     },
     {
-        "Id": "",
+        "Id": "fdeb1d26-faa1-4582-b306-4d50ee0bf9ce",
         "Name": "Invoicing",
         "Assembly": "Invoicing.UI",
         "Enabled": true,
         "DependantOn": [
-            "Customers.UI"
+            "Customers.UI",
+            "Catalog.UI"
         ]
     },
     {
-        "Id": "",
+        "Id": "f794fefe-77ca-4b2c-8f76-7fccdce1f8ff",
         "Name": "Transactions",
         "Assembly": "Transactions.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "b1ac99d4-789f-4894-b61d-1718282c8536",
         "Name": "Payments",
         "Assembly": "Payments.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "292284c5-aa3b-46df-b20f-f09ff8f8edb0",
         "Name": "Accounting",
         "Assembly": "Accounting.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "cede7b9c-8b22-44fe-8a1e-4f657f955d05",
         "Name": "Documents",
         "Assembly": "Documents.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "88c581bd-e49b-48b1-9d2a-5d7b84444310",
         "Name": "Messenger",
         "Assembly": "Messenger.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "5184052b-eef6-4a27-a7c5-237c7fbdb1ce",
         "Name": "RotRutService",
         "Assembly": "RotRutService.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "c371e0ac-1b22-4f37-aa0c-ab1e2409fbcb",
         "Name": "Customers",
         "Assembly": "Customers.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "b2a4e88e-f621-4d2b-9bb5-8c2e0a7cfde1",
         "Name": "Ticketing",
         "Assembly": "Ticketing.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "d8f08477-c0d7-4172-a73b-f25bd506841c",
         "Name": "HumanResources",
         "Assembly": "HumanResources.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "17c64347-7caa-44f7-a824-1e1cc2a52abd",
         "Name": "Inventory",
         "Assembly": "Inventory.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "4cd24777-aa76-4d81-acb3-d06a1515cc56",
         "Name": "Analytics",
         "Assembly": "Analytics.UI",
         "Enabled": true
     },
     {
-        "Id": "",
+        "Id": "4237e4e8-7d89-45c5-8482-688f4ba6251c",
         "Name": "Identity Management",
         "Assembly": "IdentityManagement.UI",
         "Enabled": true

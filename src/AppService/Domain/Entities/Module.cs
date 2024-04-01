@@ -13,4 +13,6 @@ public sealed class Module : Entity
     public bool Enabled { get; set; }
 
     public int Index { get; set; }
+
+    public List<string> DependantOn { get; set; } = new List<string>();
 }

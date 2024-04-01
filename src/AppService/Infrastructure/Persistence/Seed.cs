@@ -59,17 +59,16 @@ public static class Seed
         {
             context.Modules.Add(new Module
             {
-                Id = Guid.NewGuid(),
+                Id = module.Id,
                 Name = module.Name,
                 Assembly = module.Assembly,
                 Enabled = module.Enabled,
-                Index = i++
+                Index = i++,
+                DependantOn = module.DependantOn?.ToList() ?? new List<string>()
             });
         }
 
         await context.SaveChangesAsync();
-
-        context.Set<WidgetArea>().Add(new WidgetArea("dashboard", "Dashboard"));
 
         context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
         {
