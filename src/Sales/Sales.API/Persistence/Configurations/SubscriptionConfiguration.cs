@@ -11,7 +11,11 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
+        builder.ToTable("Subscription");
+
         //builder.HasAlternateKey(o => new { o.OrganizationId, o.SubscriptionNo });
+
+        builder.HasIndex(x => x.TenantId);
 
         builder.Ignore(e => e.DomainEvents);
 

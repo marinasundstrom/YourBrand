@@ -31,6 +31,8 @@ public class Organization : AuditableEntity
 
     public Tenant Tenant { get; set; }
 
+    public string TenantId { get; set; }
+
     public IReadOnlyCollection<User> Users => _users;
 
     public void ChangeName(string name)

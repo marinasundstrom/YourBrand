@@ -10,5 +10,7 @@ public class OrganizationUserConfiguration : IEntityTypeConfiguration<Organizati
     public void Configure(EntityTypeBuilder<OrganizationUser> builder)
     {
         builder.ToTable(name: "OrganizationUsers");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

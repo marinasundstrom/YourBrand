@@ -11,6 +11,8 @@ public class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
     {
         builder.ToTable(name: "Organizations");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasMany(p => p.Users)
             .WithMany(p => p.Organizations)
             .UsingEntity<OrganizationUser>(

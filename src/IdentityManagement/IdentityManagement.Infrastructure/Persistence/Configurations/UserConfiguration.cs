@@ -14,6 +14,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable(name: "Users");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasMany(u => u.Roles)

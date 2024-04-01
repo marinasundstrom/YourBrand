@@ -11,6 +11,8 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organiz
     {
         builder.ToTable("Organizations");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasMany(p => p.Users)
             .WithMany(p => p.Organizations)
             .UsingEntity<OrganizationUser>(

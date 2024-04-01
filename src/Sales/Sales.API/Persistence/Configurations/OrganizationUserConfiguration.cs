@@ -11,6 +11,8 @@ public class OrganizationUserConfiguration : IEntityTypeConfiguration<Organizati
     {
         builder.ToTable(name: "OrganizationUsers");
 
+        //builder.HasIndex(x => x.TenantId);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

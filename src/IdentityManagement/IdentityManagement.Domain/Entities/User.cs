@@ -35,6 +35,8 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
     public string? DisplayName { get; set; }
 
     public Tenant? Tenant { get; set; }
+    
+    public string? TenantId { get; set; }
 
     public Organization? Organization => Organizations.FirstOrDefault();
 
