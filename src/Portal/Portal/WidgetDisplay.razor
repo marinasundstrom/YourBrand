@@ -31,7 +31,16 @@
     }
     @foreach (var w in widgets)
     {
-        var widget = WidgetService.Widgets.First(x => x.Id == w.WidgetId);
+        Widgets.Widget widget = default!;
+        try 
+        {
+            widget = WidgetService.Widgets.First(x => x.Id == w.WidgetId);
+        }
+        catch(Exception) 
+        {
+            Console.WriteLine($"Widget not registered: {w.WidgetId}");
+            continue;
+        }
 
         if(widget.IsVisible) 
         {

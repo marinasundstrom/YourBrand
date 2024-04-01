@@ -42,8 +42,6 @@ public static class Seed
         }
 
         var widgetArea = new WidgetArea("dashboard", "Dashboard");
-        widgetArea.AddWidget(new Widget("analytics.engagements", null, null));
-        widgetArea.AddWidget(new Widget("sample-widget2", null, null));
 
         context.Set<WidgetArea>().Add(widgetArea);
 
