@@ -41,9 +41,6 @@ public record CreateUserCommand(string? Id, string OrganizationId, string FirstN
                 Email = request.Email
             };
 
-            var organization = await _context.Organizations.FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
-            organization.AddUser(user);
-
             _context.Users.Add(user);
 
             await _context.SaveChangesAsync(cancellationToken);

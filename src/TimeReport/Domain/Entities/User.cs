@@ -1,10 +1,11 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class User : AuditableEntity, ISoftDelete
+public class User : AuditableEntity, ISoftDelete, IHasTenant
 {
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
@@ -12,6 +13,8 @@ public class User : AuditableEntity, ISoftDelete
     readonly HashSet<Team> _teams = new HashSet<Team>();
 
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;

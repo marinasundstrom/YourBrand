@@ -2,71 +2,60 @@
 
 using MediatR;
 
-using YourBrand.HumanResources.Contracts;
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Organizations.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
-public class TimeReportOrganizationCreatedConsumer : IConsumer<OrganizationCreated>
+public class TimeReportOrganizationCreatedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentOrganizationService) : IConsumer<OrganizationCreated>
 {
-    private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentOrganizationService;
-
-    public TimeReportOrganizationCreatedConsumer(IMediator mediator, ICurrentUserService currentOrganizationService)
-    {
-        _mediator = mediator;
-        _currentOrganizationService = currentOrganizationService;
-    }
-
     public async Task Consume(ConsumeContext<OrganizationCreated> context)
     {
         var message = context.Message;
 
-        _currentOrganizationService.SetCurrentUser(message.CreatedById);
+        tenantService.SetTenantId(message.TenantId);
+        currentOrganizationService.SetCurrentUser(message.CreatedById);
 
-        var result = await _mediator.Send(new CreateOrganizationCommand(message.OrganizationId, message.Name, null));
+        var result = await mediator.Send(new CreateOrganizationCommand(message.OrganizationId, message.Name, null));
     }
 }
 
-public class TimeReportOrganizationDeletedConsumer : IConsumer<OrganizationDeleted>
+public class TimeReportOrganizationDeletedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentOrganizationService) : IConsumer<OrganizationDeleted>
 {
-    private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentOrganizationService;
-
-    public TimeReportOrganizationDeletedConsumer(IMediator mediator, ICurrentUserService currentOrganizationService)
-    {
-        _mediator = mediator;
-        _currentOrganizationService = currentOrganizationService;
-    }
-
     public async Task Consume(ConsumeContext<OrganizationDeleted> context)
     {
         var message = context.Message;
 
-        _currentOrganizationService.SetCurrentUser(message.DeletedById);
+        //tenantService.SetTenantId(message.TenantId);
+        currentOrganizationService.SetCurrentUser(message.DeletedById);
 
-        await _mediator.Send(new DeleteOrganizationCommand(message.OrganizationId));
+        await mediator.Send(new DeleteOrganizationCommand(message.OrganizationId));
     }
 }
 
-public class TimeReportOrganizationUpdatedConsumer : IConsumer<OrganizationUpdated>
+public class TimeReportOrganizationUpdatedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentOrganizationService) : IConsumer<OrganizationUpdated>
 {
-    private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentOrganizationService;
-
-    public TimeReportOrganizationUpdatedConsumer(IMediator mediator, ICurrentUserService currentOrganizationService)
-    {
-        _mediator = mediator;
-        _currentOrganizationService = currentOrganizationService;
-    }
-
     public async Task Consume(ConsumeContext<OrganizationUpdated> context)
     {
         var message = context.Message;
 
-        _currentOrganizationService.SetCurrentUser(message.UpdatedById);
+        //tenantService.SetTenantId(message.TenantId);
+        currentOrganizationService.SetCurrentUser(message.UpdatedById);
 
-        var result = await _mediator.Send(new UpdateOrganizationCommand(message.OrganizationId, message.Name));
+        var result = await mediator.Send(new UpdateOrganizationCommand(message.OrganizationId, message.Name));
+    }
+}
+
+public class TimeReportOrganizationUserAddedConsumer(IMediator mediator, ITenantService tenantService) : IConsumer<OrganizationUserAdded>
+{
+    public async Task Consume(ConsumeContext<OrganizationUserAdded> context)
+    {
+        var message = context.Message;
+
+        tenantService.SetTenantId(message.TenantId);
+
+        var result = await mediator.Send(new AddUserToOrganization(message.OrganizationId, message.UserId));
     }
 }
