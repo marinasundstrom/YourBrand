@@ -11,7 +11,7 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
-        builder.ToTable("Subscription");
+        builder.ToTable("Subscriptions");
 
         //builder.HasAlternateKey(o => new { o.OrganizationId, o.SubscriptionNo });
 
