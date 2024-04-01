@@ -18,7 +18,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
 {
     private readonly ITenantService _tenantService;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    private readonly string _organizationId;
+    private readonly string _tenantId;
 
     public TimeReportContext(
         DbContextOptions<TimeReportContext> options,
@@ -28,7 +28,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
     {
         _tenantService = tenantService;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-        _organizationId = _tenantService.OrganizationId!;
+        _tenantId = _tenantService.TenantId!;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -50,9 +50,14 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
         // Tenant filters
 
-        modelBuilder.Entity<Team>().HasQueryFilter(x => x.OrganizationId == _organizationId);
+        modelBuilder.Entity<Team>().HasQueryFilter(x => x.TenantId == _tenantId);
 
-        modelBuilder.Entity<Project>().HasQueryFilter(x => x.OrganizationId == _organizationId);
+        modelBuilder.Entity<Project>().HasQueryFilter(x => x.TenantId == _tenantId);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<TenantId>().HaveConversion<TenantIdConverter>();
     }
 
     public DbSet<User> Users { get; set; } = null!;

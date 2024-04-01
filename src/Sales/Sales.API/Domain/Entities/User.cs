@@ -1,5 +1,7 @@
 using YourBrand.Sales.Domain.ValueObjects;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.Sales.Domain.Entities;
 
 public class User : AggregateRoot<string>, IAuditable, IHasTenant
@@ -14,7 +16,7 @@ public class User : AggregateRoot<string>, IAuditable, IHasTenant
 
     public string Name { get; set; }
 
-    public TenantId? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public string Email { get; set; }
 

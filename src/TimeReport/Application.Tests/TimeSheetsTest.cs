@@ -9,6 +9,7 @@ using Shouldly;
 
 using Xunit;
 
+using YourBrand.Identity;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.TimeSheets;
 using YourBrand.TimeReport.Application.TimeSheets.Queries;
@@ -27,11 +28,11 @@ public class TimeSheetsTest : TestBase
 
         User user = CreateTestUser();
 
-        fakeCurrentUserService.UserId.Returns(x => user.Id);
+        fakeCurrentUserService.UserId.Returns(x =>  new UserId(user.Id));
 
         using ITimeReportContext context = CreateDbContext();
 
-        fakeCurrentUserService.UserId.Returns(x => user.Id);
+        fakeCurrentUserService.UserId.Returns(x => new UserId(user.Id));
 
         context.Users.Add(user);
 

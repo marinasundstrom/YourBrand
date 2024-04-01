@@ -313,11 +313,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carts.Contracts", "src\Cart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{7967D3B1-B8DD-4358-9B57-ABDE80698E5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{9DB64F5F-5A13-435A-8492-84C76E2ED7D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Common\Domain\Domain.csproj", "{9DB64F5F-5A13-435A-8492-84C76E2ED7D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Infrastructure", "src\Domain.Infrastructure\Domain.Infrastructure.csproj", "{52043D76-A0B9-4528-92DD-4619766B6851}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Infrastructure", "src\Common\Domain.Infrastructure\Domain.Infrastructure.csproj", "{52043D76-A0B9-4528-92DD-4619766B6851}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Persistence", "src\Domain.Persistence\Domain.Persistence.csproj", "{E9ECB983-EACB-4220-9D40-73E3DA9A7C72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Persistence", "src\Common\Domain.Persistence\Domain.Persistence.csproj", "{E9ECB983-EACB-4220-9D40-73E3DA9A7C72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sales", "Sales", "{B80CBBFC-33B7-443E-8FCD-00C04AC2663C}"
 EndProject

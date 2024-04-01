@@ -49,8 +49,12 @@
     <ProjectReference
       Include="..\..\CustomerRelations\Customers\Customers.Client\Customers.Client.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />
-    <ProjectReference Include="..\..\Domain.Infrastructure\Domain.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Domain.Persistence\Domain.Persistence.csproj" />
+    <ProjectReference Include="..\..\Common\Domain.Infrastructure\Domain.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\Domain.Persistence\Domain.Persistence.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

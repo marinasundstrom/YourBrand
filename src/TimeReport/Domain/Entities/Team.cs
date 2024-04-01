@@ -2,6 +2,8 @@
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Team : AuditableEntity, ISoftDelete, IHasTenant
@@ -31,7 +33,7 @@ public class Team : AuditableEntity, ISoftDelete, IHasTenant
 
     public Organization Organization { get; set; } = null!;
 
-    public string OrganizationId { get; set; } = null!;
+    public TenantId TenantId { get; set; } = null!;
 
     public IReadOnlyCollection<User> Members => _members;
 

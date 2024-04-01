@@ -1,5 +1,7 @@
 using YourBrand.Sales.Domain.ValueObjects;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.Sales.Domain.Entities;
 
 public class Organization : AggregateRoot<string>, IAuditable, IHasTenant
@@ -11,7 +13,7 @@ public class Organization : AggregateRoot<string>, IAuditable, IHasTenant
         Name = name;
     }
 
-    public TenantId? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; }
 

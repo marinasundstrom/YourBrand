@@ -7,7 +7,7 @@ namespace YourBrand.Identity;
 public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private string? _currentUserId;
+    private UserId? _currentUserId;
     private ClaimsPrincipal? _claimsPrincipal;
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
@@ -16,11 +16,11 @@ public class CurrentUserService : ICurrentUserService
         _claimsPrincipal = _httpContextAccessor.HttpContext?.User;
     }
 
-    public string? UserId => _currentUserId ??= _claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    public UserId? UserId => _currentUserId ??= _claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
     public string? GetAccessToken() => _claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
-    public void SetCurrentUser(string userId)
+    public void SetCurrentUser(UserId userId)
     {
         if (_currentUserId is not null)
         {

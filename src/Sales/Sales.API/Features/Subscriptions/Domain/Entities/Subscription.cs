@@ -1,6 +1,8 @@
 ﻿using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Domain.ValueObjects;
 
+using YourBrand.Identity;
+
 namespace YourBrand.Sales.Domain.Entities;
 
 public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters, IHasTenant
@@ -10,7 +12,7 @@ public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParam
 
     }
 
-    public TenantId? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     //public string OrganizationId { get; set; }
 

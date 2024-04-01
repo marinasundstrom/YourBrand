@@ -53,7 +53,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 
                 if (entry.Entity is IHasTenant hasTenant)
                 {
-                    hasTenant.OrganizationId = _tenantService.OrganizationId!;
+                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
                 }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())

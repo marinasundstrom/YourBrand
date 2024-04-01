@@ -3,6 +3,8 @@
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Domain.ValueObjects;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.Sales.Domain.Entities;
 
 public class Order : AggregateRoot<string>, IAuditable, IHasTenant
@@ -14,7 +16,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant
         StatusId = 1;
     }
 
-    public TenantId? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public string OrganizationId { get; private set; } = "ACME";
 

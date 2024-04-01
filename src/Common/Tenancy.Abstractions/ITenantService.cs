@@ -2,5 +2,7 @@
 
 public interface ITenantService
 {
-    string? OrganizationId { get; }
+    TenantId? TenantId { get; }
+
+    void SetTenantId(TenantId tenantId);
 }

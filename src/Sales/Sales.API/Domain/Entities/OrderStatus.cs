@@ -1,5 +1,7 @@
 ﻿using YourBrand.Sales.Domain.ValueObjects;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.Sales.Domain.Entities;
 
 public class OrderStatus : Entity<int>, IAuditable, IHasTenant
@@ -15,7 +17,7 @@ public class OrderStatus : Entity<int>, IAuditable, IHasTenant
         Description = description;
     }
 
-    public TenantId? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

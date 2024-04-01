@@ -49,10 +49,7 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
 
                 if (entry.Entity is IHasTenant e)
                 {
-                    if (e.TenantId is null)
-                    {
-                        e.TenantId = _tenantService.TenantId;
-                    }
+                    e.TenantId = _tenantService.TenantId.GetValueOrDefault();
                 }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())

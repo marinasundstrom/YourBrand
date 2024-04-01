@@ -18,6 +18,7 @@ public static class SeedData
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
@@ -51,13 +52,19 @@ public static class SeedData
                     UserName = "alice",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
-                    Tenant = tenant,
-                    //Organization = organization
+                    Tenant = tenant
                 };
 
                 organization.AddUser(alice);
 
                 var result = userMgr.CreateAsync(alice, "Pass123$").Result;
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                result = await userMgr.AddToRoleAsync(alice, "Administrator");
+
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -91,8 +98,7 @@ public static class SeedData
                     UserName = "bob",
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true,
-                    Tenant = tenant,
-                    //Organization = organization
+                    Tenant = tenant
                 };
 
                 organization.AddUser(bob);

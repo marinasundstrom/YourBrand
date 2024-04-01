@@ -11,7 +11,7 @@ public static class Config
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-                new IdentityResource("tenant", ["tenant_id"])
+                new IdentityResource("tenant", ["tenant_id", "role"])
 
               // let's include the role claim in the profile
               //new ProfileWithRoleIdentityResource(),

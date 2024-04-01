@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace YourBrand.Sales.Domain.ValueObjects;
+namespace YourBrand.Tenancy;
 
 public struct TenantId
 {

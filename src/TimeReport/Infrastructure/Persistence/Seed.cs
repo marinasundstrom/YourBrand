@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
@@ -10,6 +11,10 @@ public static class Seed
     {
         using var scope = app.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<TimeReportContext>();
+        
+        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+
+        tenantService.SetTenantId("e2dc3bf2-1619-46bf-bcc9-cfc169ca7e78");
 
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();

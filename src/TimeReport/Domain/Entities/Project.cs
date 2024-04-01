@@ -2,6 +2,8 @@
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.TimeReport.Domain.Entities;
 
 public class Project : AuditableEntity, ISoftDelete, IHasTenant
@@ -33,7 +35,7 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
 
     public Organization Organization { get; set; } = null!;
 
-    public string OrganizationId { get; set; } = null!;
+    public TenantId TenantId { get; set; } = null!;
 
     /// <summary>
     /// Expected hours per week / timesheet

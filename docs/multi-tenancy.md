@@ -10,7 +10,7 @@ Identity Management service is responsible for managing tenancy.
 
 ## Model
 
-<img src="tenancy-model.jpeg" width="300"></ing>
+<img src="tenancy-model.jpeg" width="300"></img>
 
 ### Tenant
 

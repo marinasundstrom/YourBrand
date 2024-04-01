@@ -4,7 +4,7 @@ namespace YourBrand.Identity;
 
 public interface ICurrentUserService
 {
-    string? UserId { get; }
+    UserId? UserId { get; }
     string? FirstName { get; }
     string? LastName { get; }
     string? Email { get; }
@@ -12,6 +12,6 @@ public interface ICurrentUserService
 
     string? GetAccessToken();
 
-    void SetCurrentUser(string userId);
+    void SetCurrentUser(UserId userId);
     void SetCurrentUser(ClaimsPrincipal claimsPrincipal);
 }

@@ -1,5 +1,7 @@
 using Core;
 
+using YourBrand.Tenancy;
+
 using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
@@ -34,7 +36,7 @@ public class OrderItem : Entity<string>, IAuditable, IHasTenant
         Update();
     }
 
-    public TenantId? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public Order? Order { get; internal set; }
 
