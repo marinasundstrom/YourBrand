@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain.Common;
 
@@ -10,13 +11,16 @@ namespace YourBrand.Transactions.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
+    private readonly ITenantService _tenantService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
 
     public AuditableEntitySaveChangesInterceptor(
+        ITenantService tenantService,
         ICurrentUserService currentUserService,
         IDateTime dateTime)
     {
+        _tenantService = tenantService;
         _currentUserService = currentUserService;
         _dateTime = dateTime;
     }
@@ -45,6 +49,11 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             {
                 entry.Entity.CreatedById = _currentUserService.UserId;
                 entry.Entity.Created = _dateTime.Now;
+
+                if (entry.Entity is IHasTenant hasTenant)
+                {
+                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
+                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {

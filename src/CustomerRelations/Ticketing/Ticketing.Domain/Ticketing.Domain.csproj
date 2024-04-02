@@ -19,6 +19,6 @@
 
 	<ItemGroup>
         <ProjectReference Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
-        <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Asbtractions.csproj" />
+        <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

@@ -6,18 +6,22 @@ using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Common.Interfaces;
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
+    private readonly ITenantService _tenantService;
     private readonly ICurrentUserService _currentPersonService;
     private readonly IDateTime _dateTime;
 
     public AuditableEntitySaveChangesInterceptor(
+        ITenantService tenantService,
         ICurrentUserService currentPersonService,
         IDateTime dateTime)
     {
+        _tenantService = tenantService;
         _currentPersonService = currentPersonService;
         _dateTime = dateTime;
     }
@@ -46,6 +50,11 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             {
                 entry.Entity.CreatedBy = _currentPersonService.UserId;
                 entry.Entity.Created = _dateTime.Now;
+
+                if (entry.Entity is IHasTenant hasTenant)
+                {
+                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
+                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
