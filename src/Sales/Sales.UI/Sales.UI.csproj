@@ -31,6 +31,7 @@
     <ProjectReference Include="..\..\Utils\Utils.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />
+    <ProjectReference Include="..\..\Portal\Portal.Components\Portal.Components.csproj" />
   </ItemGroup>
 
 </Project>

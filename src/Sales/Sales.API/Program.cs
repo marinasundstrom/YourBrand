@@ -75,6 +75,8 @@ builder.Services.AddServiceBus(bus =>
     }
 });
 
+builder.Services.AddControllers();
+
 builder.Services.AddSignalR();
 
 builder.Services
@@ -136,6 +138,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.MapFeaturesEndpoints();
 

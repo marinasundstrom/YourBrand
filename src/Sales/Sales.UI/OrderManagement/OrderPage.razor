@@ -4,6 +4,7 @@
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Sales
 @using YourBrand.Customers
+@using YourBrand.Portal
 @implements IAsyncDisposable
 @inject NavigationManager NavigationManager
 @inject IOrdersClient OrdersClient
@@ -46,6 +47,10 @@
                             <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
                                 OnClick="async () => await UpdateOrderStatus()"></MudIconButton>
                         </div>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <OrganizationSelector ServiceKey="@ServiceKeys.OrganizationSearchProviderKey" Class="mb-4" @bind-Value="Organization" For="() => Organization" />
                     </MudItem>
 
                     <MudItem xs="12" sm="12" md="6" lg="6">
@@ -425,6 +430,8 @@ Delete
 
     [Required]
     public OrderViewModel Model { get; set; }
+
+    public YourBrand.Portal.Organization Organization { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

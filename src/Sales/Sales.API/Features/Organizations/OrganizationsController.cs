@@ -1,6 +1,14 @@
-namespace YourBrand.Sales.Features.Features.Organizations;
+using Asp.Versioning;
 
-/*
+using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+using YourBrand.Sales.Models;
+
+namespace YourBrand.Sales.Features.OrderManagement.Organizations;
+
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -20,16 +28,6 @@ public sealed class OrganizationsController : ControllerBase
     public async Task<PagedResult<OrganizationDto>> GetOrganizations(int page = 1, int pageSize = 10, string? searchTerm = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
         => await mediator.Send(new GetOrganizations(page, pageSize, searchTerm, sortBy, sortDirection), cancellationToken);
 
-    [HttpGet("OrganizationInfo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrganizationDto))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-    [ProducesDefaultResponseType]
-    public async Task<ActionResult<OrganizationDto>> GetOrganizationInfo(CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(new GetOrganizationInfo(), cancellationToken);
-        return this.HandleResult(result);
-    }
-
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrganizationDto))]
@@ -37,10 +35,9 @@ public sealed class OrganizationsController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<OrganizationDto>> CreateOrganization(CreateOrganizationDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateOrganization(request.Name, request.Email), cancellationToken);
-        return this.HandleResult(result);
+        var result = await mediator.Send(new CreateOrganization(request.Name, request.Email, null!), cancellationToken);
+        return result.GetValue();
     }
 }
 
 public sealed record CreateOrganizationDto(string Name, string Email);
-*/

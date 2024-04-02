@@ -1,6 +1,14 @@
-namespace YourBrand.Sales.Features.Features.Users;
+using Asp.Versioning;
 
-/*
+using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+using YourBrand.Sales.Models;
+
+namespace YourBrand.Sales.Features.OrderManagement.Users;
+
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -27,7 +35,7 @@ public sealed class UsersController : ControllerBase
     public async Task<ActionResult<UserInfoDto>> GetUserInfo(CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetUserInfo(), cancellationToken);
-        return this.HandleResult(result);
+        return result.GetValue();
     }
 
     [HttpPost]
@@ -37,10 +45,9 @@ public sealed class UsersController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<UserInfoDto>> CreateUser(CreateUserDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateUser(request.Name, request.Email), cancellationToken);
-        return this.HandleResult(result);
+        var result = await mediator.Send(new CreateUser(request.Name, request.Email, null), cancellationToken);
+        return result.GetValue();
     }
 }
 
 public sealed record CreateUserDto(string Name, string Email);
-*/
