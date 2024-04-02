@@ -2,11 +2,15 @@ using System.Linq.Expressions;
 
 using LinqKit;
 
+using MassTransit.Internals;
+
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
+
+using YourBrand.Domain;
 
 namespace YourBrand.Sales.Persistence;
 
@@ -41,31 +45,43 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
                 var entityTypeBuilder = modelBuilder.Entity(clrType);
 
                 var parameter = Expression.Parameter(clrType, "entity");
-                Expression? queryFilter = null;
 
-                var softDeleteFilter = ApplySoftDeleteQueryFilter(clrType);
-                if (softDeleteFilter is not null)
+                List<Expression> queryFilters = new ();
+
+                if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    queryFilter = Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDelete)));
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+
+                    queryFilters.Add(
+                        Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));
                 }
 
-                var tenantFilter = ConfigTenantFilter(clrType);
-                if (tenantFilter is not null)
+                if (SoftDeleteQueryFilter.CanApplyTo(clrType))
                 {
-                    if (queryFilter is null)
+                    var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
+
+                    queryFilters.Add(
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDelete))));
+                }
+
+                Expression? queryFilter = null;
+
+                foreach(var qf in queryFilters) 
+                {
+                    if(queryFilter is null) 
                     {
-                        queryFilter = Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant)));
+                        queryFilter = qf;
                     }
-                    else
+                    else 
                     {
                         queryFilter = Expression.AndAlso(
                             queryFilter,
-                             Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))))
+                            qf)
                             .Expand();
                     }
                 }
 
-                if (queryFilter is null)
+                if (queryFilters.Count == 0)
                 {
                     continue;
                 }
@@ -77,44 +93,19 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
             catch (InvalidOperationException exc)
                 when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
             {
-                Console.WriteLine("Skipping owned type");
+                Console.WriteLine("Skipping previously configured owned type");
             }
             catch (InvalidOperationException exc)
                 when (exc.Message.Contains("cannot be added to the model because its CLR type has been configured as a shared type"))
             {
-                Console.WriteLine("Skipping shared type");
+                Console.WriteLine("Skipping previously configured shared type");
             }
         }
     }
 
-    private Expression<Func<IHasTenant, bool>>? ConfigTenantFilter(Type entityType)
-    {
-        var hasTenantInterface = typeof(IHasTenant);
-        if (!hasTenantInterface.IsAssignableFrom(entityType))
-        {
-            return null;
-        }
-        return (IHasTenant e) => e.TenantId == _tenantId;
-    }
-
-    private Expression<Func<ISoftDelete, bool>>? ApplySoftDeleteQueryFilter(Type entityType)
-    {
-        var softDeleteInterface = typeof(ISoftDelete);
-        var deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDelete.Deleted));
-
-        if (!softDeleteInterface.IsAssignableFrom(entityType))
-        {
-            return null;
-        }
-
-        var param = Expression.Parameter(softDeleteInterface, "entity");
-        var body = Expression.Equal(Expression.Property(param, deletedProperty!), Expression.Constant(null));
-        return Expression.Lambda<Func<ISoftDelete, bool>>(body, param);
-    }
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        configurationBuilder.Properties<TenantId>().HaveConversion<TenantIdConverter>();
+        configurationBuilder.AddTenantIdConverter();
     }
 
 #nullable disable

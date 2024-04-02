@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Sales.Domain.Entities;
 
+using YourBrand.Domain;
+
 namespace YourBrand.Sales.Persistence.Interceptors;
 
 public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor

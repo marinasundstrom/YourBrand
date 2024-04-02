@@ -57,7 +57,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        configurationBuilder.Properties<TenantId>().HaveConversion<TenantIdConverter>();
+        configurationBuilder.AddTenantIdConverter();
     }
 
     public DbSet<User> Users { get; set; } = null!;

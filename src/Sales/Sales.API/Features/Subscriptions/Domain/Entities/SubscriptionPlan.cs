@@ -3,6 +3,8 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 using YourBrand.Identity;
 
+using YourBrand.Domain;
+
 namespace YourBrand.Sales.Domain.Entities;
 
 public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters, IHasTenant

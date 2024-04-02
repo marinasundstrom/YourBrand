@@ -39,11 +39,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sales.Contracts\Sales.Contracts.csproj" />
-    <ProjectReference Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
+    <ProjectReference
+      Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj" />
-    <ProjectReference Include="..\..\CustomerRelations\Customers\Customers.Client\Customers.Client.csproj" />
+    <ProjectReference
+      Include="..\..\CustomerRelations\Customers\Customers.Client\Customers.Client.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />
     <ProjectReference Include="..\..\Common\Domain.Infrastructure\Domain.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Common\Domain.Persistence\Domain.Persistence.csproj" />
@@ -52,6 +54,8 @@
     <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Common\SampleTenant\SampleTenant.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

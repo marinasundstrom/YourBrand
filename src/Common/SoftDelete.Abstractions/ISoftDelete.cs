@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Sales.Domain.Entities;
+﻿namespace YourBrand.Domain;
 
 public interface ISoftDelete
 {
