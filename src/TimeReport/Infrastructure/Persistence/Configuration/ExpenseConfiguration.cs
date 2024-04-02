@@ -12,10 +12,10 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
     {
         builder.ToTable("Expenses");
 
-        builder.Property(x => x.Date)
-            .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));
+        builder.Ignore(x => x.DomainEvents);
 
-        builder.HasQueryFilter(i => i.Deleted == null);
+        builder.Property(x => x.Date)
+            .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));      
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

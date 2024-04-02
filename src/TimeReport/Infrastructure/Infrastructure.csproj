@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
     <PackageReference Include="Quartz" Version="3.6.0" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.0" />
     <PackageReference Include="Scrutor" Version="4.2.1" />
+    <PackageReference Include="LinqKit" Version="1.2.2" />
   </ItemGroup>
 
 </Project>

@@ -11,7 +11,8 @@ public class TeamMembershipConfiguration : IEntityTypeConfiguration<TeamMembersh
     public void Configure(EntityTypeBuilder<TeamMembership> builder)
     {
         builder.ToTable("TeamMemberships");
-        builder.HasQueryFilter(i => i.Deleted == null);
+
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

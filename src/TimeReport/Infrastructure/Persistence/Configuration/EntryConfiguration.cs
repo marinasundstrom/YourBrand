@@ -12,6 +12,8 @@ public class EntryConfiguration : IEntityTypeConfiguration<Entry>
     {
         builder.ToTable("Entries");
 
+        builder.Ignore(x => x.DomainEvents);
+
         builder.Property(x => x.Date)
                 .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));
 

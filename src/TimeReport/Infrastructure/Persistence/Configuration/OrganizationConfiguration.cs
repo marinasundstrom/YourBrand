@@ -12,7 +12,8 @@ class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
     {
         builder.ToTable("Organizations");
         builder.Property(x => x.Id).ValueGeneratedNever();
-        builder.HasQueryFilter(i => i.Deleted == null);
+
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasMany(p => p.Users)
             .WithMany(p => p.Organization)

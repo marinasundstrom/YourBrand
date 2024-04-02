@@ -17,7 +17,7 @@ public class AbsenceConfiguration : IEntityTypeConfiguration<Absence>
                 x => x == null ? null : x.GetValueOrDefault().ToDateTime(TimeOnly.Parse("01:00")),
                 x => x == null ? null : DateOnly.FromDateTime(x.GetValueOrDefault()));
 
-        builder.HasQueryFilter(i => i.Deleted == null);
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

@@ -11,7 +11,8 @@ class OrganizationUserConfiguration : IEntityTypeConfiguration<OrganizationUser>
     public void Configure(EntityTypeBuilder<OrganizationUser> builder)
     {
         builder.ToTable("OrganizationUsers");
-        builder.HasQueryFilter(i => i.Deleted == null);
+
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

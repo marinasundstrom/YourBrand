@@ -11,8 +11,7 @@ public class TimeSheetConfiguration : IEntityTypeConfiguration<TimeSheet>
     public void Configure(EntityTypeBuilder<TimeSheet> builder)
     {
         builder.ToTable("TimeSheets");
-        builder.HasQueryFilter(i => i.Deleted == null);
-
+        
         builder.Ignore(i => i.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)

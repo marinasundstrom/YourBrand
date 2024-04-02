@@ -11,7 +11,8 @@ public class ProjectTeamConfiguration : IEntityTypeConfiguration<ProjectTeam>
     public void Configure(EntityTypeBuilder<ProjectTeam> builder)
     {
         builder.ToTable("ProjectTeams");
-        builder.HasQueryFilter(i => i.Deleted == null);
+
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

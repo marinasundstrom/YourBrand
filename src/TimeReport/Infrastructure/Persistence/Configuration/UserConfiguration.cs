@@ -10,8 +10,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("Users");
+
+        builder.Ignore(x => x.DomainEvents);
+
         builder.Property(x => x.Id).ValueGeneratedNever();
-        builder.HasQueryFilter(i => i.Deleted == null && i.Hidden == false);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

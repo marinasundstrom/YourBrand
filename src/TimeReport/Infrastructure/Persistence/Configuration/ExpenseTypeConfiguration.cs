@@ -12,7 +12,7 @@ public class ExpenseTypeConfiguration : IEntityTypeConfiguration<ExpenseType>
     {
         builder.ToTable("ExpenseTypes");
 
-        builder.HasQueryFilter(i => i.Deleted == null);
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

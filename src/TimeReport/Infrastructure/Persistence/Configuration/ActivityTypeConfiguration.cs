@@ -12,7 +12,7 @@ public class ActivityTypeConfiguration : IEntityTypeConfiguration<ActivityType>
     {
         builder.ToTable("ActivityTypes");
 
-        builder.HasQueryFilter(i => i.Deleted == null);
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
