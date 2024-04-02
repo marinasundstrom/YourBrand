@@ -22,6 +22,7 @@ using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Payments.Client;
+using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +65,9 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddEndpointsApiExplorer();
 

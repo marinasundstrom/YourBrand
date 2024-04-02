@@ -21,6 +21,8 @@ using YourBrand.Showroom.Infrastructure;
 using YourBrand.Showroom.Infrastructure.Persistence;
 using YourBrand.Showroom.WebApi;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,10 @@ var configuration = builder.Configuration;
 services.AddApplication(configuration);
 services.AddInfrastructure(configuration);
 services.AddServices();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 services
     .AddControllers()

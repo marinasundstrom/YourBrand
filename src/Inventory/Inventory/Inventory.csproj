@@ -24,16 +24,16 @@
     </ItemGroup>
 
 	<ItemGroup>
-        <ProjectReference Include="..\Inventory.Contracts\Inventory.Contracts.csproj" />
+    <ProjectReference Include="..\Inventory.Contracts\Inventory.Contracts.csproj" />
 		<ProjectReference Include="..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
 		<ProjectReference Include="..\..\Finance\Payments\Payments.Client\Payments.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
-		<ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
-		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-		</ProjectReference>
+
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
         <ProjectReference Include="..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>

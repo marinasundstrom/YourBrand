@@ -10,6 +10,9 @@ using YourBrand.Extensions;
 using YourBrand.Notifications.Consumers;
 using YourBrand.Notifications.Services;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "EmailService";
@@ -48,6 +51,10 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
 });
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 

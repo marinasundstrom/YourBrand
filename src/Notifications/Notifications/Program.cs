@@ -16,6 +16,9 @@ using YourBrand.Notifications.Application;
 using YourBrand.Notifications.Infrastructure;
 using YourBrand.Notifications.Infrastructure.Persistence;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "Notifications";
@@ -47,6 +50,10 @@ var services = builder.Services;
 services.AddApplication(configuration);
 services.AddInfrastructure(configuration);
 services.AddServices();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 services
     .AddControllers()

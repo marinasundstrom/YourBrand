@@ -83,7 +83,9 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddPersistence(builder.Configuration);
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddScoped<ITenantService, TenantService>();
 

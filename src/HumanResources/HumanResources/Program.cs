@@ -15,6 +15,9 @@ using YourBrand.HumanResources.Consumers;
 using YourBrand.HumanResources.Infrastructure;
 using YourBrand.HumanResources.Infrastructure.Persistence;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 string MyAllowSpecificOrigins = "MyPolicy";
 
 
@@ -50,6 +53,11 @@ builder.Services
            .AddApplication(builder.Configuration)
            .AddInfrastructure(builder.Configuration)
            .AddServices();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
+
 
 services
     .AddControllers()

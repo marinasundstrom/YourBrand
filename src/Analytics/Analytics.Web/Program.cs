@@ -21,8 +21,10 @@ using YourBrand.Analytics.Application.Services;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Web;
 using YourBrand.Analytics.Web.Middleware;
-using YourBrand.Analytics.Web.Services;
 using YourBrand.Extensions;
+
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 Activity.ForceDefaultIdFormat = true;
@@ -70,7 +72,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddSignalR();
 

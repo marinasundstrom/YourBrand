@@ -20,6 +20,9 @@ using YourBrand.Infrastructure.Persistence;
 using YourBrand.WebApi;
 using YourBrand.WebApi.Hubs;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 
@@ -54,6 +57,10 @@ var configuration = builder.Configuration;
 services.AddApplication(configuration);
 services.AddInfrastructure(configuration);
 services.AddServices();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 services
     .AddControllers()

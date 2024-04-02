@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Enums\" />
+        <ProjectReference Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Asbtractions.csproj" />
 	</ItemGroup>
 </Project>

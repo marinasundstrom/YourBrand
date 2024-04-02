@@ -17,6 +17,9 @@ using YourBrand.Carts.API.Features.CartsManagement;
 using YourBrand.Carts.API.Persistence;
 using YourBrand.Extensions;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 string ServiceName = "Carts.API";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -102,6 +105,11 @@ builder.Services.AddMassTransit(x =>
 builder.Services
     .AddHealthChecksServices()
     .AddDbContextCheck<CartsContext>();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
+
 
 var app = builder.Build();
 

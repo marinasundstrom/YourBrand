@@ -2,8 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Catalog.Common;
 using YourBrand.Catalog.Persistence;
+using YourBrand.Identity;
 
 namespace YourBrand.Catalog.Features.Brands.Queries;
 

@@ -25,6 +25,9 @@ using YourBrand.Invoicing.Infrastructure;
 using YourBrand.Invoicing.Infrastructure.Persistence;
 using YourBrand.Payments.Client;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "Invoicing";
@@ -70,7 +73,9 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddMassTransit(x =>
 {

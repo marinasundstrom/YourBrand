@@ -44,6 +44,12 @@
     <ProjectReference Include="..\..\Sales\Sales.Client\Sales.Client.csproj" />
     <ProjectReference Include="..\..\Inventory\Inventory.Client\Inventory.Client.csproj" />
     <ProjectReference Include="..\..\Analytics\Analytics.Client\Analytics.Client.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

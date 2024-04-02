@@ -17,12 +17,14 @@ using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Catalog;
-using YourBrand.Catalog.Common;
 using YourBrand.Catalog.Features;
 using YourBrand.Catalog.Features.ProductManagement.Products;
 using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 using YourBrand.Catalog.Persistence;
 using YourBrand.Extensions;
+
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 string ServiceName = "Catalog";
 
@@ -138,7 +140,9 @@ builder.Services
 
 builder.Services.AddScoped<ProductVariantsService>();
 
-builder.Services.AddScoped<ICurrentUserService>(sp => null!);
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddAuthenticationServices(builder.Configuration);
 

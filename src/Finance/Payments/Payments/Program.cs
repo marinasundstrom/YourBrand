@@ -24,6 +24,9 @@ using YourBrand.Payments.Infrastructure;
 using YourBrand.Payments.Infrastructure.Persistence;
 using YourBrand.Transactions.Client;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "Payments";
@@ -69,7 +72,9 @@ builder.Services.AddSignalR();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>

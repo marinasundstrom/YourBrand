@@ -21,6 +21,9 @@ using YourBrand.Inventory.Infrastructure.Persistence;
 using YourBrand.Notifications.Client;
 using YourBrand.Payments.Client;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 using ItemDto = YourBrand.Inventory.Application.Items.ItemDto;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,7 +67,9 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddEndpointsApiExplorer();
 

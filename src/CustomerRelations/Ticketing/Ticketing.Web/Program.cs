@@ -19,7 +19,9 @@ using YourBrand.Ticketing.Application.Services;
 using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Web;
 using YourBrand.Ticketing.Web.Middleware;
-using YourBrand.Ticketing.Web.Services;
+
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 Activity.ForceDefaultIdFormat = true;
@@ -65,7 +67,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddSignalR();
 

@@ -24,7 +24,9 @@ using YourBrand.Documents.Contracts;
 using YourBrand.Documents.Infrastructure;
 using YourBrand.Documents.Infrastructure.Persistence;
 using YourBrand.Extensions;
+
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +60,9 @@ builder.Services
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddControllers();
 

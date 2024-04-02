@@ -2,6 +2,8 @@ using FluentValidation;
 
 using MediatR;
 
+using YourBrand.Identity;
+
 namespace YourBrand.Ticketing.Application.Features.Users;
 
 public record CreateUser(string Name, string Email) : IRequest<Result<UserInfoDto>>

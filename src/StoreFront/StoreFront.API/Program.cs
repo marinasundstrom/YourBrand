@@ -29,6 +29,9 @@ using YourBrand.StoreFront.API.Features.Checkout;
 using YourBrand.StoreFront.API.Features.Products;
 using YourBrand.StoreFront.API.Persistence;
 
+//using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 string ServiceName = "StoreFront.API";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,7 +82,9 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Progra
 
 builder.Services.AddCartServices();
 
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services
+    .AddScoped<ICurrentUserService, CurrentUserService>()
+    .AddTenantService();
 
 builder.Services.AddMassTransit(x =>
 {

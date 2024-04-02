@@ -29,10 +29,9 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Documents.Contracts\Documents.Contracts.csproj" />
-		<ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
-		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-		</ProjectReference>
+        <ProjectReference Include="..\Documents.Contracts\Documents.Contracts.csproj" />
+        <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
 		<ProjectReference Include="..\..\Extensions\Extensions.csproj" />
 	</ItemGroup>

@@ -22,6 +22,9 @@ using YourBrand.RotRutService.Infrastructure;
 using YourBrand.RotRutService.Infrastructure.Persistence;
 using YourBrand.Transactions.Client;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "RotRutService";
@@ -64,7 +67,9 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddEndpointsApiExplorer();
 

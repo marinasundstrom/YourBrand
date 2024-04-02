@@ -1,3 +1,4 @@
+using YourBrand.Identity;
 using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;

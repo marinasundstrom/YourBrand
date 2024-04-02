@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

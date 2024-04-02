@@ -21,8 +21,10 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\TestData\TestData.csproj" />
-    <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

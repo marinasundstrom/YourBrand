@@ -55,9 +55,8 @@
       Include="..\..\IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
   </ItemGroup>

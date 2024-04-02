@@ -22,6 +22,9 @@ using YourBrand.Transactions.Hubs;
 using YourBrand.Transactions.Infrastructure;
 using YourBrand.Transactions.Infrastructure.Persistence;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "Transactions";
@@ -41,6 +44,10 @@ if (builder.Environment.IsDevelopment())
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 

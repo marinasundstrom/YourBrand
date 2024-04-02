@@ -23,7 +23,9 @@ using YourBrand.Accounting.Infrastructure.Persistence;
 using YourBrand.Accounting.Services;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
+
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +59,10 @@ builder.Services
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
+
 builder.Services.AddScoped<IBlobService, BlobService>();
 
 // Add services to the container.

@@ -48,9 +48,8 @@
     <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
     <ProjectReference
       Include="..\HumanResources.Consumers\HumanResources.Consumers.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>

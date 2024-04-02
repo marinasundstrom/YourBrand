@@ -2,6 +2,8 @@
 
 using MediatR;
 
+using YourBrand.Identity;
+
 namespace YourBrand.Ticketing.Application.Features.Users;
 
 public record GetUserInfo() : IRequest<Result<UserInfoDto>>

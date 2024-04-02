@@ -14,6 +14,9 @@ using YourBrand.Messenger.Hubs;
 using YourBrand.Messenger.Infrastructure;
 using YourBrand.Messenger.Infrastructure.Persistence;
 
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string ServiceName = "Messenger";
@@ -72,6 +75,10 @@ services.AddAuthenticationServices(Configuration);
 
 //services.AddAuthWithJwt();
 services.AddAuthWithApiKey();
+
+builder.Services
+    .AddIdentityServices()
+    .AddTenantService();
 
 builder.Services.AddMassTransit(x =>
 {
