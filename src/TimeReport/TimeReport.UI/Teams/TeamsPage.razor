@@ -17,12 +17,8 @@
 <MudTable T="Team" ServerData="@(new Func<TableState, Task<TableData<Team>>>(ServerReload))"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)" Elevation="25">
     <ToolBarContent>
-        <MudAutocomplete T="User" Label="User" Variant="Variant.Text" Dense="true" Value="User" ValueChanged="OnUserChanged" SearchFunc="@Search1"
-                         For="() => User"
-                         ToStringFunc="u => u?.GetDisplayName()"
-                         ResetValueOnEmptyText="true"
-                         CoerceText="true" CoerceValue="true"
-                         AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+        <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Label="User" Variant="Variant.Outlined"
+            Value="User" ValueChanged="OnUserChanged"                        For="() => User" Class="mb-4" />
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" Immediate="true" DebounceInterval="500"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -56,7 +52,7 @@
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
 
-    User? User { get; set; }
+    Portal.User? User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,14 +75,7 @@
         table.ReloadServerData();
     }
 
-    private async Task<IEnumerable<User>> Search1(string value)
-    {
-        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
-
-        return page.Items;
-    }
-
-    void OnUserChanged(User user)
+    void OnUserChanged(Portal.User user)
     {
         User = user;
 

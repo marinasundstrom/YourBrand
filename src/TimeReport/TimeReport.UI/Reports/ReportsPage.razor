@@ -29,13 +29,8 @@ else
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="12" md="4">
-                    <MudSelect T="User" Label="User" HelperText="Select a user" Value="user" ValueChanged="OnUserChanged" Clearable=true ToStringFunc="x => ( x?.GetDisplayName() ?? AllLabel)">
-                        <MudSelectItem Value="@((User)null)">@AllLabel</MudSelectItem>
-                        @foreach (var u in users)
-                        {
-                            <MudSelectItem Value="@u">@u.GetDisplayName()</MudSelectItem>
-                        }
-                    </MudSelect>
+                    <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Label="User" Variant="Variant.Outlined" Value="user" ValueChanged="OnUserChanged"
+                        For="() => user" Class="mb-4" />
                 </MudItem>
                 <MudItem xs="12" md="4">
                     <MudSelect T="Project" Label="Projects" HelperText="Select projects" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options" ToStringFunc="x => x.Name">
@@ -68,9 +63,7 @@ else
 
     DateRange selectedDateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
 
-    private User? user { get; set; }
-
-    private IEnumerable<User> users { get; set; }
+    private Portal.User? user { get; set; }
 
     private Project? value { get; set; }
 
@@ -86,7 +79,7 @@ else
 
     private ReportMode mode = ReportMode.Project;
 
-    protected async Task OnUserChanged(User user)
+    protected async Task OnUserChanged(Portal.User user)
     {
         this.user = user;
 
@@ -100,9 +93,6 @@ else
         try
         {
             isLoading = true;
-
-            var page = await UsersClient.GetUsersAsync(0, 10, null, null, null);
-            users = page.Items;
 
             var page2 = await ProjectsClient.GetProjectsAsync(0, 10, null, null, null, null);
             projects = page2.Items;

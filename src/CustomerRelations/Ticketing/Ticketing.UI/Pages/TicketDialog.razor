@@ -72,7 +72,7 @@ else
                             </MudItem>
 
                             <MudItem xs="12" md="6">
-                                <UserSelector Label="@T["Assignee"]" Variant="Variant.Outlined" @bind-Value="Assignee"
+                                <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Label="@T["Assignee"]" Variant="Variant.Outlined" @bind-Value="Assignee"
                                               For="() => Assignee" Class="mb-4" />
                             </MudItem>
                         </MudGrid>

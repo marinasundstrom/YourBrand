@@ -25,7 +25,9 @@ public class ModuleInitializer : IModuleInitializer
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
 
-        services.AddTransient<IUserSearchProvider, UserSearchProvider>();
+        
+        services.AddKeyedScoped<IUserSearchProvider, UserSearchProvider>(ServiceKeys.UserSearchProviderKey);
+        //services.AddKeyedScoped<IOrganizationSearchProvider, OrganizationSearchProvider>(ServiceKeys.OrganizationSearchProviderKey);
     }
 
     public static void ConfigureServices(IServiceProvider services)
@@ -83,3 +85,9 @@ public class OrganizationSearchProvider(IOrganizationsClient organizationsClient
     }
 }
 */
+
+public static class ServiceKeys
+{
+    public readonly static string? UserSearchProviderKey = "TicketingUserSearchProvider";
+    public readonly static string? OrganizationSearchProviderKey = "TicketingOrganizationSearchProvider";
+}

@@ -44,7 +44,7 @@
 
         <MudSpacer />
 
-        <UserSelector Label="@T["Assignee"]" Variant="Variant.Outlined" Value="Assignee" ValueChanged="OnAssigneeChanged"
+        <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey"  Label="@T["Assignee"]" Variant="Variant.Outlined" Value="Assignee" ValueChanged="OnAssigneeChanged"
                       For="() => Assignee" />
     </ToolBarContent>
 

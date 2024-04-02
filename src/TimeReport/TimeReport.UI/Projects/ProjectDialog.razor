@@ -10,7 +10,7 @@
 
             <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
-            <OrganizationSelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" />
+            <OrganizationSelector ServiceKey="@ServiceKeys.OrganizationSearchProviderKey" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" />
 
             <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
@@ -29,7 +29,7 @@
 
     [Parameter] public string? ProjectId { get; set; }
 
-     [Parameter] public Organization? Organization { get; set; }
+    [Parameter] public Portal.Organization? Organization { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -44,7 +44,7 @@
 
             Name = result.Name;
             Description = result.Description;
-            Organization = result.Organization;
+            Organization = result.Organization.ToOrganization();
         }
     }
 

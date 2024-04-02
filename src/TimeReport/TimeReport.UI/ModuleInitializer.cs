@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
+using YourBrand.TimeReport.Client;
 
 namespace YourBrand.TimeReport;
 
@@ -22,6 +23,9 @@ public class ModuleInitializer : IModuleInitializer
         {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
+        
+        services.AddKeyedScoped<IUserSearchProvider, UserSearchProvider>(ServiceKeys.UserSearchProviderKey);
+        services.AddKeyedScoped<IOrganizationSearchProvider, OrganizationSearchProvider>(ServiceKeys.OrganizationSearchProviderKey);
     }
 
     public static void ConfigureServices(IServiceProvider services)
@@ -45,4 +49,47 @@ public class ModuleInitializer : IModuleInitializer
         });
         group.CreateItem("generate-reports", () => resources["GenerateReport"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
     }
+}
+
+public class UserSearchProvider(IUsersClient usersClient) : IUserSearchProvider
+{
+    public async Task<IEnumerable<Portal.User>> QueryUsersAsync(string? searchTerm, CancellationToken cancellationToken)
+    {
+        var result = await usersClient.GetUsersAsync(0, 10, searchTerm, null, null, cancellationToken);
+        return result.Items.Select(UserMappings.ToUser);
+    }
+}
+
+public static class UserMappings
+{
+    public static Portal.User ToUser(this Client.User user) => new(user.Id, user.DisplayName ?? $"{user.FirstName} {user.LastName}");
+
+    public static Client.User ToDto(this Portal.User user) => new()
+    {
+        Id = user.Id,
+        DisplayName = user.Name
+    };
+
+    public static Portal.Organization ToOrganization(this Client.Organization organization) => new(organization.Id, organization.Name);
+
+    public static Client.Organization ToDto(this Portal.Organization organization) => new()
+    {
+        Id = organization.Id,
+        Name = organization.Name
+    };
+}
+
+public class OrganizationSearchProvider(IOrganizationsClient organizationsClient) : IOrganizationSearchProvider
+{
+    public async Task<IEnumerable<Portal.Organization>> QueryOrganizationsAsync(string? searchTerm, CancellationToken cancellationToken)
+    {
+        var result = await organizationsClient.GetOrganizationsAsync(0, 10, searchTerm, null, null, cancellationToken);
+        return result.Items.Select(UserMappings.ToOrganization);
+    }
+}
+
+public static class ServiceKeys
+{
+    public readonly static string? UserSearchProviderKey = "TimeReportUserSearchProvider";
+    public readonly static string? OrganizationSearchProviderKey = "TimeReportOrganizationSearchProvider";
 }

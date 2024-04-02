@@ -1,5 +1,6 @@
 @using System.Linq.Expressions
-@inject IOrganizationSearchProvider OrganizationSearchProvider
+@using Microsoft.Extensions.DependencyInjection
+@inject IServiceProvider ServiceProvider
 
 <MudAutocomplete T="Organization" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
     For="For" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name"
@@ -14,6 +15,12 @@
 </MudAutocomplete>
 
 @code {
+    IOrganizationSearchProvider OrganizationSearchProvider;
+
+    [Parameter]
+    [EditorRequired]
+    public string ServiceKey { get; set; }
+
     [Parameter]
     public string Label { get; set; } = "Organization";
 
@@ -34,6 +41,12 @@
 
     [Parameter]
     public Variant Variant { get; set; }
+
+    protected override void OnInitialized()
+    {
+        OrganizationSearchProvider = ServiceProvider.GetRequiredKeyedService<IOrganizationSearchProvider>(ServiceKey);
+    }
+
 
     async Task<IEnumerable<Organization>> SearchOrganizations(string text)
     {

@@ -24,6 +24,6 @@
         <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
         <ProjectReference Include="..\TimeReport.Components\TimeReport.Components.csproj" />
         <ProjectReference Include="..\..\Utils\Utils.csproj" />
-
+        <ProjectReference Include="..\..\Portal\Portal.Components\Portal.Components.csproj" />
 	</ItemGroup>
 </Project>

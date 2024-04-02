@@ -1,5 +1,6 @@
 @using System.Linq.Expressions
-@inject IUserSearchProvider UserSearchProvider
+@using Microsoft.Extensions.DependencyInjection
+@inject IServiceProvider ServiceProvider
 @inject IDialogService DialogService
 
 <div class="d-flex flex-grow-1">
@@ -25,6 +26,12 @@
 </div>
 
 @code {
+    IUserSearchProvider UserSearchProvider;
+
+    [Parameter]
+    [EditorRequired]
+    public string ServiceKey { get; set; }
+
     [Parameter]
     public string Label { get; set; } = "User";
 
@@ -49,18 +56,14 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
+    protected override void OnInitialized() 
+    {
+        UserSearchProvider = ServiceProvider.GetRequiredKeyedService<IUserSearchProvider>(ServiceKey);
+    }
+
     async Task<IEnumerable<User>> SearchUsers(string text)
     {
-        try
-        {
-            return await UserSearchProvider.QueryUsersAsync(text);
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-
-        return null;
+        return await UserSearchProvider.QueryUsersAsync(text);
     }
 
     async Task AddUser() 

@@ -16,7 +16,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddTicketsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(TicketsClient), configureClient)
+            .AddHttpClient(nameof(TicketsClient) + "TS", configureClient)
             .AddTypedClient<ITicketsClient>((http, sp) => new TicketsClient(http));
 
         builder?.Invoke(b);
@@ -27,7 +27,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddTicketStatusesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(TicketStatusesClient), configureClient)
+            .AddHttpClient(nameof(TicketStatusesClient) + "TS", configureClient)
             .AddTypedClient<ITicketStatusesClient>((http, sp) => new TicketStatusesClient(http));
 
         builder?.Invoke(b);
@@ -38,7 +38,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddUsersClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(UsersClient), configureClient)
+            .AddHttpClient(nameof(UsersClient) + "TS", configureClient)
             .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http));
 
         builder?.Invoke(b);

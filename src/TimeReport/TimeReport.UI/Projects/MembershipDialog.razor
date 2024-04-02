@@ -10,12 +10,8 @@
             @if (MembershipId is null)
             {
 
-                <MudAutocomplete T="User" Label="User" Class="mb-6" Variant="Variant.Outlined" @bind-Value="User" SearchFunc="@Search1"
-                                 For="() => User"
-                                 ToStringFunc="u => u?.GetDisplayName()"
-                                 ResetValueOnEmptyText="true"
-                                 CoerceText="true" CoerceValue="true"
-                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+                <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey"  Label="User" Variant="Variant.Outlined" @bind-Value="User"
+                        For="() => User" Class="mb-4" />
             }
         </DialogContent>
 
@@ -35,7 +31,7 @@
     [Parameter] public string? MembershipId { get; set; }
 
     [Required]
-    public User User { get; set; }
+    public Portal.User User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,7 +39,7 @@
         {
             var result = await ProjectsClient.GetProjectMembershipAsync(ProjectId, MembershipId);
 
-            User = result.User;
+            User = result.User.ToUser();
         }
     }
 
@@ -64,12 +60,5 @@
         }
 
         Modal.Close(DialogResult.Ok(result));
-    }
-
-    private async Task<IEnumerable<User>> Search1(string value)
-    {
-        var page = await UsersClient.GetUsersAsync(0, 10, value, null, null);
-
-        return page.Items;
     }
 }
