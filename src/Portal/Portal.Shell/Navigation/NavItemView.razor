@@ -2,6 +2,21 @@
 
 @code 
 {
+    protected override void OnInitialized()
+    {
+        Item.Updated += OnUpdated;
+    }
+
+    async void OnUpdated()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Item.Updated -= OnUpdated;
+    }
+
     [Parameter]
     public NavItem Item { get; set; }
 }

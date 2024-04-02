@@ -86,7 +86,9 @@ public abstract class NavItemsCollection
             NameFunc = options.NameFunc,
             Icon = options.Icon,
             Href = options.Href,
-            RequiresAuthorization = options.RequiresAuthorization
+            RequiresAuthorization = options.RequiresAuthorization,
+            Roles = options.Roles,
+            Policy = options.Policy
         };
 
         if (options.Index is null)

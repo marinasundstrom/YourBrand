@@ -24,5 +24,7 @@ public class NavItemOptions
 
     public IEnumerable<string>? Roles { get; set; }
 
+    public string? Policy { get; set; }
+
     public int? Index { get; set; }
 }

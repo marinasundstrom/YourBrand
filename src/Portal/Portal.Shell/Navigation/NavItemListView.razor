@@ -9,7 +9,7 @@
         {
             if (item.Visible)
             {
-                <AuthorizeView Roles="@(item.Roles == null ? null : string.Join(",", item.Roles))">
+                <AuthorizeView Policy="@item.Policy" Roles="@(item.Roles == null ? null : string.Join(",", item.Roles))">
                     @if(item is NavItem item1) 
                     {
                         <NavItemView Item="item1" />
