@@ -409,6 +409,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Showroom.Components", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Components", "src\TimeReport\TimeReport.Components\TimeReport.Components.csproj", "{0527797D-B3EA-4724-A020-13C2D93087C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Components", "src\Portal\Portal.Components\Portal.Components.csproj", "{1EBB0981-9BAD-41F1-9793-6F5D8447A084}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1051,6 +1053,10 @@ Global
 		{0527797D-B3EA-4724-A020-13C2D93087C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0527797D-B3EA-4724-A020-13C2D93087C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0527797D-B3EA-4724-A020-13C2D93087C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EBB0981-9BAD-41F1-9793-6F5D8447A084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EBB0981-9BAD-41F1-9793-6F5D8447A084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EBB0981-9BAD-41F1-9793-6F5D8447A084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EBB0981-9BAD-41F1-9793-6F5D8447A084}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1222,6 +1228,7 @@ Global
 		{F14D0469-75B3-4BDD-A250-FE1698458C4C} = {4E115640-4574-4383-9488-F3865DE9D7E9}
 		{6EDDE943-259B-4692-8FE5-46FD34CB099D} = {FA4E4C89-294E-4893-970A-716A9F23119C}
 		{0527797D-B3EA-4724-A020-13C2D93087C3} = {81BB8401-820D-4509-9A09-6C9E2ACAE199}
+		{1EBB0981-9BAD-41F1-9793-6F5D8447A084} = {CCC61AFB-9D10-425B-8767-2654025A01CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F844EC9E-6AEE-4238-921B-05A9DCE3EE16}

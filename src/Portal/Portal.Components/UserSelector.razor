@@ -1,0 +1,94 @@
+@using System.Linq.Expressions
+@inject IUserSearchProvider UserSearchProvider
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="User" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchUsers" ToStringFunc="(x) => x?.GetDisplayName()"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2?.GetDisplayName()</MudText>
+                @*<MudText Typo="Typo.body2">@context2.Ca</MudText> *@
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2?.GetDisplayName()</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddUser" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "User";
+
+    [Parameter]
+    public User Value { get; set; }
+
+    [Parameter]
+    public EventCallback<User> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<User>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async Task<IEnumerable<User>> SearchUsers(string text)
+    {
+        try
+        {
+            return await UserSearchProvider.QueryUsersAsync(text);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task AddUser() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Showroom.UI")
+                .GetType("YourBrand.Showroom.Users.UserDialog");
+
+            var dialogReference = DialogService.Show(type, "New User", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (User)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

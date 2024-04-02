@@ -17,7 +17,7 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Tickets"]</MudText>
 
-<MudTable T="TicketDto" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<TicketDto>>>(ServerReload))" Elevation="25"
+<MudTable T="Ticket" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<Ticket>>>(ServerReload))" Elevation="25"
           OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]" Class="mb-8">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">@T["CreateTicket"]</MudButton>
@@ -33,7 +33,7 @@
 
         <MudSpacer />
 
-        <MudSelect T="TicketStatusDto?" Label="@T["Status"]" Dense="true" MultiSelection="true" Value="Status" ValueChanged="OnStatusChanged"
+        <MudSelect T="TicketStatus?" Label="@T["Status"]" Dense="true" MultiSelection="true" Value="Status" ValueChanged="OnStatusChanged"
             ToStringFunc="@((i) => i.Name)"
             SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged" For="() => Status" Immediate="true" Variant="Variant.Outlined">
             @foreach (var status in ticketStatuses)
@@ -50,43 +50,43 @@
 
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel SortLabel="Id" T="TicketDto">@T["Id"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Id" T="Ticket">@T["Id"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Title" T="TicketDto">@T["Title"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Title" T="Ticket">@T["Title"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Status" T="TicketDto">@T["Status"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Status" T="Ticket">@T["Status"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Priority" T="TicketDto">@T["Priority"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Priority" T="Ticket">@T["Priority"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Severity" T="TicketDto">@T["Severity"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Severity" T="Ticket">@T["Severity"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Impact" T="TicketDto">@T["Impact"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Impact" T="Ticket">@T["Impact"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Assignee" T="TicketDto">@T["Assignee"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Assignee" T="Ticket">@T["Assignee"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="EstimatedHours" T="TicketDto">@T["EstimatedTime"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="EstimatedHours" T="Ticket">@T["EstimatedTime"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="RemainingHours" T="TicketDto">@T["RemainingTime"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="RemainingHours" T="Ticket">@T["RemainingTime"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="Created" T="TicketDto">@T["Created"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="Created" T="Ticket">@T["Created"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="CreatedBy" T="TicketDto">@T["CreatedBy"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="CreatedBy" T="Ticket">@T["CreatedBy"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="LastModified" T="TicketDto">@T["LastModified"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="LastModified" T="Ticket">@T["LastModified"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortLabel="LastModifiedBy" T="TicketDto">@T["LastModifiedBy"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="LastModifiedBy" T="Ticket">@T["LastModifiedBy"]</MudTableSortLabel>
         </MudTh>
 
         <MudTh>
@@ -125,13 +125,13 @@
 @code {
     CancellationTokenSource cts = new();
     HubConnection hubConnection = null!;
-    MudTable<TicketDto> table = null!;
+    MudTable<Ticket> table = null!;
     bool selectMultiple;
-    private HashSet<TicketDto> selectedItems = new HashSet<TicketDto>();
-    List<TicketStatusDto> ticketStatuses = new();
-    HashSet<TicketStatusDto> selectedStatuses = new HashSet<TicketStatusDto>();
+    private HashSet<Ticket> selectedItems = new HashSet<Ticket>();
+    List<TicketStatus> ticketStatuses = new();
+    HashSet<TicketStatus> selectedStatuses = new HashSet<TicketStatus>();
 
-    private async Task OnSelectedStatusesChanged(IEnumerable<TicketStatusDto> ticketStatuses) 
+    private async Task OnSelectedStatusesChanged(IEnumerable<TicketStatus> ticketStatuses) 
     {
         selectedStatuses = ticketStatuses.ToHashSet();
 
@@ -140,9 +140,9 @@
 
     [Parameter] public int? Id { get; set; }
 
-    public TicketStatusDto? Status { get; set; }
+    public TicketStatus? Status { get; set; }
 
-    public UserDto? Assignee { get; set; }
+    public Portal.User? Assignee { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -163,7 +163,7 @@
 
             //hubConnection.On<string, string>("TitleUpdated", OnTitleUpdated);
             //hubConnection.On<string, string?>("DescriptionUpdated", OnDescriptionUpdated);
-            //hubConnection.On<string, TicketStatusDto>("StatusUpdated", OnStatusUpdated);
+            //hubConnection.On<string, TicketStatus>("StatusUpdated", OnStatusUpdated);
 
             hubConnection.Closed += (error) =>
             {
@@ -243,7 +243,7 @@
         return Task.CompletedTask;
     }
 
-    private async Task<TableData<TicketDto>> ServerReload(TableState state)
+    private async Task<TableData<Ticket>> ServerReload(TableState state)
     {        
         try
         {
@@ -251,7 +251,7 @@
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);
 
-            return new TableData<TicketDto>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Ticket>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -262,15 +262,15 @@
             Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
         }*/
 
-        return new TableData<TicketDto>() { Items = Enumerable.Empty<TicketDto>(), TotalItems = 0 };
+        return new TableData<Ticket>() { Items = Enumerable.Empty<Ticket>(), TotalItems = 0 };
     }
 
-    async Task<TicketDto> FetchTicket(int id)
+    async Task<Ticket> FetchTicket(int id)
     {
         return await TicketsClient.GetTicketByIdAsync(id, cts.Token);
     }
 
-    private async Task DeleteTicket(TicketDto item)
+    private async Task DeleteTicket(Ticket item)
     {
         try
         {
@@ -293,7 +293,7 @@
         }
     }
 
-    private async Task DeleteTicketCore(TicketDto item)
+    private async Task DeleteTicketCore(Ticket item)
     {
         await TicketsClient.DeleteTicketAsync(item.Id, cts.Token);
 
@@ -308,7 +308,7 @@
 
             if (result.GetValueOrDefault())
             {
-                List<TicketDto>? failedItems = null;
+                List<Ticket>? failedItems = null;
 
                 foreach (var item in selectedItems)
                 {
@@ -326,7 +326,7 @@
                     {
                         if (failedItems is null)
                         {
-                            failedItems = new List<TicketDto>();
+                            failedItems = new List<Ticket>();
                         }
 
                         failedItems.Add(item);
@@ -394,7 +394,7 @@
         return hasReplaced;
     }
 
-    private bool ReplaceItemInTable(int id, TicketDto item)
+    private bool ReplaceItemInTable(int id, Ticket item)
     {
         var data = GetTableData();
         var items = data!.Items.ToList();
@@ -410,15 +410,15 @@
         return false;
     }
 
-    private TicketDto? GetItemFromTable(int id)
+    private Ticket? GetItemFromTable(int id)
     {
         var data = GetTableData();
         return data!.Items.FirstOrDefault(x => x.Id == id);
     }
 
-    private TableData<TicketDto>? GetTableData()
+    private TableData<Ticket>? GetTableData()
     {
-        return (TableData<TicketDto>?)table?.GetType()?
+        return (TableData<Ticket>?)table?.GetType()?
         .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
         System.Reflection.BindingFlags.Instance)?
         .GetValue(table);
@@ -429,13 +429,13 @@
         await hubConnection.DisposeAsync();
     }
 
-    private async Task OnAssigneeChanged(UserDto? user)
+    private async Task OnAssigneeChanged(Portal.User? user)
     {
         Assignee = user;
         await table.ReloadServerData();
     }
 
-    private async Task OnStatusChanged(TicketStatusDto? status)
+    private async Task OnStatusChanged(TicketStatus? status)
     {
         Status = status;
         await table.ReloadServerData();

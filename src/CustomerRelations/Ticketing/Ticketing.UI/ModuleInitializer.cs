@@ -24,6 +24,8 @@ public class ModuleInitializer : IModuleInitializer
         {
             //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
+
+        services.AddTransient<IUserSearchProvider, UserSearchProvider>();
     }
 
     public static void ConfigureServices(IServiceProvider services)
@@ -51,3 +53,33 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 }
+
+public class UserSearchProvider(IUsersClient usersClient) : IUserSearchProvider
+{
+    public async Task<IEnumerable<Portal.User>> QueryUsersAsync(string? searchTerm, CancellationToken cancellationToken)
+    {
+        var result = await usersClient.GetUsersAsync(1, 10, searchTerm, null, null, cancellationToken);
+        return result.Items.Select(UserMappings.ToUser);
+    }
+}
+
+public static class UserMappings 
+{
+    public static Portal.User ToUser(this User user) => new (user.Id, user.Name);
+
+    public static User ToDto(this Portal.User user) => new () 
+    {
+        Id = user.Id,
+        Name = user.Name
+    };
+}
+
+/*
+public class OrganizationSearchProvider(IOrganizationsClient organizationsClient) : IOrganizationSearchProvider
+{
+    public Task<IEnumerable<Organization>> QueryOrganizationsAsync(string? searchTerm, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+}
+*/

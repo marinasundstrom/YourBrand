@@ -20,7 +20,7 @@
 {
     <MudPaper Elevation="25" Style="overflow-x: scroll;">
 
-        <MudDropContainer @ref="dropContainer" T="TicketDto" Items="tickets" Context="context"
+        <MudDropContainer @ref="dropContainer" T="Ticket" Items="tickets" Context="context"
                           ItemsSelector="@((item, dropzone) => item.Status.Id.ToString() == dropzone)"
                           ItemDropped="ItemUpdated" Class="d-flex flex-row">
             <ChildContent>
@@ -41,7 +41,7 @@
                                 </MudMenu>
                             *@
                         </MudToolBar>
-                        <MudDropZone T="TicketDto" Identifier="@($"{status.Id}")" Class="mud-height-full" />
+                        <MudDropZone T="Ticket" Identifier="@($"{status.Id}")" Class="mud-height-full" />
                         @*
                             <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Filled.Add" FullWidth="true"
                             Class="py-2" Style="background-color: inherit;">Add Task</MudButton>
@@ -93,10 +93,10 @@
 
 @code {
     CancellationTokenSource cts = new();
-    MudDropContainer<TicketDto> dropContainer = null!;
+    MudDropContainer<Ticket> dropContainer = null!;
     HubConnection hubConnection = null!;
-    List<TicketDto> tickets = new();
-    List<TicketStatusDto> ticketStatuses = new();
+    List<Ticket> tickets = new();
+    List<TicketStatus> ticketStatuses = new();
     bool loaded = false;
 
     protected override async Task OnInitializedAsync()
@@ -132,7 +132,7 @@
 
             hubConnection.On<int, string>("SubjectUpdated", OnSubjectUpdated);
             hubConnection.On<int, string?>("DescriptionUpdated", OnDescriptionUpdated);
-            hubConnection.On<int, TicketStatusDto>("StatusUpdated", OnStatusUpdated);
+            hubConnection.On<int, TicketStatus>("StatusUpdated", OnStatusUpdated);
             hubConnection.On<int, double?>("EstimatedHoursUpdated", OnEstimatedHoursUpdated);
             hubConnection.On<int, double?>("RemainingHoursUpdated", OnRemainingHoursUpdated);
 
@@ -179,7 +179,7 @@
         var result = await dialogRef.Result;
     }
 
-    private async Task DeleteTicket(TicketDto item)
+    private async Task DeleteTicket(Ticket item)
     {
         try
         {
@@ -203,7 +203,7 @@
         }
     }
 
-    private async void ItemUpdated(MudItemDropInfo<TicketDto> dropItem)
+    private async void ItemUpdated(MudItemDropInfo<Ticket> dropItem)
     {
         var id = dropItem.DropzoneIdentifier;
 
@@ -271,7 +271,7 @@
         StateHasChanged();
     }
 
-    void OnStatusUpdated(int ticketId, TicketStatusDto status)
+    void OnStatusUpdated(int ticketId, TicketStatus status)
     {
         var item = tickets.First(x => x.Id == ticketId);
         item.Status = status;

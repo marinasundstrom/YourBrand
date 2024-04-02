@@ -25,6 +25,7 @@
     <ProjectReference Include="..\Ticketing.Components\Ticketing.Components.csproj" />
     <ProjectReference Include="..\..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
     <ProjectReference Include="..\..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
+    <ProjectReference Include="..\..\..\Portal\Portal.Components\Portal.Components.csproj" />
   </ItemGroup>
 
   <!--

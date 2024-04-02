@@ -8,7 +8,8 @@ public static class ServiceExtensions
     {
         services
             .AddTicketsClient(configureClient, builder)
-            .AddTicketStatusesClient(configureClient, builder);
+            .AddTicketStatusesClient(configureClient, builder)
+            .AddUsersClient(configureClient, builder);
 
         return services;
     }
@@ -28,6 +29,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(TicketStatusesClient), configureClient)
             .AddTypedClient<ITicketStatusesClient>((http, sp) => new TicketStatusesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddUsersClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(UsersClient), configureClient)
+            .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http));
 
         builder?.Invoke(b);
 

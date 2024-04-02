@@ -71,11 +71,10 @@ else
                                 </MudGrid>
                             </MudItem>
 
-                            @**
                             <MudItem xs="12" md="6">
                                 <UserSelector Label="@T["Assignee"]" Variant="Variant.Outlined" @bind-Value="Assignee"
                                               For="() => Assignee" Class="mb-4" />
-                            </MudItem> *@
+                            </MudItem>
                         </MudGrid>
 
                     </MudContainer>
@@ -111,8 +110,8 @@ else
 @code {
     CancellationTokenSource cts = new ();
     EditContext editContext = null!;
-    TicketDto? ticket;
-    List<TicketStatusDto> ticketStatuses = new();
+    Ticket? ticket;
+    List<TicketStatus> ticketStatuses = new();
     bool notFound = false;
     bool error = false;
 
@@ -127,9 +126,9 @@ else
     [MaxLength(340)]
     public string? Description { get; set; }
 
-    public UserDto? Assignee { get; set; }
+    public Portal.User? Assignee { get; set; }
 
-    public TicketStatusDto Status { get; set; }
+    public TicketStatus Status { get; set; }
 
     public double? EstimatedHours { get; set; }
 
@@ -220,8 +219,9 @@ else
                     error = true;
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
+                Console.WriteLine(exc);
                 error = true;
             }
         }
@@ -262,7 +262,7 @@ else
             Title = ticket.Subject;
             Description = ticket.Description;
             Status = ticket.Status;
-            Assignee = ticket.Assignee;
+            Assignee = ticket.Assignee?.ToUser();
             EstimatedHours = ticket.EstimatedHours;
             RemainingHours = ticket.RemainingHours;
         }
