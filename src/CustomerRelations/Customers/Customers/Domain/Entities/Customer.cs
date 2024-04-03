@@ -1,8 +1,9 @@
 ﻿using YourBrand.Customers.Domain.Enums;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public abstract class Customer : AggregateRoot<int>, IAuditable
+public abstract class Customer : AggregateRoot<int>, IAuditable, IHasTenant
 {
     readonly HashSet<Address> _addresses = new HashSet<Address>();
 
@@ -10,6 +11,8 @@ public abstract class Customer : AggregateRoot<int>, IAuditable
     {
 
     }
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

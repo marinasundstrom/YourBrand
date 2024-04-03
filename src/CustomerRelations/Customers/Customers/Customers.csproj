@@ -34,7 +34,13 @@
 		</ProjectReference>
         <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
-		<ProjectReference Include="..\..\..\Extensions\Extensions.csproj" />
-		<ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
+        <ProjectReference Include="..\..\..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
+        <ProjectReference
+            Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+        <ProjectReference
+            Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\SampleTenant\SampleTenant.csproj" />
 	</ItemGroup>
 </Project>

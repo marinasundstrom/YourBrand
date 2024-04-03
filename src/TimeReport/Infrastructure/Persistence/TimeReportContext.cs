@@ -63,6 +63,11 @@ public class TimeReportContext : DbContext, ITimeReportContext
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
+            if (clrType.BaseType != typeof(object))
+            {
+                continue;
+            }
+            
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);

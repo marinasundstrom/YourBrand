@@ -1,14 +1,17 @@
 using YourBrand.Customers.Domain.Enums;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public class Address : Entity<string>, IAuditable
+public class Address : Entity<string>, IAuditable, IHasTenant
 {
     public Address()
     {
         Id = Guid.NewGuid().ToString();
         //AddDomainEvent(new AddressCreated(Id));
     }
+
+    public TenantId TenantId { get; set; }
 
     public Organization? Organization { get; private set; } = null!;
 

@@ -41,6 +41,11 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationD
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
+            if (clrType.BaseType != typeof(object))
+            {
+                continue;
+            }
+            
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);

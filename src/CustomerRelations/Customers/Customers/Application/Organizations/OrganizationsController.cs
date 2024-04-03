@@ -2,6 +2,7 @@ using Asp.Versioning;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Customers.Application.Addresses;
@@ -14,6 +15,7 @@ namespace YourBrand.Customers.Application.Organizations;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
+[Authorize]
 public class OrganizationsController : ControllerBase
 {
     private readonly IMediator _mediator;

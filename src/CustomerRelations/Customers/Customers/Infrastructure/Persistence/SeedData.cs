@@ -1,4 +1,5 @@
 ﻿using YourBrand.Customers.Domain.Entities;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Infrastructure.Persistence;
 
@@ -10,9 +11,12 @@ public class SeedData
         {
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<SeedData>>();
 
+            var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+            tenantService.SetTenantId(TenantConstants.TenantId);
+
             var context = scope.ServiceProvider.GetRequiredService<CustomersContext>();
+
             await context.Database.EnsureDeletedAsync();
-            //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
 
             if (!context.Persons.Any())

@@ -40,6 +40,11 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
+            if (clrType.BaseType != typeof(object))
+            {
+                continue;
+            }
+            
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);

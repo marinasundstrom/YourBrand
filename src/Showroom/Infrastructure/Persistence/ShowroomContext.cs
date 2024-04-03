@@ -62,6 +62,11 @@ public class ShowroomContext : DbContext, IShowroomContext
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
+            if (clrType.BaseType != typeof(object))
+            {
+                continue;
+            }
+            
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);
