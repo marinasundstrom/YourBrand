@@ -1,10 +1,15 @@
 namespace YourBrand.Showroom.Domain.Entities;
 
 using YourBrand.Showroom.Domain.Common;
+using YourBrand.Tenancy;
 
-public class PersonProfileEducation : AuditableEntity, ISoftDelete
+using YourBrand.Domain;
+
+public class PersonProfileEducation : AuditableEntity, IHasTenant, ISoftDelete
 {
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; } = null!;
 
     public PersonProfile PersonProfile { get; set; } = null!;
 
@@ -21,7 +26,7 @@ public class PersonProfileEducation : AuditableEntity, ISoftDelete
 
     public string? Description { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

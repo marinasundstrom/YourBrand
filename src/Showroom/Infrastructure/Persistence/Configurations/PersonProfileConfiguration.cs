@@ -14,6 +14,8 @@ class PersonProfilCaseConfigurationConfiguration : IEntityTypeConfiguration<Pers
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasIndex(x => x.TenantId);
+
         builder
             .HasMany(p => p.Skills)
             .WithMany(p => p.PersonProfiles)

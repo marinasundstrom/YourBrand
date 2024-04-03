@@ -11,5 +11,7 @@ class EmploymentConfiguration : IEntityTypeConfiguration<Employment>
     public void Configure(EntityTypeBuilder<Employment> builder)
     {
         builder.ToTable("Employments");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

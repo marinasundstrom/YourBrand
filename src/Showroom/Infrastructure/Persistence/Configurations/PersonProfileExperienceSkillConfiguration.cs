@@ -14,6 +14,8 @@ class PersonProfileExperienceSkillConfiguration : IEntityTypeConfiguration<Perso
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasOne(x => x.PersonProfileExperience)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

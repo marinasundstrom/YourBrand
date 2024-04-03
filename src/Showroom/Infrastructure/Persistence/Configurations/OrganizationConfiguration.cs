@@ -14,6 +14,8 @@ class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.OwnsOne(x => x.Address);
 
         builder.HasOne(x => x.CreatedBy)

@@ -1,5 +1,7 @@
 ﻿using YourBrand.Showroom.Domain.Common;
 
+using YourBrand.Domain;
+
 namespace YourBrand.Showroom.Domain.Entities;
 
 public class SkillArea : AuditableEntity, ISoftDelete
@@ -17,7 +19,7 @@ public class SkillArea : AuditableEntity, ISoftDelete
 
     public ICollection<Skill> Skills { get; set; } = new List<Skill>();
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

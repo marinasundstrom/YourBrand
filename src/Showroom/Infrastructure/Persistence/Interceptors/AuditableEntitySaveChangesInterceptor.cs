@@ -6,6 +6,7 @@ using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
 

@@ -1,7 +1,10 @@
-﻿using MediatR;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+using MediatR;
 
 namespace YourBrand.Showroom.Domain.Common;
 
+[NotMapped]
 public abstract record DomainEvent : INotification
 {
     public Guid Id { get; } = Guid.NewGuid();

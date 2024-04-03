@@ -14,6 +14,8 @@ class PersonProfileSkillConfiguration : IEntityTypeConfiguration<PersonProfileSk
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.OwnsOne(x => x.Link);
 
         builder.HasOne(x => x.CreatedBy)

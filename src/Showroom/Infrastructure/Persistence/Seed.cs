@@ -7,6 +7,7 @@ using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Domain.ValueObjects;
 using YourBrand.Showroom.Events.Enums;
 using YourBrand.Showroom.TestData;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -15,6 +16,10 @@ public static class Seed
     public static async Task SeedAsync(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
+        
+        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+        tenantService.SetTenantId(TenantConstants.TenantId);
+
         using var context = scope.ServiceProvider.GetRequiredService<ShowroomContext>();
 
         await context.Database.EnsureDeletedAsync();
@@ -194,7 +199,7 @@ public static class Seed
             Industry = await context.Industries.FirstAsync(x => x.Name.Contains("Software Development")),
             Organization = await context.Organizations.FirstAsync(),
             CompetenceArea = await context.CompetenceAreas.FirstAsync(x => x.Name.Contains("Software")),
-            Headline = "Senior Software Developer",
+            Headline = "Experienced Software Developer",
             ShortPresentation = "I'm as Software developer who is based in Malmö, Sweden.",
             Presentation = @"
 I'm as Software developer who is based in Malmö, Sweden.

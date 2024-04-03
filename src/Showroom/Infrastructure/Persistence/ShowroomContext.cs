@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+
+using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
@@ -9,20 +11,29 @@ using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
 using YourBrand.Showroom.Infrastructure.Persistence.Outbox;
 
+using YourBrand.Tenancy;
+using YourBrand.Identity;
+using LinqKit;
+using YourBrand.Domain;
+
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
 public class ShowroomContext : DbContext, IShowroomContext
 {
     private readonly IApiApplicationContext _apiApplicationContext;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+    private readonly TenantId _tenantId;
 
     public ShowroomContext(
         DbContextOptions<ShowroomContext> options,
         IApiApplicationContext apiApplicationContext,
+        ITenantService tenantService,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _apiApplicationContext = apiApplicationContext;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+
+        _tenantId = tenantService.TenantId.GetValueOrDefault();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,7 +52,84 @@ public class ShowroomContext : DbContext, IShowroomContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.PersonProfilCaseConfigurationConfiguration).Assembly);
+
+        ConfigQueryFilterForEntity(modelBuilder);
     }
+
+    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
+    {
+        foreach (var clrType in modelBuilder.Model
+            .GetEntityTypes()
+            .Select(entityType => entityType.ClrType))
+        {
+            try
+            {
+                var entityTypeBuilder = modelBuilder.Entity(clrType);
+
+                var parameter = Expression.Parameter(clrType, "entity");
+
+                List<Expression> queryFilters = new();
+
+                if (TenancyQueryFilter.CanApplyTo(clrType))
+                {
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+
+                    queryFilters.Add(
+                        Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));
+                }
+
+                if (SoftDeleteQueryFilter.CanApplyTo(clrType))
+                {
+                    var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
+
+                    queryFilters.Add(
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDelete))));
+                }
+
+                Expression? queryFilter = null;
+
+                foreach (var qf in queryFilters)
+                {
+                    if (queryFilter is null)
+                    {
+                        queryFilter = qf;
+                    }
+                    else
+                    {
+                        queryFilter = Expression.AndAlso(
+                            queryFilter,
+                            qf)
+                            .Expand();
+                    }
+                }
+
+                if (queryFilters.Count == 0)
+                {
+                    continue;
+                }
+
+                var queryFilterLambda = Expression.Lambda(queryFilter.Expand(), parameter);
+
+                entityTypeBuilder.HasQueryFilter(queryFilterLambda);
+            }
+            catch (InvalidOperationException exc)
+                when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
+            {
+                Console.WriteLine("Skipping previously configured owned type");
+            }
+            catch (InvalidOperationException exc)
+                when (exc.Message.Contains("cannot be added to the model because its CLR type has been configured as a shared type"))
+            {
+                Console.WriteLine("Skipping previously configured shared type");
+            }
+        }
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+    }
+
 
 #nullable disable
 

@@ -1,11 +1,16 @@
 ﻿using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Enums;
+using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Case : AuditableEntity, ISoftDelete
+public class Case : AuditableEntity, IHasTenant, ISoftDelete
 {
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; } = null!;
+
 
     public string? Description { get; set; } = null!;
 
@@ -15,7 +20,7 @@ public class Case : AuditableEntity, ISoftDelete
 
     public CasePricing Pricing { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }
@@ -28,7 +33,7 @@ public class Location : AuditableEntity, ISoftDelete
 
     public string? Country { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public string? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

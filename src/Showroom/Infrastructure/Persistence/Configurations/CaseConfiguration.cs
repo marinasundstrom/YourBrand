@@ -14,6 +14,8 @@ class CaseConfiguration : IEntityTypeConfiguration<Case>
         builder.Property(x => x.Id).ValueGeneratedNever();
         builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.OwnsOne(x => x.Pricing);
 
         builder.HasOne(x => x.CreatedBy)

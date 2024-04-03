@@ -1,8 +1,13 @@
+using YourBrand.Showroom.Domain.Common;
+using YourBrand.Tenancy;
+
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Employment
+public class Employment : AuditableEntity, IHasTenant
 {
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; } = null!;
 
     public PersonProfile PersonProfile { get; set; } = null!;
 
