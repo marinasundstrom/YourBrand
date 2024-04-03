@@ -11,6 +11,8 @@ public class InvoiceItemConfiguration : IEntityTypeConfiguration<InvoiceItem>
     {
         builder.ToTable("InvoiceItems");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.OwnsOne(x => x.DomesticService);
     }
 }

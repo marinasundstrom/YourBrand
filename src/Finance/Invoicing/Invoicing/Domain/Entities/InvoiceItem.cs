@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
+using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class InvoiceItem
+public class InvoiceItem : AuditableEntity, IHasTenant
 {
     private InvoiceItem()
     {
@@ -25,6 +27,8 @@ public class InvoiceItem
     }
 
     public string Id { get; private set; }
+
+    public TenantId TenantId { get; set; }
 
     public Invoice Invoice { get; private set; }
 

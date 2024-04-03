@@ -3,10 +3,11 @@
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Domain.Events;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class Invoice : Entity
+public class Invoice : AuditableEntity, IHasTenant
 {
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 
@@ -26,6 +27,8 @@ public class Invoice : Entity
     }
 
     public string Id { get; set; }
+
+    public TenantId TenantId { get; set; }
 
     public string InvoiceNo { get; set; }
 

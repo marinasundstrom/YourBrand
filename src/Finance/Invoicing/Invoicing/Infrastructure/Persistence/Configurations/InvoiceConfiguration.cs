@@ -11,6 +11,8 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
     {
         builder.ToTable("Invoices");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasMany(invoice => invoice.Items)
             .WithOne(invoiceItem => invoiceItem.Invoice)
             .IsRequired()

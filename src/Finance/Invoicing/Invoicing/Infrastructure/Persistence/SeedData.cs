@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Invoicing.Infrastructure.Persistence;
+﻿using YourBrand.Tenancy;
+
+namespace YourBrand.Invoicing.Infrastructure.Persistence;
 
 public class SeedData
 {
@@ -8,7 +10,11 @@ public class SeedData
         {
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<SeedData>>();
 
+            var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+            tenantService.SetTenantId(TenantConstants.TenantId);
+
             var context = scope.ServiceProvider.GetRequiredService<InvoicingContext>();
+
             await context.Database.EnsureDeletedAsync();
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
