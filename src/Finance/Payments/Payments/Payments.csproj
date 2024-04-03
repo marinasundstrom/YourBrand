@@ -32,12 +32,6 @@
             Include="..\..\Transactions\Transactions.Client\Transactions.Client.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
-        <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
-            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-        </ProjectReference>
-        <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj">
-            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-        </ProjectReference>
         <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />

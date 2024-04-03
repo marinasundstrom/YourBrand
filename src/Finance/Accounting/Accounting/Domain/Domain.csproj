@@ -10,6 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="LinqKit" Version="1.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference
+      Include="..\..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

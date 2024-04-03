@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 using YourBrand.Accounting.Domain.Common;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class LedgerEntry : Entity
+public class LedgerEntry : AuditableEntity, IHasTenant
 {
     public LedgerEntry()
     {
@@ -23,6 +24,8 @@ public class LedgerEntry : Entity
 
     [Key]
     public int Id { get; set; }
+
+    public TenantId TenantId { get; set; }
 
     public DateTime Date { get; set; } = DateTime.Now;
 

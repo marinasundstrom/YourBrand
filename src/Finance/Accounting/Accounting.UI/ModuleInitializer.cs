@@ -21,7 +21,7 @@ public class ModuleInitializer : IModuleInitializer
             httpClient.BaseAddress = new Uri($"{ServiceUrls.AccountingServiceUrl}/");
         }, builder =>
         {
-            //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+            builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }
 

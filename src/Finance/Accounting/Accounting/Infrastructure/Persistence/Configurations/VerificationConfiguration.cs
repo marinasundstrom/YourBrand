@@ -10,5 +10,7 @@ public class VerificationConfiguration : IEntityTypeConfiguration<Verification>
     public void Configure(EntityTypeBuilder<Verification> builder)
     {
         builder.ToTable("Verifications");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

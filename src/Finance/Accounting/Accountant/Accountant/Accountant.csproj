@@ -11,7 +11,8 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
   <ItemGroup>
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.3" />
-    <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+    <PackageReference Include="Microsoft.Tye.Extensions.Configuration"
+      Version="0.10.0-alpha.21420.1" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.11" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.11" />
     <PackageReference Include="Hangfire" Version="1.8.11" />
@@ -28,19 +29,21 @@
     <ProjectReference Include="..\..\..\Invoicing\Invoicing.Client\Invoicing.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
+    <ProjectReference
+      Include="..\..\..\..\EmailService\EmailService.Contracts\EmailService.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Documents\Documents.Client\Documents.Client.csproj">
-		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-		</ProjectReference>
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Payments\Payments.Contracts\Payments.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Payments\Payments.Client\Payments.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
+    <ProjectReference
+      Include="..\..\..\Transactions\Transactions.Contracts\Transactions.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Formulas\Formulas.csproj">

@@ -1,13 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 
+using YourBrand.Accounting.Domain.Common;
 using YourBrand.Accounting.Domain.Enums;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Verification
+public class Verification : AuditableEntity, IHasTenant
 {
     [Key]
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

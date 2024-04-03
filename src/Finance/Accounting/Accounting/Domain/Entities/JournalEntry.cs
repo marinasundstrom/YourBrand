@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using YourBrand.Accounting.Domain.Common;
+using YourBrand.Tenancy;
+
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class JournalEntry
-{
+public class JournalEntry : AuditableEntity, IHasTenant
+{    
     private readonly HashSet<LedgerEntry> _entries = new();
     private readonly HashSet<Verification> _verifications = new HashSet<Verification>();
 
@@ -22,6 +25,8 @@ public class JournalEntry
 
     [Key]
     public int Id { get; private set; }
+
+    public TenantId TenantId { get; set; }
 
     public DateTime Date { get; private set; }
 

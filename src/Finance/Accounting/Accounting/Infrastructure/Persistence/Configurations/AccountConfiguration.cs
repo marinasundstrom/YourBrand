@@ -17,5 +17,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder
             .Property(x => x.AccountNo)
             .ValueGeneratedNever();
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

@@ -47,6 +47,7 @@ public class PaymentsContext : DbContext, IPaymentsContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PaymentsContext).Assembly);
+
         ConfigQueryFilterForEntity(modelBuilder);
     }
 

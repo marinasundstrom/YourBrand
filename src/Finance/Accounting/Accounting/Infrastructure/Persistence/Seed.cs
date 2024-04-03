@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Accounting.Domain.Entities;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
 
@@ -24,6 +25,10 @@ public static class Seed
         }
 
         using var scope = serviceProvider.CreateScope();
+
+        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+        tenantService.SetTenantId(TenantConstants.TenantId);
+
         using var context = scope.ServiceProvider.GetRequiredService<AccountingContext>();
 
         if (RecreateDatabase)
