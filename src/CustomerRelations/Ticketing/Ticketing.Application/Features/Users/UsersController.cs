@@ -11,6 +11,7 @@ namespace YourBrand.Ticketing.Application.Features.Users;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
+[Authorize]
 public sealed class UsersController : ControllerBase
 {
     private readonly IMediator mediator;

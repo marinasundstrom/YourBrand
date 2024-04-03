@@ -1,6 +1,8 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class User : AggregateRoot<string>, IAuditable
+public class User : AggregateRoot<string>, IAuditable, IHasTenant
 {
     public User(string id, string name, string email)
         : base(id)
@@ -9,6 +11,8 @@ public class User : AggregateRoot<string>, IAuditable
         Name = name;
         Email = email;
     }
+    
+    public TenantId TenantId { get; set; }
 
     public string Name { get; private set; }
 

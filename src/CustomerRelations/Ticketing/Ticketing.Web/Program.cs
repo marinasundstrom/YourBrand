@@ -154,16 +154,15 @@ app.UseRateLimiter();
 using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+    /*
     var dbProviderName = context.Database.ProviderName;
 
     if (dbProviderName!.Contains("SqlServer"))
     {
         //await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
+        //await context.Database.EnsureCreatedAsync();
 
-        /*
         try
         {
             await ApplyMigrations(context);
@@ -173,11 +172,19 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
             logger.LogError(ex, "An error occurred when applying migrations to the " +
                 "database. Error: {Message}", ex.Message);
         }
-        */
     }
+    */
 
     if (args.Contains("--seed"))
     {
+        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+        tenantService.SetTenantId(TenantConstants.TenantId);
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
         try
         {
             await Seed.SeedData(context);

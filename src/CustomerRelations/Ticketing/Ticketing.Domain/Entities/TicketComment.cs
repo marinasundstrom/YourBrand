@@ -1,7 +1,11 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketComment : Entity<int>, IAuditable
+public class TicketComment : Entity<int>, IAuditable, IHasTenant
 {
+    public TenantId TenantId { get; set; }
+
     public string Text { get; set; } = null!;
 
     public HashSet<Attachment> Attachments { get; } = new HashSet<Attachment>();

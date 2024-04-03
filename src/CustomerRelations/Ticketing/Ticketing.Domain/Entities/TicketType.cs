@@ -1,6 +1,8 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public sealed class TicketType : Entity<int>
+public sealed class TicketType : Entity<int>, IHasTenant
 {
     protected TicketType() : base()
     {
@@ -11,6 +13,8 @@ public sealed class TicketType : Entity<int>
     {
         Name = name;
     }
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 }

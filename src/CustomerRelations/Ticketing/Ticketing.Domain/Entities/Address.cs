@@ -1,11 +1,15 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Address : Entity<string>, IAuditable
+public class Address : Entity<string>, IAuditable, IHasTenant
 {
     public Address()
     {
         Id = Guid.NewGuid().ToString();
     }
+
+    public TenantId TenantId { get; set; }
 
     // Street
     public string Thoroughfare { get; set; } = null!;

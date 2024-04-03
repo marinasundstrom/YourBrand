@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-//[Authorize]
+[Authorize]
 public sealed class TicketStatusesController : ControllerBase
 {
     private readonly IMediator mediator;

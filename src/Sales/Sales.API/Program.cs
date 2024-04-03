@@ -152,7 +152,6 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        var context = scope.ServiceProvider.GetRequiredService<SalesContext>();
         var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
         if (args.Contains("--seed"))
@@ -160,16 +159,14 @@ try
             var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
             tenantService.SetTenantId(TenantConstants.TenantId);
 
+            var context = scope.ServiceProvider.GetRequiredService<SalesContext>();
+
             await context.Database.EnsureDeletedAsync();
 
             await context.Database.EnsureCreatedAsync();
 
             await SeedData(context, configuration, logger);
             return;
-        }
-        else
-        {
-            await context.Database.MigrateAsync();
         }
     }
 }

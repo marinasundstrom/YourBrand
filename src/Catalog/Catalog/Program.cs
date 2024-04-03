@@ -107,7 +107,7 @@ builder.Services.AddDbContext<CatalogContext>((sp, options) =>
 {
     var connectionString = builder.Configuration.GetValue<string>("yourbrand:catalog-svc:db:connectionstring");
 
-    options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+    options.UseSqlServer(connectionString!); //, o => o.EnableRetryOnFailure());
 
     options.AddInterceptors(
         //sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
