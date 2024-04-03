@@ -45,3 +45,7 @@ This is the service responsible for managing tenancy, users, orgs, and centraliz
 Other services get notified of changes to tenants, users, and organizations, via events, and they can then update their local information.
 
 This service serves as an authentication provider, using OIDC and OAuth.
+
+### Authentication
+
+The "tenant_id" claim is included with the auth token (JWT), and extracted by TenantService on behalf or the current service.
