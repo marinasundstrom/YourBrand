@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace YourBrand.Carts.API.Migrations;
+namespace YourBrand.Carts.Migrations;
 
 /// <inheritdoc />
 public partial class UpdateCartAndCartItem : Migration

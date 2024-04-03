@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Carts.Contracts;
 
-namespace YourBrand.Carts.API.Features.CartsManagement.Consumers;
+namespace YourBrand.Carts.Features.CartsManagement.Consumers;
 
 public sealed class GetCartsConsumer(IMediator mediator) : IConsumer<GetCarts>
 {
@@ -191,7 +191,7 @@ public static class Mappings
         Total = cartItem.Total,
         Data = cartItem.Data,
         Created = cartItem.Created,
-        Updated = cartItem.Updated
+        Updated = cartItem.LastModified
     };
 }
 

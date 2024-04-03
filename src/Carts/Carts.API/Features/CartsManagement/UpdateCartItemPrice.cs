@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Carts.API.Domain.Entities;
-using YourBrand.Carts.API.Persistence;
+using YourBrand.Carts.Domain.Entities;
+using YourBrand.Carts.Persistence;
 
-namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
+namespace YourBrand.Carts.Features.CartsManagement.Requests;
 
 public sealed record UpdateCartItemPrice(string CartId, string CartItemId, decimal Price) : IRequest<Result<CartItem>>
 {
@@ -30,10 +30,6 @@ public sealed record UpdateCartItemPrice(string CartId, string CartItemId, decim
             }
 
             cart.UpdateCartItemPrice(request.CartItemId, request.Price);
-
-            var date = DateTimeOffset.UtcNow;
-            cartItem.Updated = date;
-            cart.Updated = date;
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 

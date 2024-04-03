@@ -2,7 +2,7 @@ using System.Reflection;
 
 using Asp.Versioning;
 
-namespace YourBrand.Carts.API;
+namespace YourBrand.Carts;
 
 public static class ApiVersions
 {

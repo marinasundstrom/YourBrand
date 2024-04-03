@@ -1,6 +1,8 @@
-namespace YourBrand.Carts.API.Domain.Entities;
+using YourBrand.Tenancy;
 
-public sealed class Cart
+namespace YourBrand.Carts.Domain.Entities;
+
+public sealed class Cart : IAuditable, IHasTenant
 {
     private readonly HashSet<CartItem> _cartItems = new HashSet<CartItem>();
 
@@ -17,6 +19,8 @@ public sealed class Cart
 
     public string Id { get; private set; } = Guid.NewGuid().ToString();
 
+    public TenantId TenantId { get; set; }
+
     public string Tag { get; set; } = default!;
 
     public decimal Total { get; private set; }
@@ -24,8 +28,9 @@ public sealed class Cart
     public IReadOnlyCollection<CartItem> Items => _cartItems;
 
     public DateTimeOffset Created { get; set; }
-
-    public DateTimeOffset? Updated { get; set; }
+    public string? CreatedById { get; set; }
+    public string? LastModifiedById { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
 
     public CartItem AddItem(string name, string? image, long? productId, string? productHandle, string description, decimal price, double? vatRate, decimal? regularPrice, double? discountRate, int quantity, string? data)
     {
@@ -91,7 +96,7 @@ public sealed class Cart
     }
 }
 
-public sealed class CartItem
+public sealed class CartItem : IAuditable, IHasTenant
 {
     private CartItem()
     {
@@ -114,6 +119,8 @@ public sealed class CartItem
     }
 
     public string Id { get; private set; } = Guid.NewGuid().ToString();
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = default!;
 
@@ -147,6 +154,8 @@ public sealed class CartItem
     }
 
     public DateTimeOffset Created { get; set; }
+    public string? CreatedById { get; set; }
+    public string? LastModifiedById { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
 
-    public DateTimeOffset? Updated { get; set; }
 }

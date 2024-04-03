@@ -1,6 +1,6 @@
-using YourBrand.Carts.API.Domain.Entities;
+using YourBrand.Carts.Domain.Entities;
 
-namespace YourBrand.Carts.API.Persistence;
+namespace YourBrand.Carts.Persistence;
 
 public static class Seed
 {

@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
-using YourBrand.Carts.API.Domain.Entities;
-using YourBrand.Carts.API.Features.CartsManagement.Requests;
+using YourBrand.Carts.Domain.Entities;
+using YourBrand.Carts.Features.CartsManagement.Requests;
 
-namespace YourBrand.Carts.API.Features.CartsManagement;
+namespace YourBrand.Carts.Features.CartsManagement;
 
 public static class Endpoints
 {

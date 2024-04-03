@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Carts.API.Domain.Entities;
-using YourBrand.Carts.API.Persistence;
+using YourBrand.Carts.Domain.Entities;
+using YourBrand.Carts.Persistence;
 
-namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
+namespace YourBrand.Carts.Features.CartsManagement.Requests;
 
 public sealed record RemoveCartItem(string CartId, string CartItemId) : IRequest<Result>
 {
@@ -23,9 +23,6 @@ public sealed record RemoveCartItem(string CartId, string CartItemId) : IRequest
             }
 
             cart.RemoveItem(request.CartItemId!);
-
-            var date = DateTimeOffset.UtcNow;
-            cart.Updated = date;
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 

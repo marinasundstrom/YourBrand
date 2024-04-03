@@ -12,10 +12,13 @@ using Serilog;
 using Steeltoe.Discovery.Client;
 
 using YourBrand;
-using YourBrand.Carts.API;
-using YourBrand.Carts.API.Features.CartsManagement;
-using YourBrand.Carts.API.Persistence;
+using YourBrand.Carts;
+using YourBrand.Carts.Features.CartsManagement;
+using YourBrand.Carts.Persistence;
+using YourBrand.Carts.Services;
 using YourBrand.Extensions;
+
+using YourBrand.Carts.Persistence.Interceptors;
 
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -64,9 +67,24 @@ builder.Services
 
 builder.Services.AddObservability("Carts.API", "1.0", builder.Configuration);
 
-builder.Services.AddSqlServer<CartsContext>(
-    builder.Configuration.GetValue<string>("yourbrand:carts-svc:db:connectionstring"),
-    c => c.EnableRetryOnFailure());
+builder.Services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
+builder.Services.AddDbContext<CartsContext>((sp, options) =>
+{
+    var connectionString = builder.Configuration.GetValue<string>("yourbrand:carts-svc:db:connectionstring");
+
+    options.UseSqlServer(connectionString!); //, o => o.EnableRetryOnFailure());
+
+    options.AddInterceptors(
+        //sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
+        sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+    options
+        //.LogTo(Console.WriteLine)
+        .EnableSensitiveDataLogging();
+#endif
+});
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Program>());
 
@@ -110,6 +128,7 @@ builder.Services
     .AddIdentityServices()
     .AddTenantService();
 
+builder.Services.AddScoped<IDateTime, DateTimeService>();
 
 var app = builder.Build();
 
@@ -138,14 +157,18 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        var context = scope.ServiceProvider.GetRequiredService<CartsContext>();
-        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-
-        //await context.Database.EnsureDeletedAsync();
-        //await context.Database.EnsureCreatedAsync(); 
 
         if (args.Contains("--seed"))
         {
+            var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+            tenantService.SetTenantId(TenantConstants.TenantId);
+
+            var context = scope.ServiceProvider.GetRequiredService<CartsContext>();
+            var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync(); 
+
             await SeedData(context, configuration, logger);
             return;
         }

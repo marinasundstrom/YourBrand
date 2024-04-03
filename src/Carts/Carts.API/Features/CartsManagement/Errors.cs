@@ -1,4 +1,4 @@
-namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
+namespace YourBrand.Carts.Features.CartsManagement.Requests;
 
 public static class Errors
 {

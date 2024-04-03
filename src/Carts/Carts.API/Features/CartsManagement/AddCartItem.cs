@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Carts.API.Domain.Entities;
-using YourBrand.Carts.API.Persistence;
+using YourBrand.Carts.Domain.Entities;
+using YourBrand.Carts.Persistence;
 
-namespace YourBrand.Carts.API.Features.CartsManagement.Requests;
+namespace YourBrand.Carts.Features.CartsManagement.Requests;
 
 public sealed record AddCartItem(string CartId, string Name, string? Image, long? ProductId, string? ProductHandle, string Description, decimal Price, double? VatRate, decimal? RegularPrice, double? DiscountRate, int Quantity, string? Data) : IRequest<Result<CartItem>>
 {
@@ -23,10 +23,6 @@ public sealed record AddCartItem(string CartId, string Name, string? Image, long
             }
 
             var cartItem = cart.AddItem(request.Name, request.Image, request.ProductId, request.ProductHandle, request.Description, request.Price, request.VatRate, request.RegularPrice, request.DiscountRate, request.Quantity, request.Data);
-
-            var date = DateTimeOffset.UtcNow;
-            cartItem.Created = date;
-            cart.Updated = date;
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 
