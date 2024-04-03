@@ -6,6 +6,7 @@ using YourBrand.Identity;
 using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain.Common;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Payments.Infrastructure.Persistence.Interceptors;
 
@@ -43,17 +44,21 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     {
         if (context == null) return;
 
+        foreach (var entry in context.ChangeTracker.Entries<IHasTenant>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+
+                entry.Entity.TenantId = _tenantService.TenantId.GetValueOrDefault();
+            }
+        }
+
         foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedById = _currentUserService.UserId;
                 entry.Entity.Created = _dateTime.Now;
-
-                if (entry.Entity is IHasTenant hasTenant)
-                {
-                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
-                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {

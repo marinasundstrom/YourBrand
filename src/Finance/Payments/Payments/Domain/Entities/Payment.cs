@@ -1,6 +1,7 @@
 ﻿using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Domain.Enums;
 using YourBrand.Payments.Domain.Events;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Payments.Domain.Entities;
 
@@ -44,6 +45,8 @@ public class Payment : AuditableEntity
     }
 
     public string Id { get; private set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public string InvoiceId { get; private set; }
 

@@ -38,14 +38,13 @@
         <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
+        <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\SampleTenant\SampleTenant.csproj" />
+        <ProjectReference Include="..\..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
         <ProjectReference Include="..\..\..\Extensions\Extensions.csproj" />
         <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Remove="Microsoft.Tye.Extensions.Configuration" />
-        <None Remove="Infrastructure\Persistence\Interceptors\" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Infrastructure\Persistence\Interceptors\" />
     </ItemGroup>
 </Project>

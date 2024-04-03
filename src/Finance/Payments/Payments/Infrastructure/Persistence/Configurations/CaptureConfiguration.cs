@@ -10,5 +10,7 @@ public class CaptureConfiguration : IEntityTypeConfiguration<Capture>
     public void Configure(EntityTypeBuilder<Capture> builder)
     {
         builder.ToTable("Captures");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

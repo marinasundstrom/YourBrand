@@ -20,7 +20,7 @@ public class ModuleInitializer : IModuleInitializer
             httpClient.BaseAddress = new Uri($"{ServiceUrls.PaymentsServiceUrl}/");
         }, builder =>
         {
-            //builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+            builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
     }
 
