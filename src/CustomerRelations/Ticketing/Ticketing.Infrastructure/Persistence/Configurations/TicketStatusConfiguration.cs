@@ -8,5 +8,7 @@ public sealed class TicketStatusConfiguration : IEntityTypeConfiguration<TicketS
     public void Configure(EntityTypeBuilder<TicketStatus> builder)
     {
         builder.ToTable("TicketStatuses");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

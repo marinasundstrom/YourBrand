@@ -8,5 +8,7 @@ public sealed class TicketCommentConfiguration : IEntityTypeConfiguration<Ticket
     public void Configure(EntityTypeBuilder<TicketComment> builder)
     {
         builder.ToTable("TicketComments");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

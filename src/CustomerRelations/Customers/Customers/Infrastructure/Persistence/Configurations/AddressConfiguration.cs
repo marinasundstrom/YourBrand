@@ -10,5 +10,7 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
     public void Configure(EntityTypeBuilder<Address> builder)
     {
         builder.ToTable("Addresses");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

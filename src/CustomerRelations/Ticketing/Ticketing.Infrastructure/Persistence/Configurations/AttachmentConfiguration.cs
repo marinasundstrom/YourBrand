@@ -8,5 +8,7 @@ public sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachmen
     public void Configure(EntityTypeBuilder<Attachment> builder)
     {
         builder.ToTable("Attachments");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

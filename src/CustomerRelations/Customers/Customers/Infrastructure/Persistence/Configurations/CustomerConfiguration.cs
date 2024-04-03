@@ -12,5 +12,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder
             .UseTpcMappingStrategy()
             .Property(e => e.Id).HasDefaultValueSql("NEXT VALUE FOR [CustomerIds]");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

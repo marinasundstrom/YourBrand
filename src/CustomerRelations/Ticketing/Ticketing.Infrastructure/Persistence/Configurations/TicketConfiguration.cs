@@ -9,6 +9,8 @@ public sealed class TicketConfiguration : IEntityTypeConfiguration<Ticket>
     {
         builder.ToTable("Tickets");
 
+        builder.HasIndex(x => x.TenantId);
+
         /*
         builder
             .HasMany(x => x.Items)
