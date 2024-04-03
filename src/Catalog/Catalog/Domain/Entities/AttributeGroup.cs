@@ -1,6 +1,8 @@
-﻿namespace YourBrand.Catalog.Domain.Entities;
+﻿using YourBrand.Tenancy;
 
-public class AttributeGroup : Entity<string>
+namespace YourBrand.Catalog.Domain.Entities;
+
+public class AttributeGroup : Entity<string>, IHasTenant
 {
     protected AttributeGroup() { }
 
@@ -9,6 +11,8 @@ public class AttributeGroup : Entity<string>
     {
         Name = name;
     }
+
+    public TenantId TenantId { get; set; }
 
     public int? Seq { get; set; }
 

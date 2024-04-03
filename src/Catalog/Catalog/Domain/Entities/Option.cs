@@ -3,8 +3,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Tenancy;
 
-public abstract class Option : Entity<string>
+public abstract class Option : Entity<string>, IHasTenant
 {
     protected Option() { }
 
@@ -13,6 +14,8 @@ public abstract class Option : Entity<string>
     {
         Name = name;
     }
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

@@ -10,5 +10,7 @@ public class AttributeValueConfiguration : IEntityTypeConfiguration<AttributeVal
     public void Configure(EntityTypeBuilder<AttributeValue> builder)
     {
         builder.ToTable("AttributeValues");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

@@ -11,6 +11,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("Products");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder
             .Property(x => x.Handle)
             .HasMaxLength(150);

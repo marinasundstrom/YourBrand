@@ -12,6 +12,8 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
         builder.ToTable("Brands");
 
         builder.HasIndex(x => x.Handle);
+
+        builder.HasIndex(x => x.TenantId);
     }
 }
 

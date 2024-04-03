@@ -1,6 +1,8 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class ProductCategory
+public sealed class ProductCategory : Entity<long>, IHasTenant
 {
     private readonly HashSet<Product> _products = new HashSet<Product>();
     private readonly HashSet<ProductCategory> _subCategories = new HashSet<ProductCategory>();
@@ -12,8 +14,8 @@ public sealed class ProductCategory
         Name = name;
     }
 
-    public long Id { get; private set; }
-
+    public TenantId TenantId { get; set; }
+    
     public Store? Store { get; set; }
 
     public string? StoreId { get; set; }

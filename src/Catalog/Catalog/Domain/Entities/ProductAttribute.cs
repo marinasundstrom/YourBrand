@@ -1,7 +1,11 @@
-﻿namespace YourBrand.Catalog.Domain.Entities;
+﻿using YourBrand.Tenancy;
 
-public class ProductAttribute : Entity<int>
+namespace YourBrand.Catalog.Domain.Entities;
+
+public class ProductAttribute : Entity<int>, IHasTenant
 {
+    public TenantId TenantId { get; set; }
+
     public long ProductId { get; set; }
 
     public Product Product { get; set; } = null!;

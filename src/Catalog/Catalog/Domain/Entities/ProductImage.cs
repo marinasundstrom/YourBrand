@@ -1,6 +1,8 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductImage
+public class ProductImage : Entity<string>, IHasTenant
 {
     public ProductImage() { }
 
@@ -12,8 +14,8 @@ public class ProductImage
         Url = url;
     }
 
-    public string Id { get; private set; }
-
+    public TenantId TenantId { get; set; }
+    
     public Store? Store { get; set; }
 
     public string? StoreId { get; set; }

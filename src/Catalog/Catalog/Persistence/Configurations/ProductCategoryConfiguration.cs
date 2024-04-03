@@ -12,6 +12,8 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
         builder.ToTable("ProductCategories");
         //builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasIndex(x => x.TenantId);
+
         builder
             .Property(x => x.Handle)
             .HasMaxLength(150);

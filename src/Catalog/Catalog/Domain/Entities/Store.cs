@@ -1,6 +1,8 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class Store : Entity<string>
+public class Store : Entity<string>, IHasTenant
 {
     readonly HashSet<Product> _products = new HashSet<Product>();
 
@@ -12,6 +14,8 @@ public class Store : Entity<string>
         Handle = handle;
         Currency = currency;
     }
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

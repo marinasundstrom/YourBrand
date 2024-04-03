@@ -10,5 +10,7 @@ public class AttributeGroupConfiguration : IEntityTypeConfiguration<AttributeGro
     public void Configure(EntityTypeBuilder<AttributeGroup> builder)
     {
         builder.ToTable("AttributeGroups");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

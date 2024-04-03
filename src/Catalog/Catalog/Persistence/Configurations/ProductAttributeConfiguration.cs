@@ -10,5 +10,7 @@ public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAtt
     public void Configure(EntityTypeBuilder<ProductAttribute> builder)
     {
         builder.ToTable("ProductAttributes");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

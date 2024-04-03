@@ -10,5 +10,7 @@ public class ProductOptionConfiguration : IEntityTypeConfiguration<ProductOption
     public void Configure(EntityTypeBuilder<ProductOption> builder)
     {
         builder.ToTable("ProductOptions");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

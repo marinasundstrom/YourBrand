@@ -11,6 +11,8 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
     {
         builder.ToTable("Stores");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasOne(x => x.Currency)
                 .WithMany()
                 .HasForeignKey("CurrencyCode");

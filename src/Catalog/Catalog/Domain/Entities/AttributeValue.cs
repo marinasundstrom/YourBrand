@@ -1,6 +1,8 @@
-﻿namespace YourBrand.Catalog.Domain.Entities;
+﻿using YourBrand.Tenancy;
 
-public class AttributeValue : Entity<string>
+namespace YourBrand.Catalog.Domain.Entities;
+
+public class AttributeValue : Entity<string>, IHasTenant
 {
     protected AttributeValue() { }
 
@@ -9,6 +11,8 @@ public class AttributeValue : Entity<string>
     {
         Name = name;
     }
+
+    public TenantId TenantId { get; set; }
 
     public int? Seq { get; set; }
 

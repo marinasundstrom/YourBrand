@@ -1,10 +1,11 @@
 using Core;
 
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class Product
+public sealed class Product : Entity<long>, IHasTenant
 {
     readonly HashSet<ProductAttribute> _productAttributes = new HashSet<ProductAttribute>();
 
@@ -32,8 +33,8 @@ public sealed class Product
         Handle = handle;
     }
 
-    public long Id { get; private set; }
-
+    public TenantId TenantId { get; set; }
+    
     public Store? Store { get; internal set; }
 
     public string? StoreId { get; private set; }

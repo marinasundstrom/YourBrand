@@ -1,6 +1,8 @@
+using YourBrand.Tenancy;
+
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class Brand : AggregateRoot<int>
+public sealed class Brand : AggregateRoot<int>, IHasTenant
 {
     readonly HashSet<Brand> _subBrands = new HashSet<Brand>();
 
@@ -11,6 +13,8 @@ public sealed class Brand : AggregateRoot<int>
         Name = name;
         Handle = handle;
     }
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

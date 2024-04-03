@@ -10,5 +10,7 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     public void Configure(EntityTypeBuilder<ProductImage> builder)
     {
         builder.ToTable("ProductImages");
+
+        builder.HasIndex(x => x.TenantId);
     }
 }

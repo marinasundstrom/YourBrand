@@ -9,6 +9,8 @@ public class AttributeConfiguration : IEntityTypeConfiguration<Domain.Entities.A
     {
         builder.ToTable("Attributes");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder
             .HasMany(p => p.Values)
             .WithOne(p => p.Attribute);

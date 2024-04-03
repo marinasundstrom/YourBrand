@@ -1,6 +1,8 @@
-﻿namespace YourBrand.Catalog.Domain.Entities;
+﻿using YourBrand.Tenancy;
 
-public class Attribute : Entity<string>
+namespace YourBrand.Catalog.Domain.Entities;
+
+public class Attribute : Entity<string>, IHasTenant
 {
     protected Attribute() { }
 
@@ -9,6 +11,8 @@ public class Attribute : Entity<string>
     {
         Name = name;
     }
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

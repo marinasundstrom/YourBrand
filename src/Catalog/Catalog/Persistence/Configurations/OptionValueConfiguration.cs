@@ -11,6 +11,8 @@ public class OptionValueConfiguration : IEntityTypeConfiguration<OptionValue>
     {
         builder.ToTable("OptionValues");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.Property(x => x.Price).HasColumnName(nameof(OptionValue.Price));
     }
 }

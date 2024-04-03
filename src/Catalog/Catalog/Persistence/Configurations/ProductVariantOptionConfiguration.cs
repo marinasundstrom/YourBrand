@@ -11,6 +11,8 @@ public class ProductVariantOptionConfiguration : IEntityTypeConfiguration<Produc
     {
         builder.ToTable("ProductVariantOption");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder
             .HasOne(x => x.Product)
             .WithMany(x => x.ProductVariantOptions)

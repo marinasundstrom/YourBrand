@@ -11,6 +11,8 @@ public class OptionConfiguration : IEntityTypeConfiguration<Option>
     {
         builder.ToTable("Options");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder.HasDiscriminator(x => x.OptionType)
             .HasValue(typeof(SelectableOption), Domain.Enums.OptionType.YesOrNo)
             .HasValue(typeof(ChoiceOption), Domain.Enums.OptionType.Choice)

@@ -1,6 +1,8 @@
-﻿namespace YourBrand.Catalog.Domain.Entities;
+﻿using YourBrand.Tenancy;
 
-public class OptionGroup : AggregateRoot<string>
+namespace YourBrand.Catalog.Domain.Entities;
+
+public class OptionGroup : AggregateRoot<string>, IHasTenant
 {
     protected OptionGroup() { }
 
@@ -9,6 +11,8 @@ public class OptionGroup : AggregateRoot<string>
     {
         Name = name;
     }
+
+    public TenantId TenantId { get; set; }
 
     public int? Seq { get; set; }
 

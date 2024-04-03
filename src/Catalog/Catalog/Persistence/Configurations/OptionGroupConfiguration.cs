@@ -11,6 +11,8 @@ public class OptionGroupConfiguration : IEntityTypeConfiguration<OptionGroup>
     {
         builder.ToTable("OptionGroups");
 
+        builder.HasIndex(x => x.TenantId);
+
         builder
             .HasOne(x => x.Product)
             .WithMany(x => x.OptionGroups)

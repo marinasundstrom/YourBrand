@@ -26,6 +26,10 @@ using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
+using YourBrand.Catalog.Services;
+
+using YourBrand.Catalog.Persistence.Interceptors;
+
 string ServiceName = "Catalog";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -97,8 +101,24 @@ builder.Services.AddProductsServices();
 
 builder.Services.AddObservability("Catalog.API", "1.0", builder.Configuration);
 
-builder.Services.AddSqlServer<CatalogContext>(
-    builder.Configuration.GetValue<string>("yourbrand:catalog-svc:db:connectionstring"));
+builder.Services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
+builder.Services.AddDbContext<CatalogContext>((sp, options) =>
+{
+    var connectionString = builder.Configuration.GetValue<string>("yourbrand:catalog-svc:db:connectionstring");
+
+    options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+    options.AddInterceptors(
+        //sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
+        sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+    options
+        //.LogTo(Console.WriteLine)
+        .EnableSensitiveDataLogging();
+#endif
+});
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());
 
@@ -144,6 +164,8 @@ builder.Services
     .AddIdentityServices()
     .AddTenantService();
 
+builder.Services.AddScoped<IDateTime, DateTimeService>();
+
 builder.Services.AddAuthenticationServices(builder.Configuration);
 
 builder.Services.AddAuthorization();
@@ -185,14 +207,18 @@ app.MapHealthChecks("/healthz", new HealthCheckOptions()
 using (var scope = app.Services.CreateScope())
 {
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-
-    //await context.Database.EnsureDeletedAsync();
-    //await context.Database.EnsureCreatedAsync(); 
 
     if (args.Contains("--seed"))
     {
+        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
+        tenantService.SetTenantId(TenantConstants.TenantId);
+
+        var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
+
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
         await SeedData(context, configuration, logger);
         return;
     }
