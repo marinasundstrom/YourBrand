@@ -1,10 +1,11 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ProjectTeam : AuditableEntity, ISoftDelete
+public class ProjectTeam : AuditableEntity, IHasTenant, ISoftDelete
 {
     private ProjectTeam()
     {
@@ -16,6 +17,8 @@ public class ProjectTeam : AuditableEntity, ISoftDelete
     }
 
     public string Id { get; set; } = Guid.NewGuid().ToString();
+
+    public TenantId TenantId { get; set; }
 
     public Project Project { get; set; } = null!;
 

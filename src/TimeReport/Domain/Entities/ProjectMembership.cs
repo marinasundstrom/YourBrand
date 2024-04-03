@@ -1,12 +1,15 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ProjectMembership : AuditableEntity, ISoftDelete
+public class ProjectMembership : AuditableEntity, IHasTenant, ISoftDelete
 {
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public Project Project { get; set; } = null!;
 

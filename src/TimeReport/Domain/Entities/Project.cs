@@ -29,13 +29,13 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
 
     public string Id { get; set; } = null!;
 
+    public TenantId TenantId { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
 
     public Organization Organization { get; set; } = null!;
-
-    public TenantId TenantId { get; set; } = null!;
 
     /// <summary>
     /// Expected hours per week / timesheet

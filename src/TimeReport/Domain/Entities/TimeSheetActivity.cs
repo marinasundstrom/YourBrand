@@ -1,13 +1,14 @@
 ﻿
 using System.Globalization;
 
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheetActivity : AuditableEntity, ISoftDelete
+public class TimeSheetActivity : AuditableEntity, IHasTenant, ISoftDelete
 {
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
@@ -27,6 +28,8 @@ public class TimeSheetActivity : AuditableEntity, ISoftDelete
     }
 
     public string Id { get; private set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public TimeSheet TimeSheet { get; private set; } = null!;
 

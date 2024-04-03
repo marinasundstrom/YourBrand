@@ -1,10 +1,11 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Entry : AuditableEntity
+public class Entry : AuditableEntity, IHasTenant
 {
     public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
         DateOnly date, double? hours, string? description)
@@ -28,6 +29,8 @@ public class Entry : AuditableEntity
     }
 
     public string Id { get; private set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public User User { get; private set; } = null!;
 

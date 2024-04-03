@@ -27,13 +27,13 @@ public class Team : AuditableEntity, ISoftDelete, IHasTenant
 
     public string Id { get; set; } = null!;
 
+    public TenantId TenantId { get; set; }
+
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
 
     public Organization Organization { get; set; } = null!;
-
-    public TenantId TenantId { get; set; } = null!;
 
     public IReadOnlyCollection<User> Members => _members;
 

@@ -10,11 +10,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\SampleTenant\SampleTenant.csproj" />
   </ItemGroup>
 
   <ItemGroup>

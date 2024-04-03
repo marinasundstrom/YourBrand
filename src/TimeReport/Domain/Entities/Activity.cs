@@ -1,10 +1,11 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Activity : AuditableEntity, ISoftDelete
+public class Activity : AuditableEntity, IHasTenant, ISoftDelete
 {
     protected Activity()
     {
@@ -20,6 +21,8 @@ public class Activity : AuditableEntity, ISoftDelete
     }
 
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
 

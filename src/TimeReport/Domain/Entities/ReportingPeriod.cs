@@ -1,9 +1,10 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ReportingPeriod : AuditableEntity
+public class ReportingPeriod : AuditableEntity, IHasTenant
 {
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
@@ -21,6 +22,8 @@ public class ReportingPeriod : AuditableEntity
     }
 
     public string Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public User User { get; private set; } = null!;
 
