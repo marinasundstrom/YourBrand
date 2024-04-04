@@ -98,7 +98,7 @@ public class WarehouseItemEventHandler
         {
             await _notificationsClient.CreateNotificationAsync(new CreateNotification
             {
-                Text = $"Quantity available of {item.Item.Name} is below threshold.",
+                Content = $"Quantity available of {item.Item.Name} is below threshold.",
                 UserId = item.CreatedById,
                 //Link = Link
             });

@@ -32,7 +32,7 @@ public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, I
         {
             await notificationsClient.CreateNotificationAsync(new CreateNotification
             {
-                Text = $"New order #{order.OrderNo}.",
+                Content = $"New order #{order.OrderNo}.",
                 UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"
             });

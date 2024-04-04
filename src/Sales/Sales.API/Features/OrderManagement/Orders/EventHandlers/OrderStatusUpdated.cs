@@ -47,7 +47,7 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
         {
             await _notificationsClient.CreateNotificationAsync(new CreateNotification
             {
-                Text = $"New order #{order.OrderNo}.",
+                Content = $"New order #{order.OrderNo}.",
                 UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"
             });
