@@ -50,10 +50,12 @@ public sealed class CustomProfileService<TUser> : Duende.IdentityServer.AspNetId
         */
     }
 
+    /*
     public async Task IsActiveAsync(IsActiveContext context)
     {
         var user = await UserManager.GetUserAsync(context.Subject);
 
         context.IsActive = (user != null); // && user.;
     }
+    */
 }

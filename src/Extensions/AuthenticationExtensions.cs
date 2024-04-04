@@ -51,6 +51,8 @@ public static class AuthenticationExtensions
                             ValidTypes = new[] { "at+jwt" }
                         };
 
+                        options.SaveToken = true;
+
                         // We have to hook the OnMessageReceived event in order to
                         // allow the JWT authentication handler to read the access
                         // token from the query string when a WebSocket or 

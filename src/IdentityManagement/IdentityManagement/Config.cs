@@ -89,6 +89,22 @@ public static class Config
             },
             new Duende.IdentityServer.Models.Client
             {
+                ClientId = "appservice",
+
+                // use token exchange
+                AllowedGrantTypes = [ OidcConstants.GrantTypes.TokenExchange ],
+
+                // secret for authentication
+                ClientSecrets =
+                [
+                    new Secret("foobar123!".Sha256())
+                ],
+
+                // scopes that client has access to
+                AllowedScopes = [ "profile", "email", "myapi" ],
+            },
+            new Duende.IdentityServer.Models.Client
+            {
                 ClientId = "accountant",
 
                 // no interactive user, use the clientid/secret for authentication

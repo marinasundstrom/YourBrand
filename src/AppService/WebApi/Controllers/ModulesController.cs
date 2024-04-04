@@ -1,7 +1,10 @@
 ﻿using Asp.Versioning;
 
+using IdentityModel.Client;
+
 using MediatR;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +15,13 @@ namespace YourBrand.WebApi.Controllers;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-[AllowAnonymous]
+[Authorize]
 public class ModulesController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ModuleDto>>> GetModules(
         [FromServices] IMediator mediator, CancellationToken cancellationToken)
     {
@@ -31,6 +35,9 @@ public class ModulesController : ControllerBase
     public async Task<ActionResult> ToggleModule(Guid id,
     [FromServices] IMediator mediator, CancellationToken cancellationToken)
     {
+        //var foo = await HttpContext.GetTokenAsync("access_token");
+        //Console.WriteLine(foo);
+        
         await mediator.Send(new ToggleModule(id), cancellationToken);
         return Ok();
     }
