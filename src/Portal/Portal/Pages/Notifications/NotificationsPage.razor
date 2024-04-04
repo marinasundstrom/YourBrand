@@ -13,7 +13,6 @@
 <MudTable T="Notification" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Notification>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
         <MudTh></MudTh>
-        <MudTh><MudTableSortLabel T="Notification" SortLabel="Title">@T["Header_Title"]</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="Notification" SortLabel="Text">@T["Header_Text"]</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel T="Notification" SortLabel="Published">@T["Header_Published"]</MudTableSortLabel></MudTh>
     </HeaderContent>
@@ -24,8 +23,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Circle" />
             }
         </MudTd>
-        <MudTd DataLabel="@T["Header_Title"]">@context.Title</MudTd>
-        <MudTd DataLabel="@T["Header_Text"]">@context.Text</MudTd>
+        <MudTd DataLabel="@T["Header_Text"]">@context.Content</MudTd>
         <MudTd DataLabel="@T["Header_Published"]">@(context.Published.Date == DateTime.Now.Date ? context.Published.ToString("HH:mm") : context.Published.ToString("yyyy-MM-dd HH:mm"))</MudTd>
     </RowTemplate>
     <NoRecordsContent>

@@ -1,35 +1,34 @@
-using MediatR;
+using System.Diagnostics.Contracts;
 
-using YourBrand.Notifications.Client;
+using MassTransit;
+
+using YourBrand.Notifications.Contracts;
+
+using MediatR;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Application.Notifications.Commands;
 
 public sealed record CreateNotificationCommand(
-    string Title,
-    string Text,
+    string Content,
     string Link,
     string UserId,
     DateTimeOffset? ScheduledFor
     ) : IRequest
 {
-    public class CreateNotificationCommandHandler : IRequestHandler<CreateNotificationCommand>
+    public class CreateNotificationCommandHandler(IRequestClient<SendNotification> notificationsClient, ICurrentUserService currentUserService, ITenantService tenantService) : IRequestHandler<CreateNotificationCommand>
     {
-        private readonly INotificationsClient _notificationsClient;
-
-        public CreateNotificationCommandHandler(YourBrand.Notifications.Client.INotificationsClient notificationsClient)
-        {
-            _notificationsClient = notificationsClient;
-        }
-
         public async Task Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
-            await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+            await notificationsClient.GetResponse<SendNotificationResponse>(new SendNotification
             {
-                Title = request.Title,
-                Text = request.Text,
+                TenantId = tenantService.TenantId!,
+                Content = request.Content,
                 Link = request.Link,
                 UserId = request.UserId,
-                ScheduledFor = request.ScheduledFor
+                ScheduledFor = request.ScheduledFor,
+                CreatedById = currentUserService.UserId!
             }, cancellationToken);
         }
     }

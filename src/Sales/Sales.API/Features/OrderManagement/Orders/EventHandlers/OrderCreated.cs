@@ -30,9 +30,8 @@ public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, I
     {
         try
         {
-            await notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+            await notificationsClient.CreateNotificationAsync(new CreateNotification
             {
-                Title = "Sales",
                 Text = $"New order #{order.OrderNo}.",
                 UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"

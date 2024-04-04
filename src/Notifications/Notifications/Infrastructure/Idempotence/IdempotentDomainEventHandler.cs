@@ -11,11 +11,11 @@ public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHan
     where TDomainEvent : DomainEvent
 {
     private readonly IDomainEventHandler<TDomainEvent> decorated;
-    private readonly WorkerContext dbContext;
+    private readonly NotificationsContext dbContext;
 
     public IdempotentDomainEventHandler(
         IDomainEventHandler<TDomainEvent> decorated,
-        WorkerContext dbContext)
+        NotificationsContext dbContext)
     {
         this.decorated = decorated;
         this.dbContext = dbContext;

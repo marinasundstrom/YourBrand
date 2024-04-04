@@ -1,24 +1,26 @@
+using MassTransit;
+
 using MediatR;
 
-using YourBrand.Notifications.Client;
+using YourBrand.Identity;
+using YourBrand.Notifications.Contracts;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Application.Notifications.Commands;
 
-public record MarkNotificationAsReadCommand(string NotificationId) : IRequest
+
+public sealed record MarkNotificationAsReadCommand(string NotificationId) : IRequest
 {
-    public class MarkNotificationAsReadCommandHandler : IRequestHandler<MarkNotificationAsReadCommand>
+    public class MarkNotificationAsReadCommandHandler(IRequestClient<MarkNotificationAsRead> notificationsClient, ICurrentUserService currentUserService, ITenantService tenantService) : IRequestHandler<MarkNotificationAsReadCommand>
     {
-        private readonly INotificationsClient _notificationsClient;
-
-        public MarkNotificationAsReadCommandHandler(YourBrand.Notifications.Client.INotificationsClient notificationsClient)
-        {
-            _notificationsClient = notificationsClient;
-        }
-
         public async Task Handle(MarkNotificationAsReadCommand request, CancellationToken cancellationToken)
         {
-            await _notificationsClient.MarkNotificationAsReadAsync(request.NotificationId);
-
+            await notificationsClient.GetResponse<MarkNotificationAsReadResponse>(new MarkNotificationAsRead
+            {
+                TenantId = tenantService.TenantId!,
+                NotificationId = request.NotificationId,
+                CreatedById = currentUserService.UserId!
+            }, cancellationToken);
         }
     }
 }

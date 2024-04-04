@@ -22,7 +22,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-     <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
+    <ProjectReference
+      Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference
+      Include="..\..\Notifications\Notifications.Contracts\Notifications.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference

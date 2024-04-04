@@ -6,6 +6,7 @@ using YourBrand.Identity;
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 
@@ -43,28 +44,32 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     {
         if (context == null) return;
 
+        foreach (var entry in context.ChangeTracker.Entries<IHasTenant>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+
+                entry.Entity.TenantId = _tenantService.TenantId.GetValueOrDefault();
+            }
+        }
+
         foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = _currentUserService.UserId ?? "Foo";
+                entry.Entity.CreatedById = _currentUserService.UserId!;
                 entry.Entity.Created = _dateTime.Now;
-
-                if (entry.Entity is IHasTenant hasTenant)
-                {
-                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
-                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = _currentUserService.UserId ?? "Foo";
+                entry.Entity.LastModifiedById = _currentUserService.UserId;
                 entry.Entity.LastModified = _dateTime.Now;
             }
             else if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDelete softDelete)
                 {
-                    softDelete.DeletedBy = _currentUserService.UserId ?? "Foo";
+                    softDelete.DeletedById = _currentUserService.UserId;
                     softDelete.Deleted = _dateTime.Now;
 
                     entry.State = EntityState.Modified;

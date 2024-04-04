@@ -52,8 +52,7 @@ public class NotificationsController : Controller
     public async Task<ActionResult> CreateNotification(CreateNotificationDto createNotificationDto, CancellationToken cancellationToken)
     {
         await _mediator.Send(new CreateNotificationCommand(
-            createNotificationDto.Title,
-            createNotificationDto.Text,
+            createNotificationDto.Content,
             createNotificationDto.Link,
             createNotificationDto.UserId,
             createNotificationDto.ScheduledFor),
@@ -64,8 +63,7 @@ public class NotificationsController : Controller
 }
 
 public sealed record CreateNotificationDto(
-    string Title,
-    string Text,
+    string Content,
     string? Link,
     string? UserId,
     DateTimeOffset? ScheduledFor

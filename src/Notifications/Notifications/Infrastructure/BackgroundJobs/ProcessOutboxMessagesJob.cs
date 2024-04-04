@@ -17,11 +17,11 @@ namespace YourBrand.Notifications.Infrastructure.BackgroundJobs;
 [DisallowConcurrentExecution]
 public sealed class ProcessOutboxMessagesJob : IJob
 {
-    private readonly WorkerContext dbContext;
+    private readonly NotificationsContext dbContext;
     private readonly IDomainEventDispatcher domainEventDispatcher;
     private readonly ILogger<ProcessOutboxMessagesJob> logger;
 
-    public ProcessOutboxMessagesJob(WorkerContext dbContext, IDomainEventDispatcher domainEventDispatcher,
+    public ProcessOutboxMessagesJob(NotificationsContext dbContext, IDomainEventDispatcher domainEventDispatcher,
         ILogger<ProcessOutboxMessagesJob> logger)
     {
         this.dbContext = dbContext;

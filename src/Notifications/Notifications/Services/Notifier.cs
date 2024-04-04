@@ -1,5 +1,4 @@
-﻿using Contracts;
-
+﻿
 using MassTransit;
 
 namespace YourBrand.Notifications.Services;
@@ -15,6 +14,6 @@ public class Notifier : INotifier
 
     public async Task Notify()
     {
-        await _bus.Publish(new RandomNotification($"This message was sent at: {DateTime.Now}"));
+        //await _bus.Publish(new RandomNotification($"This message was sent at: {DateTime.Now}"));
     }
 }

@@ -1,4 +1,4 @@
-using Contracts;
+using YourBrand.Notifications.Contracts;
 
 using MassTransit;
 
@@ -33,7 +33,7 @@ public class NotificationPublisher : INotificationPublisher
         notification.Published = DateTime.Now;
         await context.SaveChangesAsync();
 
-        var notifcationDto = new NotificationDto(notification.Id, notification.Published, notification.Title, notification.Text, notification.Link, notification.UserId, notification.IsRead, notification.Created, notification.CreatedBy, notification.LastModified, notification.LastModifiedBy);
+        var notifcationDto = new NotificationDto(notification.Id, notification.Published, notification.Content, notification.Link, notification.UserId, notification.IsRead, notification.Created, notification.CreatedById, notification.LastModified, notification.LastModifiedById);
 
         await _bus.Publish(notifcationDto);
     }

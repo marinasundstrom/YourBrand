@@ -6,7 +6,7 @@ using YourBrand.Notifications.Domain.Events;
 
 namespace YourBrand.Notifications.Application.Notifications.Commands;
 
-public record CreateNotificationCommand(string Title, string? Text, string? Link, string? UserId, DateTime? ScheduledFor) : IRequest
+public record CreateNotificationCommand(string? Content, string? Link, string? UserId, DateTimeOffset? ScheduledFor) : IRequest
 {
     public class CreateNotificationCommandHandler : IRequestHandler<CreateNotificationCommand>
     {
@@ -62,8 +62,7 @@ public record CreateNotificationCommand(string Title, string? Text, string? Link
         {
             var notification = new Notification();
             notification.Id = Guid.NewGuid().ToString();
-            notification.Title = request.Title;
-            notification.Text = request.Text;
+            notification.Content = request.Content;
             notification.Link = request.Link;
             notification.UserId = userId ?? request.UserId;
             notification.ScheduledFor = request.ScheduledFor;

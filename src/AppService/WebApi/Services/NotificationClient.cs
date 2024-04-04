@@ -15,7 +15,7 @@ public class NotificationClient : INotificationClient
         _notificationsHubContext = notificationsHubContext;
     }
 
-    public async Task NotificationReceived(NotificationDto notification)
+    public async Task NotificationReceived(Notification notification)
     {
         if (notification.UserId is not null)
         {

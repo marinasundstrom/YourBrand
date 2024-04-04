@@ -1,12 +1,10 @@
-﻿using Contracts;
-
-using MassTransit;
+﻿using MassTransit;
 
 using YourBrand.Application.Common.Interfaces;
 
 namespace YourBrand.Consumers;
 
-public class NotificationConsumer : IConsumer<NotificationDto>
+public class NotificationConsumer : IConsumer<YourBrand.Notifications.Contracts.NotificationDto>
 {
     private readonly INotificationClient _notificationClient;
 
@@ -15,23 +13,22 @@ public class NotificationConsumer : IConsumer<NotificationDto>
         _notificationClient = notificationClient;
     }
 
-    public async Task Consume(ConsumeContext<NotificationDto> context)
+    public async Task Consume(ConsumeContext<YourBrand.Notifications.Contracts.NotificationDto> context)
     {
         var notification = context.Message;
 
-        var dto = new YourBrand.Notifications.Client.NotificationDto()
+        var dto = new YourBrand.Notifications.Client.Notification()
         {
             Id = notification.Id,
             Published = notification.Published.GetValueOrDefault(),
-            Title = notification.Title,
-            Text = notification.Text,
+            Content = notification.Content,
             Link = notification.Link,
             UserId = notification.UserId,
             IsRead = notification.IsRead,
             Created = notification.Created,
             CreatedBy = notification.CreatedBy,
             LastModified = notification.LastModified,
-            LastModifiedBy = notification.LastModifiedBy
+            LastModifiedBy = notification.LastModifiedById
         };
 
         await _notificationClient.NotificationReceived(dto);

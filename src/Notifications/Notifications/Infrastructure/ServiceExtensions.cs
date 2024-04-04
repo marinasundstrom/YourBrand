@@ -40,10 +40,10 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<WorkerContext>(configuration.GetConnectionString("DefaultConnection"),
+        services.AddSqlServer<NotificationsContext>(configuration.GetConnectionString("DefaultConnection"),
         options => options.EnableRetryOnFailure());
 
-        services.AddScoped<IWorkerContext>(sp => sp.GetRequiredService<WorkerContext>());
+        services.AddScoped<IWorkerContext>(sp => sp.GetRequiredService<NotificationsContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 

@@ -42,17 +42,21 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
     {
         if (context == null) return;
 
+        foreach (var entry in context.ChangeTracker.Entries<IHasTenant>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+
+                entry.Entity.TenantId = _tenantService.TenantId.GetValueOrDefault();
+            }
+        }
+
         foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
         {
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedById = _currentUserService.UserId!;
                 entry.Entity.Created = _dateTime.Now;
-
-                if (entry.Entity is IHasTenant e)
-                {
-                    e.TenantId = _tenantService.TenantId.GetValueOrDefault();
-                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {

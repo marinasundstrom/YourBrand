@@ -65,7 +65,7 @@ public record GetNotificationsQuery(string? UserId, string? Tag,
             var notifications = await query.ToListAsync(cancellationToken);
 
             return new NotificationsResults(
-                notifications.Select(notification => new NotificationDto(notification.Id, notification.Title, notification.Text, notification.Tag, notification.Link, notification.UserId, notification.IsRead, notification.Read, notification.Published, notification.ScheduledFor, notification.Created, notification.CreatedBy, notification.LastModified, notification.LastModifiedBy)),
+                notifications.Select(notification => new NotificationDto(notification.Id, notification.Content, notification.Tag, notification.Link, notification.UserId, notification.IsRead, notification.Read, notification.Published, notification.ScheduledFor, notification.Created, notification.CreatedById, notification.LastModified, notification.LastModifiedById)),
                 unreadNotificationsCount,
                 totalCount);
         }

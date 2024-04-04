@@ -27,7 +27,7 @@ public record GetNotificationsQuery(bool IncludeUnreadNotificationsCount,
             var notifications = results.Items;
 
             return new NotificationsResults(
-                notifications.Select(notification => new NotificationDto(notification.Id, notification.Title, notification.Text, notification.Link, notification.Published.GetValueOrDefault().DateTime, notification.IsRead)),
+                notifications.Select(notification => new NotificationDto(notification.Id, notification.Content, notification.Link, notification.Published.GetValueOrDefault().DateTime, notification.IsRead)),
                 results.UnreadNotificationsCount,
                 results.TotalCount);
         }

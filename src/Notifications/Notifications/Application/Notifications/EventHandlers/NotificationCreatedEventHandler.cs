@@ -33,7 +33,7 @@ public class NotificationCreatedEventHandler : IDomainEventHandler<NotificationC
 
         if (notification.ScheduledFor is not null)
         {
-            if (notification.ScheduledFor < DateTime.UtcNow)
+            if (notification.ScheduledFor < DateTimeOffset.UtcNow)
             {
                 throw new InvalidOperationException("Cannot send notification back in time!");
             }

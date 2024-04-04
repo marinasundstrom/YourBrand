@@ -299,6 +299,10 @@ components:
           type: string
         enabled:
           type: boolean
+        dependantOn:
+          type: array
+          items:
+            type: string
     ProblemDetails:
       type: object
       additionalProperties:
@@ -350,11 +354,8 @@ components:
       properties:
         id:
           type: string
-        title:
+        content:
           type: string
-        text:
-          type: string
-          nullable: true
         link:
           type: string
           nullable: true
@@ -376,9 +377,7 @@ components:
       type: object
       additionalProperties: false
       properties:
-        title:
-          type: string
-        text:
+        content:
           type: string
         link:
           type: string

@@ -2,6 +2,8 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Tenancy;
+
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Notifications.Domain.Entities;
@@ -10,12 +12,12 @@ using YourBrand.Notifications.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Notifications.Infrastructure.Persistence;
 
-public class WorkerContext : DbContext, IWorkerContext
+public class NotificationsContext : DbContext, IWorkerContext
 {
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
-    public WorkerContext(
-        DbContextOptions<WorkerContext> options,
+    public NotificationsContext(
+        DbContextOptions<NotificationsContext> options,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
@@ -62,7 +64,7 @@ public class WorkerContext : DbContext, IWorkerContext
             return new OutboxMessage()
             {
                 Id = domainEvent.Id,
-                OccurredOnUtc = DateTime.UtcNow,
+                OccurredOnUtc = DateTime.Now,
                 Type = domainEvent.GetType().Name,
                 Content = JsonConvert.SerializeObject(
                     domainEvent,
@@ -76,5 +78,10 @@ public class WorkerContext : DbContext, IWorkerContext
         this.Set<OutboxMessage>().AddRange(outboxMessages);
 
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
     }
 }

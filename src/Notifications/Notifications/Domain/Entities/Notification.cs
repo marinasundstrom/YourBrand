@@ -1,8 +1,10 @@
 ﻿using YourBrand.Notifications.Domain.Common;
+using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Notifications.Domain.Entities;
 
-public class Notification : AuditableEntity, ISoftDelete
+public class Notification : AuditableEntity, IHasTenant, ISoftDelete
 {
     public Notification()
     {
@@ -12,15 +14,14 @@ public class Notification : AuditableEntity, ISoftDelete
     public Notification(string title, string text)
     {
         Id = Guid.NewGuid().ToString();
-        Title = title;
-        Text = text;
+        Content = text;
     }
 
     public string Id { get; set; } = null!;
 
-    public string Title { get; set; } = null!;
+    public TenantId TenantId { get; set; }
 
-    public string? Text { get; set; }
+    public string? Content { get; set; }
 
     public string? Tag { get; set; }
 
@@ -28,18 +29,18 @@ public class Notification : AuditableEntity, ISoftDelete
 
     public bool IsRead { get; set; }
 
-    public DateTime? Read { get; set; }
+    public DateTimeOffset? Read { get; set; }
 
     public string? ItemId { get; set; }
 
     public string? UserId { get; set; }
 
-    public DateTime? Published { get; set; }
+    public DateTimeOffset? Published { get; set; }
 
-    public DateTime? ScheduledFor { get; set; }
+    public DateTimeOffset? ScheduledFor { get; set; }
 
     public string? ScheduledJobId { get; set; }
 
-    public DateTime? Deleted { get; set; }
-    public string? DeletedBy { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
+    public string? DeletedById { get; set; }
 }

@@ -1,5 +1,5 @@
 ﻿namespace YourBrand.Notifications.Application.Notifications;
 
 public record NotificationDto(
-    string Id, string Title, string? Text, string? Tag, string? Link, string? UserId, bool IsRead, DateTime? Read, DateTime? Published, DateTime? ScheduledFor,
-    DateTime Created, string CreatedBy, DateTime? LastModified, string? LastModifiedBy);
+    string Id, string? Content, string? Tag, string? Link, string? UserId, bool IsRead, DateTimeOffset? Read, DateTimeOffset? Published, DateTimeOffset? ScheduledFor,
+    DateTimeOffset Created, string CreatedBy, DateTimeOffset? LastModified, string? LastModifiedBy);

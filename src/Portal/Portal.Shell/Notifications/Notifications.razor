@@ -42,7 +42,7 @@
 
                     <MudMenuItem Class="@cls" OnClick="async () => await OnNotificationClicked(notification)">
                         @*<MudText Typo="Typo.subtitle2">@notification.Title</MudText>*@
-                        <MudText Typo="Typo.body1" Class="mb-2">@notification.Text</MudText>
+                        <MudText Typo="Typo.body1" Class="mb-2">@notification.Content</MudText>
                         <MudText Typo="Typo.body2">@($"{"test"} • {(notification.Published.Date == DateTime.Now.Date ? notification.Published.ToString("HH:mm") : notification.Published.ToString("yyyy-MM-dd HH:mm"))}")</MudText>
                     </MudMenuItem>
 
@@ -219,7 +219,7 @@
         totalNotificationsCount++;
         unreadNotificationsCount++;
 
-        Snackbar.Add($"<h6>{notification.Title}</h6><p>{notification.Text}</p>", Severity.Info, options =>
+        Snackbar.Add($"{notification.Content}", Severity.Info, options =>
         {
             //options.Icon = "";
             options.VisibleStateDuration = 5000;

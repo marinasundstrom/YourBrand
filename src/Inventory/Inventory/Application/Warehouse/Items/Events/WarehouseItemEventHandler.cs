@@ -96,9 +96,8 @@ public class WarehouseItemEventHandler
     {
         try
         {
-            await _notificationsClient.CreateNotificationAsync(new CreateNotificationDto
+            await _notificationsClient.CreateNotificationAsync(new CreateNotification
             {
-                Title = "Inventory",
                 Text = $"Quantity available of {item.Item.Name} is below threshold.",
                 UserId = item.CreatedById,
                 //Link = Link
