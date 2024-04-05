@@ -87,17 +87,17 @@ builder.Services
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
-builder.Services.AddScoped<ITenantService, TenantService>();
+builder.Services.AddScoped<ITenantContext, TenantContext>();
 
 builder.Services.AddNotificationsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/notifications/");
 }, b => { });
 
-//builder.Services.AddTenantService();
-//builder.Services.AddCurrentUserService();
+//builder.Services.AddTenantContext();
+//builder.Services.AddUserContext();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -156,8 +156,8 @@ try
 
         if (args.Contains("--seed"))
         {
-            var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-            tenantService.SetTenantId(TenantConstants.TenantId);
+            var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+            tenantContext.SetTenantId(TenantConstants.TenantId);
 
             var context = scope.ServiceProvider.GetRequiredService<SalesContext>();
 

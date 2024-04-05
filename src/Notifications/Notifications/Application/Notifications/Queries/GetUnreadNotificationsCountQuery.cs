@@ -14,7 +14,7 @@ public record GetUnreadNotificationsCountQuery(string? UserId) : IRequest<int>
     {
         private readonly IWorkerContext context;
 
-        public GetUnreadNotificationsCountQueryHandler(IWorkerContext context, ICurrentUserService currentUserService)
+        public GetUnreadNotificationsCountQueryHandler(IWorkerContext context, IUserContext userContext)
         {
             this.context = context;
         }

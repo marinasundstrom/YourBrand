@@ -10,19 +10,19 @@ public sealed record StartSession : IRequest<string>
     sealed class Handler : IRequestHandler<StartSession, string>
     {
         private readonly ISessionClient sessionClient;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public Handler(
             YourBrand.Analytics.ISessionClient sessionClient,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             this.sessionClient = sessionClient;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<string> Handle(StartSession request, CancellationToken cancellationToken)
         {
-            return await sessionClient.InitSessionAsync(currentUserService.ClientId, new YourBrand.Analytics.SessionData() { IpAddress = currentUserService.GetRemoteIPAddress() }, cancellationToken);
+            return await sessionClient.InitSessionAsync(userContext.ClientId, new YourBrand.Analytics.SessionData() { IpAddress = userContext.GetRemoteIPAddress() }, cancellationToken);
         }
     }
 }

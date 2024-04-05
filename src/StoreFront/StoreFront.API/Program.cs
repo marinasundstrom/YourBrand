@@ -83,8 +83,8 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Progra
 builder.Services.AddCartServices();
 
 builder.Services
-    .AddScoped<ICurrentUserService, CurrentUserService>()
-    .AddSingleton<ITenantService, TenantService>();
+    .AddScoped<IUserContext, UserContext>()
+    .AddSingleton<ITenantContext, TenantContext>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -294,7 +294,7 @@ static void AddClients(WebApplicationBuilder builder)
 // INFO: Makes Program class visible to IntegrationTests.
 public partial class Program { }
 
-public class AddTenantIdFilter<T>(ITenantService tenantService) :
+public class AddTenantIdFilter<T>(ITenantContext tenantContext) :
     IFilter<SendContext<T>>
     where T : class
 {
@@ -304,15 +304,15 @@ public class AddTenantIdFilter<T>(ITenantService tenantService) :
 
     public Task Send(SendContext<T> context, IPipe<SendContext<T>> next)
     {
-        context.Headers.Set("TenantId", tenantService.TenantId);
+        context.Headers.Set("TenantId", tenantContext.TenantId);
 
-        Console.WriteLine("HEADER: " + tenantService.TenantId);
+        Console.WriteLine("HEADER: " + tenantContext.TenantId);
 
         return next.Send(context);
     }
 }
 
-public class AddTenantIdFilter2<T>(ITenantService tenantService) :
+public class AddTenantIdFilter2<T>(ITenantContext tenantContext) :
     IFilter<PublishContext<T>>
     where T : class
 {
@@ -322,9 +322,9 @@ public class AddTenantIdFilter2<T>(ITenantService tenantService) :
 
     public Task Send(PublishContext<T> context, IPipe<PublishContext<T>> next)
     {
-        context.Headers.Set("TenantId", tenantService.TenantId);
+        context.Headers.Set("TenantId", tenantContext.TenantId);
 
-        Console.WriteLine("HEADER: " + tenantService.TenantId);
+        Console.WriteLine("HEADER: " + tenantContext.TenantId);
 
         return next.Send(context);
     }

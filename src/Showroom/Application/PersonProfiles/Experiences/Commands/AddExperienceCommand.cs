@@ -22,14 +22,14 @@ public record AddExperienceCommand(
     class CreatePersonProfileCommandHandler : IRequestHandler<AddExperienceCommand, ExperienceDto>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public CreatePersonProfileCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ExperienceDto> Handle(AddExperienceCommand request, CancellationToken cancellationToken)

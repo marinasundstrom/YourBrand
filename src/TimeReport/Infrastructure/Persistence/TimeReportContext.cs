@@ -22,19 +22,19 @@ namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
 public class TimeReportContext : DbContext, ITimeReportContext
 {
-    private readonly ITenantService _tenantService;
+    private readonly ITenantContext _tenantContext;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
     private readonly string _tenantId;
 
     public TimeReportContext(
         DbContextOptions<TimeReportContext> options,
-        ITenantService tenantService,
+        ITenantContext tenantContext,
         IApiApplicationContext apiApplicationContext,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _tenantService = tenantService;
+        _tenantContext = tenantContext;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-        _tenantId = _tenantService.TenantId!;
+        _tenantId = _tenantContext.TenantId!;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

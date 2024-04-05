@@ -12,10 +12,10 @@ public record GetOrderStatusesQuery(int Page = 0, int PageSize = 10, string? Sea
 {
     class GetOrderStatusesQueryHandler(
         ISalesContext context,
-        ICurrentUserService currentUserService) : IRequestHandler<GetOrderStatusesQuery, PagedResult<OrderStatusDto>>
+        IUserContext userContext) : IRequestHandler<GetOrderStatusesQuery, PagedResult<OrderStatusDto>>
     {
         private readonly ISalesContext _context = context;
-        private readonly ICurrentUserService currentUserService = currentUserService;
+        private readonly IUserContext userContext = userContext;
 
         public async Task<PagedResult<OrderStatusDto>> Handle(GetOrderStatusesQuery request, CancellationToken cancellationToken)
         {

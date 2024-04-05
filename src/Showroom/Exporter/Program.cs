@@ -25,7 +25,7 @@ services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program
 services.AddLogging();
 services.AddInfrastructure(configuration);
 services.AddScoped<IApiApplicationContext>(sp => Substitute.For<IApiApplicationContext>());
-services.AddScoped<ICurrentUserService>(sp => Substitute.For<ICurrentUserService>());
+services.AddScoped<IUserContext>(sp => Substitute.For<IUserContext>());
 
 var provider = services.BuildServiceProvider();
 

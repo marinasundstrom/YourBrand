@@ -69,7 +69,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddEndpointsApiExplorer();
 

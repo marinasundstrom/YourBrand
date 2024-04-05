@@ -13,12 +13,12 @@ public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
     private readonly ILogger<ApiKeysUserCreatedConsumer> _logger;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public ApiKeysUserCreatedConsumer(IMediator mediator, ICurrentUserService currentUserService, IRequestClient<GetUser> requestClient, ILogger<ApiKeysUserCreatedConsumer> logger)
+    public ApiKeysUserCreatedConsumer(IMediator mediator, IUserContext userContext, IRequestClient<GetUser> requestClient, ILogger<ApiKeysUserCreatedConsumer> logger)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _requestClient = requestClient;
         _logger = logger;
     }
@@ -29,7 +29,7 @@ public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
         {
             var message = context.Message;
 
-            _currentUserService.SetCurrentUser(message.CreatedById);
+            _userContext.SetCurrentUser(message.CreatedById);
 
             var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
             var message2 = messageR.Message;
@@ -46,19 +46,19 @@ public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
 public class ApiKeysUserDeletedConsumer : IConsumer<UserDeleted>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public ApiKeysUserDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public ApiKeysUserDeletedConsumer(IMediator mediator, IUserContext userContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Consume(ConsumeContext<UserDeleted> context)
     {
         var message = context.Message;
 
-        _currentUserService.SetCurrentUser(message.DeletedById);
+        _userContext.SetCurrentUser(message.DeletedById);
 
         await _mediator.Send(new DeleteUserCommand(message.UserId));
     }
@@ -68,20 +68,20 @@ public class ApiKeysUserUpdatedConsumer : IConsumer<UserUpdated>
 {
     private readonly IMediator _mediator;
     private readonly IRequestClient<GetUser> _requestClient;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public ApiKeysUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ICurrentUserService currentUserService)
+    public ApiKeysUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, IUserContext userContext)
     {
         _mediator = mediator;
         _requestClient = requestClient;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Consume(ConsumeContext<UserUpdated> context)
     {
         var message = context.Message;
 
-        _currentUserService.SetCurrentUser(message.UpdatedById);
+        _userContext.SetCurrentUser(message.UpdatedById);
 
         var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
         var message2 = messageR.Message;

@@ -14,10 +14,10 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationD
     private readonly TenantId _tenantId;
 
     public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options, ITenantService tenantService)
+        DbContextOptions<ApplicationDbContext> options, ITenantContext tenantContext)
         : base(options)
     {
-        _tenantId = tenantService.TenantId.GetValueOrDefault();
+        _tenantId = tenantContext.TenantId.GetValueOrDefault();
 
         Console.WriteLine("TENANT: " + _tenantId);
     }

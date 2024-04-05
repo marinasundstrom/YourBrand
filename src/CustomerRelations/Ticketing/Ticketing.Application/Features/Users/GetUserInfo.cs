@@ -18,17 +18,17 @@ public record GetUserInfo() : IRequest<Result<UserInfoDto>>
     public class Handler : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
     {
         private readonly IUserRepository userRepository;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
-        public Handler(IUserRepository userRepository, ICurrentUserService currentUserService)
+        public Handler(IUserRepository userRepository, IUserContext userContext)
         {
             this.userRepository = userRepository;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<Result<UserInfoDto>> Handle(GetUserInfo request, CancellationToken cancellationToken)
         {
-            var user = await userRepository.FindByIdAsync(currentUserService.UserId!, cancellationToken);
+            var user = await userRepository.FindByIdAsync(userContext.UserId!, cancellationToken);
 
             if (user is null)
             {

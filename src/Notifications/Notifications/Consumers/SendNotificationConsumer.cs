@@ -10,14 +10,14 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Notifications.Consumers;
 
-public class SendNotificationConsumer(IMediator mediator, ICurrentUserService currentUserService, ITenantService tenantService) : IConsumer<SendNotification>
+public class SendNotificationConsumer(IMediator mediator, IUserContext userContext, ITenantContext tenantContext) : IConsumer<SendNotification>
 {
     public async Task Consume(ConsumeContext<SendNotification> context)
     {
         var message = context.Message;
 
-        tenantService.SetTenantId(message.TenantId);
-        currentUserService.SetCurrentUser(message.CreatedById);
+        tenantContext.SetTenantId(message.TenantId);
+        userContext.SetCurrentUser(message.CreatedById);
 
         await mediator.Send(new CreateNotificationCommand(message.Content, message.Link, message.UserId, message.ScheduledFor));
 
@@ -25,14 +25,14 @@ public class SendNotificationConsumer(IMediator mediator, ICurrentUserService cu
     }
 }
 
-public class MarkAllNotificationsAsReadConsumer(IMediator mediator, ICurrentUserService currentUserService, ITenantService tenantService) : IConsumer<MarkAllNotificationsAsRead>
+public class MarkAllNotificationsAsReadConsumer(IMediator mediator, IUserContext userContext, ITenantContext tenantContext) : IConsumer<MarkAllNotificationsAsRead>
 {
     public async Task Consume(ConsumeContext<MarkAllNotificationsAsRead> context)
     {
         var message = context.Message;
 
-        tenantService.SetTenantId(message.TenantId);
-        currentUserService.SetCurrentUser(message.CreatedById);
+        tenantContext.SetTenantId(message.TenantId);
+        userContext.SetCurrentUser(message.CreatedById);
 
         await mediator.Send(new MarkAllNotificationsAsReadCommand());
 
@@ -40,14 +40,14 @@ public class MarkAllNotificationsAsReadConsumer(IMediator mediator, ICurrentUser
     }
 }
 
-public class MarkNotificationAsReadConsumer(IMediator mediator, ICurrentUserService currentUserService, ITenantService tenantService) : IConsumer<MarkNotificationAsRead>
+public class MarkNotificationAsReadConsumer(IMediator mediator, IUserContext userContext, ITenantContext tenantContext) : IConsumer<MarkNotificationAsRead>
 {
     public async Task Consume(ConsumeContext<MarkNotificationAsRead> context)
     {
         var message = context.Message;
 
-        tenantService.SetTenantId(message.TenantId);
-        currentUserService.SetCurrentUser(message.CreatedById);
+        tenantContext.SetTenantId(message.TenantId);
+        userContext.SetCurrentUser(message.CreatedById);
 
         await mediator.Send(new MarkNotificationAsReadCommand(message.NotificationId));
 

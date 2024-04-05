@@ -23,12 +23,12 @@ public class PaymentsContext : DbContext, IPaymentsContext
 
     public PaymentsContext(
         DbContextOptions<PaymentsContext> options,
-        ITenantService tenantService,
+        ITenantContext tenantContext,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
 
-        _tenantId = tenantService.TenantId.GetValueOrDefault();
+        _tenantId = tenantContext.TenantId.GetValueOrDefault();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

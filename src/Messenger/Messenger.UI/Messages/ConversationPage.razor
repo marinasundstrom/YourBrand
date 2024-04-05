@@ -13,7 +13,7 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 @inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
-@inject YourBrand.Portal.Services.ICurrentUserService CurrentUserService
+@inject YourBrand.Portal.Services.IUserContext UserContext
 @inject YourBrand.Portal.Theming.ThemeManager ThemeManager
 @inject IJSRuntime JSRuntime
 <AppPageTitle>Chat - YourBrand</AppPageTitle>
@@ -320,7 +320,7 @@
 
         var authenticationState = await AuthenticationStateTask;
 
-        //userId = await CurrentUserService.GetUserId();
+        //userId = await UserContext.GetUserId();
 
         Console.WriteLine("Is auth: " + authenticationState.User.Identity.IsAuthenticated);
 
@@ -330,7 +330,7 @@
 
         Console.WriteLine(userId);
 
-        isCurrentUserAdmin = await CurrentUserService.IsUserInRole(YourBrand.Portal.Roles.Administrator);
+        isCurrentUserAdmin = await UserContext.IsUserInRole(YourBrand.Portal.Roles.Administrator);
 
         try
         {

@@ -22,18 +22,18 @@ public record CreateUser(string Name, string Email) : IRequest<Result<UserInfoDt
     {
         private readonly IUserRepository userRepository;
         private readonly IUnitOfWork unitOfWork;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
-        public Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+        public Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext)
         {
             this.userRepository = userRepository;
             this.unitOfWork = unitOfWork;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<Result<UserInfoDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
-            string userId = currentUserService.UserId!;
+            string userId = userContext.UserId!;
 
             userRepository.Add(new User(userId, request.Name, request.Email));
 

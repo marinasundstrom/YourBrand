@@ -10,11 +10,11 @@ using YourBrand.Identity;
 
 namespace YourBrand.Messenger.Application.Common.Interfaces;
 
-public static class CurrentUserServiceJwtExtensions
+public static class UserContextJwtExtensions
 {
     private static DiscoveryDocumentResponse? discoveryDocumentResponse;
 
-    public static async Task SetCurrentUserFromAccessTokenAsync(this ICurrentUserService currentUserService, string accessToken)
+    public static async Task SetCurrentUserFromAccessTokenAsync(this IUserContext userContext, string accessToken)
     {
         var httpClient = new HttpClient();
 
@@ -50,6 +50,6 @@ public static class CurrentUserServiceJwtExtensions
                             tokenValidationParameters, out var rawValidatedToken);
 
         //INFO: Fix ?
-        currentUserService.SetCurrentUser(claimsPrincipal);
+        userContext.SetCurrentUser(claimsPrincipal);
     }
 }

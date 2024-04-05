@@ -128,7 +128,7 @@ builder.Services
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddScoped<IDateTime, DateTimeService>();
 
@@ -162,8 +162,8 @@ try
 
         if (args.Contains("--seed"))
         {
-            var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-            tenantService.SetTenantId(TenantConstants.TenantId);
+            var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+            tenantContext.SetTenantId(TenantConstants.TenantId);
 
             var context = scope.ServiceProvider.GetRequiredService<CartsContext>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
@@ -199,7 +199,7 @@ static async Task SeedData(CartsContext context, IConfiguration configuration, I
 // INFO: Makes Program class visible to IntegrationTests.
 public partial class Program { }
 
-public class ReadTenantIdFilter<T>(ITenantService tenantService) :
+public class ReadTenantIdFilter<T>(ITenantContext tenantContext) :
     IFilter<ConsumeContext<T>>
     where T : class
 {
@@ -213,7 +213,7 @@ public class ReadTenantIdFilter<T>(ITenantService tenantService) :
 
         Console.WriteLine("HEADER: " + tenantId);
 
-        tenantService.SetTenantId(tenantId!);
+        tenantContext.SetTenantId(tenantId!);
 
         return next.Send(context);
     }

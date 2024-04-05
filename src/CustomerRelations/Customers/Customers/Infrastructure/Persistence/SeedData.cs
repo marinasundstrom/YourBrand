@@ -11,8 +11,8 @@ public class SeedData
         {
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<SeedData>>();
 
-            var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-            tenantService.SetTenantId(TenantConstants.TenantId);
+            var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+            tenantContext.SetTenantId(TenantConstants.TenantId);
 
             var context = scope.ServiceProvider.GetRequiredService<CustomersContext>();
 

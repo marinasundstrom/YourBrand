@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace YourBrand.Identity;
 
-public class CurrentUserService : ICurrentUserService
+public class UserContext : IUserContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private UserId? _currentUserId;
     private ClaimsPrincipal? _claimsPrincipal;
 
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+    public UserContext(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
         _claimsPrincipal = _httpContextAccessor.HttpContext?.User;

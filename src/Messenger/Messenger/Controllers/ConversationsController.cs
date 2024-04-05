@@ -79,11 +79,11 @@ public class ConversationsController : ControllerBase
 
     [HttpPost("{id}/Messages")]
     public async Task<ActionResult<MessageDto>> PostMessage(
-        [FromServices] ICurrentUserService currentUserService,
+        [FromServices] IUserContext userContext,
         string id,
         string text, string? replyToId, CancellationToken cancellationToken = default)
     {
-        var response = await _postMessageClient.GetResponse<MessageDto>(new PostMessage(currentUserService.GetAccessToken()!, id, text, replyToId), cancellationToken);
+        var response = await _postMessageClient.GetResponse<MessageDto>(new PostMessage(userContext.GetAccessToken()!, id, text, replyToId), cancellationToken);
         return Ok(response.Message);
     }
 

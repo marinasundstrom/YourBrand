@@ -10,14 +10,14 @@ public record UpdateHeadlineCommand(string Id, string Text) : IRequest
     class UpdateHeadlineCommandHandler : IRequestHandler<UpdateHeadlineCommand>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public UpdateHeadlineCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task Handle(UpdateHeadlineCommand request, CancellationToken cancellationToken)

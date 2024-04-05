@@ -7,14 +7,14 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository,
-    ICurrentUserService currentUserService,
+    IUserContext userContext,
     IEmailService emailService,
     IOrderNotificationService orderNotificationService,
     INotificationsClient notificationsClient,
     ILogger<OrderStatusUpdatedEventHandler> logger) : IDomainEventHandler<OrderStatusUpdated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
-    private readonly ICurrentUserService currentUserService = currentUserService;
+    private readonly IUserContext userContext = userContext;
     private readonly IEmailService emailService = emailService;
     private readonly IOrderNotificationService orderNotificationService = orderNotificationService;
     private readonly INotificationsClient _notificationsClient = notificationsClient;

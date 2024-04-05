@@ -12,12 +12,12 @@ public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
 {
     public class Handler : IRequestHandler<GetModulesQuery, IEnumerable<ModuleDto>>
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IAppServiceContext _appServiceContext;
 
-        public Handler(ICurrentUserService currentUserService, IAppServiceContext appServiceContext)
+        public Handler(IUserContext userContext, IAppServiceContext appServiceContext)
         {
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _appServiceContext = appServiceContext;
         }
 

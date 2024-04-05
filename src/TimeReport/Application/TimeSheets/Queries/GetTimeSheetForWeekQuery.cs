@@ -21,16 +21,16 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
 
-        public GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
+        public GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext)
         {
             _timeSheetRepository = timeSheetRepository;
             _reportingPeriodRepository = reportingPeriodRepository;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
         }
 
         public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
             var query = _timeSheetRepository.GetTimeSheets()
                 .AsSplitQuery();
 
-            string? userId = request.UserId ?? _currentUserService.UserId;
+            string? userId = request.UserId ?? _userContext.UserId;
 
             query = query.Where(x => x.UserId == userId);
 

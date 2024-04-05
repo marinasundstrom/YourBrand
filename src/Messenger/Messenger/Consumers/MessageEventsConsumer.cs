@@ -16,15 +16,15 @@ public class MessagePostedConsumer : IConsumer<MessagePosted>
 {
     private readonly IMediator _mediator;
     private readonly IMessengerContext _messengerContext;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IHubContext<MessageHub, IMessageClient> _hubContext;
 
-    public MessagePostedConsumer(IMediator mediator, IMessengerContext messengerContext, ICurrentUserService currentUserService,
+    public MessagePostedConsumer(IMediator mediator, IMessengerContext messengerContext, IUserContext userContext,
         IHubContext<MessageHub, IMessageClient> hubContext)
     {
         _mediator = mediator;
         _messengerContext = messengerContext;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _hubContext = hubContext;
     }
 
@@ -50,14 +50,14 @@ public class MessagePostedConsumer : IConsumer<MessagePosted>
 public class MessageUpdatedConsumer : IConsumer<MessageUpdated>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IHubContext<MessageHub, IMessageClient> _hubContext;
 
-    public MessageUpdatedConsumer(IMediator mediator, ICurrentUserService currentUserService,
+    public MessageUpdatedConsumer(IMediator mediator, IUserContext userContext,
         IHubContext<MessageHub, IMessageClient> hubContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _hubContext = hubContext;
     }
 
@@ -77,14 +77,14 @@ public class MessageUpdatedConsumer : IConsumer<MessageUpdated>
 public class MessageDeletedConsumer : IConsumer<MessageDeleted>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IHubContext<MessageHub, IMessageClient> _hubContext;
 
-    public MessageDeletedConsumer(IMediator mediator, ICurrentUserService currentUserService,
+    public MessageDeletedConsumer(IMediator mediator, IUserContext userContext,
         IHubContext<MessageHub, IMessageClient> hubContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _hubContext = hubContext;
     }
 
@@ -102,14 +102,14 @@ public class MessageDeletedConsumer : IConsumer<MessageDeleted>
 public class MessageReadConsumer : IConsumer<MessageRead>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IHubContext<MessageHub, IMessageClient> _hubContext;
 
-    public MessageReadConsumer(IMediator mediator, ICurrentUserService currentUserService,
+    public MessageReadConsumer(IMediator mediator, IUserContext userContext,
         IHubContext<MessageHub, IMessageClient> hubContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _hubContext = hubContext;
     }
 

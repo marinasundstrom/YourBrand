@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject INotificationsClient NotificationsClient
-@inject ICurrentUserService CurrentUserService
+@inject IUserContext UserContext
 @using System.ComponentModel.DataAnnotations
 
 <AppPageTitle>@T["Send notification"]</AppPageTitle>
@@ -40,7 +40,7 @@
 
     protected async override Task OnInitializedAsync() 
     {
-        UserId = await CurrentUserService.GetUserId();
+        UserId = await UserContext.GetUserId();
     }
 
     async Task Send() 

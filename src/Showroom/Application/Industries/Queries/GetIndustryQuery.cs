@@ -12,14 +12,14 @@ public record GetIndustryQuery(int Id) : IRequest<IndustryDto?>
     class GetIndustryQueryHandler : IRequestHandler<GetIndustryQuery, IndustryDto?>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetIndustryQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<IndustryDto?> Handle(GetIndustryQuery request, CancellationToken cancellationToken)

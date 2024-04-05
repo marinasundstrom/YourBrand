@@ -58,7 +58,7 @@ services.AddServices();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 services
     .AddControllers()

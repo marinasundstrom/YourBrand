@@ -10,19 +10,19 @@ public sealed record CreateClient : IRequest<string>
     sealed class Handler : IRequestHandler<CreateClient, string>
     {
         private readonly IClientClient clientClient;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public Handler(
             YourBrand.Analytics.IClientClient clientClient,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             this.clientClient = clientClient;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<string> Handle(CreateClient request, CancellationToken cancellationToken)
         {
-            var userAgent = currentUserService.UserAgent!.ToString();
+            var userAgent = userContext.UserAgent!.ToString();
 
             return await clientClient.InitClientAsync(new YourBrand.Analytics.ClientData()
             {

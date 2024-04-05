@@ -13,14 +13,14 @@ public record GetTeamQuery(string Id) : IRequest<TeamDto?>
     class GetTeamQueryHandler : IRequestHandler<GetTeamQuery, TeamDto?>
     {
         private readonly ITimeReportContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetTeamQueryHandler(
             ITimeReportContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<TeamDto?> Handle(GetTeamQuery request, CancellationToken cancellationToken)

@@ -14,14 +14,14 @@ public record GetIndustriesQuery(int Page = 0, int PageSize = 10, string? Search
     class GetIndustriesQueryHandler : IRequestHandler<GetIndustriesQuery, Results<IndustryDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetIndustriesQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<Results<IndustryDto>> Handle(GetIndustriesQuery request, CancellationToken cancellationToken)

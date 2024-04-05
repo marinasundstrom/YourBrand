@@ -14,14 +14,14 @@ public sealed record GetVatRatesQuery(int Page = 1, int PageSize = 10, string? S
     sealed class GetVatRatesQueryHandler : IRequestHandler<GetVatRatesQuery, PagedResult<VatRateDto>>
     {
         private readonly CatalogContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetVatRatesQueryHandler(
             CatalogContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<PagedResult<VatRateDto>> Handle(GetVatRatesQuery request, CancellationToken cancellationToken)

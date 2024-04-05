@@ -2,7 +2,7 @@
 
 namespace YourBrand.Identity;
 
-public interface ICurrentUserService
+public interface IUserContext
 {
     UserId? UserId { get; }
     string? FirstName { get; }

@@ -15,14 +15,14 @@ public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchStrin
     class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, ItemsResult<TeamDto>>
     {
         private readonly ITimeReportContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetTeamsQueryHandler(
             ITimeReportContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ItemsResult<TeamDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)

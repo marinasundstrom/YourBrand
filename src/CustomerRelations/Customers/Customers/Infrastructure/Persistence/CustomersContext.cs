@@ -23,12 +23,12 @@ public class CustomersContext : DbContext, ICustomersContext
 
     public CustomersContext(
         DbContextOptions<CustomersContext> options,
-        ITenantService tenantService,
+        ITenantContext tenantContext,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
 
-        _tenantId = tenantService.TenantId.GetValueOrDefault();
+        _tenantId = tenantContext.TenantId.GetValueOrDefault();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

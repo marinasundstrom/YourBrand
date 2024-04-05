@@ -11,15 +11,15 @@ namespace YourBrand.Application.Notifications.Commands;
 
 public sealed record MarkNotificationAsReadCommand(string NotificationId) : IRequest
 {
-    public class MarkNotificationAsReadCommandHandler(IRequestClient<MarkNotificationAsRead> notificationsClient, ICurrentUserService currentUserService, ITenantService tenantService) : IRequestHandler<MarkNotificationAsReadCommand>
+    public class MarkNotificationAsReadCommandHandler(IRequestClient<MarkNotificationAsRead> notificationsClient, IUserContext userContext, ITenantContext tenantContext) : IRequestHandler<MarkNotificationAsReadCommand>
     {
         public async Task Handle(MarkNotificationAsReadCommand request, CancellationToken cancellationToken)
         {
             await notificationsClient.GetResponse<MarkNotificationAsReadResponse>(new MarkNotificationAsRead
             {
-                TenantId = tenantService.TenantId!,
+                TenantId = tenantContext.TenantId!,
                 NotificationId = request.NotificationId,
-                CreatedById = currentUserService.UserId!
+                CreatedById = userContext.UserId!
             }, cancellationToken);
         }
     }

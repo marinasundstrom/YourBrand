@@ -17,15 +17,15 @@ public record DeleteMessageCommand(string ConversationId, string MessageId) : IR
         private readonly IConversationRepository _conversationRepository;
         private readonly IMessageRepository _messageRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public DeleteMessageCommandHandler(IConversationRepository conversationRepository, IMessageRepository messageRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
+        public DeleteMessageCommandHandler(IConversationRepository conversationRepository, IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus)
         {
             _conversationRepository = conversationRepository;
             _messageRepository = messageRepository;
             _unitOfWork = unitOfWork;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _bus = bus;
         }
 
@@ -54,6 +54,6 @@ public record DeleteMessageCommand(string ConversationId, string MessageId) : IR
 
         }
 
-        private bool IsAuthorizedToDelete(Domain.Entities.Message message) => _currentUserService.IsCurrentUser(message.CreatedById!) || _currentUserService.IsUserInRole(Roles.Administrator);
+        private bool IsAuthorizedToDelete(Domain.Entities.Message message) => _userContext.IsCurrentUser(message.CreatedById!) || _userContext.IsUserInRole(Roles.Administrator);
     }
 }

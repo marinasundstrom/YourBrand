@@ -14,13 +14,13 @@ public record UpdateTenantCommand(string TenantId, string Name) : IRequest<Tenan
     public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateTenantCommand, TenantDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IEventPublisher _eventPublisher;
 
-        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
         {
             _context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _eventPublisher = eventPublisher;
         }
 
@@ -39,7 +39,7 @@ public record UpdateTenantCommand(string TenantId, string Name) : IRequest<Tenan
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantUpdated(tenant.Id, tenant.Name, _currentUserService.UserId));
+            await _eventPublisher.PublishEvent(new TenantUpdated(tenant.Id, tenant.Name, _userContext.UserId));
 
             return tenant.ToDto();
         }

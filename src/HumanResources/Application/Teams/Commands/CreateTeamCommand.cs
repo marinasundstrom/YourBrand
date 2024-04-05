@@ -15,7 +15,7 @@ public record CreateTeamCommand(string Name, string Description, string Organiza
         private readonly IApplicationDbContext _context;
         private readonly IEventPublisher _eventPublisher;
 
-        public Handler(IApplicationDbContext context, ICurrentUserService currentPersonService, IEventPublisher eventPublisher)
+        public Handler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
             _eventPublisher = eventPublisher;

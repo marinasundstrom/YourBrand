@@ -20,7 +20,7 @@ public record CreateUser(string Name, string Email, string? TenantId, string? Us
         }
     }
 
-    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<CreateUser, Result<UserInfoDto>>
+    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<CreateUser, Result<UserInfoDto>>
     {
         public async Task<Result<UserInfoDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
@@ -31,7 +31,7 @@ public record CreateUser(string Name, string Email, string? TenantId, string? Us
                 return Result.Success(user.ToDto2());
             }
 
-            string userId = request.UserId ?? currentUserService.UserId!;
+            string userId = request.UserId ?? userContext.UserId!;
 
             userRepository.Add(new User(userId, request.Name, request.Email)
             {

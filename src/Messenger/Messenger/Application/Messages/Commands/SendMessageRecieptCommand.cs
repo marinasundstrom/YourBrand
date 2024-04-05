@@ -16,19 +16,19 @@ public record SendMessageReceiptCommand(string MessageId) : IRequest<ReceiptDto>
     public class SendMessageReceiptCommandHandler : IRequestHandler<SendMessageReceiptCommand, ReceiptDto>
     {
         private readonly IMessengerContext context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public SendMessageReceiptCommandHandler(IMessengerContext context, ICurrentUserService currentUserService, IBus bus)
+        public SendMessageReceiptCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus)
         {
             this.context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _bus = bus;
         }
 
         public async Task<ReceiptDto> Handle(SendMessageReceiptCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
+            var userId = _userContext.UserId;
 
             var message = await context
                 .Messages

@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace YourBrand.StoreFront.API;
 
-public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
+public sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
     private string? _currentUserId;
     private readonly HttpContext _httpContext = httpContextAccessor.HttpContext!;

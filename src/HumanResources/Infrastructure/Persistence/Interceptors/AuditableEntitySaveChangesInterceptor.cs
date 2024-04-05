@@ -12,16 +12,16 @@ namespace YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
-    private readonly ITenantService _tenantService;
-    private readonly ICurrentUserService _currentPersonService;
+    private readonly ITenantContext _tenantContext;
+    private readonly IUserContext _currentPersonService;
     private readonly IDateTime _dateTime;
 
     public AuditableEntitySaveChangesInterceptor(
-        ITenantService tenantService,
-        ICurrentUserService currentPersonService,
+        ITenantContext tenantContext,
+        IUserContext currentPersonService,
         IDateTime dateTime)
     {
-        _tenantService = tenantService;
+        _tenantContext = tenantContext;
         _currentPersonService = currentPersonService;
         _dateTime = dateTime;
     }
@@ -53,7 +53,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 
                 if (entry.Entity is IHasTenant hasTenant)
                 {
-                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
+                    hasTenant.TenantId = _tenantContext.TenantId.GetValueOrDefault();
                 }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())

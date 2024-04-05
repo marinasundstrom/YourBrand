@@ -16,21 +16,21 @@ public record JoinConversationCommand(string? ConversationId) : IRequest
         private readonly IConversationRepository _conversationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public JoinConversationCommandHandler(IConversationRepository conversationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
+        public JoinConversationCommandHandler(IConversationRepository conversationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus)
         {
             _conversationRepository = conversationRepository;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _bus = bus;
         }
 
         public async Task Handle(JoinConversationCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
+            var userId = _userContext.UserId;
 
             var conversation = await _conversationRepository.GetConversation(request.ConversationId!, cancellationToken);
 

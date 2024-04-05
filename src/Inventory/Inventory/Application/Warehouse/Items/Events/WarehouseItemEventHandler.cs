@@ -24,17 +24,17 @@ public class WarehouseItemEventHandler
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly INotificationsClient _notificationsClient;
     private readonly ILogger<WarehouseItemEventHandler> _logger;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
     public WarehouseItemEventHandler(
         IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient,
-        ILogger<WarehouseItemEventHandler> logger, ICurrentUserService currentUserService)
+        ILogger<WarehouseItemEventHandler> logger, IUserContext userContext)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
         _notificationsClient = notificationsClient;
         _logger = logger;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Handle(WarehouseItemCreated notification, CancellationToken cancellationToken)

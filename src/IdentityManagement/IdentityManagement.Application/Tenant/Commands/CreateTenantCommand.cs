@@ -15,13 +15,13 @@ public record CreateTenantCommand(string Name, string? FriendlyName) : IRequest<
     public class CreateTenantCommandHandler : IRequestHandler<CreateTenantCommand, TenantDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentTenantService;
+        private readonly IUserContext _currentTenantContext;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreateTenantCommandHandler(IApplicationDbContext context, ICurrentUserService currentTenantService, IEventPublisher eventPublisher)
+        public CreateTenantCommandHandler(IApplicationDbContext context, IUserContext currentTenantContext, IEventPublisher eventPublisher)
         {
             _context = context;
-            _currentTenantService = currentTenantService;
+            _currentTenantContext = currentTenantContext;
             _eventPublisher = eventPublisher;
         }
 
@@ -40,7 +40,7 @@ public record CreateTenantCommand(string Name, string? FriendlyName) : IRequest<
                .AsSplitQuery()
                .FirstAsync(x => x.Id == tenant.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantCreated(tenant.Id, tenant.Name, _currentTenantService.UserId));
+            await _eventPublisher.PublishEvent(new TenantCreated(tenant.Id, tenant.Name, _currentTenantContext.UserId));
 
             return tenant.ToDto();
         }

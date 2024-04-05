@@ -48,4 +48,4 @@ This service serves as an authentication provider, using OIDC and OAuth.
 
 ### Authentication
 
-The "tenant_id" claim is included with the auth token (JWT), and extracted by TenantService on behalf or the current service.
+The "tenant_id" claim is included with the auth token (JWT), and extracted by TenantContext on behalf or the current service.

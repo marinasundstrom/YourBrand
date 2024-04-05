@@ -17,18 +17,18 @@ public sealed record CreateNotificationCommand(
     DateTimeOffset? ScheduledFor
     ) : IRequest
 {
-    public class CreateNotificationCommandHandler(IRequestClient<SendNotification> notificationsClient, ICurrentUserService currentUserService, ITenantService tenantService) : IRequestHandler<CreateNotificationCommand>
+    public class CreateNotificationCommandHandler(IRequestClient<SendNotification> notificationsClient, IUserContext userContext, ITenantContext tenantContext) : IRequestHandler<CreateNotificationCommand>
     {
         public async Task Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
             await notificationsClient.GetResponse<SendNotificationResponse>(new SendNotification
             {
-                TenantId = tenantService.TenantId!,
+                TenantId = tenantContext.TenantId!,
                 Content = request.Content,
                 Link = request.Link,
                 UserId = request.UserId,
                 ScheduledFor = request.ScheduledFor,
-                CreatedById = currentUserService.UserId!
+                CreatedById = userContext.UserId!
             }, cancellationToken);
         }
     }

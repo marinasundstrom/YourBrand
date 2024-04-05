@@ -61,7 +61,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddScoped<IBlobService, BlobService>();
 

@@ -4,9 +4,9 @@ namespace YourBrand.Tenancy;
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection AddTenantService(this IServiceCollection services)
+    public static IServiceCollection AddTenantContext(this IServiceCollection services)
     {
-        services.AddScoped<ITenantService, TenantService>();
+        services.AddScoped<ITenantContext, TenantContext>();
 
         return services;
     }

@@ -14,10 +14,10 @@ public record CreatePersonCommand(string OrganizationId, string FirstName, strin
     public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, PersonDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentPersonService;
+        private readonly IUserContext _currentPersonService;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreatePersonCommandHandler(IApplicationDbContext context, ICurrentUserService currentPersonService, IEventPublisher eventPublisher)
+        public CreatePersonCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
             _currentPersonService = currentPersonService;

@@ -8,7 +8,7 @@ using YourBrand.Sales.Features.OrderManagement.Users;
 
 namespace YourBrand.Sales.Consumers;
 
-public class SalesOrganizationCreatedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentUserService, IRequestClient<GetOrganization> requestClient, ILogger<SalesOrganizationCreatedConsumer> logger) : IConsumer<OrganizationCreated>
+public class SalesOrganizationCreatedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext userContext, IRequestClient<GetOrganization> requestClient, ILogger<SalesOrganizationCreatedConsumer> logger) : IConsumer<OrganizationCreated>
 {
     public async Task Consume(ConsumeContext<OrganizationCreated> context)
     {
@@ -16,9 +16,9 @@ public class SalesOrganizationCreatedConsumer(IMediator mediator, ITenantService
         {
             var message = context.Message;
 
-            tenantService.SetTenantId(message.TenantId);
+            tenantContext.SetTenantId(message.TenantId);
 
-            //_currentUserService.SetCurrentUser(message.CreatedById);
+            //_userContext.SetCurrentUser(message.CreatedById);
 
             var result = await mediator.Send(new Sales.Features.OrderManagement.Organizations.CreateOrganization(message.OrganizationId, message.Name, message.TenantId));
         }
@@ -29,30 +29,30 @@ public class SalesOrganizationCreatedConsumer(IMediator mediator, ITenantService
     }
 }
 
-public class SalesOrganizationDeletedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentUserService) : IConsumer<OrganizationDeleted>
+public class SalesOrganizationDeletedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext userContext) : IConsumer<OrganizationDeleted>
 {
     public async Task Consume(ConsumeContext<OrganizationDeleted> context)
     {
         var message = context.Message;
 
-        //tenantService.SetTenantId(message.TenantId);
+        //tenantContext.SetTenantId(message.TenantId);
 
-        //_currentUserService.SetCurrentUser(message.DeletedById);
+        //_userContext.SetCurrentUser(message.DeletedById);
 
         await mediator.Send(new DeleteUser(message.OrganizationId));
     }
 }
 
 
-public class SalesOrganizationUpdatedConsumer(IMediator mediator, IRequestClient<GetOrganization> requestClient, ITenantService tenantService, ICurrentUserService currentUserService) : IConsumer<OrganizationUpdated>
+public class SalesOrganizationUpdatedConsumer(IMediator mediator, IRequestClient<GetOrganization> requestClient, ITenantContext tenantContext, IUserContext userContext) : IConsumer<OrganizationUpdated>
 {
     public async Task Consume(ConsumeContext<OrganizationUpdated> context)
     {
         var message = context.Message;
 
-        //tenantService.SetTenantId(message.TenantId);
+        //tenantContext.SetTenantId(message.TenantId);
 
-        //_currentUserService.SetCurrentUser(message.UpdatedById);
+        //_userContext.SetCurrentUser(message.UpdatedById);
 
         var messageR = await requestClient.GetResponse<GetOrganizationResponse>(new GetUser(message.OrganizationId, message.UpdatedById));
         var message2 = messageR.Message;
@@ -61,13 +61,13 @@ public class SalesOrganizationUpdatedConsumer(IMediator mediator, IRequestClient
     }
 }
 
-public class SalesOrganizationUserAddedConsumer(IMediator mediator, ITenantService tenantService) : IConsumer<OrganizationUserAdded>
+public class SalesOrganizationUserAddedConsumer(IMediator mediator, ITenantContext tenantContext) : IConsumer<OrganizationUserAdded>
 {
     public async Task Consume(ConsumeContext<OrganizationUserAdded> context)
     {
         var message = context.Message;
 
-        tenantService.SetTenantId(message.TenantId);
+        tenantContext.SetTenantId(message.TenantId);
 
         var result = await mediator.Send(new AddUserToOrganization(message.OrganizationId, message.UserId));
     }

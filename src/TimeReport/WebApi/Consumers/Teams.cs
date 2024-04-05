@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Teams.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
-public class TimeReportTeamCreatedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, ICurrentUserService currentTeamService) : IConsumer<TeamCreated>
+public class TimeReportTeamCreatedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, IUserContext currentTeamService) : IConsumer<TeamCreated>
 {
     public async Task Consume(ConsumeContext<TeamCreated> context)
     {
@@ -20,7 +20,7 @@ public class TimeReportTeamCreatedConsumer(IMediator mediator, IRequestClient<Ge
     }
 }
 
-public class TimeReportTeamDeletedConsumer(IMediator mediator, ICurrentUserService currentTeamService) : IConsumer<TeamDeleted>
+public class TimeReportTeamDeletedConsumer(IMediator mediator, IUserContext currentTeamService) : IConsumer<TeamDeleted>
 {
     public async Task Consume(ConsumeContext<TeamDeleted> context)
     {
@@ -32,7 +32,7 @@ public class TimeReportTeamDeletedConsumer(IMediator mediator, ICurrentUserServi
     }
 }
 
-public class TimeReportTeamUpdatedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, ICurrentUserService currentTeamService) : IConsumer<TeamUpdated>
+public class TimeReportTeamUpdatedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, IUserContext currentTeamService) : IConsumer<TeamUpdated>
 {
     public async Task Consume(ConsumeContext<TeamUpdated> context)
     {
@@ -47,7 +47,7 @@ public class TimeReportTeamUpdatedConsumer(IMediator mediator, IRequestClient<Ge
     }
 }
 
-public class TimeReportTeamMemberAddedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, ICurrentUserService currentTeamService) : IConsumer<TeamMemberAdded>
+public class TimeReportTeamMemberAddedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient, IUserContext currentTeamService) : IConsumer<TeamMemberAdded>
 {
     public async Task Consume(ConsumeContext<TeamMemberAdded> context)
     {

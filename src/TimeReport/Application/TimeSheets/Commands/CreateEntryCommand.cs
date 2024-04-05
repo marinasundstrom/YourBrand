@@ -21,16 +21,16 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
         private readonly IProjectRepository _projectRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeReportContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
 
-        public CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork, ITimeReportContext context, ICurrentUserService currentUserService)
+        public CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext)
         {
             _timeSheetRepository = timeSheetRepository;
             _reportingPeriodRepository = reportingPeriodRepository;
             _projectRepository = projectRepository;
             _unitOfWork = unitOfWork;
             _context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
         }
 
         public async Task<Result<EntryDto, DomainException>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)

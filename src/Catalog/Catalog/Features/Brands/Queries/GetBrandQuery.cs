@@ -12,14 +12,14 @@ public sealed record GetBrandQuery(int Id) : IRequest<BrandDto?>
     sealed class GetBrandQueryHandler : IRequestHandler<GetBrandQuery, BrandDto?>
     {
         private readonly CatalogContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetBrandQueryHandler(
             CatalogContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<BrandDto?> Handle(GetBrandQuery request, CancellationToken cancellationToken)

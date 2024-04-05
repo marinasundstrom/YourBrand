@@ -14,13 +14,13 @@ public record SyncDataCommand() : IRequest
     {
         private readonly IApplicationDbContext _context;
         private readonly IEventPublisher _eventPublisher;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
 
-        public SyncDataCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher, ICurrentUserService currentUserService)
+        public SyncDataCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher, IUserContext userContext)
         {
             _context = context;
             _eventPublisher = eventPublisher;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
         }
 
         public async Task Handle(SyncDataCommand request, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ public record SyncDataCommand() : IRequest
 
             foreach (var organization in organizations)
             {
-                await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _currentUserService.UserId));
+                await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _userContext.UserId));
             }
 
             var users = await _context.Persons
@@ -44,7 +44,7 @@ public record SyncDataCommand() : IRequest
 
             foreach (var user in users)
             {
-                await _eventPublisher.PublishEvent(new PersonCreated(user.Id, _currentUserService.UserId));
+                await _eventPublisher.PublishEvent(new PersonCreated(user.Id, _userContext.UserId));
             }
         }
     }

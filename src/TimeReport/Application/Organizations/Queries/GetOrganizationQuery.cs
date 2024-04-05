@@ -13,14 +13,14 @@ public record GetOrganizationQuery(string Id) : IRequest<OrganizationDto?>
     class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery, OrganizationDto?>
     {
         private readonly ITimeReportContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetOrganizationQueryHandler(
             ITimeReportContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<OrganizationDto?> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)

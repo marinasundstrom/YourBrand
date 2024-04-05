@@ -14,9 +14,9 @@ public sealed class CartsContext : DbContext
 {
     private TenantId _tenantId;
 
-    public CartsContext(DbContextOptions options, ITenantService tenantService) : base(options)
+    public CartsContext(DbContextOptions options, ITenantContext tenantContext) : base(options)
     {
-        _tenantId = tenantService.TenantId.GetValueOrDefault();
+        _tenantId = tenantContext.TenantId.GetValueOrDefault();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

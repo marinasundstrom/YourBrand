@@ -15,14 +15,14 @@ public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SkillAreaI
     class GetSkillsQueryHandler : IRequestHandler<GetSkillsQuery, Results<SkillDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetSkillsQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<Results<SkillDto>> Handle(GetSkillsQuery request, CancellationToken cancellationToken)

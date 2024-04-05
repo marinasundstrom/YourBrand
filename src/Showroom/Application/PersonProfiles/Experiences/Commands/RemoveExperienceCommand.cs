@@ -13,14 +13,14 @@ public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequ
     class RemoveExperienceCommandHandler : IRequestHandler<RemoveExperienceCommand>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public RemoveExperienceCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task Handle(RemoveExperienceCommand request, CancellationToken cancellationToken)

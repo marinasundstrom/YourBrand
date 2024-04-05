@@ -11,17 +11,17 @@ public record GetNotificationsQuery(bool IncludeUnreadNotificationsCount,
     public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, NotificationsResults>
     {
         private readonly YourBrand.Notifications.Client.INotificationsClient _notificationsClient;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
 
-        public GetNotificationsQueryHandler(YourBrand.Notifications.Client.INotificationsClient notificationsClient, ICurrentUserService currentUserService)
+        public GetNotificationsQueryHandler(YourBrand.Notifications.Client.INotificationsClient notificationsClient, IUserContext userContext)
         {
             _notificationsClient = notificationsClient;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
         }
 
         public async Task<NotificationsResults> Handle(GetNotificationsQuery request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
+            var userId = _userContext.UserId;
 
             var results = await _notificationsClient.GetNotificationsAsync(userId, null, request.IncludeUnreadNotificationsCount, request.Page, request.PageSize, request.SortBy, (YourBrand.Notifications.Client.SortDirection?)request.SortDirection);
             var notifications = results.Items;

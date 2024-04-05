@@ -27,13 +27,13 @@ public class ShowroomContext : DbContext, IShowroomContext
     public ShowroomContext(
         DbContextOptions<ShowroomContext> options,
         IApiApplicationContext apiApplicationContext,
-        ITenantService tenantService,
+        ITenantContext tenantContext,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
         _apiApplicationContext = apiApplicationContext;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
 
-        _tenantId = tenantService.TenantId.GetValueOrDefault();
+        _tenantId = tenantContext.TenantId.GetValueOrDefault();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

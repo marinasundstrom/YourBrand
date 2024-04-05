@@ -56,7 +56,7 @@ builder.Services
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 
 services

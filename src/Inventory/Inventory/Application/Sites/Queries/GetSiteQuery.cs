@@ -12,14 +12,14 @@ public record GetSiteQuery(string Id) : IRequest<SiteDto?>
     class GetSiteQueryHandler : IRequestHandler<GetSiteQuery, SiteDto?>
     {
         private readonly IInventoryContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetSiteQueryHandler(
             IInventoryContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<SiteDto?> Handle(GetSiteQuery request, CancellationToken cancellationToken)

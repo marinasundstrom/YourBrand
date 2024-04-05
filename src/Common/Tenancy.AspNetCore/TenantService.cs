@@ -2,12 +2,12 @@
 
 namespace YourBrand.Tenancy;
 
-public sealed class TenantService : ITenantService
+public sealed class TenantContext : ITenantContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private TenantId? _tenantId;
 
-    public TenantService(IHttpContextAccessor httpContextAccessor)
+    public TenantContext(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }

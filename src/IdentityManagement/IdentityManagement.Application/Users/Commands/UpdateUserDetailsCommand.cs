@@ -14,13 +14,13 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
     public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateOrganizationCommand, UserDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IEventPublisher _eventPublisher;
 
-        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
         {
             _context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _eventPublisher = eventPublisher;
         }
 
@@ -44,7 +44,7 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserUpdated(user.Id, _currentUserService.UserId));
+            await _eventPublisher.PublishEvent(new UserUpdated(user.Id, _userContext.UserId));
 
             return user.ToDto();
         }

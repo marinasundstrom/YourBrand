@@ -16,7 +16,7 @@ public record UpdateUser(string UserId, string Name, string Email) : IRequest<Re
         }
     }
 
-    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<UpdateUser, Result<UserInfoDto>>
+    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<UpdateUser, Result<UserInfoDto>>
     {
         public async Task<Result<UserInfoDto>> Handle(UpdateUser request, CancellationToken cancellationToken)
         {

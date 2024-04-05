@@ -162,7 +162,7 @@ builder.Services.AddScoped<ProductVariantsService>();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddScoped<IDateTime, DateTimeService>();
 
@@ -211,8 +211,8 @@ using (var scope = app.Services.CreateScope())
 
     if (args.Contains("--seed"))
     {
-        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-        tenantService.SetTenantId(TenantConstants.TenantId);
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+        tenantContext.SetTenantId(TenantConstants.TenantId);
 
         var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
 

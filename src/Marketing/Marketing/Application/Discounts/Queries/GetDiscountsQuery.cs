@@ -13,14 +13,14 @@ public record GetDiscountsQuery(int Page = 0, int PageSize = 10, string? SearchS
     class GetDiscountsQueryHandler : IRequestHandler<GetDiscountsQuery, ItemsResult<DiscountDto>>
     {
         private readonly IMarketingContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetDiscountsQueryHandler(
             IMarketingContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ItemsResult<DiscountDto>> Handle(GetDiscountsQuery request, CancellationToken cancellationToken)

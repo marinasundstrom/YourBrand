@@ -31,7 +31,7 @@ public static class ServiceExtensions
         services.AddClients();
 
         // Shared
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<Services.IAccessTokenProvider, AccessTokenProvider>();
 
         return services;

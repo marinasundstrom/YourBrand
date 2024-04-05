@@ -12,14 +12,14 @@ public record GetExperienceQuery(string PersonProfileId, string Id) : IRequest<E
     class GetPersonProfileQueryHandler : IRequestHandler<GetExperienceQuery, ExperienceDto?>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetPersonProfileQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ExperienceDto?> Handle(GetExperienceQuery request, CancellationToken cancellationToken)

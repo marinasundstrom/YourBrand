@@ -17,17 +17,17 @@ namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IDateTime _dateTime;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        ICurrentUserService currentUserService,
+        IUserContext userContext,
         IDateTime dateTime,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _dateTime = dateTime;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
     }

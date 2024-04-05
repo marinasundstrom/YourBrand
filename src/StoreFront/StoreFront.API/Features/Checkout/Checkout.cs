@@ -19,7 +19,7 @@ public sealed record Checkout(
         //private readonly IItemsClient productsClient;
         private readonly YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient;
         private readonly YourBrand.Catalog.IProductsClient productsClient2;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
         //private readonly ICartHubService cartHubService;
 
         public Handler(
@@ -29,21 +29,21 @@ public sealed record Checkout(
             YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient,
             YourBrand.Catalog.IProductsClient productsClient2,
             //ICartHubService cartHubService,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _ordersClient = ordersClient;
             this.cartsClient = cartsClient;
             //this.productsClient = productsClient;
             this.warehouseItemsClient = warehouseItemsClient;
             this.productsClient2 = productsClient2;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
             //this.cartHubService = cartHubService;
         }
 
         public async Task Handle(Checkout request, CancellationToken cancellationToken)
         {
-            var customerId = currentUserService.CustomerNo;
-            var clientId = currentUserService.ClientId;
+            var customerId = userContext.CustomerNo;
+            var clientId = userContext.ClientId;
 
             string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
 

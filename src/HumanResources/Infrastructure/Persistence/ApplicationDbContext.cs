@@ -14,13 +14,13 @@ namespace YourBrand.HumanResources.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly ICurrentUserService _currentPersonService;
+    private readonly IUserContext _currentPersonService;
     private readonly IDateTime _dateTime;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        ICurrentUserService currentPersonService,
+        IUserContext currentPersonService,
         IDateTime dateTime,
         AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
     {

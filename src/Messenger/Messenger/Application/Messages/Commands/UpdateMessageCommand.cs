@@ -16,13 +16,13 @@ public record UpdateMessageCommand(string ConversationId, string MessageId, stri
     public class UpdateMessageCommandHandler : IRequestHandler<UpdateMessageCommand>
     {
         private readonly IMessengerContext context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public UpdateMessageCommandHandler(IMessengerContext context, ICurrentUserService currentUserService, IBus bus)
+        public UpdateMessageCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus)
         {
             this.context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _bus = bus;
         }
 
@@ -45,6 +45,6 @@ public record UpdateMessageCommand(string ConversationId, string MessageId, stri
 
         }
 
-        private bool IsAuthorizedToEdit(Domain.Entities.Message message) => _currentUserService.IsCurrentUser(message.CreatedById!) || _currentUserService.IsUserInRole(Roles.Administrator);
+        private bool IsAuthorizedToEdit(Domain.Entities.Message message) => _userContext.IsCurrentUser(message.CreatedById!) || _userContext.IsUserInRole(Roles.Administrator);
     }
 }

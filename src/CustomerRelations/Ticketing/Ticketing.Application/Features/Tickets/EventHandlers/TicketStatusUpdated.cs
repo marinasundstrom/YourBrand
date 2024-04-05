@@ -6,14 +6,14 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 public sealed class TicketStatusUpdatedEventHandler : IDomainEventHandler<TicketStatusUpdated>
 {
     private readonly ITicketRepository ticketRepository;
-    private readonly ICurrentUserService currentUserService;
+    private readonly IUserContext userContext;
     private readonly IEmailService emailService;
     private readonly ITicketNotificationService ticketNotificationService;
 
-    public TicketStatusUpdatedEventHandler(ITicketRepository ticketRepository, ICurrentUserService currentUserService, IEmailService emailService, ITicketNotificationService ticketNotificationService)
+    public TicketStatusUpdatedEventHandler(ITicketRepository ticketRepository, IUserContext userContext, IEmailService emailService, ITicketNotificationService ticketNotificationService)
     {
         this.ticketRepository = ticketRepository;
-        this.currentUserService = currentUserService;
+        this.userContext = userContext;
         this.emailService = emailService;
         this.ticketNotificationService = ticketNotificationService;
     }

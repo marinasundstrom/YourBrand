@@ -10,12 +10,12 @@ namespace YourBrand.IdentityManagement.Consumers;
 public class GetUserConsumer : IConsumer<GetUser>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public GetUserConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public GetUserConsumer(IMediator mediator, IUserContext userContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Consume(ConsumeContext<GetUser> context)

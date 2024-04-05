@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 public class AuthenticationDelegatingHandler(
     ITokenProvider tokenProvider, 
-    ITenantService tenantService, 
+    ITenantContext tenantContext, 
     ILogger<AuthenticationDelegatingHandler> logger) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -37,7 +37,7 @@ public class AuthenticationDelegatingHandler(
 
         Console.WriteLine("Claims: " + string.Join(", ", stoken?.Claims.Select(x => x.Type)));
 
-        tenantService.SetTenantId(stoken?.Claims?.FirstOrDefault(x => x.Type == "client_tenant_id")?.Value!);
+        tenantContext.SetTenantId(stoken?.Claims?.FirstOrDefault(x => x.Type == "client_tenant_id")?.Value!);
 
         return response;
     }

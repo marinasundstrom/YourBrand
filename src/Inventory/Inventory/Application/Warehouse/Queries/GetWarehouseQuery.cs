@@ -12,14 +12,14 @@ public record GetWarehouseQuery(string Id) : IRequest<WarehouseDto?>
     class GetWarehouseQueryHandler : IRequestHandler<GetWarehouseQuery, WarehouseDto?>
     {
         private readonly IInventoryContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetWarehouseQueryHandler(
             IInventoryContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<WarehouseDto?> Handle(GetWarehouseQuery request, CancellationToken cancellationToken)

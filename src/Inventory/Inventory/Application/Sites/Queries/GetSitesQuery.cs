@@ -13,14 +13,14 @@ public record GetSitesQuery(int Page = 0, int PageSize = 10, string? SearchStrin
     class GetSitesQueryHandler : IRequestHandler<GetSitesQuery, ItemsResult<SiteDto>>
     {
         private readonly IInventoryContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetSitesQueryHandler(
             IInventoryContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ItemsResult<SiteDto>> Handle(GetSitesQuery request, CancellationToken cancellationToken)

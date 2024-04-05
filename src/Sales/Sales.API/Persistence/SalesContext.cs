@@ -19,10 +19,10 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
     private readonly string? _tenantId;
 
     public SalesContext(
-        DbContextOptions<SalesContext> options, ITenantService tenantService)
+        DbContextOptions<SalesContext> options, ITenantContext tenantContext)
         : base(options)
     {
-        _tenantId = tenantService.TenantId;
+        _tenantId = tenantContext.TenantId;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

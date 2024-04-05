@@ -13,14 +13,14 @@ public record GetSkillQuery(string Id) : IRequest<PersonProfileSkillDto?>
     class GetSkillQueryHandler : IRequestHandler<GetSkillQuery, PersonProfileSkillDto?>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetSkillQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<PersonProfileSkillDto?> Handle(GetSkillQuery request, CancellationToken cancellationToken)

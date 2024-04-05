@@ -26,8 +26,8 @@ public static class Seed
 
         using var scope = serviceProvider.CreateScope();
 
-        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-        tenantService.SetTenantId(TenantConstants.TenantId);
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+        tenantContext.SetTenantId(TenantConstants.TenantId);
 
         using var context = scope.ServiceProvider.GetRequiredService<AccountingContext>();
 

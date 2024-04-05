@@ -14,13 +14,13 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreateUserCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public CreateUserCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
         {
             _context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _eventPublisher = eventPublisher;
         }
 
@@ -55,7 +55,7 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
                .AsSplitQuery()
                .FirstAsync(x => x.Id == user.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization!.Id, _currentUserService.UserId));
+            await _eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization!.Id, _userContext.UserId));
 
             return user.ToDto();
         }

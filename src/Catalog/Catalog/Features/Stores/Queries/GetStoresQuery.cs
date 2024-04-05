@@ -14,14 +14,14 @@ public sealed record GetStoresQuery(int Page = 0, int PageSize = 10, string? Sea
     sealed class GetStoresQueryHandler : IRequestHandler<GetStoresQuery, PagedResult<StoreDto>>
     {
         private readonly CatalogContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetStoresQueryHandler(
             CatalogContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<PagedResult<StoreDto>> Handle(GetStoresQuery request, CancellationToken cancellationToken)

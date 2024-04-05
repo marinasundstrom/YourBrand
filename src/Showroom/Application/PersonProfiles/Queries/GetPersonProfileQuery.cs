@@ -12,16 +12,16 @@ public record GetPersonProfileQuery(string Id) : IRequest<PersonProfileDto>
     class GetPersonProfileQueryHandler : IRequestHandler<GetPersonProfileQuery, PersonProfileDto?>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
         private readonly IUrlHelper _urlHelper;
 
         public GetPersonProfileQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService,
+            IUserContext userContext,
             IUrlHelper urlHelper)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
             _urlHelper = urlHelper;
         }
 

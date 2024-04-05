@@ -54,7 +54,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 

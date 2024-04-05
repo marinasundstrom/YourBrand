@@ -12,14 +12,14 @@ public record GetCampaignQuery(string Id) : IRequest<CampaignDto?>
     class GetCampaignQueryHandler : IRequestHandler<GetCampaignQuery, CampaignDto?>
     {
         private readonly IMarketingContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetCampaignQueryHandler(
             IMarketingContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<CampaignDto?> Handle(GetCampaignQuery request, CancellationToken cancellationToken)

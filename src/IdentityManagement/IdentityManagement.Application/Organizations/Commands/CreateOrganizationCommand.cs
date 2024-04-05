@@ -15,10 +15,10 @@ public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRe
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentOrganizationService;
+        private readonly IUserContext _currentOrganizationService;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreateOrganizationCommandHandler(IApplicationDbContext context, ICurrentUserService currentOrganizationService, IEventPublisher eventPublisher)
+        public CreateOrganizationCommandHandler(IApplicationDbContext context, IUserContext currentOrganizationService, IEventPublisher eventPublisher)
         {
             _context = context;
             _currentOrganizationService = currentOrganizationService;

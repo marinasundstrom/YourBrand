@@ -17,13 +17,13 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
     public class PostMessageCommandHandler : IRequestHandler<PostMessageCommand, MessageDto>
     {
         private readonly IMessengerContext context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public PostMessageCommandHandler(IMessengerContext context, ICurrentUserService currentUserService, IBus bus)
+        public PostMessageCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus)
         {
             this.context = context;
-            this._currentUserService = currentUserService;
+            this._userContext = userContext;
             _bus = bus;
         }
 
@@ -39,7 +39,7 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
                 throw new Exception();
             }
 
-            if (!conversation.Participants.Any(x => x.UserId == _currentUserService.UserId))
+            if (!conversation.Participants.Any(x => x.UserId == _userContext.UserId))
             {
                 throw new Exception();
             }

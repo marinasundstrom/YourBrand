@@ -32,16 +32,16 @@ public static class ServiceExtensions
 
 public class Handler : DelegatingHandler
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public Handler(ICurrentUserService currentUserService)
+    public Handler(IUserContext userContext)
     {
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _currentUserService.GetAccessToken());
+        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _userContext.GetAccessToken());
 
         return base.SendAsync(request, cancellationToken);
     }

@@ -14,14 +14,14 @@ public record GetCompetenceAreasQuery(int Page = 0, int PageSize = 10, string? S
     class GetCompetenceAreasQueryHandler : IRequestHandler<GetCompetenceAreasQuery, Results<CompetenceAreaDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetCompetenceAreasQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<Results<CompetenceAreaDto>> Handle(GetCompetenceAreasQuery request, CancellationToken cancellationToken)

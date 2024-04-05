@@ -12,13 +12,13 @@ namespace YourBrand.Messenger.Consumers;
 public class PostMessageConsumer : IConsumer<PostMessage>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IBus _bus;
 
-    public PostMessageConsumer(IMediator mediator, ICurrentUserService currentUserService, IBus bus)
+    public PostMessageConsumer(IMediator mediator, IUserContext userContext, IBus bus)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _bus = bus;
     }
 
@@ -26,7 +26,7 @@ public class PostMessageConsumer : IConsumer<PostMessage>
     {
         var message = context.Message;
 
-        await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         var result = await _mediator.Send(new PostMessageCommand(message.ConversationId, message.Text, message.ReplyToId));
 
@@ -37,13 +37,13 @@ public class PostMessageConsumer : IConsumer<PostMessage>
 public class UpdateMessageConsumer : IConsumer<UpdateMessage>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IBus _bus;
 
-    public UpdateMessageConsumer(IMediator mediator, ICurrentUserService currentUserService, IBus bus)
+    public UpdateMessageConsumer(IMediator mediator, IUserContext userContext, IBus bus)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _bus = bus;
     }
 
@@ -51,7 +51,7 @@ public class UpdateMessageConsumer : IConsumer<UpdateMessage>
     {
         var message = context.Message;
 
-        await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         await _mediator.Send(new UpdateMessageCommand(message.ConversationId, message.MessageId!, message.Text));
     }
@@ -60,13 +60,13 @@ public class UpdateMessageConsumer : IConsumer<UpdateMessage>
 public class DeleteMessageConsumer : IConsumer<DeleteMessage>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IBus _bus;
 
-    public DeleteMessageConsumer(IMediator mediator, ICurrentUserService currentUserService, IBus bus)
+    public DeleteMessageConsumer(IMediator mediator, IUserContext userContext, IBus bus)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _bus = bus;
     }
 
@@ -74,7 +74,7 @@ public class DeleteMessageConsumer : IConsumer<DeleteMessage>
     {
         var message = context.Message;
 
-        await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         await _mediator.Send(new DeleteMessageCommand(message.ConversationId, message.MessageId));
     }
@@ -83,13 +83,13 @@ public class DeleteMessageConsumer : IConsumer<DeleteMessage>
 public class MarkMessageAsReadConsumer : IConsumer<MarkMessageAsRead>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IBus _bus;
 
-    public MarkMessageAsReadConsumer(IMediator mediator, ICurrentUserService currentUserService, IBus bus)
+    public MarkMessageAsReadConsumer(IMediator mediator, IUserContext userContext, IBus bus)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _bus = bus;
     }
 
@@ -97,7 +97,7 @@ public class MarkMessageAsReadConsumer : IConsumer<MarkMessageAsRead>
     {
         var message = context.Message;
 
-        await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         await _mediator.Send(new SendMessageReceiptCommand(message.MessageId));
     }
@@ -106,19 +106,19 @@ public class MarkMessageAsReadConsumer : IConsumer<MarkMessageAsRead>
 public class StartTypingConsumer : IConsumer<StartTyping>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public StartTypingConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public StartTypingConsumer(IMediator mediator, IUserContext userContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Consume(ConsumeContext<StartTyping> context)
     {
         var message = context.Message;
 
-        await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         //await _mediator.Send(new SendMessageReceiptCommand(message.MessageId));
     }
@@ -127,19 +127,19 @@ public class StartTypingConsumer : IConsumer<StartTyping>
 public class EndTypingConsumer : IConsumer<EndTyping>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public EndTypingConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public EndTypingConsumer(IMediator mediator, IUserContext userContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Consume(ConsumeContext<EndTyping> context)
     {
         var message = context.Message;
 
-        await _currentUserService.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         //await _mediator.Send(new SendMessageReceiptCommand(message.MessageId));
     }

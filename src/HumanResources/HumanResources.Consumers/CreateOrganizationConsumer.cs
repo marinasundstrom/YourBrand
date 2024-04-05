@@ -11,9 +11,9 @@ namespace YourBrand.HumanResources.Consumers;
 public class CreateOrganizationConsumer : IConsumer<CreateOrganization>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentPersonService;
+    private readonly IUserContext _currentPersonService;
 
-    public CreateOrganizationConsumer(IMediator mediator, ICurrentUserService currentPersonService)
+    public CreateOrganizationConsumer(IMediator mediator, IUserContext currentPersonService)
     {
         _mediator = mediator;
         _currentPersonService = currentPersonService;

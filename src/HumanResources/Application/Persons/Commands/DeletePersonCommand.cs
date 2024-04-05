@@ -14,10 +14,10 @@ public record DeletePersonCommand(string PersonId) : IRequest
     public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentPersonService;
+        private readonly IUserContext _currentPersonService;
         private readonly IEventPublisher _eventPublisher;
 
-        public DeletePersonCommandHandler(IApplicationDbContext context, ICurrentUserService currentPersonService, IEventPublisher eventPublisher)
+        public DeletePersonCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher)
         {
             _context = context;
             _currentPersonService = currentPersonService;

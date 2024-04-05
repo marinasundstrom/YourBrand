@@ -12,14 +12,14 @@ public record GetCompanyQuery(string Id) : IRequest<CompanyDto?>
     class GetCompanyQueryHandler : IRequestHandler<GetCompanyQuery, CompanyDto?>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetCompanyQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<CompanyDto?> Handle(GetCompanyQuery request, CancellationToken cancellationToken)

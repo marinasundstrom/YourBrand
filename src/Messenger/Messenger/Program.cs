@@ -78,7 +78,7 @@ services.AddAuthWithApiKey();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddMassTransit(x =>
 {

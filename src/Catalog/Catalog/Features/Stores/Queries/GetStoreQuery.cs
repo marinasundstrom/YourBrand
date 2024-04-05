@@ -12,14 +12,14 @@ public sealed record GetStoreQuery(string IdOrHandle) : IRequest<StoreDto?>
     sealed class GetStoreQueryHandler : IRequestHandler<GetStoreQuery, StoreDto?>
     {
         private readonly CatalogContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetStoreQueryHandler(
             CatalogContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<StoreDto?> Handle(GetStoreQuery request, CancellationToken cancellationToken)

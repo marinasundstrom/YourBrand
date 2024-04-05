@@ -13,14 +13,14 @@ public record GetWarehousesQuery(int Page = 0, int PageSize = 10, string? SiteId
     class GetWarehousesQueryHandler : IRequestHandler<GetWarehousesQuery, ItemsResult<WarehouseDto>>
     {
         private readonly IInventoryContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetWarehousesQueryHandler(
             IInventoryContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ItemsResult<WarehouseDto>> Handle(GetWarehousesQuery request, CancellationToken cancellationToken)

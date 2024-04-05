@@ -10,7 +10,7 @@ namespace YourBrand.TimeReport.Application.Organizations.Commands;
 
 public record AddUserToOrganization(string OrganizationId, string UserId) : IRequest<OrganizationDto>
 {
-    public class Handler(IOrganizationRepository organizationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<AddUserToOrganization, OrganizationDto>
+    public class Handler(IOrganizationRepository organizationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<AddUserToOrganization, OrganizationDto>
     {
         public async Task<OrganizationDto> Handle(AddUserToOrganization request, CancellationToken cancellationToken)
         {

@@ -10,14 +10,14 @@ public record UpdatePresentationCommand(string Id, string Text) : IRequest
     class UpdatePresentationCommandHandler : IRequestHandler<UpdatePresentationCommand>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public UpdatePresentationCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task Handle(UpdatePresentationCommand request, CancellationToken cancellationToken)

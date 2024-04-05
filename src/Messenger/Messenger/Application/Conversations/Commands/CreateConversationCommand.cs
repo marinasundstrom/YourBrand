@@ -17,20 +17,20 @@ public record CreateConversationCommand(string? Title) : IRequest<ConversationDt
     {
         private readonly IConversationRepository _conversationRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public CreateConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
+        public CreateConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus)
         {
             _conversationRepository = conversationRepository;
             _unitOfWork = unitOfWork;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _bus = bus;
         }
 
         public async Task<ConversationDto> Handle(CreateConversationCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
+            var userId = _userContext.UserId;
 
             var conversation = new Conversation()
             {

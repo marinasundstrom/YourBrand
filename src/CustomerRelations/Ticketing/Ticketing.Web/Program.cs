@@ -69,7 +69,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddSignalR();
 
@@ -177,8 +177,8 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     if (args.Contains("--seed"))
     {
-        var tenantService = scope.ServiceProvider.GetRequiredService<ITenantService>();
-        tenantService.SetTenantId(TenantConstants.TenantId);
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+        tenantContext.SetTenantId(TenantConstants.TenantId);
 
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 

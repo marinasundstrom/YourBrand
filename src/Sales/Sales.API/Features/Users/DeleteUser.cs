@@ -16,7 +16,7 @@ public record DeleteUser(string UserId) : IRequest<Result<DeleteUser>>
         }
     }
 
-    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<DeleteUser, Result>
+    public class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<DeleteUser, Result>
     {
         public async Task<Result> Handle(DeleteUser request, CancellationToken cancellationToken)
         {

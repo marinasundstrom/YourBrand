@@ -16,7 +16,7 @@ public record UpdateOrganization(string OrganizationId, string Name) : IRequest<
         }
     }
 
-    public class Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<UpdateOrganization, Result<OrganizationDto>>
+    public class Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<UpdateOrganization, Result<OrganizationDto>>
     {
         public async Task<Result<OrganizationDto>> Handle(UpdateOrganization request, CancellationToken cancellationToken)
         {

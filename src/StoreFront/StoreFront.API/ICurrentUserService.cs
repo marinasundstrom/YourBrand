@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.StoreFront.API;
 
-public interface ICurrentUserService
+public interface IUserContext
 {
     string? UserId { get; }
 

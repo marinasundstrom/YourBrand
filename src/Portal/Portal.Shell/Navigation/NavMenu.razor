@@ -1,7 +1,7 @@
 ﻿@using System.Runtime.CompilerServices
 @using Navigation
 @inject NavManager NavManager
-@inject YourBrand.Portal.Services.ICurrentUserService CurrentUserService
+@inject YourBrand.Portal.Services.IUserContext UserContext
 @inject IStringLocalizer<NavMenu> T
 @inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorageService
 @implements IDisposable
@@ -17,7 +17,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        roles = await CurrentUserService.GetRoles();
+        roles = await UserContext.GetRoles();
 
         foreach (var navGroup in NavManager.GetGroupsRecursive())
         {

@@ -16,16 +16,16 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
     class FindPersonProfilesQueryHandler : IRequestHandler<FindPersonProfilesQuery, Results<PersonProfileDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
         private readonly IUrlHelper _urlHelper;
 
         public FindPersonProfilesQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService,
+            IUserContext userContext,
             IUrlHelper urlHelper)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
             _urlHelper = urlHelper;
         }
 

@@ -16,7 +16,7 @@ public record AddUserToOrganization(string OrganizationId, string UserId) : IReq
         }
     }
 
-    public class Handler(IOrganizationRepository organizationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<AddUserToOrganization, Result<OrganizationDto>>
+    public class Handler(IOrganizationRepository organizationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<AddUserToOrganization, Result<OrganizationDto>>
     {
         public async Task<Result<OrganizationDto>> Handle(AddUserToOrganization request, CancellationToken cancellationToken)
         {

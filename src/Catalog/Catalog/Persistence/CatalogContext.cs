@@ -14,10 +14,10 @@ public sealed class CatalogContext : DbContext
 {
     private TenantId _tenantId;
 
-    public CatalogContext(DbContextOptions<CatalogContext> options, ITenantService tenantService) 
+    public CatalogContext(DbContextOptions<CatalogContext> options, ITenantContext tenantContext) 
         : base(options)
     {
-        _tenantId = tenantService.TenantId.GetValueOrDefault()!;
+        _tenantId = tenantContext.TenantId.GetValueOrDefault()!;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

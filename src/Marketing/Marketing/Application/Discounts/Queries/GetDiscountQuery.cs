@@ -12,14 +12,14 @@ public record GetDiscountQuery(string Id) : IRequest<DiscountDto?>
     class GetDiscountQueryHandler : IRequestHandler<GetDiscountQuery, DiscountDto?>
     {
         private readonly IMarketingContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetDiscountQueryHandler(
             IMarketingContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<DiscountDto?> Handle(GetDiscountQuery request, CancellationToken cancellationToken)

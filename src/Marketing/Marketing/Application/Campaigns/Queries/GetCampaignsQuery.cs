@@ -13,14 +13,14 @@ public record GetCampaignsQuery(int Page = 0, int PageSize = 10, string? SearchS
     class GetCampaignsQueryHandler : IRequestHandler<GetCampaignsQuery, ItemsResult<CampaignDto>>
     {
         private readonly IMarketingContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetCampaignsQueryHandler(
             IMarketingContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ItemsResult<CampaignDto>> Handle(GetCampaignsQuery request, CancellationToken cancellationToken)

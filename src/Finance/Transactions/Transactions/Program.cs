@@ -47,7 +47,7 @@ builder.Services
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 

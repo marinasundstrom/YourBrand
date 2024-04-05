@@ -14,14 +14,14 @@ public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? Sea
     class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, Results<OrganizationDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetOrganizationsQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<Results<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)

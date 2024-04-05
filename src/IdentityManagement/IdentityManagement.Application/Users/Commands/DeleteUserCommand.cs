@@ -14,13 +14,13 @@ public record DeleteUserCommand(string UserId) : IRequest
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IEventPublisher _eventPublisher;
 
-        public DeleteUserCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IEventPublisher eventPublisher)
+        public DeleteUserCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
         {
             _context = context;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _eventPublisher = eventPublisher;
         }
 
@@ -39,7 +39,7 @@ public record DeleteUserCommand(string UserId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserDeleted(user.Id, _currentUserService.UserId));
+            await _eventPublisher.PublishEvent(new UserDeleted(user.Id, _userContext.UserId));
 
         }
     }

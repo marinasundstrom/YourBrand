@@ -65,7 +65,7 @@ services
 services.AddHttpContextAccessor();
 
 services.AddIdentityServices();
-services.AddTenantService();
+services.AddTenantContext();
 
 services.AddScoped<IBlobService, BlobService>();
 

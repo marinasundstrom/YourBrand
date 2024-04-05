@@ -11,12 +11,12 @@ namespace YourBrand.IdentityManagement.Consumers;
 public class CreateOrganizationConsumer : IConsumer<CreateOrganization>
 {
     private readonly IMediator _mediator;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
 
-    public CreateOrganizationConsumer(IMediator mediator, ICurrentUserService currentUserService)
+    public CreateOrganizationConsumer(IMediator mediator, IUserContext userContext)
     {
         _mediator = mediator;
-        _currentUserService = currentUserService;
+        _userContext = userContext;
     }
 
     public async Task Consume(ConsumeContext<CreateOrganization> context)

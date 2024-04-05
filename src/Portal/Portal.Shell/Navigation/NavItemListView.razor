@@ -1,5 +1,5 @@
 @using Navigation
-@inject YourBrand.Portal.Services.ICurrentUserService CurrentUserService
+@inject YourBrand.Portal.Services.IUserContext UserContext
 
 @foreach(var item in Items) 
 {
@@ -45,7 +45,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        roles = await CurrentUserService.GetRoles();
+        roles = await UserContext.GetRoles();
     }
 
     [Parameter]

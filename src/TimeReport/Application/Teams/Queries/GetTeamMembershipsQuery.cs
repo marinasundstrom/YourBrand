@@ -15,14 +15,14 @@ public record GetTeamMembershipsQuery(string Id, int Page = 0, int PageSize = 10
     class GetTeamMembershipsQueryHandler : IRequestHandler<GetTeamMembershipsQuery, ItemsResult<TeamMembershipDto>>
     {
         private readonly ITimeReportContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public GetTeamMembershipsQueryHandler(
             ITimeReportContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<ItemsResult<TeamMembershipDto>> Handle(GetTeamMembershipsQuery request, CancellationToken cancellationToken)

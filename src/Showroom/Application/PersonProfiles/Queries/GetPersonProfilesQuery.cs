@@ -15,16 +15,16 @@ public record GetPersonProfilesAsync(int Page = 0, int PageSize = 10, string? Or
     class GetPersonProfilesAsyncHandler : IRequestHandler<GetPersonProfilesAsync, Results<PersonProfileDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
         private readonly IUrlHelper _urlHelper;
 
         public GetPersonProfilesAsyncHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService,
+            IUserContext userContext,
             IUrlHelper urlHelper)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
             _urlHelper = urlHelper;
         }
 

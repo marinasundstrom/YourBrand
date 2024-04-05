@@ -6,7 +6,7 @@ public static class ServicesExtensions
 {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services)
     {
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IUserContext, UserContext>();
 
         return services;
     }

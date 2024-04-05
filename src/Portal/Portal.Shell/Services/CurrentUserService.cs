@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace YourBrand.Portal.Services;
 
-public class CurrentUserService(AuthenticationStateProvider authenticationStateProvider) : ICurrentUserService
+public class UserContext(AuthenticationStateProvider authenticationStateProvider) : IUserContext
 {
     private readonly AuthenticationStateProvider _authenticationStateProvider = authenticationStateProvider;
 

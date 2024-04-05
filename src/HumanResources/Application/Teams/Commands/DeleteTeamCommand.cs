@@ -12,11 +12,11 @@ public record DeleteTeamCommand(string TeamId) : IRequest
 {
     public class Handler : IRequestHandler<DeleteTeamCommand>
     {
-        private readonly ICurrentUserService _currentPersonService;
+        private readonly IUserContext _currentPersonService;
         private readonly IApplicationDbContext _context;
         private readonly IEventPublisher _eventPublisher;
 
-        public Handler(ICurrentUserService currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher)
+        public Handler(IUserContext currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher)
         {
             _currentPersonService = currentPersonService;
             _context = context;

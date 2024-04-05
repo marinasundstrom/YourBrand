@@ -10,16 +10,16 @@ public record UpdatePersonProfileCommand(string Id, UpdatePersonProfileDto Perso
     class UpdatePersonProfileCommandHandler : IRequestHandler<UpdatePersonProfileCommand, PersonProfileDto>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
         private readonly IUrlHelper _urlHelper;
 
         public UpdatePersonProfileCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService,
+            IUserContext userContext,
             IUrlHelper urlHelper)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
             _urlHelper = urlHelper;
         }
 

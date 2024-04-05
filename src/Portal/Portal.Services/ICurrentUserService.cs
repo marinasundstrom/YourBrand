@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Portal.Services;
 
-public interface ICurrentUserService
+public interface IUserContext
 {
     Task<string?> GetUserId();
     Task<IEnumerable<string>> GetRoles();

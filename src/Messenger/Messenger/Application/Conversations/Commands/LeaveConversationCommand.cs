@@ -15,20 +15,20 @@ public record LeaveConversationCommand(string? ConversationId) : IRequest
     {
         private readonly IConversationRepository _conversationRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserContext _userContext;
         private readonly IBus _bus;
 
-        public LeaveConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBus bus)
+        public LeaveConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus)
         {
             _conversationRepository = conversationRepository;
             _unitOfWork = unitOfWork;
-            _currentUserService = currentUserService;
+            _userContext = userContext;
             _bus = bus;
         }
 
         public async Task Handle(LeaveConversationCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentUserService.UserId;
+            var userId = _userContext.UserId;
 
             var conversation = await _conversationRepository.GetConversation(request.ConversationId!, cancellationToken);
 

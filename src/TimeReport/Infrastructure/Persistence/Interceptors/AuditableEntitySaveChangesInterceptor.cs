@@ -12,18 +12,18 @@ namespace YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IUserContext _userContext;
     private readonly IDateTime _dateTime;
-    private readonly ITenantService _tenantService;
+    private readonly ITenantContext _tenantContext;
 
     public AuditableEntitySaveChangesInterceptor(
-        ICurrentUserService currentUserService,
+        IUserContext userContext,
         IDateTime dateTime,
-        ITenantService tenantService)
+        ITenantContext tenantContext)
     {
-        _currentUserService = currentUserService;
+        _userContext = userContext;
         _dateTime = dateTime;
-        _tenantService = tenantService;
+        _tenantContext = tenantContext;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -48,24 +48,24 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedById = _currentUserService.UserId;
+                entry.Entity.CreatedById = _userContext.UserId;
                 entry.Entity.Created = _dateTime.Now;
 
                 if (entry.Entity is IHasTenant hasTenant)
                 {
-                    hasTenant.TenantId = _tenantService.TenantId.GetValueOrDefault();
+                    hasTenant.TenantId = _tenantContext.TenantId.GetValueOrDefault();
                 }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedById = _currentUserService.UserId;
+                entry.Entity.LastModifiedById = _userContext.UserId;
                 entry.Entity.LastModified = _dateTime.Now;
             }
             else if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDelete softDelete)
                 {
-                    softDelete.DeletedById = _currentUserService.UserId;
+                    softDelete.DeletedById = _userContext.UserId;
                     softDelete.Deleted = _dateTime.Now;
 
                     entry.State = EntityState.Modified;

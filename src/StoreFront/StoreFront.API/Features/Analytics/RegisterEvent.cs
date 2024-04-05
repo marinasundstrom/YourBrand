@@ -12,14 +12,14 @@ public sealed record RegisterEvent(string ClientId, string SessionId, EventType 
     sealed class Handler : IRequestHandler<RegisterEvent, string>
     {
         private readonly IEventsClient eventsClient;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public Handler(
             YourBrand.Analytics.IEventsClient eventsClient,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             this.eventsClient = eventsClient;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task<string> Handle(RegisterEvent request, CancellationToken cancellationToken)

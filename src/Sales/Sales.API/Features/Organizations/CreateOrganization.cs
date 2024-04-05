@@ -18,7 +18,7 @@ public record CreateOrganization(string Id, string Name, string TenantId) : IReq
         }
     }
 
-    public class Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<CreateOrganization, Result<OrganizationDto>>
+    public class Handler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<CreateOrganization, Result<OrganizationDto>>
     {
         public async Task<Result<OrganizationDto>> Handle(CreateOrganization request, CancellationToken cancellationToken)
         {

@@ -10,10 +10,10 @@ public record GetOrderStatusQuery(int Id) : IRequest<OrderStatusDto?>
 {
     class GetOrderStatusQueryHandler(
         ISalesContext context,
-        ICurrentUserService currentUserService) : IRequestHandler<GetOrderStatusQuery, OrderStatusDto?>
+        IUserContext userContext) : IRequestHandler<GetOrderStatusQuery, OrderStatusDto?>
     {
         private readonly ISalesContext _context = context;
-        private readonly ICurrentUserService currentUserService = currentUserService;
+        private readonly IUserContext userContext = userContext;
 
         public async Task<OrderStatusDto?> Handle(GetOrderStatusQuery request, CancellationToken cancellationToken)
         {

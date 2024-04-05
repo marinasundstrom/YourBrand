@@ -74,7 +74,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddIdentityServices()
-    .AddTenantService();
+    .AddTenantContext();
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>

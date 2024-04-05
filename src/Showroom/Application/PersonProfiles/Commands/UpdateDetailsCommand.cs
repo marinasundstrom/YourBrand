@@ -10,14 +10,14 @@ public record UpdateDetailsCommand(string Id, PersonProfileDetailsDto Details) :
     class UpdateDetailsCommandHandler : IRequestHandler<UpdateDetailsCommand>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
 
         public UpdateDetailsCommandHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService)
+            IUserContext userContext)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
         }
 
         public async Task Handle(UpdateDetailsCommand request, CancellationToken cancellationToken)

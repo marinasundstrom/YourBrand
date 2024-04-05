@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Tenancy;
 
-public interface ITenantService
+public interface ITenantContext
 {
     TenantId? TenantId { get; }
 

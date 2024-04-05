@@ -15,16 +15,16 @@ public record GetCompaniesQuery(int Page = 0, int PageSize = 10, int? IndustryId
     class GetCompaniesQueryHandler : IRequestHandler<GetCompaniesQuery, Results<CompanyDto>>
     {
         private readonly IShowroomContext _context;
-        private readonly ICurrentUserService currentUserService;
+        private readonly IUserContext userContext;
         private readonly IUrlHelper _urlHelper;
 
         public GetCompaniesQueryHandler(
             IShowroomContext context,
-            ICurrentUserService currentUserService,
+            IUserContext userContext,
             IUrlHelper urlHelper)
         {
             _context = context;
-            this.currentUserService = currentUserService;
+            this.userContext = userContext;
             _urlHelper = urlHelper;
         }
 

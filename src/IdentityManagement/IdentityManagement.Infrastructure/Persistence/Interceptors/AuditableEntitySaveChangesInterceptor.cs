@@ -10,11 +10,11 @@ namespace YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
-    private readonly ICurrentUserService _currentPersonService;
+    private readonly IUserContext _currentPersonService;
     private readonly IDateTime _dateTime;
 
     public AuditableEntitySaveChangesInterceptor(
-        ICurrentUserService currentPersonService,
+        IUserContext currentPersonService,
         IDateTime dateTime)
     {
         _currentPersonService = currentPersonService;

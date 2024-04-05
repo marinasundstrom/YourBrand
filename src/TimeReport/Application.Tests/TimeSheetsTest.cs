@@ -28,11 +28,11 @@ public class TimeSheetsTest : TestBase
 
         User user = CreateTestUser();
 
-        fakeCurrentUserService.UserId.Returns(x =>  new UserId(user.Id));
+        fakeUserContext.UserId.Returns(x =>  new UserId(user.Id));
 
         using ITimeReportContext context = CreateDbContext();
 
-        fakeCurrentUserService.UserId.Returns(x => new UserId(user.Id));
+        fakeUserContext.UserId.Returns(x => new UserId(user.Id));
 
         context.Users.Add(user);
 
@@ -54,7 +54,7 @@ public class TimeSheetsTest : TestBase
 
         var unitOfWork = Substitute.For<IUnitOfWork>();
 
-        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(timeSheetRepository, reportingPeriodRepository, userRepository, unitOfWork, context, fakeCurrentUserService);
+        var commandHandler = new GetTimeSheetForWeekQuery.GetTimeSheetForWeekQueryHandler(timeSheetRepository, reportingPeriodRepository, userRepository, unitOfWork, context, fakeUserContext);
 
         var initialTimeSheetsCount = await context.TimeSheets.CountAsync();
 

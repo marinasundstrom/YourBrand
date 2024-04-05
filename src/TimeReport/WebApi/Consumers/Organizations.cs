@@ -9,52 +9,52 @@ using YourBrand.TimeReport.Application.Organizations.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
-public class TimeReportOrganizationCreatedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentOrganizationService) : IConsumer<OrganizationCreated>
+public class TimeReportOrganizationCreatedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext currentOrganizationService) : IConsumer<OrganizationCreated>
 {
     public async Task Consume(ConsumeContext<OrganizationCreated> context)
     {
         var message = context.Message;
 
-        tenantService.SetTenantId(message.TenantId);
+        tenantContext.SetTenantId(message.TenantId);
         currentOrganizationService.SetCurrentUser(message.CreatedById);
 
         var result = await mediator.Send(new CreateOrganizationCommand(message.OrganizationId, message.Name, null));
     }
 }
 
-public class TimeReportOrganizationDeletedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentOrganizationService) : IConsumer<OrganizationDeleted>
+public class TimeReportOrganizationDeletedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext currentOrganizationService) : IConsumer<OrganizationDeleted>
 {
     public async Task Consume(ConsumeContext<OrganizationDeleted> context)
     {
         var message = context.Message;
 
-        //tenantService.SetTenantId(message.TenantId);
+        //tenantContext.SetTenantId(message.TenantId);
         currentOrganizationService.SetCurrentUser(message.DeletedById);
 
         await mediator.Send(new DeleteOrganizationCommand(message.OrganizationId));
     }
 }
 
-public class TimeReportOrganizationUpdatedConsumer(IMediator mediator, ITenantService tenantService, ICurrentUserService currentOrganizationService) : IConsumer<OrganizationUpdated>
+public class TimeReportOrganizationUpdatedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext currentOrganizationService) : IConsumer<OrganizationUpdated>
 {
     public async Task Consume(ConsumeContext<OrganizationUpdated> context)
     {
         var message = context.Message;
 
-        //tenantService.SetTenantId(message.TenantId);
+        //tenantContext.SetTenantId(message.TenantId);
         currentOrganizationService.SetCurrentUser(message.UpdatedById);
 
         var result = await mediator.Send(new UpdateOrganizationCommand(message.OrganizationId, message.Name));
     }
 }
 
-public class TimeReportOrganizationUserAddedConsumer(IMediator mediator, ITenantService tenantService) : IConsumer<OrganizationUserAdded>
+public class TimeReportOrganizationUserAddedConsumer(IMediator mediator, ITenantContext tenantContext) : IConsumer<OrganizationUserAdded>
 {
     public async Task Consume(ConsumeContext<OrganizationUserAdded> context)
     {
         var message = context.Message;
 
-        tenantService.SetTenantId(message.TenantId);
+        tenantContext.SetTenantId(message.TenantId);
 
         var result = await mediator.Send(new AddUserToOrganization(message.OrganizationId, message.UserId));
     }

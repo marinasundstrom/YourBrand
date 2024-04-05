@@ -1,14 +1,14 @@
 namespace YourBrand.Identity;
 
-public static class CurrentUserServiceExtensions
+public static class UserContextExtensions
 {
-    public static bool IsCurrentUser(this ICurrentUserService currentUserService, string userId)
+    public static bool IsCurrentUser(this IUserContext userContext, string userId)
     {
-        return currentUserService.UserId == userId;
+        return userContext.UserId == userId;
     }
 
-    public static bool IsUserInRole(this ICurrentUserService currentUserService, string role)
+    public static bool IsUserInRole(this IUserContext userContext, string role)
     {
-        return currentUserService.Role == role;
+        return userContext.Role == role;
     }
 }
