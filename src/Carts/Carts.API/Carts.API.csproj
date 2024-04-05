@@ -44,7 +44,7 @@
     <ProjectReference Include="..\..\Common\SampleTenant\SampleTenant.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
-    <ProjectReference Include="..\..\Common\Domain.MassTransit\Domain.MassTransit.csproj">
+    <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

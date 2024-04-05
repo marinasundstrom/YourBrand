@@ -22,7 +22,7 @@ using YourBrand.Carts.Persistence.Interceptors;
 
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
+using YourBrand.Integration;
 
 string ServiceName = "Carts.API";
 

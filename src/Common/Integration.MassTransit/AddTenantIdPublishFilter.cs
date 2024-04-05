@@ -2,7 +2,7 @@ using MassTransit;
 
 using YourBrand.Tenancy;
 
-namespace YourBrand.Domain;
+namespace YourBrand.Integration;
 
 public sealed class AddTenantIdPublishFilter<T>(ITenantContext tenantContext) :
     IFilter<PublishContext<T>>

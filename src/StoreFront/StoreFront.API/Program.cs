@@ -31,7 +31,7 @@ using YourBrand.StoreFront.API.Persistence;
 
 //using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
+using YourBrand.Integration;
 
 string ServiceName = "StoreFront.API";
 

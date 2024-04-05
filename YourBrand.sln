@@ -419,7 +419,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftDelete.EFCore", "src\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications.Contracts", "src\Notifications\Notifications.Contracts\Notifications.Contracts.csproj", "{DC658A27-5273-476B-B147-AC67EA2717EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.MassTransit", "src\Common\Domain.MassTransit\Domain.MassTransit.csproj", "{1EDA64F8-BF27-426C-86DE-3EE45F927E39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.MassTransit", "src\Common\Integration.MassTransit\Integration.MassTransit.csproj", "{1EDA64F8-BF27-426C-86DE-3EE45F927E39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

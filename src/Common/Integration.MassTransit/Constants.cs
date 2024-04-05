@@ -1,4 +1,4 @@
-namespace YourBrand.Domain;
+namespace YourBrand.Integration;
 
 public static class Constants 
 {

@@ -2,7 +2,7 @@ using MassTransit;
 
 using YourBrand.Tenancy;
 
-namespace YourBrand.Domain;
+namespace YourBrand.Integration;
 
 public class ReadTenantIdConsumeFilter<T>(ITenantContext tenantContext) :
     IFilter<ConsumeContext<T>>
