@@ -22,6 +22,7 @@ using YourBrand.Carts.Persistence.Interceptors;
 
 using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 string ServiceName = "Carts.API";
 
@@ -115,7 +116,7 @@ builder.Services.AddMassTransit(x =>
                 h.Password("guest");
             });
 
-            cfg.UseConsumeFilter(typeof(ReadTenantIdFilter<>), context);
+            cfg.UseConsumeFilter(typeof(ReadTenantIdConsumeFilter<>), context);
 
             cfg.ConfigureEndpoints(context);
         });
@@ -198,23 +199,3 @@ static async Task SeedData(CartsContext context, IConfiguration configuration, I
 
 // INFO: Makes Program class visible to IntegrationTests.
 public partial class Program { }
-
-public class ReadTenantIdFilter<T>(ITenantContext tenantContext) :
-    IFilter<ConsumeContext<T>>
-    where T : class
-{
-    public void Probe(ProbeContext context)
-    {
-    }
-
-    public Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
-    {
-        var tenantId = context.Headers.Get<string>("TenantId");
-
-        Console.WriteLine("HEADER: " + tenantId);
-
-        tenantContext.SetTenantId(tenantId!);
-
-        return next.Send(context);
-    }
-}

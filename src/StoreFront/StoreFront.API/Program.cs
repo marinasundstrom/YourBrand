@@ -31,6 +31,7 @@ using YourBrand.StoreFront.API.Persistence;
 
 //using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 string ServiceName = "StoreFront.API";
 
@@ -113,8 +114,8 @@ builder.Services.AddMassTransit(x =>
                 h.Password("guest");
             });
 
-            cfg.UseSendFilter(typeof(AddTenantIdFilter<>), context);
-            cfg.UsePublishFilter(typeof(AddTenantIdFilter2<>), context);
+            cfg.UseSendFilter(typeof(AddTenantIdSendFilter<>), context);
+            cfg.UsePublishFilter(typeof(AddTenantIdPublishFilter<>), context);
 
             cfg.ConfigureEndpoints(context);
         });
@@ -293,39 +294,3 @@ static void AddClients(WebApplicationBuilder builder)
 
 // INFO: Makes Program class visible to IntegrationTests.
 public partial class Program { }
-
-public class AddTenantIdFilter<T>(ITenantContext tenantContext) :
-    IFilter<SendContext<T>>
-    where T : class
-{
-    public void Probe(ProbeContext context)
-    {
-    }
-
-    public Task Send(SendContext<T> context, IPipe<SendContext<T>> next)
-    {
-        context.Headers.Set("TenantId", tenantContext.TenantId);
-
-        Console.WriteLine("HEADER: " + tenantContext.TenantId);
-
-        return next.Send(context);
-    }
-}
-
-public class AddTenantIdFilter2<T>(ITenantContext tenantContext) :
-    IFilter<PublishContext<T>>
-    where T : class
-{
-    public void Probe(ProbeContext context)
-    {
-    }
-
-    public Task Send(PublishContext<T> context, IPipe<PublishContext<T>> next)
-    {
-        context.Headers.Set("TenantId", tenantContext.TenantId);
-
-        Console.WriteLine("HEADER: " + tenantContext.TenantId);
-
-        return next.Send(context);
-    }
-}
