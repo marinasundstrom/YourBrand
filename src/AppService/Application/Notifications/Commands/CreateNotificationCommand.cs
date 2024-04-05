@@ -2,10 +2,10 @@ using System.Diagnostics.Contracts;
 
 using MassTransit;
 
-using YourBrand.Notifications.Contracts;
-
 using MediatR;
+
 using YourBrand.Identity;
+using YourBrand.Notifications.Contracts;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Application.Notifications.Commands;

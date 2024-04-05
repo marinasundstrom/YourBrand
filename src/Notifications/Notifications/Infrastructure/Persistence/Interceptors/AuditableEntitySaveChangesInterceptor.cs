@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 
 namespace YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 

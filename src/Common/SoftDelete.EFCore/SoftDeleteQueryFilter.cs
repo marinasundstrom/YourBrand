@@ -5,8 +5,8 @@ namespace YourBrand.Domain;
 
 public static class SoftDeleteQueryFilter
 {
-    static Type softDeleteInterface = typeof(ISoftDelete);
-    static PropertyInfo deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDelete.Deleted));
+    static readonly Type softDeleteInterface = typeof(ISoftDelete);
+    static readonly PropertyInfo deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDelete.Deleted));
 
     public static Expression<Func<ISoftDelete, bool>>? GetFilter()
     {

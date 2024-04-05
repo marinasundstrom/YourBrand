@@ -37,7 +37,7 @@ public class ModulesController : ControllerBase
     {
         //var foo = await HttpContext.GetTokenAsync("access_token");
         //Console.WriteLine(foo);
-        
+
         await mediator.Send(new ToggleModule(id), cancellationToken);
         return Ok();
     }

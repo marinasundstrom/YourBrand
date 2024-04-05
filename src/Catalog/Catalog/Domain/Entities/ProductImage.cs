@@ -15,7 +15,7 @@ public class ProductImage : Entity<string>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
-    
+
     public Store? Store { get; set; }
 
     public string? StoreId { get; set; }

@@ -16,7 +16,7 @@ public static class Seed
     public static async Task SeedAsync(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
-        
+
         var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
         tenantContext.SetTenantId(TenantConstants.TenantId);
 

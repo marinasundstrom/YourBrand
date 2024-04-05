@@ -7,10 +7,9 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.EmailService;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Notifications.Consumers;
 using YourBrand.Notifications.Services;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);

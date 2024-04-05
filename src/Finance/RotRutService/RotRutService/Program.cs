@@ -12,6 +12,7 @@ using YourBrand;
 using YourBrand.Accounting.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Identity;
 using YourBrand.Invoicing.Client;
 using YourBrand.Payments.Client;
 using YourBrand.RotRutService;
@@ -20,10 +21,8 @@ using YourBrand.RotRutService.Application.Commands;
 using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Infrastructure;
 using YourBrand.RotRutService.Infrastructure.Persistence;
-using YourBrand.Transactions.Client;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Transactions.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

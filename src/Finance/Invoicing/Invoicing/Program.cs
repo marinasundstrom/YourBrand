@@ -15,6 +15,7 @@ using YourBrand;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Identity;
 using YourBrand.Invoicing;
 using YourBrand.Invoicing.Application;
 using YourBrand.Invoicing.Application.Commands;
@@ -24,8 +25,6 @@ using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Infrastructure;
 using YourBrand.Invoicing.Infrastructure.Persistence;
 using YourBrand.Payments.Client;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);

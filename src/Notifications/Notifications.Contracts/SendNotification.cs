@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Notifications.Contracts;
 
-public record SendNotification 
+public record SendNotification
 {
     public required string TenantId { get; set; }
     public required string Content { get; set; }

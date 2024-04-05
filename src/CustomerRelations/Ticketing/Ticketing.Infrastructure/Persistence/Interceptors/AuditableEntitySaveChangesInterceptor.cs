@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Interceptors;
 

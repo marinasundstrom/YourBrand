@@ -15,7 +15,7 @@ public sealed class ProductCategory : Entity<long>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
-    
+
     public Store? Store { get; set; }
 
     public string? StoreId { get; set; }

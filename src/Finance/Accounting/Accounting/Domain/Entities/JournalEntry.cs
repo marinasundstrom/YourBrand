@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 namespace YourBrand.Accounting.Domain.Entities;
 
 public class JournalEntry : AuditableEntity, IHasTenant
-{    
+{
     private readonly HashSet<LedgerEntry> _entries = new();
     private readonly HashSet<Verification> _verifications = new HashSet<Verification>();
 

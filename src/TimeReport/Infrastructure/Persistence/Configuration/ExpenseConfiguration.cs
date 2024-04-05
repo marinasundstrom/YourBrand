@@ -15,7 +15,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
         builder.Ignore(x => x.DomainEvents);
 
         builder.Property(x => x.Date)
-            .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));      
+            .HasConversion(x => x.ToDateTime(TimeOnly.Parse("01:00")), x => DateOnly.FromDateTime(x));
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

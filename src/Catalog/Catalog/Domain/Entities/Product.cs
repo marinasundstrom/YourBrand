@@ -34,7 +34,7 @@ public sealed class Product : Entity<long>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
-    
+
     public Store? Store { get; internal set; }
 
     public string? StoreId { get; private set; }

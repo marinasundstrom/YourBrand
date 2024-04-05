@@ -1,6 +1,6 @@
 namespace YourBrand.Portal;
 
-public interface IUserSearchProvider 
+public interface IUserSearchProvider
 {
     Task<IEnumerable<User>> QueryUsersAsync(string? searchTerm, CancellationToken cancellationToken = default);
 }

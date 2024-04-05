@@ -11,7 +11,7 @@ public class User : AggregateRoot<string>, IAuditable, IHasTenant
         Name = name;
         Email = email;
     }
-    
+
     public TenantId TenantId { get; set; }
 
     public string Name { get; private set; }

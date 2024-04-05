@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Catalog.Domain.Entities;
+using YourBrand.Catalog.Services;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Catalog.Services;
 
 namespace YourBrand.Catalog.Persistence.Interceptors;
 

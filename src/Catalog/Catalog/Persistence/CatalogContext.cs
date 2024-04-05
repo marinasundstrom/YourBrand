@@ -14,7 +14,7 @@ public sealed class CatalogContext : DbContext
 {
     private TenantId _tenantId;
 
-    public CatalogContext(DbContextOptions<CatalogContext> options, ITenantContext tenantContext) 
+    public CatalogContext(DbContextOptions<CatalogContext> options, ITenantContext tenantContext)
         : base(options)
     {
         _tenantId = tenantContext.TenantId.GetValueOrDefault()!;
@@ -35,7 +35,7 @@ public sealed class CatalogContext : DbContext
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if(clrType.BaseType != typeof(object))
+            if (clrType.BaseType != typeof(object))
             {
                 continue;
             }

@@ -11,12 +11,11 @@ using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Notifications;
 using YourBrand.Notifications.Application;
 using YourBrand.Notifications.Infrastructure;
 using YourBrand.Notifications.Infrastructure.Persistence;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);

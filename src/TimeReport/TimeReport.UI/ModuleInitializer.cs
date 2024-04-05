@@ -23,7 +23,7 @@ public class ModuleInitializer : IModuleInitializer
         {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
         });
-        
+
         services.AddKeyedScoped<IUserSearchProvider, UserSearchProvider>(ServiceKeys.UserSearchProviderKey);
         services.AddKeyedScoped<IOrganizationSearchProvider, OrganizationSearchProvider>(ServiceKeys.OrganizationSearchProviderKey);
     }
@@ -40,12 +40,13 @@ public class ModuleInitializer : IModuleInitializer
 
         group.CreateItem("projects", () => resources["Projects"], MudBlazor.Icons.Material.Filled.List, "/projects");
         group.CreateItem("report-time", () => resources["Report time"], MudBlazor.Icons.Material.Filled.AccessTime, "/timesheet");
-        group.CreateItem("timesheets",options => {
+        group.CreateItem("timesheets", options =>
+        {
             options.SetName(() => resources["Timesheets"]);
             options.Icon = MudBlazor.Icons.Material.Filled.ListAlt;
             options.Href = "/timesheets";
             options.RequiresAuthorization = true;
-            options.Roles = [ "Administrator" ];
+            options.Roles = ["Administrator"];
         });
         group.CreateItem("generate-reports", () => resources["GenerateReport"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
     }

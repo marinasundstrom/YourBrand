@@ -13,6 +13,8 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.Transactions;
 using YourBrand.Transactions.Application;
 using YourBrand.Transactions.Application.Commands;
@@ -21,9 +23,6 @@ using YourBrand.Transactions.Domain.Enums;
 using YourBrand.Transactions.Hubs;
 using YourBrand.Transactions.Infrastructure;
 using YourBrand.Transactions.Infrastructure.Persistence;
-
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
 

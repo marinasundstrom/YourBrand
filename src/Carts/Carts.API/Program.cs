@@ -15,14 +15,12 @@ using YourBrand;
 using YourBrand.Carts;
 using YourBrand.Carts.Features.CartsManagement;
 using YourBrand.Carts.Persistence;
+using YourBrand.Carts.Persistence.Interceptors;
 using YourBrand.Carts.Services;
 using YourBrand.Extensions;
-
-using YourBrand.Carts.Persistence.Interceptors;
-
 using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Integration;
+using YourBrand.Tenancy;
 
 string ServiceName = "Carts.API";
 
@@ -170,7 +168,7 @@ try
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
             await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync(); 
+            await context.Database.EnsureCreatedAsync();
 
             await SeedData(context, configuration, logger);
             return;

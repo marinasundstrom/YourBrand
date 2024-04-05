@@ -21,14 +21,11 @@ using YourBrand.Catalog.Features;
 using YourBrand.Catalog.Features.ProductManagement.Products;
 using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 using YourBrand.Catalog.Persistence;
+using YourBrand.Catalog.Persistence.Interceptors;
+using YourBrand.Catalog.Services;
 using YourBrand.Extensions;
-
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-
-using YourBrand.Catalog.Services;
-
-using YourBrand.Catalog.Persistence.Interceptors;
 
 string ServiceName = "Catalog";
 

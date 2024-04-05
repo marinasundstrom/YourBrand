@@ -1,9 +1,8 @@
 namespace YourBrand.Showroom.Domain.Entities;
 
+using YourBrand.Domain;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
-
-using YourBrand.Domain;
 
 public class PersonProfileEducation : AuditableEntity, IHasTenant, ISoftDelete
 {

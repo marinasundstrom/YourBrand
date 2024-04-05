@@ -1,10 +1,9 @@
 using MediatR;
 
-using YourBrand.TimeReport.Domain;
-using YourBrand.TimeReport.Domain.Repositories;
-
 using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.TimeReport.Domain;
+using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.Organizations.Commands;
 

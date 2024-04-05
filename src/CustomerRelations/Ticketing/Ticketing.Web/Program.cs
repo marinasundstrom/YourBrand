@@ -13,15 +13,14 @@ using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.Ticketing;
 using YourBrand.Ticketing.Application;
 using YourBrand.Ticketing.Application.Services;
 using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Web;
 using YourBrand.Ticketing.Web.Middleware;
-
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 Activity.ForceDefaultIdFormat = true;

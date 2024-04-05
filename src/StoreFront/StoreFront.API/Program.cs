@@ -20,6 +20,7 @@ using YourBrand.Analytics.Client;
 using YourBrand.Carts;
 using YourBrand.Catalog;
 using YourBrand.Extensions;
+using YourBrand.Integration;
 using YourBrand.Inventory.Client;
 using YourBrand.Sales;
 using YourBrand.StoreFront.API;
@@ -28,10 +29,8 @@ using YourBrand.StoreFront.API.Features.Cart;
 using YourBrand.StoreFront.API.Features.Checkout;
 using YourBrand.StoreFront.API.Features.Products;
 using YourBrand.StoreFront.API.Persistence;
-
 //using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Integration;
 
 string ServiceName = "StoreFront.API";
 

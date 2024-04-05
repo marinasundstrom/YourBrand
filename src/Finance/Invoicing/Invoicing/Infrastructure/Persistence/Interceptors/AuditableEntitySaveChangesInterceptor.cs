@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 
 namespace YourBrand.Invoicing.Infrastructure.Persistence.Interceptors;
 

@@ -1,10 +1,9 @@
-using YourBrand.Notifications.Contracts;
-
 using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
+using YourBrand.Notifications.Contracts;
 using YourBrand.Notifications.Domain.Entities;
 
 namespace YourBrand.Notifications.Services;

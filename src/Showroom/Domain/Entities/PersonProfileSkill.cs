@@ -1,9 +1,8 @@
-﻿using YourBrand.Showroom.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Enums;
 using YourBrand.Showroom.Domain.ValueObjects;
 using YourBrand.Tenancy;
-
-using YourBrand.Domain;
 
 namespace YourBrand.Showroom.Domain.Entities;
 

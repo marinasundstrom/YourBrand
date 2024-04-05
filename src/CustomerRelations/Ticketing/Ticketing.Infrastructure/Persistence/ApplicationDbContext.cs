@@ -45,7 +45,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationD
             {
                 continue;
             }
-            
+
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);

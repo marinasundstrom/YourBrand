@@ -7,14 +7,13 @@ using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Messenger;
 using YourBrand.Messenger.Application;
 using YourBrand.Messenger.Authentication;
 using YourBrand.Messenger.Hubs;
 using YourBrand.Messenger.Infrastructure;
 using YourBrand.Messenger.Infrastructure.Persistence;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);

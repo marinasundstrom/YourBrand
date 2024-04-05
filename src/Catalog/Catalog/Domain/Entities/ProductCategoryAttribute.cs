@@ -5,7 +5,7 @@ namespace YourBrand.Catalog.Domain.Entities;
 public class ProductCategoryAttribute : Entity<Guid>, IHasTenant
 {
     public TenantId TenantId { get; set; }
-    
+
     public long ProductCategoryId { get; set; }
 
     public ProductCategory ProductCategory { get; set; } = null!;

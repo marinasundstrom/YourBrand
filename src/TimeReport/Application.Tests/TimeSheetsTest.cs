@@ -28,7 +28,7 @@ public class TimeSheetsTest : TestBase
 
         User user = CreateTestUser();
 
-        fakeUserContext.UserId.Returns(x =>  new UserId(user.Id));
+        fakeUserContext.UserId.Returns(x => new UserId(user.Id));
 
         using ITimeReportContext context = CreateDbContext();
 

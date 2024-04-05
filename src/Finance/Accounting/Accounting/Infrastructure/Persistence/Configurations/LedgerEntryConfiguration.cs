@@ -10,7 +10,7 @@ public class LedgerEntryConfiguration : IEntityTypeConfiguration<LedgerEntry>
     public void Configure(EntityTypeBuilder<LedgerEntry> builder)
     {
         builder.ToTable("LedgerEntries");
-        
+
         builder.HasIndex(x => x.TenantId);
     }
 }

@@ -17,7 +17,7 @@ public class PersonProfileIndustryExperiences : AuditableEntity, IHasTenant, ISo
     public int IndustryId { get; set; }
 
     public int Years { get; set; }
-    
+
     public string? DeletedById { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }

@@ -5,8 +5,8 @@ using System.Net.Http.Headers;
 using YourBrand.Tenancy;
 
 public class AuthenticationDelegatingHandler(
-    ITokenProvider tokenProvider, 
-    ITenantContext tenantContext, 
+    ITokenProvider tokenProvider,
+    ITenantContext tenantContext,
     ILogger<AuthenticationDelegatingHandler> logger) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

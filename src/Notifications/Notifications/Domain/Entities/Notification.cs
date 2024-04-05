@@ -1,6 +1,6 @@
-﻿using YourBrand.Notifications.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Notifications.Domain.Common;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 
 namespace YourBrand.Notifications.Domain.Entities;
 

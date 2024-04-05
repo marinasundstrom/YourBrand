@@ -1,8 +1,7 @@
 using Core;
 
-using YourBrand.Tenancy;
-
 using YourBrand.Sales.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 

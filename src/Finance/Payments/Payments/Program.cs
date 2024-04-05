@@ -13,6 +13,7 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Identity;
 using YourBrand.Payments;
 using YourBrand.Payments.Application;
 using YourBrand.Payments.Application.Commands;
@@ -22,10 +23,8 @@ using YourBrand.Payments.Domain.Enums;
 using YourBrand.Payments.Hubs;
 using YourBrand.Payments.Infrastructure;
 using YourBrand.Payments.Infrastructure.Persistence;
-using YourBrand.Transactions.Client;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Transactions.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 

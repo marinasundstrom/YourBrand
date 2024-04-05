@@ -15,13 +15,12 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Application;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Infrastructure;
 using YourBrand.Infrastructure.Persistence;
+using YourBrand.Tenancy;
 using YourBrand.WebApi;
 using YourBrand.WebApi.Hubs;
-
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 

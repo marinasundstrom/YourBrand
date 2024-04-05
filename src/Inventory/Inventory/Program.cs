@@ -12,6 +12,7 @@ using YourBrand;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Identity;
 using YourBrand.Inventory;
 using YourBrand.Inventory.Application;
 using YourBrand.Inventory.Application.Items.Commands;
@@ -20,8 +21,6 @@ using YourBrand.Inventory.Infrastructure;
 using YourBrand.Inventory.Infrastructure.Persistence;
 using YourBrand.Notifications.Client;
 using YourBrand.Payments.Client;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 using ItemDto = YourBrand.Inventory.Application.Items.ItemDto;

@@ -10,7 +10,7 @@ public class JournalEntryConfiguration : IEntityTypeConfiguration<JournalEntry>
     public void Configure(EntityTypeBuilder<JournalEntry> builder)
     {
         builder.ToTable("JournalEntries");
-        
+
         builder.HasIndex(x => x.TenantId);
     }
 }

@@ -2,13 +2,12 @@
 
 using Newtonsoft.Json;
 
-using YourBrand.Tenancy;
-
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Notifications.Domain.Entities;
 using YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 using YourBrand.Notifications.Infrastructure.Persistence.Outbox;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Notifications.Infrastructure.Persistence;
 

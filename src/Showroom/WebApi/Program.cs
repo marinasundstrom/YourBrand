@@ -15,13 +15,12 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.ApiKeys;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Showroom;
 using YourBrand.Showroom.Application;
 using YourBrand.Showroom.Infrastructure;
 using YourBrand.Showroom.Infrastructure.Persistence;
 using YourBrand.Showroom.WebApi;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);

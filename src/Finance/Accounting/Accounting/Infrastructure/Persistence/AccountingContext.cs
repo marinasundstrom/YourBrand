@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 
+using LinqKit;
+
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
-
-using LinqKit;
 
 using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Domain.Common;
@@ -47,7 +47,7 @@ public class AccountingContext : DbContext, IAccountingContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountConfiguration).Assembly);
-        
+
         ConfigQueryFilterForEntity(modelBuilder);
     }
 

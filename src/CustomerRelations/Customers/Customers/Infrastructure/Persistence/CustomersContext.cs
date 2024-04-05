@@ -49,7 +49,7 @@ public class CustomersContext : DbContext, ICustomersContext
         modelBuilder.HasSequence<int>("CustomerIds");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CustomersContext).Assembly);
-        
+
         ConfigQueryFilterForEntity(modelBuilder);
     }
 
@@ -59,7 +59,7 @@ public class CustomersContext : DbContext, ICustomersContext
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if(clrType.BaseType != typeof(object)) 
+            if (clrType.BaseType != typeof(object))
             {
                 continue;
             }

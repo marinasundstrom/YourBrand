@@ -1,20 +1,20 @@
 ﻿using System.Linq.Expressions;
 
+using LinqKit;
+
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
 using YourBrand.ApiKeys;
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
 using YourBrand.Showroom.Infrastructure.Persistence.Outbox;
-
 using YourBrand.Tenancy;
-using YourBrand.Identity;
-using LinqKit;
-using YourBrand.Domain;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
@@ -66,7 +66,7 @@ public class ShowroomContext : DbContext, IShowroomContext
             {
                 continue;
             }
-            
+
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);

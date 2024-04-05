@@ -6,11 +6,10 @@ using MassTransit.Internals;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
-
-using YourBrand.Domain;
 
 namespace YourBrand.Sales.Persistence;
 
@@ -44,14 +43,14 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
             {
                 continue;
             }
-            
+
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);
 
                 var parameter = Expression.Parameter(clrType, "entity");
 
-                List<Expression> queryFilters = new ();
+                List<Expression> queryFilters = new();
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
@@ -71,13 +70,13 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
 
                 Expression? queryFilter = null;
 
-                foreach(var qf in queryFilters) 
+                foreach (var qf in queryFilters)
                 {
-                    if(queryFilter is null) 
+                    if (queryFilter is null)
                     {
                         queryFilter = qf;
                     }
-                    else 
+                    else
                     {
                         queryFilter = Expression.AndAlso(
                             queryFilter,

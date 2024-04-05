@@ -11,7 +11,7 @@ public class ReportingPeriodConfiguration : IEntityTypeConfiguration<ReportingPe
     public void Configure(EntityTypeBuilder<ReportingPeriod> builder)
     {
         builder.ToTable("ReportingPeriods");
-        
+
         builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)

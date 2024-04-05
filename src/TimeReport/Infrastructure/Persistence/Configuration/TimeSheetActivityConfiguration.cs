@@ -10,7 +10,7 @@ public class TimeSheetActivityConfiguration : IEntityTypeConfiguration<TimeSheet
 {
     public void Configure(EntityTypeBuilder<TimeSheetActivity> builder)
     {
-        builder.ToTable("TimeSheetActivities");        
+        builder.ToTable("TimeSheetActivities");
 
         builder.Ignore(i => i.DomainEvents);
 

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Domain.Common;
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 

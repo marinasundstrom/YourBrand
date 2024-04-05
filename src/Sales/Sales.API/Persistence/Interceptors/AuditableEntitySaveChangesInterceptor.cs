@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-using YourBrand.Sales.Domain.Entities;
-
 using YourBrand.Domain;
+using YourBrand.Sales.Domain.Entities;
 
 namespace YourBrand.Sales.Persistence.Interceptors;
 

@@ -1,8 +1,7 @@
 ﻿
+using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
-
-using YourBrand.Tenancy;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 

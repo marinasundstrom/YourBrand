@@ -10,13 +10,12 @@ using YourBrand;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Identity;
 using YourBrand.Marketing;
 using YourBrand.Marketing.Application;
 using YourBrand.Marketing.Infrastructure;
 using YourBrand.Marketing.Infrastructure.Persistence;
 using YourBrand.Payments.Client;
-
-using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);

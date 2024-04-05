@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using YourBrand.ApiKeys;
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Common;
@@ -15,8 +16,6 @@ using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
 using YourBrand.TimeReport.Infrastructure.Persistence.Outbox;
-
-using YourBrand.Domain;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
@@ -67,7 +66,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
             {
                 continue;
             }
-            
+
             try
             {
                 var entityTypeBuilder = modelBuilder.Entity(clrType);
