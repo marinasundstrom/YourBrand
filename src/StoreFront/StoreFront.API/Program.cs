@@ -84,7 +84,7 @@ builder.Services.AddCartServices();
 
 builder.Services
     .AddScoped<ICurrentUserService, CurrentUserService>()
-    .AddTenantService();
+    .AddSingleton<ITenantService, TenantService>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -112,6 +112,9 @@ builder.Services.AddMassTransit(x =>
                 h.Username("guest");
                 h.Password("guest");
             });
+
+            cfg.UseSendFilter(typeof(AddTenantIdFilter<>), context);
+            cfg.UsePublishFilter(typeof(AddTenantIdFilter2<>), context);
 
             cfg.ConfigureEndpoints(context);
         });
@@ -290,3 +293,39 @@ static void AddClients(WebApplicationBuilder builder)
 
 // INFO: Makes Program class visible to IntegrationTests.
 public partial class Program { }
+
+public class AddTenantIdFilter<T>(ITenantService tenantService) :
+    IFilter<SendContext<T>>
+    where T : class
+{
+    public void Probe(ProbeContext context)
+    {
+    }
+
+    public Task Send(SendContext<T> context, IPipe<SendContext<T>> next)
+    {
+        context.Headers.Set("TenantId", tenantService.TenantId);
+
+        Console.WriteLine("HEADER: " + tenantService.TenantId);
+
+        return next.Send(context);
+    }
+}
+
+public class AddTenantIdFilter2<T>(ITenantService tenantService) :
+    IFilter<PublishContext<T>>
+    where T : class
+{
+    public void Probe(ProbeContext context)
+    {
+    }
+
+    public Task Send(PublishContext<T> context, IPipe<PublishContext<T>> next)
+    {
+        context.Headers.Set("TenantId", tenantService.TenantId);
+
+        Console.WriteLine("HEADER: " + tenantService.TenantId);
+
+        return next.Send(context);
+    }
+}

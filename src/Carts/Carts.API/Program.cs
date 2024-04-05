@@ -115,6 +115,8 @@ builder.Services.AddMassTransit(x =>
                 h.Password("guest");
             });
 
+            cfg.UseConsumeFilter(typeof(ReadTenantIdFilter<>), context);
+
             cfg.ConfigureEndpoints(context);
         });
     }
@@ -196,3 +198,23 @@ static async Task SeedData(CartsContext context, IConfiguration configuration, I
 
 // INFO: Makes Program class visible to IntegrationTests.
 public partial class Program { }
+
+public class ReadTenantIdFilter<T>(ITenantService tenantService) :
+    IFilter<ConsumeContext<T>>
+    where T : class
+{
+    public void Probe(ProbeContext context)
+    {
+    }
+
+    public Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
+    {
+        var tenantId = context.Headers.Get<string>("TenantId");
+
+        Console.WriteLine("HEADER: " + tenantId);
+
+        tenantService.SetTenantId(tenantId!);
+
+        return next.Send(context);
+    }
+}

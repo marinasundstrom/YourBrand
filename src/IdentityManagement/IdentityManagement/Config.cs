@@ -86,6 +86,8 @@ public static class Config
 
                 // scopes that client has access to
                 AllowedScopes = [ "profile", "email", "myapi", "catalogapi", "cartsapi", "salesapi" ],
+                
+                Claims = [ new ClientClaim("tenant_id", TenantConstants.TenantId) ]
             },
             new Duende.IdentityServer.Models.Client
             {
