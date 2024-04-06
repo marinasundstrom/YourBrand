@@ -1,0 +1,57 @@
+﻿@namespace YourBrand.Portal.Addresses
+
+<MudGrid>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Organization" @bind-Value="Model.Organization" For="() => Model.Organization" Class="mt-4"
+            Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="VAT number" @bind-Value="Model.VatNumber" For="() => Model.VatNumber" Class="mt-4"
+            Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="First Name" @bind-Value="Model.FirstName" For="() => Model.FirstName"
+            Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Last Name" @bind-Value="Model.LastName" For="() => Model.LastName"
+            Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="12">
+        <MudTextField Label="SSN" @bind-Value="Model.Ssn" For="() => Model.Ssn" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="12">
+        <MudTextField Label="Phone Number" @bind-Value="Model.PhoneNumber" For="() => Model.PhoneNumber"
+            Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="12">
+        <MudTextField Label="Email" @bind-Value="Model.Email" For="() => Model.Email" Class="mt-4"
+            Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="8">
+        <AddressForm Model="Model.Address" />
+    </MudItem>
+
+</MudGrid>
+
+@code 
+{
+    [Parameter]
+    [EditorRequired]
+    public BillingDetailsFormModel Model { get; set; } = default!;
+}

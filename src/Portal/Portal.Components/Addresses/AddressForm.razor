@@ -1,0 +1,57 @@
+@namespace YourBrand.Portal.Addresses
+
+<MudGrid>
+    <MudItem xs="12" md="8">
+        <MudTextField Label="Thoroughfare" @bind-Value="Model.Thoroughfare"
+            For="() => Model.Thoroughfare" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudTextField Label="Premises" @bind-Value="Model.Premises"
+            For="() => Model.Premises" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="12">
+        <MudTextField Label="Sub Premises" @bind-Value="Model.SubPremises"
+            For="() => Model.SubPremises" Class="mt-4">
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudTextField Label="Postal Code" @bind-Value="Model.PostalCode"
+            For="() => Model.PostalCode" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="8">
+        <MudTextField Label="Locality" @bind-Value="Model.Locality"
+            For="() => Model.Locality" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="12">
+        <MudTextField Label="Sub Administrative Area" @bind-Value="Model.SubAdministrativeArea"
+            For="() => Model.SubAdministrativeArea" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Administrative Area" @bind-Value="Model.AdministrativeArea"
+            For="() => Model.AdministrativeArea" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Country" @bind-Value="Model.Country"
+            For="() => Model.Country" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+</MudGrid>
+
+@code 
+{
+    [Parameter]
+    public AddressFormModel Model { get; set; }
+}

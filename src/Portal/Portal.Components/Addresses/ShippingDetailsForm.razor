@@ -1,0 +1,44 @@
+﻿@namespace YourBrand.Portal.Addresses
+
+<MudGrid>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Organization" @bind-Value="Model.Organization" For="() => Model.Organization" Class="mt-4"
+            Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="First Name" @bind-Value="Model.FirstName" For="() => Model.FirstName"
+            Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Last Name" @bind-Value="Model.LastName" For="() => Model.LastName"
+            Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="12">
+        <MudTextField Label="SSN" @bind-Value="Model.Ssn" For="() => Model.Ssn" Class="mt-4" Required>
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudTextField Label="Care of" @bind-Value="Model.CareOf" For="() => Model.CareOf" Class="mt-4">
+        </MudTextField>
+    </MudItem>
+
+    <MudItem xs="12" md="8">
+        <AddressForm Model="Model.Address" />
+    </MudItem>
+
+</MudGrid>
+
+@code 
+{
+    [Parameter]
+    [EditorRequired]
+    public ShippingDetailsFormModel Model { get; set; } = default!;
+}
