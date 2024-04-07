@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.Abstractions" Version="8.0.16" />
+    <PackageReference Include="MassTransit" Version="8.2.0" />
   </ItemGroup>
 
   <ItemGroup>

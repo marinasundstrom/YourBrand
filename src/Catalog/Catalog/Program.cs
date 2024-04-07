@@ -147,9 +147,7 @@ builder.Services.AddMassTransit(x =>
                 h.Password("guest");
             });
 
-            cfg.UsePublishFilter(typeof(AddTenantIdPublishFilter<>), context);
-            cfg.UseSendFilter(typeof(AddTenantIdSendFilter<>), context);
-            cfg.UseConsumeFilter(typeof(ReadTenantIdConsumeFilter<>), context);
+            cfg.UseTenancyFilters(context);
 
             cfg.ConfigureEndpoints(context);
         });
