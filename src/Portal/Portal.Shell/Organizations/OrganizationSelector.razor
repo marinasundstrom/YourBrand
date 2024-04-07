@@ -7,14 +7,14 @@
 @using Organization = YourBrand.Portal.Services.Organization
 
 <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
-    PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+    PopoverClass="docs-layout-menu-shadow" ListClass="pa-0 docs-menu-list" LockScroll="true">
     <ActivatorContent>
         <MudIconButton Class="ma-1" Icon="@Icons.Material.Filled.Business" Color="Color.Inherit" Edge="Edge.Start" />
     </ActivatorContent>
     <ChildContent>
       @if(error) 
       {
-        <MudMenuItem>
+        <MudMenuItem Class="py-2">
             <MudText>Failed to load organizations.</MudText>
          </MudMenuItem>
       }
@@ -22,7 +22,7 @@
       {
             foreach (var item in items)
             {
-                <MudMenuItem @key="@item" OnClick="async () => await OrganizationProvider.SetCurrentOrganization(item.Id)">
+                <MudMenuItem @key="@item" Class="py-2" OnClick="async () => await OrganizationProvider.SetCurrentOrganization(item.Id)">
                     <div class="d-flex">
                         <MudIcon Icon="@(currentOrganization?.Id == item.Id ? Icons.Material.Filled.Check : null)"
                             class="me-2" />
