@@ -25,6 +25,7 @@ using YourBrand.Catalog.Persistence.Interceptors;
 using YourBrand.Catalog.Services;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Tenancy;
 
 string ServiceName = "Catalog";
@@ -145,6 +146,10 @@ builder.Services.AddMassTransit(x =>
                 h.Username("guest");
                 h.Password("guest");
             });
+
+            cfg.UsePublishFilter(typeof(AddTenantIdPublishFilter<>), context);
+            cfg.UseSendFilter(typeof(AddTenantIdSendFilter<>), context);
+            cfg.UseConsumeFilter(typeof(ReadTenantIdConsumeFilter<>), context);
 
             cfg.ConfigureEndpoints(context);
         });
