@@ -1,7 +1,9 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 @using YourBrand.Catalog
 @inject IOrdersClient OrdersClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
@@ -117,12 +119,12 @@
         if (Model.Id == null)
         {
             var dto = Model.ToCreateOrderItemRequest();
-            item = await OrdersClient.AddOrderItemAsync(OrderId, dto);
+            item = await OrdersClient.AddOrderItemAsync(OrganizationProvider.CurrentOrganization.Id, OrderId, dto);
         }
         else
         {
             var dto = Model.ToUpdateOrderItemRequest();
-            item = await OrdersClient.UpdateOrderItemAsync(OrderId, Model.Id, dto);
+            item = await OrdersClient.UpdateOrderItemAsync(OrganizationProvider.CurrentOrganization.Id, OrderId, Model.Id, dto);
         }
 
         MudDialog.Close(DialogResult.Ok(item.ToModel()));

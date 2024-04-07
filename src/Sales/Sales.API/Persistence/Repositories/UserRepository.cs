@@ -44,3 +44,23 @@ public sealed class UserRepository : IUserRepository
         dbSet.Remove(user);
     }
 }
+
+public static class IncludeExtensions
+{
+    public static IQueryable<Order> IncludeAll(this IQueryable<Order> source)
+    {
+        return source
+            .Include(i => i.Parent)
+            .Include(i => i.Status)
+            .Include(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
+            .Include(i => i.Items)
+            .ThenInclude(i => i.SubscriptionPlan)
+            .Include(i => i.Items)
+            .ThenInclude(i => i.Subscription)
+            .ThenInclude(i => i.SubscriptionPlan)
+            .Include(i => i.Assignee)
+            .Include(i => i.CreatedBy)
+            .Include(i => i.LastModifiedBy);
+    }
+}

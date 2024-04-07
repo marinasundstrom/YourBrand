@@ -2,6 +2,8 @@
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 using static YourBrand.Sales.Domain.Errors.Orders;
@@ -9,7 +11,7 @@ using static YourBrand.Sales.Results;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Commands;
 
-public sealed record RemoveOrderItem(string OrderId, string OrderItemId) : IRequest<Result>
+public sealed record RemoveOrderItem(string OrganizationId, string OrderId, string OrderItemId) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<RemoveOrderItem>
     {
@@ -25,7 +27,10 @@ public sealed record RemoveOrderItem(string OrderId, string OrderItemId) : IRequ
     {
         public async Task<Result> Handle(RemoveOrderItem request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.OrderId, cancellationToken);
+            var order = await orderRepository
+                                        .GetAll()
+                                        .Where(x => x.OrganizationId == request.OrganizationId)
+                                        .FirstOrDefaultAsync(x => x.Id == request.OrderId, cancellationToken);
 
             if (order is null)
             {

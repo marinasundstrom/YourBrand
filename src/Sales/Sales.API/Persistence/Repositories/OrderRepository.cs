@@ -22,60 +22,29 @@ public sealed class OrderRepository : IOrderRepository
     {
         //return dbSet.Where(new OrdersWithStatus(OrderStatus.Completed).Or(new OrdersWithStatus(OrderStatus.OnHold))).AsQueryable();
 
-        return dbSet.AsQueryable();
+        return dbSet
+            .IncludeAll()
+            .AsQueryable();
     }
 
     public async Task<Order?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         return await dbSet
-            .Include(i => i.Parent)
-            .Include(i => i.Status)
-            .Include(i => i.Subscription)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Items)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Items)
-            .ThenInclude(i => i.Subscription)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Assignee)
-            .Include(i => i.CreatedBy)
-            .Include(i => i.LastModifiedBy)
+            .IncludeAll()
             .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }
 
     public async Task<Order?> FindByNoAsync(int orderNo, CancellationToken cancellationToken = default)
     {
         return await dbSet
-            .Include(i => i.Parent)
-            .Include(i => i.Status)
-            .Include(i => i.Subscription)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Items)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Items)
-            .ThenInclude(i => i.Subscription)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Assignee)
-            .Include(i => i.CreatedBy)
-            .Include(i => i.LastModifiedBy)
+            .IncludeAll()
             .FirstOrDefaultAsync(x => x.OrderNo.Equals(orderNo), cancellationToken);
     }
 
     public IQueryable<Order> GetAll(ISpecification<Order> specification)
     {
         return dbSet
-            .Include(i => i.Parent)
-            .Include(i => i.Status)
-            .Include(i => i.Subscription)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Items)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Items)
-            .ThenInclude(i => i.Subscription)
-            .ThenInclude(i => i.SubscriptionPlan)
-            .Include(i => i.Assignee)
-            .Include(i => i.CreatedBy)
-            .Include(i => i.LastModifiedBy)
+            .IncludeAll()
             .Where(specification.Criteria);
     }
 

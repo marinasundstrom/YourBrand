@@ -1,9 +1,11 @@
-﻿@using YourBrand.Sales
+﻿@using YourBrand.Portal.Services
+@using YourBrand.Sales
 @inject ISubscriptionsClient SubscriptionsClient
 @inject IOrdersClient OrdersClient
 @inject IOrderStatusesClient OrderStatusesClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
 
 @page "/subscriptions/{Id}"
 
@@ -132,8 +134,12 @@ else
     IEnumerable<OrderStatus> orderStatuses = new List<OrderStatus>();
     IEnumerable<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
 
+    string organizationId;
+
     protected override async Task OnInitializedAsync()
     {
+        organizationId = OrganizationProvider.CurrentOrganization.Id;
+
         subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(Guid.Parse(Id));
 
         orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
@@ -145,7 +151,7 @@ else
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(selectedStatuses?.Select(x => x.Id), null, null, null, Guid.Parse(Id), state.Page +
+            var result = await OrdersClient.GetOrdersAsync(organizationId, selectedStatuses?.Select(x => x.Id), null, null, null, Guid.Parse(Id), state.Page +
             1,
             state.PageSize,
             state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
@@ -182,7 +188,7 @@ else
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.DeleteOrderAsync(order.Id);
+        await OrdersClient.DeleteOrderAsync(OrganizationProvider.CurrentOrganization.Id, order.Id);
         await table.ReloadServerData();
     }
 }

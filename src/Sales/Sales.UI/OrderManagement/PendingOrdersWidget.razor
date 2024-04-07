@@ -1,6 +1,8 @@
+@using YourBrand.Portal.Services
 @using YourBrand.Portal.Widgets
 @inject IOrdersClient OrdersClient
 @inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
 
 <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Dense="false"
           Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
@@ -40,17 +42,17 @@
     [CascadingParameter]
     public Widget Widget { get; set; } = default!;
 
-    protected async Task OnInitializedAsync() 
-    {
-    }
+    string organizationId;
 
     private async Task<TableData<Order>> ServerReload(TableState state)
     {
+        organizationId = OrganizationProvider.CurrentOrganization.Id;
+
         loading = true;
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(new int [] { 2 }, null, null, null, null, state.Page + 1, state.PageSize,
+            var result = await OrdersClient.GetOrdersAsync(organizationId, new int [] { 2 }, null, null, null, null, state.Page + 1, state.PageSize,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
             state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
             YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cts.Token);

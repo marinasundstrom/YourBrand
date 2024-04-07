@@ -2,12 +2,14 @@
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Queries;
 
-public record GetOrderById(string Id) : IRequest<Result<OrderDto>>
+public record GetOrderById(string OrganizationId, string Id) : IRequest<Result<OrderDto>>
 {
     public class Validator : AbstractValidator<GetOrderById>
     {
@@ -21,8 +23,11 @@ public record GetOrderById(string Id) : IRequest<Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(GetOrderById request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);
-
+            var order = await orderRepository
+                            .GetAll()
+                            .Where(x => x.OrganizationId == request.OrganizationId)
+                            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+                            
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

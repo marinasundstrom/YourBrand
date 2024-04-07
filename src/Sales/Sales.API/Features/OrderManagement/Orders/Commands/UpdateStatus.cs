@@ -2,11 +2,13 @@ using FluentValidation;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
-public sealed record UpdateStatus(string Id, int StatusId) : IRequest<Result>
+public sealed record UpdateStatus(string OrganizationId, string Id, int StatusId) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<UpdateStatus>
     {
@@ -20,8 +22,11 @@ public sealed record UpdateStatus(string Id, int StatusId) : IRequest<Result>
     {
         public async Task<Result> Handle(UpdateStatus request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);
-
+            var order = await orderRepository
+                            .GetAll()
+                            .Where(x => x.OrganizationId == request.OrganizationId)
+                            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+                            
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

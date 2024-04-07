@@ -6,7 +6,7 @@ using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
-public record GenerateSubscriptionOrders(string OrderId) : IRequest
+public record GenerateSubscriptionOrders(string OrganizationId, string OrderId) : IRequest
 {
     public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<GenerateSubscriptionOrders>
     {

@@ -2,13 +2,15 @@ using FluentValidation;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
-public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto ShippingDetails) : IRequest<Result>
+public sealed record UpdateShippingDetails(string OrganizationId, string Id, ShippingDetailsDto ShippingDetails) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<UpdateShippingDetails>
     {
@@ -22,8 +24,11 @@ public sealed record UpdateShippingDetails(string Id, ShippingDetailsDto Shippin
     {
         public async Task<Result> Handle(UpdateShippingDetails request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);
-
+            var order = await orderRepository
+                            .GetAll()
+                            .Where(x => x.OrganizationId == request.OrganizationId)
+                            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+                            
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

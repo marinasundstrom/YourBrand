@@ -2,6 +2,7 @@
 @using YourBrand.Portal.Services
 @inject IOrganizationProvider OrganizationProvider
 @inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 @implements IDisposable
 @using Organization = YourBrand.Portal.Services.Organization
 
@@ -59,6 +60,9 @@
 
     private void OnCurrentOrganizationChanged(object? sender, EventArgs e)
     {
+        if(currentOrganization == OrganizationProvider.CurrentOrganization)
+            return;
+
         currentOrganization = OrganizationProvider.CurrentOrganization;
 
         if (currentOrganization is null) return;
@@ -68,6 +72,8 @@
         StateHasChanged();
 
         Snackbar.Add($"Your organization is: {currentOrganization.Name}");
+
+        NavigationManager.NavigateTo("/");
     }
     
     public void Dispose()

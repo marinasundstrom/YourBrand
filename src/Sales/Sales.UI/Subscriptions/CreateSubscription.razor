@@ -1,8 +1,10 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 @using YourBrand.Catalog
 @inject IOrdersClient OrdersClient
 @inject ISubscriptionsClient SubscriptionsClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
@@ -51,7 +53,7 @@
 
     async Task Submit()
     {
-        var order = await OrdersClient.CreateOrderAsync(new CreateOrderRequest 
+        var order = await OrdersClient.CreateOrderAsync(OrganizationProvider.CurrentOrganization.Id, new CreateOrderRequest 
         {
             Customer = new SetCustomer
             {

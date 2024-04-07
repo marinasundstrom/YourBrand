@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Data.Entity;
+
+using FluentValidation;
 
 using MediatR;
 
@@ -7,7 +9,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
-public sealed record DeleteOrder(string Id) : IRequest<Result>
+public sealed record DeleteOrder(string OrganizationId, string Id) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<DeleteOrder>
     {
@@ -21,7 +23,10 @@ public sealed record DeleteOrder(string Id) : IRequest<Result>
     {
         public async Task<Result> Handle(DeleteOrder request, CancellationToken cancellationToken)
         {
-            var order = await orderRepository.FindByIdAsync(request.Id, cancellationToken);
+            var order = await orderRepository
+                .GetAll()
+                .Where(x => x.OrganizationId == request.OrganizationId)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (order is null)
             {

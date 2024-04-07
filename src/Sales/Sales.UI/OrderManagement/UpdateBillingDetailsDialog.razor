@@ -1,6 +1,8 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 @inject IOrdersClient OrdersClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
@@ -121,7 +123,7 @@
 
     async Task Submit()
     {
-        await OrdersClient.UpdateBillingDetailsAsync(OrderId, Model);
+        await OrdersClient.UpdateBillingDetailsAsync(OrganizationProvider.CurrentOrganization.Id, OrderId, Model);
 
         MudDialog.Close(DialogResult.Ok(Model));
     }

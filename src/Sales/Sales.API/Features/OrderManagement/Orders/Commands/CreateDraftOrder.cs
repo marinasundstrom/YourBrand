@@ -12,7 +12,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
-public sealed record CreateDraftOrder() : IRequest<Result<OrderDto>>
+public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<OrderDto>>
 {
     public sealed class Validator : AbstractValidator<CreateDraftOrder>
     {
@@ -32,12 +32,17 @@ public sealed record CreateDraftOrder() : IRequest<Result<OrderDto>>
 
             try
             {
-                order.OrderNo = (await orderRepository.GetAll().MaxAsync(x => x.OrderNo)) + 1;
+                order.OrderNo = (await orderRepository
+                    .GetAll()
+                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .MaxAsync(x => x.OrderNo)) + 1;
             }
             catch (InvalidOperationException e)
             {
                 order.OrderNo = 1; // Order start number
             }
+
+            order.OrganizationId = request.OrganizationId;
 
             order.VatIncluded = true;
 

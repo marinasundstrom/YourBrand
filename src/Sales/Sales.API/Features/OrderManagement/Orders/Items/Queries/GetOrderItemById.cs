@@ -5,7 +5,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Items;
 
-public sealed record GetOrderItemById(string OrderId, string OrderItemId) : IRequest<Result<OrderItemDto>>
+public sealed record GetOrderItemById(string OrganizationId, string OrderId, string OrderItemId) : IRequest<Result<OrderItemDto>>
 {
     public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<GetOrderItemById, Result<OrderItemDto>>
     {

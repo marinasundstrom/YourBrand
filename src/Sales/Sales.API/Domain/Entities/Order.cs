@@ -18,7 +18,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant
 
     public TenantId TenantId { get; set; }
 
-    public string OrganizationId { get; private set; } = "ACME";
+    public string OrganizationId { get; set; }
 
     public int OrderNo { get; set; }
 

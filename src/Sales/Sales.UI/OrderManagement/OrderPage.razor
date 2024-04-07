@@ -2,6 +2,7 @@
 @page "/orders/{OrderNo:int}"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 @using YourBrand.Customers
 @using YourBrand.Portal
@@ -11,6 +12,7 @@
 @inject IOrderStatusesClient OrderStatusesClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@inject IOrganizationProvider OrganizationProvider
 
 @if (order is not null)
 {
@@ -443,7 +445,7 @@ Delete
         }
         else
         {
-            order = await OrdersClient.CreateDraftOrderAsync(new CreateDraftOrderRequest());
+            order = await OrdersClient.CreateDraftOrderAsync(OrganizationProvider.CurrentOrganization.Id, new CreateDraftOrderRequest());
 
             if(order.Customer is not null) 
             {
@@ -470,7 +472,7 @@ Delete
 
     async Task Load() 
     {
-        order = await OrdersClient.GetOrderByNoAsync(OrderNo.GetValueOrDefault());
+        order = await OrdersClient.GetOrderByNoAsync(OrganizationProvider.CurrentOrganization.Id, OrderNo.GetValueOrDefault());
 
         if(order.Customer is not null) 
         {
@@ -495,7 +497,7 @@ Delete
         if(customer is null)
             return;
 
-        await OrdersClient.SetCustomerAsync(order.Id, new SetCustomer {
+        await OrdersClient.SetCustomerAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, new SetCustomer {
             Id = customer.Id.ToString(),
             Name = customer.Name
         });
@@ -563,7 +565,7 @@ Delete
 
         if (result.Cancelled) return;
 
-        await OrdersClient.UpdateStatusAsync(order.Id, ((OrderStatus)result.Data).Id);
+        await OrdersClient.UpdateStatusAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, ((OrderStatus)result.Data).Id);
 
         Model.Status = (OrderStatus)result.Data;
     }
@@ -575,7 +577,7 @@ Delete
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.DeleteOrderAsync(order.Id);
+        await OrdersClient.DeleteOrderAsync(OrganizationProvider.CurrentOrganization.Id, order.Id);
 
         NavigationManager.NavigateTo("/orders");
     }
@@ -587,7 +589,7 @@ Delete
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.RemoveOrderItemAsync(order.Id, orderItem.Id);
+        await OrdersClient.RemoveOrderItemAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, orderItem.Id);
 
         Model.RemoveItem(orderItem);
     }
@@ -629,7 +631,7 @@ Delete
         try 
         {
             orderItem.Quantity = quantity;
-            await OrdersClient.UpdateOrderItemQuantityAsync(order.Id, orderItem.Id, new UpdateOrderItemQuantityRequest() { Quantity = quantity });
+            await OrdersClient.UpdateOrderItemQuantityAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, orderItem.Id, new UpdateOrderItemQuantityRequest() { Quantity = quantity });
             Model.Update();
         } 
         catch 

@@ -13,7 +13,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
-public sealed record CreateOrder(int? Status, SetCustomerDto? Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, IEnumerable<CreateOrderItemDto> Items) : IRequest<Result<OrderDto>>
+public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomerDto? Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, IEnumerable<CreateOrderItemDto> Items) : IRequest<Result<OrderDto>>
 {
     public sealed class Validator : AbstractValidator<CreateOrder>
     {
@@ -33,7 +33,10 @@ public sealed record CreateOrder(int? Status, SetCustomerDto? Customer, BillingD
 
             try
             {
-                order.OrderNo = (await orderRepository.GetAll().MaxAsync(x => x.OrderNo)) + 1;
+                order.OrderNo = (await orderRepository
+                    .GetAll()
+                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .MaxAsync(x => x.OrderNo)) + 1;
             }
             catch (InvalidOperationException e)
             {
@@ -54,6 +57,8 @@ public sealed record CreateOrder(int? Status, SetCustomerDto? Customer, BillingD
                 order.Customer.Id = request.Customer.Id;
                 order.Customer.Name = request.Customer.Name;
             }
+
+            order.OrganizationId = request.OrganizationId;
 
             order.VatIncluded = true;
 
