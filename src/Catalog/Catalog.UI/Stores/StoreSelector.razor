@@ -60,6 +60,8 @@
 
     private void OnCurrentStoreChanged(object? sender, EventArgs e)
     {
+        var firstTime = currentStore is null;
+
         currentStore = StoreProvider.CurrentStore;
 
         if (currentStore is null) return;
@@ -68,7 +70,10 @@
 
         StateHasChanged();
 
-        Snackbar.Add($"Your store is: {currentStore.Name}");
+        if (!firstTime) 
+        {
+            Snackbar.Add($"Switched to store: {currentStore.Name}");
+        }
     }
 
     public void Dispose()

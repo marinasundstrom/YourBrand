@@ -60,6 +60,8 @@
 
     private void OnCurrentOrganizationChanged(object? sender, EventArgs e)
     {
+        var firstTime = currentOrganization is null;
+
         if(currentOrganization == OrganizationProvider.CurrentOrganization)
             return;
 
@@ -71,9 +73,12 @@
 
         StateHasChanged();
 
-        Snackbar.Add($"Your organization is: {currentOrganization.Name}");
+        if(!firstTime) 
+        {
+            Snackbar.Add($"Switched to organization: {currentOrganization.Name}");
 
-        NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/");
+        }
     }
     
     public void Dispose()
