@@ -1,6 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
+using MudBlazor;
+
+using YourBrand.Portal.AppBar;
 using YourBrand.Portal.Authentication;
 using YourBrand.Portal.Localization;
 using YourBrand.Portal.Navigation;
@@ -17,6 +20,8 @@ public static class ServiceProviderExtensions
         CreateNavMenu(services);
 
         CreateDashboard(services);
+
+        InitAppBarTray(services);
 
         return services
             .UseNotifications()
@@ -99,5 +104,18 @@ public static class ServiceProviderExtensions
             Size = WidgetSize.Large
         });
         */
+    }
+
+    private static void InitAppBarTray(IServiceProvider services)
+    {
+        var appBarTray = services
+            .GetRequiredService<IAppBarTrayService>();
+
+        var snackbar = services
+            .GetRequiredService<ISnackbar>();
+
+        var t = services.GetRequiredService<IStringLocalizer<Resources>>();
+
+        appBarTray.AddItem(new AppBarTrayItem("organization-selector", () => t["Organization"], typeof(Organizations.OrganizationSelector)));
     }
 }

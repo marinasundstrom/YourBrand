@@ -47,7 +47,6 @@
         OrganizationSearchProvider = ServiceProvider.GetRequiredKeyedService<IOrganizationSearchProvider>(ServiceKey);
     }
 
-
     async Task<IEnumerable<Organization>> SearchOrganizations(string text)
     {
         try

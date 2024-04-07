@@ -23,6 +23,8 @@ public static class ServiceExtensions
             .AddScoped<IAccessTokenProvider, AccessTokenProvider>()
             .AddMarkdownServices();
 
+        services.AddScoped<IOrganizationProvider, OrganizationProvider>();
+
         return services;
     }
 }

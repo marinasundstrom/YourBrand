@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj" />
+    <ProjectReference
+      Include="..\..\IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj" />
     <ProjectReference Include="..\Portal.Services\Portal.Services.csproj" />
   </ItemGroup>
 
