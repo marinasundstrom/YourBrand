@@ -370,7 +370,6 @@
                 return Task.CompletedTask;
             };
             await hubConnection.StartAsync();
-            Snackbar.Add("Connected");
         }
         catch (Exception exc)
         {
