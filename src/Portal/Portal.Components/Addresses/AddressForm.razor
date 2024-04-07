@@ -2,7 +2,7 @@
 
 <MudGrid>
     <MudItem xs="12" md="8">
-        <MudTextField Label="Thoroughfare" @bind-Value="Model.Thoroughfare"
+        <MudTextField Label="Street" @bind-Value="Model.Thoroughfare"
             For="() => Model.Thoroughfare" Class="mt-4" Required>
         </MudTextField>
     </MudItem>
@@ -26,19 +26,19 @@
     </MudItem>
 
     <MudItem xs="12" md="8">
-        <MudTextField Label="Locality" @bind-Value="Model.Locality"
+        <MudTextField Label="City or Town" @bind-Value="Model.Locality"
             For="() => Model.Locality" Class="mt-4" Required>
         </MudTextField>
     </MudItem>
 
     <MudItem xs="12" md="12">
-        <MudTextField Label="Sub Administrative Area" @bind-Value="Model.SubAdministrativeArea"
+        <MudTextField Label="County" @bind-Value="Model.SubAdministrativeArea"
             For="() => Model.SubAdministrativeArea" Class="mt-4" Required>
         </MudTextField>
     </MudItem>
 
     <MudItem xs="12" md="6">
-        <MudTextField Label="Administrative Area" @bind-Value="Model.AdministrativeArea"
+        <MudTextField Label="State" @bind-Value="Model.AdministrativeArea"
             For="() => Model.AdministrativeArea" Class="mt-4" Required>
         </MudTextField>
     </MudItem>
