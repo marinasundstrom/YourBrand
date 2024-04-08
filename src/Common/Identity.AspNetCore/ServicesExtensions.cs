@@ -4,9 +4,10 @@ namespace YourBrand.Identity;
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    public static IServiceCollection AddUserContext(this IServiceCollection services)
     {
-        services.AddScoped<IUserContext, UserContext>();
+        services.AddScoped<ISettableUserContext, UserContext>();
+        services.AddScoped<IUserContext>(sp => sp.GetRequiredService<ISettableUserContext>());
 
         return services;
     }

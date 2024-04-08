@@ -8,14 +8,11 @@ using YourBrand.Showroom.Application.Users.Commands;
 using YourBrand.Tenancy;
 namespace YourBrand.Showroom.Consumers;
 
-public class ShowroomUserCreatedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext userContext, IRequestClient<GetUser> requestClient, ILogger<ShowroomUserCreatedConsumer> logger) : IConsumer<UserCreated>
+public class ShowroomUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ILogger<ShowroomUserCreatedConsumer> logger) : IConsumer<UserCreated>
 {
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
         var message = context.Message;
-
-        tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.CreatedById);
 
         var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
         var message2 = messageR.Message;
@@ -24,31 +21,24 @@ public class ShowroomUserCreatedConsumer(IMediator mediator, ITenantContext tena
     }
 }
 
-public class ShowroomUserDeletedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext userContext) : IConsumer<UserDeleted>
+public class ShowroomUserDeletedConsumer(IMediator mediator) : IConsumer<UserDeleted>
 {
     public async Task Consume(ConsumeContext<UserDeleted> context)
     {
         var message = context.Message;
 
-        //tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.DeletedById);
-
         await mediator.Send(new DeleteUserCommand(message.UserId));
     }
 }
 
-public class ShowroomUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ITenantContext tenantContext, IUserContext userContext) : IConsumer<UserUpdated>
+public class ShowroomUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient) : IConsumer<UserUpdated>
 {
     public async Task Consume(ConsumeContext<UserUpdated> context)
     {
         var message = context.Message;
 
-        userContext.SetCurrentUser(message.UpdatedById);
-
         var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
         var message2 = messageR.Message;
-
-        tenantContext.SetTenantId(message2.TenantId);
 
         var result = await mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }

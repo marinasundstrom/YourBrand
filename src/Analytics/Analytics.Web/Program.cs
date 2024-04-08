@@ -73,7 +73,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpContextAccessor();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddSignalR();

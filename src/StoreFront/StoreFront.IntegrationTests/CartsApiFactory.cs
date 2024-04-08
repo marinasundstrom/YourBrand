@@ -57,6 +57,9 @@ public class StoreFrontApiFactory
                 {
                     cfg.UseDelayedMessageScheduler();
 
+                    cfg.UseTenancyFilters(context);
+                    cfg.UseIdentityFilters(context);
+
                     cfg.ConfigureEndpoints(context);
                 });
             });

@@ -1,10 +1,10 @@
 using MassTransit;
 
-using YourBrand.Tenancy;
+using YourBrand.Identity;
 
 namespace YourBrand.Integration;
 
-public class ReadTenantIdConsumeFilter<T>(ISettableTenantContext tenantContext) :
+public class ReadUserIdConsumeFilter<T>(ISettableUserContext userContext) :
     IFilter<ConsumeContext<T>>
     where T : class
 {
@@ -14,9 +14,9 @@ public class ReadTenantIdConsumeFilter<T>(ISettableTenantContext tenantContext) 
 
     public Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
     {
-        var tenantId = context.Headers.Get<string>(Constants.TenantId);
+        var userId = context.Headers.Get<string>(Constants.UserId);
 
-        tenantContext.SetTenantId(tenantId!);
+        userContext.SetCurrentUser(userId!);
 
         return next.Send(context);
     }

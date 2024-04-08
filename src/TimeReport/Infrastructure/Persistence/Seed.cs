@@ -12,7 +12,7 @@ public static class Seed
         using var scope = app.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<TimeReportContext>();
 
-        var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
 
         tenantContext.SetTenantId("e2dc3bf2-1619-46bf-bcc9-cfc169ca7e78");
 

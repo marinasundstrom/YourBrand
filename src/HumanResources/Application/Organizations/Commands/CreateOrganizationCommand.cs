@@ -15,13 +15,13 @@ public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRe
     public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IUserContext _currentOrganizationService;
+        private readonly IUserContext _userContext;
         private readonly IEventPublisher _eventPublisher;
 
-        public CreateOrganizationCommandHandler(IApplicationDbContext context, IUserContext currentOrganizationService, IEventPublisher eventPublisher)
+        public CreateOrganizationCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
         {
             _context = context;
-            _currentOrganizationService = currentOrganizationService;
+            _userContext = userContext;
             _eventPublisher = eventPublisher;
         }
 
@@ -40,7 +40,7 @@ public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRe
                .AsSplitQuery()
                .FirstAsync(x => x.Id == organization.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _currentOrganizationService.UserId));
+            await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _userContext.UserId));
 
             return organization.ToDto();
         }

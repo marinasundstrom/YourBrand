@@ -3,6 +3,8 @@ using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using YourBrand.Integration;
+
 namespace YourBrand.Extensions;
 
 public static class ServiceBusExtensions
@@ -27,6 +29,9 @@ public static class ServiceBusExtensions
         {
             cfg.Host($"sb://{configuration["Azure:ServiceBus:Namespace"]}.servicebus.windows.net");
 
+            cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
+            
             cfg.ConfigureEndpoints(context);
         });
     }
@@ -42,6 +47,9 @@ public static class ServiceBusExtensions
                 h.Username("guest");
                 h.Password("guest");
             });
+
+            cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
 
             cfg.ConfigureEndpoints(context);
         });

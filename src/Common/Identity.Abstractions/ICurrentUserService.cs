@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace YourBrand.Identity;
+﻿namespace YourBrand.Identity;
 
 public interface IUserContext
 {
@@ -11,7 +9,4 @@ public interface IUserContext
     string? Role { get; }
 
     string? GetAccessToken();
-
-    void SetCurrentUser(UserId userId);
-    void SetCurrentUser(ClaimsPrincipal claimsPrincipal);
 }

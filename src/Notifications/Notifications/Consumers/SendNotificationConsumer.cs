@@ -10,14 +10,11 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Notifications.Consumers;
 
-public class SendNotificationConsumer(IMediator mediator, IUserContext userContext, ITenantContext tenantContext) : IConsumer<SendNotification>
+public class SendNotificationConsumer(IMediator mediator) : IConsumer<SendNotification>
 {
     public async Task Consume(ConsumeContext<SendNotification> context)
     {
         var message = context.Message;
-
-        tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.CreatedById);
 
         await mediator.Send(new CreateNotificationCommand(message.Content, message.Link, message.UserId, message.ScheduledFor));
 
@@ -25,14 +22,11 @@ public class SendNotificationConsumer(IMediator mediator, IUserContext userConte
     }
 }
 
-public class MarkAllNotificationsAsReadConsumer(IMediator mediator, IUserContext userContext, ITenantContext tenantContext) : IConsumer<MarkAllNotificationsAsRead>
+public class MarkAllNotificationsAsReadConsumer(IMediator mediator) : IConsumer<MarkAllNotificationsAsRead>
 {
     public async Task Consume(ConsumeContext<MarkAllNotificationsAsRead> context)
     {
         var message = context.Message;
-
-        tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.CreatedById);
 
         await mediator.Send(new MarkAllNotificationsAsReadCommand());
 
@@ -40,14 +34,11 @@ public class MarkAllNotificationsAsReadConsumer(IMediator mediator, IUserContext
     }
 }
 
-public class MarkNotificationAsReadConsumer(IMediator mediator, IUserContext userContext, ITenantContext tenantContext) : IConsumer<MarkNotificationAsRead>
+public class MarkNotificationAsReadConsumer(IMediator mediator) : IConsumer<MarkNotificationAsRead>
 {
     public async Task Consume(ConsumeContext<MarkNotificationAsRead> context)
     {
         var message = context.Message;
-
-        tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.CreatedById);
 
         await mediator.Send(new MarkNotificationAsReadCommand(message.NotificationId));
 

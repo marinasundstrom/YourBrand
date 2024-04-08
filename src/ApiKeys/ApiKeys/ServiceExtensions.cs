@@ -6,7 +6,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddIdentityServices();
+        services.AddUserContext();
 
         return services;
     }

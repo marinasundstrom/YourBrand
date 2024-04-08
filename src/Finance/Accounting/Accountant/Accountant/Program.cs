@@ -16,6 +16,7 @@ using YourBrand.Accounting.Client;
 using YourBrand.Authentication;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
+using YourBrand.Integration;
 using YourBrand.Invoicing.Client;
 using YourBrand.Payments.Client;
 
@@ -57,6 +58,9 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

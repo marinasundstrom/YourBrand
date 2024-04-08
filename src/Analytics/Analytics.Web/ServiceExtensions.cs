@@ -3,6 +3,7 @@
 using YourBrand.Analytics.Application;
 using YourBrand.Analytics.Consumers;
 using YourBrand.Analytics.Infrastructure;
+using YourBrand.Integration;
 
 namespace YourBrand.Analytics.Web;
 
@@ -31,6 +32,9 @@ public static class ServiceExtensions
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.ConfigureEndpoints(context);
+
+                cfg.UseTenancyFilters(context);
+                cfg.UseIdentityFilters(context);
             });
         });
 

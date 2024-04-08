@@ -8,6 +8,7 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Messenger;
 using YourBrand.Messenger.Application;
 using YourBrand.Messenger.Authentication;
@@ -76,7 +77,7 @@ services.AddAuthenticationServices(Configuration);
 services.AddAuthWithApiKey();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddMassTransit(x =>
@@ -85,6 +86,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumers(typeof(Program).Assembly);
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

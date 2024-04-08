@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 
+using YourBrand.Integration;
 using YourBrand.Ticketing.Application;
 using YourBrand.Ticketing.Consumers;
 using YourBrand.Ticketing.Infrastructure;
@@ -30,6 +31,9 @@ public static class ServiceExtensions
 
             x.UsingRabbitMq((context, cfg) =>
             {
+                cfg.UseTenancyFilters(context);
+                cfg.UseIdentityFilters(context);
+                
                 cfg.ConfigureEndpoints(context);
             });
         });

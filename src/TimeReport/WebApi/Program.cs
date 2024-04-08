@@ -16,6 +16,7 @@ using YourBrand;
 using YourBrand.ApiKeys;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport;
 using YourBrand.TimeReport.Application;
@@ -64,7 +65,7 @@ services
 
 services.AddHttpContextAccessor();
 
-services.AddIdentityServices();
+services.AddUserContext();
 services.AddTenantContext();
 
 services.AddScoped<IBlobService, BlobService>();
@@ -99,6 +100,9 @@ services.AddMassTransit(x =>
     x.AddConsumers(typeof(Program).Assembly);
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

@@ -41,6 +41,10 @@
         <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
         <ProjectReference Include="..\..\..\Common\SampleTenant\SampleTenant.csproj" />
+        <ProjectReference
+            Include="..\..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
 	</ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace YourBrand.Identity;
 
-public class UserContext : IUserContext
+public class UserContext : ISettableUserContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private UserId? _currentUserId;

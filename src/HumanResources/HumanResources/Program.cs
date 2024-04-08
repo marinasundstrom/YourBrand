@@ -16,6 +16,7 @@ using YourBrand.HumanResources.Infrastructure;
 using YourBrand.HumanResources.Infrastructure.Persistence;
 
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Tenancy;
 
 string MyAllowSpecificOrigins = "MyPolicy";
@@ -55,7 +56,7 @@ builder.Services
            .AddServices();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 
@@ -91,6 +92,9 @@ services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

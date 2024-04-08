@@ -2,7 +2,7 @@
 
 namespace YourBrand.Tenancy;
 
-public sealed class TenantContext : ITenantContext
+public sealed class TenantContext : ISettableTenantContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private TenantId? _tenantId;

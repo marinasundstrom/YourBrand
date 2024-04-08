@@ -34,6 +34,7 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.StoreFront;
+using YourBrand.Integration;
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 
@@ -159,6 +160,9 @@ builder.Services.AddMassTransit(x =>
         {
             cfg.Host($"sb://{builder.Configuration["Azure:ServiceBus:Namespace"]}.servicebus.windows.net");
 
+            cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
+
             cfg.ConfigureEndpoints(context);
         });
     }
@@ -173,6 +177,9 @@ builder.Services.AddMassTransit(x =>
                 h.Username("guest");
                 h.Password("guest");
             });
+
+            cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
 
             cfg.ConfigureEndpoints(context);
         });

@@ -18,6 +18,7 @@ using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Infrastructure;
 using YourBrand.Infrastructure.Persistence;
+using YourBrand.Integration;
 using YourBrand.Tenancy;
 using YourBrand.WebApi;
 using YourBrand.WebApi.Hubs;
@@ -58,7 +59,7 @@ services.AddInfrastructure(configuration);
 services.AddServices();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 services
@@ -107,6 +108,9 @@ services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

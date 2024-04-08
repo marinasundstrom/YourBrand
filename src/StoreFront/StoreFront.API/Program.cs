@@ -20,6 +20,7 @@ using YourBrand.Analytics.Client;
 using YourBrand.Carts;
 using YourBrand.Catalog;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Integration;
 using YourBrand.Inventory.Client;
 using YourBrand.Sales;
@@ -83,8 +84,10 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Progra
 builder.Services.AddCartServices();
 
 builder.Services
-    .AddScoped<IUserContext, UserContext>()
-    .AddSingleton<ITenantContext, TenantContext>();
+    .AddUserContext()
+    .AddScoped<YourBrand.StoreFront.API.IUserContext, YourBrand.StoreFront.API.UserContext>()
+    .AddSingleton<ISettableTenantContext, TenantContext>()
+    .AddSingleton<ITenantContext>(sp => sp.GetRequiredService<ISettableTenantContext>());
 
 builder.Services.AddMassTransit(x =>
 {
@@ -97,6 +100,9 @@ builder.Services.AddMassTransit(x =>
         x.UsingAzureServiceBus((context, cfg) =>
         {
             cfg.Host($"sb://{builder.Configuration["Azure:ServiceBus:Namespace"]}.servicebus.windows.net");
+
+            cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
 
             cfg.ConfigureEndpoints(context);
         });
@@ -114,7 +120,8 @@ builder.Services.AddMassTransit(x =>
             });
 
             cfg.UseTenancyFilters(context);
-
+            cfg.UseIdentityFilters(context);
+            
             cfg.ConfigureEndpoints(context);
         });
     }

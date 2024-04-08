@@ -12,6 +12,7 @@ using YourBrand.ApiKeys.Authentication;
 using YourBrand.ApiKeys.Infrastructure;
 using YourBrand.ApiKeys.Infrastructure.Persistence;
 using YourBrand.Extensions;
+using YourBrand.Integration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumers(typeof(Program).Assembly);
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+
         cfg.ConfigureEndpoints(context);
     });
 });

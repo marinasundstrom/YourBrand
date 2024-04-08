@@ -86,7 +86,7 @@ builder.Services
     .AddPersistence(builder.Configuration);
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddScoped<ITenantContext, TenantContext>();
@@ -156,7 +156,7 @@ try
 
         if (args.Contains("--seed"))
         {
-            var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+            var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
             tenantContext.SetTenantId(TenantConstants.TenantId);
 
             var context = scope.ServiceProvider.GetRequiredService<SalesContext>();

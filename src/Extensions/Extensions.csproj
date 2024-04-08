@@ -49,4 +49,10 @@
     <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.2.0-beta.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+
 </Project>

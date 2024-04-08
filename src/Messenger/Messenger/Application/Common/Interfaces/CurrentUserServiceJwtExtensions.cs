@@ -14,7 +14,7 @@ public static class UserContextJwtExtensions
 {
     private static DiscoveryDocumentResponse? discoveryDocumentResponse;
 
-    public static async Task SetCurrentUserFromAccessTokenAsync(this IUserContext userContext, string accessToken)
+    public static async Task SetCurrentUserFromAccessTokenAsync(this ISettableUserContext userContext, string accessToken)
     {
         var httpClient = new HttpClient();
 

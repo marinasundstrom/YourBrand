@@ -8,7 +8,7 @@ public static class Seed
     {
         using var scope = services.CreateScope();
 
-        var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
         tenantContext.SetTenantId(TenantConstants.TenantId);
 
         using var context = scope.ServiceProvider.GetRequiredService<NotificationsContext>();

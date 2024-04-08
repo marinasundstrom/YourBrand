@@ -8,6 +8,7 @@ using YourBrand;
 using YourBrand.EmailService;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Notifications.Consumers;
 using YourBrand.Notifications.Services;
 using YourBrand.Tenancy;
@@ -47,12 +48,15 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddScoped<IEmailService, EmailService>();

@@ -6,7 +6,8 @@ public static class ServicesExtensions
 {
     public static IServiceCollection AddTenantContext(this IServiceCollection services)
     {
-        services.AddScoped<ITenantContext, TenantContext>();
+        services.AddScoped<ISettableTenantContext, TenantContext>();
+        services.AddScoped<ITenantContext>(sp => sp.GetRequiredService<ISettableTenantContext>());
 
         return services;
     }

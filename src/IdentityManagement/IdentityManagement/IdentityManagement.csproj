@@ -17,8 +17,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
 
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
@@ -56,5 +54,11 @@
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Common\SampleTenant\SampleTenant.csproj" />
+    <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

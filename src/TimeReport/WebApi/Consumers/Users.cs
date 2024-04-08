@@ -9,14 +9,11 @@ using YourBrand.TimeReport.Application.Users.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
-public class TimeReportUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ITenantContext tenantContext, IUserContext userContext) : IConsumer<UserCreated>
+public class TimeReportUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient) : IConsumer<UserCreated>
 {
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
         var message = context.Message;
-
-        tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.CreatedById);
 
         var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.CreatedById));
         var message2 = messageR.Message;
@@ -25,27 +22,21 @@ public class TimeReportUserCreatedConsumer(IMediator mediator, IRequestClient<Ge
     }
 }
 
-public class TimeReportUserDeletedConsumer(IMediator mediator, ITenantContext tenantContext, IUserContext userContext) : IConsumer<UserDeleted>
+public class TimeReportUserDeletedConsumer(IMediator mediator) : IConsumer<UserDeleted>
 {
     public async Task Consume(ConsumeContext<UserDeleted> context)
     {
         var message = context.Message;
-
-        //_tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.DeletedById);
-
+        
         await mediator.Send(new DeleteUserCommand(message.UserId));
     }
 }
 
-public class TimeReportUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ITenantContext tenantContext, IUserContext userContext) : IConsumer<UserUpdated>
+public class TimeReportUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient) : IConsumer<UserUpdated>
 {
     public async Task Consume(ConsumeContext<UserUpdated> context)
     {
         var message = context.Message;
-
-        //tenantContext.SetTenantId(message.TenantId);
-        userContext.SetCurrentUser(message.UpdatedById);
 
         var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.UpdatedById)));
         var message2 = messageR.Message;

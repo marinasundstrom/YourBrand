@@ -55,7 +55,7 @@ public sealed record Checkout(
 
             const int OrderStatusOpen = 2;
 
-            await _ordersClient.CreateOrderAsync(new CreateOrderRequest()
+            await _ordersClient.CreateOrderAsync("organizationId", new CreateOrderRequest()
             {
                 Status = OrderStatusOpen,
                 Customer = new SetCustomer

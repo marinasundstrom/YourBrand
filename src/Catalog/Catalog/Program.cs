@@ -132,6 +132,9 @@ builder.Services.AddMassTransit(x =>
         {
             cfg.Host($"sb://{builder.Configuration["Azure:ServiceBus:Namespace"]}.servicebus.windows.net");
 
+            cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
+
             cfg.ConfigureEndpoints(context);
         });
     }
@@ -148,6 +151,7 @@ builder.Services.AddMassTransit(x =>
             });
 
             cfg.UseTenancyFilters(context);
+            cfg.UseIdentityFilters(context);
 
             cfg.ConfigureEndpoints(context);
         });
@@ -161,7 +165,7 @@ builder.Services
 builder.Services.AddScoped<ProductVariantsService>();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddScoped<IDateTime, DateTimeService>();
@@ -211,7 +215,7 @@ using (var scope = app.Services.CreateScope())
 
     if (args.Contains("--seed"))
     {
-        var tenantContext = scope.ServiceProvider.GetRequiredService<ITenantContext>();
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
         tenantContext.SetTenantId(TenantConstants.TenantId);
 
         var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();

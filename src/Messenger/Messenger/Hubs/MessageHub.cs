@@ -16,11 +16,11 @@ namespace YourBrand.Messenger.Hubs;
 public class MessageHub : Hub<IMessageClient>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
+    private readonly ISettableUserContext _userContext;
     private readonly IRequestClient<PostMessage> _postMessageClient;
     private readonly IBus _bus;
 
-    public MessageHub(IMediator mediator, IUserContext userContext,
+    public MessageHub(IMediator mediator, ISettableUserContext userContext,
         IRequestClient<PostMessage> postMessageClient,
         IBus bus)
     {

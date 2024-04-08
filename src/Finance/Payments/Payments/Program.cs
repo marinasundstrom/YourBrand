@@ -14,6 +14,7 @@ using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Payments;
 using YourBrand.Payments.Application;
 using YourBrand.Payments.Application.Commands;
@@ -72,7 +73,7 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 // Set the JSON serializer options
@@ -99,6 +100,9 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

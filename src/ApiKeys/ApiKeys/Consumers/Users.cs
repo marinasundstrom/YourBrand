@@ -29,8 +29,6 @@ public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
         {
             var message = context.Message;
 
-            _userContext.SetCurrentUser(message.CreatedById);
-
             var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
             var message2 = messageR.Message;
 
@@ -58,8 +56,6 @@ public class ApiKeysUserDeletedConsumer : IConsumer<UserDeleted>
     {
         var message = context.Message;
 
-        _userContext.SetCurrentUser(message.DeletedById);
-
         await _mediator.Send(new DeleteUserCommand(message.UserId));
     }
 }
@@ -80,8 +76,6 @@ public class ApiKeysUserUpdatedConsumer : IConsumer<UserUpdated>
     public async Task Consume(ConsumeContext<UserUpdated> context)
     {
         var message = context.Message;
-
-        _userContext.SetCurrentUser(message.UpdatedById);
 
         var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
         var message2 = messageR.Message;

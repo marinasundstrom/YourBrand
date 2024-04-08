@@ -12,6 +12,7 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Notifications;
 using YourBrand.Notifications.Application;
 using YourBrand.Notifications.Infrastructure;
@@ -51,7 +52,7 @@ services.AddInfrastructure(configuration);
 services.AddServices();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 services
@@ -72,6 +73,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumers(typeof(Program).Assembly);
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

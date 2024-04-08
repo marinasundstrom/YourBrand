@@ -13,6 +13,10 @@ using YourBrand.IdentityManagement;
 using YourBrand.IdentityManagement.Application;
 using YourBrand.IdentityManagement.Consumers;
 using YourBrand.IdentityManagement.Infrastructure;
+using YourBrand.Integration;
+
+using YourBrand.Tenancy;
+using YourBrand.Identity;
 
 string MyAllowSpecificOrigins = "MyPolicy";
 
@@ -50,6 +54,11 @@ builder.Services
            .AddInfrastructure(builder.Configuration)
            .AddServices();
 
+builder.Services
+    .AddUserContext()
+    .AddTenantContext();
+
+
 services
     .AddControllers()
     .AddNewtonsoftJson();
@@ -82,6 +91,9 @@ services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

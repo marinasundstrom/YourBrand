@@ -12,21 +12,18 @@ namespace YourBrand.Messenger.Consumers;
 public class PostMessageConsumer : IConsumer<PostMessage>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
+    private readonly ISettableUserContext _userContext;
     private readonly IBus _bus;
 
-    public PostMessageConsumer(IMediator mediator, IUserContext userContext, IBus bus)
+    public PostMessageConsumer(IMediator mediator, IBus bus)
     {
         _mediator = mediator;
-        _userContext = userContext;
         _bus = bus;
     }
 
     public async Task Consume(ConsumeContext<PostMessage> context)
     {
         var message = context.Message;
-
-        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         var result = await _mediator.Send(new PostMessageCommand(message.ConversationId, message.Text, message.ReplyToId));
 
@@ -37,21 +34,17 @@ public class PostMessageConsumer : IConsumer<PostMessage>
 public class UpdateMessageConsumer : IConsumer<UpdateMessage>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
     private readonly IBus _bus;
 
-    public UpdateMessageConsumer(IMediator mediator, IUserContext userContext, IBus bus)
+    public UpdateMessageConsumer(IMediator mediator, IBus bus)
     {
         _mediator = mediator;
-        _userContext = userContext;
         _bus = bus;
     }
 
     public async Task Consume(ConsumeContext<UpdateMessage> context)
     {
         var message = context.Message;
-
-        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         await _mediator.Send(new UpdateMessageCommand(message.ConversationId, message.MessageId!, message.Text));
     }
@@ -60,21 +53,17 @@ public class UpdateMessageConsumer : IConsumer<UpdateMessage>
 public class DeleteMessageConsumer : IConsumer<DeleteMessage>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
     private readonly IBus _bus;
 
-    public DeleteMessageConsumer(IMediator mediator, IUserContext userContext, IBus bus)
+    public DeleteMessageConsumer(IMediator mediator, IBus bus)
     {
         _mediator = mediator;
-        _userContext = userContext;
         _bus = bus;
     }
 
     public async Task Consume(ConsumeContext<DeleteMessage> context)
     {
         var message = context.Message;
-
-        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         await _mediator.Send(new DeleteMessageCommand(message.ConversationId, message.MessageId));
     }
@@ -83,10 +72,10 @@ public class DeleteMessageConsumer : IConsumer<DeleteMessage>
 public class MarkMessageAsReadConsumer : IConsumer<MarkMessageAsRead>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
+    private readonly ISettableUserContext _userContext;
     private readonly IBus _bus;
 
-    public MarkMessageAsReadConsumer(IMediator mediator, IUserContext userContext, IBus bus)
+    public MarkMessageAsReadConsumer(IMediator mediator, ISettableUserContext userContext, IBus bus)
     {
         _mediator = mediator;
         _userContext = userContext;
@@ -106,9 +95,9 @@ public class MarkMessageAsReadConsumer : IConsumer<MarkMessageAsRead>
 public class StartTypingConsumer : IConsumer<StartTyping>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
+    private readonly ISettableUserContext _userContext;
 
-    public StartTypingConsumer(IMediator mediator, IUserContext userContext)
+    public StartTypingConsumer(IMediator mediator, ISettableUserContext userContext)
     {
         _mediator = mediator;
         _userContext = userContext;
@@ -127,9 +116,9 @@ public class StartTypingConsumer : IConsumer<StartTyping>
 public class EndTypingConsumer : IConsumer<EndTyping>
 {
     private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
+    private readonly ISettableUserContext _userContext;
 
-    public EndTypingConsumer(IMediator mediator, IUserContext userContext)
+    public EndTypingConsumer(IMediator mediator, ISettableUserContext userContext)
     {
         _mediator = mediator;
         _userContext = userContext;

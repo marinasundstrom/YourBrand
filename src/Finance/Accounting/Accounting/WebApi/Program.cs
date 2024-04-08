@@ -25,6 +25,7 @@ using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,7 +61,7 @@ builder.Services
 builder.Services.AddHttpContextAccessor();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddScoped<IBlobService, BlobService>();
@@ -102,6 +103,9 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, cfg) =>
     {
         //cfg.UseMessageData(messageDataRepository);
+
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
 
         cfg.ConfigureEndpoints(context);
     });

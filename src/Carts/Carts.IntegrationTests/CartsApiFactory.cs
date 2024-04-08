@@ -57,6 +57,9 @@ public class CartsApiFactory
                 {
                     cfg.UseDelayedMessageScheduler();
 
+                    cfg.UseTenancyFilters(context);
+                    cfg.UseIdentityFilters(context);
+
                     cfg.ConfigureEndpoints(context);
                 });
             });

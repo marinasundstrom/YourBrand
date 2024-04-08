@@ -16,6 +16,7 @@ using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Invoicing;
 using YourBrand.Invoicing.Application;
 using YourBrand.Invoicing.Application.Commands;
@@ -73,7 +74,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 builder.Services.AddHttpContextAccessor();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddMassTransit(x =>
@@ -86,6 +87,9 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

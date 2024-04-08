@@ -14,6 +14,7 @@ using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Identity;
+using YourBrand.Integration;
 using YourBrand.Tenancy;
 using YourBrand.Transactions;
 using YourBrand.Transactions.Application;
@@ -45,7 +46,7 @@ builder.Services
     .AddApiVersioningServices();
 
 builder.Services
-    .AddIdentityServices()
+    .AddUserContext()
     .AddTenantContext();
 
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
@@ -73,7 +74,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddIdentityServices();
+builder.Services.AddUserContext();
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
@@ -94,6 +95,9 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseTenancyFilters(context);
+        cfg.UseIdentityFilters(context);
+        
         cfg.ConfigureEndpoints(context);
     });
 });

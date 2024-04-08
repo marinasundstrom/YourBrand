@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
