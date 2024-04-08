@@ -18,7 +18,7 @@ public record GetOrders(string OrganizationId, int[]? Status, string? CustomerId
         {
             var query = orderRepository.GetAll();
 
-            query = query.Where(x => x.OrganizationId == request.OrganizationId);
+            query = query.InOrganization(request.OrganizationId);
 
             if (request.Status?.Any() ?? false)
             {

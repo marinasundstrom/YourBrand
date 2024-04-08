@@ -35,7 +35,7 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
             {
                 order.OrderNo = (await orderRepository
                     .GetAll()
-                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .InOrganization(request.OrganizationId)
                     .MaxAsync(x => x.OrderNo)) + 1;
             }
             catch (InvalidOperationException e)

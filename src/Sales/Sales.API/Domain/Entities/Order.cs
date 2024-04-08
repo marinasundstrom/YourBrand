@@ -49,7 +49,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     public User? Assignee { get; private set; }
 
-    public string? AssigneeId { get; private set; }
+    public UserId? AssigneeId { get; private set; }
 
     public bool UpdateAssigneeId(string? userId)
     {

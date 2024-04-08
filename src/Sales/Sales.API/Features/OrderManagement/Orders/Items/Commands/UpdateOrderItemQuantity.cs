@@ -27,7 +27,7 @@ public sealed record UpdateOrderItemQuantity(string OrganizationId, string Order
         {
             var order = await orderRepository
                                         .GetAll()
-                                        .Where(x => x.OrganizationId == request.OrganizationId)
+                                        .InOrganization(request.OrganizationId)
                                         .FirstOrDefaultAsync(x => x.Id == request.OrderId, cancellationToken);
                                         
             if (order is null)

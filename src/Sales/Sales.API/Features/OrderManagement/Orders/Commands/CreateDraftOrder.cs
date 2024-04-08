@@ -34,7 +34,7 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
             {
                 order.OrderNo = (await orderRepository
                     .GetAll()
-                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .InOrganization(request.OrganizationId)
                     .MaxAsync(x => x.OrderNo)) + 1;
             }
             catch (InvalidOperationException e)

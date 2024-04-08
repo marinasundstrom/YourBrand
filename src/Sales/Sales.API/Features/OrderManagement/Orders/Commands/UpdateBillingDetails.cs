@@ -26,7 +26,7 @@ public sealed record UpdateBillingDetails(string OrganizationId, string Id, Bill
         {
             var order = await orderRepository
                             .GetAll()
-                            .Where(x => x.OrganizationId == request.OrganizationId)
+                            .InOrganization(request.OrganizationId)
                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
                             
             if (order is null)

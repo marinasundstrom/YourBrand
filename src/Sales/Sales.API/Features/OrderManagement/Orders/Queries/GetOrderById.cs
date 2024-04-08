@@ -25,7 +25,7 @@ public record GetOrderById(string OrganizationId, string Id) : IRequest<Result<O
         {
             var order = await orderRepository
                             .GetAll()
-                            .Where(x => x.OrganizationId == request.OrganizationId)
+                            .InOrganization(request.OrganizationId)
                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
                             
             if (order is null)

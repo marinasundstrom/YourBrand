@@ -7,7 +7,7 @@ namespace YourBrand.Sales.Domain.Entities;
 
 public class Organization : AggregateRoot<OrganizationId>, IAuditable, IHasTenant
 {
-    public Organization(string id, string name)
+    public Organization(OrganizationId id, string name)
         : base(id)
     {
         Id = id;
