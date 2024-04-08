@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Invoicing.Domain;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Entities;
@@ -128,6 +129,8 @@ public class InvoicingContext : DbContext, IInvoicingContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Invoice> Invoices { get; set; } = null!;

@@ -5,6 +5,7 @@ using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;
@@ -112,6 +113,8 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationD
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

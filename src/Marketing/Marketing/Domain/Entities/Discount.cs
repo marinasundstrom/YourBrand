@@ -1,3 +1,4 @@
+using YourBrand.Identity;
 using YourBrand.Marketing.Domain.Enums;
 
 namespace YourBrand.Marketing.Domain.Entities;
@@ -61,8 +62,8 @@ public class Discount : Entity<string>, IAuditable
     public double? Percentage { get; set; }
     public decimal? Amount { get; set; }
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
     public DateTimeOffset Created { get; set; }
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 }

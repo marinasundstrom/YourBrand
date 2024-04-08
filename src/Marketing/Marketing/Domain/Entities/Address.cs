@@ -1,3 +1,4 @@
+using YourBrand.Identity;
 using YourBrand.Marketing.Domain.Enums;
 
 namespace YourBrand.Marketing.Domain.Entities;
@@ -42,11 +43,11 @@ public class Address : Entity<string>, IAuditable
 
     public string Country { get; set; } = null!;
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

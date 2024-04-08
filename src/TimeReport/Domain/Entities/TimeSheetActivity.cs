@@ -1,6 +1,7 @@
 ﻿
 using System.Globalization;
 
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
@@ -42,7 +43,7 @@ public class TimeSheetActivity : AuditableEntity, IHasTenant, ISoftDelete
     // public decimal? HourlyRate { get; set; }
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 
     public Entry AddEntry(DateOnly date, double? hours, string? description)

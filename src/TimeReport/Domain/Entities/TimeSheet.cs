@@ -1,6 +1,7 @@
 ﻿
 using System.Globalization;
 
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
@@ -57,7 +58,7 @@ public class TimeSheet : AuditableEntity, IHasTenant, ISoftDelete
     public IReadOnlyCollection<Entry> Entries => _entries;
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public IEnumerable<Entry> GetEntriesByActivityId(string activityId)
     {

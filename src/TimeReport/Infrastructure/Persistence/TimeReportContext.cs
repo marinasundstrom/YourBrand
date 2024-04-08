@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 
 using YourBrand.ApiKeys;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Common;
@@ -133,6 +134,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<User> Users { get; set; } = null!;

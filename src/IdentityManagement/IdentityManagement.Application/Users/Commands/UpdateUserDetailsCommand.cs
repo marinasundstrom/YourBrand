@@ -44,7 +44,7 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserUpdated(user.Id, _userContext.UserId));
+            await _eventPublisher.PublishEvent(new UserUpdated(user.Id));
 
             return user.ToDto();
         }

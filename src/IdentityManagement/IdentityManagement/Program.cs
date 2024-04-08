@@ -9,14 +9,13 @@ using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.IdentityManagement;
 using YourBrand.IdentityManagement.Application;
 using YourBrand.IdentityManagement.Consumers;
 using YourBrand.IdentityManagement.Infrastructure;
 using YourBrand.Integration;
-
 using YourBrand.Tenancy;
-using YourBrand.Identity;
 
 string MyAllowSpecificOrigins = "MyPolicy";
 
@@ -93,7 +92,7 @@ services.AddMassTransit(x =>
     {
         cfg.UseTenancyFilters(context);
         cfg.UseIdentityFilters(context);
-        
+
         cfg.ConfigureEndpoints(context);
     });
 });

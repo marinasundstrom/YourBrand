@@ -1,3 +1,4 @@
+using YourBrand.Identity;
 using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Domain.Repositories;
@@ -8,5 +9,5 @@ public interface IUserRepository
 
     void RemoveUser(User user);
 
-    Task<User?> GetUser(string id, CancellationToken cancellationToken = default);
+    Task<User?> GetUser(UserId id, CancellationToken cancellationToken = default);
 }

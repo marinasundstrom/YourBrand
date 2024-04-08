@@ -8,10 +8,10 @@ public record CreateOrganization
 
 public record CreateOrganizationResponse(string Id, string Name, string? FriendlyName);
 
-public record OrganizationCreated(string OrganizationId, string Name, string CreatedById);
+public record OrganizationCreated(string OrganizationId, string Name);
 
-public record OrganizationUpdated(string OrganizationId, string Name, string UpdatedById);
+public record OrganizationUpdated(string OrganizationId, string Name);
 
-public record OrganizationDeleted(string OrganizationId, string DeletedById);
+public record OrganizationDeleted(string OrganizationId);
 
 public record GetOrganizationResponse(string Id, string Name, string? FriendlyName);

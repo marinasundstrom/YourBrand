@@ -8,6 +8,9 @@ using YourBrand.ApiKeys.Domain.Common;
 using YourBrand.ApiKeys.Domain.Entities;
 using YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;
 using YourBrand.ApiKeys.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence;
 
@@ -38,6 +41,13 @@ public class ApiKeysContext : DbContext, IApiKeysContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.ItemConfiguration).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

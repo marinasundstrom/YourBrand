@@ -10,10 +10,10 @@ public record GetTenant(string TenantId, string RequestedById);
 
 public record CreateTenantResponse(string Id, string Name, string? FriendlyName);
 
-public record TenantCreated(string TenantId, string Name, string CreatedById);
+public record TenantCreated(string TenantId, string Name);
 
-public record TenantUpdated(string TenantId, string Name, string UpdatedById);
+public record TenantUpdated(string TenantId, string Name);
 
-public record TenantDeleted(string TenantId, string DeletedById);
+public record TenantDeleted(string TenantId);
 
 public record GetTenantResponse(string Id, string Name, string? FriendlyName);

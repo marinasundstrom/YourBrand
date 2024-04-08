@@ -1,4 +1,5 @@
 ﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
 
@@ -10,11 +11,13 @@ public class CaseProfile : AuditableEntity, IHasTenant, ISoftDelete
 
     public TenantId TenantId { get; set; } = null!;
 
+    public OrganizationId OrganizationId { get; set; } = null!;
+
     public PersonProfile PersonProfile { get; set; } = null!;
 
     public string? Presentation { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

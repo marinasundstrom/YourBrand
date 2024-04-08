@@ -2,6 +2,7 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Entities;
@@ -9,6 +10,7 @@ using YourBrand.HumanResources.Infrastructure.Persistence.Configurations;
 using YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
 using YourBrand.HumanResources.Infrastructure.Persistence.Outbox;
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.HumanResources.Infrastructure.Persistence;
 
@@ -45,6 +47,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonConfiguration).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Organization> Organizations { get; set; } = null!;

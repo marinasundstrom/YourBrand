@@ -10,12 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -31,8 +31,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Analytics.Application\Analytics.Application.csproj" />
-		<ProjectReference Include="..\Analytics.Domain\Analytics.Domain.csproj" />
+        <ProjectReference Include="..\Analytics.Application\Analytics.Application.csproj" />
+        <ProjectReference Include="..\Analytics.Domain\Analytics.Domain.csproj" />
+
+        <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+        <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+        <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+        <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
 	</ItemGroup>
 
 </Project>

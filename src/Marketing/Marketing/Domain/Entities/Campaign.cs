@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Marketing.Domain.Entities;
+﻿using YourBrand.Identity;
+
+namespace YourBrand.Marketing.Domain.Entities;
 
 public class Campaign : Entity<string>, IAuditable
 {
@@ -30,11 +32,11 @@ public class Campaign : Entity<string>, IAuditable
 
     public bool RemoveProductOffer(ProductOffer productOffer) => _productOffers.Remove(productOffer);
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

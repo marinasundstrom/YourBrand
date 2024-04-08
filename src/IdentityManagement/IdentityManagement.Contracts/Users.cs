@@ -13,12 +13,12 @@ public record CreateUser
 
 public record CreateUserResponse(string UserId, string TenantId, string OrganizationId, string FirstName, string LastName, string? DisplayName, string Email);
 
-public record UserCreated(string UserId, string TenantId, string OrganizationId, string CreatedById);
+public record UserCreated(string UserId, string TenantId, string OrganizationId);
 
-public record UserUpdated(string UserId, string UpdatedById);
+public record UserUpdated(string UserId);
 
-public record UserDeleted(string UserId, string DeletedById);
+public record UserDeleted(string UserId);
 
-public record GetUser(string UserId, string RequestedById);
+public record GetUser(string UserId);
 
 public record GetUserResponse(string UserId, string TenantId, string OrganizationId, string FirstName, string LastName, string? DisplayName, string Email);

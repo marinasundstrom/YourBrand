@@ -26,7 +26,7 @@ public sealed record UpdateAssignedUser(string OrganizationId, string Id, string
                             .GetAll()
                             .InOrganization(request.OrganizationId)
                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-                            
+
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

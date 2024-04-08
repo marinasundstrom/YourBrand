@@ -15,7 +15,7 @@ public class SalesUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser
         {
             var message = context.Message;
 
-            var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
+            var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
             var message2 = messageR.Message;
 
             var result = await mediator.Send(new Sales.Features.OrderManagement.Users.CreateUser($"{message2.FirstName} {message2.LastName}", message2.Email, message.TenantId, message2.UserId));
@@ -44,7 +44,7 @@ public class SalesUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
+        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new UpdateUser(message2.UserId, $"{message2.FirstName} {message2.LastName}", message2.Email));

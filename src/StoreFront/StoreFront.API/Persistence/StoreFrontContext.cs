@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.StoreFront.API.Domain.Entities;
+using YourBrand.Tenancy;
 
 namespace YourBrand.StoreFront.API.Persistence;
 
@@ -18,6 +21,13 @@ public sealed class StoreFrontContext : DbContext
             .HasForeignKey("CartId")
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Cart> StoreFront { get; set; } = default!;

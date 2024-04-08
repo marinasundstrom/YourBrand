@@ -12,6 +12,7 @@ using YourBrand.Customers.Domain.Entities;
 using YourBrand.Customers.Infrastructure.Persistence.Interceptors;
 using YourBrand.Customers.Infrastructure.Persistence.Outbox;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Infrastructure.Persistence;
@@ -130,6 +131,8 @@ public class CustomersContext : DbContext, ICustomersContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Customer> Customers { get; set; } = null!;

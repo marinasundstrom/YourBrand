@@ -49,7 +49,7 @@ public record UpdateOrganizationCommand(string PersonId, string FirstName, strin
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonUpdated(person.Id, _currentPersonService.UserId));
+            await _eventPublisher.PublishEvent(new PersonUpdated(person.Id));
 
             return person.ToDto();
         }

@@ -27,7 +27,7 @@ public record GetOrderById(string OrganizationId, string Id) : IRequest<Result<O
                             .GetAll()
                             .InOrganization(request.OrganizationId)
                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-                            
+
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

@@ -1,3 +1,4 @@
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Carts.Domain.Entities;
@@ -28,8 +29,8 @@ public sealed class Cart : IAuditable, IHasTenant
     public IReadOnlyCollection<CartItem> Items => _cartItems;
 
     public DateTimeOffset Created { get; set; }
-    public string? CreatedById { get; set; }
-    public string? LastModifiedById { get; set; }
+    public UserId? CreatedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 
     public CartItem AddItem(string name, string? image, long? productId, string? productHandle, string description, decimal price, double? vatRate, decimal? regularPrice, double? discountRate, int quantity, string? data)
@@ -154,8 +155,8 @@ public sealed class CartItem : IAuditable, IHasTenant
     }
 
     public DateTimeOffset Created { get; set; }
-    public string? CreatedById { get; set; }
-    public string? LastModifiedById { get; set; }
+    public UserId? CreatedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 
 }

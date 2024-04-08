@@ -1,8 +1,10 @@
-﻿namespace YourBrand.Documents.Domain.Common;
+﻿using YourBrand.Identity;
+
+namespace YourBrand.Documents.Domain.Common;
 
 public interface ISoftDelete
 {
     DateTime? Deleted { get; set; }
 
-    string? DeletedById { get; set; }
+    UserId? DeletedById { get; set; }
 }

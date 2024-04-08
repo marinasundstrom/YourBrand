@@ -1,5 +1,6 @@
 ﻿using YourBrand.Documents.Domain.Common;
 using YourBrand.Documents.Domain.Events;
+using YourBrand.Identity;
 
 namespace YourBrand.Documents.Domain.Entities;
 
@@ -72,5 +73,5 @@ public class Directory : AuditableEntity, ISoftDelete, IDeletable, IItem
 
     public DateTime? Deleted { get; set; }
 
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 }

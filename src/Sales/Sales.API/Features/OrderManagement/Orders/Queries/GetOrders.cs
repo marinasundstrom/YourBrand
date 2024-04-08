@@ -16,9 +16,9 @@ public record GetOrders(string OrganizationId, int[]? Status, string? CustomerId
 
         public async Task<Result<PagedResult<OrderDto>>> Handle(GetOrders request, CancellationToken cancellationToken)
         {
-            var query = orderRepository.GetAll();
-
-            query = query.InOrganization(request.OrganizationId);
+            var query = orderRepository
+                .GetAll()
+                .InOrganization(request.OrganizationId);
 
             if (request.Status?.Any() ?? false)
             {

@@ -33,7 +33,7 @@ public static class ServiceExtensions
             {
                 cfg.UseTenancyFilters(context);
                 cfg.UseIdentityFilters(context);
-                
+
                 cfg.ConfigureEndpoints(context);
             });
         });

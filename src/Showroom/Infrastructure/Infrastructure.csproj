@@ -25,9 +25,11 @@
       Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\SampleTenant\SampleTenant.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

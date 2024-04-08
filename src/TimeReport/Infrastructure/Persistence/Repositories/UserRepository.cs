@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Repositories;
 using YourBrand.TimeReport.Infrastructure.Persistence;
@@ -20,7 +21,7 @@ public sealed class UserRepository : IUserRepository
         _context.Users.Add(user);
     }
 
-    public async Task<User?> GetUser(string id, CancellationToken cancellationToken = default)
+    public async Task<User?> GetUser(UserId id, CancellationToken cancellationToken = default)
     {
         return await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }

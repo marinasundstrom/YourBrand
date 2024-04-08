@@ -26,7 +26,7 @@ public sealed record UpdateStatus(string OrganizationId, string Id, int StatusId
                             .GetAll()
                             .InOrganization(request.OrganizationId)
                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-                            
+
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

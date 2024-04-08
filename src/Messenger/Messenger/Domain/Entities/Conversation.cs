@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Identity;
 using YourBrand.Messenger.Domain.Common;
 using YourBrand.Messenger.Domain.Events;
 
@@ -36,7 +37,7 @@ public class Conversation : AuditableEntity, ISoftDelete
     }
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 
     public void RemoveParticipant(ConversationParticipant participant)

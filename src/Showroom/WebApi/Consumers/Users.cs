@@ -14,7 +14,7 @@ public class ShowroomUserCreatedConsumer(IMediator mediator, IRequestClient<GetU
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
+        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
@@ -37,7 +37,7 @@ public class ShowroomUserUpdatedConsumer(IMediator mediator, IRequestClient<GetU
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
+        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));

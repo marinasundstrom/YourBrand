@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Marketing.Domain.Entities;
+﻿using YourBrand.Identity;
+
+namespace YourBrand.Marketing.Domain.Entities;
 
 public class ProductOffer : Entity<string>, IAuditable
 {
@@ -26,11 +28,11 @@ public class ProductOffer : Entity<string>, IAuditable
 
     public decimal OfferPrice { get; set; }
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

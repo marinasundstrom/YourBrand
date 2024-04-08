@@ -17,8 +17,7 @@ public sealed record MarkAllNotificationsAsReadCommand() : IRequest
         {
             await notificationsClient.GetResponse<MarkAllNotificationsAsReadResponse>(new MarkAllNotificationsAsRead
             {
-                TenantId = tenantContext.TenantId!,
-                CreatedById = userContext.UserId!
+                TenantId = tenantContext.TenantId!
             }, cancellationToken);
         }
     }

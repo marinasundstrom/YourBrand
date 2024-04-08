@@ -1,4 +1,5 @@
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Enums;
 using YourBrand.Tenancy;
@@ -10,6 +11,10 @@ public class PersonProfile : AuditableEntity, IHasTenant, ISoftDelete
     public string Id { get; set; }
 
     public TenantId TenantId { get; set; } = null!;
+
+    public Organization Organization { get; set; } = null!;
+
+    public OrganizationId OrganizationId { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
 
@@ -23,15 +28,11 @@ public class PersonProfile : AuditableEntity, IHasTenant, ISoftDelete
 
     public User? User { get; set; }
 
-    public string? UserId { get; set; }
+    public UserId? UserId { get; set; }
 
     public Industry Industry { get; set; } = null!;
 
     public int IndustryId { get; set; }
-
-    public Organization Organization { get; set; } = null!;
-
-    public string OrganizationId { get; set; } = null!;
 
     public CompetenceArea CompetenceArea { get; set; } = null!;
 
@@ -51,7 +52,7 @@ public class PersonProfile : AuditableEntity, IHasTenant, ISoftDelete
 
     public User? Manager { get; set; } = null!;
 
-    public string? ManagerId { get; set; } = null!;
+    public UserId? ManagerId { get; set; } = null!;
 
     public DateTime? AvailableFromDate { get; set; }
 
@@ -70,6 +71,6 @@ public class PersonProfile : AuditableEntity, IHasTenant, ISoftDelete
     public List<Employment> Employments { get; set; } = new List<Employment>();
 
     public DateTimeOffset? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

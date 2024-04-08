@@ -17,12 +17,12 @@ public record CreatePerson
 
 public record CreatePersonResponse(string PersonId, string OrganizationId, string FirstName, string LastName, string? DisplayName, string SSN, string Email);
 
-public record PersonCreated(string PersonId, string CreatedById);
+public record PersonCreated(string PersonId);
 
-public record PersonUpdated(string PersonId, string UpdatedById);
+public record PersonUpdated(string PersonId);
 
-public record PersonDeleted(string PersonId, string DeletedById);
+public record PersonDeleted(string PersonId);
 
-public record GetPerson(string PersonId, string RequestedById);
+public record GetPerson(string PersonId);
 
 public record GetPersonResponse(string PersonId, string OrganizationId, string FirstName, string LastName, string? DisplayName, string SSN, string Email);

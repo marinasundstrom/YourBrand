@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Carts.Domain.Entities;
 using YourBrand.Domain;
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Carts.Persistence;
@@ -112,6 +114,8 @@ public sealed class CartsContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 

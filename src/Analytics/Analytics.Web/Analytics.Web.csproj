@@ -18,7 +18,7 @@
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'YourBrand.Catalog.Web' " />
 	<ItemGroup>
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

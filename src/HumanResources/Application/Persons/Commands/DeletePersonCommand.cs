@@ -39,7 +39,7 @@ public record DeletePersonCommand(string PersonId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id, _currentPersonService.UserId));
+            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id));
 
         }
     }

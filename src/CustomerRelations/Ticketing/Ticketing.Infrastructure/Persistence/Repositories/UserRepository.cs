@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Identity;
 using YourBrand.Ticketing.Domain.Specifications;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories;
@@ -22,7 +23,7 @@ public sealed class UserRepository : IUserRepository
         return dbSet.AsQueryable();
     }
 
-    public async Task<User?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<User?> FindByIdAsync(UserId id, CancellationToken cancellationToken = default)
     {
         return await dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }

@@ -52,7 +52,7 @@ public record CreatePersonCommand(string OrganizationId, string FirstName, strin
                .AsSplitQuery()
                .FirstAsync(x => x.Id == person.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonCreated(person.Id, _currentPersonService.UserId));
+            await _eventPublisher.PublishEvent(new PersonCreated(person.Id));
 
             return person.ToDto();
         }

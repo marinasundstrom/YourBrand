@@ -2,6 +2,9 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.Transactions.Domain;
 using YourBrand.Transactions.Domain.Common;
 using YourBrand.Transactions.Domain.Entities;
@@ -37,6 +40,13 @@ public class TransactionsContext : DbContext, ITransactionsContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(TransactionsContext).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Transaction> Transactions { get; set; } = null!;

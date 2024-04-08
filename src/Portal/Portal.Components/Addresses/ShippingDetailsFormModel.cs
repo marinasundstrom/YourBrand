@@ -14,7 +14,7 @@ public class ShippingDetailsFormModel
     public string Ssn { get; set; }
 
     public string? CareOf { get; set; }
-    
+
     public string? Organization { get; set; }
 
     [Required]

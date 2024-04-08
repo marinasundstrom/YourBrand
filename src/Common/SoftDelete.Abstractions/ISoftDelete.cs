@@ -1,7 +1,9 @@
-﻿namespace YourBrand.Domain;
+﻿using YourBrand.Identity;
+
+namespace YourBrand.Domain;
 
 public interface ISoftDelete
 {
-    string? DeletedById { get; set; }
+    UserId? DeletedById { get; set; }
     DateTimeOffset? Deleted { get; set; }
 }

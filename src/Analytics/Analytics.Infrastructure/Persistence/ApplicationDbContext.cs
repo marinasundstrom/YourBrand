@@ -2,6 +2,10 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
 namespace YourBrand.Analytics.Infrastructure.Persistence;
 
 public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
@@ -42,6 +46,13 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 
             modelBuilder.Entity(entityType).HasQueryFilter(lambda);
         }
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

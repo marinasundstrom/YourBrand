@@ -17,7 +17,7 @@ public static class SoftDeleteQueryFilter
             var body = Expression.Equal(Expression.Property(param, deletedProperty!), Expression.Constant(null));
             expression = Expression.Lambda<Func<ISoftDelete, bool>>(body, param);
         }
-        
+
         return expression;
     }
 

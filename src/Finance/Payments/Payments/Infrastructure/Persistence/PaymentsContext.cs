@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using YourBrand.Domain;
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Payments.Domain;
 using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Domain.Entities;
@@ -128,6 +130,8 @@ public class PaymentsContext : DbContext, IPaymentsContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Payment> Payments { get; set; } = null!;

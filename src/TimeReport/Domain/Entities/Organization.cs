@@ -1,3 +1,5 @@
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
@@ -45,7 +47,7 @@ public class Organization : AuditableEntity, ISoftDelete, IHasTenant
         project.Organization = this;
     }
 
-    public string Id { get; private set; }
+    public OrganizationId Id { get; private set; }
 
     public TenantId TenantId { get; set; }
 
@@ -74,7 +76,7 @@ public class Organization : AuditableEntity, ISoftDelete, IHasTenant
 
     public DateTime? Deleted { get; set; }
 
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public User? DeletedBy { get; set; }
 }

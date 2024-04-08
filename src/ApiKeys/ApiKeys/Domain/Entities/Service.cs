@@ -1,5 +1,7 @@
 
 using YourBrand.ApiKeys.Domain.Common;
+using YourBrand.Domain;
+using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
@@ -16,7 +18,7 @@ public class Service : AuditableEntity, ISoftDelete
 
     public List<Resource> Resources { get; set; } = new List<Resource>();
 
-    public DateTime? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

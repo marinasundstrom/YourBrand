@@ -2,6 +2,8 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Notifications.Domain.Entities;
@@ -38,6 +40,13 @@ public class NotificationsContext : DbContext, IWorkerContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.NotificationConfiguration).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable
@@ -77,10 +86,5 @@ public class NotificationsContext : DbContext, IWorkerContext
         this.Set<OutboxMessage>().AddRange(outboxMessages);
 
         return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        configurationBuilder.AddTenantIdConverter();
     }
 }

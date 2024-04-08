@@ -46,5 +46,9 @@
             Include="..\..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
+
+        <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
 	</ItemGroup>
 </Project>

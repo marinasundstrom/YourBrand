@@ -13,7 +13,6 @@ using Steeltoe.Discovery.Client;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
-using YourBrand.Identity;
 using YourBrand.Integration;
 using YourBrand.Payments;
 using YourBrand.Payments.Application;
@@ -102,7 +101,7 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.UseTenancyFilters(context);
         cfg.UseIdentityFilters(context);
-        
+
         cfg.ConfigureEndpoints(context);
     });
 });

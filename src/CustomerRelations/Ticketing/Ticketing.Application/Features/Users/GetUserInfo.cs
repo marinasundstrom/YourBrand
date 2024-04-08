@@ -28,7 +28,7 @@ public record GetUserInfo() : IRequest<Result<UserInfoDto>>
 
         public async Task<Result<UserInfoDto>> Handle(GetUserInfo request, CancellationToken cancellationToken)
         {
-            var user = await userRepository.FindByIdAsync(userContext.UserId!, cancellationToken);
+            var user = await userRepository.FindByIdAsync(userContext.UserId.GetValueOrDefault(), cancellationToken);
 
             if (user is null)
             {

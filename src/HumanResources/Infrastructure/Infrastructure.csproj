@@ -20,8 +20,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\ApiKeys\ApiKeys.Integration.Abstractions\ApiKeys.Integration.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Persistence\Interceptors\" />

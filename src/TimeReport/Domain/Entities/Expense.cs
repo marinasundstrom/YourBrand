@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
@@ -25,7 +26,7 @@ public class Expense : AuditableEntity, IHasTenant, ISoftDelete
 
     public DateTime? Deleted { get; set; }
 
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public User? DeletedBy { get; set; }
 }

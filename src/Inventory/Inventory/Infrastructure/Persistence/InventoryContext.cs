@@ -2,11 +2,14 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Entities;
 using YourBrand.Inventory.Infrastructure.Persistence.Interceptors;
 using YourBrand.Inventory.Infrastructure.Persistence.Outbox;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Inventory.Infrastructure.Persistence;
 
@@ -39,6 +42,13 @@ public class InventoryContext : DbContext, IInventoryContext
         modelBuilder.HasSequence<int>("InventoryIds");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(InventoryContext).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Site> Sites { get; set; } = null!;

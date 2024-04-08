@@ -1,4 +1,5 @@
 ﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Notifications.Domain.Common;
 using YourBrand.Tenancy;
 
@@ -42,5 +43,5 @@ public class Notification : AuditableEntity, IHasTenant, ISoftDelete
     public string? ScheduledJobId { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 }

@@ -85,7 +85,7 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.UseTenancyFilters(context);
         cfg.UseIdentityFilters(context);
-        
+
         cfg.ConfigureEndpoints(context);
     });
 });

@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Identity;
 using YourBrand.Messenger.Domain.Common;
 
 namespace YourBrand.Messenger.Domain.Entities;
@@ -41,6 +42,6 @@ public class Message : AuditableEntity, ISoftDelete
     public IReadOnlyCollection<Message> Replies => _replies;
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

@@ -12,11 +12,11 @@ public record GetOrganizationResponse(string Id, string TenantId, string Name, s
 
 public record CreateOrganizationResponse(string Id, string Name, string? FriendlyName);
 
-public record OrganizationCreated(string OrganizationId, string TenantId, string Name, string CreatedById);
+public record OrganizationCreated(string OrganizationId, string TenantId, string Name);
 
-public record OrganizationUpdated(string OrganizationId, string Name, string UpdatedById);
+public record OrganizationUpdated(string OrganizationId, string Name);
 
-public record OrganizationDeleted(string OrganizationId, string DeletedById);
+public record OrganizationDeleted(string OrganizationId);
 
 public record AddOrganizationUser(string OrganizationId, string UserId);
 

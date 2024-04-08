@@ -55,7 +55,7 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
                .AsSplitQuery()
                .FirstAsync(x => x.Id == user.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization!.Id, _userContext.UserId));
+            await _eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization!.Id));
 
             return user.ToDto();
         }

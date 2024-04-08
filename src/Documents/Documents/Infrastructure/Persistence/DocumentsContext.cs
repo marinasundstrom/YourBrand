@@ -7,6 +7,9 @@ using YourBrand.Documents.Domain.Common;
 using YourBrand.Documents.Domain.Entities;
 using YourBrand.Documents.Infrastructure.Persistence.Interceptors;
 using YourBrand.Documents.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
@@ -37,6 +40,13 @@ public class DocumentsContext : DbContext, IDocumentsContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DocumentsContext).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Domain.Entities.Directory> Directories { get; set; } = null!;

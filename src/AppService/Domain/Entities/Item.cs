@@ -1,4 +1,5 @@
 ﻿using YourBrand.Domain.Common;
+using YourBrand.Identity;
 
 namespace YourBrand.Domain.Entities;
 
@@ -24,6 +25,6 @@ public class Item : AuditableEntity, ISoftDelete
     public string? Image { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

@@ -34,7 +34,7 @@ public class TimeReportTeamUpdatedConsumer(IMediator mediator, IRequestClient<Ge
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetTeamResponse>(new GetTeam(message.TeamId, (message.UpdatedById)));
+        var messageR = await requestClient.GetResponse<GetTeamResponse>(new GetTeam(message.TeamId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new UpdateTeamCommand(message2.TeamId, message.Name, message.Description));

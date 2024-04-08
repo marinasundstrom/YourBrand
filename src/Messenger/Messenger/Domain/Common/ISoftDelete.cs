@@ -1,4 +1,5 @@
-﻿using YourBrand.Messenger.Domain.Entities;
+﻿using YourBrand.Identity;
+using YourBrand.Messenger.Domain.Entities;
 
 namespace YourBrand.Messenger.Domain.Common;
 
@@ -8,5 +9,5 @@ public interface ISoftDelete
 
     User? DeletedBy { get; set; }
 
-    string? DeletedById { get; set; }
+    UserId? DeletedById { get; set; }
 }

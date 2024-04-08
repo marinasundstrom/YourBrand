@@ -1,12 +1,12 @@
 namespace YourBrand.HumanResources.Contracts;
 
-public record TeamCreated(string TeamId, string OrganizationId, string Name, string Description, string CreatedById);
+public record TeamCreated(string TeamId, string OrganizationId, string Name, string Description);
 
-public record TeamUpdated(string TeamId, string Name, string Description, string UpdatedById);
+public record TeamUpdated(string TeamId, string Name, string Description);
 
-public record TeamDeleted(string TeamId, string DeletedById);
+public record TeamDeleted(string TeamId);
 
-public record GetTeam(string TeamId, string RequestedById);
+public record GetTeam(string TeamId);
 
 public record GetTeamResponse(string TeamId, string Name);
 

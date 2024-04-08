@@ -33,7 +33,7 @@ public record SyncDataCommand() : IRequest
 
             foreach (var organization in organizations)
             {
-                await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name, _userContext.UserId));
+                await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name));
             }
 
             var users = await _context.Persons
@@ -44,7 +44,7 @@ public record SyncDataCommand() : IRequest
 
             foreach (var user in users)
             {
-                await _eventPublisher.PublishEvent(new PersonCreated(user.Id, _userContext.UserId));
+                await _eventPublisher.PublishEvent(new PersonCreated(user.Id));
             }
         }
     }

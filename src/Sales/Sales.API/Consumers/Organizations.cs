@@ -42,7 +42,7 @@ public class SalesOrganizationUpdatedConsumer(IMediator mediator, IRequestClient
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetOrganizationResponse>(new GetUser(message.OrganizationId, message.UpdatedById));
+        var messageR = await requestClient.GetResponse<GetOrganizationResponse>(new GetUser(message.OrganizationId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new UpdateOrganization(message2.Id, message2.Name));

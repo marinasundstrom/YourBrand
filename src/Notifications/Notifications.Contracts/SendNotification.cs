@@ -15,7 +15,6 @@ public record SendNotificationResponse;
 public record MarkAllNotificationsAsRead
 {
     public required string TenantId { get; set; }
-    public required string CreatedById { get; set; }
 }
 
 public record MarkAllNotificationsAsReadResponse;
@@ -24,7 +23,6 @@ public record MarkNotificationAsRead
 {
     public required string TenantId { get; set; }
     public required string NotificationId { get; set; }
-    public required string CreatedById { get; set; }
 }
 
 public record MarkNotificationAsReadResponse;

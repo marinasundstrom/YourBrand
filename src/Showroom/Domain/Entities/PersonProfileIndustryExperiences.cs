@@ -1,4 +1,5 @@
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
 
@@ -10,6 +11,8 @@ public class PersonProfileIndustryExperiences : AuditableEntity, IHasTenant, ISo
 
     public TenantId TenantId { get; set; } = null!;
 
+    //public OrganizationId OrganizationId { get; set; } = null!;
+
     public PersonProfile PersonProfile { get; set; } = null!;
 
     public Industry Industry { get; set; } = null!;
@@ -18,7 +21,7 @@ public class PersonProfileIndustryExperiences : AuditableEntity, IHasTenant, ISo
 
     public int Years { get; set; }
 
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 }

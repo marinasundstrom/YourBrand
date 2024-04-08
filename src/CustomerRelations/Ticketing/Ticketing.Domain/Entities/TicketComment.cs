@@ -1,3 +1,4 @@
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
@@ -14,13 +15,13 @@ public class TicketComment : Entity<int>, IAuditable, IHasTenant
 
     public User? CreatedBy { get; set; } = null!;
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
     public User? LastModifiedBy { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

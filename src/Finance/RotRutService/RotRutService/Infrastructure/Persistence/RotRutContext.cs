@@ -2,11 +2,14 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Common;
 using YourBrand.RotRutService.Domain.Entities;
 using YourBrand.RotRutService.Infrastructure.Persistence.Interceptors;
 using YourBrand.RotRutService.Infrastructure.Persistence.Outbox;
+using YourBrand.Tenancy;
 
 namespace YourBrand.RotRutService.Infrastructure.Persistence;
 
@@ -37,6 +40,13 @@ public class RotRutContext : DbContext, IRotRutContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(RotRutContext).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<RotRutRequest> RotRutRequests { get; set; } = null!;

@@ -40,7 +40,7 @@ public record CreateTenantCommand(string Name, string? FriendlyName) : IRequest<
                .AsSplitQuery()
                .FirstAsync(x => x.Id == tenant.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantCreated(tenant.Id, tenant.Name, _currentTenantContext.UserId));
+            await _eventPublisher.PublishEvent(new TenantCreated(tenant.Id, tenant.Name));
 
             return tenant.ToDto();
         }

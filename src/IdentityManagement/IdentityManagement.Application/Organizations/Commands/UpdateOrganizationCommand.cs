@@ -39,7 +39,7 @@ public record UpdateOrganizationCommand(string OrganizationId, string Name) : IR
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name, _userContext.UserId));
+            await _eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name));
 
             return organization.ToDto();
         }

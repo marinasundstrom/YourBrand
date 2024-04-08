@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Common;
+using YourBrand.Domain;
 using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Interceptors;

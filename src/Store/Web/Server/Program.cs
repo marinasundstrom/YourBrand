@@ -33,8 +33,8 @@ using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
-using YourBrand.StoreFront;
 using YourBrand.Integration;
+using YourBrand.StoreFront;
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 

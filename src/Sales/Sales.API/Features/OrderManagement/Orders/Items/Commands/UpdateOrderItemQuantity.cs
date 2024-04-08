@@ -29,7 +29,7 @@ public sealed record UpdateOrderItemQuantity(string OrganizationId, string Order
                                         .GetAll()
                                         .InOrganization(request.OrganizationId)
                                         .FirstOrDefaultAsync(x => x.Id == request.OrderId, cancellationToken);
-                                        
+
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

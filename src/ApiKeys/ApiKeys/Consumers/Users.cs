@@ -29,7 +29,7 @@ public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
         {
             var message = context.Message;
 
-            var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, (message.CreatedById)));
+            var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
             var message2 = messageR.Message;
 
             var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
@@ -77,7 +77,7 @@ public class ApiKeysUserUpdatedConsumer : IConsumer<UserUpdated>
     {
         var message = context.Message;
 
-        var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId, message.UpdatedById));
+        var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
         var message2 = messageR.Message;
 
         var result = await _mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));

@@ -3,10 +3,13 @@
 using Newtonsoft.Json;
 
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain;
 using YourBrand.Domain.Common;
 using YourBrand.Domain.Entities;
+using YourBrand.Identity;
 using YourBrand.Infrastructure.Persistence.Interceptors;
 using YourBrand.Infrastructure.Persistence.Outbox;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Infrastructure.Persistence;
 
@@ -37,6 +40,13 @@ public class AppServiceContext : DbContext, IAppServiceContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.ItemConfiguration).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

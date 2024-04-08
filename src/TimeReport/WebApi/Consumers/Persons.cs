@@ -15,7 +15,7 @@ public class TimeReportPersonCreatedConsumer(IMediator mediator, IRequestClient<
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, message.CreatedById));
+        var messageR = await requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new CreateUserCommand(message2.PersonId, message2.OrganizationId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
@@ -38,7 +38,7 @@ public class TimeReportPersonUpdatedConsumer(IMediator mediator, IRequestClient<
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId, (message.UpdatedById)));
+        var messageR = await requestClient.GetResponse<GetPersonResponse>(new GetPerson(message.PersonId));
         var message2 = messageR.Message;
 
         var result = await mediator.Send(new UpdateUserCommand(message2.PersonId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));

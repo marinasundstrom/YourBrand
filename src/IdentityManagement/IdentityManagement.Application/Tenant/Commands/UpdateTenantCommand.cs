@@ -39,7 +39,7 @@ public record UpdateTenantCommand(string TenantId, string Name) : IRequest<Tenan
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantUpdated(tenant.Id, tenant.Name, _userContext.UserId));
+            await _eventPublisher.PublishEvent(new TenantUpdated(tenant.Id, tenant.Name));
 
             return tenant.ToDto();
         }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 

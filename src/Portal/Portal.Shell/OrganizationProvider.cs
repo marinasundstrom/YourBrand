@@ -1,7 +1,7 @@
 using Blazored.LocalStorage;
 
-using YourBrand.Portal.Services;
 using YourBrand.IdentityManagement.Client;
+using YourBrand.Portal.Services;
 
 namespace YourBrand.Portal;
 

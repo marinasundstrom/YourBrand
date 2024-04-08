@@ -1,4 +1,5 @@
 ﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
 
@@ -17,6 +18,6 @@ public class CompetenceArea : AuditableEntity, IHasTenant, ISoftDelete
     public ICollection<CompetenceArea> Children { get; set; } = new List<CompetenceArea>();
 
     public DateTimeOffset? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

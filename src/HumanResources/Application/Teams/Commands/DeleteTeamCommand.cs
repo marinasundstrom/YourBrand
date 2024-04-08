@@ -38,7 +38,7 @@ public record DeleteTeamCommand(string TeamId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new Contracts.TeamDeleted(team.Id, _currentPersonService.UserId));
+            await _eventPublisher.PublishEvent(new Contracts.TeamDeleted(team.Id));
 
         }
     }

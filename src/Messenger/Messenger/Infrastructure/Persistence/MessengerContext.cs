@@ -3,11 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Domain.Common;
 using YourBrand.Messenger.Domain.Entities;
 using YourBrand.Messenger.Infrastructure.Persistence.Interceptors;
 using YourBrand.Messenger.Infrastructure.Persistence.Outbox;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence;
 
@@ -38,6 +41,13 @@ public class MessengerContext : DbContext, IMessengerContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.MessageConfiguration).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

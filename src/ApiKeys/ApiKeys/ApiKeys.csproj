@@ -43,6 +43,11 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
+    
   </ItemGroup>
 
   <ItemGroup>

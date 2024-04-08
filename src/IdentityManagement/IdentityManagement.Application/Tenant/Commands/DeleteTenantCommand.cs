@@ -38,7 +38,7 @@ public record DeleteTenantCommand(string TenantId) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantDeleted(tenant.Id, _userContext.UserId));
+            await _eventPublisher.PublishEvent(new TenantDeleted(tenant.Id));
 
         }
     }

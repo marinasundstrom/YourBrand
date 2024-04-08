@@ -55,7 +55,7 @@ public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionP
 
     public DateTimeOffset? Deleted { get; set; }
 
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public SubscriptionPlan WithName(string name)
     {

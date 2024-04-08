@@ -13,6 +13,8 @@ using YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 using YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 using YourBrand.Accounting.Infrastructure.Persistence.Outbox;
 using YourBrand.Domain;
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
@@ -128,6 +130,8 @@ public class AccountingContext : DbContext, IAccountingContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

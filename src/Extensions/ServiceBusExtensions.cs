@@ -31,7 +31,7 @@ public static class ServiceBusExtensions
 
             cfg.UseTenancyFilters(context);
             cfg.UseIdentityFilters(context);
-            
+
             cfg.ConfigureEndpoints(context);
         });
     }

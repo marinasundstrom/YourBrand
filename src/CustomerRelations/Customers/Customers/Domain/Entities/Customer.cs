@@ -1,4 +1,5 @@
 ﻿using YourBrand.Customers.Domain.Enums;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
@@ -30,11 +31,11 @@ public abstract class Customer : AggregateRoot<int>, IAuditable, IHasTenant
 
     public void RemoveAddress(Address address) => _addresses.Remove(address);
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

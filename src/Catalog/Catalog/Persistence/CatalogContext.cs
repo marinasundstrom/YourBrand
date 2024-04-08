@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Domain;
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Persistence;
@@ -106,6 +108,8 @@ public sealed class CatalogContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Store> Stores { get; set; } = null!;

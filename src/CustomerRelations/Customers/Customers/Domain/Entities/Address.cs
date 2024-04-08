@@ -1,4 +1,5 @@
 using YourBrand.Customers.Domain.Enums;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
@@ -41,11 +42,11 @@ public class Address : Entity<string>, IAuditable, IHasTenant
 
     public string Country { get; set; } = null!;
 
-    public string? CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

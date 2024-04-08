@@ -28,7 +28,7 @@ public sealed record UpdateBillingDetails(string OrganizationId, string Id, Bill
                             .GetAll()
                             .InOrganization(request.OrganizationId)
                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-                            
+
             if (order is null)
             {
                 return Errors.Orders.OrderNotFound;

@@ -1,10 +1,11 @@
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class User : AggregateRoot<string>, IAuditable, IHasTenant
+public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
 {
-    public User(string id, string name, string email)
+    public User(UserId id, string name, string email)
         : base(id)
     {
         Id = id;
@@ -20,13 +21,13 @@ public class User : AggregateRoot<string>, IAuditable, IHasTenant
 
     public User? CreatedBy { get; set; }
 
-    public string? CreatedById { get; set; }
+    public UserId? CreatedById { get; set; }
 
     public DateTimeOffset Created { get; set; }
 
     public User? LastModifiedBy { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

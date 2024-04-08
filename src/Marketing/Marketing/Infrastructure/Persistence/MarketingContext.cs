@@ -2,11 +2,14 @@
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Marketing.Domain;
 using YourBrand.Marketing.Domain.Common;
 using YourBrand.Marketing.Domain.Entities;
 using YourBrand.Marketing.Infrastructure.Persistence.Interceptors;
 using YourBrand.Marketing.Infrastructure.Persistence.Outbox;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Marketing.Infrastructure.Persistence;
 
@@ -39,6 +42,13 @@ public class MarketingContext : DbContext, IMarketingContext
         modelBuilder.HasSequence<int>("MarketingIds");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MarketingContext).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
     public DbSet<Contact> Contacts { get; set; } = null!;

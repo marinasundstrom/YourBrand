@@ -37,7 +37,7 @@ public record CreateTeamCommand(string Name, string Description, string Organiza
                .Include(x => x.Organization)
                .FirstAsync(x => x.Id == team.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new Contracts.TeamCreated(team.Id, team.Organization.Id, team.Name, team.Description!, team.CreatedBy!));
+            await _eventPublisher.PublishEvent(new Contracts.TeamCreated(team.Id, team.Organization.Id, team.Name, team.Description!));
 
             return team.ToDto();
         }

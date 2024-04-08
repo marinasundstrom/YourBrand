@@ -1,4 +1,5 @@
 ﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Domain.Enums;
 using YourBrand.Showroom.Domain.ValueObjects;
@@ -11,6 +12,8 @@ public class PersonProfileSkill : AuditableEntity, IHasTenant, ISoftDelete
     public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; } = null!;
+
+    //public OrganizationId OrganizationId { get; set; } = null!;
 
     public PersonProfile PersonProfile { get; set; } = null!;
 
@@ -31,6 +34,6 @@ public class PersonProfileSkill : AuditableEntity, IHasTenant, ISoftDelete
     public List<PersonProfile> PersonProfiles { get; set; } = new List<PersonProfile>();
 
     public DateTimeOffset? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }

@@ -14,7 +14,7 @@ public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParam
 
     public TenantId TenantId { get; set; }
 
-    //public string OrganizationId { get; set; }
+    //public OrganizationId OrganizationId { get; set; }
 
     public int SubscriptionNo { get; set; }
 
@@ -48,7 +48,7 @@ public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParam
 
     public DateTimeOffset? Deleted { get; set; }
 
-    public string? DeletedById { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public Recurrence Recurrence { get; set; }
     public int? EveryDays { get; set; }

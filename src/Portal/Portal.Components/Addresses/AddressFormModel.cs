@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Portal.Addresses;
 
-public class AddressFormModel 
+public class AddressFormModel
 {
     [Required]
     public string Thoroughfare { get; set; }
