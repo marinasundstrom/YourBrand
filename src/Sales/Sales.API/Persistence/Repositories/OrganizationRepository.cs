@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Specifications;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
@@ -24,7 +25,7 @@ public sealed class OrganizationRepository : IOrganizationRepository
         return dbSet.AsQueryable();
     }
 
-    public async Task<Organization?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Organization?> FindByIdAsync(OrganizationId id, CancellationToken cancellationToken = default)
     {
         return await dbSet
             .Include(x => x.Users)

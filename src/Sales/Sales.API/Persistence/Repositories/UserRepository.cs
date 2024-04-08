@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Specifications;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Identity;
 
 namespace YourBrand.Sales.Persistence.Repositories.Mocks;
 
@@ -24,7 +25,7 @@ public sealed class UserRepository : IUserRepository
         return dbSet.AsQueryable();
     }
 
-    public async Task<User?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<User?> FindByIdAsync(UserId id, CancellationToken cancellationToken = default)
     {
         return await dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }

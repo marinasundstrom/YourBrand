@@ -110,6 +110,8 @@ public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
     }
 
 #nullable disable

@@ -1,10 +1,11 @@
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
 
 using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Organization : AggregateRoot<string>, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IAuditable, IHasTenant
 {
     public Organization(string id, string name)
         : base(id)
@@ -19,13 +20,13 @@ public class Organization : AggregateRoot<string>, IAuditable, IHasTenant
 
     public User? CreatedBy { get; set; }
 
-    public string? CreatedById { get; set; }
+    public UserId? CreatedById { get; set; }
 
     public DateTimeOffset Created { get; set; }
 
     public User? LastModifiedBy { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 

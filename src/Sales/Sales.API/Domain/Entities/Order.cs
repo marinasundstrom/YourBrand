@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Domain.ValueObjects;
 
-using YourBrand.Tenancy;
-
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Order : AggregateRoot<string>, IAuditable, IHasTenant
+public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<OrderItem> _items = new HashSet<OrderItem>();
 
@@ -18,7 +17,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant
 
     public TenantId TenantId { get; set; }
 
-    public string OrganizationId { get; set; }
+    public OrganizationId OrganizationId { get; set; }
 
     public int OrderNo { get; set; }
 
@@ -206,13 +205,13 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant
 
     public User? CreatedBy { get; set; }
 
-    public string? CreatedById { get; set; }
+    public UserId? CreatedById { get; set; }
 
     public DateTimeOffset Created { get; set; }
 
     public User? LastModifiedBy { get; set; }
 
-    public string? LastModifiedById { get; set; }
+    public UserId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }
