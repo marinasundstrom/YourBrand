@@ -1,0 +1,31 @@
+@page "/sync-data"
+@using System.ComponentModel.DataAnnotations
+@inject ISyncClient SyncClient
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<AppPageTitle>Sync data</AppPageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true" Align="Align.Center" Class="mb-8">Sync data</MudText>
+
+<MudText Class="mb-4">This will cause tenants, organizations, and users to be synced with other services.</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.SyncAlt"
+    OnClick="SyncData">Sync now</MudButton>
+
+@code 
+{
+    async Task SyncData() 
+    {
+        try 
+        {
+            await SyncClient.SyncDataAsync();
+
+            Snackbar.Add("Data is syncing.", Severity.Info);
+        }
+        catch(Exception) 
+        {
+            Snackbar.Add("Failed to sync data", Severity.Error);
+        }
+    }
+}

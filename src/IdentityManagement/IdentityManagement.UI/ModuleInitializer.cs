@@ -38,5 +38,7 @@ public class ModuleInitializer : IModuleInitializer
 
         group.CreateItem("users", () => resources["Users"], MudBlazor.Icons.Material.Filled.People, "/usermanagement/users");
         group.CreateItem("organization", () => resources["Organization"], MudBlazor.Icons.Material.Filled.House, "/usermanagement/organization");
+
+        group.CreateItem("sync-data", () => resources["Sync data"], MudBlazor.Icons.Material.Filled.Sync, "/sync-data");
     }
 }
