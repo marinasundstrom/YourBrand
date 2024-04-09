@@ -52,9 +52,6 @@
                 {
                     Snackbar.Add($"{error.Message}", Severity.Error);
                 }
-
-                Snackbar.Add("Connection closed");
-
                 return Task.CompletedTask;
             };
 
