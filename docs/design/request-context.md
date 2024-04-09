@@ -1,20 +1,14 @@
 # Request context
 
-The request context is context within the current request: What the tenant is, and who the authenticated user is.
+Each service is capable to handling more than one tenant. So each request belongs to potentially a different tenant, and user.
+
+The request context is the context within the current request: What the tenant is, and who the authenticated user is.
 
 It is represented by two services that are linked: the ``TenantContext`` and the ``UserContext``.
 
 The "current" tenant refers to the tenant of the user that has been authenticated within the current requests.
 
 In normal cases, the tenant is retrieved from the authenticated user.
-
-## Some notes
-
-You will not likely have to retrieve the ``TenantContext`` or ``UserContext`` in most cases.
-
-These services are mostly used internally. Although you might sometimes want to know what the current tenant or current user is. 
-
-You generally don't have to worry about setting who created what since that is automatically set for entities when they are persisted by the ORM.
 
 ## TenantContext
 
@@ -43,3 +37,11 @@ The default implementation gets the User Id from the "sub" claim via the ``HttpC
 There is a ``ISettableUserContext`` that is mainly used internally at the service boundaries.
 
 When an asynchronous message is being sent, or published, the User Id is passed with it in the headers without you having to worry about it. And then automatically set at the consuming side.
+
+## Notes on usage of contexts
+
+You will not likely have to retrieve the ``TenantContext`` or ``UserContext`` in most cases.
+
+These services are mostly used internally. Although you might sometimes want to know what the current tenant or current user is. 
+
+You generally don't have to worry about setting who created what since that is automatically set for entities when they are persisted by the ORM.
