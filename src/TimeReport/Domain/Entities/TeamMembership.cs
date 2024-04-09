@@ -28,7 +28,7 @@ public class TeamMembership : AuditableEntity, IHasTenant, ISoftDelete
 
     public User User { get; set; } = null!;
 
-    public string UserId { get; set; } = null!;
+    public UserId UserId { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
 

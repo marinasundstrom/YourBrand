@@ -58,7 +58,7 @@ public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime 
 
                 if (request.Mode == ReportMode.User)
                 {
-                    entryGroups = entries.GroupBy(x => x.UserId);
+                    entryGroups = entries.GroupBy(x => x.UserId.ToString());
                 }
                 else if (request.Mode == ReportMode.Project)
                 {

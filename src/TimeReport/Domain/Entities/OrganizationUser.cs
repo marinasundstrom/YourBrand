@@ -1,4 +1,5 @@
-﻿using YourBrand.Identity;
+﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Common.Interfaces;
@@ -13,11 +14,11 @@ public class OrganizationUser : AuditableEntity, IHasTenant, ISoftDelete
 
     public Organization Organization { get; set; } = null!;
 
-    public string OrganizationId { get; set; } = null!;
+    public OrganizationId OrganizationId { get; set; } = null!;
 
     public User User { get; set; } = null!;
 
-    public string UserId { get; set; } = null!;
+    public UserId UserId { get; set; } = null!;
 
     public DateTime? Deleted { get; set; }
 

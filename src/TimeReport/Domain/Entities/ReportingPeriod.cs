@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 
@@ -27,7 +28,7 @@ public class ReportingPeriod : AuditableEntity, IHasTenant
 
     public User User { get; private set; } = null!;
 
-    public string UserId { get; private set; } = null!;
+    public UserId UserId { get; private set; } = null!;
 
     public int Year { get; private set; }
 

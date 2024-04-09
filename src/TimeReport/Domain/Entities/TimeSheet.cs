@@ -36,7 +36,7 @@ public class TimeSheet : AuditableEntity, IHasTenant, ISoftDelete
 
     public User User { get; private set; } = null!;
 
-    public string UserId { get; private set; } = null!;
+    public UserId UserId { get; private set; } = null!;
 
     public int Year { get; private set; }
 

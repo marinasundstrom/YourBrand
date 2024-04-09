@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Events;
@@ -34,7 +35,7 @@ public class Entry : AuditableEntity, IHasTenant
 
     public User User { get; private set; } = null!;
 
-    public string UserId { get; private set; } = null!;
+    public UserId UserId { get; private set; } = null!;
 
     public Project Project { get; private set; } = null!;
 

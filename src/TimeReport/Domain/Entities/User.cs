@@ -13,7 +13,7 @@ public class User : AuditableEntity, ISoftDelete, IHasTenant
     readonly HashSet<Organization> _organization = new HashSet<Organization>();
     readonly HashSet<Team> _teams = new HashSet<Team>();
 
-    public string Id { get; set; } = null!;
+    public UserId Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; }
 
