@@ -89,8 +89,6 @@ builder.Services
     .AddUserContext()
     .AddTenantContext();
 
-builder.Services.AddScoped<ITenantContext, TenantContext>();
-
 builder.Services.AddNotificationsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/notifications/");
@@ -158,6 +156,8 @@ try
         {
             var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
             tenantContext.SetTenantId(TenantConstants.TenantId);
+
+            Console.WriteLine(tenantContext.TenantId);
 
             var context = scope.ServiceProvider.GetRequiredService<SalesContext>();
 

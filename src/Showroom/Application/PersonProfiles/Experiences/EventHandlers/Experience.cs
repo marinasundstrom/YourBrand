@@ -35,7 +35,6 @@ public class ExperienceHandler : IDomainEventHandler<ExperienceAdded>, IDomainEv
             .Where(x => x.PersonProfile.Id == personProfileId && x.Company.Industry.Id == industryId)
             .OrderBy(x => x.StartDate);
 
-
         if (!await experiences.AnyAsync(cancellationToken))
         {
             var pfie2 = await _context.PersonProfileIndustryExperiences.FirstOrDefaultAsync(x => x.PersonProfile.Id == personProfileId && x.Industry.Id == industryId, cancellationToken);

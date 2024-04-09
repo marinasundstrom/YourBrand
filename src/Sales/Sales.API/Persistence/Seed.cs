@@ -16,7 +16,6 @@ public static class Seed
     private static void Version1(SalesContext context)
     {
         context.OrderStatuses.Add(new OrderStatus("Draft", "draft", string.Empty));
-
         context.OrderStatuses.Add(new OrderStatus("Open", "open", string.Empty));
         context.OrderStatuses.Add(new OrderStatus("Archived", "archived", string.Empty));
         context.OrderStatuses.Add(new OrderStatus("Canceled", "canceled", string.Empty));
@@ -60,6 +59,8 @@ public static class Seed
             Status = SubscriptionStatus.Active,
             StatusDate = DateTime.Now
         };
+
+        subscription.OrganizationId = TenantConstants.OrganizationId;
 
         context.Subscriptions.Add(subscription);
     }

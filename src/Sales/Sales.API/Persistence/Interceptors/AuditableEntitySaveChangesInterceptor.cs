@@ -45,7 +45,6 @@ public sealed class AuditableEntitySaveChangesInterceptor : SaveChangesIntercept
         {
             if (entry.State == EntityState.Added)
             {
-
                 entry.Entity.TenantId = _tenantContext.TenantId.GetValueOrDefault();
             }
         }

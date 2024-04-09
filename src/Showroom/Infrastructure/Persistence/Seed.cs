@@ -192,6 +192,7 @@ public static class Seed
         PersonProfile personProfile = new PersonProfile()
         {
             Id = Guid.NewGuid().ToString(),
+            OrganizationId = TenantConstants.OrganizationId,
             FirstName = "Marina",
             LastName = "Sundström",
             DisplayName = null,
@@ -335,7 +336,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 Description = experience.Description
             };
 
-            experience2.AddDomainEvent(new ExperienceAdded(experience2.Id, personProfile.Id, company.Industry.Id));
+            //experience2.AddDomainEvent(new ExperienceAdded(experience2.Id, personProfile.Id, company.Industry.Id));
 
             foreach (var skill in experience.Skills)
             {

@@ -12,7 +12,7 @@ public class User : AuditableEntity, IHasTenant, ISoftDelete
 
     public TenantId TenantId { get; set; } = null!;
 
-    public OrganizationId OrganizationId { get; set; } = null!;
+    public OrganizationId? OrganizationId { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
