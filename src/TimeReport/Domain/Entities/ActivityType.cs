@@ -1,4 +1,5 @@
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
@@ -24,12 +25,16 @@ public class ActivityType : AuditableEntity, IHasTenant, ISoftDelete
     public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; }
+    
+    public Organization Organization { get; set; } = null!;
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; } = null!;
 
-    public Organization Organization { get; set; } = null!;
+
 
     public Project? Project { get; set; }
 

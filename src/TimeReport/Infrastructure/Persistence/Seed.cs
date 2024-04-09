@@ -36,20 +36,20 @@ public static class Seed
 
         if (!context.Organizations.Any())
         {
-            /*
-            context.Organizations.Add(new Organization("My org", //Guid.NewGuid().ToString(),
-            "A description"
-            ) { Id = "test" });
-            */
+            context.Organizations.Add(new Organization(TenantConstants.OrganizationId, TenantConstants.OrganizationName, null));
 
             await context.SaveChangesAsync();
         }
 
         if (!context.ActivityTypes.Any())
         {
-            context.ActivityTypes.Add(new ActivityType("Chargeable", null));
+            context.ActivityTypes.Add(new ActivityType("Chargeable", null) {
+                OrganizationId = TenantConstants.OrganizationId
+            });
 
-            context.ActivityTypes.Add(new ActivityType("Sick", null));
+            context.ActivityTypes.Add(new ActivityType("Sick", null) {
+                OrganizationId = TenantConstants.OrganizationId
+            });
 
             await context.SaveChangesAsync();
         }
