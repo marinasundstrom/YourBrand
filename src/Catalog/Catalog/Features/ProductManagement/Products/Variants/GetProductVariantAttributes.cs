@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record GetProductVariantAttributes(long ProductId, long ProductVariantId) : IRequest<IEnumerable<ProductVariantAttributeDto>>
 {
-    public class Handler : IRequestHandler<GetProductVariantAttributes, IEnumerable<ProductVariantAttributeDto>>
+    public class Handler(CatalogContext context) : IRequestHandler<GetProductVariantAttributes, IEnumerable<ProductVariantAttributeDto>>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<ProductVariantAttributeDto>> Handle(GetProductVariantAttributes request, CancellationToken cancellationToken)
         {
-            var variantOptionValues = await _context.ProductAttributes
+            var variantOptionValues = await context.ProductAttributes
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Value)

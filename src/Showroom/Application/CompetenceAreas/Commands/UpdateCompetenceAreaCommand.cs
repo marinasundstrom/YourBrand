@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.CompetenceAreas.Commands;
 
 public record UpdateCompetenceAreaCommand(string Id, string Name) : IRequest
 {
-    public class UpdateCompetenceAreaCommandHandler : IRequestHandler<UpdateCompetenceAreaCommand>
+    public class UpdateCompetenceAreaCommandHandler(IShowroomContext context) : IRequestHandler<UpdateCompetenceAreaCommand>
     {
-        private readonly IShowroomContext context;
-
-        public UpdateCompetenceAreaCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(UpdateCompetenceAreaCommand request, CancellationToken cancellationToken)
         {
             var competenceArea = await context.CompetenceAreas.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

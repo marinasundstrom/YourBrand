@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Users.Commands;
 
 public record DeleteUserCommand(string UserId) : IRequest
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+    public class DeleteUserCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteUserCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteUserCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                         .AsSplitQuery()
                         .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
@@ -30,9 +23,9 @@ public record DeleteUserCommand(string UserId) : IRequest
                 throw new UserNotFoundException(request.UserId);
             }
 
-            _context.Users.Remove(user);
+            context.Users.Remove(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

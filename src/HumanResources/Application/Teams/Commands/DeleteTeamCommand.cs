@@ -10,22 +10,11 @@ namespace YourBrand.HumanResources.Application.Teams.Commands;
 
 public record DeleteTeamCommand(string TeamId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteTeamCommand>
+    public class Handler(IUserContext currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<DeleteTeamCommand>
     {
-        private readonly IUserContext _currentPersonService;
-        private readonly IApplicationDbContext _context;
-        private readonly IEventPublisher _eventPublisher;
-
-        public Handler(IUserContext currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher)
-        {
-            _currentPersonService = currentPersonService;
-            _context = context;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = await _context.Teams
+            var team = await context.Teams
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TeamId, cancellationToken);
 
@@ -34,11 +23,11 @@ public record DeleteTeamCommand(string TeamId) : IRequest
                 throw new PersonNotFoundException(request.TeamId);
             }
 
-            _context.Teams.Remove(team);
+            context.Teams.Remove(team);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new Contracts.TeamDeleted(team.Id));
+            await eventPublisher.PublishEvent(new Contracts.TeamDeleted(team.Id));
 
         }
     }

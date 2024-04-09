@@ -12,25 +12,12 @@ namespace YourBrand.Showroom.Application.Companies;
 
 public record GetCompaniesQuery(int Page = 0, int PageSize = 10, int? IndustryId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CompanyDto>>
 {
-    class GetCompaniesQueryHandler : IRequestHandler<GetCompaniesQuery, Results<CompanyDto>>
+    class GetCompaniesQueryHandler(
+        IShowroomContext context) : IRequestHandler<GetCompaniesQuery, Results<CompanyDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public GetCompaniesQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<Results<CompanyDto>> Handle(GetCompaniesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Company> result = _context
+            IQueryable<Company> result = context
                     .Companies
                     .AsNoTracking()
                     .AsQueryable();

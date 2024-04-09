@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Skills.SkillAreas.Commands;
 
 public record DeleteSkillAreaCommand(string Id) : IRequest
 {
-    public class DeleteSkillAreaCommandHandler : IRequestHandler<DeleteSkillAreaCommand>
+    public class DeleteSkillAreaCommandHandler(IShowroomContext context) : IRequestHandler<DeleteSkillAreaCommand>
     {
-        private readonly IShowroomContext context;
-
-        public DeleteSkillAreaCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteSkillAreaCommand request, CancellationToken cancellationToken)
         {
             var skillArea = await context.SkillAreas

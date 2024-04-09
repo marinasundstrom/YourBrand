@@ -10,22 +10,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 public record GetSkillExperiencesQuery(string PersonProfileId, string Id) : IRequest<PersonProfileSkillExperiencesDto?>
 {
 
-    class GetSkillExperiencesQueryHandler : IRequestHandler<GetSkillExperiencesQuery, PersonProfileSkillExperiencesDto?>
+    class GetSkillExperiencesQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetSkillExperiencesQuery, PersonProfileSkillExperiencesDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetSkillExperiencesQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<PersonProfileSkillExperiencesDto?> Handle(GetSkillExperiencesQuery request, CancellationToken cancellationToken)
         {
-            var personProfileSkill = await _context
+            var personProfileSkill = await context
                .PersonProfileSkills
                .Include(x => x.Skill)
                .ThenInclude(x => x.Area)
@@ -33,7 +24,7 @@ public record GetSkillExperiencesQuery(string PersonProfileId, string Id) : IReq
                .AsNoTracking()
                .FirstAsync(c => c.PersonProfile.Id == request.PersonProfileId && c.Id == request.Id, cancellationToken);
 
-            var personProfileExperiences = await _context
+            var personProfileExperiences = await context
                .PersonProfileExperiences
                .Where(x => x.PersonProfile.Id == request.PersonProfileId)
                .Include(x => x.Company)

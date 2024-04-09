@@ -14,22 +14,15 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence;
 
-public class MessengerContext : DbContext, IMessengerContext
+public class MessengerContext(
+    DbContextOptions<MessengerContext> options,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IMessengerContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    public MessengerContext(
-        DbContextOptions<MessengerContext> options,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

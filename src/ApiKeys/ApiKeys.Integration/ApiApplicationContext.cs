@@ -4,17 +4,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace YourBrand.ApiKeys;
 
-public class ApiApplicationContext : IApiApplicationContext
+public class ApiApplicationContext(IHttpContextAccessor httpContextAccessor) : IApiApplicationContext
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private string? applicationId;
 
-    public ApiApplicationContext(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
+    public string? AppId => applicationId ??= httpContextAccessor.HttpContext?.User?.FindFirstValue("AppId");
 
-    public string? AppId => applicationId ??= _httpContextAccessor.HttpContext?.User?.FindFirstValue("AppId");
-
-    public string? AppName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
+    public string? AppName => httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
 }

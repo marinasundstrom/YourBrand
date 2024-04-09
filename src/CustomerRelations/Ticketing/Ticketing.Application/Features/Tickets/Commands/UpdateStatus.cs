@@ -16,19 +16,8 @@ public sealed record UpdateStatus(int Id, int Status) : IRequest<Result>
         }
     }
 
-    public sealed class Handler : IRequestHandler<UpdateStatus, Result>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context) : IRequestHandler<UpdateStatus, Result>
     {
-        private readonly ITicketRepository ticketRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IApplicationDbContext context;
-
-        public Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context)
-        {
-            this.ticketRepository = ticketRepository;
-            this.unitOfWork = unitOfWork;
-            this.context = context;
-        }
-
         public async Task<Result> Handle(UpdateStatus request, CancellationToken cancellationToken)
         {
             var ticket = await ticketRepository.FindByIdAsync(request.Id, cancellationToken);

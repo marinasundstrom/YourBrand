@@ -7,20 +7,11 @@ using YourBrand.ApiKeys.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.ApiKeys.Infrastructure.Idempotence;
 
-public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHandler<TDomainEvent>
+public sealed class IdempotentDomainEventHandler<TDomainEvent>(
+    IDomainEventHandler<TDomainEvent> decorated,
+    ApiKeysContext dbContext) : IDomainEventHandler<TDomainEvent>
     where TDomainEvent : DomainEvent
 {
-    private readonly IDomainEventHandler<TDomainEvent> decorated;
-    private readonly ApiKeysContext dbContext;
-
-    public IdempotentDomainEventHandler(
-        IDomainEventHandler<TDomainEvent> decorated,
-        ApiKeysContext dbContext)
-    {
-        this.decorated = decorated;
-        this.dbContext = dbContext;
-    }
-
     public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
     {
         string consumer = decorated.GetType().Name;

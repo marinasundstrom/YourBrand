@@ -16,20 +16,13 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class UsersController : ControllerBase
+public class UsersController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public UsersController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<UserDto>>> GetUsers(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetUsersQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetUsersQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
 
     }
 
@@ -37,7 +30,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> GetUser(string id, CancellationToken cancellationToken)
     {
-        var user = await _mediator.Send(new GetUserQuery(id), cancellationToken);
+        var user = await mediator.Send(new GetUserQuery(id), cancellationToken);
 
         if (user is null)
         {
@@ -54,7 +47,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var user = await _mediator.Send(new CreateUserCommand(null, null!, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email), cancellationToken);
+            var user = await mediator.Send(new CreateUserCommand(null, null!, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.SSN, createUserDto.Email), cancellationToken);
 
             return Ok(user);
         }
@@ -71,7 +64,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            var user = await _mediator.Send(new UpdateUserCommand(id, updateUserDetailsDto.FirstName, updateUserDetailsDto.LastName, updateUserDetailsDto.DisplayName, updateUserDetailsDto.SSN, updateUserDetailsDto.Email), cancellationToken);
+            var user = await mediator.Send(new UpdateUserCommand(id, updateUserDetailsDto.FirstName, updateUserDetailsDto.LastName, updateUserDetailsDto.DisplayName, updateUserDetailsDto.SSN, updateUserDetailsDto.Email), cancellationToken);
 
             return Ok(user);
         }
@@ -88,7 +81,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
+            await mediator.Send(new DeleteUserCommand(id), cancellationToken);
 
             return Ok();
         }
@@ -104,7 +97,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetUserProjectMembershipsQuery(id, page, pageSize, sortBy, sortDirection), cancellationToken));
+            return Ok(await mediator.Send(new GetUserProjectMembershipsQuery(id, page, pageSize, sortBy, sortDirection), cancellationToken));
         }
         catch (UserNotFoundException)
         {
@@ -117,7 +110,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetUserStatisticsQuery(id, from, to), cancellationToken));
+            return Ok(await mediator.Send(new GetUserStatisticsQuery(id, from, to), cancellationToken));
         }
         catch (UserNotFoundException)
         {
@@ -130,7 +123,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetUserStatisticsSummaryQuery(id), cancellationToken));
+            return Ok(await mediator.Send(new GetUserStatisticsSummaryQuery(id), cancellationToken));
         }
         catch (UserNotFoundException)
         {

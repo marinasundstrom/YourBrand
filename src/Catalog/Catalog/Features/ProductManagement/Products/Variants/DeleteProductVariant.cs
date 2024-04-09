@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record DeleteProductVariant(long ProductId, long ProductVariantId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteProductVariant>
+    public class Handler(CatalogContext context) : IRequestHandler<DeleteProductVariant>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProductVariant request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .AsSplitQuery()
                 .Include(pv => pv.Variants)
                 .FirstAsync(x => x.Id == request.ProductVariantId);
@@ -27,9 +20,9 @@ public record DeleteProductVariant(long ProductId, long ProductVariantId) : IReq
             var variant = product.Variants.First(x => x.Id == request.ProductVariantId);
 
             product.RemoveVariant(variant);
-            _context.Products.Remove(variant);
+            context.Products.Remove(variant);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
         }
     }

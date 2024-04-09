@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
 
 public record UpdateActivityTypeCommand(string ActivityId, string Name, string? Description, string OrganizationId, string? ProjectId, bool ExcludeHours) : IRequest<ActivityTypeDto>
 {
-    public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityTypeCommand, ActivityTypeDto>
+    public class UpdateActivityCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateActivityTypeCommand, ActivityTypeDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public UpdateActivityCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ActivityTypeDto> Handle(UpdateActivityTypeCommand request, CancellationToken cancellationToken)
         {
-            var activityType = await _context.ActivityTypes
+            var activityType = await context.ActivityTypes
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
@@ -33,13 +26,13 @@ public record UpdateActivityTypeCommand(string ActivityId, string Name, string? 
 
             Project? project = null;
 
-            Organization organization = await _context.Organizations
+            Organization organization = await context.Organizations
                     .AsSplitQuery()
                     .FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
 
             if (request.ProjectId is not null)
             {
-                project = await _context.Projects
+                project = await context.Projects
                         .AsSplitQuery()
                         .FirstAsync(x => x.Organization.Id == request.OrganizationId && x.Id == request.ProjectId, cancellationToken);
             }
@@ -50,7 +43,7 @@ public record UpdateActivityTypeCommand(string ActivityId, string Name, string? 
             activityType.Project = project;
             activityType.ExcludeHours = request.ExcludeHours;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return activityType.ToDto();
         }

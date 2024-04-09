@@ -9,15 +9,8 @@ namespace YourBrand.Accounting.Application.Journal.Commands;
 
 public record CreateJournalEntryCommand(string Description, int? InvoiceNo, List<CreateEntry> Entries) : IRequest<int>
 {
-    public class CreateJournalEntryCommandHandler : IRequestHandler<CreateJournalEntryCommand, int>
+    public class CreateJournalEntryCommandHandler(IAccountingContext context) : IRequestHandler<CreateJournalEntryCommand, int>
     {
-        private readonly IAccountingContext context;
-
-        public CreateJournalEntryCommandHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<int> Handle(CreateJournalEntryCommand request, CancellationToken cancellationToken)
         {
             if (request.Entries.Sum(x => x.Debit ?? -(x.Credit.GetValueOrDefault())) != 0)

@@ -18,28 +18,13 @@ namespace YourBrand.IdentityManagement.Pages.ExternalLogin;
 
 [AllowAnonymous]
 [SecurityHeaders]
-public class Callback : PageModel
+public class Callback(
+    IIdentityServerInteractionService interaction,
+    IEventService events,
+    ILogger<Callback> logger,
+    UserManager<User> userManager,
+    SignInManager<User> signInManager) : PageModel
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IIdentityServerInteractionService _interaction;
-    private readonly ILogger<Callback> _logger;
-    private readonly IEventService _events;
-
-    public Callback(
-        IIdentityServerInteractionService interaction,
-        IEventService events,
-        ILogger<Callback> logger,
-        UserManager<User> userManager,
-        SignInManager<User> signInManager)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _interaction = interaction;
-        _logger = logger;
-        _events = events;
-    }
-
     public async Task<IActionResult> OnGet()
     {
         // read external identity from the temporary cookie
@@ -51,10 +36,10 @@ public class Callback : PageModel
 
         var externalUser = result.Principal;
 
-        if (_logger.IsEnabled(LogLevel.Debug))
+        if (logger.IsEnabled(LogLevel.Debug))
         {
             var externalClaims = externalUser.Claims.Select(c => $"{c.Type}: {c.Value}");
-            _logger.LogDebug("External claims: {@claims}", externalClaims);
+            logger.LogDebug("External claims: {@claims}", externalClaims);
         }
 
         // lookup our user and external provider info
@@ -69,7 +54,7 @@ public class Callback : PageModel
         var providerUserId = userIdClaim.Value;
 
         // find external user
-        var user = await _userManager.FindByLoginAsync(provider, providerUserId);
+        var user = await userManager.FindByLoginAsync(provider, providerUserId);
         if (user == null)
         {
             // this might be where you might initiate a custom workflow for user registration
@@ -86,7 +71,7 @@ public class Callback : PageModel
         CaptureExternalLoginContext(result, additionalLocalClaims, localSignInProps);
 
         // issue authentication cookie for user
-        await _signInManager.SignInWithClaimsAsync(user, localSignInProps, additionalLocalClaims);
+        await signInManager.SignInWithClaimsAsync(user, localSignInProps, additionalLocalClaims);
 
         // delete temporary cookie used during external authentication
         await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
@@ -95,8 +80,8 @@ public class Callback : PageModel
         var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
         // check if external login is in the context of an OIDC request
-        var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-        await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, user.UserName, true, context?.Client.ClientId));
+        var context = await interaction.GetAuthorizationContextAsync(returnUrl);
+        await events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, user.UserName, true, context?.Client.ClientId));
 
         if (context != null)
         {
@@ -159,16 +144,16 @@ public class Callback : PageModel
             }
         }
 
-        var identityResult = await _userManager.CreateAsync(user);
+        var identityResult = await userManager.CreateAsync(user);
         if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
 
         if (filtered.Any())
         {
-            identityResult = await _userManager.AddClaimsAsync(user, filtered);
+            identityResult = await userManager.AddClaimsAsync(user, filtered);
             if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
         }
 
-        identityResult = await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
+        identityResult = await userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
         if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
 
         return user;

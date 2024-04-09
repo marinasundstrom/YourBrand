@@ -4,12 +4,7 @@ using YourBrand.Accounting.Domain.Common;
 
 namespace YourBrand.Accounting.Application.Common.Models;
 
-public class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
+public class DomainEventNotification<TDomainEvent>(TDomainEvent domainEvent) : INotification where TDomainEvent : DomainEvent
 {
-    public DomainEventNotification(TDomainEvent domainEvent)
-    {
-        DomainEvent = domainEvent;
-    }
-
-    public TDomainEvent DomainEvent { get; }
+    public TDomainEvent DomainEvent { get; } = domainEvent;
 }

@@ -8,15 +8,8 @@ namespace YourBrand.Inventory.Application.Warehouses.Commands;
 
 public record CreateWarehouseCommand(string Name, string SiteId) : IRequest<WarehouseDto>
 {
-    public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouseCommand, WarehouseDto>
+    public class CreateWarehouseCommandHandler(IInventoryContext context) : IRequestHandler<CreateWarehouseCommand, WarehouseDto>
     {
-        private readonly IInventoryContext context;
-
-        public CreateWarehouseCommandHandler(IInventoryContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<WarehouseDto> Handle(CreateWarehouseCommand request, CancellationToken cancellationToken)
         {
             var warehouse = await context.Warehouses.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

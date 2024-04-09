@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Skills.Commands;
 
 public record CreateSkillCommand(string Name, string SkillAreaId) : IRequest<SkillDto>
 {
-    public class CreateSkillCommandHandler : IRequestHandler<CreateSkillCommand, SkillDto>
+    public class CreateSkillCommandHandler(IShowroomContext context) : IRequestHandler<CreateSkillCommand, SkillDto>
     {
-        private readonly IShowroomContext context;
-
-        public CreateSkillCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<SkillDto> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
         {
             var skill = await context.Skills.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

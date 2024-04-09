@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Industries.Commands;
 
 public record UpdateIndustryCommand(int Id, string Name) : IRequest
 {
-    public class UpdateIndustryCommandHandler : IRequestHandler<UpdateIndustryCommand>
+    public class UpdateIndustryCommandHandler(IShowroomContext context) : IRequestHandler<UpdateIndustryCommand>
     {
-        private readonly IShowroomContext context;
-
-        public UpdateIndustryCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(UpdateIndustryCommand request, CancellationToken cancellationToken)
         {
             var industry = await context.Industries.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

@@ -8,27 +8,20 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Values;
 
 public record DeleteProductAttributeValue(string Id, string ValueId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteProductAttributeValue>
+    public class Handler(CatalogContext context) : IRequestHandler<DeleteProductAttributeValue>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProductAttributeValue request, CancellationToken cancellationToken)
         {
-            var attribute = await _context.Attributes
+            var attribute = await context.Attributes
              .Include(pv => pv.Values)
              .FirstAsync(o => o.Id == request.Id);
 
             var value = attribute.ProductAttributes.First(o => o.AttributeId == request.ValueId);
 
             attribute.ProductAttributes.Remove(value);
-            _context.ProductAttributes.Remove(value);
+            context.ProductAttributes.Remove(value);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
         }
     }

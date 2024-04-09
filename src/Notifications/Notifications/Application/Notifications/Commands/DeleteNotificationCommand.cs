@@ -12,17 +12,8 @@ namespace YourBrand.Notifications.Application.Notifications.Commands;
 public record DeleteNotificationCommand(string NotificationId) : IRequest
 {
 
-    public class DeleteNotificationCommandHandler : IRequestHandler<DeleteNotificationCommand>
+    public class DeleteNotificationCommandHandler(IWorkerContext context, IBackgroundJobClient backgroundJobClient) : IRequestHandler<DeleteNotificationCommand>
     {
-        private readonly IWorkerContext context;
-        private readonly IBackgroundJobClient _backgroundJobClient;
-
-        public DeleteNotificationCommandHandler(IWorkerContext context, IBackgroundJobClient backgroundJobClient)
-        {
-            this.context = context;
-            _backgroundJobClient = backgroundJobClient;
-        }
-
         public async Task Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
         {
             var notification = await context.Notifications
@@ -35,7 +26,7 @@ public record DeleteNotificationCommand(string NotificationId) : IRequest
 
             if (notification.ScheduledJobId is not null && notification.Published is null)
             {
-                _backgroundJobClient.Delete(notification.ScheduledJobId);
+                backgroundJobClient.Delete(notification.ScheduledJobId);
             }
 
             context.Notifications.Remove(notification);

@@ -1,11 +1,6 @@
 ﻿namespace YourBrand.Ticketing.Domain.Exceptions;
 
-public class BadRequestException : Exception
+public class BadRequestException(string title) : Exception
 {
-    public BadRequestException(string title)
-    {
-        Title = title;
-    }
-
-    public string Title { get; }
+    public string Title { get; } = title;
 }

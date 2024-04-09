@@ -8,25 +8,10 @@ using YourBrand.Invoicing.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 
-public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
+public class InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
+    IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory,
+    ILogger<InvoicesBatchConsumer> logger) : IConsumer<InvoicesBatch>
 {
-    private readonly IJournalEntriesClient _journalEntriesClient;
-    private readonly IInvoicesClient _invoicesClient;
-    private readonly IDocumentsClient _documentsClient;
-    private readonly EntriesFactory _entriesFactory;
-    private readonly ILogger<InvoicesBatchConsumer> _logger;
-
-    public InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
-        IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory,
-        ILogger<InvoicesBatchConsumer> logger)
-    {
-        _journalEntriesClient = verificationsClient;
-        _invoicesClient = invoicesClient;
-        _documentsClient = documentsClient;
-        _entriesFactory = entriesFactory;
-        _logger = logger;
-    }
-
     public async Task Consume(ConsumeContext<InvoicesBatch> context)
     {
         var batch = context.Message;
@@ -44,7 +29,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         // Get invoice
         // Register entries
 
-        var invoice = await _invoicesClient.GetInvoiceAsync(i.Id, cancellationToken);
+        var invoice = await invoicesClient.GetInvoiceAsync(i.Id, cancellationToken);
 
         if (invoice.Status != InvoiceStatus.Sent)
         {
@@ -56,9 +41,9 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 
     private async Task CreateVerificationFromInvoice(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
     {
-        var entries = _entriesFactory.CreateEntriesFromInvoice(invoice);
+        var entries = entriesFactory.CreateEntriesFromInvoice(invoice);
 
-        var journalEntryId = await _journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
+        var journalEntryId = await verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
         {
             Description = $"Skickade ut faktura #{invoice.InvoiceNo}",
             InvoiceNo = int.Parse(invoice.InvoiceNo),
@@ -71,7 +56,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to add verification to journal entry,");
+            logger.LogError(e, "Failed to add verification to journal entry,");
         }
     }
 
@@ -79,7 +64,7 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
     {
         MemoryStream stream, stream2;
 
-        var file = await _invoicesClient.GetInvoiceFileAsync(invoice.Id);
+        var file = await invoicesClient.GetInvoiceFileAsync(invoice.Id);
 
         string filename = GetFileName(file);
 
@@ -96,13 +81,13 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
         stream2.Seek(0, SeekOrigin.Begin);
         stream.Seek(0, SeekOrigin.Begin);
 
-        await _journalEntriesClient.AddFileToJournalEntryAsVerificationAsync(
+        await verificationsClient.AddFileToJournalEntryAsVerificationAsync(
             journalEntryId, null, int.Parse(invoice.Id),
             new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 
         try
         {
-            await _documentsClient.UploadDocumentAsync("invoices",
+            await documentsClient.UploadDocumentAsync("invoices",
                 new Documents.Client.FileParameter(stream2, $"invoice-{invoice.Id}{fileExt}", contentType));
         }
         catch (Exception exc)

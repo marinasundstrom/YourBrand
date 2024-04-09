@@ -10,21 +10,14 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
 public record CreateProductOption(long ProductId, CreateProductOptionData Data) : IRequest<OptionDto>
 {
-    public class Handler : IRequestHandler<CreateProductOption, OptionDto>
+    public class Handler(CatalogContext context) : IRequestHandler<CreateProductOption, OptionDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OptionDto> Handle(CreateProductOption request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .FirstAsync(x => x.Id == request.ProductId);
 
-            var group = await _context.OptionGroups
+            var group = await context.OptionGroups
                 .FirstOrDefaultAsync(x => x.Id == request.Data.GroupId);
 
             Option option = default!;
@@ -86,7 +79,7 @@ public record CreateProductOption(long ProductId, CreateProductOptionData Data) 
 
             if (product.HasVariants)
             {
-                var variants = await _context.Products
+                var variants = await context.Products
                     .Where(x => x.ParentId == product.Id)
                     .Include(x => x.Options)
                     .ToArrayAsync(cancellationToken);
@@ -101,7 +94,7 @@ public record CreateProductOption(long ProductId, CreateProductOptionData Data) 
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return option.ToDto();
         }

@@ -6,18 +6,11 @@ using YourBrand.TimeReport.Infrastructure.Persistence;
 
 namespace YourBrand.TimeReport.Domain;
 
-public sealed class TimeSheetRepository : ITimeSheetRepository
+public sealed class TimeSheetRepository(TimeReportContext context) : ITimeSheetRepository
 {
-    private readonly TimeReportContext _context;
-
-    public TimeSheetRepository(TimeReportContext context)
-    {
-        _context = context;
-    }
-
     public async Task<TimeSheet?> GetTimeSheet(string id, CancellationToken cancellationToken = default)
     {
-        return await _context.TimeSheets
+        return await context.TimeSheets
                 .Include(x => x.User)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Entries)
@@ -37,7 +30,7 @@ public sealed class TimeSheetRepository : ITimeSheetRepository
 
     public async Task<TimeSheet?> GetTimeSheetByWeek(string userId, int year, int week, CancellationToken cancellationToken = default)
     {
-        return await _context.TimeSheets
+        return await context.TimeSheets
                 .Include(x => x.User)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Entries)
@@ -57,7 +50,7 @@ public sealed class TimeSheetRepository : ITimeSheetRepository
 
     public IQueryable<TimeSheet> GetTimeSheets()
     {
-        return _context.TimeSheets
+        return context.TimeSheets
                 .Include(x => x.User)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Entries)

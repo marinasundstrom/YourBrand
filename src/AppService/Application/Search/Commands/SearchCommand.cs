@@ -10,15 +10,8 @@ namespace YourBrand.Application.Search.Commands;
 public record SearchCommand(string SearchText,
         int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SearchResultItem>>
 {
-    public class SearchCommandHandler : IRequestHandler<SearchCommand, Results<SearchResultItem>>
+    public class SearchCommandHandler(IAppServiceContext context) : IRequestHandler<SearchCommand, Results<SearchResultItem>>
     {
-        private readonly IAppServiceContext context;
-
-        public SearchCommandHandler(IAppServiceContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<Results<SearchResultItem>> Handle(SearchCommand request, CancellationToken cancellationToken)
         {
             var searchText = request.SearchText.Trim().ToLower();

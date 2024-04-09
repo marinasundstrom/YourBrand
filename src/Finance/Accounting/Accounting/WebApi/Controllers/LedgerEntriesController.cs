@@ -8,15 +8,8 @@ using YourBrand.Accounting.Application.Ledger.Queries;
 namespace YourBrand.Accounting.Controllers;
 
 [Route("[controller]")]
-public class LedgerEntriesController : Controller
+public class LedgerEntriesController(IMediator mediator) : Controller
 {
-    private readonly IMediator mediator;
-
-    public LedgerEntriesController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<LedgerEntriesResult> GetLedgerEntriesAsync(int? accountNo = null, int? journalEntryId = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc, CancellationToken cancellationToken = default)
     {

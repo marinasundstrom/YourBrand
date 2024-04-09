@@ -10,18 +10,11 @@ namespace YourBrand.Showroom.Application.Users.Commands;
 
 public record DeleteUserCommand(string UserId) : IRequest
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+    public class DeleteUserCommandHandler(IShowroomContext context) : IRequestHandler<DeleteUserCommand>
     {
-        private readonly IShowroomContext _context;
-
-        public DeleteUserCommandHandler(IShowroomContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                         .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -29,9 +22,9 @@ public record DeleteUserCommand(string UserId) : IRequest
                 throw new UserNotFoundException(request.UserId);
             }
 
-            _context.Users.Remove(user);
+            context.Users.Remove(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

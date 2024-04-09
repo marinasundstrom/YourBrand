@@ -7,7 +7,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, INotificationsClient notificationsClient,
-    ILogger<OrderCreatedEventHandler> logger, IUserContext userContext) : IDomainEventHandler<OrderCreated>
+    ILogger<OrderCreatedEventHandler> logger) : IDomainEventHandler<OrderCreated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
 

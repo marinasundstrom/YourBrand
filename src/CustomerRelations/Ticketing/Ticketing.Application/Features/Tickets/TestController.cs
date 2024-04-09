@@ -10,15 +10,8 @@ namespace YourBrand.Ticketing.Application.Features.Tickets;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public sealed class Test : ControllerBase
+public sealed class Test(IPublishEndpoint publishEndpoint) : ControllerBase
 {
-    private readonly IPublishEndpoint publishEndpoint;
-
-    public Test(IPublishEndpoint publishEndpoint)
-    {
-        this.publishEndpoint = publishEndpoint;
-    }
-
     [HttpPut("{id}/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]

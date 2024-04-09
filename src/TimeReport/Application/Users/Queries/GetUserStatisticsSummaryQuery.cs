@@ -11,18 +11,11 @@ namespace YourBrand.TimeReport.Application.Users.Queries;
 
 public record GetUserStatisticsSummaryQuery(string UserId) : IRequest<StatisticsSummary>
 {
-    public class GetUserStatisticsSummaryQueryHandler : IRequestHandler<GetUserStatisticsSummaryQuery, StatisticsSummary>
+    public class GetUserStatisticsSummaryQueryHandler(ITimeReportContext context) : IRequestHandler<GetUserStatisticsSummaryQuery, StatisticsSummary>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetUserStatisticsSummaryQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<StatisticsSummary> Handle(GetUserStatisticsSummaryQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                        .AsNoTracking()
                        .AsSplitQuery()
                        .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
@@ -32,7 +25,7 @@ public record GetUserStatisticsSummaryQuery(string UserId) : IRequest<Statistics
                 throw new UserNotFoundException(request.UserId);
             }
 
-            var entries = await _context.Entries
+            var entries = await context.Entries
                 .Include(x => x.Project)
                 .Where(x => x.User.Id == request.UserId)
                 .AsSplitQuery()

@@ -12,32 +12,20 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 public record GetPersonProfilesAsync(int Page = 0, int PageSize = 10, string? OrganizationId = null, string? CompetenceAreaId = null, DateTime? AvailableFrom = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<PersonProfileDto>>
 {
-    class GetPersonProfilesAsyncHandler : IRequestHandler<GetPersonProfilesAsync, Results<PersonProfileDto>>
+    class GetPersonProfilesAsyncHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<GetPersonProfilesAsync, Results<PersonProfileDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public GetPersonProfilesAsyncHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<Results<PersonProfileDto>> Handle(GetPersonProfilesAsync request, CancellationToken cancellationToken)
         {
-            IQueryable<PersonProfile> result = _context
+            IQueryable<PersonProfile> result = context
                     .PersonProfiles
                     .AsNoTracking()
                     .AsQueryable();
 
             if (!string.IsNullOrEmpty(request.OrganizationId))
             {
-                var organization = await _context.Organizations.FindAsync(request.OrganizationId);
+                var organization = await context.Organizations.FindAsync(request.OrganizationId);
                 if (organization == null)
                 {
                     throw new Exception("Org not found");
@@ -88,7 +76,7 @@ public record GetPersonProfilesAsync(int Page = 0, int PageSize = 10, string? Or
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var items2 = items.Select(cp => cp.ToDto(_urlHelper)).ToList();
+            var items2 = items.Select(cp => cp.ToDto(urlHelper)).ToList();
 
             return new Results<PersonProfileDto>(items2, totalCount);
         }

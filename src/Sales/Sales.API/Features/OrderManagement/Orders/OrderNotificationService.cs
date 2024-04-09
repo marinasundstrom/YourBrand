@@ -4,15 +4,8 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
-public class OrderNotificationService : IOrderNotificationService
+public class OrderNotificationService(IHubContext<OrdersHub, IOrdersHubClient> hubsContext) : IOrderNotificationService
 {
-    private readonly IHubContext<OrdersHub, IOrdersHubClient> hubsContext;
-
-    public OrderNotificationService(IHubContext<OrdersHub, IOrdersHubClient> hubsContext)
-    {
-        this.hubsContext = hubsContext;
-    }
-
     public async Task Created(int orderNo)
     {
         await hubsContext.Clients.All.Created(orderNo);

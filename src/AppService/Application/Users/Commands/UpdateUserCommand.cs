@@ -10,18 +10,11 @@ namespace YourBrand.Application.Users.Commands;
 
 public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
+    public class UpdateUserCommandHandler(IAppServiceContext context) : IRequestHandler<UpdateUserCommand, UserDto>
     {
-        readonly IAppServiceContext _context;
-
-        public UpdateUserCommandHandler(IAppServiceContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -35,7 +28,7 @@ public record UpdateUserCommand(string UserId, string FirstName, string LastName
             user.SSN = request.Ssn;
             user.Email = request.Email;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.LastModified);
         }

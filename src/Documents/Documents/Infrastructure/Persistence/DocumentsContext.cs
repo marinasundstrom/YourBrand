@@ -13,22 +13,15 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
-public class DocumentsContext : DbContext, IDocumentsContext
+public class DocumentsContext(
+    DbContextOptions<DocumentsContext> options,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IDocumentsContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    public DocumentsContext(
-        DbContextOptions<DocumentsContext> options,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

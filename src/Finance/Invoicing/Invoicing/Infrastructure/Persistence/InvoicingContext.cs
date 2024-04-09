@@ -17,26 +17,18 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Infrastructure.Persistence;
 
-public class InvoicingContext : DbContext, IInvoicingContext
+public class InvoicingContext(
+    DbContextOptions<InvoicingContext> options,
+    ITenantContext tenantContext,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IInvoicingContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    private readonly TenantId _tenantId;
-
-    public InvoicingContext(
-        DbContextOptions<InvoicingContext> options,
-        ITenantContext tenantContext,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-
-        _tenantId = tenantContext.TenantId.GetValueOrDefault();
-    }
+    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

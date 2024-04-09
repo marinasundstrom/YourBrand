@@ -9,22 +9,13 @@ namespace YourBrand.Showroom.Application.Organizations.Queries;
 
 public record GetOrganizationQuery(string Id) : IRequest<OrganizationDto?>
 {
-    class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery, OrganizationDto?>
+    class GetOrganizationQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetOrganizationQuery, OrganizationDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetOrganizationQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<OrganizationDto?> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)
         {
-            var organization = await _context
+            var organization = await context
                .Organizations
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);

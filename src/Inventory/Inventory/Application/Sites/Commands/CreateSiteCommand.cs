@@ -8,15 +8,8 @@ namespace YourBrand.Inventory.Application.Sites.Commands;
 
 public record CreateSiteCommand(string Name, bool CreateWarehouse) : IRequest<SiteDto>
 {
-    public class CreateSiteCommandHandler : IRequestHandler<CreateSiteCommand, SiteDto>
+    public class CreateSiteCommandHandler(IInventoryContext context) : IRequestHandler<CreateSiteCommand, SiteDto>
     {
-        private readonly IInventoryContext context;
-
-        public CreateSiteCommandHandler(IInventoryContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<SiteDto> Handle(CreateSiteCommand request, CancellationToken cancellationToken)
         {
             var site = await context.Sites.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

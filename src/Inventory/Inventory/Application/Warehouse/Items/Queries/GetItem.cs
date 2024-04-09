@@ -8,18 +8,11 @@ namespace YourBrand.Inventory.Application.Warehouses.Items.Queries;
 
 public record GetWarehouseItem(string WarehouseId, string Id) : IRequest<WarehouseItemDto?>
 {
-    public class Handler : IRequestHandler<GetWarehouseItem, WarehouseItemDto?>
+    public class Handler(IInventoryContext context) : IRequestHandler<GetWarehouseItem, WarehouseItemDto?>
     {
-        private readonly IInventoryContext _context;
-
-        public Handler(IInventoryContext context)
-        {
-            _context = context;
-        }
-
         public async Task<WarehouseItemDto?> Handle(GetWarehouseItem request, CancellationToken cancellationToken)
         {
-            var person = await _context.WarehouseItems
+            var person = await context.WarehouseItems
                 .Include(x => x.Item)
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Warehouse)

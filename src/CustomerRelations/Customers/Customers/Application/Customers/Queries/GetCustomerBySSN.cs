@@ -9,18 +9,11 @@ namespace YourBrand.Customers.Application.Customers.Queries;
 
 public record GetCustomerBySSN(string SSN) : IRequest<CustomerDto?>
 {
-    public class Handler : IRequestHandler<GetCustomerBySSN, CustomerDto?>
+    public class Handler(ICustomersContext context) : IRequestHandler<GetCustomerBySSN, CustomerDto?>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<CustomerDto?> Handle(GetCustomerBySSN request, CancellationToken cancellationToken)
         {
-            var person = await _context.Customers
+            var person = await context.Customers
                 .Include(i => ((Person)i).Addresses)
                 .Include(i => ((Organization)i).Addresses)
                 .AsSplitQuery()

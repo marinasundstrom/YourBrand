@@ -14,17 +14,8 @@ public sealed record DeleteTicket(int Id) : IRequest<Result>
         }
     }
 
-    public sealed class Handler : IRequestHandler<DeleteTicket, Result>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork) : IRequestHandler<DeleteTicket, Result>
     {
-        private readonly ITicketRepository ticketRepository;
-        private readonly IUnitOfWork unitOfWork;
-
-        public Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork)
-        {
-            this.ticketRepository = ticketRepository;
-            this.unitOfWork = unitOfWork;
-        }
-
         public async Task<Result> Handle(DeleteTicket request, CancellationToken cancellationToken)
         {
             var ticket = await ticketRepository.FindByIdAsync(request.Id, cancellationToken);

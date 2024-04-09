@@ -9,18 +9,11 @@ namespace YourBrand.HumanResources.Application.Teams.Queries;
 
 public record GetTeamQuery(string TeamId) : IRequest<TeamDto>
 {
-    public class Handler : IRequestHandler<GetTeamQuery, TeamDto>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetTeamQuery, TeamDto>
     {
-        private readonly IApplicationDbContext _context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<TeamDto> Handle(GetTeamQuery request, CancellationToken cancellationToken)
         {
-            var team = await _context.Teams
+            var team = await context.Teams
                 .OrderBy(x => x.Id)
                 .AsNoTracking()
                 .AsSplitQuery()

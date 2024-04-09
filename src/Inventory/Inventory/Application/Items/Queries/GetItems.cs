@@ -9,15 +9,8 @@ namespace YourBrand.Inventory.Application.Items.Queries;
 
 public record GetItems(int Page = 0, int PageSize = 10, string? GroupId = null, string? WarehouseId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ItemDto>>
 {
-    public class Handler : IRequestHandler<GetItems, ItemsResult<ItemDto>>
+    public class Handler(IInventoryContext context) : IRequestHandler<GetItems, ItemsResult<ItemDto>>
     {
-        private readonly IInventoryContext _context;
-
-        public Handler(IInventoryContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ItemDto>> Handle(GetItems request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -30,7 +23,7 @@ public record GetItems(int Page = 0, int PageSize = 10, string? GroupId = null, 
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            IQueryable<Item> result = _context
+            IQueryable<Item> result = context
                       .Items
                       .AsNoTracking()
                       .AsQueryable();

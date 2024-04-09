@@ -10,22 +10,13 @@ namespace YourBrand.Inventory.Application.Sites.Queries;
 
 public record GetSitesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<SiteDto>>
 {
-    class GetSitesQueryHandler : IRequestHandler<GetSitesQuery, ItemsResult<SiteDto>>
+    class GetSitesQueryHandler(
+        IInventoryContext context,
+        IUserContext userContext) : IRequestHandler<GetSitesQuery, ItemsResult<SiteDto>>
     {
-        private readonly IInventoryContext _context;
-        private readonly IUserContext userContext;
-
-        public GetSitesQueryHandler(
-            IInventoryContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ItemsResult<SiteDto>> Handle(GetSitesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Site> result = _context
+            IQueryable<Site> result = context
                     .Sites
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

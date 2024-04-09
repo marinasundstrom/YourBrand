@@ -4,15 +4,8 @@ using YourBrand.Application.Common.Interfaces;
 
 namespace YourBrand.Consumers;
 
-public class NotificationConsumer : IConsumer<YourBrand.Notifications.Contracts.NotificationDto>
+public class NotificationConsumer(INotificationClient notificationClient) : IConsumer<YourBrand.Notifications.Contracts.NotificationDto>
 {
-    private readonly INotificationClient _notificationClient;
-
-    public NotificationConsumer(INotificationClient notificationClient)
-    {
-        _notificationClient = notificationClient;
-    }
-
     public async Task Consume(ConsumeContext<YourBrand.Notifications.Contracts.NotificationDto> context)
     {
         var notification = context.Message;
@@ -31,6 +24,6 @@ public class NotificationConsumer : IConsumer<YourBrand.Notifications.Contracts.
             LastModifiedBy = notification.LastModifiedById
         };
 
-        await _notificationClient.NotificationReceived(dto);
+        await notificationClient.NotificationReceived(dto);
     }
 }

@@ -8,15 +8,8 @@ public record CreateDiscountCommand(
                 double Percentage,
                 decimal Amount) : IRequest<DiscountDto>
 {
-    public class CreateDiscountCommandHandler : IRequestHandler<CreateDiscountCommand, DiscountDto>
+    public class CreateDiscountCommandHandler(IMarketingContext context) : IRequestHandler<CreateDiscountCommand, DiscountDto>
     {
-        private readonly IMarketingContext context;
-
-        public CreateDiscountCommandHandler(IMarketingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<DiscountDto> Handle(CreateDiscountCommand request, CancellationToken cancellationToken)
         {
             var discount = Domain.Entities.Discount.CreateDiscountForPurchase(request.Percentage, request.Amount);

@@ -13,22 +13,15 @@ using YourBrand.Transactions.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Transactions.Infrastructure.Persistence;
 
-public class TransactionsContext : DbContext, ITransactionsContext
+public class TransactionsContext(
+    DbContextOptions<TransactionsContext> options,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), ITransactionsContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    public TransactionsContext(
-        DbContextOptions<TransactionsContext> options,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

@@ -7,18 +7,11 @@ namespace YourBrand.Analytics.Application.Features.Tracking;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public class ClientController : ControllerBase
+public class ClientController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ClientController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<string> InitClient(ClientData data, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new InitClientCommand(data.UserAgent), cancellationToken);
+        return await mediator.Send(new InitClientCommand(data.UserAgent), cancellationToken);
     }
 }

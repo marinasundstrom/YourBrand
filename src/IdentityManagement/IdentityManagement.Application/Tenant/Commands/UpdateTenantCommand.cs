@@ -11,22 +11,11 @@ namespace YourBrand.IdentityManagement.Application.Tenants.Commands;
 
 public record UpdateTenantCommand(string TenantId, string Name) : IRequest<TenantDto>
 {
-    public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateTenantCommand, TenantDto>
+    public sealed class UpdateUserDetailsCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<UpdateTenantCommand, TenantDto>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task<TenantDto> Handle(UpdateTenantCommand request, CancellationToken cancellationToken)
         {
-            var tenant = await _context.Tenants
+            var tenant = await context.Tenants
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TenantId, cancellationToken);
 
@@ -37,9 +26,9 @@ public record UpdateTenantCommand(string TenantId, string Name) : IRequest<Tenan
 
             tenant.ChangeName(request.Name);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantUpdated(tenant.Id, tenant.Name));
+            await eventPublisher.PublishEvent(new TenantUpdated(tenant.Id, tenant.Name));
 
             return tenant.ToDto();
         }

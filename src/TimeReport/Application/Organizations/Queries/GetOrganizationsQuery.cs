@@ -12,22 +12,13 @@ namespace YourBrand.TimeReport.Application.Organizations
 
 public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<OrganizationDto>>
 {
-    class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
+    class GetOrganizationsQueryHandler(
+        ITimeReportContext context,
+        IUserContext userContext) : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
     {
-        private readonly ITimeReportContext _context;
-        private readonly IUserContext userContext;
-
-        public GetOrganizationsQueryHandler(
-            ITimeReportContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Organization> result = _context
+            IQueryable<Organization> result = context
                     .Organizations
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

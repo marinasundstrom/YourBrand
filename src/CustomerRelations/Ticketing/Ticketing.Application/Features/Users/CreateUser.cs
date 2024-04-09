@@ -18,19 +18,8 @@ public record CreateUser(string Name, string Email) : IRequest<Result<UserInfoDt
         }
     }
 
-    public class Handler : IRequestHandler<CreateUser, Result<UserInfoDto>>
+    public sealed class Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<CreateUser, Result<UserInfoDto>>
     {
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IUserContext userContext;
-
-        public Handler(IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext)
-        {
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
-            this.userContext = userContext;
-        }
-
         public async Task<Result<UserInfoDto>> Handle(CreateUser request, CancellationToken cancellationToken)
         {
             string userId = userContext.UserId!;

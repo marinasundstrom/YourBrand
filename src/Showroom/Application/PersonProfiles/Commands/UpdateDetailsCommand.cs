@@ -7,22 +7,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record UpdateDetailsCommand(string Id, PersonProfileDetailsDto Details) : IRequest
 {
-    class UpdateDetailsCommandHandler : IRequestHandler<UpdateDetailsCommand>
+    class UpdateDetailsCommandHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<UpdateDetailsCommand>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public UpdateDetailsCommandHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task Handle(UpdateDetailsCommand request, CancellationToken cancellationToken)
         {
-            var personProfile = await _context.PersonProfiles.FindAsync(request.Id);
+            var personProfile = await context.PersonProfiles.FindAsync(request.Id);
             if (personProfile is null)
             {
                 throw new Exception();
@@ -37,7 +28,7 @@ public record UpdateDetailsCommand(string Id, PersonProfileDetailsDto Details) :
             personProfile.OrganizationId = request.Details.OrganizationId;
             personProfile.CompetenceAreaId = request.Details.CompetenceAreaId;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

@@ -14,19 +14,8 @@ namespace YourBrand.Messenger.Application.Messages.Commands;
 
 public record PostMessageCommand(string ConversationId, string Text, string? ReplyToId) : IRequest<MessageDto>
 {
-    public class PostMessageCommandHandler : IRequestHandler<PostMessageCommand, MessageDto>
+    public class PostMessageCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus) : IRequestHandler<PostMessageCommand, MessageDto>
     {
-        private readonly IMessengerContext context;
-        private readonly IUserContext _userContext;
-        private readonly IBus _bus;
-
-        public PostMessageCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus)
-        {
-            this.context = context;
-            this._userContext = userContext;
-            _bus = bus;
-        }
-
         public async Task<MessageDto> Handle(PostMessageCommand request, CancellationToken cancellationToken)
         {
             var conversation = await context.Conversations
@@ -39,7 +28,7 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
                 throw new Exception();
             }
 
-            if (!conversation.Participants.Any(x => x.UserId == _userContext.UserId))
+            if (!conversation.Participants.Any(x => x.UserId == userContext.UserId))
             {
                 throw new Exception();
             }
@@ -68,7 +57,7 @@ public record PostMessageCommand(string ConversationId, string Text, string? Rep
 
             var result = message.ToDto();
 
-            await _bus.Publish(new MessagePosted(result));
+            await bus.Publish(new MessagePosted(result));
 
             return message.ToDto();
         }

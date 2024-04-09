@@ -11,20 +11,11 @@ namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
 public record UploadExpenseAttachmentCommand(string ExpenseId, string Name, Stream Stream) : IRequest<string?>
 {
-    public class UploadExpenseAttachmentCommandHandler : IRequestHandler<UploadExpenseAttachmentCommand, string?>
+    public class UploadExpenseAttachmentCommandHandler(ITimeReportContext context, IBlobService blobService) : IRequestHandler<UploadExpenseAttachmentCommand, string?>
     {
-        private readonly ITimeReportContext _context;
-        private readonly IBlobService _blobService;
-
-        public UploadExpenseAttachmentCommandHandler(ITimeReportContext context, IBlobService blobService)
-        {
-            _context = context;
-            _blobService = blobService;
-        }
-
         public async Task<string?> Handle(UploadExpenseAttachmentCommand request, CancellationToken cancellationToken)
         {
-            var expense = await _context.Expenses
+            var expense = await context.Expenses
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
@@ -41,11 +32,11 @@ public record UploadExpenseAttachmentCommand(string ExpenseId, string Name, Stre
 
             var blobName = $"{expense.Id}-{request.Name}";
 
-            await _blobService.UploadBloadAsync(blobName, request.Stream);
+            await blobService.UploadBloadAsync(blobName, request.Stream);
 
             expense.Attachment = blobName;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return GetAttachmentUrl(expense.Attachment);
         }

@@ -9,27 +9,16 @@ namespace YourBrand.Documents.Application.Queries;
 
 public record GetDocumentFile(string DocumentId) : IRequest<DocumentFileResponse?>
 {
-    public class Handler : IRequestHandler<GetDocumentFile, DocumentFileResponse?>
+    public class Handler(DocumentsContext context, IFileUploaderService fileUploaderService, IHttpContextAccessor httpContextAccessor) : IRequestHandler<GetDocumentFile, DocumentFileResponse?>
     {
-        private readonly DocumentsContext _context;
-        private readonly IFileUploaderService _fileUploaderService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public Handler(DocumentsContext context, IFileUploaderService fileUploaderService, IHttpContextAccessor httpContextAccessor)
-        {
-            _context = context;
-            _fileUploaderService = fileUploaderService;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
         public async Task<DocumentFileResponse?> Handle(GetDocumentFile request, CancellationToken cancellationToken)
         {
-            var document = await _context.Documents
+            var document = await context.Documents
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
-            var stream = await _fileUploaderService.DownloadFileAsync(document!.BlobId);
+            var stream = await fileUploaderService.DownloadFileAsync(document!.BlobId);
 
             return document is null
                 ? null

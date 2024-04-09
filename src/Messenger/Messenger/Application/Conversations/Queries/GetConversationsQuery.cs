@@ -13,18 +13,11 @@ public record GetConversationsQuery(
     int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null)
     : IRequest<Results<ConversationDto>>
 {
-    public class GetConversationsQueryHandler : IRequestHandler<GetConversationsQuery, Results<ConversationDto>>
+    public class GetConversationsQueryHandler(IConversationRepository conversationRepository) : IRequestHandler<GetConversationsQuery, Results<ConversationDto>>
     {
-        private readonly IConversationRepository _conversationRepository;
-
-        public GetConversationsQueryHandler(IConversationRepository conversationRepository)
-        {
-            _conversationRepository = conversationRepository;
-        }
-
         public async Task<Results<ConversationDto>> Handle(GetConversationsQuery request, CancellationToken cancellationToken)
         {
-            var query = _conversationRepository.GetConversations();
+            var query = conversationRepository.GetConversations();
 
             var totalCount = await query.CountAsync(cancellationToken);
 

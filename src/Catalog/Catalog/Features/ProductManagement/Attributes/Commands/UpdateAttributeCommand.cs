@@ -9,15 +9,8 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
 public record UpdateAttributeCommand(string Id, string Name, string? Description, string? GroupId, IEnumerable<UpdateProductAttributeValueData> Values) : IRequest
 {
-    public class UpdateAttributeCommandHandler : IRequestHandler<UpdateAttributeCommand>
+    public class UpdateAttributeCommandHandler(CatalogContext context) : IRequestHandler<UpdateAttributeCommand>
     {
-        private readonly CatalogContext context;
-
-        public UpdateAttributeCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(UpdateAttributeCommand request, CancellationToken cancellationToken)
         {
             var attribute = await context.Attributes

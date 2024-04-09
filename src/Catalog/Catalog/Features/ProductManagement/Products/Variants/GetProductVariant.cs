@@ -8,21 +8,14 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record GetProductVariant(string ProductIdOrHandle, string ProductVariantIdOrHandle) : IRequest<ProductDto?>
 {
-    public class Handler : IRequestHandler<GetProductVariant, ProductDto?>
+    public class Handler(CatalogContext context) : IRequestHandler<GetProductVariant, ProductDto?>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProductDto?> Handle(GetProductVariant request, CancellationToken cancellationToken)
         {
             bool isProductId = long.TryParse(request.ProductIdOrHandle, out var productId);
             bool isProductVariantId = long.TryParse(request.ProductVariantIdOrHandle, out var productVariantId);
 
-            var query = _context.Products
+            var query = context.Products
                 .AsSplitQuery()
                 .AsNoTracking()
                 .IncludeAll()

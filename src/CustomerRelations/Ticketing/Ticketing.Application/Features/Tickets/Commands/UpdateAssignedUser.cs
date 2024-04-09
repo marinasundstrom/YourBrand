@@ -14,19 +14,8 @@ public sealed record UpdateAssignee(int Id, string? UserId) : IRequest<Result>
         }
     }
 
-    public sealed class Handler : IRequestHandler<UpdateAssignee, Result>
+    public sealed class Handler(ITicketRepository ticketRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateAssignee, Result>
     {
-        private readonly ITicketRepository ticketRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
-
-        public Handler(ITicketRepository ticketRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
-        {
-            this.ticketRepository = ticketRepository;
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
-        }
-
         public async Task<Result> Handle(UpdateAssignee request, CancellationToken cancellationToken)
         {
             var ticket = await ticketRepository.FindByIdAsync(request.Id, cancellationToken);

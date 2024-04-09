@@ -9,126 +9,71 @@ using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Consumers;
 
-public class PostMessageConsumer : IConsumer<PostMessage>
+public class PostMessageConsumer(IMediator mediator, IBus bus) : IConsumer<PostMessage>
 {
-    private readonly IMediator _mediator;
     private readonly ISettableUserContext _userContext;
-    private readonly IBus _bus;
-
-    public PostMessageConsumer(IMediator mediator, IBus bus)
-    {
-        _mediator = mediator;
-        _bus = bus;
-    }
 
     public async Task Consume(ConsumeContext<PostMessage> context)
     {
         var message = context.Message;
 
-        var result = await _mediator.Send(new PostMessageCommand(message.ConversationId, message.Text, message.ReplyToId));
+        var result = await mediator.Send(new PostMessageCommand(message.ConversationId, message.Text, message.ReplyToId));
 
         await context.RespondAsync<MessageDto>(result);
     }
 }
 
-public class UpdateMessageConsumer : IConsumer<UpdateMessage>
+public class UpdateMessageConsumer(IMediator mediator, IBus bus) : IConsumer<UpdateMessage>
 {
-    private readonly IMediator _mediator;
-    private readonly IBus _bus;
-
-    public UpdateMessageConsumer(IMediator mediator, IBus bus)
-    {
-        _mediator = mediator;
-        _bus = bus;
-    }
-
     public async Task Consume(ConsumeContext<UpdateMessage> context)
     {
         var message = context.Message;
 
-        await _mediator.Send(new UpdateMessageCommand(message.ConversationId, message.MessageId!, message.Text));
+        await mediator.Send(new UpdateMessageCommand(message.ConversationId, message.MessageId!, message.Text));
     }
 }
 
-public class DeleteMessageConsumer : IConsumer<DeleteMessage>
+public class DeleteMessageConsumer(IMediator mediator, IBus bus) : IConsumer<DeleteMessage>
 {
-    private readonly IMediator _mediator;
-    private readonly IBus _bus;
-
-    public DeleteMessageConsumer(IMediator mediator, IBus bus)
-    {
-        _mediator = mediator;
-        _bus = bus;
-    }
-
     public async Task Consume(ConsumeContext<DeleteMessage> context)
     {
         var message = context.Message;
 
-        await _mediator.Send(new DeleteMessageCommand(message.ConversationId, message.MessageId));
+        await mediator.Send(new DeleteMessageCommand(message.ConversationId, message.MessageId));
     }
 }
 
-public class MarkMessageAsReadConsumer : IConsumer<MarkMessageAsRead>
+public class MarkMessageAsReadConsumer(IMediator mediator, ISettableUserContext userContext, IBus bus) : IConsumer<MarkMessageAsRead>
 {
-    private readonly IMediator _mediator;
-    private readonly ISettableUserContext _userContext;
-    private readonly IBus _bus;
-
-    public MarkMessageAsReadConsumer(IMediator mediator, ISettableUserContext userContext, IBus bus)
-    {
-        _mediator = mediator;
-        _userContext = userContext;
-        _bus = bus;
-    }
-
     public async Task Consume(ConsumeContext<MarkMessageAsRead> context)
     {
         var message = context.Message;
 
-        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
-        await _mediator.Send(new SendMessageReceiptCommand(message.MessageId));
+        await mediator.Send(new SendMessageReceiptCommand(message.MessageId));
     }
 }
 
-public class StartTypingConsumer : IConsumer<StartTyping>
+public class StartTypingConsumer(IMediator mediator, ISettableUserContext userContext) : IConsumer<StartTyping>
 {
-    private readonly IMediator _mediator;
-    private readonly ISettableUserContext _userContext;
-
-    public StartTypingConsumer(IMediator mediator, ISettableUserContext userContext)
-    {
-        _mediator = mediator;
-        _userContext = userContext;
-    }
-
     public async Task Consume(ConsumeContext<StartTyping> context)
     {
         var message = context.Message;
 
-        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         //await _mediator.Send(new SendMessageReceiptCommand(message.MessageId));
     }
 }
 
-public class EndTypingConsumer : IConsumer<EndTyping>
+public class EndTypingConsumer(IMediator mediator, ISettableUserContext userContext) : IConsumer<EndTyping>
 {
-    private readonly IMediator _mediator;
-    private readonly ISettableUserContext _userContext;
-
-    public EndTypingConsumer(IMediator mediator, ISettableUserContext userContext)
-    {
-        _mediator = mediator;
-        _userContext = userContext;
-    }
-
     public async Task Consume(ConsumeContext<EndTyping> context)
     {
         var message = context.Message;
 
-        await _userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
+        await userContext.SetCurrentUserFromAccessTokenAsync(message.AccessToken);
 
         //await _mediator.Send(new SendMessageReceiptCommand(message.MessageId));
     }

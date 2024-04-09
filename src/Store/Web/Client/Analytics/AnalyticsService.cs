@@ -8,32 +8,17 @@ using YourBrand.StoreFront;
 
 namespace Client.Analytics;
 
-public sealed class AnalyticsService : IDisposable
+public sealed class AnalyticsService(
+    IAnalyticsClient analyticsClient,
+    NavigationManager navigationManager,
+    ILocalStorageService localStorageService,
+    ISessionStorageService sessionStorageService,
+    IServiceProvider serviceProvider) : IDisposable
 {
-    private readonly IAnalyticsClient analyticsClient;
-    private readonly NavigationManager navigationManager;
-    private readonly ILocalStorageService localStorageService;
-    private readonly ISessionStorageService sessionStorageService;
-    private readonly IServiceProvider serviceProvider;
     string? cid;
     string? sid;
     private string? referrer;
     private IDisposable? locationChangingHandler;
-
-
-    public AnalyticsService(
-        IAnalyticsClient analyticsClient,
-        NavigationManager navigationManager,
-        ILocalStorageService localStorageService,
-        ISessionStorageService sessionStorageService,
-        IServiceProvider serviceProvider)
-    {
-        this.analyticsClient = analyticsClient;
-        this.navigationManager = navigationManager;
-        this.localStorageService = localStorageService;
-        this.sessionStorageService = sessionStorageService;
-        this.serviceProvider = serviceProvider;
-    }
 
     public async Task Init()
     {

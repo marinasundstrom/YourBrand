@@ -5,16 +5,9 @@ using YourBrand.Ticketing.Domain.Specifications;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories;
 
-public sealed class UserRepository : IUserRepository
+public sealed class UserRepository(ApplicationDbContext context) : IUserRepository
 {
-    readonly ApplicationDbContext context;
-    readonly DbSet<User> dbSet;
-
-    public UserRepository(ApplicationDbContext context)
-    {
-        this.context = context;
-        this.dbSet = context.Set<User>();
-    }
+    readonly DbSet<User> dbSet = context.Set<User>();
 
     public IQueryable<User> GetAll()
     {

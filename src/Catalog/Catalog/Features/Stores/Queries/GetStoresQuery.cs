@@ -11,22 +11,12 @@ namespace YourBrand.Catalog.Features.Stores.Queries;
 
 public sealed record GetStoresQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<StoreDto>>
 {
-    sealed class GetStoresQueryHandler : IRequestHandler<GetStoresQuery, PagedResult<StoreDto>>
+    sealed class GetStoresQueryHandler(
+        CatalogContext context) : IRequestHandler<GetStoresQuery, PagedResult<StoreDto>>
     {
-        private readonly CatalogContext _context;
-        private readonly IUserContext userContext;
-
-        public GetStoresQueryHandler(
-            CatalogContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<PagedResult<StoreDto>> Handle(GetStoresQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Stores
+            var query = context.Stores
                 .Include(x => x.Currency)
                 .AsSplitQuery()
                 .AsNoTracking()

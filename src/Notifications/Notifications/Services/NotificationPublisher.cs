@@ -8,24 +8,13 @@ using YourBrand.Notifications.Domain.Entities;
 
 namespace YourBrand.Notifications.Services;
 
-public class NotificationPublisher : INotificationPublisher
+public class NotificationPublisher(IBus bus, IServiceProvider serviceProvider, ILogger<NotificationPublisher> logger) : INotificationPublisher
 {
-    private readonly IBus _bus;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<NotificationPublisher> _logger;
-
-    public NotificationPublisher(IBus bus, IServiceProvider serviceProvider, ILogger<NotificationPublisher> logger)
-    {
-        _bus = bus;
-        _serviceProvider = serviceProvider;
-        _logger = logger;
-    }
-
     public async Task PublishNotification(Notification n1)
     {
-        _logger.LogInformation("Sending notification");
+        logger.LogInformation("Sending notification");
 
-        using var scope = _serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IWorkerContext>();
 
         var notification = await context.Notifications.FirstAsync(n => n.Id == n1.Id);
@@ -34,6 +23,6 @@ public class NotificationPublisher : INotificationPublisher
 
         var notifcationDto = new NotificationDto(notification.Id, notification.Published, notification.Content, notification.Link, notification.UserId, notification.IsRead, notification.Created, notification.CreatedById, notification.LastModified, notification.LastModifiedById);
 
-        await _bus.Publish(notifcationDto);
+        await bus.Publish(notifcationDto);
     }
 }

@@ -19,22 +19,13 @@ public record UpdateExperienceCommand(
     string? Description)
     : IRequest<ExperienceDto>
 {
-    class UpdateExperienceCommandHandler : IRequestHandler<UpdateExperienceCommand, ExperienceDto>
+    class UpdateExperienceCommandHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<UpdateExperienceCommand, ExperienceDto>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public UpdateExperienceCommandHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ExperienceDto> Handle(UpdateExperienceCommand request, CancellationToken cancellationToken)
         {
-            var experience = await _context.PersonProfileExperiences
+            var experience = await context.PersonProfileExperiences
                 .Include(x => x.PersonProfile)
                 .Include(x => x.Company)
                 .ThenInclude(x => x.Industry)
@@ -55,9 +46,9 @@ public record UpdateExperienceCommand(
 
             experience.AddDomainEvent(new ExperienceUpdated(experience.PersonProfile.Id, experience.PersonProfile.Id, experience.Company.Industry.Id));
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            experience = await _context.PersonProfileExperiences
+            experience = await context.PersonProfileExperiences
                 .Include(x => x.Employment)
                 .ThenInclude(x => x.Employer)
                 .Include(x => x.Company)

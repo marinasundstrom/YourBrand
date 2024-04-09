@@ -13,15 +13,8 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize]
-public sealed class TicketStatusesController : ControllerBase
+public sealed class TicketStatusesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public TicketStatusesController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ItemsResult<TicketStatusDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]

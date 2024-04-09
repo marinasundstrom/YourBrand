@@ -1,15 +1,8 @@
 namespace BlazorApp;
 
-public sealed class RequestContext
+public sealed class RequestContext(IHttpContextAccessor httpContextAccessor)
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public RequestContext(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
-    public string Method => _httpContextAccessor.HttpContext!.Request.Method;
+    public string Method => httpContextAccessor.HttpContext!.Request.Method;
 }
 
 public static class RequestContextExtensions

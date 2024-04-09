@@ -13,22 +13,15 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Infrastructure.Persistence;
 
-public class AppServiceContext : DbContext, IAppServiceContext
+public class AppServiceContext(
+    DbContextOptions<AppServiceContext> options,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IAppServiceContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    public AppServiceContext(
-        DbContextOptions<AppServiceContext> options,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

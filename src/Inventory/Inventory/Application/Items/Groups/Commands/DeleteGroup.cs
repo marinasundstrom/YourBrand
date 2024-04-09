@@ -6,15 +6,8 @@ namespace YourBrand.Inventory.Application.Items.Groups.Commands;
 
 public record DeleteItemGroup(string ItemGroupId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteItemGroup>
+    public class Handler(IInventoryContext context) : IRequestHandler<DeleteItemGroup>
     {
-        private readonly IInventoryContext _context;
-
-        public Handler(IInventoryContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteItemGroup request, CancellationToken cancellationToken)
         {
             /*

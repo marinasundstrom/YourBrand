@@ -105,10 +105,6 @@ public enum SortDirection
     Descending
 }
 
-public class PropertyNotFoundException : Exception
+public class PropertyNotFoundException(Type type, string propertyName) : Exception($"Type {type.FullName} does not have a property named {propertyName}.")
 {
-    public PropertyNotFoundException(Type type, string propertyName)
-        : base($"Type {type.FullName} does not have a property named {propertyName}.")
-    {
-    }
 }

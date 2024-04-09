@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Organizations.Commands;
 
 public record DeleteOrganizationCommand(string Id) : IRequest
 {
-    public class DeleteOrganizationCommandHandler : IRequestHandler<DeleteOrganizationCommand>
+    public class DeleteOrganizationCommandHandler(IShowroomContext context) : IRequestHandler<DeleteOrganizationCommand>
     {
-        private readonly IShowroomContext context;
-
-        public DeleteOrganizationCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = await context.Organizations

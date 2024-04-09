@@ -14,23 +14,12 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.HumanResources.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options,
+    IUserContext currentPersonService,
+    IDateTime dateTime,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IApplicationDbContext
 {
-    private readonly IUserContext _currentPersonService;
-    private readonly IDateTime _dateTime;
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
-        IUserContext currentPersonService,
-        IDateTime dateTime,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _currentPersonService = currentPersonService;
-        _dateTime = dateTime;
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 #if DEBUG
@@ -39,7 +28,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

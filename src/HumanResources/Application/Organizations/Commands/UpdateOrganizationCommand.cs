@@ -11,22 +11,11 @@ namespace YourBrand.HumanResources.Application.Organizations.Commands;
 
 public record UpdateOrganizationCommand(string OrganizationId, string Name) : IRequest<OrganizationDto>
 {
-    public class UpdatePersonDetailsCommandHandler : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
+    public class UpdatePersonDetailsCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher) : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _currentPersonService;
-        private readonly IEventPublisher _eventPublisher;
-
-        public UpdatePersonDetailsCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _currentPersonService = currentPersonService;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task<OrganizationDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _context.Organizations
+            var organization = await context.Organizations
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.OrganizationId, cancellationToken);
 
@@ -37,9 +26,9 @@ public record UpdateOrganizationCommand(string OrganizationId, string Name) : IR
 
             organization.ChangeName(request.Name);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name));
+            await eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name));
 
             return organization.ToDto();
         }

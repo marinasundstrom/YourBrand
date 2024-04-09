@@ -10,18 +10,11 @@ namespace YourBrand.HumanResources.Application.Organizations.Queries;
 
 public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, HumanResources.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<OrganizationDto>>
 {
-    public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
+    public class GetOrganizationsQueryHandler(IApplicationDbContext context) : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetOrganizationsQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Organizations
+            var query = context.Organizations
                 .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)

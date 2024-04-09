@@ -10,15 +10,8 @@ namespace YourBrand.Notifications.Application.Notifications.Queries;
 
 public record GetUnreadNotificationsCountQuery(string? UserId) : IRequest<int>
 {
-    public class GetUnreadNotificationsCountQueryHandler : IRequestHandler<GetUnreadNotificationsCountQuery, int>
+    public class GetUnreadNotificationsCountQueryHandler(IWorkerContext context) : IRequestHandler<GetUnreadNotificationsCountQuery, int>
     {
-        private readonly IWorkerContext context;
-
-        public GetUnreadNotificationsCountQueryHandler(IWorkerContext context, IUserContext userContext)
-        {
-            this.context = context;
-        }
-
         public async Task<int> Handle(GetUnreadNotificationsCountQuery request, CancellationToken cancellationToken)
         {
             var query = context.Notifications

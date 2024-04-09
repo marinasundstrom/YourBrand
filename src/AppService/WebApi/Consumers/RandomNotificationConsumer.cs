@@ -6,19 +6,12 @@ using YourBrand.Application.Common.Interfaces;
 
 namespace YourBrand.Consumers;
 
-public class RandomNotificationConsumer : IConsumer<RandomNotification>
+public class RandomNotificationConsumer(IWorkerClient workerClient) : IConsumer<RandomNotification>
 {
-    private readonly IWorkerClient _workerClient;
-
-    public RandomNotificationConsumer(IWorkerClient workerClient)
-    {
-        _workerClient = workerClient;
-    }
-
     public async Task Consume(ConsumeContext<RandomNotification> context)
     {
         var message = context.Message;
 
-        await _workerClient.NotificationReceived(message.Message);
+        await workerClient.NotificationReceived(message.Message);
     }
 }

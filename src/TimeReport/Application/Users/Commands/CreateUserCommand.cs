@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Users.Commands;
 
 public record CreateUserCommand(string? Id, string OrganizationId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
+    public class CreateUserCommandHandler(ITimeReportContext context) : IRequestHandler<CreateUserCommand, UserDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateUserCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .Include(x => x.Teams)
                 .Include(x => x.Organization)
                 .FirstOrDefaultAsync(u => u.Id == request.Id);
@@ -41,9 +34,9 @@ public record CreateUserCommand(string? Id, string OrganizationId, string FirstN
                 Email = request.Email
             };
 
-            _context.Users.Add(user);
+            context.Users.Add(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return user.ToDto();
         }

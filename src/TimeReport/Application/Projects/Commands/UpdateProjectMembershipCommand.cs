@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public record UpdateProjectMembershipCommand(string ProjectId, string MembershipId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
 {
-    public class UpdateProjectMembershipCommandHandler : IRequestHandler<UpdateProjectMembershipCommand, ProjectMembershipDto>
+    public class UpdateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectMembershipCommand, ProjectMembershipDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public UpdateProjectMembershipCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProjectMembershipDto> Handle(UpdateProjectMembershipCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                 .Include(p => p.Memberships)
                 .Include(p => p.Memberships)
                 .ThenInclude(m => m.User)
@@ -43,7 +36,7 @@ public record UpdateProjectMembershipCommand(string ProjectId, string Membership
             m.From = request.From;
             m.To = request.To;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return m.ToDto();
         }

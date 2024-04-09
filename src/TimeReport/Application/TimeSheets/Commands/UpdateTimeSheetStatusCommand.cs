@@ -10,22 +10,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
 {
-    public class UpdateTimeSheetStatusCommandHandler : IRequestHandler<UpdateTimeSheetStatusCommand>
+    public class UpdateTimeSheetStatusCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<UpdateTimeSheetStatusCommand>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public UpdateTimeSheetStatusCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task Handle(UpdateTimeSheetStatusCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -34,7 +23,7 @@ public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
 
             timeSheet.Close();
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
 
         }
     }

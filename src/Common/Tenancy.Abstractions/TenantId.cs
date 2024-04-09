@@ -2,11 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace YourBrand.Tenancy;
 
-public struct TenantId
+public struct TenantId(string value)
 {
-    public TenantId(string value) => Value = value;
-
-    public string Value { get; private set; }
+    public string Value { get; private set; } = value;
 
     public override bool Equals([NotNullWhen(true)] object? obj)
     {

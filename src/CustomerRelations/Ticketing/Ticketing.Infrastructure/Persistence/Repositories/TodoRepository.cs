@@ -4,16 +4,9 @@ using YourBrand.Ticketing.Domain.Specifications;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories;
 
-public sealed class TicketRepository : ITicketRepository
+public sealed class TicketRepository(ApplicationDbContext context) : ITicketRepository
 {
-    readonly ApplicationDbContext context;
-    readonly DbSet<Ticket> dbSet;
-
-    public TicketRepository(ApplicationDbContext context)
-    {
-        this.context = context;
-        this.dbSet = context.Set<Ticket>();
-    }
+    readonly DbSet<Ticket> dbSet = context.Set<Ticket>();
 
     public IQueryable<Ticket> GetAll()
     {

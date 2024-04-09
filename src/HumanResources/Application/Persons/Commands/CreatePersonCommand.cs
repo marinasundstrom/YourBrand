@@ -11,40 +11,29 @@ namespace YourBrand.HumanResources.Application.Persons.Commands;
 
 public record CreatePersonCommand(string OrganizationId, string FirstName, string LastName, string? DisplayName, string Title, string Role, string Ssn, string Email, string DepartmentId, string? ReportsTo, string Password) : IRequest<PersonDto>
 {
-    public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, PersonDto>
+    public class CreatePersonCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher) : IRequestHandler<CreatePersonCommand, PersonDto>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _currentPersonService;
-        private readonly IEventPublisher _eventPublisher;
-
-        public CreatePersonCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _currentPersonService = currentPersonService;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task<PersonDto> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _context.Organizations.FirstAsync(); // FirstAsync(o => o.Id == request.OrganizationId, cancellationToken);
+            var organization = await context.Organizations.FirstAsync(); // FirstAsync(o => o.Id == request.OrganizationId, cancellationToken);
 
             var person = new Person(organization, request.FirstName, request.LastName, request.DisplayName, request.Title, request.Ssn, request.Email);
 
-            var role = await _context.Roles.FirstAsync(x => x.Name == request.Role, cancellationToken);
+            var role = await context.Roles.FirstAsync(x => x.Name == request.Role, cancellationToken);
 
             person.AddToRole(role);
 
             if (request.ReportsTo != null)
             {
-                var manager = await _context.Persons.FirstAsync(x => x.Id == request.ReportsTo);
+                var manager = await context.Persons.FirstAsync(x => x.Id == request.ReportsTo);
                 person.ReportsTo = manager;
             }
 
-            _context.Persons.Add(person);
+            context.Persons.Add(person);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            person = await _context.Persons
+            person = await context.Persons
                .Include(u => u.Roles)
                .Include(u => u.Organization)
                .Include(u => u.Department)
@@ -52,7 +41,7 @@ public record CreatePersonCommand(string OrganizationId, string FirstName, strin
                .AsSplitQuery()
                .FirstAsync(x => x.Id == person.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonCreated(person.Id));
+            await eventPublisher.PublishEvent(new PersonCreated(person.Id));
 
             return person.ToDto();
         }

@@ -7,25 +7,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record UpdatePersonProfileCommand(string Id, UpdatePersonProfileDto PersonProfile) : IRequest<PersonProfileDto>
 {
-    class UpdatePersonProfileCommandHandler : IRequestHandler<UpdatePersonProfileCommand, PersonProfileDto>
+    class UpdatePersonProfileCommandHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<UpdatePersonProfileCommand, PersonProfileDto>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public UpdatePersonProfileCommandHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<PersonProfileDto> Handle(UpdatePersonProfileCommand request, CancellationToken cancellationToken)
         {
-            var personProfile = await _context.PersonProfiles.FindAsync(request.Id);
+            var personProfile = await context.PersonProfiles.FindAsync(request.Id);
             if (personProfile is null)
             {
                 return null;
@@ -45,9 +33,9 @@ public record UpdatePersonProfileCommand(string Id, UpdatePersonProfileDto Perso
                 personProfile.AvailableFromDate = personProfile.AvailableFromDate?.Date;
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            return personProfile.ToDto(_urlHelper);
+            return personProfile.ToDto(urlHelper);
         }
     }
 }

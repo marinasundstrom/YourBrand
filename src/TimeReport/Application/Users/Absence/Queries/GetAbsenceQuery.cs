@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 
 public record GetAbsenceQuery(string AbsenceId) : IRequest<AbsenceDto>
 {
-    public class GetAbsenceQueryHandler : IRequestHandler<GetAbsenceQuery, AbsenceDto>
+    public class GetAbsenceQueryHandler(ITimeReportContext context) : IRequestHandler<GetAbsenceQuery, AbsenceDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetAbsenceQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<AbsenceDto> Handle(GetAbsenceQuery request, CancellationToken cancellationToken)
         {
-            var absence = await _context.Absence
+            var absence = await context.Absence
                .Include(x => x.Project)
                .AsNoTracking()
                .AsSplitQuery()

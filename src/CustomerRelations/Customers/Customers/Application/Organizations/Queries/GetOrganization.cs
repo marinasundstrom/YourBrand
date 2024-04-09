@@ -8,19 +8,12 @@ namespace YourBrand.Customers.Application.Organizations.Queries;
 
 public record GetOrganization(int Id) : IRequest<OrganizationDto?>
 {
-    public class Handler : IRequestHandler<GetOrganization, OrganizationDto?>
+    public class Handler(ICustomersContext context) : IRequestHandler<GetOrganization, OrganizationDto?>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OrganizationDto?> Handle(GetOrganization request, CancellationToken cancellationToken)
         {
 
-            var organization = await _context.Organizations
+            var organization = await context.Organizations
                 .Include(i => i.Addresses)
                 .AsSplitQuery()
                 .AsNoTracking()

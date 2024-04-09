@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.CompetenceAreas.Commands;
 
 public record DeleteCompetenceAreaCommand(string Id) : IRequest
 {
-    public class DeleteCompetenceAreaCommandHandler : IRequestHandler<DeleteCompetenceAreaCommand>
+    public class DeleteCompetenceAreaCommandHandler(IShowroomContext context) : IRequestHandler<DeleteCompetenceAreaCommand>
     {
-        private readonly IShowroomContext context;
-
-        public DeleteCompetenceAreaCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteCompetenceAreaCommand request, CancellationToken cancellationToken)
         {
             var comepetenceArea = await context.CompetenceAreas

@@ -7,12 +7,8 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.StoreFront.API.Persistence;
 
-public sealed class StoreFrontContext : DbContext
+public sealed class StoreFrontContext(DbContextOptions options) : DbContext(options)
 {
-    public StoreFrontContext(DbContextOptions options) : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cart>()

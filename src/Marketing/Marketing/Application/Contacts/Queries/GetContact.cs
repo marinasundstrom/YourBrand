@@ -8,18 +8,11 @@ namespace YourBrand.Marketing.Application.Contacts.Queries;
 
 public record GetContact(string ContactId) : IRequest<ContactDto?>
 {
-    public class Handler : IRequestHandler<GetContact, ContactDto?>
+    public class Handler(IMarketingContext context) : IRequestHandler<GetContact, ContactDto?>
     {
-        private readonly IMarketingContext _context;
-
-        public Handler(IMarketingContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ContactDto?> Handle(GetContact request, CancellationToken cancellationToken)
         {
-            var person = await _context.Contacts
+            var person = await context.Contacts
                 .Include(i => i.Campaign)
                 .AsSplitQuery()
                 .AsNoTracking()

@@ -12,22 +12,11 @@ namespace YourBrand.IdentityManagement.Pages.Ciba;
 
 [Authorize]
 [SecurityHeadersAttribute]
-public class Consent : PageModel
+public class Consent(
+    IBackchannelAuthenticationInteractionService interaction,
+    IEventService events,
+    ILogger<Consent> logger) : PageModel
 {
-    private readonly IBackchannelAuthenticationInteractionService _interaction;
-    private readonly IEventService _events;
-    private readonly ILogger<Consent> _logger;
-
-    public Consent(
-        IBackchannelAuthenticationInteractionService interaction,
-        IEventService events,
-        ILogger<Consent> logger)
-    {
-        _interaction = interaction;
-        _events = events;
-        _logger = logger;
-    }
-
     public ViewModel View { get; set; }
 
     [BindProperty]
@@ -52,10 +41,10 @@ public class Consent : PageModel
     public async Task<IActionResult> OnPost()
     {
         // validate return url is still valid
-        var request = await _interaction.GetLoginRequestByInternalIdAsync(Input.Id);
+        var request = await interaction.GetLoginRequestByInternalIdAsync(Input.Id);
         if (request == null || request.Subject.GetSubjectId() != User.GetSubjectId())
         {
-            _logger.LogError("Invalid id {id}", Input.Id);
+            logger.LogError("Invalid id {id}", Input.Id);
             return RedirectToPage("/Home/Error/Index");
         }
 
@@ -67,7 +56,7 @@ public class Consent : PageModel
             result = new CompleteBackchannelLoginRequest(Input.Id);
 
             // emit event
-            await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
+            await events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
         // user clicked 'yes' - validate the data
         else if (Input?.Button == "yes")
@@ -88,7 +77,7 @@ public class Consent : PageModel
                 };
 
                 // emit event
-                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, result.ScopesValuesConsented, false));
+                await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, result.ScopesValuesConsented, false));
             }
             else
             {
@@ -103,7 +92,7 @@ public class Consent : PageModel
         if (result != null)
         {
             // communicate outcome of consent back to identityserver
-            await _interaction.CompleteLoginRequestAsync(result);
+            await interaction.CompleteLoginRequestAsync(result);
 
             return RedirectToPage("/Ciba/All");
         }
@@ -115,14 +104,14 @@ public class Consent : PageModel
 
     private async Task<ViewModel> BuildViewModelAsync(string id, InputModel model = null)
     {
-        var request = await _interaction.GetLoginRequestByInternalIdAsync(id);
+        var request = await interaction.GetLoginRequestByInternalIdAsync(id);
         if (request != null && request.Subject.GetSubjectId() == User.GetSubjectId())
         {
             return CreateConsentViewModel(model, id, request);
         }
         else
         {
-            _logger.LogError("No backchannel login request matching id: {id}", id);
+            logger.LogError("No backchannel login request matching id: {id}", id);
         }
         return null;
     }

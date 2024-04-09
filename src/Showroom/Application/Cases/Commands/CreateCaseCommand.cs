@@ -10,17 +10,8 @@ public record CasePricing(decimal? HourlyPrice, double? Hours);
 
 public record CreateCaseCommand(string? Description, CasePricing? Pricing) : IRequest<CaseDto>
 {
-    public class CreateCaseCommandHandler : IRequestHandler<CreateCaseCommand, CaseDto>
+    public class CreateCaseCommandHandler(IShowroomContext context, IUrlHelper urlHelper) : IRequestHandler<CreateCaseCommand, CaseDto>
     {
-        private readonly IShowroomContext context;
-        private readonly IUrlHelper _urlHelper;
-
-        public CreateCaseCommandHandler(IShowroomContext context, IUrlHelper urlHelper)
-        {
-            this.context = context;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<CaseDto> Handle(CreateCaseCommand request, CancellationToken cancellationToken)
         {
             var @case = new Domain.Entities.Case
@@ -52,7 +43,7 @@ public record CreateCaseCommand(string? Description, CasePricing? Pricing) : IRe
                 .Include(c => c.LastModifiedBy)
                 .FirstOrDefaultAsync(x => x.Id == @case.Id);
 
-            return @case.ToDto(_urlHelper);
+            return @case.ToDto(urlHelper);
         }
     }
 }

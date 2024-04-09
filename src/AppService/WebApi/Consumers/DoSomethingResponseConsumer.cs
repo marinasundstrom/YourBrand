@@ -6,19 +6,12 @@ using YourBrand.Application.Common.Interfaces;
 
 namespace YourBrand.Consumers;
 
-public class DoSomethingResponseConsumer : IConsumer<DoSomethingResponse>
+public class DoSomethingResponseConsumer(ISomethingClient somethingClient) : IConsumer<DoSomethingResponse>
 {
-    private readonly ISomethingClient _somethingClient;
-
-    public DoSomethingResponseConsumer(ISomethingClient somethingClient)
-    {
-        _somethingClient = somethingClient;
-    }
-
     public async Task Consume(ConsumeContext<DoSomethingResponse> context)
     {
         var message = context.Message;
 
-        await _somethingClient.ResponseReceived(message.Message);
+        await somethingClient.ResponseReceived(message.Message);
     }
 }

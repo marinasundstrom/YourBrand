@@ -3,19 +3,13 @@ using Azure.Storage.Blobs.Models;
 
 namespace YourBrand.Documents.Application.Services;
 
-public class FileUploaderService : IFileUploaderService
+public class FileUploaderService(BlobServiceClient blobServiceClient) : IFileUploaderService
 {
-    private readonly BlobServiceClient _blobServiceClient;
     private bool flag;
-
-    public FileUploaderService(BlobServiceClient blobServiceClient)
-    {
-        _blobServiceClient = blobServiceClient;
-    }
 
     public async Task DeleteFileAsync(string id, CancellationToken cancellationToken = default)
     {
-        var blobContainerClient = _blobServiceClient.GetBlobContainerClient("documents");
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient("documents");
 
         if (!flag)
         {
@@ -28,7 +22,7 @@ public class FileUploaderService : IFileUploaderService
 
     public async Task<Stream> DownloadFileAsync(string blobId)
     {
-        var blobContainerClient = _blobServiceClient.GetBlobContainerClient("documents");
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient("documents");
 
         if (!flag)
         {
@@ -43,7 +37,7 @@ public class FileUploaderService : IFileUploaderService
 
     public async Task UploadFileAsync(string id, Stream stream, CancellationToken cancellationToken = default)
     {
-        var blobContainerClient = _blobServiceClient.GetBlobContainerClient("documents");
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient("documents");
 
         if (!flag)
         {

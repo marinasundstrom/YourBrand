@@ -10,22 +10,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record UpdateEntryDetailsCommand(string TimeSheetId, string EntryId, string? Description) : IRequest<EntryDto>
 {
-    public class UpdateEntryDetailsCommandHandler : IRequestHandler<UpdateEntryDetailsCommand, EntryDto>
+    public class UpdateEntryDetailsCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<UpdateEntryDetailsCommand, EntryDto>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public UpdateEntryDetailsCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task<EntryDto> Handle(UpdateEntryDetailsCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -51,7 +40,7 @@ public record UpdateEntryDetailsCommand(string TimeSheetId, string EntryId, stri
 
             entry.Description = request.Description;
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return entry.ToDto();
         }

@@ -9,15 +9,8 @@ namespace YourBrand.Customers.Application.Customers.Queries;
 
 public record GetCustomers(int Page = 1, int PageSize = 10, string? SearchString = null) : IRequest<ItemsResult<CustomerDto>>
 {
-    public class Handler : IRequestHandler<GetCustomers, ItemsResult<CustomerDto>>
+    public class Handler(ICustomersContext context) : IRequestHandler<GetCustomers, ItemsResult<CustomerDto>>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<CustomerDto>> Handle(GetCustomers request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -30,7 +23,7 @@ public record GetCustomers(int Page = 1, int PageSize = 10, string? SearchString
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Customers
+            var query = context.Customers
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderBy(x => x.Id)

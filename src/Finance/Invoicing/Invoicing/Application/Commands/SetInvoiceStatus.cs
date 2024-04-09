@@ -9,22 +9,15 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record SetInvoiceStatus(string InvoiceId, InvoiceStatus Status) : IRequest
 {
-    public class Handler : IRequestHandler<SetInvoiceStatus>
+    public class Handler(IInvoicingContext context) : IRequestHandler<SetInvoiceStatus>
     {
-        private readonly IInvoicingContext _context;
-
-        public Handler(IInvoicingContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(SetInvoiceStatus request, CancellationToken cancellationToken)
         {
-            var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             invoice.SetStatus(request.Status);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

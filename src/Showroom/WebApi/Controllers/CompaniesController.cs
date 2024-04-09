@@ -15,43 +15,36 @@ namespace YourBrand.Showroom.WebApi.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class CompaniesController : ControllerBase
+public class CompaniesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public CompaniesController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<Results<CompanyDto>> GetCompanies(int page = 1, int pageSize = 10, int? industryId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetCompaniesQuery(page - 1, pageSize, industryId, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetCompaniesQuery(page - 1, pageSize, industryId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
     public async Task<CompanyDto?> GetCompany(string id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetCompanyQuery(id), cancellationToken);
+        return await mediator.Send(new GetCompanyQuery(id), cancellationToken);
     }
 
     [HttpPost]
     public async Task<CompanyDto> CreateCompany(CreateCompanyDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new CreateCompanyCommand(dto.Name, dto.IndustryId), cancellationToken);
+        return await mediator.Send(new CreateCompanyCommand(dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateCompany(string id, UpdateCompanyDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateCompanyCommand(id, dto.Name, dto.IndustryId), cancellationToken);
+        await mediator.Send(new UpdateCompanyCommand(id, dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteCompany(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteCompanyCommand(id), cancellationToken);
+        await mediator.Send(new DeleteCompanyCommand(id), cancellationToken);
     }
 }
 

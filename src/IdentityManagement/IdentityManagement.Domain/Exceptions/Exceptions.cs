@@ -1,169 +1,81 @@
 ﻿namespace YourBrand.IdentityManagement.Domain.Exceptions;
 
-public class DomainException : Exception
+public class DomainException(string title, string details) : Exception(title)
 {
-    public DomainException(string title, string details)
-        : base(title)
-    {
-        Details = details;
-    }
-
     public string Title => Message;
 
-    public string Details { get; set; }
+    public string Details { get; set; } = details;
 }
 
-public class TimeSheetNotFoundException : DomainException
+public class TimeSheetNotFoundException(string timeSheetId) : DomainException("TimeSheet not found", $"TimeSheet with Id {timeSheetId} was not found.")
 {
-    public TimeSheetNotFoundException(string timeSheetId)
-        : base("TimeSheet not found", $"TimeSheet with Id {timeSheetId} was not found.")
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
+    public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class TimeSheetClosedException : DomainException
+public class TimeSheetClosedException(string timeSheetId) : DomainException("TimeSheet is closed", $"TimeSheet with Id {timeSheetId} is closed.")
 {
-    public TimeSheetClosedException(string timeSheetId)
-        : base("TimeSheet is closed", $"TimeSheet with Id {timeSheetId} is closed.")
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
+    public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class EntryNotFoundException : DomainException
+public class EntryNotFoundException(string entryId) : DomainException("Entry not found", $"Entry with Id {entryId} was not found.")
 {
-    public EntryNotFoundException(string entryId)
-         : base("Entry not found", $"Entry with Id {entryId} was not found.")
-    {
-        EntryId = entryId;
-    }
-
-    public string EntryId { get; }
+    public string EntryId { get; } = entryId;
 }
 
-public class ProjectMembershipNotFoundException : DomainException
+public class ProjectMembershipNotFoundException(string membershipId) : DomainException("Project Membership not found", $"Project Membership with Id {membershipId} was not found.")
 {
-    public ProjectMembershipNotFoundException(string membershipId)
-         : base("Project Membership not found", $"Project Membership with Id {membershipId} was not found.")
-    {
-        ProjectMembershipId = membershipId;
-    }
-
-    public string ProjectMembershipId { get; }
+    public string ProjectMembershipId { get; } = membershipId;
 }
 
-public class UserNotFoundException : DomainException
+public class UserNotFoundException(string personName) : DomainException("User not found", $"User {personName} was not found.")
 {
-    public UserNotFoundException(string personName)
-         : base("User not found", $"User {personName} was not found.")
-    {
-        UserName = personName;
-    }
-
-    public string UserName { get; }
+    public string UserName { get; } = personName;
 }
 
-public class UserAlreadyProjectMemberException : DomainException
+public class UserAlreadyProjectMemberException(string personName, string projectId) : DomainException("User is already a member", $"User {personName} is already a member of {projectId}.")
 {
-    public UserAlreadyProjectMemberException(string personName, string projectId)
-         : base("User is already a member", $"User {personName} is already a member of {projectId}.")
-    {
-        UserName = personName;
-        ProjectId = projectId;
-    }
+    public string UserName { get; } = personName;
 
-    public string UserName { get; }
-
-    public string ProjectId { get; }
+    public string ProjectId { get; } = projectId;
 }
 
-public class EntryAlreadyExistsException : DomainException
+public class EntryAlreadyExistsException(string timeSheetId, DateOnly date, string activityId) : DomainException("Entry already exists", $"Entry already registered for {activityId} on {date}.")
 {
-    public EntryAlreadyExistsException(string timeSheetId, DateOnly date, string activityId)
-        : base("Entry already exists", $"Entry already registered for {activityId} on {date}.")
-    {
-        TimeSheetId = timeSheetId;
-        Date = date;
-        ActivityId = activityId;
-    }
+    public string TimeSheetId { get; } = timeSheetId;
 
-    public string TimeSheetId { get; }
+    public DateOnly Date { get; } = date;
 
-    public DateOnly Date { get; }
-
-    public string ActivityId { get; }
+    public string ActivityId { get; } = activityId;
 }
 
-public class MonthLockedException : DomainException
+public class MonthLockedException(string timeSheetId) : DomainException("Month is locked", $"The month is locked for TimeSheet withd Id {timeSheetId}.")
 {
-    public MonthLockedException(string timeSheetId)
-        : base("Month is locked", $"The month is locked for TimeSheet withd Id {timeSheetId}.")
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
+    public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class ProjectNotFoundException : DomainException
+public class ProjectNotFoundException(string projectId) : DomainException("Project not found", $"Project with Id {projectId} was not found.")
 {
-    public ProjectNotFoundException(string projectId)
-        : base("Project not found", $"Project with Id {projectId} was not found.")
-    {
-        ProjectId = projectId;
-    }
-
-    public string ProjectId { get; }
+    public string ProjectId { get; } = projectId;
 }
 
-public class ActivityNotFoundException : DomainException
+public class ActivityNotFoundException(string activityId) : DomainException("Activity not found", $"Activity with Id {activityId} was not found.")
 {
-    public ActivityNotFoundException(string activityId)
-        : base("Activity not found", $"Activity with Id {activityId} was not found.")
-    {
-        ActivityId = activityId;
-    }
-
-    public string ActivityId { get; }
+    public string ActivityId { get; } = activityId;
 }
 
-public class DayHoursExceedPermittedDailyWorkingHoursException : DomainException
+public class DayHoursExceedPermittedDailyWorkingHoursException(string timeSheetId, DateOnly date) : DomainException("Total daily hours exceed working hours", $"The number of hours for {date} in TimeSheet with Id {timeSheetId} exceeds the permitted daily working hours.")
 {
-    public DayHoursExceedPermittedDailyWorkingHoursException(string timeSheetId, DateOnly date)
-        : base("Total daily hours exceed working hours", $"The number of hours for {date} in TimeSheet with Id {timeSheetId} exceeds the permitted daily working hours.")
-    {
-        TimeSheetId = timeSheetId;
-        Date = date;
-    }
+    public string TimeSheetId { get; } = timeSheetId;
 
-    public string TimeSheetId { get; }
-
-    public DateOnly Date { get; }
+    public DateOnly Date { get; } = date;
 }
 
-public class WeekHoursExceedPermittedWeeklyWorkingHoursException : DomainException
+public class WeekHoursExceedPermittedWeeklyWorkingHoursException(string timeSheetId) : DomainException("Total weekly hours exceed working hours", $"The number of hours for TimeSheet with Id {timeSheetId} exceeds the permitted weekly working hours.")
 {
-    public WeekHoursExceedPermittedWeeklyWorkingHoursException(string timeSheetId)
-        : base("Total weekly hours exceed working hours", $"The number of hours for TimeSheet with Id {timeSheetId} exceeds the permitted weekly working hours.")
-    {
-        TimeSheetId = timeSheetId;
-    }
-
-    public string TimeSheetId { get; }
+    public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class OrganizationNotFoundException : DomainException
+public class OrganizationNotFoundException(string organizationName) : DomainException("Organization not found", $"Organization {organizationName} was not found.")
 {
-    public OrganizationNotFoundException(string organizationName)
-         : base("Organization not found", $"Organization {organizationName} was not found.")
-    {
-        OrganizationName = organizationName;
-    }
-
-    public string OrganizationName { get; }
+    public string OrganizationName { get; } = organizationName;
 }

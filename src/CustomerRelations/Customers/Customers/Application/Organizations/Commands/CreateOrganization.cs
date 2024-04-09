@@ -9,15 +9,8 @@ namespace YourBrand.Customers.Application.Organizations.Commands;
 
 public record CreateOrganization(string Name, string OrgNo, string? Phone, string? PhoneMobile, string? Email, Address2Dto Address) : IRequest<OrganizationDto>
 {
-    public class Handler : IRequestHandler<CreateOrganization, OrganizationDto>
+    public class Handler(ICustomersContext context) : IRequestHandler<CreateOrganization, OrganizationDto>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OrganizationDto> Handle(CreateOrganization request, CancellationToken cancellationToken)
         {
             var organization = new Domain.Entities.Organization(request.Name, request.OrgNo, string.Empty);
@@ -37,9 +30,9 @@ public record CreateOrganization(string Name, string OrgNo, string? Phone, strin
                 Country = request.Address.Country
             });
 
-            _context.Organizations.Add(organization);
+            context.Organizations.Add(organization);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return organization.ToDto();
         }

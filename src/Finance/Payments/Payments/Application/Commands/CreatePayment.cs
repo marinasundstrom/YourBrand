@@ -9,20 +9,11 @@ namespace YourBrand.Payments.Application.Commands;
 
 public record CreatePayment(string InvoiceId, string Currency, decimal Amount, DateTime DueDate, PaymentMethod PaymentMethod, string? Reference, string? Message) : IRequest
 {
-    public class Handler : IRequestHandler<CreatePayment>
+    public class Handler(IPaymentsContext context, IPublishEndpoint publishEndpoint) : IRequestHandler<CreatePayment>
     {
-        private readonly IPaymentsContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
-
-        public Handler(IPaymentsContext context, IPublishEndpoint publishEndpoint)
-        {
-            _context = context;
-            _publishEndpoint = publishEndpoint;
-        }
-
         public async Task Handle(CreatePayment request, CancellationToken cancellationToken)
         {
-            _context.Payments.Add(new Domain.Entities.Payment(
+            context.Payments.Add(new Domain.Entities.Payment(
                     request.InvoiceId,
                     PaymentStatus.Created,
                     request.Currency,
@@ -33,7 +24,7 @@ public record CreatePayment(string InvoiceId, string Currency, decimal Amount, D
                     request.Message
                 ));
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

@@ -8,15 +8,8 @@ namespace YourBrand.Ticketing.Application.Features.Users;
 
 public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<UserDto>>
 {
-    public class Handler : IRequestHandler<GetUsers, ItemsResult<UserDto>>
+    public class Handler(IUserRepository userRepository) : IRequestHandler<GetUsers, ItemsResult<UserDto>>
     {
-        private readonly IUserRepository userRepository;
-
-        public Handler(IUserRepository userRepository)
-        {
-            this.userRepository = userRepository;
-        }
-
         public async Task<ItemsResult<UserDto>> Handle(GetUsers request, CancellationToken cancellationToken)
         {
             var query = userRepository.GetAll();

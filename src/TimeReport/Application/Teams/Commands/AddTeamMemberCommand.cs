@@ -9,15 +9,8 @@ namespace YourBrand.TimeReport.Application.Teams
 
 public record AddTeamMemberCommand(string Id, string UserId) : IRequest
 {
-    public class AddTeamMemberCommandHandler : IRequestHandler<AddTeamMemberCommand>
+    public class AddTeamMemberCommandHandler(ITimeReportContext context) : IRequestHandler<AddTeamMemberCommand>
     {
-        private readonly ITimeReportContext context;
-
-        public AddTeamMemberCommandHandler(ITimeReportContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams

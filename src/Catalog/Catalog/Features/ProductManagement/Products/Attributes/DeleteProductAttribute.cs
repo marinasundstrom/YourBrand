@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
 public record DeleteProductAttribute(long ProductId, string AttributeId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteProductAttribute>
+    public class Handler(CatalogContext context) : IRequestHandler<DeleteProductAttribute>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProductAttribute request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .Include(x => x.ProductAttributes)
                 .FirstAsync(x => x.Id == request.ProductId);
 
@@ -27,9 +20,9 @@ public record DeleteProductAttribute(long ProductId, string AttributeId) : IRequ
                 .First(x => x.AttributeId == request.AttributeId);
 
             product.RemoveProductAttribute(attribute);
-            _context.ProductAttributes.Remove(attribute);
+            context.ProductAttributes.Remove(attribute);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
         }
     }

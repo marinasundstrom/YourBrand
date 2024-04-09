@@ -11,22 +11,11 @@ namespace YourBrand.IdentityManagement.Application.Users.Commands;
 
 public record DeleteUserCommand(string UserId) : IRequest
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
+    public class DeleteUserCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<DeleteUserCommand>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public DeleteUserCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .Include(p => p.Roles)
                 .FirstOrDefaultAsync(p => p.Id == request.UserId);
 
@@ -35,11 +24,11 @@ public record DeleteUserCommand(string UserId) : IRequest
                 throw new UserNotFoundException(request.UserId);
             }
 
-            _context.Users.Remove(user);
+            context.Users.Remove(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserDeleted(user.Id));
+            await eventPublisher.PublishEvent(new UserDeleted(user.Id));
 
         }
     }

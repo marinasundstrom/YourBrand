@@ -14,27 +14,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class ExpensesController : ControllerBase
+public class ExpensesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ExpensesController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<ExpenseDto>>> GetExpenses(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetExpensesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetExpensesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ExpenseDto>> GetExpense(string id, CancellationToken cancellationToken)
     {
-        var expense = await _mediator.Send(new GetExpenseQuery(id), cancellationToken);
+        var expense = await mediator.Send(new GetExpenseQuery(id), cancellationToken);
 
         if (expense is null)
         {
@@ -50,7 +43,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new CreateExpenseCommand(projectId, createExpenseDto.Date, createExpenseDto.ExpenseTypeId, createExpenseDto.Amount, createExpenseDto.Description), cancellationToken);
+            var activity = await mediator.Send(new CreateExpenseCommand(projectId, createExpenseDto.Date, createExpenseDto.ExpenseTypeId, createExpenseDto.Amount, createExpenseDto.Description), cancellationToken);
 
             return Ok(activity);
         }
@@ -66,7 +59,7 @@ public class ExpensesController : ControllerBase
     {
         var stream = file.OpenReadStream();
 
-        var url = await _mediator.Send(new UploadExpenseAttachmentCommand(id, file.FileName, stream), cancellationToken);
+        var url = await mediator.Send(new UploadExpenseAttachmentCommand(id, file.FileName, stream), cancellationToken);
 
         return Ok(url);
     }
@@ -77,7 +70,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new UpdateExpenseCommand(id, updateExpenseDto.Date, updateExpenseDto.Amount, updateExpenseDto.Description), cancellationToken);
+            var activity = await mediator.Send(new UpdateExpenseCommand(id, updateExpenseDto.Date, updateExpenseDto.Amount, updateExpenseDto.Description), cancellationToken);
 
             return Ok(activity);
         }
@@ -93,7 +86,7 @@ public class ExpensesController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteExpenseCommand(id), cancellationToken);
+            await mediator.Send(new DeleteExpenseCommand(id), cancellationToken);
 
             return Ok();
         }

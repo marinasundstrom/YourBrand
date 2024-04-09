@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Commands;
 
 public record DeleteProjectGroupCommand(string ExpenseId) : IRequest
 {
-    public class DeleteExpenseCommandHandler : IRequestHandler<DeleteProjectGroupCommand>
+    public class DeleteExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteProjectGroupCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteExpenseCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProjectGroupCommand request, CancellationToken cancellationToken)
         {
-            var projectGroup = await _context.ProjectGroups
+            var projectGroup = await context.ProjectGroups
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
 
@@ -29,9 +22,9 @@ public record DeleteProjectGroupCommand(string ExpenseId) : IRequest
                 throw new Exception();
             }
 
-            _context.ProjectGroups.Remove(projectGroup);
+            context.ProjectGroups.Remove(projectGroup);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

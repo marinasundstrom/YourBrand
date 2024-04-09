@@ -8,20 +8,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Skills.Commands;
 
 public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkillId, IEnumerable<UpdateSkillExperienceDto> Experiences) : IRequest
 {
-    public class Handler : IRequestHandler<UpdateSkillExperiencesCommand>
+    public class Handler(IShowroomContext context) : IRequestHandler<UpdateSkillExperiencesCommand>
     {
-        private readonly IShowroomContext _context;
-
-        public Handler(IShowroomContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(UpdateSkillExperiencesCommand request, CancellationToken cancellationToken)
         {
             foreach (var experience in request.Experiences)
             {
-                var exp = await _context.PersonProfileExperiences
+                var exp = await context.PersonProfileExperiences
                     .Include(x => x.Skills)
                     .Where(x => x.PersonProfile.Id == request.Id)
                     .FirstAsync(x => x.Id == experience.PersonProfileExperienceId);
@@ -36,7 +29,7 @@ public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkill
                         {
                             Id = Guid.NewGuid().ToString(),
                             PersonProfileExperience = exp,
-                            PersonProfileSkill = await _context.PersonProfileSkills.FirstAsync(x => x.Id == request.PersonProfileSkillId, cancellationToken),
+                            PersonProfileSkill = await context.PersonProfileSkills.FirstAsync(x => x.Id == request.PersonProfileSkillId, cancellationToken),
                         });
                     }
                 }
@@ -45,12 +38,12 @@ public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkill
                     if (skill is not null)
                     {
                         exp.Skills.Remove(skill);
-                        _context.PersonProfileExperienceSkills.Remove(skill);
+                        context.PersonProfileExperienceSkills.Remove(skill);
                     }
                 }
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

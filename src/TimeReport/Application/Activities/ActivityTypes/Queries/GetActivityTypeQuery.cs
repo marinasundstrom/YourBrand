@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Queries;
 
 public record GetActivityTypeQuery(string ActivityId) : IRequest<ActivityTypeDto>
 {
-    public class GetActivityQueryHandler : IRequestHandler<GetActivityTypeQuery, ActivityTypeDto>
+    public class GetActivityQueryHandler(ITimeReportContext context) : IRequestHandler<GetActivityTypeQuery, ActivityTypeDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetActivityQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ActivityTypeDto> Handle(GetActivityTypeQuery request, CancellationToken cancellationToken)
         {
-            var activityType = await _context.ActivityTypes
+            var activityType = await context.ActivityTypes
                .Include(x => x.Project)
                .AsNoTracking()
                .AsSplitQuery()

@@ -9,15 +9,8 @@ namespace YourBrand.Payments.Application.Queries;
 
 public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null, string? InvoiceId = null) : IRequest<ItemsResult<PaymentDto>>
 {
-    public class Handler : IRequestHandler<GetPayments, ItemsResult<PaymentDto>>
+    public class Handler(IPaymentsContext context) : IRequestHandler<GetPayments, ItemsResult<PaymentDto>>
     {
-        private readonly IPaymentsContext _context;
-
-        public Handler(IPaymentsContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<PaymentDto>> Handle(GetPayments request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -30,7 +23,7 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Payments
+            var query = context.Payments
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Created)

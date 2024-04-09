@@ -19,25 +19,17 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence;
 
-public class AccountingContext : DbContext, IAccountingContext
+public class AccountingContext(DbContextOptions<AccountingContext> options,
+    ITenantContext tenantContext,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IAccountingContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    private readonly TenantId _tenantId;
-
-    public AccountingContext(DbContextOptions<AccountingContext> options,
-        ITenantContext tenantContext,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-
-        _tenantId = tenantContext.TenantId.GetValueOrDefault();
-    }
+    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

@@ -9,25 +9,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 public record GetPersonProfileQuery(string Id) : IRequest<PersonProfileDto>
 {
-    class GetPersonProfileQueryHandler : IRequestHandler<GetPersonProfileQuery, PersonProfileDto?>
+    class GetPersonProfileQueryHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<GetPersonProfileQuery, PersonProfileDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public GetPersonProfileQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<PersonProfileDto?> Handle(GetPersonProfileQuery request, CancellationToken cancellationToken)
         {
-            var personProfile = await _context
+            var personProfile = await context
                .PersonProfiles
                .Include(x => x.Industry)
                .Include(x => x.Organization)
@@ -41,7 +29,7 @@ public record GetPersonProfileQuery(string Id) : IRequest<PersonProfileDto>
                 return null;
             }
 
-            return personProfile.ToDto(_urlHelper);
+            return personProfile.ToDto(urlHelper);
         }
     }
 }

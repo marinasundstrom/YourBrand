@@ -11,19 +11,12 @@ namespace YourBrand.Marketing.Application.Addresses;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public class AddressesController : ControllerBase
+public class AddressesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public AddressesController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ItemsResult<AddressDto>>> GetAddresses(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetAddresses(page, pageSize), cancellationToken);
+        var result = await mediator.Send(new GetAddresses(page, pageSize), cancellationToken);
         return Ok(result);
     }
 }

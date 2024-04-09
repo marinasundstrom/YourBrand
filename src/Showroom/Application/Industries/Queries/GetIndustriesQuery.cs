@@ -11,22 +11,13 @@ namespace YourBrand.Showroom.Application.Industries.Queries;
 
 public record GetIndustriesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<IndustryDto>>
 {
-    class GetIndustriesQueryHandler : IRequestHandler<GetIndustriesQuery, Results<IndustryDto>>
+    class GetIndustriesQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetIndustriesQuery, Results<IndustryDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetIndustriesQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<Results<IndustryDto>> Handle(GetIndustriesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Industry> result = _context
+            IQueryable<Industry> result = context
                     .Industries
                      //.OrderBy(o => o.Created)
                      .AsNoTracking()

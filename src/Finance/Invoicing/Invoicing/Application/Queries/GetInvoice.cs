@@ -8,18 +8,11 @@ namespace YourBrand.Invoicing.Application.Queries;
 
 public record GetInvoice(string InvoiceId) : IRequest<InvoiceDto?>
 {
-    public class Handler : IRequestHandler<GetInvoice, InvoiceDto?>
+    public class Handler(IInvoicingContext context) : IRequestHandler<GetInvoice, InvoiceDto?>
     {
-        private readonly IInvoicingContext _context;
-
-        public Handler(IInvoicingContext context)
-        {
-            _context = context;
-        }
-
         public async Task<InvoiceDto?> Handle(GetInvoice request, CancellationToken cancellationToken)
         {
-            var invoice = await _context.Invoices
+            var invoice = await context.Invoices
                 .Include(i => i.Items)
                 .AsSplitQuery()
                 .AsNoTracking()

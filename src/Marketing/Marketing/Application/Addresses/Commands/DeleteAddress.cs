@@ -8,18 +8,11 @@ namespace YourBrand.Marketing.Application.Addresses.Commands;
 
 public record DeleteAddress(string AddressId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteAddress>
+    public class Handler(IMarketingContext context) : IRequestHandler<DeleteAddress>
     {
-        private readonly IMarketingContext _context;
-
-        public Handler(IMarketingContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteAddress request, CancellationToken cancellationToken)
         {
-            var address = await _context.Addresses
+            var address = await context.Addresses
                 //.Include(i => i.Addresses)
                 .AsSplitQuery()
                 .AsNoTracking()
@@ -30,9 +23,9 @@ public record DeleteAddress(string AddressId) : IRequest
                 throw new Exception();
             }
 
-            _context.Addresses.Remove(address);
+            context.Addresses.Remove(address);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -13,30 +13,15 @@ using YourBrand.Notifications.Contracts;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
-public class WarehouseItemEventHandler
+public class WarehouseItemEventHandler(
+    IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient,
+    ILogger<WarehouseItemEventHandler> logger, IUserContext userContext)
 : IDomainEventHandler<WarehouseItemCreated>,
   IDomainEventHandler<WarehouseItemQuantityOnHandUpdated>,
   IDomainEventHandler<WarehouseItemsPicked>,
   IDomainEventHandler<WarehouseItemsReserved>,
   IDomainEventHandler<WarehouseItemQuantityAvailableUpdated>
 {
-    private readonly IInventoryContext _context;
-    private readonly IPublishEndpoint _publishEndpoint;
-    private readonly INotificationsClient _notificationsClient;
-    private readonly ILogger<WarehouseItemEventHandler> _logger;
-    private readonly IUserContext _userContext;
-
-    public WarehouseItemEventHandler(
-        IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient,
-        ILogger<WarehouseItemEventHandler> logger, IUserContext userContext)
-    {
-        _context = context;
-        _publishEndpoint = publishEndpoint;
-        _notificationsClient = notificationsClient;
-        _logger = logger;
-        _userContext = userContext;
-    }
-
     public async Task Handle(WarehouseItemCreated notification, CancellationToken cancellationToken)
     {
     }
@@ -55,7 +40,7 @@ public class WarehouseItemEventHandler
 
     public async Task Handle(WarehouseItemQuantityAvailableUpdated notification, CancellationToken cancellationToken)
     {
-        var item = await _context.WarehouseItems
+        var item = await context.WarehouseItems
             .Include(x => x.Item)
             .Include(x => x.Warehouse)
             .ThenInclude(x => x.Site)
@@ -66,7 +51,7 @@ public class WarehouseItemEventHandler
             return;
         }
 
-        await _publishEndpoint.Publish(new QuantityAvailableChanged(item.ItemId, notification.WarehouseId, notification.Quantity));
+        await publishEndpoint.Publish(new QuantityAvailableChanged(item.ItemId, notification.WarehouseId, notification.Quantity));
 
         if (notification.Quantity <= item.QuantityThreshold
                 && notification.OldQuantity > item.QuantityThreshold)
@@ -89,14 +74,14 @@ public class WarehouseItemEventHandler
                 <b>Site:</b>  {item.Warehouse.Site.Name}<br />
                 <b>Quantity available:</b>  {item.QuantityAvailable}<br />
                 ";
-        await _publishEndpoint.Publish(new SendEmail("test@email.com", subject, body));
+        await publishEndpoint.Publish(new SendEmail("test@email.com", subject, body));
     }
 
     private async Task PostNotification(WarehouseItem? item)
     {
         try
         {
-            await _notificationsClient.CreateNotificationAsync(new CreateNotification
+            await notificationsClient.CreateNotificationAsync(new CreateNotification
             {
                 Content = $"Quantity available of {item.Item.Name} is below threshold.",
                 UserId = item.CreatedById,
@@ -105,7 +90,7 @@ public class WarehouseItemEventHandler
         }
         catch (Exception exc)
         {
-            _logger.LogError(exc, "Failed to post notification.");
+            logger.LogError(exc, "Failed to post notification.");
         }
     }
 }

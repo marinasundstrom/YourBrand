@@ -13,16 +13,10 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Persistence;
 
-public sealed class SalesContext : DomainDbContext, IUnitOfWork, ISalesContext
+public sealed class SalesContext(
+    DbContextOptions<SalesContext> options, ITenantContext tenantContext) : DomainDbContext(options), IUnitOfWork, ISalesContext
 {
-    private readonly string? _tenantId;
-
-    public SalesContext(
-        DbContextOptions<SalesContext> options, ITenantContext tenantContext)
-        : base(options)
-    {
-        _tenantId = tenantContext.TenantId;
-    }
+    private readonly string? _tenantId = tenantContext.TenantId;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -9,18 +9,11 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteInvoiceItem>
+    public class Handler(IInvoicingContext context) : IRequestHandler<DeleteInvoiceItem>
     {
-        private readonly IInvoicingContext _context;
-
-        public Handler(IInvoicingContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteInvoiceItem request, CancellationToken cancellationToken)
         {
-            var invoice = await _context.Invoices
+            var invoice = await context.Invoices
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -33,7 +26,7 @@ public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IReque
 
             invoice.DeleteItem(item);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

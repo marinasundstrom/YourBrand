@@ -19,17 +19,8 @@ public record ProductImportResult(IEnumerable<string> Diagnostics);
 
 public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImportResult>>
 {
-    public sealed class Handler : IRequestHandler<ImportProducts, Result<ProductImportResult>>
+    public sealed class Handler(CatalogContext context, IProductImageUploader productImageUploader) : IRequestHandler<ImportProducts, Result<ProductImportResult>>
     {
-        private readonly CatalogContext _context;
-        private readonly IProductImageUploader _productImageUploader;
-
-        public Handler(CatalogContext context, IProductImageUploader productImageUploader)
-        {
-            _context = context;
-            _productImageUploader = productImageUploader;
-        }
-
         public async Task<Result<ProductImportResult>> Handle(ImportProducts request, CancellationToken cancellationToken)
         {
             var name = DateTime.UtcNow.Ticks.ToString();
@@ -59,7 +50,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
                     string productHandle = GetHandle(record);
 
-                    var productExists = _context.Products
+                    var productExists = context.Products
                         .Where(x => x.Store == store)
                         .Any(x => x.Sku == record.Sku || x.Handle == record.Handle);
 
@@ -98,9 +89,9 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
                 }
             }
 
-            _context.Products.AddRange(products.Select(x => x.Value));
+            context.Products.AddRange(products.Select(x => x.Value));
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             string ArchiveDirPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads/{name}");
 
@@ -115,7 +106,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
                 var fileName = product.Image.Url;
 
-                await _productImageUploader.TryDeleteProductImage(product.Id, fileName);
+                await productImageUploader.TryDeleteProductImage(product.Id, fileName);
 
                 Stream? stream = null;
 
@@ -137,11 +128,11 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
                     if (!string.IsNullOrEmpty(fileName))
                     {
                         var mimeType = GetMimeTypeForFileExtension(fileName);
-                        path = await _productImageUploader.UploadProductImage(product.Id, fileName, stream!, mimeType);
+                        path = await productImageUploader.UploadProductImage(product.Id, fileName, stream!, mimeType);
                     }
                     else
                     {
-                        path = await _productImageUploader.GetPlaceholderImageUrl();
+                        path = await productImageUploader.GetPlaceholderImageUrl();
                     }
 
                     var image2 = new ProductImage("Image", string.Empty, path);
@@ -156,7 +147,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
                 }
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             Directory.Delete(ArchiveDirPath, true);
 
@@ -176,7 +167,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
         {
             if (!categories.TryGetValue(categoryId, out var category))
             {
-                category = await _context.ProductCategories
+                category = await context.ProductCategories
                     .Where(x => x.Store == store)
                     .Include(x => x.Parent)
                     .FirstAsync(x => x.Id == categoryId, cancellationToken);
@@ -192,7 +183,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
         {
             if (!brands.TryGetValue(handle, out var brand))
             {
-                brand = await _context.Brands.FirstAsync(x => x.Handle == handle, cancellationToken);
+                brand = await context.Brands.FirstAsync(x => x.Handle == handle, cancellationToken);
                 brands.Add(handle, brand);
             }
             return brand;
@@ -204,7 +195,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
         {
             if (!stores.TryGetValue(handle, out var store))
             {
-                store = await _context.Stores.FirstAsync(x => x.Handle == handle, cancellationToken);
+                store = await context.Stores.FirstAsync(x => x.Handle == handle, cancellationToken);
                 stores.Add(handle, store);
             }
             return store;
@@ -216,7 +207,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
         {
             if (!products.TryGetValue(sku, out var product))
             {
-                product = await _context.Products
+                product = await context.Products
                     .Where(x => x.Sku == sku)
                     .FirstAsync(x => x.Sku == sku, cancellationToken);
 

@@ -8,18 +8,11 @@ namespace YourBrand.Payments.Application.Queries;
 
 public record GetPaymentByReference(string Reference) : IRequest<PaymentDto?>
 {
-    public class Handler : IRequestHandler<GetPaymentByReference, PaymentDto?>
+    public class Handler(IPaymentsContext context) : IRequestHandler<GetPaymentByReference, PaymentDto?>
     {
-        private readonly IPaymentsContext _context;
-
-        public Handler(IPaymentsContext context)
-        {
-            _context = context;
-        }
-
         public async Task<PaymentDto?> Handle(GetPaymentByReference request, CancellationToken cancellationToken)
         {
-            var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Reference == request.Reference);
+            var payment = await context.Payments.FirstOrDefaultAsync(p => p.Reference == request.Reference);
 
             return payment?.ToDto();
         }

@@ -13,23 +13,10 @@ using YourBrand.Messenger.Contracts;
 namespace YourBrand.Messenger.Hubs;
 
 [Authorize(AuthenticationSchemes = Messenger.Authentication.AuthSchemes.Default)]
-public class MessageHub : Hub<IMessageClient>
+public class MessageHub(IMediator mediator, ISettableUserContext userContext,
+    IRequestClient<PostMessage> postMessageClient,
+    IBus bus) : Hub<IMessageClient>
 {
-    private readonly IMediator _mediator;
-    private readonly ISettableUserContext _userContext;
-    private readonly IRequestClient<PostMessage> _postMessageClient;
-    private readonly IBus _bus;
-
-    public MessageHub(IMediator mediator, ISettableUserContext userContext,
-        IRequestClient<PostMessage> postMessageClient,
-        IBus bus)
-    {
-        _mediator = mediator;
-        _userContext = userContext;
-        _postMessageClient = postMessageClient;
-        _bus = bus;
-    }
-
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
@@ -53,30 +40,30 @@ public class MessageHub : Hub<IMessageClient>
 
     public async Task SendMessage(string conversationId, string text, string? replyToId)
     {
-        _userContext.SetCurrentUser(this.Context.User!);
+        userContext.SetCurrentUser(this.Context.User!);
 
-        var response = await _postMessageClient.GetResponse<MessageDto>(new PostMessage(_userContext.GetAccessToken()!, conversationId, text, replyToId));
+        var response = await postMessageClient.GetResponse<MessageDto>(new PostMessage(userContext.GetAccessToken()!, conversationId, text, replyToId));
     }
 
     public async Task MessageRead(string conversationId, string id)
     {
-        _userContext.SetCurrentUser(this.Context.User!);
+        userContext.SetCurrentUser(this.Context.User!);
 
-        await _bus.Publish(new MarkMessageAsRead(_userContext.GetAccessToken()!, conversationId, id));
+        await bus.Publish(new MarkMessageAsRead(userContext.GetAccessToken()!, conversationId, id));
     }
 
     public async Task EditMessage(string conversationId, string id, string text)
     {
-        _userContext.SetCurrentUser(this.Context.User!);
+        userContext.SetCurrentUser(this.Context.User!);
 
-        await _bus.Publish(new UpdateMessage(_userContext.GetAccessToken()!, conversationId, id, text));
+        await bus.Publish(new UpdateMessage(userContext.GetAccessToken()!, conversationId, id, text));
     }
 
     public async Task DeleteMessage(string conversationId, string id)
     {
-        _userContext.SetCurrentUser(this.Context.User!);
+        userContext.SetCurrentUser(this.Context.User!);
 
-        await _bus.Publish(new DeleteMessage(_userContext.GetAccessToken()!, conversationId, id));
+        await bus.Publish(new DeleteMessage(userContext.GetAccessToken()!, conversationId, id));
     }
     public override async Task OnDisconnectedAsync(Exception? exception)
     {

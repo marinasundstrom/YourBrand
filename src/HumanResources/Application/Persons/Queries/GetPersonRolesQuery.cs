@@ -10,18 +10,11 @@ namespace YourBrand.HumanResources.Application.Persons.Queries;
 
 public record GetPersonRolesQuery(string PersonId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, HumanResources.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
-    public class GetPersonRolesQueryHandler : IRequestHandler<GetPersonRolesQuery, ItemsResult<RoleDto>>
+    public class GetPersonRolesQueryHandler(IApplicationDbContext context) : IRequestHandler<GetPersonRolesQuery, ItemsResult<RoleDto>>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetPersonRolesQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<RoleDto>> Handle(GetPersonRolesQuery request, CancellationToken cancellationToken)
         {
-            var person = await _context.Persons
+            var person = await context.Persons
                   .FirstOrDefaultAsync(x => x.Id == request.PersonId, cancellationToken);
 
             if (person is null)
@@ -29,7 +22,7 @@ public record GetPersonRolesQuery(string PersonId, int Page = 0, int PageSize = 
                 throw new Exception("Person not found");
             }
 
-            var query = _context.Roles
+            var query = context.Roles
                 .Where(x => x.Persons.Any(x => x.Id == request.PersonId))
                 //.OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)

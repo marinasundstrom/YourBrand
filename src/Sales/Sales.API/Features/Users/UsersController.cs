@@ -12,15 +12,8 @@ namespace YourBrand.Sales.Features.OrderManagement.Users;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public sealed class UsersController : ControllerBase
+public sealed class UsersController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public UsersController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<UserDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]

@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
 public record GetAttribute(string AttributeId) : IRequest<AttributeDto>
 {
-    public class Handler : IRequestHandler<GetAttribute, AttributeDto>
+    public class Handler(CatalogContext context) : IRequestHandler<GetAttribute, AttributeDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<AttributeDto> Handle(GetAttribute request, CancellationToken cancellationToken)
         {
-            var attribute = await _context.Attributes
+            var attribute = await context.Attributes
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Group)

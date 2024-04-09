@@ -4,18 +4,11 @@ using YourBrand.Showroom.Application.Common.Interfaces;
 
 namespace YourBrand.Showroom.WebApi.Services;
 
-public class FileUploaderService : IFileUploaderService
+public class FileUploaderService(BlobServiceClient blobServiceClient) : IFileUploaderService
 {
-    private readonly BlobServiceClient _blobServiceClient;
-
-    public FileUploaderService(BlobServiceClient blobServiceClient)
-    {
-        _blobServiceClient = blobServiceClient;
-    }
-
     public async Task UploadFileAsync(string id, Stream stream, CancellationToken cancellationToken = default)
     {
-        var blobContainerClient = _blobServiceClient.GetBlobContainerClient("images");
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
 
         await blobContainerClient.DeleteBlobIfExistsAsync(id);
 

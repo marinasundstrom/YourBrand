@@ -7,17 +7,8 @@ namespace YourBrand.HumanResources.Application.Teams.Commands;
 
 public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
 {
-    public class Handler : IRequestHandler<AddTeamMemberCommand>
+    public class Handler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<AddTeamMemberCommand>
     {
-        private readonly IApplicationDbContext context;
-        private readonly IEventPublisher _eventPublisher;
-
-        public Handler(IApplicationDbContext context, IEventPublisher eventPublisher)
-        {
-            this.context = context;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams
@@ -35,7 +26,7 @@ public record AddTeamMemberCommand(string TeamId, string PersonId) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new Contracts.TeamMemberAdded(team.Id, user.Id));
+            await eventPublisher.PublishEvent(new Contracts.TeamMemberAdded(team.Id, user.Id));
 
         }
     }

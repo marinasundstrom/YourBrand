@@ -8,13 +8,9 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Analytics.Infrastructure.Persistence;
 
-public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
+public sealed class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
 {
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

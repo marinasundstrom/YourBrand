@@ -4,15 +4,8 @@ namespace YourBrand.Analytics.Application.Features.Tracking;
 
 public record InitClientCommand(string UserAgent) : IRequest<string>
 {
-    public class Handler : IRequestHandler<InitClientCommand, string>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<InitClientCommand, string>
     {
-        private readonly IApplicationDbContext context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<string> Handle(InitClientCommand request, CancellationToken cancellationToken)
         {
             int number = System.Security.Cryptography.RandomNumberGenerator.GetInt32(1000000, 2000000);

@@ -11,17 +11,8 @@ namespace YourBrand.Transactions.Application.Queries;
 
 public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Status = null) : IRequest<ItemsResult<TransactionDto>>
 {
-    public class Handler : IRequestHandler<GetTransactions, ItemsResult<TransactionDto>>
+    public class Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint) : IRequestHandler<GetTransactions, ItemsResult<TransactionDto>>
     {
-        private readonly ITransactionsContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
-
-        public Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint)
-        {
-            _context = context;
-            _publishEndpoint = publishEndpoint;
-        }
-
         public async Task<ItemsResult<TransactionDto>> Handle(GetTransactions request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -34,7 +25,7 @@ public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Statu
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Transactions
+            var query = context.Transactions
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Date)

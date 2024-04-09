@@ -7,16 +7,9 @@ using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Persistence.Repositories.Mocks;
 
-public sealed class OrderRepository : IOrderRepository
+public sealed class OrderRepository(SalesContext context) : IOrderRepository
 {
-    readonly SalesContext context;
-    readonly DbSet<Order> dbSet;
-
-    public OrderRepository(SalesContext context)
-    {
-        this.context = context;
-        this.dbSet = context.Set<Order>();
-    }
+    readonly DbSet<Order> dbSet = context.Set<Order>();
 
     public IQueryable<Order> GetAll()
     {

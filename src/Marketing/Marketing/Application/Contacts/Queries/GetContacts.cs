@@ -8,15 +8,8 @@ namespace YourBrand.Marketing.Application.Contacts.Queries;
 
 public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ContactDto>>
 {
-    public class Handler : IRequestHandler<GetContacts, ItemsResult<ContactDto>>
+    public class Handler(IMarketingContext context) : IRequestHandler<GetContacts, ItemsResult<ContactDto>>
     {
-        private readonly IMarketingContext _context;
-
-        public Handler(IMarketingContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ContactDto>> Handle(GetContacts request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -29,7 +22,7 @@ public record GetContacts(int Page = 0, int PageSize = 10, string? CampaignId = 
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Contacts
+            var query = context.Contacts
                 .AsSplitQuery()
                 .AsNoTracking()
                 .AsQueryable();

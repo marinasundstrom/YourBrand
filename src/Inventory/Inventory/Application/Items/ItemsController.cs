@@ -14,50 +14,43 @@ namespace YourBrand.Inventory.Application.Items;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public class ItemsController : ControllerBase
+public class ItemsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ItemsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<ItemsResult<ItemDto>> GetItems(int page = 1, int pageSize = 10, string? groupId = null, string? warehouseId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetItems(page - 1, pageSize, groupId, warehouseId, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetItems(page - 1, pageSize, groupId, warehouseId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
     public async Task<ItemDto?> GetItem(string id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetItem(id), cancellationToken);
+        return await mediator.Send(new GetItem(id), cancellationToken);
     }
 
 
     [HttpGet("{id}/Warehouse")]
     public async Task<ItemsResult<WarehouseItemDto>> GetWarehouseItems(string? id = null, int page = 1, int pageSize = 10, string? warehouseId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetWarehouseItems(page - 1, pageSize, warehouseId, id, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetWarehouseItems(page - 1, pageSize, warehouseId, id, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpPost]
     public async Task<ItemDto> CreateItem(CreateItemDto dto, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new AddItem(dto.Id, dto.Name, dto.Type, dto.GroupId, dto.Unit), cancellationToken);
+        return await mediator.Send(new AddItem(dto.Id, dto.Name, dto.Type, dto.GroupId, dto.Unit), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateItem(string id, UpdateItemDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateItem(id, dto.Id, dto.Name, dto.GroupId, dto.Unit), cancellationToken);
+        await mediator.Send(new UpdateItem(id, dto.Id, dto.Name, dto.GroupId, dto.Unit), cancellationToken);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteItem(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteItem(id), cancellationToken);
+        await mediator.Send(new DeleteItem(id), cancellationToken);
     }
 }
 

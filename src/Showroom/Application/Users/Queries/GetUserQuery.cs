@@ -9,18 +9,11 @@ namespace YourBrand.Showroom.Application.Users.Queries;
 
 public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
+    public class GetUserQueryHandler(IShowroomContext context) : IRequestHandler<GetUserQuery, UserDto>
     {
-        readonly IShowroomContext _context;
-
-        public GetUserQueryHandler(IShowroomContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 

@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
 public record GetProductAttributes(long ProductId) : IRequest<IEnumerable<ProductAttributeDto>>
 {
-    public class Handler : IRequestHandler<GetProductAttributes, IEnumerable<ProductAttributeDto>>
+    public class Handler(CatalogContext context) : IRequestHandler<GetProductAttributes, IEnumerable<ProductAttributeDto>>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<ProductAttributeDto>> Handle(GetProductAttributes request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.ProductAttributes)

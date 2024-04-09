@@ -14,28 +14,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
 {
-    public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, Result<EntryDto, DomainException>>
+    public class CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork) : IRequestHandler<CreateEntryCommand, Result<EntryDto, DomainException>>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IReportingPeriodRepository _reportingPeriodRepository;
-        private readonly IProjectRepository _projectRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-        private readonly IUserContext _userContext;
-
-        public CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _reportingPeriodRepository = reportingPeriodRepository;
-            _projectRepository = projectRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-            _userContext = userContext;
-        }
-
         public async Task<Result<EntryDto, DomainException>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -47,13 +30,13 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new Error(new TimeSheetClosedException(request.TimeSheetId));
             }
 
-            var group = await _reportingPeriodRepository.GetReportingPeriod(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
+            var group = await reportingPeriodRepository.GetReportingPeriod(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
 
             if (group is null)
             {
                 group = new ReportingPeriod(timeSheet.User, request.Date.Year, request.Date.Month);
 
-                _reportingPeriodRepository.AddReportingPeriod(group);
+                reportingPeriodRepository.AddReportingPeriod(group);
             }
             else
             {
@@ -73,7 +56,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
                 return new Error(new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId));
             }
 
-            var project = await _projectRepository.GetProject(request.ProjectId, cancellationToken);
+            var project = await projectRepository.GetProject(request.ProjectId, cancellationToken);
 
             if (project is null)
             {
@@ -115,7 +98,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
 
             group.AddEntry(entry);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new Ok(entry.ToDto());
         }

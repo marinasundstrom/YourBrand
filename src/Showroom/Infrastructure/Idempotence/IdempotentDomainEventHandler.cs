@@ -7,20 +7,11 @@ using YourBrand.Showroom.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Showroom.Infrastructure.Idempotence;
 
-public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHandler<TDomainEvent>
+public sealed class IdempotentDomainEventHandler<TDomainEvent>(
+    IDomainEventHandler<TDomainEvent> decorated,
+    ShowroomContext dbContext) : IDomainEventHandler<TDomainEvent>
     where TDomainEvent : DomainEvent
 {
-    private readonly IDomainEventHandler<TDomainEvent> decorated;
-    private readonly ShowroomContext dbContext;
-
-    public IdempotentDomainEventHandler(
-        IDomainEventHandler<TDomainEvent> decorated,
-        ShowroomContext dbContext)
-    {
-        this.decorated = decorated;
-        this.dbContext = dbContext;
-    }
-
     public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
     {
         string consumer = decorated.GetType().Name;

@@ -6,15 +6,8 @@ namespace YourBrand.Analytics.Application.Features.Tracking;
 
 public record RegisterGeoLocation(string ClientId, string SessionId, YourBrand.Analytics.Domain.ValueObjects.Coordinates Coordinates) : IRequest
 {
-    public class Handler : IRequestHandler<RegisterGeoLocation>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<RegisterGeoLocation>
     {
-        private readonly IApplicationDbContext context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(RegisterGeoLocation request, CancellationToken cancellationToken)
         {
             var session = await context.Sessions

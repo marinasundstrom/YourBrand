@@ -10,22 +10,13 @@ namespace YourBrand.Marketing.Application.Discounts.Queries;
 
 public record GetDiscountsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<DiscountDto>>
 {
-    class GetDiscountsQueryHandler : IRequestHandler<GetDiscountsQuery, ItemsResult<DiscountDto>>
+    class GetDiscountsQueryHandler(
+        IMarketingContext context,
+        IUserContext userContext) : IRequestHandler<GetDiscountsQuery, ItemsResult<DiscountDto>>
     {
-        private readonly IMarketingContext _context;
-        private readonly IUserContext userContext;
-
-        public GetDiscountsQueryHandler(
-            IMarketingContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ItemsResult<DiscountDto>> Handle(GetDiscountsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Discount> result = _context
+            IQueryable<Discount> result = context
                     .Discounts
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

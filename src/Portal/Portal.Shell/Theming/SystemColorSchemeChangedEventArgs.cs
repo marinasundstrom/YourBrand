@@ -1,11 +1,6 @@
 ﻿namespace YourBrand.Portal.Theming;
 
-public class SystemColorSchemeChangedEventArgs : EventArgs
+public class SystemColorSchemeChangedEventArgs(ColorScheme colorScheme) : EventArgs
 {
-    public SystemColorSchemeChangedEventArgs(ColorScheme colorScheme)
-    {
-        ColorScheme = colorScheme;
-    }
-
-    public ColorScheme ColorScheme { get; }
+    public ColorScheme ColorScheme { get; } = colorScheme;
 }

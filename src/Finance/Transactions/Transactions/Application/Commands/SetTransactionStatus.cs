@@ -9,22 +9,15 @@ namespace YourBrand.Transactions.Application.Commands;
 
 public record SetTransactionStatus(string TransactionId, TransactionStatus Status) : IRequest
 {
-    public class Handler : IRequestHandler<SetTransactionStatus>
+    public class Handler(ITransactionsContext context) : IRequestHandler<SetTransactionStatus>
     {
-        private readonly ITransactionsContext _context;
-
-        public Handler(ITransactionsContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(SetTransactionStatus request, CancellationToken cancellationToken)
         {
-            var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
+            var transaction = await context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
             transaction.SetStatus(request.Status);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

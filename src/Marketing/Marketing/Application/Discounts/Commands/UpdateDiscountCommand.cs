@@ -13,15 +13,8 @@ public record UpdateDiscountCommand(string Id,
                 double Percentage,
                 decimal Amount) : IRequest
 {
-    public class UpdateDiscountCommandHandler : IRequestHandler<UpdateDiscountCommand>
+    public class UpdateDiscountCommandHandler(IMarketingContext context) : IRequestHandler<UpdateDiscountCommand>
     {
-        private readonly IMarketingContext context;
-
-        public UpdateDiscountCommandHandler(IMarketingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(UpdateDiscountCommand request, CancellationToken cancellationToken)
         {
             var discount = await context.Discounts.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

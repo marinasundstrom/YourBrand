@@ -11,22 +11,13 @@ namespace YourBrand.Showroom.Application.Organizations.Queries;
 
 public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<OrganizationDto>>
 {
-    class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, Results<OrganizationDto>>
+    class GetOrganizationsQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetOrganizationsQuery, Results<OrganizationDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetOrganizationsQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<Results<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Organization> result = _context
+            IQueryable<Organization> result = context
                     .Organizations
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

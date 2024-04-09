@@ -9,22 +9,13 @@ namespace YourBrand.Showroom.Application.Skills.Queries;
 
 public record GetSkillQuery(string Id) : IRequest<SkillDto?>
 {
-    class GetSkillQueryHandler : IRequestHandler<GetSkillQuery, SkillDto?>
+    class GetSkillQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetSkillQuery, SkillDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetSkillQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<SkillDto?> Handle(GetSkillQuery request, CancellationToken cancellationToken)
         {
-            var skill = await _context
+            var skill = await context
                .Skills
                .Include(x => x.Area)
                .ThenInclude(x => x.Industry)

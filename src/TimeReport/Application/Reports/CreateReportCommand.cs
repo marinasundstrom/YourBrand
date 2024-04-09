@@ -13,21 +13,14 @@ namespace YourBrand.TimeReport.Application.Reports.Queries;
 
 public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime StartDate, DateTime EndDate, int[] Statuses, ReportMode Mode) : IRequest<Stream?>
 {
-    public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Stream?>
+    public class CreateReportCommandHandler(ITimeReportContext context) : IRequestHandler<CreateReportCommand, Stream?>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateReportCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<Stream?> Handle(CreateReportCommand request, CancellationToken cancellationToken)
         {
             DateOnly startDate2 = DateOnly.FromDateTime(request.StartDate);
             DateOnly endDate2 = DateOnly.FromDateTime(request.EndDate);
 
-            var query = _context.Entries
+            var query = context.Entries
                 .Include(p => p.TimeSheet)
                 .ThenInclude(p => p.User)
                 .Include(p => p.Project)

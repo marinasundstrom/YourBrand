@@ -15,20 +15,9 @@ using YourBrand.Invoicing.Infrastructure.Persistence.Outbox;
 namespace YourBrand.Invoicing.Infrastructure.BackgroundJobs;
 
 [DisallowConcurrentExecution]
-public sealed class ProcessOutboxMessagesJob : IJob
+public sealed class ProcessOutboxMessagesJob(InvoicingContext dbContext, IDomainEventDispatcher domainEventDispatcher,
+    ILogger<ProcessOutboxMessagesJob> logger) : IJob
 {
-    private readonly InvoicingContext dbContext;
-    private readonly IDomainEventDispatcher domainEventDispatcher;
-    private readonly ILogger<ProcessOutboxMessagesJob> logger;
-
-    public ProcessOutboxMessagesJob(InvoicingContext dbContext, IDomainEventDispatcher domainEventDispatcher,
-        ILogger<ProcessOutboxMessagesJob> logger)
-    {
-        this.dbContext = dbContext;
-        this.domainEventDispatcher = domainEventDispatcher;
-        this.logger = logger;
-    }
-
     public async Task Execute(IJobExecutionContext context)
     {
         logger.LogDebug("Processing Outbox");

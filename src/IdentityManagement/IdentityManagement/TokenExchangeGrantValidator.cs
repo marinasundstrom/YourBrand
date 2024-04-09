@@ -9,14 +9,8 @@ using IdentityModel;
 
 namespace YourBrand.IdentityManagement;
 
-public class TokenExchangeGrantValidator : IExtensionGrantValidator
+public class TokenExchangeGrantValidator(ITokenValidator validator) : IExtensionGrantValidator
 {
-    private readonly ITokenValidator _validator;
-
-    public TokenExchangeGrantValidator(ITokenValidator validator)
-    {
-        _validator = validator;
-    }
 
     // register for urn:ietf:params:oauth:grant-type:token-exchange
     public string GrantType => OidcConstants.GrantTypes.TokenExchange;
@@ -51,7 +45,7 @@ public class TokenExchangeGrantValidator : IExtensionGrantValidator
         }
 
         // validate the incoming access token with the built-in token validator
-        var validationResult = await _validator.ValidateAccessTokenAsync(subjectToken);
+        var validationResult = await validator.ValidateAccessTokenAsync(subjectToken);
         if (validationResult.IsError)
         {
             return;

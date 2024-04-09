@@ -14,17 +14,8 @@ public sealed record UpdateRemainingHours(int Id, double? Hours) : IRequest<Resu
         }
     }
 
-    public sealed class Handler : IRequestHandler<UpdateRemainingHours, Result>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateRemainingHours, Result>
     {
-        private readonly ITicketRepository ticketRepository;
-        private readonly IUnitOfWork unitOfWork;
-
-        public Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork)
-        {
-            this.ticketRepository = ticketRepository;
-            this.unitOfWork = unitOfWork;
-        }
-
         public async Task<Result> Handle(UpdateRemainingHours request, CancellationToken cancellationToken)
         {
             var ticket = await ticketRepository.FindByIdAsync(request.Id, cancellationToken);

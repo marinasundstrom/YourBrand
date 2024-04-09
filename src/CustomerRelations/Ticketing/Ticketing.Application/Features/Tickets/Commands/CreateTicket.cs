@@ -20,21 +20,8 @@ public sealed record CreateTicket(string Title, string? Description, int Status,
         }
     }
 
-    public sealed class Handler : IRequestHandler<CreateTicket, Result<TicketDto>>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateTicket, Result<TicketDto>>
     {
-        private readonly ITicketRepository ticketRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IApplicationDbContext context;
-        private readonly IDomainEventDispatcher domainEventDispatcher;
-
-        public Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IDomainEventDispatcher domainEventDispatcher)
-        {
-            this.ticketRepository = ticketRepository;
-            this.unitOfWork = unitOfWork;
-            this.context = context;
-            this.domainEventDispatcher = domainEventDispatcher;
-        }
-
         public async Task<Result<TicketDto>> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
             var ticket = new Ticket(request.Title, "", request.Description!);

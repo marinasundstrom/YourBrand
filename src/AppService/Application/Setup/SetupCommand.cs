@@ -8,26 +8,17 @@ namespace YourBrand.Application.Setup;
 
 public record SetupCommand(string OrganizationName, string Email, string Password) : IRequest
 {
-    public class SetupCommandHandler : IRequestHandler<SetupCommand>
+    public class SetupCommandHandler(IRequestClient<CreateOrganization> createOrgClient, IRequestClient<CreatePerson> createPersonClient) : IRequestHandler<SetupCommand>
     {
-        private readonly IRequestClient<CreateOrganization> _createOrgClient;
-        private readonly IRequestClient<CreatePerson> _createPersonClient;
-
-        public SetupCommandHandler(IRequestClient<CreateOrganization> createOrgClient, IRequestClient<CreatePerson> createPersonClient)
-        {
-            _createOrgClient = createOrgClient;
-            _createPersonClient = createPersonClient;
-        }
-
         public async Task Handle(SetupCommand request, CancellationToken cancellationToken)
         {
-            var res = await _createOrgClient.GetResponse<CreateOrganizationResponse>(new CreateOrganization
+            var res = await createOrgClient.GetResponse<CreateOrganizationResponse>(new CreateOrganization
             {
                 Name = request.OrganizationName,
                 FriendlyName = null
             });
 
-            await _createPersonClient.GetResponse<CreatePersonResponse>(new CreatePerson
+            await createPersonClient.GetResponse<CreatePersonResponse>(new CreatePerson
             {
                 OrganizationId = res.Message.Id,
                 FirstName = "Administrator",

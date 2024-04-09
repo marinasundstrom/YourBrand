@@ -7,20 +7,11 @@ using YourBrand.Transactions.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Transactions.Infrastructure.Idempotence;
 
-public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHandler<TDomainEvent>
+public sealed class IdempotentDomainEventHandler<TDomainEvent>(
+    IDomainEventHandler<TDomainEvent> decorated,
+    TransactionsContext dbContext) : IDomainEventHandler<TDomainEvent>
     where TDomainEvent : DomainEvent
 {
-    private readonly IDomainEventHandler<TDomainEvent> decorated;
-    private readonly TransactionsContext dbContext;
-
-    public IdempotentDomainEventHandler(
-        IDomainEventHandler<TDomainEvent> decorated,
-        TransactionsContext dbContext)
-    {
-        this.decorated = decorated;
-        this.dbContext = dbContext;
-    }
-
     public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
     {
         string consumer = decorated.GetType().Name;

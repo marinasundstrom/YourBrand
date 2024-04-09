@@ -6,15 +6,8 @@ using YourBrand.Ticketing.Contracts;
 
 namespace YourBrand.Ticketing.Consumers;
 
-public sealed class UpdateStatusConsumer : IConsumer<UpdateStatus>
+public sealed class UpdateStatusConsumer(IMediator mediator) : IConsumer<UpdateStatus>
 {
-    private readonly IMediator mediator;
-
-    public UpdateStatusConsumer(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     public async Task Consume(ConsumeContext<UpdateStatus> context)
     {
         var message = context.Message;

@@ -10,18 +10,11 @@ namespace YourBrand.IdentityManagement.Application.Users.Queries;
 
 public record GetUserRolesQuery(string UserId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, IdentityManagement.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
-    public class GetUserRolesQueryHandler : IRequestHandler<GetUserRolesQuery, ItemsResult<RoleDto>>
+    public class GetUserRolesQueryHandler(IApplicationDbContext context) : IRequestHandler<GetUserRolesQuery, ItemsResult<RoleDto>>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetUserRolesQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<RoleDto>> Handle(GetUserRolesQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                   .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -29,7 +22,7 @@ public record GetUserRolesQuery(string UserId, int Page = 0, int PageSize = 10, 
                 throw new Exception("User not found");
             }
 
-            var query = _context.Roles
+            var query = context.Roles
                 .Where(x => x.Users.Any(x => x.Id == request.UserId))
                 //.OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)

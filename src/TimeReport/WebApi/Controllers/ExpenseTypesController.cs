@@ -15,27 +15,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class ExpenseTypesController : ControllerBase
+public class ExpenseTypesController(IMediator mediator, ITimeReportContext context) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ExpenseTypesController(IMediator mediator, ITimeReportContext context)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<ExpenseTypeDto>>> GetExpenseTypes(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetExpenseTypesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetExpenseTypesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ExpenseTypeDto>> GetExpenseType(string id, CancellationToken cancellationToken)
     {
-        var expense = await _mediator.Send(new GetExpenseTypeQuery(id), cancellationToken);
+        var expense = await mediator.Send(new GetExpenseTypeQuery(id), cancellationToken);
 
         if (expense is null)
         {
@@ -52,7 +45,7 @@ public class ExpenseTypesController : ControllerBase
     {
         try
         {
-            var expense = await _mediator.Send(new CreateExpenseTypeCommand(createExpenseTypeDto.Name, createExpenseTypeDto.Description), cancellationToken);
+            var expense = await mediator.Send(new CreateExpenseTypeCommand(createExpenseTypeDto.Name, createExpenseTypeDto.Description), cancellationToken);
 
             return Ok(expense);
         }
@@ -68,7 +61,7 @@ public class ExpenseTypesController : ControllerBase
     {
         try
         {
-            var expense = await _mediator.Send(new UpdateExpenseTypeCommand(id, updateExpenseTypeDto.Name, updateExpenseTypeDto.Description), cancellationToken);
+            var expense = await mediator.Send(new UpdateExpenseTypeCommand(id, updateExpenseTypeDto.Name, updateExpenseTypeDto.Description), cancellationToken);
 
             return Ok(expense);
         }
@@ -85,7 +78,7 @@ public class ExpenseTypesController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteExpenseTypeCommand(id), cancellationToken);
+            await mediator.Send(new DeleteExpenseTypeCommand(id), cancellationToken);
 
             return Ok();
         }

@@ -11,18 +11,11 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public record CreateProjectMembershipCommand(string ProjectId, string UserId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
 {
-    public class CreateProjectMembershipCommandHandler : IRequestHandler<CreateProjectMembershipCommand, ProjectMembershipDto>
+    public class CreateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectMembershipCommand, ProjectMembershipDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateProjectMembershipCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProjectMembershipDto> Handle(CreateProjectMembershipCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                         .Include(p => p.Organization)
                         .Include(p => p.Memberships)
                         .ThenInclude(m => m.User)
@@ -34,7 +27,7 @@ public record CreateProjectMembershipCommand(string ProjectId, string UserId, Da
                 throw new ProjectNotFoundException(request.ProjectId);
             }
 
-            var user = await _context.Users
+            var user = await context.Users
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -58,9 +51,9 @@ public record CreateProjectMembershipCommand(string ProjectId, string UserId, Da
                 To = request.To
             };
 
-            _context.ProjectMemberships.Add(m);
+            context.ProjectMemberships.Add(m);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return m.ToDto();
         }

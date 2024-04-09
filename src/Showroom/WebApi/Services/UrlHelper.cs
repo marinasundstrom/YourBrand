@@ -1,18 +1,11 @@
 ﻿using YourBrand.Showroom.Application.Common.Interfaces;
 namespace YourBrand.Showroom.WebApi.Services;
 
-public class UrlHelper : IUrlHelper
+public class UrlHelper(IHttpContextAccessor httpContextAccessor) : IUrlHelper
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public UrlHelper(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public string GetHostUrl()
     {
-        var request = _httpContextAccessor.HttpContext!.Request;
+        var request = httpContextAccessor.HttpContext!.Request;
 
         string host = $"{request.Scheme}://{request.Host}";
 

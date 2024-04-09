@@ -8,31 +8,16 @@ using YourBrand.Invoicing.Client;
 
 namespace YourBrand.Accountant.Services;
 
-public class ReminderService : IReminderService
+public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClient verificationsClient,
+    IDocumentsClient documentsClient, IServiceScopeFactory serviceScopeFactory, ILogger<RefundService> logger) : IReminderService
 {
-    private readonly IInvoicesClient _invoicesClient;
-    private readonly IJournalEntriesClient _verificationsClient;
-    private readonly IDocumentsClient _documentsClient;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly ILogger<RefundService> _logger;
-
-    public ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClient verificationsClient,
-        IDocumentsClient documentsClient, IServiceScopeFactory serviceScopeFactory, ILogger<RefundService> logger)
-    {
-        _invoicesClient = invoicesClient;
-        _verificationsClient = verificationsClient;
-        _documentsClient = documentsClient;
-        _serviceScopeFactory = serviceScopeFactory;
-        _logger = logger;
-    }
-
     public async Task IssueReminders()
     {
-        _logger.LogInformation("Querying for invoices");
+        logger.LogInformation("Querying for invoices");
 
-        var results = await _invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent }, null);
+        var results = await invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent }, null);
 
-        using (var scope = _serviceScopeFactory.CreateScope())
+        using (var scope = serviceScopeFactory.CreateScope())
         {
             foreach (var invoice in results.Items)
             {
@@ -40,7 +25,7 @@ public class ReminderService : IReminderService
 
                 if (invoice.Status == InvoiceStatus.PartiallyPaid)
                 {
-                    _logger.LogDebug($"Notify customer about partially paid invoice {invoice.Id}");
+                    logger.LogDebug($"Notify customer about partially paid invoice {invoice.Id}");
 
                     // Send email
 
@@ -61,7 +46,7 @@ public class ReminderService : IReminderService
                 {
                     if (DateTime.Now > invoice.DueDate)
                     {
-                        _logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
+                        logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
 
                         // Send email
 
@@ -74,7 +59,7 @@ public class ReminderService : IReminderService
 
                         string templateId = "reminder";
 
-                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Reminder);
+                        await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Reminder);
 
                         string text = await GenerateDocument(model, templateId);
 
@@ -87,7 +72,7 @@ public class ReminderService : IReminderService
 
     private async Task<string> GenerateDocument(string model, string templateId)
     {
-        var response = await _documentsClient.GenerateDocumentAsync(templateId, DocumentFormat.Html, model);
+        var response = await documentsClient.GenerateDocumentAsync(templateId, DocumentFormat.Html, model);
 
         byte[] bytes;
 

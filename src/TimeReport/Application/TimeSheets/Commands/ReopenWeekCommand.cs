@@ -10,22 +10,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record ReopenWeekCommand(string TimeSheetId) : IRequest
 {
-    public class ReopenWeekCommandHandler : IRequestHandler<ReopenWeekCommand>
+    public class ReopenWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<ReopenWeekCommand>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public ReopenWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task Handle(ReopenWeekCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -34,7 +23,7 @@ public record ReopenWeekCommand(string TimeSheetId) : IRequest
 
             timeSheet.Reopen();
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
         }
     }

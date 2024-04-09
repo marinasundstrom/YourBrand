@@ -8,26 +8,17 @@ namespace YourBrand.TimeReport.Application.Organizations
 
 public record DeleteOrganizationCommand(string Id) : IRequest
 {
-    public class DeleteOrganizationCommandHandler : IRequestHandler<DeleteOrganizationCommand>
+    public class DeleteOrganizationCommandHandler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork) : IRequestHandler<DeleteOrganizationCommand>
     {
-        private readonly IOrganizationRepository _organizationRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public DeleteOrganizationCommandHandler(IOrganizationRepository organizationRepository, IUnitOfWork unitOfWork)
-        {
-            _organizationRepository = organizationRepository;
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _organizationRepository.GetOrganizationById(request.Id, cancellationToken);
+            var organization = await organizationRepository.GetOrganizationById(request.Id, cancellationToken);
 
             if (organization is null) throw new Exception();
 
-            _organizationRepository.RemoveOrganization(organization);
+            organizationRepository.RemoveOrganization(organization);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
         }
     }

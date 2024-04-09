@@ -6,14 +6,8 @@ namespace YourBrand.Catalog.Features.ProductManagement;
 
 [ApiController]
 [Route("api/products")]
-public partial class ProductsController : Controller
+public partial class ProductsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public ProductsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
 
     /*
 

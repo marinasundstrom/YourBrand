@@ -8,20 +8,13 @@ namespace YourBrand.Documents.Application.Commands;
 
 public record CheckNameTaken(string Name) : IRequest<bool>
 {
-    public class Handler : IRequestHandler<CheckNameTaken, bool>
+    public class Handler(IDocumentsContext context) : IRequestHandler<CheckNameTaken, bool>
     {
-        private readonly IDocumentsContext _context;
-
-        public Handler(IDocumentsContext context)
-        {
-            _context = context;
-        }
-
         public async Task<bool> Handle(CheckNameTaken request, CancellationToken cancellationToken)
         {
             var n = request.Name;
 
-            var document = await _context.Documents
+            var document = await context.Documents
              .AsSplitQuery()
              .AsNoTracking()
              .FirstOrDefaultAsync(x => x.Name == n, cancellationToken);

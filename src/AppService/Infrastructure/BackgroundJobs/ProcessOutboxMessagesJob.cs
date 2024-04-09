@@ -16,20 +16,9 @@ using YourBrand.Infrastructure.Persistence.Outbox;
 namespace YourBrand.Infrastructure.BackgroundJobs;
 
 [DisallowConcurrentExecution]
-public sealed class ProcessOutboxMessagesJob : IJob
+public sealed class ProcessOutboxMessagesJob(AppServiceContext dbContext, IDomainEventDispatcher domainEventDispatcher,
+    ILogger<ProcessOutboxMessagesJob> logger) : IJob
 {
-    private readonly AppServiceContext dbContext;
-    private readonly IDomainEventDispatcher domainEventDispatcher;
-    private readonly ILogger<ProcessOutboxMessagesJob> logger;
-
-    public ProcessOutboxMessagesJob(AppServiceContext dbContext, IDomainEventDispatcher domainEventDispatcher,
-        ILogger<ProcessOutboxMessagesJob> logger)
-    {
-        this.dbContext = dbContext;
-        this.domainEventDispatcher = domainEventDispatcher;
-        this.logger = logger;
-    }
-
     public async Task Execute(IJobExecutionContext context)
     {
         logger.LogDebug("Processing Outbox");

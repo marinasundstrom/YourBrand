@@ -11,7 +11,7 @@ namespace YourBrand.Application.Notifications.Commands;
 
 public sealed record MarkAllNotificationsAsReadCommand() : IRequest
 {
-    public class MarkAllNotificationsAsReadCommandHandler(IRequestClient<MarkAllNotificationsAsRead> notificationsClient, IUserContext userContext, ITenantContext tenantContext) : IRequestHandler<MarkAllNotificationsAsReadCommand>
+    public sealed class MarkAllNotificationsAsReadCommandHandler(IRequestClient<MarkAllNotificationsAsRead> notificationsClient, ITenantContext tenantContext) : IRequestHandler<MarkAllNotificationsAsReadCommand>
     {
         public async Task Handle(MarkAllNotificationsAsReadCommand request, CancellationToken cancellationToken)
         {

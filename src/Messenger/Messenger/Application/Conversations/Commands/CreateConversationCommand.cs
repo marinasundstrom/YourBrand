@@ -13,24 +13,11 @@ namespace YourBrand.Messenger.Application.Conversations.Commands;
 
 public record CreateConversationCommand(string? Title) : IRequest<ConversationDto>
 {
-    public class CreateConversationCommandHandler : IRequestHandler<CreateConversationCommand, ConversationDto>
+    public class CreateConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<CreateConversationCommand, ConversationDto>
     {
-        private readonly IConversationRepository _conversationRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserContext _userContext;
-        private readonly IBus _bus;
-
-        public CreateConversationCommandHandler(IConversationRepository conversationRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus)
-        {
-            _conversationRepository = conversationRepository;
-            _unitOfWork = unitOfWork;
-            _userContext = userContext;
-            _bus = bus;
-        }
-
         public async Task<ConversationDto> Handle(CreateConversationCommand request, CancellationToken cancellationToken)
         {
-            var userId = _userContext.UserId;
+            var userId = userContext.UserId;
 
             var conversation = new Conversation()
             {
@@ -38,13 +25,13 @@ public record CreateConversationCommand(string? Title) : IRequest<ConversationDt
                 Title = request.Title
             };
 
-            _conversationRepository.AddConversation(conversation);
+            conversationRepository.AddConversation(conversation);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             //await _mediator.Send(new JoinConversationCommand(conversation.Id), cancellationToken);
 
-            conversation = await _conversationRepository.GetConversation(conversation.Id);
+            conversation = await conversationRepository.GetConversation(conversation.Id);
             return conversation!.ToDto();
         }
     }

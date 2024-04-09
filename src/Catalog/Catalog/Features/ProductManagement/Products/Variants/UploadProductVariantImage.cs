@@ -6,17 +6,8 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record UploadProductVariantImage(long ProductId, long VariantId, string FileName, Stream Stream) : IRequest<string?>
 {
-    public class Handler : IRequestHandler<UploadProductVariantImage, string?>
+    public class Handler(CatalogContext context) : IRequestHandler<UploadProductVariantImage, string?>
     {
-        private readonly CatalogContext _context;
-        //private readonly IBlobStorageService _blobStorageService;
-
-        public Handler(CatalogContext context) //, IBlobStorageService blobStorageService)
-        {
-            _context = context;
-            //_blobStorageService = blobStorageService;
-        }
-
         public async Task<string?> Handle(UploadProductVariantImage request, CancellationToken cancellationToken)
         {
             /*

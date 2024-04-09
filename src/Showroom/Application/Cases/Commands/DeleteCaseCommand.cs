@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Cases.Commands;
 
 public record DeleteCaseCommand(string Id) : IRequest
 {
-    public class DeleteCaseCommandHandler : IRequestHandler<DeleteCaseCommand>
+    public class DeleteCaseCommandHandler(IShowroomContext context) : IRequestHandler<DeleteCaseCommand>
     {
-        private readonly IShowroomContext context;
-
-        public DeleteCaseCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteCaseCommand request, CancellationToken cancellationToken)
         {
             var comepetenceArea = await context.Cases

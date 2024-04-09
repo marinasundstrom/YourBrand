@@ -9,15 +9,8 @@ namespace YourBrand.Application.Widgets;
 
 public record GetWidgets(int Page = 1, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<WidgetDto>>
 {
-    public class Handler : IRequestHandler<GetWidgets, Results<WidgetDto>>
+    public class Handler(IAppServiceContext context) : IRequestHandler<GetWidgets, Results<WidgetDto>>
     {
-        private readonly IAppServiceContext context;
-
-        public Handler(IAppServiceContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<Results<WidgetDto>> Handle(GetWidgets request, CancellationToken cancellationToken)
         {
             var query = context.Widgets.AsQueryable();

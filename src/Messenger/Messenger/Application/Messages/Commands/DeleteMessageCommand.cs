@@ -12,30 +12,15 @@ namespace YourBrand.Messenger.Application.Messages.Commands;
 
 public record DeleteMessageCommand(string ConversationId, string MessageId) : IRequest
 {
-    public class DeleteMessageCommandHandler : IRequestHandler<DeleteMessageCommand>
+    public class DeleteMessageCommandHandler(IConversationRepository conversationRepository, IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus) : IRequestHandler<DeleteMessageCommand>
     {
-        private readonly IConversationRepository _conversationRepository;
-        private readonly IMessageRepository _messageRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserContext _userContext;
-        private readonly IBus _bus;
-
-        public DeleteMessageCommandHandler(IConversationRepository conversationRepository, IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext, IBus bus)
-        {
-            _conversationRepository = conversationRepository;
-            _messageRepository = messageRepository;
-            _unitOfWork = unitOfWork;
-            _userContext = userContext;
-            _bus = bus;
-        }
-
         public async Task Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
         {
-            var conversation = await _conversationRepository.GetConversation(request.ConversationId, cancellationToken);
+            var conversation = await conversationRepository.GetConversation(request.ConversationId, cancellationToken);
 
             if (conversation is null) throw new Exception();
 
-            var message = await _messageRepository.GetMessage(request.MessageId, cancellationToken);
+            var message = await messageRepository.GetMessage(request.MessageId, cancellationToken);
 
             if (message is null) throw new Exception();
 
@@ -48,12 +33,12 @@ public record DeleteMessageCommand(string ConversationId, string MessageId) : IR
 
             //_messageRepository.DeleteMessage(message);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _bus.Publish(new MessageDeleted(null!, message.Id));
+            await bus.Publish(new MessageDeleted(null!, message.Id));
 
         }
 
-        private bool IsAuthorizedToDelete(Domain.Entities.Message message) => _userContext.IsCurrentUser(message.CreatedById!) || _userContext.IsUserInRole(Roles.Administrator);
+        private bool IsAuthorizedToDelete(Domain.Entities.Message message) => userContext.IsCurrentUser(message.CreatedById!) || userContext.IsUserInRole(Roles.Administrator);
     }
 }

@@ -13,19 +13,8 @@ namespace YourBrand.Messenger.Application.Messages.Commands;
 
 public record UpdateMessageCommand(string ConversationId, string MessageId, string Text) : IRequest
 {
-    public class UpdateMessageCommandHandler : IRequestHandler<UpdateMessageCommand>
+    public class UpdateMessageCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus) : IRequestHandler<UpdateMessageCommand>
     {
-        private readonly IMessengerContext context;
-        private readonly IUserContext _userContext;
-        private readonly IBus _bus;
-
-        public UpdateMessageCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus)
-        {
-            this.context = context;
-            _userContext = userContext;
-            _bus = bus;
-        }
-
         public async Task Handle(UpdateMessageCommand request, CancellationToken cancellationToken)
         {
             var message = await context.Messages.FirstOrDefaultAsync(i => i.Id == request.MessageId, cancellationToken);
@@ -41,10 +30,10 @@ public record UpdateMessageCommand(string ConversationId, string MessageId, stri
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await _bus.Publish(new MessageUpdated(null!, message.Id, message.Text, DateTime.Now));
+            await bus.Publish(new MessageUpdated(null!, message.Id, message.Text, DateTime.Now));
 
         }
 
-        private bool IsAuthorizedToEdit(Domain.Entities.Message message) => _userContext.IsCurrentUser(message.CreatedById!) || _userContext.IsUserInRole(Roles.Administrator);
+        private bool IsAuthorizedToEdit(Domain.Entities.Message message) => userContext.IsCurrentUser(message.CreatedById!) || userContext.IsUserInRole(Roles.Administrator);
     }
 }

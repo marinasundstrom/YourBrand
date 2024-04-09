@@ -13,22 +13,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
 {
-    public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Result<EntryDto, DomainException>>
+    public class UpdateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<UpdateEntryCommand, Result<EntryDto, DomainException>>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public UpdateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task<Result<EntryDto, DomainException>> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -67,7 +56,7 @@ public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hou
                 return new Result<EntryDto, DomainException>.Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
             }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new Result<EntryDto, DomainException>.Ok(entry.ToDto());
         }

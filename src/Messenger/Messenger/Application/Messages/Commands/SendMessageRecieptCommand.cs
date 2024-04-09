@@ -13,22 +13,11 @@ namespace YourBrand.Messenger.Application.Messages.Commands;
 
 public record SendMessageReceiptCommand(string MessageId) : IRequest<ReceiptDto>
 {
-    public class SendMessageReceiptCommandHandler : IRequestHandler<SendMessageReceiptCommand, ReceiptDto>
+    public class SendMessageReceiptCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus) : IRequestHandler<SendMessageReceiptCommand, ReceiptDto>
     {
-        private readonly IMessengerContext context;
-        private readonly IUserContext _userContext;
-        private readonly IBus _bus;
-
-        public SendMessageReceiptCommandHandler(IMessengerContext context, IUserContext userContext, IBus bus)
-        {
-            this.context = context;
-            _userContext = userContext;
-            _bus = bus;
-        }
-
         public async Task<ReceiptDto> Handle(SendMessageReceiptCommand request, CancellationToken cancellationToken)
         {
-            var userId = _userContext.UserId;
+            var userId = userContext.UserId;
 
             var message = await context
                 .Messages
@@ -64,7 +53,7 @@ public record SendMessageReceiptCommand(string MessageId) : IRequest<ReceiptDto>
 
             var dto = receipt.ToDto();
 
-            await _bus.Publish(new MessageRead(dto));
+            await bus.Publish(new MessageRead(dto));
 
             return dto;
         }

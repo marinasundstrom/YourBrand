@@ -11,18 +11,11 @@ namespace YourBrand.TimeReport.Application.Users.Queries;
 
 public record GetUserProjectMembershipsQuery(string UserId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectMembershipDto>>
 {
-    public class GetUserProjectMembershipsQueryHandler : IRequestHandler<GetUserProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
+    public class GetUserProjectMembershipsQueryHandler(ITimeReportContext context) : IRequestHandler<GetUserProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetUserProjectMembershipsQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ProjectMembershipDto>> Handle(GetUserProjectMembershipsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.ProjectMemberships
+            var query = context.ProjectMemberships
                     .OrderBy(p => p.Created)
                     .Where(x => x.User.Id == request.UserId);
 

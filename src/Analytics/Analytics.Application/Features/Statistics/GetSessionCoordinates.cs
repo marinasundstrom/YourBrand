@@ -6,15 +6,8 @@ namespace YourBrand.Analytics.Application.Features.Statistics;
 
 public record GetSessionCoordinates(DateTime? From = null, DateTime? To = null) : IRequest<IEnumerable<SessionCoordinates>>
 {
-    public class Handler : IRequestHandler<GetSessionCoordinates, IEnumerable<SessionCoordinates>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetSessionCoordinates, IEnumerable<SessionCoordinates>>
     {
-        private readonly IApplicationDbContext context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<IEnumerable<SessionCoordinates>> Handle(GetSessionCoordinates request, CancellationToken cancellationToken)
         {
             var sessions = await context.Sessions

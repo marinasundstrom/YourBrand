@@ -13,25 +13,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<PersonProfileDto>>
 {
-    class FindPersonProfilesQueryHandler : IRequestHandler<FindPersonProfilesQuery, Results<PersonProfileDto>>
+    class FindPersonProfilesQueryHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<FindPersonProfilesQuery, Results<PersonProfileDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public FindPersonProfilesQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<Results<PersonProfileDto>> Handle(FindPersonProfilesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<PersonProfile> result = _context
+            IQueryable<PersonProfile> result = context
                     .PersonProfiles
                     .AsNoTracking()
                     .AsQueryable();
@@ -114,7 +102,7 @@ public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, in
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var items2 = items.Select(cp => cp.ToDto(_urlHelper)).ToList();
+            var items2 = items.Select(cp => cp.ToDto(urlHelper)).ToList();
 
             return new Results<PersonProfileDto>(items2, totalCount);
         }

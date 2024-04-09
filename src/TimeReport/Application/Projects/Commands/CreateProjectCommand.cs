@@ -10,26 +10,19 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public record CreateProjectCommand(string Name, string? Description, string OrganizationId) : IRequest<ProjectDto>
 {
-    public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, ProjectDto>
+    public class CreateProjectCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectCommand, ProjectDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateProjectCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProjectDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
             var project = new Project(request.Name, request.Description);
 
-            project.Organization = await _context.Organizations.FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
+            project.Organization = await context.Organizations.FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
 
-            _context.Projects.Add(project);
+            context.Projects.Add(project);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            project = await _context.Projects
+            project = await context.Projects
                 .Include(x => x.Organization)
                 .FirstAsync(x => x.Id == project.Id);
 

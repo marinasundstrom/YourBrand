@@ -12,14 +12,9 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Carts.Persistence;
 
-public sealed class CartsContext : DbContext
+public sealed class CartsContext(DbContextOptions options, ITenantContext tenantContext) : DbContext(options)
 {
-    private TenantId _tenantId;
-
-    public CartsContext(DbContextOptions options, ITenantContext tenantContext) : base(options)
-    {
-        _tenantId = tenantContext.TenantId.GetValueOrDefault();
-    }
+    private TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

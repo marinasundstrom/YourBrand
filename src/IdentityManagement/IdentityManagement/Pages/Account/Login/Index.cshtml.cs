@@ -15,35 +15,18 @@ namespace YourBrand.IdentityManagement.Pages.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
-public class Index : PageModel
+public class Index(
+    IIdentityServerInteractionService interaction,
+    IAuthenticationSchemeProvider schemeProvider,
+    IIdentityProviderStore identityProviderStore,
+    IEventService events,
+    UserManager<User> userManager,
+    SignInManager<User> signInManager) : PageModel
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IIdentityServerInteractionService _interaction;
-    private readonly IEventService _events;
-    private readonly IAuthenticationSchemeProvider _schemeProvider;
-    private readonly IIdentityProviderStore _identityProviderStore;
-
     public ViewModel View { get; set; }
 
     [BindProperty]
     public InputModel Input { get; set; }
-
-    public Index(
-        IIdentityServerInteractionService interaction,
-        IAuthenticationSchemeProvider schemeProvider,
-        IIdentityProviderStore identityProviderStore,
-        IEventService events,
-        UserManager<User> userManager,
-        SignInManager<User> signInManager)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _interaction = interaction;
-        _schemeProvider = schemeProvider;
-        _identityProviderStore = identityProviderStore;
-        _events = events;
-    }
 
     public async Task<IActionResult> OnGet(string returnUrl)
     {
@@ -61,7 +44,7 @@ public class Index : PageModel
     public async Task<IActionResult> OnPost()
     {
         // check if we are in the context of an authorization request
-        var context = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
+        var context = await interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
 
         // the user clicked the "cancel" button
         if (Input.Button != "login")
@@ -71,7 +54,7 @@ public class Index : PageModel
                 // if the user cancels, send a result back into IdentityServer as if they 
                 // denied the consent (even if this client does not require consent).
                 // this will send back an access denied OIDC error response to the client.
-                await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+                await interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
                 // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                 if (context.IsNativeClient())
@@ -92,11 +75,11 @@ public class Index : PageModel
 
         if (ModelState.IsValid)
         {
-            var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberLogin, lockoutOnFailure: true);
+            var result = await signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberLogin, lockoutOnFailure: true);
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(Input.Username);
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+                var user = await userManager.FindByNameAsync(Input.Username);
+                await events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
 
                 if (context != null)
                 {
@@ -127,7 +110,7 @@ public class Index : PageModel
                 }
             }
 
-            await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, "invalid credentials", clientId: context?.Client.ClientId));
+            await events.RaiseAsync(new UserLoginFailureEvent(Input.Username, "invalid credentials", clientId: context?.Client.ClientId));
             ModelState.AddModelError(string.Empty, LoginOptions.InvalidCredentialsErrorMessage);
         }
 
@@ -143,8 +126,8 @@ public class Index : PageModel
             ReturnUrl = returnUrl
         };
 
-        var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-        if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
+        var context = await interaction.GetAuthorizationContextAsync(returnUrl);
+        if (context?.IdP != null && await schemeProvider.GetSchemeAsync(context.IdP) != null)
         {
             var local = context.IdP == Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider;
 
@@ -164,7 +147,7 @@ public class Index : PageModel
             return;
         }
 
-        var schemes = await _schemeProvider.GetAllSchemesAsync();
+        var schemes = await schemeProvider.GetAllSchemesAsync();
 
         var providers = schemes
             .Where(x => x.DisplayName != null)
@@ -174,7 +157,7 @@ public class Index : PageModel
                 AuthenticationScheme = x.Name
             }).ToList();
 
-        var dyanmicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
+        var dyanmicSchemes = (await identityProviderStore.GetAllSchemeNamesAsync())
             .Where(x => x.Enabled)
             .Select(x => new ViewModel.ExternalProvider
             {

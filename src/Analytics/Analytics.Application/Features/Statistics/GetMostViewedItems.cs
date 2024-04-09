@@ -6,15 +6,8 @@ namespace YourBrand.Analytics.Application.Features.Statistics;
 
 public record GetMostViewedItems(DateTime? From = null, DateTime? To = null, bool DistinctByClient = false) : IRequest<Data>
 {
-    public class Handler : IRequestHandler<GetMostViewedItems, Data>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetMostViewedItems, Data>
     {
-        private readonly IApplicationDbContext context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<Data> Handle(GetMostViewedItems request, CancellationToken cancellationToken)
         {
             var events = await context.Events

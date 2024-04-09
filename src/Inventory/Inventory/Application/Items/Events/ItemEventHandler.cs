@@ -4,16 +4,9 @@ using YourBrand.Inventory.Domain.Events;
 
 namespace YourBrand.Inventory.Application.Items.Events;
 
-public class ItemEventHandler
-    : IDomainEventHandler<ItemCreated>
+public class ItemEventHandler(IInventoryContext context)
+        : IDomainEventHandler<ItemCreated>
 {
-    private readonly IInventoryContext _context;
-
-    public ItemEventHandler(IInventoryContext context)
-    {
-        _context = context;
-    }
-
     public async Task Handle(ItemCreated notification, CancellationToken cancellationToken)
     {
         /*

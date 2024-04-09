@@ -8,17 +8,8 @@ namespace YourBrand.Analytics.Application.Features.Tracking;
 
 public record RegisterEventCommand(string ClientId, string SessionId, Domain.Enums.EventType EventType, Dictionary<string, object> Data) : IRequest<string?>
 {
-    public class Handler : IRequestHandler<RegisterEventCommand, string?>
+    public class Handler(IApplicationDbContext context, IMemoryCache memoryCache) : IRequestHandler<RegisterEventCommand, string?>
     {
-        private readonly IApplicationDbContext context;
-        private readonly IMemoryCache memoryCache;
-
-        public Handler(IApplicationDbContext context, IMemoryCache memoryCache)
-        {
-            this.context = context;
-            this.memoryCache = memoryCache;
-        }
-
         public async Task<string?> Handle(RegisterEventCommand request, CancellationToken cancellationToken)
         {
             var session = await memoryCache.GetOrCreate(

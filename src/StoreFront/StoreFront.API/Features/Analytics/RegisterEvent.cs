@@ -9,19 +9,10 @@ namespace YourBrand.StoreFront.Application.Features.Analytics;
 
 public sealed record RegisterEvent(string ClientId, string SessionId, EventType EventType, IDictionary<string, object> Data) : IRequest<string>
 {
-    sealed class Handler : IRequestHandler<RegisterEvent, string>
+    sealed class Handler(
+        YourBrand.Analytics.IEventsClient eventsClient,
+        IUserContext userContext) : IRequestHandler<RegisterEvent, string>
     {
-        private readonly IEventsClient eventsClient;
-        private readonly IUserContext userContext;
-
-        public Handler(
-            YourBrand.Analytics.IEventsClient eventsClient,
-            IUserContext userContext)
-        {
-            this.eventsClient = eventsClient;
-            this.userContext = userContext;
-        }
-
         public async Task<string> Handle(RegisterEvent request, CancellationToken cancellationToken)
         {
             try

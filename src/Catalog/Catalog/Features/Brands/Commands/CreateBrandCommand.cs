@@ -7,15 +7,8 @@ namespace YourBrand.Catalog.Features.Brands.Commands;
 
 public sealed record CreateBrandCommand(string Name, string Handle) : IRequest<BrandDto>
 {
-    public sealed class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, BrandDto>
+    public sealed class CreateBrandCommandHandler(CatalogContext context) : IRequestHandler<CreateBrandCommand, BrandDto>
     {
-        private readonly CatalogContext context;
-
-        public CreateBrandCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<BrandDto> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
             var brand = await context.Brands.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

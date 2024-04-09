@@ -10,18 +10,11 @@ namespace YourBrand.ApiKeys.Application.Users.Commands;
 
 public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Email) : IRequest<UserDto>
 {
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
+    public class UpdateUserCommandHandler(IApiKeysContext context) : IRequestHandler<UpdateUserCommand, UserDto>
     {
-        readonly IApiKeysContext _context;
-
-        public UpdateUserCommandHandler(IApiKeysContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -34,7 +27,7 @@ public record UpdateUserCommand(string UserId, string FirstName, string LastName
             user.DisplayName = request.DisplayName;
             user.Email = request.Email;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.LastModified);
         }

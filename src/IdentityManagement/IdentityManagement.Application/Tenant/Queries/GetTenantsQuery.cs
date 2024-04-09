@@ -10,18 +10,11 @@ namespace YourBrand.IdentityManagement.Application.Tenants.Queries;
 
 public record GetTenantsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, IdentityManagement.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TenantDto>>
 {
-    public class GetTenantsQueryHandler : IRequestHandler<GetTenantsQuery, ItemsResult<TenantDto>>
+    public class GetTenantsQueryHandler(IApplicationDbContext context) : IRequestHandler<GetTenantsQuery, ItemsResult<TenantDto>>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetTenantsQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<TenantDto>> Handle(GetTenantsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Tenants
+            var query = context.Tenants
                 .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)

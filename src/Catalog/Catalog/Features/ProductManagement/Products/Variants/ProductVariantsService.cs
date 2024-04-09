@@ -5,20 +5,13 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public class ProductVariantsService
+public class ProductVariantsService(CatalogContext context)
 {
-    private readonly CatalogContext _context;
-
-    public ProductVariantsService(CatalogContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IEnumerable<Product>> FindVariants(string productIdOrHandle, string? productVariantIdOrHandle, IDictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken)
     {
         bool isProductId = long.TryParse(productIdOrHandle, out var productId);
 
-        var query = _context.Products
+        var query = context.Products
             .AsSplitQuery()
             .AsNoTracking()
             .IncludeAll()
@@ -56,7 +49,7 @@ public class ProductVariantsService
     {
         bool isProductId = long.TryParse(productIdOrHandle, out var productId);
 
-        var query = _context.Products
+        var query = context.Products
             .AsSplitQuery()
             .AsNoTracking()
             .Include(pv => pv.ProductAttributes)

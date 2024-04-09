@@ -8,15 +8,8 @@ namespace YourBrand.Catalog.Features.Stores.Commands;
 
 public sealed record CreateStoreCommand(string Name, string Handle, string Currency) : IRequest<StoreDto>
 {
-    public sealed class CreateStoreCommandHandler : IRequestHandler<CreateStoreCommand, StoreDto>
+    public sealed class CreateStoreCommandHandler(CatalogContext context) : IRequestHandler<CreateStoreCommand, StoreDto>
     {
-        private readonly CatalogContext context;
-
-        public CreateStoreCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<StoreDto> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
         {
             var store = await context.Stores.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

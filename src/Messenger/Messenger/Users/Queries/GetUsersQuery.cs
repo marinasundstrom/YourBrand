@@ -9,41 +9,25 @@ using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Application.Users.Queries;
 
-public class GetUsersQuery : IRequest<Results<UserDto>>
+public class GetUsersQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null) : IRequest<Results<UserDto>>
 {
-    public GetUsersQuery(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null)
-    {
-        Page = page;
-        PageSize = pageSize;
-        SearchString = searchString;
-        SortBy = sortBy;
-        SortDirection = sortDirection;
-    }
+    public int Page { get; } = page;
 
-    public int Page { get; }
-
-    public int PageSize { get; }
+    public int PageSize { get; } = pageSize;
 
     public string? UserId { get; }
 
-    public string? SearchString { get; }
+    public string? SearchString { get; } = searchString;
 
-    public string? SortBy { get; }
+    public string? SortBy { get; } = sortBy;
 
-    public Application.Common.Models.SortDirection? SortDirection { get; }
+    public Application.Common.Models.SortDirection? SortDirection { get; } = sortDirection;
 
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Results<UserDto>>
+    public class GetUsersQueryHandler(IMessengerContext context) : IRequestHandler<GetUsersQuery, Results<UserDto>>
     {
-        readonly IMessengerContext _context;
-
-        public GetUsersQueryHandler(IMessengerContext context)
-        {
-            _context = context;
-        }
-
         public async Task<Results<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Users
+            var query = context.Users
                 .OrderBy(p => p.Created)
                 .AsNoTracking();
             //.AsSplitQuery();

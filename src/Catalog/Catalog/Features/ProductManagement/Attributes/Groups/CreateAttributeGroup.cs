@@ -7,15 +7,8 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Groups;
 
 public record CreateAttributeGroup(CreateProductAttributeGroupData Data) : IRequest<AttributeGroupDto>
 {
-    public class Handler : IRequestHandler<CreateAttributeGroup, AttributeGroupDto>
+    public class Handler(CatalogContext context) : IRequestHandler<CreateAttributeGroup, AttributeGroupDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<AttributeGroupDto> Handle(CreateAttributeGroup request, CancellationToken cancellationToken)
         {
             var group = new AttributeGroup(Guid.NewGuid().ToString())
@@ -24,9 +17,9 @@ public record CreateAttributeGroup(CreateProductAttributeGroupData Data) : IRequ
                 Description = request.Data.Description
             };
 
-            _context.AttributeGroups.Add(group);
+            context.AttributeGroups.Add(group);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new AttributeGroupDto(group.Id, group.Name, group.Description);
         }

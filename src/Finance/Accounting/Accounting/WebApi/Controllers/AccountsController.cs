@@ -8,15 +8,8 @@ using YourBrand.Accounting.Application.Accounts.Queries;
 namespace YourBrand.Accounting.Controllers;
 
 [Route("[controller]")]
-public class AccountsController : Controller
+public class AccountsController(IMediator mediator) : Controller
 {
-    private readonly IMediator mediator;
-
-    public AccountsController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IEnumerable<AccountDto>> GetAccounts(int? accountClass = null, bool includeBlankAccounts = true, bool includeUnusedAccounts = false, CancellationToken cancellationToken = default)
     {

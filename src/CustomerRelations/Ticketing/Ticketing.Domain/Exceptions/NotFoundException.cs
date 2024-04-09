@@ -1,11 +1,6 @@
 ﻿namespace YourBrand.Ticketing.Domain.Exceptions;
 
-public class NotFoundException : Exception
+public class NotFoundException(string title) : Exception
 {
-    public NotFoundException(string title)
-    {
-        Title = title;
-    }
-
-    public string Title { get; }
+    public string Title { get; } = title;
 }

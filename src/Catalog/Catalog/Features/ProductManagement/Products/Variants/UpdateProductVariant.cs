@@ -8,20 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public record UpdateProductVariant(long ProductId, long ProductVariantId, UpdateProductVariantData Data) : IRequest<ProductDto>
 {
-    public class Handler : IRequestHandler<UpdateProductVariant, ProductDto>
+    public class Handler(CatalogContext context, ProductVariantsService productVariantsService) : IRequestHandler<UpdateProductVariant, ProductDto>
     {
-        private readonly CatalogContext _context;
-        private readonly ProductVariantsService _productVariantsService;
-
-        public Handler(CatalogContext context, ProductVariantsService productVariantsService)
-        {
-            _context = context;
-            _productVariantsService = productVariantsService;
-        }
-
         public async Task<ProductDto> Handle(UpdateProductVariant request, CancellationToken cancellationToken)
         {
-            var match = (await _productVariantsService.FindVariants(request.ProductId.ToString(), request.ProductVariantId.ToString(), request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)!, cancellationToken))
+            var match = (await productVariantsService.FindVariants(request.ProductId.ToString(), request.ProductVariantId.ToString(), request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)!, cancellationToken))
                 .SingleOrDefault();
 
             if (match is not null)
@@ -29,7 +20,7 @@ public record UpdateProductVariant(long ProductId, long ProductVariantId, Update
                 throw new VariantAlreadyExistsException("Variant with the same options already exists.");
             }
 
-            var product = await _context.Products
+            var product = await context.Products
                 .AsSplitQuery()
                 .Include(pv => pv.Parent)
                     .ThenInclude(pv => pv!.Category)
@@ -52,7 +43,7 @@ public record UpdateProductVariant(long ProductId, long ProductVariantId, Update
             {
                 if (v.Id == null)
                 {
-                    var attribute = _context.Attributes.First(x => x.Id == v.AttributeId);
+                    var attribute = context.Attributes.First(x => x.Id == v.AttributeId);
 
                     var value2 = attribute.Values.First(x => x.Id == v.ValueId);
 
@@ -64,7 +55,7 @@ public record UpdateProductVariant(long ProductId, long ProductVariantId, Update
                 }
                 else
                 {
-                    var option = _context.Attributes.First(x => x.Id == v.AttributeId);
+                    var option = context.Attributes.First(x => x.Id == v.AttributeId);
 
                     var value2 = option.Values.First(x => x.Id == v.ValueId);
 
@@ -77,7 +68,7 @@ public record UpdateProductVariant(long ProductId, long ProductVariantId, Update
 
             foreach (var v in variant.ProductAttributes.ToList())
             {
-                if (_context.Entry(v).State == EntityState.Added)
+                if (context.Entry(v).State == EntityState.Added)
                     continue;
 
                 var value = request.Data.Attributes.FirstOrDefault(x => x.Id == v.Id);
@@ -88,7 +79,7 @@ public record UpdateProductVariant(long ProductId, long ProductVariantId, Update
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return variant.ToDto();
         }

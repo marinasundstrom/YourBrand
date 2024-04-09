@@ -18,24 +18,17 @@ namespace YourBrand.HumanResources;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-public class TeamsController : Controller
+public class TeamsController(IMediator mediator) : Controller
 {
     private const string AuthSchemes =
         JwtBearerDefaults.AuthenticationScheme + "," +
         ApiKeyDefaults.AuthenticationScheme;
 
-    private readonly IMediator _mediator;
-
-    public TeamsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<TeamDto>>> GetTeams(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, HumanResources.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetTeamsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetTeamsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
 
     }
 
@@ -43,7 +36,7 @@ public class TeamsController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<TeamDto>> GetTeam(string id, CancellationToken cancellationToken)
     {
-        var person = await _mediator.Send(new GetTeamQuery(id), cancellationToken);
+        var person = await mediator.Send(new GetTeamQuery(id), cancellationToken);
 
         if (person is null)
         {
@@ -59,7 +52,7 @@ public class TeamsController : Controller
     {
         try
         {
-            var team = await _mediator.Send(new CreateTeamCommand(createTeamDto.Name, createTeamDto.Description, createTeamDto.OrganizationId), cancellationToken);
+            var team = await mediator.Send(new CreateTeamCommand(createTeamDto.Name, createTeamDto.Description, createTeamDto.OrganizationId), cancellationToken);
 
             return Ok(team);
         }
@@ -75,7 +68,7 @@ public class TeamsController : Controller
     {
         try
         {
-            var team = await _mediator.Send(new UpdateTeamCommand(id, updateTeamDto.Name, updateTeamDto.Description), cancellationToken);
+            var team = await mediator.Send(new UpdateTeamCommand(id, updateTeamDto.Name, updateTeamDto.Description), cancellationToken);
 
             return Ok(team);
         }
@@ -91,7 +84,7 @@ public class TeamsController : Controller
     {
         try
         {
-            await _mediator.Send(new DeleteTeamCommand(id), cancellationToken);
+            await mediator.Send(new DeleteTeamCommand(id), cancellationToken);
 
             return Ok();
         }
@@ -105,19 +98,19 @@ public class TeamsController : Controller
     [HttpPost("{id}/Members")]
     public async Task AddMember(string id, AddMemberDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new AddTeamMemberCommand(id, dto.PersonId), cancellationToken);
+        await mediator.Send(new AddTeamMemberCommand(id, dto.PersonId), cancellationToken);
     }
 
     [HttpDelete("{id}/Members/{personId}")]
     public async Task RemoveMember(string id, string personId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new RemoveTeamMemberCommand(id, personId), cancellationToken);
+        await mediator.Send(new RemoveTeamMemberCommand(id, personId), cancellationToken);
     }
 
     [HttpGet("{id}/Memberships")]
     public async Task<ItemsResult<TeamMembershipDto>> GetMemberships(string id, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetTeamMembershipsQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetTeamMembershipsQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 }
 

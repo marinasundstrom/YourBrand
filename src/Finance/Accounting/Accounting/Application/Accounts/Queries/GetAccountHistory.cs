@@ -9,15 +9,8 @@ namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceHistory>
 {
-    public class GetAccountHistoryQueryHandler : IRequestHandler<GetAccountHistoryQuery, AccountBalanceHistory>
+    public class GetAccountHistoryQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountHistoryQuery, AccountBalanceHistory>
     {
-        private readonly IAccountingContext context;
-
-        public GetAccountHistoryQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<AccountBalanceHistory> Handle(GetAccountHistoryQuery request, CancellationToken cancellationToken)
         {
             List<(int Year, int Month)> months = new();

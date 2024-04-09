@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Commands;
 
 public record UpdateProjectGroupCommand(string ExpenseId, string Name, string? Description) : IRequest<ProjectGroupDto>
 {
-    public class UpdateExpenseCommandHandler : IRequestHandler<UpdateProjectGroupCommand, ProjectGroupDto>
+    public class UpdateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectGroupCommand, ProjectGroupDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public UpdateExpenseCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProjectGroupDto> Handle(UpdateProjectGroupCommand request, CancellationToken cancellationToken)
         {
-            var projectGroup = await _context.ProjectGroups
+            var projectGroup = await context.ProjectGroups
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
@@ -33,7 +26,7 @@ public record UpdateProjectGroupCommand(string ExpenseId, string Name, string? D
             projectGroup.Name = request.Name;
             projectGroup.Description = request.Description;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return projectGroup.ToDto();
         }

@@ -12,15 +12,8 @@ namespace YourBrand.Ticketing.Application.Features.Users;
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize]
-public sealed class UsersController : ControllerBase
+public sealed class UsersController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public UsersController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ItemsResult<UserDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]

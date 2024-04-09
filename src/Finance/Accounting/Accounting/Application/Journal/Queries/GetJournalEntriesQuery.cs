@@ -8,15 +8,8 @@ namespace YourBrand.Accounting.Application.Journal.Queries;
 
 public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10, int? InvoiceNo = null) : IRequest<JournalEntryResult>
 {
-    public class GetJournalEntriesQueryHandler : IRequestHandler<GetJournalEntriesQuery, JournalEntryResult>
+    public class GetJournalEntriesQueryHandler(IAccountingContext context) : IRequestHandler<GetJournalEntriesQuery, JournalEntryResult>
     {
-        private readonly IAccountingContext context;
-
-        public GetJournalEntriesQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<JournalEntryResult> Handle(GetJournalEntriesQuery request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)

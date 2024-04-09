@@ -10,15 +10,8 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Skills.Commands;
 
 public record UpdateSkillCommand(string Id, SkillLevel Level, string? Comment) : IRequest<PersonProfileSkillDto>
 {
-    public class UpdateSkillCommandHandler : IRequestHandler<UpdateSkillCommand, PersonProfileSkillDto>
+    public class UpdateSkillCommandHandler(IShowroomContext context) : IRequestHandler<UpdateSkillCommand, PersonProfileSkillDto>
     {
-        private readonly IShowroomContext context;
-
-        public UpdateSkillCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<PersonProfileSkillDto> Handle(UpdateSkillCommand request, CancellationToken cancellationToken)
         {
             var skill = await context.PersonProfileSkills

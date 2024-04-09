@@ -13,22 +13,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRequest
 {
-    public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityCommand>
+    public class DeleteActivityCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<DeleteActivityCommand>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public DeleteActivityCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -40,7 +29,7 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
                 throw new TimeSheetClosedException(request.TimeSheetId);
             }
 
-            var activity = await _context!.Activities.FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
+            var activity = await context!.Activities.FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 
             if (activity is null)
             {
@@ -59,7 +48,7 @@ public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRe
                 }
             }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
         }
     }

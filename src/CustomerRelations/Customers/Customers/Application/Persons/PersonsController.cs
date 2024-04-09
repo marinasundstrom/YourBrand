@@ -15,26 +15,19 @@ namespace YourBrand.Customers.Application.Persons;
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize]
-public class PersonsController : ControllerBase
+public class PersonsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public PersonsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ItemsResult<Persons.PersonDto>>> GetPersons(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetPersons(page, pageSize), cancellationToken);
+        var result = await mediator.Send(new GetPersons(page, pageSize), cancellationToken);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
     public async Task<PersonDto?> GetPerson(int id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetPerson(id), cancellationToken);
+        return await mediator.Send(new GetPerson(id), cancellationToken);
     }
 
     [HttpPost]
@@ -42,7 +35,7 @@ public class PersonsController : ControllerBase
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status201Created)]
     public async Task<ActionResult> CreatePerson([FromBody] CreatePersonDto dto, CancellationToken cancellationToken)
     {
-        var dto2 = await _mediator.Send(new CreatePerson(dto.FirstName, dto.LastName, dto.SSN, dto.Phone, dto.PhoneMobile, dto.Email, dto.Address), cancellationToken);
+        var dto2 = await mediator.Send(new CreatePerson(dto.FirstName, dto.LastName, dto.SSN, dto.Phone, dto.PhoneMobile, dto.Email, dto.Address), cancellationToken);
         return CreatedAtAction(nameof(GetPerson), new { id = dto2.Id }, dto2);
     }
 
@@ -55,7 +48,7 @@ public class PersonsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task DeletePerson(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeletePerson(id), cancellationToken);
+        await mediator.Send(new DeletePerson(id), cancellationToken);
     }
 }
 

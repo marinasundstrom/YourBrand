@@ -12,15 +12,9 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Persistence;
 
-public sealed class CatalogContext : DbContext
+public sealed class CatalogContext(DbContextOptions<CatalogContext> options, ITenantContext tenantContext) : DbContext(options)
 {
-    private TenantId _tenantId;
-
-    public CatalogContext(DbContextOptions<CatalogContext> options, ITenantContext tenantContext)
-        : base(options)
-    {
-        _tenantId = tenantContext.TenantId.GetValueOrDefault()!;
-    }
+    private TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault()!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

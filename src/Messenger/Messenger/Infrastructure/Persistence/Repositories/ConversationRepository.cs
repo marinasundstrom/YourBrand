@@ -5,23 +5,16 @@ using YourBrand.Messenger.Domain.Repositories;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence.Repositories;
 
-sealed class ConversationRepository : IConversationRepository
+sealed class ConversationRepository(MessengerContext context) : IConversationRepository
 {
-    private readonly MessengerContext _context;
-
-    public ConversationRepository(MessengerContext context)
-    {
-        _context = context;
-    }
-
     public void AddConversation(Conversation conversation)
     {
-        _context.Conversations.Add(conversation);
+        context.Conversations.Add(conversation);
     }
 
     public async Task<Conversation?> GetConversation(string id, CancellationToken cancellationToken = default)
     {
-        return await _context.Conversations
+        return await context.Conversations
                 .Include(c => c.Participants)
                 .ThenInclude(c => c.User)
                 .Include(i => i.CreatedBy)
@@ -32,7 +25,7 @@ sealed class ConversationRepository : IConversationRepository
 
     public IQueryable<Conversation> GetConversations()
     {
-        return _context.Conversations
+        return context.Conversations
                 .OrderByDescending(c => c.Created)
                 .Include(c => c.Participants)
                 .ThenInclude(c => c.User)
@@ -43,7 +36,7 @@ sealed class ConversationRepository : IConversationRepository
 
     public IQueryable<Conversation> GetConversationsForUser(string userId)
     {
-        return _context.Conversations
+        return context.Conversations
                 .OrderByDescending(c => c.Created)
                 .Include(c => c.Participants)
                 .ThenInclude(c => c.User)

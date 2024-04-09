@@ -16,15 +16,8 @@ public record GetTicketById(int Id) : IRequest<Result<TicketDto>>
         }
     }
 
-    public class Handler : IRequestHandler<GetTicketById, Result<TicketDto>>
+    public class Handler(ITicketRepository ticketRepository) : IRequestHandler<GetTicketById, Result<TicketDto>>
     {
-        private readonly ITicketRepository ticketRepository;
-
-        public Handler(ITicketRepository ticketRepository)
-        {
-            this.ticketRepository = ticketRepository;
-        }
-
         public async Task<Result<TicketDto>> Handle(GetTicketById request, CancellationToken cancellationToken)
         {
             var ticket = await ticketRepository.FindByIdAsync(request.Id, cancellationToken);

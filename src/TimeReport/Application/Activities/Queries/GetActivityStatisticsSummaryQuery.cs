@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Activities.Queries;
 
 public record GetActivityStatisticsSummaryQuery(string ActivityId) : IRequest<StatisticsSummary>
 {
-    public class GetStatisticsSummaryQueryHandler : IRequestHandler<GetActivityStatisticsSummaryQuery, StatisticsSummary>
+    public class GetStatisticsSummaryQueryHandler(ITimeReportContext context) : IRequestHandler<GetActivityStatisticsSummaryQuery, StatisticsSummary>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetStatisticsSummaryQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<StatisticsSummary> Handle(GetActivityStatisticsSummaryQuery request, CancellationToken cancellationToken)
         {
-            var activity = await _context.Activities
+            var activity = await context.Activities
                .Include(x => x.Entries)
                .ThenInclude(x => x.User)
                .AsSplitQuery()

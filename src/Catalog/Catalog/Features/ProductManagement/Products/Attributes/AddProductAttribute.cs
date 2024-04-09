@@ -9,24 +9,17 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
 public record AddProductAttribute(long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
 {
-    public class Handler : IRequestHandler<AddProductAttribute, ProductAttributeDto>
+    public class Handler(CatalogContext context) : IRequestHandler<AddProductAttribute, ProductAttributeDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProductAttributeDto> Handle(AddProductAttribute request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .Include(x => x.Parent)
                 .ThenInclude(x => x!.ProductAttributes)
                 .ThenInclude(x => x.Attribute)
                 .FirstAsync(product => product.Id == request.ProductId, cancellationToken);
 
-            var attribute = await _context.Attributes
+            var attribute = await context.Attributes
                 .Include(x => x.Values)
                 .FirstOrDefaultAsync(attribute => attribute.Id == request.AttributeId, cancellationToken);
 
@@ -50,7 +43,7 @@ public record AddProductAttribute(long ProductId, string AttributeId, string Val
 
             product.AddProductAttribute(productAttribute);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return productAttribute.ToDto();
         }

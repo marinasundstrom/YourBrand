@@ -9,15 +9,8 @@ namespace YourBrand.Invoicing.Application.Queries;
 
 public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, InvoiceStatus[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
 {
-    public class Handler : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
+    public class Handler(IInvoicingContext context) : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
     {
-        private readonly IInvoicingContext _context;
-
-        public Handler(IInvoicingContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<InvoiceDto>> Handle(GetInvoices request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -30,7 +23,7 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Invoices
+            var query = context.Invoices
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)

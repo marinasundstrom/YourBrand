@@ -8,7 +8,7 @@ namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
 public sealed record CreateProductCategory(string Name, string Description, long? ParentCategoryId, string Handle, string? StoreId) : IRequest<Result<ProductCategory>>
 {
-    public sealed class Handler(IConfiguration configuration, CatalogContext catalogContext = default!) : IRequestHandler<CreateProductCategory, Result<ProductCategory>>
+    public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<CreateProductCategory, Result<ProductCategory>>
     {
         public async Task<Result<ProductCategory>> Handle(CreateProductCategory request, CancellationToken cancellationToken)
         {

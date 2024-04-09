@@ -8,15 +8,8 @@ namespace YourBrand.Accounting.Application.Ledger.Queries;
 
 public record GetLedgerEntriesQuery(int? AccountNo = null, int? VerificationId = null, int Page = 0, int PageSize = 10, ResultDirection Direction = ResultDirection.Asc) : IRequest<LedgerEntriesResult>
 {
-    public class GetLedgerEntriesQueryHandler : IRequestHandler<GetLedgerEntriesQuery, LedgerEntriesResult>
+    public class GetLedgerEntriesQueryHandler(IAccountingContext context) : IRequestHandler<GetLedgerEntriesQuery, LedgerEntriesResult>
     {
-        private readonly IAccountingContext context;
-
-        public GetLedgerEntriesQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<LedgerEntriesResult> Handle(GetLedgerEntriesQuery request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)

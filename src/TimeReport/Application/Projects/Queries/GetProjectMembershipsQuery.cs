@@ -11,18 +11,11 @@ namespace YourBrand.TimeReport.Application.Projects.Queries;
 
 public record GetProjectMembershipsQuery(string ProjectId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectMembershipDto>>
 {
-    public class GetProjectMembershipsQueryHandler : IRequestHandler<GetProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
+    public class GetProjectMembershipsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetProjectMembershipsQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ProjectMembershipDto>> Handle(GetProjectMembershipsQuery request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                 .OrderBy(p => p.Created)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId);
@@ -32,7 +25,7 @@ public record GetProjectMembershipsQuery(string ProjectId, int Page = 0, int Pag
                 throw new ProjectNotFoundException(request.ProjectId);
             }
 
-            var query = _context.ProjectMemberships
+            var query = context.ProjectMemberships
                     .OrderBy(p => p.Created)
                     .Where(m => m.Project.Id == project.Id);
 

@@ -8,15 +8,8 @@ namespace YourBrand.Marketing.Application.Discounts.Commands;
 
 public record DeleteDiscountCommand(string Id) : IRequest
 {
-    public class DeleteDiscountCommandHandler : IRequestHandler<DeleteDiscountCommand>
+    public class DeleteDiscountCommandHandler(IMarketingContext context) : IRequestHandler<DeleteDiscountCommand>
     {
-        private readonly IMarketingContext context;
-
-        public DeleteDiscountCommandHandler(IMarketingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteDiscountCommand request, CancellationToken cancellationToken)
         {
             var discount = await context.Discounts

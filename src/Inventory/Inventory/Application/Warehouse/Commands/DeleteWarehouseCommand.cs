@@ -8,15 +8,8 @@ namespace YourBrand.Inventory.Application.Warehouses.Commands;
 
 public record DeleteWarehouseCommand(string Id) : IRequest
 {
-    public class DeleteWarehouseCommandHandler : IRequestHandler<DeleteWarehouseCommand>
+    public class DeleteWarehouseCommandHandler(IInventoryContext context) : IRequestHandler<DeleteWarehouseCommand>
     {
-        private readonly IInventoryContext context;
-
-        public DeleteWarehouseCommandHandler(IInventoryContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteWarehouseCommand request, CancellationToken cancellationToken)
         {
             var warehouse = await context.Warehouses

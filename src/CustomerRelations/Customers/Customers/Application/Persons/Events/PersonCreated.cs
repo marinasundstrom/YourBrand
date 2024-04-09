@@ -4,15 +4,8 @@ using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Application.Persons.Events;
 
-public class PersonCreatedHandler : IDomainEventHandler<PersonCreated>
+public class PersonCreatedHandler(ICustomersContext context) : IDomainEventHandler<PersonCreated>
 {
-    private readonly ICustomersContext _context;
-
-    public PersonCreatedHandler(ICustomersContext context)
-    {
-        _context = context;
-    }
-
     public async Task Handle(PersonCreated notification, CancellationToken cancellationToken)
     {
         /*

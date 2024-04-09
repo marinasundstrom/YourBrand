@@ -7,20 +7,11 @@ using YourBrand.TimeReport.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.TimeReport.Infrastructure.Idempotence;
 
-public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHandler<TDomainEvent>
+public sealed class IdempotentDomainEventHandler<TDomainEvent>(
+    IDomainEventHandler<TDomainEvent> decorated,
+    TimeReportContext dbContext) : IDomainEventHandler<TDomainEvent>
     where TDomainEvent : DomainEvent
 {
-    private readonly IDomainEventHandler<TDomainEvent> decorated;
-    private readonly TimeReportContext dbContext;
-
-    public IdempotentDomainEventHandler(
-        IDomainEventHandler<TDomainEvent> decorated,
-        TimeReportContext dbContext)
-    {
-        this.decorated = decorated;
-        this.dbContext = dbContext;
-    }
-
     public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
     {
         string consumer = decorated.GetType().Name;

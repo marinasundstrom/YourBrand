@@ -8,15 +8,8 @@ namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Commands;
 
 public record CreateProjectGroupCommand(string Name, string? Description) : IRequest<ProjectGroupDto>
 {
-    public class CreateExpenseCommandHandler : IRequestHandler<CreateProjectGroupCommand, ProjectGroupDto>
+    public class CreateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectGroupCommand, ProjectGroupDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateExpenseCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProjectGroupDto> Handle(CreateProjectGroupCommand request, CancellationToken cancellationToken)
         {
             /*
@@ -38,9 +31,9 @@ public record CreateProjectGroupCommand(string Name, string? Description) : IReq
                 //Project = project
             };
 
-            _context.ProjectGroups.Add(projectGroup);
+            context.ProjectGroups.Add(projectGroup);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return projectGroup.ToDto();
         }

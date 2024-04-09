@@ -14,15 +14,8 @@ namespace YourBrand.WebApi.Controllers;
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize]
-public sealed class WidgetsController : ControllerBase
+public sealed class WidgetsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public WidgetsController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Results<WidgetDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]

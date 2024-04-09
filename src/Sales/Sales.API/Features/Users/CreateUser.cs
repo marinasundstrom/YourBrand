@@ -33,10 +33,7 @@ public record CreateUser(string Name, string Email, string? TenantId, string? Us
 
             string userId = request.UserId ?? userContext.UserId!;
 
-            userRepository.Add(new User(userId, request.Name, request.Email)
-            {
-                TenantId = request.TenantId
-            });
+            userRepository.Add(new User(userId, request.Name, request.Email));
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

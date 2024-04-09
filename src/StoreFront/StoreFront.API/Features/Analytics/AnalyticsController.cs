@@ -9,19 +9,10 @@ namespace YourBrand.StoreFront.Application.Features.Analytics;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public class AnalyticsController : ControllerBase
+public class AnalyticsController(
+    ILogger<AnalyticsController> logger,
+    IMediator mediator) : ControllerBase
 {
-    private readonly ILogger<AnalyticsController> _logger;
-    private readonly IMediator mediator;
-
-    public AnalyticsController(
-        ILogger<AnalyticsController> logger,
-        IMediator mediator)
-    {
-        _logger = logger;
-        this.mediator = mediator;
-    }
-
     [HttpPost("Event")]
     public async Task<string> RegisterEventAsync([FromHeader(Name = "X-Client-Id")] string clientId, [FromHeader(Name = "X-Session-Id")] string sessionId, YourBrand.Analytics.EventData data, CancellationToken cancellationToken = default)
     {

@@ -11,22 +11,11 @@ namespace YourBrand.HumanResources.Application.Persons.Commands;
 
 public record DeletePersonCommand(string PersonId) : IRequest
 {
-    public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand>
+    public class DeletePersonCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher) : IRequestHandler<DeletePersonCommand>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _currentPersonService;
-        private readonly IEventPublisher _eventPublisher;
-
-        public DeletePersonCommandHandler(IApplicationDbContext context, IUserContext currentPersonService, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _currentPersonService = currentPersonService;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(DeletePersonCommand request, CancellationToken cancellationToken)
         {
-            var person = await _context.Persons
+            var person = await context.Persons
                 .Include(p => p.Roles)
                 .FirstOrDefaultAsync(p => p.Id == request.PersonId);
 
@@ -35,11 +24,11 @@ public record DeletePersonCommand(string PersonId) : IRequest
                 throw new PersonNotFoundException(request.PersonId);
             }
 
-            _context.Persons.Remove(person);
+            context.Persons.Remove(person);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new PersonDeleted(person.Id));
+            await eventPublisher.PublishEvent(new PersonDeleted(person.Id));
 
         }
     }

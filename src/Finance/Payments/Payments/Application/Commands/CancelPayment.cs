@@ -11,20 +11,11 @@ namespace YourBrand.Payments.Application.Commands;
 
 public record CancelPayment(string PaymentId) : IRequest
 {
-    public class Handler : IRequestHandler<CancelPayment>
+    public class Handler(IPaymentsContext context, IPublishEndpoint publishEndpoint) : IRequestHandler<CancelPayment>
     {
-        private readonly IPaymentsContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
-
-        public Handler(IPaymentsContext context, IPublishEndpoint publishEndpoint)
-        {
-            _context = context;
-            _publishEndpoint = publishEndpoint;
-        }
-
         public async Task Handle(CancelPayment request, CancellationToken cancellationToken)
         {
-            var payment = await _context.Payments.FirstOrDefaultAsync(p => p.Id == request.PaymentId);
+            var payment = await context.Payments.FirstOrDefaultAsync(p => p.Id == request.PaymentId);
 
             if (payment is null)
             {
@@ -33,7 +24,7 @@ public record CancelPayment(string PaymentId) : IRequest
 
             payment.SetStatus(PaymentStatus.Cancelled);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

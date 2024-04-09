@@ -6,15 +6,8 @@ namespace YourBrand.Customers.Application.Persons.Commands;
 
 public record DeletePerson(string PersonId) : IRequest
 {
-    public class Handler : IRequestHandler<DeletePerson>
+    public class Handler(ICustomersContext context) : IRequestHandler<DeletePerson>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeletePerson request, CancellationToken cancellationToken)
         {
             /*

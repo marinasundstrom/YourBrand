@@ -15,27 +15,20 @@ namespace YourBrand.WebApi.Controllers;
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize]
-public class NotificationsController : Controller
+public class NotificationsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public NotificationsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<ActionResult<NotificationsResults>> GetNotifications(
         bool includeUnreadNotificationsCount = false,
         int page = 1, int pageSize = 5, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetNotificationsQuery(includeUnreadNotificationsCount, page, pageSize, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetNotificationsQuery(includeUnreadNotificationsCount, page, pageSize, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpPost("{id}/MarkAsRead")]
     public async Task<ActionResult> MarkNotificationAsRead(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new MarkNotificationAsReadCommand(id), cancellationToken);
+        await mediator.Send(new MarkNotificationAsReadCommand(id), cancellationToken);
 
         return Ok();
     }
@@ -43,7 +36,7 @@ public class NotificationsController : Controller
     [HttpPost("MarkAllAsRead")]
     public async Task<ActionResult> MarkAllNotificationsAsRead(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new MarkAllNotificationsAsReadCommand(), cancellationToken);
+        await mediator.Send(new MarkAllNotificationsAsReadCommand(), cancellationToken);
 
         return Ok();
     }
@@ -51,7 +44,7 @@ public class NotificationsController : Controller
     [HttpPost]
     public async Task<ActionResult> CreateNotification(CreateNotificationDto createNotificationDto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateNotificationCommand(
+        await mediator.Send(new CreateNotificationCommand(
             createNotificationDto.Content,
             createNotificationDto.Link,
             createNotificationDto.UserId,

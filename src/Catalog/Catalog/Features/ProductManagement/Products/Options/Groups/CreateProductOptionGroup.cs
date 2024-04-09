@@ -10,18 +10,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
 public record CreateProductOptionGroup(long ProductId, CreateProductOptionGroupData Data) : IRequest<OptionGroupDto>
 {
-    public class Handler : IRequestHandler<CreateProductOptionGroup, OptionGroupDto>
+    public class Handler(CatalogContext context) : IRequestHandler<CreateProductOptionGroup, OptionGroupDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OptionGroupDto> Handle(CreateProductOptionGroup request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .FirstAsync(x => x.Id == request.ProductId);
 
             var group = new OptionGroup(Guid.NewGuid().ToString())
@@ -34,7 +27,7 @@ public record CreateProductOptionGroup(long ProductId, CreateProductOptionGroupD
 
             product.AddOptionGroup(group);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return new OptionGroupDto(group.Id, group.Name, group.Description, group.Seq, group.Min, group.Max);
         }

@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Industries.Commands;
 
 public record CreateIndustryCommand(string Name) : IRequest<IndustryDto>
 {
-    public class CreateIndustryCommandHandler : IRequestHandler<CreateIndustryCommand, IndustryDto>
+    public class CreateIndustryCommandHandler(IShowroomContext context) : IRequestHandler<CreateIndustryCommand, IndustryDto>
     {
-        private readonly IShowroomContext context;
-
-        public CreateIndustryCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<IndustryDto> Handle(CreateIndustryCommand request, CancellationToken cancellationToken)
         {
             var industry = await context.Industries.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

@@ -8,15 +8,8 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
 public record DeleteAttributeCommand(string Id) : IRequest
 {
-    public class DeleteAttributeCommandHandler : IRequestHandler<DeleteAttributeCommand>
+    public class DeleteAttributeCommandHandler(CatalogContext context) : IRequestHandler<DeleteAttributeCommand>
     {
-        private readonly CatalogContext context;
-
-        public DeleteAttributeCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteAttributeCommand request, CancellationToken cancellationToken)
         {
             var attribute = await context.Attributes

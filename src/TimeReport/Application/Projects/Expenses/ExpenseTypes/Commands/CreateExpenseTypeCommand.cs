@@ -8,15 +8,8 @@ namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Comman
 
 public record CreateExpenseTypeCommand(string Name, string? Description) : IRequest<ExpenseTypeDto>
 {
-    public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseTypeCommand, ExpenseTypeDto>
+    public class CreateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<CreateExpenseTypeCommand, ExpenseTypeDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateExpenseCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ExpenseTypeDto> Handle(CreateExpenseTypeCommand request, CancellationToken cancellationToken)
         {
             /*
@@ -38,9 +31,9 @@ public record CreateExpenseTypeCommand(string Name, string? Description) : IRequ
                 //Project = project
             };
 
-            _context.ExpenseTypes.Add(expenseType);
+            context.ExpenseTypes.Add(expenseType);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return expenseType.ToDto();
         }

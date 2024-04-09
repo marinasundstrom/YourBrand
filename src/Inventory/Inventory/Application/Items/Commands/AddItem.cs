@@ -10,28 +10,21 @@ namespace YourBrand.Inventory.Application.Items.Commands;
 
 public record AddItem(string Id, string Name, ItemTypeDto Type, string GroupId, string Unit) : IRequest<ItemDto>
 {
-    public class Handler : IRequestHandler<AddItem, ItemDto>
+    public class Handler(IInventoryContext context) : IRequestHandler<AddItem, ItemDto>
     {
-        private readonly IInventoryContext _context;
-
-        public Handler(IInventoryContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemDto> Handle(AddItem request, CancellationToken cancellationToken)
         {
-            var item = await _context.Items.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
+            var item = await context.Items.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
             if (item is not null) throw new Exception();
 
             item = new Domain.Entities.Item(request.Id, request.Name, (ItemType)request.Type, "Foo", request.GroupId, request.Unit);
 
-            _context.Items.Add(item);
+            context.Items.Add(item);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            item = await _context.Items
+            item = await context.Items
                .Include(x => x.Group)
                .AsNoTracking()
                .FirstAsync(c => c.Id == item.Id);

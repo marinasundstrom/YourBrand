@@ -12,35 +12,24 @@ namespace YourBrand.HumanResources.Application.Organizations.Commands;
 
 public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRequest<OrganizationDto>
 {
-    public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
+    public class CreateOrganizationCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public CreateOrganizationCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task<OrganizationDto> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = new Organization(
                  request.Name,
                  request.FriendlyName ?? request.Name.ToLower().Replace(' ', '-'));
 
-            _context.Organizations.Add(organization);
+            context.Organizations.Add(organization);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            organization = await _context.Organizations
+            organization = await context.Organizations
                .AsNoTracking()
                .AsSplitQuery()
                .FirstAsync(x => x.Id == organization.Id, cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name));
+            await eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Name));
 
             return organization.ToDto();
         }

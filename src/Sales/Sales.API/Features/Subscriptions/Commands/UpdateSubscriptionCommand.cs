@@ -8,15 +8,8 @@ namespace YourBrand.Sales.Features.Subscriptions;
 
 public record UpdateSubscriptionCommand(Guid SubscriptionId) : IRequest
 {
-    public class UpdateSubscriptionCommandHandler : IRequestHandler<UpdateSubscriptionCommand>
+    public class UpdateSubscriptionCommandHandler(SalesContext salesContext) : IRequestHandler<UpdateSubscriptionCommand>
     {
-        private readonly SalesContext salesContext;
-
-        public UpdateSubscriptionCommandHandler(SalesContext salesContext)
-        {
-            this.salesContext = salesContext;
-        }
-
         public async Task Handle(UpdateSubscriptionCommand request, CancellationToken cancellationToken)
         {
             var subscription = await salesContext.Subscriptions

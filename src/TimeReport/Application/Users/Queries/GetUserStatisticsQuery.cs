@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Users.Queries;
 
 public record GetUserStatisticsQuery(string UserId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
 {
-    public class GetUserStatisticsQueryHandler : IRequestHandler<GetUserStatisticsQuery, Data>
+    public class GetUserStatisticsQueryHandler(ITimeReportContext context) : IRequestHandler<GetUserStatisticsQuery, Data>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetUserStatisticsQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<Data> Handle(GetUserStatisticsQuery request, CancellationToken cancellationToken)
         {
-            var projects = await _context.Projects
+            var projects = await context.Projects
                 .Include(x => x.Memberships)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Activities)

@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Organizations.Commands;
 
 public record CreateOrganizationCommand(string Id, string Name) : IRequest
 {
-    public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand>
+    public class CreateOrganizationCommandHandler(IShowroomContext context) : IRequestHandler<CreateOrganizationCommand>
     {
-        private readonly IShowroomContext context;
-
-        public CreateOrganizationCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
             var organization = await context.Organizations.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

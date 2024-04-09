@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Users.Queries;
 
 public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, TimeReport.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<UserDto>>
 {
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
+    public class GetUsersQueryHandler(ITimeReportContext context) : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetUsersQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Users
+            var query = context.Users
                 .OrderBy(p => p.Created)
                 .AsNoTracking()
                 .AsSplitQuery();

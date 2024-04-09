@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Queries;
 
 public record GetActivityTypesQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ActivityTypeDto>>
 {
-    public class GetActivitiesQueryHandler : IRequestHandler<GetActivityTypesQuery, ItemsResult<ActivityTypeDto>>
+    public class GetActivitiesQueryHandler(ITimeReportContext context) : IRequestHandler<GetActivityTypesQuery, ItemsResult<ActivityTypeDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetActivitiesQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ActivityTypeDto>> Handle(GetActivityTypesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.ActivityTypes
+            var query = context.ActivityTypes
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

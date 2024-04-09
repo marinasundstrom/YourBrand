@@ -3,21 +3,8 @@ using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
-public sealed class TicketStatusUpdatedEventHandler : IDomainEventHandler<TicketStatusUpdated>
+public sealed class TicketStatusUpdatedEventHandler(ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService) : IDomainEventHandler<TicketStatusUpdated>
 {
-    private readonly ITicketRepository ticketRepository;
-    private readonly IUserContext userContext;
-    private readonly IEmailService emailService;
-    private readonly ITicketNotificationService ticketNotificationService;
-
-    public TicketStatusUpdatedEventHandler(ITicketRepository ticketRepository, IUserContext userContext, IEmailService emailService, ITicketNotificationService ticketNotificationService)
-    {
-        this.ticketRepository = ticketRepository;
-        this.userContext = userContext;
-        this.emailService = emailService;
-        this.ticketNotificationService = ticketNotificationService;
-    }
-
     public async Task Handle(TicketStatusUpdated notification, CancellationToken cancellationToken)
     {
         var ticket = await ticketRepository.FindByIdAsync(notification.TicketId, cancellationToken);

@@ -12,22 +12,13 @@ namespace YourBrand.TimeReport.Application.Teams
 
 public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TeamDto>>
 {
-    class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, ItemsResult<TeamDto>>
+    class GetTeamsQueryHandler(
+        ITimeReportContext context,
+        IUserContext userContext) : IRequestHandler<GetTeamsQuery, ItemsResult<TeamDto>>
     {
-        private readonly ITimeReportContext _context;
-        private readonly IUserContext userContext;
-
-        public GetTeamsQueryHandler(
-            ITimeReportContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ItemsResult<TeamDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Team> result = _context
+            IQueryable<Team> result = context
                     .Teams
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

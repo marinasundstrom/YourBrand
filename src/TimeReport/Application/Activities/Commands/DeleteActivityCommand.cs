@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Activities.Commands;
 
 public record DeleteActivityCommand(string ActivityId) : IRequest
 {
-    public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityCommand>
+    public class DeleteActivityCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteActivityCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteActivityCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
-            var activity = await _context.Activities
+            var activity = await context.Activities
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 
@@ -29,9 +22,9 @@ public record DeleteActivityCommand(string ActivityId) : IRequest
                 throw new Exception();
             }
 
-            _context.Activities.Remove(activity);
+            context.Activities.Remove(activity);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

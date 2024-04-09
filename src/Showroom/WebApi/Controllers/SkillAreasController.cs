@@ -15,43 +15,36 @@ namespace YourBrand.Showroom.WebApi.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class SkillAreasController : ControllerBase
+public class SkillAreasController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public SkillAreasController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<Results<SkillAreaDto>> GetSkillAreas(int page = 1, int pageSize = 10, int? industryId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetSkillAreasQuery(page - 1, pageSize, industryId, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetSkillAreasQuery(page - 1, pageSize, industryId, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
     public async Task<SkillAreaDto?> GetSkillArea(string id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetSkillAreaQuery(id), cancellationToken);
+        return await mediator.Send(new GetSkillAreaQuery(id), cancellationToken);
     }
 
     [HttpPost]
     public async Task CreateSkillArea(CreateSkillAreaDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateSkillAreaCommand(dto.Name, dto.IndustryId), cancellationToken);
+        await mediator.Send(new CreateSkillAreaCommand(dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateSkillArea(string id, UpdateSkillAreaDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateSkillAreaCommand(id, dto.Name, dto.IndustryId), cancellationToken);
+        await mediator.Send(new UpdateSkillAreaCommand(id, dto.Name, dto.IndustryId), cancellationToken);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteSkillArea(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteSkillAreaCommand(id), cancellationToken);
+        await mediator.Send(new DeleteSkillAreaCommand(id), cancellationToken);
     }
 }
 

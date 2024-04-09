@@ -10,24 +10,13 @@ namespace YourBrand.Documents.Application.Commands;
 
 public record UploadDocument(string Name, string ContentType, Stream Stream, string DirectoryId) : IRequest<DocumentDto>
 {
-    public class Handler : IRequestHandler<UploadDocument, DocumentDto>
+    public class Handler(IDocumentsContext context, IFileUploaderService fileUploaderService, IUrlResolver urlResolver) : IRequestHandler<UploadDocument, DocumentDto>
     {
-        private readonly IDocumentsContext _context;
-        private readonly IFileUploaderService _fileUploaderService;
-        private readonly IUrlResolver _urlResolver;
-
-        public Handler(IDocumentsContext context, IFileUploaderService fileUploaderService, IUrlResolver urlResolver)
-        {
-            _context = context;
-            _fileUploaderService = fileUploaderService;
-            _urlResolver = urlResolver;
-        }
-
         public async Task<DocumentDto> Handle(UploadDocument request, CancellationToken cancellationToken)
         {
             var n = Path.GetFileNameWithoutExtension(request.Name);
 
-            var document = await _context.Documents
+            var document = await context.Documents
              .AsSplitQuery()
              .AsNoTracking()
              .Where(x => x.DirectoryId == request.DirectoryId)
@@ -42,7 +31,7 @@ public record UploadDocument(string Name, string ContentType, Stream Stream, str
                 name = $"{n} (2){e}";
             }
 
-            var directory = await _context.Directories
+            var directory = await context.Directories
              .Include(x => x.Documents)
              .AsSplitQuery()
              .FirstAsync(/* x => x.Id == request.DirectoryId, */ cancellationToken);
@@ -53,11 +42,11 @@ public record UploadDocument(string Name, string ContentType, Stream Stream, str
 
             document.BlobId = $"{document.Id.Replace("-", string.Empty)}";
 
-            await _fileUploaderService.UploadFileAsync(document.BlobId, request.Stream, cancellationToken);
+            await fileUploaderService.UploadFileAsync(document.BlobId, request.Stream, cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            return document.ToDto(_urlResolver.GetUrl);
+            return document.ToDto(urlResolver.GetUrl);
         }
     }
 }

@@ -10,27 +10,20 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
 public record UpdateProductOption(long ProductId, string OptionId, UpdateProductOptionData Data) : IRequest<OptionDto>
 {
-    public class Handler : IRequestHandler<UpdateProductOption, OptionDto>
+    public class Handler(CatalogContext context) : IRequestHandler<UpdateProductOption, OptionDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OptionDto> Handle(UpdateProductOption request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
             .AsNoTracking()
             .FirstAsync(x => x.Id == request.ProductId);
 
-            var option = await _context.Options
+            var option = await context.Options
                 .Include(x => (x as ChoiceOption)!.Values)
                 .Include(x => x.Group)
                 .FirstAsync(x => x.Id == request.OptionId);
 
-            var group = await _context.OptionGroups
+            var group = await context.OptionGroups
                 .FirstOrDefaultAsync(x => x.Id == request.Data.GroupId);
 
             option.Name = request.Data.Name;
@@ -80,7 +73,7 @@ public record UpdateProductOption(long ProductId, string OptionId, UpdateProduct
                             };
 
                             choiceOption.Values.Add(value);
-                            _context.OptionValues.Add(value);
+                            context.OptionValues.Add(value);
                         }
                         else
                         {
@@ -96,7 +89,7 @@ public record UpdateProductOption(long ProductId, string OptionId, UpdateProduct
 
                     foreach (var v in choiceOption!.Values.ToList())
                     {
-                        if (_context.Entry(v).State == EntityState.Added)
+                        if (context.Entry(v).State == EntityState.Added)
                             continue;
 
                         var value = request.Data.Values.FirstOrDefault(x => x.Id == v.Id);
@@ -109,7 +102,7 @@ public record UpdateProductOption(long ProductId, string OptionId, UpdateProduct
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return option.ToDto();
         }

@@ -7,25 +7,12 @@ using YourBrand.RotRutService.Domain;
 
 namespace YourBrand.RotRutService.Consumers;
 
-public class InvoicePaidConsumer : IConsumer<InvoicePaid>
+public class InvoicePaidConsumer(IRotRutContext context, IJournalEntriesClient verificationsClient,
+    IInvoicesClient invoicesClient, RotRutCaseFactory rotRutCaseFactory) : IConsumer<InvoicePaid>
 {
-    private readonly IRotRutContext _context;
-    private readonly IJournalEntriesClient _verificationsClient;
-    private readonly IInvoicesClient _invoicesClient;
-    private readonly RotRutCaseFactory _rotRutCaseFactory;
-
-    public InvoicePaidConsumer(IRotRutContext context, IJournalEntriesClient verificationsClient,
-        IInvoicesClient invoicesClient, RotRutCaseFactory rotRutCaseFactory)
-    {
-        _context = context;
-        _verificationsClient = verificationsClient;
-        _invoicesClient = invoicesClient;
-        _rotRutCaseFactory = rotRutCaseFactory;
-    }
-
     public async Task Consume(ConsumeContext<InvoicePaid> context)
     {
-        var invoice = await _invoicesClient.GetInvoiceAsync(context.Message.Id, context.CancellationToken);
+        var invoice = await invoicesClient.GetInvoiceAsync(context.Message.Id, context.CancellationToken);
 
         await CreateRotRutCase(invoice, context.CancellationToken);
     }
@@ -36,11 +23,11 @@ public class InvoicePaidConsumer : IConsumer<InvoicePaid>
 
         if (domesticServices is not null)
         {
-            var rotRutCase = _rotRutCaseFactory.CreateRotRutCase(invoice);
+            var rotRutCase = rotRutCaseFactory.CreateRotRutCase(invoice);
 
-            _context.RotRutCases.Add(rotRutCase);
+            context.RotRutCases.Add(rotRutCase);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 

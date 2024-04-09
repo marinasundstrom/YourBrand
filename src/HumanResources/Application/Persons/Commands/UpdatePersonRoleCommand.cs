@@ -8,22 +8,15 @@ namespace YourBrand.HumanResources.Application.Persons.Commands;
 
 public record UpdatePersonRoleCommand(string PersonId, string Role) : IRequest
 {
-    public class UpdatePersonRoleCommandHandler : IRequestHandler<UpdatePersonRoleCommand>
+    public class UpdatePersonRoleCommandHandler(IApplicationDbContext context) : IRequestHandler<UpdatePersonRoleCommand>
     {
-        private readonly IApplicationDbContext _context;
-
-        public UpdatePersonRoleCommandHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(UpdatePersonRoleCommand request, CancellationToken cancellationToken)
         {
-            var person = await _context.Persons
+            var person = await context.Persons
                 .Include(p => p.Roles)
                 .FirstOrDefaultAsync(p => p.Id == request.PersonId);
 
-            var role = await _context.Roles
+            var role = await context.Roles
                 .FirstOrDefaultAsync(p => p.Name == request.Role);
 
             if (role is null)
@@ -33,7 +26,7 @@ public record UpdatePersonRoleCommand(string PersonId, string Role) : IRequest
 
             person.AddToRole(role);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

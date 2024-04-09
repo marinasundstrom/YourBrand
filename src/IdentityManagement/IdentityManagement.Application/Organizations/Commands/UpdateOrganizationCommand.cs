@@ -11,22 +11,11 @@ namespace YourBrand.IdentityManagement.Application.Organizations.Commands;
 
 public record UpdateOrganizationCommand(string OrganizationId, string Name) : IRequest<OrganizationDto>
 {
-    public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
+    public sealed class UpdateUserDetailsCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task<OrganizationDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _context.Organizations
+            var organization = await context.Organizations
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.OrganizationId, cancellationToken);
 
@@ -37,9 +26,9 @@ public record UpdateOrganizationCommand(string OrganizationId, string Name) : IR
 
             organization.ChangeName(request.Name);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name));
+            await eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name));
 
             return organization.ToDto();
         }

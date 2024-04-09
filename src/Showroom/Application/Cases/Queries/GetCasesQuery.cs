@@ -11,25 +11,13 @@ namespace YourBrand.Showroom.Application.Cases.Queries;
 
 public record GetCasesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CaseDto>>
 {
-    class GetCasesQueryHandler : IRequestHandler<GetCasesQuery, Results<CaseDto>>
+    class GetCasesQueryHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<GetCasesQuery, Results<CaseDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public GetCasesQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<Results<CaseDto>> Handle(GetCasesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Case> result = _context
+            IQueryable<Case> result = context
                     .Cases
                      .OrderBy(o => o.Created)
                      .AsNoTracking()
@@ -55,7 +43,7 @@ public record GetCasesQuery(int Page = 0, int PageSize = 10, string? SearchStrin
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);
 
-            return new Results<CaseDto>(items.Select(cp => cp.ToDto(_urlHelper)), totalCount);
+            return new Results<CaseDto>(items.Select(cp => cp.ToDto(urlHelper)), totalCount);
         }
     }
 }

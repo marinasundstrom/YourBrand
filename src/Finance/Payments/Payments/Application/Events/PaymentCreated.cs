@@ -7,20 +7,11 @@ using YourBrand.Payments.Hubs;
 
 namespace YourBrand.Payments.Application.Events;
 
-public class PaymentCreatedHandler : IDomainEventHandler<PaymentCreated>
+public class PaymentCreatedHandler(IPaymentsContext context, IPaymentsHubClient paymentsHubClient) : IDomainEventHandler<PaymentCreated>
 {
-    private readonly IPaymentsContext _context;
-    private readonly IPaymentsHubClient _paymentsHubClient;
-
-    public PaymentCreatedHandler(IPaymentsContext context, IPaymentsHubClient paymentsHubClient)
-    {
-        _context = context;
-        _paymentsHubClient = paymentsHubClient;
-    }
-
     public async Task Handle(PaymentCreated notification, CancellationToken cancellationToken)
     {
-        var payment = await _context
+        var payment = await context
             .Payments
             .FirstOrDefaultAsync(i => i.Id == notification.PaymentId);
 

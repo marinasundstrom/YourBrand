@@ -8,15 +8,8 @@ namespace YourBrand.TimeReport.Application.Teams.Commands;
 
 public record CreateTeamCommand(string Id, string OrganizationId, string Name, string? Description) : IRequest<TeamDto>
 {
-    public class CreateTeamCommandHandler : IRequestHandler<CreateTeamCommand, TeamDto>
+    public class CreateTeamCommandHandler(ITimeReportContext context) : IRequestHandler<CreateTeamCommand, TeamDto>
     {
-        private readonly ITimeReportContext context;
-
-        public CreateTeamCommandHandler(ITimeReportContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<TeamDto> Handle(CreateTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

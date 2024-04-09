@@ -1,21 +1,14 @@
 ﻿namespace YourBrand.HumanResources.Domain.Entities;
 
-public class Department
+public class Department(string name, string description)
 {
     readonly HashSet<Person> _persons = new HashSet<Person>();
 
-    public Department(string name, string description)
-    {
-        Id = Guid.NewGuid().ToString();
-        Name = name;
-        Description = description;
-    }
+    public string Id { get; private set; } = Guid.NewGuid().ToString();
 
-    public string Id { get; private set; }
+    public string Name { get; private set; } = name;
 
-    public string Name { get; private set; }
-
-    public string? Description { get; private set; }
+    public string? Description { get; private set; } = description;
 
     public Organization Organization { get; private set; }
 

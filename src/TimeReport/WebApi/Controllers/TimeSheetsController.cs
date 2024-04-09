@@ -18,27 +18,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class TimeSheetsController : ControllerBase
+public class TimeSheetsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public TimeSheetsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<TimeSheetDto>>> GetTimeSheets(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null)
     {
-        return Ok(await _mediator.Send(new GetTimeSheetsQuery(page, pageSize, projectId, userId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetTimeSheetsQuery(page, pageSize, projectId, userId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<TimeSheetDto>> GetTimeSheet([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var timeSheet = await _mediator.Send(new GetTimeSheetQuery(id), cancellationToken);
+        var timeSheet = await mediator.Send(new GetTimeSheetQuery(id), cancellationToken);
 
         if (timeSheet is null)
         {
@@ -52,7 +45,7 @@ public class TimeSheetsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<TimeSheetDto>> GetTimeSheetForWeek([FromRoute] int year, [FromRoute] int week, [FromQuery] string? userId, CancellationToken cancellationToken)
     {
-        return Ok(await _mediator.Send(new GetTimeSheetForWeekQuery(year, week, userId), cancellationToken));
+        return Ok(await mediator.Send(new GetTimeSheetForWeekQuery(year, week, userId), cancellationToken));
     }
 
     [HttpPost("{timeSheetId}")]
@@ -63,7 +56,7 @@ public class TimeSheetsController : ControllerBase
     {
         var date = DateOnly.FromDateTime(dto.Date);
 
-        var result = await _mediator.Send(new CreateEntryCommand(timeSheetId, dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
+        var result = await mediator.Send(new CreateEntryCommand(timeSheetId, dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
 
         return result switch
         {
@@ -91,7 +84,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            var result = await _mediator.Send(new UpdateEntryCommand(timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
+            var result = await mediator.Send(new UpdateEntryCommand(timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
 
             return result switch
             {
@@ -134,7 +127,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            var newDto = await _mediator.Send(new UpdateEntryDetailsCommand(timeSheetId, entryId, dto.Description), cancellationToken);
+            var newDto = await mediator.Send(new UpdateEntryDetailsCommand(timeSheetId, entryId, dto.Description), cancellationToken);
             return Ok(newDto);
         }
         catch (TimeSheetNotFoundException exc)
@@ -170,7 +163,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteActivityCommand(timeSheetId, activityId), cancellationToken);
+            await mediator.Send(new DeleteActivityCommand(timeSheetId, activityId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)
@@ -194,7 +187,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new CloseWeekCommand(timeSheetId), cancellationToken);
+            await mediator.Send(new CloseWeekCommand(timeSheetId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)
@@ -210,7 +203,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new ReopenWeekCommand(timeSheetId), cancellationToken);
+            await mediator.Send(new ReopenWeekCommand(timeSheetId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)
@@ -226,7 +219,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new ApproveWeekCommand(timeSheetId), cancellationToken);
+            await mediator.Send(new ApproveWeekCommand(timeSheetId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)
@@ -242,7 +235,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new UpdateTimeSheetStatusCommand(timeSheetId), cancellationToken);
+            await mediator.Send(new UpdateTimeSheetStatusCommand(timeSheetId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)
@@ -258,7 +251,7 @@ public class TimeSheetsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new LockMonthCommand(timeSheetId), cancellationToken);
+            await mediator.Send(new LockMonthCommand(timeSheetId), cancellationToken);
             return Ok();
         }
         catch (TimeSheetNotFoundException exc)

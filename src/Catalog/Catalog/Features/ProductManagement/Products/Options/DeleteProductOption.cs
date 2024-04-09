@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
 public record DeleteProductOption(long ProductId, string OptionId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteProductOption>
+    public class Handler(CatalogContext context) : IRequestHandler<DeleteProductOption>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProductOption request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .Include(x => x.Options)
                 .FirstAsync(x => x.Id == request.ProductId);
 
@@ -27,11 +20,11 @@ public record DeleteProductOption(long ProductId, string OptionId) : IRequest
                 .First(x => x.Id == request.OptionId);
 
             product.RemoveOption(option);
-            _context.Options.Remove(option);
+            context.Options.Remove(option);
 
             if (product.HasVariants)
             {
-                var variants = await _context.Products
+                var variants = await context.Products
                     .Where(x => x.ParentId == product.Id)
                     .Include(x => x.ProductOptions.Where(z => z.OptionId == option.Id))
                     .ToArrayAsync(cancellationToken);
@@ -46,7 +39,7 @@ public record DeleteProductOption(long ProductId, string OptionId) : IRequest
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
         }
     }

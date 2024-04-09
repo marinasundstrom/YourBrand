@@ -15,25 +15,18 @@ namespace YourBrand.Showroom.WebApi.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class CasesController : ControllerBase
+public class CasesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public CasesController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<Results<CaseDto>> GetCases(int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await _mediator.Send(new GetCasesQuery(page - 1, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetCasesQuery(page - 1, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
     public async Task<CaseDto?> GetCase(string id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetCaseQuery(id), cancellationToken);
+        return await mediator.Send(new GetCaseQuery(id), cancellationToken);
     }
 
     [HttpPost]
@@ -41,20 +34,20 @@ public class CasesController : ControllerBase
     [ProducesResponseType(typeof(CaseDto), StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateCase(CreateCaseDto dto, CancellationToken cancellationToken)
     {
-        var dto2 = await _mediator.Send(new CreateCaseCommand(dto.Description, new CasePricing(dto.Pricing.HourlyPrice, dto.Pricing.Hours)), cancellationToken);
+        var dto2 = await mediator.Send(new CreateCaseCommand(dto.Description, new CasePricing(dto.Pricing.HourlyPrice, dto.Pricing.Hours)), cancellationToken);
         return CreatedAtAction(nameof(GetCase), new { id = dto2.Id }, dto2);
     }
 
     [HttpPut("{id}")]
     public async Task UpdateCase(string id, UpdateCaseDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new UpdateCaseCommand(id, dto.Description), cancellationToken);
+        await mediator.Send(new UpdateCaseCommand(id, dto.Description), cancellationToken);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteCase(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteCaseCommand(id), cancellationToken);
+        await mediator.Send(new DeleteCaseCommand(id), cancellationToken);
     }
 }
 

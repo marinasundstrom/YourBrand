@@ -8,15 +8,8 @@ namespace YourBrand.Inventory.Application.Sites.Commands;
 
 public record DeleteSiteCommand(string Id) : IRequest
 {
-    public class DeleteSiteCommandHandler : IRequestHandler<DeleteSiteCommand>
+    public class DeleteSiteCommandHandler(IInventoryContext context) : IRequestHandler<DeleteSiteCommand>
     {
-        private readonly IInventoryContext context;
-
-        public DeleteSiteCommandHandler(IInventoryContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteSiteCommand request, CancellationToken cancellationToken)
         {
             var site = await context.Sites

@@ -19,22 +19,13 @@ namespace YourBrand.Messenger.WebApi.Controllers;
 [ApiController]
 [Authorize(AuthenticationSchemes = Messenger.Authentication.AuthSchemes.Default)]
 [Route("[controller]")]
-public class ConversationsController : ControllerBase
+public class ConversationsController(IMediator mediator, IRequestClient<PostMessage> postMessageClient) : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IRequestClient<PostMessage> _postMessageClient;
-
-    public ConversationsController(IMediator mediator, IRequestClient<PostMessage> postMessageClient)
-    {
-        _mediator = mediator;
-        _postMessageClient = postMessageClient;
-    }
-
     [HttpGet]
     public async Task<ActionResult<Results<ConversationDto>>> GetConversations(
         int skip = 0, int take = 10, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetConversationsQuery(skip, take, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetConversationsQuery(skip, take, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpGet("{id}")]
@@ -42,14 +33,14 @@ public class ConversationsController : ControllerBase
         string id,
         CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetConversationQuery(id), cancellationToken));
+        return Ok(await mediator.Send(new GetConversationQuery(id), cancellationToken));
     }
 
     [HttpPost]
     public async Task<ActionResult<MessageDto>> CreateConversation(
         string? title, CancellationToken cancellationToken = default)
     {
-        var dto = await _mediator.Send(new CreateConversationCommand(title), cancellationToken);
+        var dto = await mediator.Send(new CreateConversationCommand(title), cancellationToken);
         return Ok(dto);
     }
 
@@ -57,7 +48,7 @@ public class ConversationsController : ControllerBase
     public async Task<ActionResult> JoinConversation(
         string id, CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(new JoinConversationCommand(id), cancellationToken);
+        await mediator.Send(new JoinConversationCommand(id), cancellationToken);
         return Ok();
     }
 
@@ -66,7 +57,7 @@ public class ConversationsController : ControllerBase
     public async Task<ActionResult> LeaveConversation(
         string id, CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(new LeaveConversationCommand(id), cancellationToken);
+        await mediator.Send(new LeaveConversationCommand(id), cancellationToken);
         return Ok();
     }
 
@@ -74,7 +65,7 @@ public class ConversationsController : ControllerBase
     public async Task<ActionResult<Results<MessageDto>>> GetMessages(
         string id, int skip = 0, int take = 10, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetMessagesIncrQuery(id, skip, take, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetMessagesIncrQuery(id, skip, take, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpPost("{id}/Messages")]
@@ -83,7 +74,7 @@ public class ConversationsController : ControllerBase
         string id,
         string text, string? replyToId, CancellationToken cancellationToken = default)
     {
-        var response = await _postMessageClient.GetResponse<MessageDto>(new PostMessage(userContext.GetAccessToken()!, id, text, replyToId), cancellationToken);
+        var response = await postMessageClient.GetResponse<MessageDto>(new PostMessage(userContext.GetAccessToken()!, id, text, replyToId), cancellationToken);
         return Ok(response.Message);
     }
 
@@ -92,7 +83,7 @@ public class ConversationsController : ControllerBase
         string conversationId, string id,
         CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(new DeleteMessageCommand(conversationId, id), cancellationToken);
+        await mediator.Send(new DeleteMessageCommand(conversationId, id), cancellationToken);
         return Ok();
     }
 }

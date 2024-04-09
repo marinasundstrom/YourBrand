@@ -9,22 +9,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Queries;
 
 public record GetExperienceQuery(string PersonProfileId, string Id) : IRequest<ExperienceDto>
 {
-    class GetPersonProfileQueryHandler : IRequestHandler<GetExperienceQuery, ExperienceDto?>
+    class GetPersonProfileQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetExperienceQuery, ExperienceDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetPersonProfileQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ExperienceDto?> Handle(GetExperienceQuery request, CancellationToken cancellationToken)
         {
-            var experience = await _context
+            var experience = await context
                .PersonProfileExperiences
                 .Include(x => x.Employment)
                 .ThenInclude(x => x.Employer)

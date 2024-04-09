@@ -10,22 +10,13 @@ namespace YourBrand.Marketing.Application.Campaigns.Queries;
 
 public record GetCampaignsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<CampaignDto>>
 {
-    class GetCampaignsQueryHandler : IRequestHandler<GetCampaignsQuery, ItemsResult<CampaignDto>>
+    class GetCampaignsQueryHandler(
+        IMarketingContext context,
+        IUserContext userContext) : IRequestHandler<GetCampaignsQuery, ItemsResult<CampaignDto>>
     {
-        private readonly IMarketingContext _context;
-        private readonly IUserContext userContext;
-
-        public GetCampaignsQueryHandler(
-            IMarketingContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ItemsResult<CampaignDto>> Handle(GetCampaignsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Campaign> result = _context
+            IQueryable<Campaign> result = context
                     .Campaigns
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

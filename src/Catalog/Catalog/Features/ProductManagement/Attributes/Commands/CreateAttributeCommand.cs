@@ -9,15 +9,8 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
 public record CreateAttributeCommand(string Name, string? Description, string? GroupId, IEnumerable<CreateProductAttributeValueData> Values) : IRequest<AttributeDto>
 {
-    public class CreateAttributeCommandHandler : IRequestHandler<CreateAttributeCommand, AttributeDto>
+    public class CreateAttributeCommandHandler(CatalogContext context) : IRequestHandler<CreateAttributeCommand, AttributeDto>
     {
-        private readonly CatalogContext context;
-
-        public CreateAttributeCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<AttributeDto> Handle(CreateAttributeCommand request, CancellationToken cancellationToken)
         {
             var group = await context.AttributeGroups

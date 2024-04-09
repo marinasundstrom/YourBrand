@@ -1,11 +1,6 @@
 ﻿namespace YourBrand.Analytics.Application.Exceptions;
 
-public class ValidationException : Exception
+public class ValidationException(Dictionary<string, string[]> errors) : Exception
 {
-    public ValidationException(Dictionary<string, string[]> errors)
-    {
-        Errors = errors;
-    }
-
-    public IReadOnlyDictionary<string, string[]> Errors { get; }
+    public IReadOnlyDictionary<string, string[]> Errors { get; } = errors;
 }

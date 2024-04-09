@@ -12,22 +12,13 @@ namespace YourBrand.Showroom.Application.Skills.Queries;
 
 public record GetSkillsQuery(int Page = 0, int PageSize = 10, string? SkillAreaId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SkillDto>>
 {
-    class GetSkillsQueryHandler : IRequestHandler<GetSkillsQuery, Results<SkillDto>>
+    class GetSkillsQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetSkillsQuery, Results<SkillDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetSkillsQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<Results<SkillDto>> Handle(GetSkillsQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Skill> result = _context
+            IQueryable<Skill> result = context
                     .Skills
                     .OrderBy(o => o.Name)
                     .AsNoTracking()

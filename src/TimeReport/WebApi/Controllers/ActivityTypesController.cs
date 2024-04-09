@@ -15,27 +15,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class ActivityTypesController : ControllerBase
+public class ActivityTypesController(IMediator mediator, ITimeReportContext context) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ActivityTypesController(IMediator mediator, ITimeReportContext context)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<ActivityTypeDto>>> GetActivityTypes(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetActivityTypesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetActivityTypesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ActivityTypeDto>> GetActivityType(string id, CancellationToken cancellationToken)
     {
-        var activity = await _mediator.Send(new GetActivityTypeQuery(id), cancellationToken);
+        var activity = await mediator.Send(new GetActivityTypeQuery(id), cancellationToken);
 
         if (activity is null)
         {
@@ -52,7 +45,7 @@ public class ActivityTypesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new CreateActivityTypeCommand(createActivityTypeDto.Name, createActivityTypeDto.Description, createActivityTypeDto.OrganizationId, createActivityTypeDto.ProjectId, createActivityTypeDto.ExcludeHours), cancellationToken);
+            var activity = await mediator.Send(new CreateActivityTypeCommand(createActivityTypeDto.Name, createActivityTypeDto.Description, createActivityTypeDto.OrganizationId, createActivityTypeDto.ProjectId, createActivityTypeDto.ExcludeHours), cancellationToken);
 
             return Ok(activity);
         }
@@ -68,7 +61,7 @@ public class ActivityTypesController : ControllerBase
     {
         try
         {
-            var activity = await _mediator.Send(new UpdateActivityTypeCommand(id, updateActivityTypeDto.Name, updateActivityTypeDto.Description, updateActivityTypeDto.OrganizationId, updateActivityTypeDto.ProjectId, updateActivityTypeDto.ExcludeHours), cancellationToken);
+            var activity = await mediator.Send(new UpdateActivityTypeCommand(id, updateActivityTypeDto.Name, updateActivityTypeDto.Description, updateActivityTypeDto.OrganizationId, updateActivityTypeDto.ProjectId, updateActivityTypeDto.ExcludeHours), cancellationToken);
 
             return Ok(activity);
         }
@@ -85,7 +78,7 @@ public class ActivityTypesController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteActivityTypeCommand(id), cancellationToken);
+            await mediator.Send(new DeleteActivityTypeCommand(id), cancellationToken);
 
             return Ok();
         }

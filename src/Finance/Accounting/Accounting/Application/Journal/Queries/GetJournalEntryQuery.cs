@@ -8,15 +8,8 @@ namespace YourBrand.Accounting.Application.Journal.Queries;
 
 public record GetJournalEntryQuery(int VerificationId) : IRequest<JournalEntryDto>
 {
-    public class GetJournalEntryQueryHandler : IRequestHandler<GetJournalEntryQuery, JournalEntryDto>
+    public class GetJournalEntryQueryHandler(IAccountingContext context) : IRequestHandler<GetJournalEntryQuery, JournalEntryDto>
     {
-        private readonly IAccountingContext context;
-
-        public GetJournalEntryQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<JournalEntryDto> Handle(GetJournalEntryQuery request, CancellationToken cancellationToken)
         {
             var v = await context.JournalEntries

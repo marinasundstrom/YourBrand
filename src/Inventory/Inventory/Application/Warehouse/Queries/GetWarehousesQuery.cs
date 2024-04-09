@@ -10,22 +10,13 @@ namespace YourBrand.Inventory.Application.Warehouses.Queries;
 
 public record GetWarehousesQuery(int Page = 0, int PageSize = 10, string? SiteId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<WarehouseDto>>
 {
-    class GetWarehousesQueryHandler : IRequestHandler<GetWarehousesQuery, ItemsResult<WarehouseDto>>
+    class GetWarehousesQueryHandler(
+        IInventoryContext context,
+        IUserContext userContext) : IRequestHandler<GetWarehousesQuery, ItemsResult<WarehouseDto>>
     {
-        private readonly IInventoryContext _context;
-        private readonly IUserContext userContext;
-
-        public GetWarehousesQueryHandler(
-            IInventoryContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<ItemsResult<WarehouseDto>> Handle(GetWarehousesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Warehouse> result = _context
+            IQueryable<Warehouse> result = context
                     .Warehouses
                     .OrderBy(o => o.Created)
                     .AsNoTracking()

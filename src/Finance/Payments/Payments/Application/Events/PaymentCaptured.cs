@@ -9,22 +9,11 @@ using YourBrand.Payments.Hubs;
 
 namespace YourBrand.Payments.Application.Events;
 
-public class PaymentCapturedHandler : IDomainEventHandler<PaymentCaptured>
+public class PaymentCapturedHandler(IPaymentsContext context, IPaymentsHubClient paymentsHubClient, IPublishEndpoint publishEndpoint) : IDomainEventHandler<PaymentCaptured>
 {
-    private readonly IPaymentsContext _context;
-    private readonly IPaymentsHubClient _paymentsHubClient;
-    private readonly IPublishEndpoint _publishEndpoint;
-
-    public PaymentCapturedHandler(IPaymentsContext context, IPaymentsHubClient paymentsHubClient, IPublishEndpoint publishEndpoint)
-    {
-        _context = context;
-        _paymentsHubClient = paymentsHubClient;
-        _publishEndpoint = publishEndpoint;
-    }
-
     public async Task Handle(PaymentCaptured notification, CancellationToken cancellationToken)
     {
-        var payment = await _context
+        var payment = await context
             .Payments
             .Include(c => c.Captures)
             .FirstOrDefaultAsync(i => i.Id == notification.PaymentId);
@@ -35,7 +24,7 @@ public class PaymentCapturedHandler : IDomainEventHandler<PaymentCaptured>
 
             if (capture is not null)
             {
-                await _publishEndpoint.Publish(new Contracts.PaymentCaptured(capture.PaymentId, capture.Id, capture.Date, payment.Currency, capture.Amount));
+                await publishEndpoint.Publish(new Contracts.PaymentCaptured(capture.PaymentId, capture.Id, capture.Date, payment.Currency, capture.Amount));
             }
         }
     }

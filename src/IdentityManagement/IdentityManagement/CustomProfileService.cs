@@ -12,17 +12,9 @@ using YourBrand.IdentityManagement.Client;
 
 namespace YourBrand.IdentityManagement;
 
-public sealed class CustomProfileService<TUser> : Duende.IdentityServer.AspNetIdentity.ProfileService<TUser>
+public sealed class CustomProfileService<TUser>(ILogger<DefaultProfileService> logger, UserManager<TUser> userManager, IUserClaimsPrincipalFactory<TUser> claimsFactory) : Duende.IdentityServer.AspNetIdentity.ProfileService<TUser>(userManager, claimsFactory)
     where TUser : IdentityUser
 {
-    private readonly ILogger<DefaultProfileService> _logger;
-
-    public CustomProfileService(ILogger<DefaultProfileService> logger, UserManager<TUser> userManager, IUserClaimsPrincipalFactory<TUser> claimsFactory)
-        : base(userManager, claimsFactory)
-    {
-        _logger = logger;
-    }
-
     public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         // add actor claim if needed

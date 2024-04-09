@@ -15,18 +15,11 @@ namespace YourBrand.RotRutService.Application.Commands;
 
 public record CreateRutFile(string? NamnPaBegaran) : IRequest<string>
 {
-    public class Handler : IRequestHandler<CreateRutFile, string>
+    public class Handler(IRotRutContext context) : IRequestHandler<CreateRutFile, string>
     {
-        private readonly IRotRutContext _context;
-
-        public Handler(IRotRutContext context)
-        {
-            _context = context;
-        }
-
         public async Task<string> Handle(CreateRutFile request, CancellationToken cancellationToken)
         {
-            var rotRutCases = await _context.RotRutCases
+            var rotRutCases = await context.RotRutCases
                 .Where(x => x.Status == Domain.Entities.RotRutCaseStatus.InvoicePaid)
                 .ToArrayAsync(cancellationToken);
 

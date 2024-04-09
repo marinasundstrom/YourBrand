@@ -10,22 +10,10 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record CreatePersonProfileCommand(CreatePersonProfileDto PersonProfile) : IRequest<PersonProfileDto>
 {
-    class CreatePersonProfileCommandHandler : IRequestHandler<CreatePersonProfileCommand, PersonProfileDto>
+    class CreatePersonProfileCommandHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<CreatePersonProfileCommand, PersonProfileDto>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public CreatePersonProfileCommandHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<PersonProfileDto> Handle(CreatePersonProfileCommand request, CancellationToken cancellationToken)
         {
             var personProfile = new PersonProfile
@@ -56,17 +44,17 @@ public record CreatePersonProfileCommand(CreatePersonProfileDto PersonProfile) :
                 personProfile.CompetenceAreaId = request.PersonProfile.CompetenceAreaId;
             }
 
-            _context.PersonProfiles.Add(personProfile);
+            context.PersonProfiles.Add(personProfile);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            personProfile = await _context.PersonProfiles
+            personProfile = await context.PersonProfiles
                 .Include(x => x.Industry)
                 .Include(x => x.Organization)
                 .Include(x => x.CompetenceArea)
                 .FirstOrDefaultAsync(x => x.Id == personProfile.Id);
 
-            return personProfile.ToDto(_urlHelper);
+            return personProfile.ToDto(urlHelper);
         }
     }
 }

@@ -8,15 +8,8 @@ namespace YourBrand.Showroom.Application.Industries.Commands;
 
 public record DeleteIndustryCommand(int Id) : IRequest
 {
-    public class DeleteIndustryCommandHandler : IRequestHandler<DeleteIndustryCommand>
+    public class DeleteIndustryCommandHandler(IShowroomContext context) : IRequestHandler<DeleteIndustryCommand>
     {
-        private readonly IShowroomContext context;
-
-        public DeleteIndustryCommandHandler(IShowroomContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteIndustryCommand request, CancellationToken cancellationToken)
         {
             var industry = await context.Industries

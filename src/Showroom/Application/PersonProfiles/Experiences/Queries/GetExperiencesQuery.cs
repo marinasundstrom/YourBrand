@@ -12,22 +12,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Queries;
 
 public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? PersonProfileId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ExperienceDto>>
 {
-    class GetExperiencesQueryHandler : IRequestHandler<GetExperiencesQuery, Results<ExperienceDto>>
+    class GetExperiencesQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetExperiencesQuery, Results<ExperienceDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetExperiencesQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<Results<ExperienceDto>> Handle(GetExperiencesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<PersonProfileExperience> result = _context
+            IQueryable<PersonProfileExperience> result = context
                     .PersonProfileExperiences
                     .OrderByDescending(x => x.StartDate)
                     .ThenByDescending(x => x.EndDate)

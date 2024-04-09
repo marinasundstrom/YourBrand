@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
 public record DeleteProductOptionGroup(long ProductId, string OptionGroupId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteProductOptionGroup>
+    public class Handler(CatalogContext context) : IRequestHandler<DeleteProductOptionGroup>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProductOptionGroup request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
                 .Include(x => x.OptionGroups)
                 .ThenInclude(x => x.Options)
                 .FirstAsync(x => x.Id == request.ProductId);
@@ -30,9 +23,9 @@ public record DeleteProductOptionGroup(long ProductId, string OptionGroupId) : I
             optionGroup.Options.Clear();
 
             product.RemoveOptionGroup(optionGroup);
-            _context.OptionGroups.Remove(optionGroup);
+            context.OptionGroups.Remove(optionGroup);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
         }
     }

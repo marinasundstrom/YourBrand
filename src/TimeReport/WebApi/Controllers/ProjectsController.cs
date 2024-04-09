@@ -17,29 +17,22 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(AuthenticationSchemes = AuthSchemes.Default)]
-public class ProjectsController : ControllerBase
+public class ProjectsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public ProjectsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
         var user = Request.HttpContext.User;
 
-        return Ok(await _mediator.Send(new GetProjectsQuery(page, pageSize, userId, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetProjectsQuery(page, pageSize, userId, searchString, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ProjectDto>> GetProject(string id, CancellationToken cancellationToken)
     {
-        var project = await _mediator.Send(new GetProjectQuery(id), cancellationToken);
+        var project = await mediator.Send(new GetProjectQuery(id), cancellationToken);
 
         if (project is null)
         {
@@ -56,7 +49,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            var project = await _mediator.Send(new CreateProjectCommand(createProjectDto.Name, createProjectDto.Description, createProjectDto.OrganizationId), cancellationToken);
+            var project = await mediator.Send(new CreateProjectCommand(createProjectDto.Name, createProjectDto.Description, createProjectDto.OrganizationId), cancellationToken);
 
             return Ok(project);
         }
@@ -73,7 +66,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            var project = await _mediator.Send(new UpdateProjectCommand(id, updateProjectDto.Name, updateProjectDto.Description, updateProjectDto.OrganizationId), cancellationToken);
+            var project = await mediator.Send(new UpdateProjectCommand(id, updateProjectDto.Name, updateProjectDto.Description, updateProjectDto.OrganizationId), cancellationToken);
 
             return Ok(project);
         }
@@ -90,7 +83,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteProjectCommand(id), cancellationToken);
+            await mediator.Send(new DeleteProjectCommand(id), cancellationToken);
 
             return Ok();
         }
@@ -105,7 +98,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetProjectStatisticsSummaryQuery(), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsSummaryQuery(), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -118,7 +111,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetProjectStatisticsQuery(from, to), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsQuery(from, to), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -131,7 +124,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetProjectStatisticsSummaryForProjectQuery(id), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsSummaryForProjectQuery(id), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -144,7 +137,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetProjectStatisticsForProjectQuery(id, from, to), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsForProjectQuery(id, from, to), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -158,7 +151,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetProjectMembershipsQuery(id, page, pageSize, sortBy, sortDirection), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectMembershipsQuery(id, page, pageSize, sortBy, sortDirection), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -172,7 +165,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new GetProjectMembershipQuery(id, membershipId), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectMembershipQuery(id, membershipId), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -187,7 +180,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new CreateProjectMembershipCommand(id, createProjectMembershipDto.UserId, createProjectMembershipDto.From, createProjectMembershipDto.Thru), cancellationToken));
+            return Ok(await mediator.Send(new CreateProjectMembershipCommand(id, createProjectMembershipDto.UserId, createProjectMembershipDto.From, createProjectMembershipDto.Thru), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -202,7 +195,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            return Ok(await _mediator.Send(new UpdateProjectMembershipCommand(id, membershipId, updateProjectMembershipDto.From, updateProjectMembershipDto.Thru), cancellationToken));
+            return Ok(await mediator.Send(new UpdateProjectMembershipCommand(id, membershipId, updateProjectMembershipDto.From, updateProjectMembershipDto.Thru), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -221,7 +214,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new DeleteProjectMembershipCommand(id, membershipId), cancellationToken);
+            await mediator.Send(new DeleteProjectMembershipCommand(id, membershipId), cancellationToken);
 
             return Ok();
         }
@@ -242,7 +235,7 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            await _mediator.Send(new BillProjectCommand(id, from, to), cancellationToken);
+            await mediator.Send(new BillProjectCommand(id, from, to), cancellationToken);
 
             return Ok();
         }

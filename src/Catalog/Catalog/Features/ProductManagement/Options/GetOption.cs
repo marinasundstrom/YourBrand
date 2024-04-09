@@ -9,18 +9,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Options;
 
 public record GetOption(string OptionId) : IRequest<OptionDto>
 {
-    public class Handler : IRequestHandler<GetOption, OptionDto>
+    public class Handler(CatalogContext context) : IRequestHandler<GetOption, OptionDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OptionDto> Handle(GetOption request, CancellationToken cancellationToken)
         {
-            var option = await _context.Options
+            var option = await context.Options
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Group)

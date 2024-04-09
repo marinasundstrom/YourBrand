@@ -8,15 +8,8 @@ namespace YourBrand.TimeReport.Application.Teams.Commands;
 
 public record UpdateTeamCommand(string Id, string Name, string? Description) : IRequest<TeamDto>
 {
-    public class UpdateTeamCommandHandler : IRequestHandler<UpdateTeamCommand, TeamDto>
+    public class UpdateTeamCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateTeamCommand, TeamDto>
     {
-        private readonly ITimeReportContext context;
-
-        public UpdateTeamCommandHandler(ITimeReportContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<TeamDto> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

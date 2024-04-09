@@ -11,24 +11,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record LockMonthCommand(string TimeSheetId) : IRequest
 {
-    public class LockMonthCommandHandler : IRequestHandler<LockMonthCommand>
+    public class LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<LockMonthCommand>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IReportingPeriodRepository _reportingPeriodRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _reportingPeriodRepository = reportingPeriodRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task Handle(LockMonthCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -74,7 +61,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
 
             var userId = timeSheet.User.Id;
 
-            var group = await _reportingPeriodRepository.GetReportingPeriod(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
+            var group = await reportingPeriodRepository.GetReportingPeriod(userId, lastDate.Date.Year, lastDate.Date.Month, cancellationToken);
 
             if (group is not null)
             {
@@ -109,7 +96,7 @@ public record LockMonthCommand(string TimeSheetId) : IRequest
                     entry.Lock();
                 }
 
-                await _unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
             }
 
         }

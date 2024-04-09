@@ -10,15 +10,8 @@ namespace YourBrand.ApiKeys.Application.Commands;
 
 public record CheckApiKeyCommand(string ApiKey, string Origin, string ServiceSecret, string[] RequestedResources) : IRequest<ApiKeyResult>
 {
-    public class CheckApiKeyCommandHandler : IRequestHandler<CheckApiKeyCommand, ApiKeyResult>
+    public class CheckApiKeyCommandHandler(IApiKeysContext context) : IRequestHandler<CheckApiKeyCommand, ApiKeyResult>
     {
-        private readonly IApiKeysContext context;
-
-        public CheckApiKeyCommandHandler(IApiKeysContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<ApiKeyResult> Handle(CheckApiKeyCommand request, CancellationToken cancellationToken)
         {
             Console.WriteLine("Origin: " + request.Origin);

@@ -4,15 +4,8 @@ using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Application.Contacts.Events;
 
-public class ContactCreatedHandler : IDomainEventHandler<ContactCreated>
+public class ContactCreatedHandler(IMarketingContext context) : IDomainEventHandler<ContactCreated>
 {
-    private readonly IMarketingContext _context;
-
-    public ContactCreatedHandler(IMarketingContext context)
-    {
-        _context = context;
-    }
-
     public async Task Handle(ContactCreated notification, CancellationToken cancellationToken)
     {
         /*

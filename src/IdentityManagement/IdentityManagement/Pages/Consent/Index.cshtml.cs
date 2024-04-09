@@ -14,22 +14,11 @@ namespace YourBrand.IdentityManagement.Pages.Consent;
 
 [Authorize]
 [SecurityHeadersAttribute]
-public class Index : PageModel
+public class Index(
+    IIdentityServerInteractionService interaction,
+    IEventService events,
+    ILogger<Index> logger) : PageModel
 {
-    private readonly IIdentityServerInteractionService _interaction;
-    private readonly IEventService _events;
-    private readonly ILogger<Index> _logger;
-
-    public Index(
-        IIdentityServerInteractionService interaction,
-        IEventService events,
-        ILogger<Index> logger)
-    {
-        _interaction = interaction;
-        _events = events;
-        _logger = logger;
-    }
-
     public ViewModel View { get; set; }
 
     [BindProperty]
@@ -54,7 +43,7 @@ public class Index : PageModel
     public async Task<IActionResult> OnPost()
     {
         // validate return url is still valid
-        var request = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
+        var request = await interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
         if (request == null) return RedirectToPage("/Home/Error/Index");
 
         ConsentResponse grantedConsent = null;
@@ -65,7 +54,7 @@ public class Index : PageModel
             grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
             // emit event
-            await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
+            await events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
         // user clicked 'yes' - validate the data
         else if (Input?.Button == "yes")
@@ -87,7 +76,7 @@ public class Index : PageModel
                 };
 
                 // emit event
-                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
+                await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
             }
             else
             {
@@ -102,7 +91,7 @@ public class Index : PageModel
         if (grantedConsent != null)
         {
             // communicate outcome of consent back to identityserver
-            await _interaction.GrantConsentAsync(request, grantedConsent);
+            await interaction.GrantConsentAsync(request, grantedConsent);
 
             // redirect back to authorization endpoint
             if (request.IsNativeClient() == true)
@@ -122,14 +111,14 @@ public class Index : PageModel
 
     private async Task<ViewModel> BuildViewModelAsync(string returnUrl, InputModel model = null)
     {
-        var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
+        var request = await interaction.GetAuthorizationContextAsync(returnUrl);
         if (request != null)
         {
             return CreateConsentViewModel(model, returnUrl, request);
         }
         else
         {
-            _logger.LogError("No consent request matching request: {0}", returnUrl);
+            logger.LogError("No consent request matching request: {0}", returnUrl);
         }
         return null;
     }

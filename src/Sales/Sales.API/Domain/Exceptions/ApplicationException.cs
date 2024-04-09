@@ -1,11 +1,6 @@
 ﻿namespace YourBrand.Sales.Domain.Exceptions;
 
-public class ApplicationException : Exception
+public class ApplicationException(string title) : Exception
 {
-    public ApplicationException(string title)
-    {
-        Title = title;
-    }
-
-    public string Title { get; }
+    public string Title { get; } = title;
 }

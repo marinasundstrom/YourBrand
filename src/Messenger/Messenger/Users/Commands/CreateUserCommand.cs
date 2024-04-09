@@ -9,39 +9,23 @@ using YourBrand.Messenger.Domain.Entities;
 
 namespace YourBrand.Messenger.Application.Users.Commands;
 
-public class CreateUserCommand : IRequest<UserDto>
+public class CreateUserCommand(string? id, string firstName, string lastName, string? displayName, string email) : IRequest<UserDto>
 {
-    public CreateUserCommand(string? id, string firstName, string lastName, string? displayName, string email)
+    public string? Id { get; } = id;
+
+    public string FirstName { get; } = firstName;
+
+    public string LastName { get; } = lastName;
+
+    public string? DisplayName { get; } = displayName;
+
+    public string Email { get; } = email;
+
+    public class CreateUserCommand1Handler(IMessengerContext context) : IRequestHandler<CreateUserCommand, UserDto>
     {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        DisplayName = displayName;
-        Email = email;
-    }
-
-    public string? Id { get; }
-
-    public string FirstName { get; }
-
-    public string LastName { get; }
-
-    public string? DisplayName { get; }
-
-    public string Email { get; }
-
-    public class CreateUserCommand1Handler : IRequestHandler<CreateUserCommand, UserDto>
-    {
-        readonly IMessengerContext _context;
-
-        public CreateUserCommand1Handler(IMessengerContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
 
             if (user is not null)
             {
@@ -57,9 +41,9 @@ public class CreateUserCommand : IRequest<UserDto>
                 Email = request.Email
             };
 
-            _context.Users.Add(user);
+            context.Users.Add(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.LastModified);
         }

@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Projects.Expenses.Queries;
 
 public record GetExpenseQuery(string ExpenseId) : IRequest<ExpenseDto>
 {
-    public class GetExpenseQueryHandler : IRequestHandler<GetExpenseQuery, ExpenseDto>
+    public class GetExpenseQueryHandler(ITimeReportContext context) : IRequestHandler<GetExpenseQuery, ExpenseDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetExpenseQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ExpenseDto> Handle(GetExpenseQuery request, CancellationToken cancellationToken)
         {
-            var expense = await _context.Expenses
+            var expense = await context.Expenses
                .Include(x => x.Project)
                .Include(x => x.ExpenseType)
                .AsNoTracking()

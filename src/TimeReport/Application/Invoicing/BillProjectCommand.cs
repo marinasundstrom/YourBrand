@@ -9,23 +9,14 @@ namespace YourBrand.TimeReport.Application.Invoicing;
 
 public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) : IRequest
 {
-    public class Handler : IRequestHandler<BillProjectCommand>
+    public class Handler(ITimeReportContext context, IInvoicesClient invoicesClient) : IRequestHandler<BillProjectCommand>
     {
-        private readonly ITimeReportContext _context;
-        private readonly IInvoicesClient _invoicesClient;
-
-        public Handler(ITimeReportContext context, IInvoicesClient invoicesClient)
-        {
-            _context = context;
-            _invoicesClient = invoicesClient;
-        }
-
         public async Task Handle(BillProjectCommand request, CancellationToken cancellationToken)
         {
             var from = DateOnly.FromDateTime(request.From);
             var to = DateOnly.FromDateTime(request.To);
 
-            var entries = await _context.Entries
+            var entries = await context.Entries
                 .Include(e => e.Project)
                 .Include(e => e.Activity)
                 .AsSplitQuery()
@@ -41,7 +32,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
                 return;
             }
 
-            var invoice = await _invoicesClient.CreateInvoiceAsync(new CreateInvoice()
+            var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
             {
                 Date = DateTime.Now,
                 Note = entriesByActivity.First().Key.Project.Name
@@ -54,7 +45,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
                 var hours = entryGroup.Sum(e => e.Hours.GetValueOrDefault());
 
-                await _invoicesClient.AddItemAsync(
+                await invoicesClient.AddItemAsync(
                     invoice.Id,
                     new AddInvoiceItem
                     {

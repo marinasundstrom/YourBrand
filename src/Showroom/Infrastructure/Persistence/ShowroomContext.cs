@@ -18,29 +18,19 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence;
 
-public class ShowroomContext : DbContext, IShowroomContext
+public class ShowroomContext(
+    DbContextOptions<ShowroomContext> options,
+    IApiApplicationContext apiApplicationContext,
+    ITenantContext tenantContext,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IShowroomContext
 {
-    private readonly IApiApplicationContext _apiApplicationContext;
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    private readonly TenantId _tenantId;
-
-    public ShowroomContext(
-        DbContextOptions<ShowroomContext> options,
-        IApiApplicationContext apiApplicationContext,
-        ITenantContext tenantContext,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _apiApplicationContext = apiApplicationContext;
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-
-        _tenantId = tenantContext.TenantId.GetValueOrDefault();
-    }
+    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

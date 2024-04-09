@@ -11,22 +11,11 @@ namespace YourBrand.IdentityManagement.Application.Users.Commands;
 
 public record UpdateOrganizationCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Title, string Ssn, string Email, string ReportsTo) : IRequest<UserDto>
 {
-    public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateOrganizationCommand, UserDto>
+    public sealed class UpdateUserDetailsCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<UpdateOrganizationCommand, UserDto>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public UpdateUserDetailsCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task<UserDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .Include(u => u.Roles)
                 .Include(u => u.Organizations)
                 .AsSplitQuery()
@@ -42,9 +31,9 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
             user.DisplayName = request.DisplayName;
             user.Email = request.Email;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new UserUpdated(user.Id));
+            await eventPublisher.PublishEvent(new UserUpdated(user.Id));
 
             return user.ToDto();
         }

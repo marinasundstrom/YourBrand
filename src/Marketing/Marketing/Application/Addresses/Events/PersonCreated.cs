@@ -6,18 +6,11 @@ using YourBrand.Marketing.Domain.Events;
 
 namespace YourBrand.Marketing.Application.Addresses.Events;
 
-public class AddressCreatedHandler : IDomainEventHandler<AddressCreated>
+public class AddressCreatedHandler(IMarketingContext context) : IDomainEventHandler<AddressCreated>
 {
-    private readonly IMarketingContext _context;
-
-    public AddressCreatedHandler(IMarketingContext context)
-    {
-        _context = context;
-    }
-
     public async Task Handle(AddressCreated notification, CancellationToken cancellationToken)
     {
-        var person = await _context.Addresses
+        var person = await context.Addresses
             .FirstOrDefaultAsync(i => i.Id == notification.AddressId);
 
         if (person is not null)

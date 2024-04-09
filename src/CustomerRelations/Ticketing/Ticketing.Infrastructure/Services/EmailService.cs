@@ -4,18 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Ticketing.Infrastructure.Services;
 
-public class EmailService : IEmailService
+public class EmailService(ILogger<EmailService> logger) : IEmailService
 {
-    private readonly ILogger<EmailService> _logger;
-    private readonly SmtpClient _smtpClient;
-
-    public EmailService(ILogger<EmailService> logger)
-    {
-        _logger = logger;
-
-        // Fake server
-        _smtpClient = new SmtpClient("localhost", 25);
-    }
+    private readonly SmtpClient _smtpClient = new SmtpClient("localhost", 25);
 
     public async Task SendEmail(string recipient, string subject, string body)
     {
@@ -27,6 +18,6 @@ public class EmailService : IEmailService
 
         await _smtpClient.SendMailAsync(message);
 
-        _logger.LogInformation("Email was sent.");
+        logger.LogInformation("Email was sent.");
     }
 }

@@ -8,15 +8,8 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note, SetCustomerDto? Customer) : IRequest<InvoiceDto>
 {
-    public class Handler : IRequestHandler<CreateInvoice, InvoiceDto>
+    public class Handler(IInvoicingContext context) : IRequestHandler<CreateInvoice, InvoiceDto>
     {
-        private readonly IInvoicingContext _context;
-
-        public Handler(IInvoicingContext context)
-        {
-            _context = context;
-        }
-
         public async Task<InvoiceDto> Handle(CreateInvoice request, CancellationToken cancellationToken)
         {
             var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note);
@@ -25,7 +18,7 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note,
 
             try
             {
-                invoice.InvoiceNo = (_context.Invoices.Select(x => x.InvoiceNo).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
+                invoice.InvoiceNo = (context.Invoices.Select(x => x.InvoiceNo).ToList().Select(x => int.Parse(x)).Max() + 1).ToString();
             }
             catch
             {
@@ -43,9 +36,9 @@ public record CreateInvoice(DateTime? Date, InvoiceStatus? Status, string? Note,
                 invoice.Customer.Name = request.Customer.Name;
             }
 
-            _context.Invoices.Add(invoice);
+            context.Invoices.Add(invoice);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return invoice.ToDto();
         }

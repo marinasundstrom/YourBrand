@@ -9,18 +9,11 @@ namespace YourBrand.Application.Users.Queries;
 
 public record GetUserQuery(string UserId) : IRequest<UserDto>
 {
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
+    public class GetUserQueryHandler(IAppServiceContext context) : IRequestHandler<GetUserQuery, UserDto>
     {
-        readonly IAppServiceContext _context;
-
-        public GetUserQueryHandler(IAppServiceContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 

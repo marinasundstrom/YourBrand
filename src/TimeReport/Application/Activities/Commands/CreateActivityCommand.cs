@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Activities.Commands;
 
 public record CreateActivityCommand(string ProjectId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
 {
-    public class CreateActivityCommandHandler : IRequestHandler<CreateActivityCommand, ActivityDto>
+    public class CreateActivityCommandHandler(ITimeReportContext context) : IRequestHandler<CreateActivityCommand, ActivityDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public CreateActivityCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ActivityDto> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                .AsSplitQuery()
                .Include(at => at.Organization)
                .ThenInclude(at => at.CreatedBy)
@@ -39,7 +32,7 @@ public record CreateActivityCommand(string ProjectId, string Name, string Activi
                 throw new Exception();
             }
 
-            var activityType = await _context.ActivityTypes
+            var activityType = await context.ActivityTypes
                     .AsSingleQuery()
                     .IncludeAll()
                     .FirstAsync(at => at.Id == request.ActivityTypeId);
@@ -50,9 +43,9 @@ public record CreateActivityCommand(string ProjectId, string Name, string Activi
                 HourlyRate = request.HourlyRate
             };
 
-            _context.Activities.Add(activity);
+            context.Activities.Add(activity);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return activity.ToDto();
         }

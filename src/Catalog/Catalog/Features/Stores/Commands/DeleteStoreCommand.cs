@@ -8,15 +8,8 @@ namespace YourBrand.Catalog.Features.Stores.Commands;
 
 public sealed record DeleteStoreCommand(string Id) : IRequest
 {
-    public sealed class DeleteStoreCommandHandler : IRequestHandler<DeleteStoreCommand>
+    public sealed class DeleteStoreCommandHandler(CatalogContext context) : IRequestHandler<DeleteStoreCommand>
     {
-        private readonly CatalogContext context;
-
-        public DeleteStoreCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteStoreCommand request, CancellationToken cancellationToken)
         {
             var store = await context.Stores

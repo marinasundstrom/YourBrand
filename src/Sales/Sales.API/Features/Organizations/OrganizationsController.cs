@@ -12,15 +12,8 @@ namespace YourBrand.Sales.Features.OrderManagement.Organizations;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public sealed class OrganizationsController : ControllerBase
+public sealed class OrganizationsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator mediator;
-
-    public OrganizationsController(IMediator mediator)
-    {
-        this.mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<OrganizationDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]

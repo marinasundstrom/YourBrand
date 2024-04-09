@@ -8,15 +8,8 @@ namespace YourBrand.Customers.Application.Organizations.Queries;
 
 public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchString = null) : IRequest<ItemsResult<OrganizationDto>>
 {
-    public class Handler : IRequestHandler<GetOrganizations, ItemsResult<OrganizationDto>>
+    public class Handler(ICustomersContext context) : IRequestHandler<GetOrganizations, ItemsResult<OrganizationDto>>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizations request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -29,7 +22,7 @@ public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchSt
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Organizations
+            var query = context.Organizations
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)

@@ -13,15 +13,8 @@ public record GetMessagesIncrQuery(
     string ConversationId, int Skip, int Take, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null)
     : IRequest<Results<MessageDto>>
 {
-    public class GetMessagesIncrQueryHandler : IRequestHandler<GetMessagesIncrQuery, Results<MessageDto>>
+    public class GetMessagesIncrQueryHandler(IMessengerContext context) : IRequestHandler<GetMessagesIncrQuery, Results<MessageDto>>
     {
-        private readonly IMessengerContext context;
-
-        public GetMessagesIncrQueryHandler(IMessengerContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<Results<MessageDto>> Handle(GetMessagesIncrQuery request, CancellationToken cancellationToken)
         {
             var query = context.Messages

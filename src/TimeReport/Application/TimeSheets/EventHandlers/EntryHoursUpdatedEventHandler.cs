@@ -5,18 +5,11 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.EventHandlers;
 
-public class EntryHoursUpdatedEventHandler : IDomainEventHandler<EntryHoursUpdatedEvent>
+public class EntryHoursUpdatedEventHandler(ILogger<EntryHoursUpdatedEventHandler> logger) : IDomainEventHandler<EntryHoursUpdatedEvent>
 {
-    private readonly ILogger<EntryHoursUpdatedEventHandler> _logger;
-
-    public EntryHoursUpdatedEventHandler(ILogger<EntryHoursUpdatedEventHandler> logger)
-    {
-        _logger = logger;
-    }
-
     public Task Handle(EntryHoursUpdatedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Hours for {notification.EntryId} was updated to {notification.Hours}.");
+        logger.LogInformation($"Hours for {notification.EntryId} was updated to {notification.Hours}.");
 
         return Task.CompletedTask;
     }

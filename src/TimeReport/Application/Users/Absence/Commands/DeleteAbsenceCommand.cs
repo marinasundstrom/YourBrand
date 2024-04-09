@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
 public record DeleteAbsenceCommand(string AbsenceId) : IRequest
 {
-    public class DeleteAbsenceCommandHandler : IRequestHandler<DeleteAbsenceCommand>
+    public class DeleteAbsenceCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteAbsenceCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteAbsenceCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteAbsenceCommand request, CancellationToken cancellationToken)
         {
-            var absence = await _context.Absence
+            var absence = await context.Absence
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.AbsenceId, cancellationToken);
 
@@ -29,9 +22,9 @@ public record DeleteAbsenceCommand(string AbsenceId) : IRequest
                 throw new Exception();
             }
 
-            _context.Absence.Remove(absence);
+            context.Absence.Remove(absence);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

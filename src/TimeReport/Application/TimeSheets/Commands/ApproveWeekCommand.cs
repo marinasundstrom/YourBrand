@@ -9,20 +9,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
 public record ApproveWeekCommand(string TimeSheetId) : IRequest
 {
-    public class ApproveWeekCommandHandler : IRequestHandler<ApproveWeekCommand>
+    public class ApproveWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork) : IRequestHandler<ApproveWeekCommand>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ApproveWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task Handle(ApproveWeekCommand request, CancellationToken cancellationToken)
         {
-            var timeSheet = await _timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
+            var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
@@ -31,7 +22,7 @@ public record ApproveWeekCommand(string TimeSheetId) : IRequest
 
             timeSheet.Approve();
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
         }
     }

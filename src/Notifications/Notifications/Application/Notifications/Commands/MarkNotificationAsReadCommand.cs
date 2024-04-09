@@ -8,15 +8,8 @@ namespace YourBrand.Notifications.Application.Notifications.Commands;
 
 public record MarkNotificationAsReadCommand(string NotificationId) : IRequest
 {
-    public class MarkNotificationAsReadCommandHandler : IRequestHandler<MarkNotificationAsReadCommand>
+    public class MarkNotificationAsReadCommandHandler(IWorkerContext context) : IRequestHandler<MarkNotificationAsReadCommand>
     {
-        private readonly IWorkerContext context;
-
-        public MarkNotificationAsReadCommandHandler(IWorkerContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(MarkNotificationAsReadCommand request, CancellationToken cancellationToken)
         {
             var notification = await context.Notifications

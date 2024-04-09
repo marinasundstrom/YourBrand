@@ -11,22 +11,11 @@ namespace YourBrand.IdentityManagement.Application.Tenants.Commands;
 
 public record DeleteTenantCommand(string TenantId) : IRequest
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteTenantCommand>
+    public class DeleteUserCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<DeleteTenantCommand>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public DeleteUserCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(DeleteTenantCommand request, CancellationToken cancellationToken)
         {
-            var tenant = await _context.Tenants
+            var tenant = await context.Tenants
                 .FirstOrDefaultAsync(p => p.Id == request.TenantId);
 
             if (tenant is null)
@@ -34,11 +23,11 @@ public record DeleteTenantCommand(string TenantId) : IRequest
                 throw new UserNotFoundException(request.TenantId);
             }
 
-            _context.Tenants.Remove(tenant);
+            context.Tenants.Remove(tenant);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new TenantDeleted(tenant.Id));
+            await eventPublisher.PublishEvent(new TenantDeleted(tenant.Id));
 
         }
     }

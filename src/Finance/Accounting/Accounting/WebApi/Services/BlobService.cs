@@ -4,18 +4,11 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Services;
 
-class BlobService : IBlobService
+class BlobService(BlobServiceClient blobServiceClient) : IBlobService
 {
-    private readonly BlobServiceClient _blobServiceClient;
-
-    public BlobService(BlobServiceClient blobServiceClient)
-    {
-        _blobServiceClient = blobServiceClient;
-    }
-
     public async Task UploadBloadAsync(string name, Stream stream)
     {
-        var blobContainerClient = _blobServiceClient.GetBlobContainerClient("attachments");
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient("attachments");
 
 #if DEBUG
         await blobContainerClient.CreateIfNotExistsAsync();

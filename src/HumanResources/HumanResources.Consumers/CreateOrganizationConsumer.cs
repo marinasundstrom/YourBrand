@@ -8,22 +8,13 @@ using YourBrand.Identity;
 
 namespace YourBrand.HumanResources.Consumers;
 
-public class CreateOrganizationConsumer : IConsumer<CreateOrganization>
+public class CreateOrganizationConsumer(IMediator mediator, IUserContext currentPersonService) : IConsumer<CreateOrganization>
 {
-    private readonly IMediator _mediator;
-    private readonly IUserContext _currentPersonService;
-
-    public CreateOrganizationConsumer(IMediator mediator, IUserContext currentPersonService)
-    {
-        _mediator = mediator;
-        _currentPersonService = currentPersonService;
-    }
-
     public async Task Consume(ConsumeContext<CreateOrganization> context)
     {
         var message = context.Message;
 
-        var organization = await _mediator.Send(new CreateOrganizationCommand(message.Name, message.FriendlyName));
+        var organization = await mediator.Send(new CreateOrganizationCommand(message.Name, message.FriendlyName));
 
         await context.RespondAsync(new CreateOrganizationResponse(organization.Id, organization.Name, organization.FriendlyName));
     }

@@ -15,15 +15,8 @@ public record GetAccountsQuery(
     bool IncludeUnusedAccounts = false)
     : IRequest<IEnumerable<AccountDto>>
 {
-    public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, IEnumerable<AccountDto>>
+    public class GetAccountsQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountsQuery, IEnumerable<AccountDto>>
     {
-        private readonly IAccountingContext context;
-
-        public GetAccountsQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<IEnumerable<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
         {
             var query = context.Accounts

@@ -8,15 +8,8 @@ namespace YourBrand.Customers.Application.Addresses.Queries;
 
 public record GetAddresses(int Page = 1, int PageSize = 10) : IRequest<ItemsResult<AddressDto>>
 {
-    public class Handler : IRequestHandler<GetAddresses, ItemsResult<AddressDto>>
+    public class Handler(ICustomersContext context) : IRequestHandler<GetAddresses, ItemsResult<AddressDto>>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<AddressDto>> Handle(GetAddresses request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -29,7 +22,7 @@ public record GetAddresses(int Page = 1, int PageSize = 10) : IRequest<ItemsResu
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Addresses
+            var query = context.Addresses
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)

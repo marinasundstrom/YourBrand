@@ -11,17 +11,8 @@ namespace YourBrand.Accounting.Application.Journal.Commands;
 
 public record AddFileAsVerificationCommand(int JournalEntryId, string Name, string ContentType, string? Description, int? invoiceId, Stream Stream) : IRequest<string>
 {
-    public class AddFileAsVerificationCommandHandler : IRequestHandler<AddFileAsVerificationCommand, string>
+    public class AddFileAsVerificationCommandHandler(IAccountingContext context, IBlobService blobService) : IRequestHandler<AddFileAsVerificationCommand, string>
     {
-        private readonly IAccountingContext context;
-        private readonly IBlobService blobService;
-
-        public AddFileAsVerificationCommandHandler(IAccountingContext context, IBlobService blobService)
-        {
-            this.context = context;
-            this.blobService = blobService;
-        }
-
         public async Task<string> Handle(AddFileAsVerificationCommand request, CancellationToken cancellationToken)
         {
             var journalEntry = await context.JournalEntries

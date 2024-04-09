@@ -15,23 +15,12 @@ using YourBrand.IdentityManagement.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
+public class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options,
+    IUserContext userContext,
+    IDateTime dateTime,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
 {
-    private readonly IUserContext _userContext;
-    private readonly IDateTime _dateTime;
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
-        IUserContext userContext,
-        IDateTime dateTime,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _userContext = userContext;
-        _dateTime = dateTime;
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 #if DEBUG
@@ -40,7 +29,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string, Identi
 
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

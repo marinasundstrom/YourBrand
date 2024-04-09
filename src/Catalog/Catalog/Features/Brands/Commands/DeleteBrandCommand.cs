@@ -8,15 +8,8 @@ namespace YourBrand.Catalog.Features.Brands.Commands;
 
 public sealed record DeleteBrandCommand(int Id) : IRequest
 {
-    public sealed class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand>
+    public sealed class DeleteBrandCommandHandler(CatalogContext context) : IRequestHandler<DeleteBrandCommand>
     {
-        private readonly CatalogContext context;
-
-        public DeleteBrandCommandHandler(CatalogContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
         {
             var brand = await context.Brands

@@ -5,22 +5,15 @@ using YourBrand.Transactions.Hubs;
 
 namespace YourBrand.Transactions.Application.Services;
 
-public class TransactionsHubClient : ITransactionsHubClient
+public class TransactionsHubClient(IHubContext<TransactionsHub, ITransactionsHubClient> hubContext) : ITransactionsHubClient
 {
-    private readonly IHubContext<TransactionsHub, ITransactionsHubClient> _hubContext;
-
-    public TransactionsHubClient(IHubContext<TransactionsHub, ITransactionsHubClient> hubContext)
-    {
-        _hubContext = hubContext;
-    }
-
     public async Task TransactionStatusUpdated(string id, TransactionStatus status)
     {
-        await _hubContext.Clients.All.TransactionStatusUpdated(id, status);
+        await hubContext.Clients.All.TransactionStatusUpdated(id, status);
     }
 
     public async Task TransactionInvoiceIdUpdated(string id, int? invoiceId)
     {
-        await _hubContext.Clients.All.TransactionInvoiceIdUpdated(id, invoiceId);
+        await hubContext.Clients.All.TransactionInvoiceIdUpdated(id, invoiceId);
     }
 }

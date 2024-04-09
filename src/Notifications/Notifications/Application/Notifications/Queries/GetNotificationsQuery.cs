@@ -11,15 +11,8 @@ public record GetNotificationsQuery(string? UserId, string? Tag,
         bool IncludeUnreadNotificationsCount,
         int Page, int PageSize, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<NotificationsResults>
 {
-    public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, NotificationsResults>
+    public class GetNotificationsQueryHandler(IWorkerContext context) : IRequestHandler<GetNotificationsQuery, NotificationsResults>
     {
-        private readonly IWorkerContext context;
-
-        public GetNotificationsQueryHandler(IWorkerContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<NotificationsResults> Handle(GetNotificationsQuery request, CancellationToken cancellationToken)
         {
             var query = context.Notifications

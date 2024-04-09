@@ -8,18 +8,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Options;
 
 public record GetOptionValues(string OptionId) : IRequest<IEnumerable<OptionValueDto>>
 {
-    public class Handler : IRequestHandler<GetOptionValues, IEnumerable<OptionValueDto>>
+    public class Handler(CatalogContext context) : IRequestHandler<GetOptionValues, IEnumerable<OptionValueDto>>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<IEnumerable<OptionValueDto>> Handle(GetOptionValues request, CancellationToken cancellationToken)
         {
-            var options = await _context.OptionValues
+            var options = await context.OptionValues
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Option)

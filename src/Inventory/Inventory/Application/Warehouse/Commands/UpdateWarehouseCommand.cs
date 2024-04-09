@@ -8,15 +8,8 @@ namespace YourBrand.Inventory.Application.Warehouses.Commands;
 
 public record UpdateWarehouseCommand(string Id, string Name, string SiteId) : IRequest
 {
-    public class UpdateWarehouseCommandHandler : IRequestHandler<UpdateWarehouseCommand>
+    public class UpdateWarehouseCommandHandler(IInventoryContext context) : IRequestHandler<UpdateWarehouseCommand>
     {
-        private readonly IInventoryContext context;
-
-        public UpdateWarehouseCommandHandler(IInventoryContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
             var warehouse = await context.Warehouses.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

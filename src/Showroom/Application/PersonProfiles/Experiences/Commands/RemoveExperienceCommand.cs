@@ -10,22 +10,13 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 
 public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequest
 {
-    class RemoveExperienceCommandHandler : IRequestHandler<RemoveExperienceCommand>
+    class RemoveExperienceCommandHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<RemoveExperienceCommand>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public RemoveExperienceCommandHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task Handle(RemoveExperienceCommand request, CancellationToken cancellationToken)
         {
-            var experience = await _context.PersonProfileExperiences
+            var experience = await context.PersonProfileExperiences
                 .Include(x => x.PersonProfile)
                 .Include(x => x.Company)
                 .ThenInclude(x => x.Industry)
@@ -36,11 +27,11 @@ public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequ
                 throw new Exception("Not found");
             }
 
-            _context.PersonProfileExperiences.Remove(experience);
+            context.PersonProfileExperiences.Remove(experience);
 
             experience.AddDomainEvent(new ExperienceUpdated(experience.PersonProfile.Id, experience.PersonProfile.Id, experience.Company.Industry.Id));
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

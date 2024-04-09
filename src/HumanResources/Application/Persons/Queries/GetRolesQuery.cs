@@ -10,18 +10,11 @@ namespace YourBrand.HumanResources.Application.Persons.Queries;
 
 public record GetRolesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<RoleDto>>
 {
-    public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, ItemsResult<RoleDto>>
+    public class GetRolesQueryHandler(IApplicationDbContext context) : IRequestHandler<GetRolesQuery, ItemsResult<RoleDto>>
     {
-        readonly IApplicationDbContext _context;
-
-        public GetRolesQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<RoleDto>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Roles
+            var query = context.Roles
                 //.OrderBy(p => p.Created)
                 .AsNoTracking()
                 .AsSplitQuery();

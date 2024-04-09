@@ -9,15 +9,8 @@ namespace YourBrand.Sales.Features.Subscriptions;
 
 public record GetSubscriptionsQuery : IRequest<PagedResult<SubscriptionDto>>
 {
-    public class GetSubscriptionsQueryHandler : IRequestHandler<GetSubscriptionsQuery, PagedResult<SubscriptionDto>>
+    public class GetSubscriptionsQueryHandler(SalesContext salesContext) : IRequestHandler<GetSubscriptionsQuery, PagedResult<SubscriptionDto>>
     {
-        private readonly SalesContext salesContext;
-
-        public GetSubscriptionsQueryHandler(SalesContext salesContext)
-        {
-            this.salesContext = salesContext;
-        }
-
         public async Task<PagedResult<SubscriptionDto>> Handle(GetSubscriptionsQuery request, CancellationToken cancellationToken)
         {
             var subscriptions = await salesContext.Subscriptions

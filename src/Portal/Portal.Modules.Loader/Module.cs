@@ -2,17 +2,11 @@
 
 namespace YourBrand.Portal.Modules;
 
-public class Module
+public class Module(string name, Assembly assembly)
 {
-    public Module(string name, Assembly assembly)
-    {
-        Name = name;
-        Assembly = assembly;
-    }
+    public string Name { get; } = name;
 
-    public string Name { get; }
-
-    public Assembly Assembly { get; }
+    public Assembly Assembly { get; } = assembly;
 
     public bool Enabled { get; set; } = true;
 }

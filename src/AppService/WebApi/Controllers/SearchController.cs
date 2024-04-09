@@ -16,20 +16,13 @@ namespace YourBrand.WebApi.Controllers;
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize]
-public class SearchController : Controller
+public class SearchController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public SearchController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost]
     [ProducesResponseType(typeof(Results<SearchResultItem>), StatusCodes.Status200OK)]
     public async Task<ActionResult<Results<SearchResultItem>>> Search(string searchText,
         int page = 1, int pageSize = 5, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new SearchCommand(searchText, page - 1, pageSize, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new SearchCommand(searchText, page - 1, pageSize, sortBy, sortDirection), cancellationToken));
     }
 }

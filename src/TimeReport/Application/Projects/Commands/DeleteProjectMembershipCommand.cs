@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public record DeleteProjectMembershipCommand(string ProjectId, string MembershipId) : IRequest
 {
-    public class DeleteProjectMembershipCommandHandler : IRequestHandler<DeleteProjectMembershipCommand>
+    public class DeleteProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteProjectMembershipCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteProjectMembershipCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProjectMembershipCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                 .Include(p => p.Organization)
                 .Include(p => p.Memberships)
                 .ThenInclude(m => m.User)
@@ -40,9 +33,9 @@ public record DeleteProjectMembershipCommand(string ProjectId, string Membership
                 throw new ProjectMembershipNotFoundException(request.MembershipId);
             }
 
-            _context.ProjectMemberships.Remove(m);
+            context.ProjectMemberships.Remove(m);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

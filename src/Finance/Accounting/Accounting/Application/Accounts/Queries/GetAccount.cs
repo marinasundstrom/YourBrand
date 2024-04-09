@@ -10,15 +10,8 @@ namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountQuery(int AccountNo) : IRequest<AccountDto>
 {
-    public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDto>
+    public class GetAccountQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountQuery, AccountDto>
     {
-        private readonly IAccountingContext context;
-
-        public GetAccountQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<AccountDto> Handle(GetAccountQuery request, CancellationToken cancellationToken)
         {
             var account = await context.Accounts

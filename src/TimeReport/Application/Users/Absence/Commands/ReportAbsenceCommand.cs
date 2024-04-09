@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
 public record ReportAbsenceCommand(string ProjectId, DateTime Date, decimal Amount, string? Description) : IRequest<AbsenceDto>
 {
-    public class ReportAbsenceCommandHandler : IRequestHandler<ReportAbsenceCommand, AbsenceDto>
+    public class ReportAbsenceCommandHandler(ITimeReportContext context) : IRequestHandler<ReportAbsenceCommand, AbsenceDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public ReportAbsenceCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<AbsenceDto> Handle(ReportAbsenceCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                .AsSplitQuery()
                .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 
@@ -37,9 +30,9 @@ public record ReportAbsenceCommand(string ProjectId, DateTime Date, decimal Amou
                 Project = project
             };
 
-            _context.Absence.Add(absence);
+            context.Absence.Add(absence);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return absence.ToDto();
         }

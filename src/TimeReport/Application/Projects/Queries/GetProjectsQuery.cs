@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Projects.Queries;
 
 public record GetProjectsQuery(int Page = 0, int PageSize = 10, string? UserId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectDto>>
 {
-    public class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, ItemsResult<ProjectDto>>
+    public class GetProjectsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectsQuery, ItemsResult<ProjectDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetProjectsQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ProjectDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Projects
+            var query = context.Projects
                 .AsNoTracking()
                 .AsSplitQuery();
 

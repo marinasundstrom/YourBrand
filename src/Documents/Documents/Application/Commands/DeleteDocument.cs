@@ -8,18 +8,11 @@ namespace YourBrand.Documents.Application.Commands;
 
 public record DeleteDocument(string DocumentId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteDocument>
+    public class Handler(IDocumentsContext context) : IRequestHandler<DeleteDocument>
     {
-        private readonly IDocumentsContext _context;
-
-        public Handler(IDocumentsContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteDocument request, CancellationToken cancellationToken)
         {
-            var document = await _context.Documents
+            var document = await context.Documents
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
@@ -28,9 +21,9 @@ public record DeleteDocument(string DocumentId) : IRequest
                 throw new Exception("Document not found.");
             }
 
-            _context.Documents.Remove(document);
+            context.Documents.Remove(document);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

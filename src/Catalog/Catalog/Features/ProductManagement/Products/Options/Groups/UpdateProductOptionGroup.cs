@@ -9,18 +9,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
 public record UpdateProductOptionGroup(long ProductId, string OptionGroupId, UpdateProductOptionGroupData Data) : IRequest<OptionGroupDto>
 {
-    public class Handler : IRequestHandler<UpdateProductOptionGroup, OptionGroupDto>
+    public class Handler(CatalogContext context) : IRequestHandler<UpdateProductOptionGroup, OptionGroupDto>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<OptionGroupDto> Handle(UpdateProductOptionGroup request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
+            var product = await context.Products
             .Include(x => x.OptionGroups)
             .FirstAsync(x => x.Id == request.ProductId);
 
@@ -32,7 +25,7 @@ public record UpdateProductOptionGroup(long ProductId, string OptionGroupId, Upd
             optionGroup.Min = request.Data.Min;
             optionGroup.Max = request.Data.Max;
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return new OptionGroupDto(optionGroup.Id, optionGroup.Name, optionGroup.Description, optionGroup.Seq, optionGroup.Min, optionGroup.Max);
         }

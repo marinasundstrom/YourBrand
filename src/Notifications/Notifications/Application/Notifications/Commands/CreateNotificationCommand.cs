@@ -8,15 +8,8 @@ namespace YourBrand.Notifications.Application.Notifications.Commands;
 
 public record CreateNotificationCommand(string? Content, string? Link, string? UserId, DateTimeOffset? ScheduledFor) : IRequest
 {
-    public class CreateNotificationCommandHandler : IRequestHandler<CreateNotificationCommand>
+    public class CreateNotificationCommandHandler(IWorkerContext context) : IRequestHandler<CreateNotificationCommand>
     {
-        private readonly IWorkerContext context;
-
-        public CreateNotificationCommandHandler(IWorkerContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
             if (request.UserId is not null)

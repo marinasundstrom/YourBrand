@@ -8,18 +8,11 @@ namespace YourBrand.Documents.Application.Commands;
 
 public record UpdateDescription(string DocumentId, string Description) : IRequest
 {
-    public class Handler : IRequestHandler<UpdateDescription>
+    public class Handler(IDocumentsContext context) : IRequestHandler<UpdateDescription>
     {
-        private readonly IDocumentsContext _context;
-
-        public Handler(IDocumentsContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(UpdateDescription request, CancellationToken cancellationToken)
         {
-            var document = await _context.Documents
+            var document = await context.Documents
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.DocumentId, cancellationToken);
 
@@ -30,7 +23,7 @@ public record UpdateDescription(string DocumentId, string Description) : IReques
 
             document.UpdateDescription(request.Description);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

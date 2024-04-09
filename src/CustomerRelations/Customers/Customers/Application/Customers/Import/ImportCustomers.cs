@@ -16,17 +16,8 @@ public record CustomerImportResult(IEnumerable<string> Diagnostics);
 public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerImportResult>>
 {
 
-    public sealed class Handler : IRequestHandler<ImportCustomers, Result<CustomerImportResult>>
+    public sealed class Handler(ICustomersContext context, IBlobStorageService blobStorageService) : IRequestHandler<ImportCustomers, Result<CustomerImportResult>>
     {
-        private readonly ICustomersContext _context;
-        private readonly IBlobStorageService _blobStorageService;
-
-        public Handler(ICustomersContext context, IBlobStorageService blobStorageService)
-        {
-            _context = context;
-            _blobStorageService = blobStorageService;
-        }
-
         public async Task<Result<CustomerImportResult>> Handle(ImportCustomers request, CancellationToken cancellationToken)
         {
             List<string> diagnostics = new();
@@ -45,7 +36,7 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
 
                 if (customerRecord is OrganizationCustomerRecord org)
                 {
-                    var exists = await _context.Organizations.AnyAsync(x => x.OrganizationNo == org.OrgNo, cancellationToken);
+                    var exists = await context.Organizations.AnyAsync(x => x.OrganizationNo == org.OrgNo, cancellationToken);
 
                     if (exists)
                     {
@@ -59,7 +50,7 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
                 }
                 else if (customerRecord is IndividualCustomerRecord ind)
                 {
-                    var exists = await _context.Persons.AnyAsync(x => x.Ssn == ind.Ssn, cancellationToken);
+                    var exists = await context.Persons.AnyAsync(x => x.Ssn == ind.Ssn, cancellationToken);
 
                     if (exists)
                     {
@@ -96,10 +87,10 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
                     customer.AddAddress(a);
                 }
 
-                _context.Customers.Add(customer);
+                context.Customers.Add(customer);
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return Result.Success(new CustomerImportResult(diagnostics));
         }

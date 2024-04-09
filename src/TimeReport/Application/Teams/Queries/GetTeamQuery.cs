@@ -10,22 +10,13 @@ namespace YourBrand.TimeReport.Application.Teams
 
 public record GetTeamQuery(string Id) : IRequest<TeamDto?>
 {
-    class GetTeamQueryHandler : IRequestHandler<GetTeamQuery, TeamDto?>
+    class GetTeamQueryHandler(
+        ITimeReportContext context,
+        IUserContext userContext) : IRequestHandler<GetTeamQuery, TeamDto?>
     {
-        private readonly ITimeReportContext _context;
-        private readonly IUserContext userContext;
-
-        public GetTeamQueryHandler(
-            ITimeReportContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<TeamDto?> Handle(GetTeamQuery request, CancellationToken cancellationToken)
         {
-            var team = await _context
+            var team = await context
                .Teams
                .Include(x => x.Memberships)
                .ThenInclude(x => x.User)

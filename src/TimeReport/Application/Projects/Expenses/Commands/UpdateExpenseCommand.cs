@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
 public record UpdateExpenseCommand(string ExpenseId, DateTime Date, decimal Amount, string? Description) : IRequest<ExpenseDto>
 {
-    public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, ExpenseDto>
+    public class UpdateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateExpenseCommand, ExpenseDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public UpdateExpenseCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ExpenseDto> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
-            var expense = await _context.Expenses
+            var expense = await context.Expenses
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
@@ -34,7 +27,7 @@ public record UpdateExpenseCommand(string ExpenseId, DateTime Date, decimal Amou
             expense.Amount = request.Amount;
             expense.Description = request.Description;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return expense.ToDto();
         }

@@ -18,26 +18,18 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Payments.Infrastructure.Persistence;
 
-public class PaymentsContext : DbContext, IPaymentsContext
+public class PaymentsContext(
+    DbContextOptions<PaymentsContext> options,
+    ITenantContext tenantContext,
+    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IPaymentsContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    private readonly TenantId _tenantId;
-
-    public PaymentsContext(
-        DbContextOptions<PaymentsContext> options,
-        ITenantContext tenantContext,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-
-        _tenantId = tenantContext.TenantId.GetValueOrDefault();
-    }
+    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();

@@ -10,15 +10,8 @@ namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountsClassesSummaryQuery(int[] AccountNo) : IRequest<IEnumerable<AccountClassSummary>>
 {
-    public class GetAccountsClassesSummaryQueryHandler : IRequestHandler<GetAccountsClassesSummaryQuery, IEnumerable<AccountClassSummary>>
+    public class GetAccountsClassesSummaryQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountsClassesSummaryQuery, IEnumerable<AccountClassSummary>>
     {
-        private readonly IAccountingContext context;
-
-        public GetAccountsClassesSummaryQueryHandler(IAccountingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<IEnumerable<AccountClassSummary>> Handle(GetAccountsClassesSummaryQuery request, CancellationToken cancellationToken)
         {
             var query = context.Accounts

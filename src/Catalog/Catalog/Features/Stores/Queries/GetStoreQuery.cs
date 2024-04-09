@@ -9,22 +9,12 @@ namespace YourBrand.Catalog.Features.Stores.Queries;
 
 public sealed record GetStoreQuery(string IdOrHandle) : IRequest<StoreDto?>
 {
-    sealed class GetStoreQueryHandler : IRequestHandler<GetStoreQuery, StoreDto?>
+    sealed class GetStoreQueryHandler(
+        CatalogContext context) : IRequestHandler<GetStoreQuery, StoreDto?>
     {
-        private readonly CatalogContext _context;
-        private readonly IUserContext userContext;
-
-        public GetStoreQueryHandler(
-            CatalogContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<StoreDto?> Handle(GetStoreQuery request, CancellationToken cancellationToken)
         {
-            var store = await _context
+            var store = await context
                .Stores
                .Include(x => x.Currency)
                .AsNoTracking()

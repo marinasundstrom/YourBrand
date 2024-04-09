@@ -10,18 +10,11 @@ namespace YourBrand.Showroom.Application.Users.Commands;
 
 public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
+    public class CreateUserCommandHandler(IShowroomContext context) : IRequestHandler<CreateUserCommand, UserDto>
     {
-        readonly IShowroomContext _context;
-
-        public CreateUserCommandHandler(IShowroomContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
 
             if (user is not null)
             {
@@ -38,9 +31,9 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
                 Email = request.Email
             };
 
-            _context.Users.Add(user);
+            context.Users.Add(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.SSN, user.Email, user.Created, user.LastModified);
         }

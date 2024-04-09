@@ -9,15 +9,8 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 
 public record GetTicketStatuses(string? SearchTerm, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<TicketStatusDto>>
 {
-    public class Handler : IRequestHandler<GetTicketStatuses, ItemsResult<TicketStatusDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetTicketStatuses, ItemsResult<TicketStatusDto>>
     {
-        private readonly IApplicationDbContext context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<ItemsResult<TicketStatusDto>> Handle(GetTicketStatuses request, CancellationToken cancellationToken)
         {
             var query = context.TicketStatuses.AsQueryable();

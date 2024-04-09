@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Projects.Commands;
 
 public record DeleteProjectCommand(string ProjectId) : IRequest
 {
-    public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand>
+    public class DeleteProjectCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteProjectCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteProjectCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 
@@ -30,9 +23,9 @@ public record DeleteProjectCommand(string ProjectId) : IRequest
                 throw new ProjectNotFoundException(request.ProjectId);
             }
 
-            _context.Projects.Remove(project);
+            context.Projects.Remove(project);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

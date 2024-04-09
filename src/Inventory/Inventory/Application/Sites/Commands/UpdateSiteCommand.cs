@@ -8,15 +8,8 @@ namespace YourBrand.Inventory.Application.Sites.Commands;
 
 public record UpdateSiteCommand(string Id, string Name) : IRequest
 {
-    public class UpdateSiteCommandHandler : IRequestHandler<UpdateSiteCommand>
+    public class UpdateSiteCommandHandler(IInventoryContext context) : IRequestHandler<UpdateSiteCommand>
     {
-        private readonly IInventoryContext context;
-
-        public UpdateSiteCommandHandler(IInventoryContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(UpdateSiteCommand request, CancellationToken cancellationToken)
         {
             var site = await context.Sites.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

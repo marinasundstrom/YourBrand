@@ -9,18 +9,11 @@ namespace YourBrand.HumanResources.Application.Teams.Commands;
 
 public record UpdateTeamCommand(string TeamId, string Name, string Description) : IRequest<TeamDto>
 {
-    public class Handler : IRequestHandler<UpdateTeamCommand, TeamDto>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<UpdateTeamCommand, TeamDto>
     {
-        private readonly IApplicationDbContext _context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<TeamDto> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = await _context.Teams
+            var team = await context.Teams
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TeamId, cancellationToken);
 
@@ -32,7 +25,7 @@ public record UpdateTeamCommand(string TeamId, string Name, string Description) 
             team.UpdateName(request.Name);
             team.UpdateDescription(request.Description);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return team.ToDto();
         }

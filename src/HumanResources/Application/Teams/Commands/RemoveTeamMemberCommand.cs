@@ -10,22 +10,11 @@ namespace YourBrand.HumanResources.Application.Teams.Commands;
 
 public record RemoveTeamMemberCommand(string TeamId, string PersonId) : IRequest
 {
-    public class Handler : IRequestHandler<RemoveTeamMemberCommand>
+    public class Handler(IUserContext currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<RemoveTeamMemberCommand>
     {
-        private readonly IUserContext _currentPersonService;
-        private readonly IApplicationDbContext _context;
-        private readonly IEventPublisher _eventPublisher;
-
-        public Handler(IUserContext currentPersonService, IApplicationDbContext context, IEventPublisher eventPublisher)
-        {
-            _currentPersonService = currentPersonService;
-            _context = context;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(RemoveTeamMemberCommand request, CancellationToken cancellationToken)
         {
-            var team = await _context.Teams
+            var team = await context.Teams
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TeamId, cancellationToken);
 
@@ -34,7 +23,7 @@ public record RemoveTeamMemberCommand(string TeamId, string PersonId) : IRequest
                 throw new PersonNotFoundException(request.TeamId);
             }
 
-            var person = await _context.Persons
+            var person = await context.Persons
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.PersonId, cancellationToken);
 
@@ -45,9 +34,9 @@ public record RemoveTeamMemberCommand(string TeamId, string PersonId) : IRequest
 
             team.RemoveMember(person);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new Contracts.TeamMemberRemoved(team.Id, person.Id));
+            await eventPublisher.PublishEvent(new Contracts.TeamMemberRemoved(team.Id, person.Id));
 
         }
     }

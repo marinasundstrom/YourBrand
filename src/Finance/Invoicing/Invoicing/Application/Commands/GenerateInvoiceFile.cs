@@ -11,20 +11,11 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record GenerateInvoiceFile(string InvoiceId) : IRequest<Stream>
 {
-    public class Handler : IRequestHandler<GenerateInvoiceFile, Stream>
+    public class Handler(IInvoicingContext context, IDocumentsClient documentsClient) : IRequestHandler<GenerateInvoiceFile, Stream>
     {
-        private readonly IInvoicingContext _context;
-        private readonly IDocumentsClient _documentsClient;
-
-        public Handler(IInvoicingContext context, IDocumentsClient documentsClient)
-        {
-            _context = context;
-            _documentsClient = documentsClient;
-        }
-
         public async Task<Stream> Handle(GenerateInvoiceFile request, CancellationToken cancellationToken)
         {
-            var invoice = await _context.Invoices
+            var invoice = await context.Invoices
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
@@ -38,7 +29,7 @@ public record GenerateInvoiceFile(string InvoiceId) : IRequest<Stream>
 
             Console.WriteLine(model);
 
-            var response = await _documentsClient.GenerateDocumentAsync("invoice", DocumentFormat.Html, model);
+            var response = await documentsClient.GenerateDocumentAsync("invoice", DocumentFormat.Html, model);
             return response.Stream;
         }
     }

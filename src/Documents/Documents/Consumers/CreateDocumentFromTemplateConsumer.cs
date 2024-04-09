@@ -14,33 +14,20 @@ using YourBrand.Documents.Infrastructure.Persistence;
 
 namespace YourBrand.Documents.Consumers;
 
-public class CreateDocumentFromTemplateConsumer : IConsumer<CreateDocumentFromTemplate>
+public class CreateDocumentFromTemplateConsumer(
+    ILogger<CreateDocumentFromTemplateConsumer> logger,
+    DocumentsContext documentsContext,
+    IRazorTemplateCompiler razorTemplateCompiler,
+    IPdfGenerator pdfGenerator,
+    IMessageDataRepository messageDataRepository) : IConsumer<CreateDocumentFromTemplate>
 {
-    private readonly ILogger<CreateDocumentFromTemplateConsumer> _logger;
-    private readonly DocumentsContext _documentsContext;
-    private readonly IRazorTemplateCompiler _razorTemplateCompiler;
-    private readonly IPdfGenerator _pdfGenerator;
-    private readonly IMessageDataRepository _messageDataRepository;
-
-    public CreateDocumentFromTemplateConsumer(
-        ILogger<CreateDocumentFromTemplateConsumer> logger,
-        DocumentsContext documentsContext,
-        IRazorTemplateCompiler razorTemplateCompiler,
-        IPdfGenerator pdfGenerator,
-        IMessageDataRepository messageDataRepository)
-    {
-        _logger = logger;
-        _documentsContext = documentsContext;
-        _razorTemplateCompiler = razorTemplateCompiler;
-        _pdfGenerator = pdfGenerator;
-        _messageDataRepository = messageDataRepository;
-    }
+    private readonly IMessageDataRepository _messageDataRepository = messageDataRepository;
 
     public async Task Consume(ConsumeContext<CreateDocumentFromTemplate> context)
     {
         var request = context.Message;
 
-        DocumentTemplate? documentTemplate = await _documentsContext.DocumentTemplates
+        DocumentTemplate? documentTemplate = await documentsContext.DocumentTemplates
             .FirstOrDefaultAsync(dt => dt.Id == request.TemplateId, context.CancellationToken);
 
         if (documentTemplate is null)
@@ -77,16 +64,16 @@ public class CreateDocumentFromTemplateConsumer : IConsumer<CreateDocumentFromTe
 
         string renderedHtml;
 
-        if (!_razorTemplateCompiler.HasCachedTemplate(request.TemplateId))
+        if (!razorTemplateCompiler.HasCachedTemplate(request.TemplateId))
         {
-            renderedHtml = await _razorTemplateCompiler.CompileAndRenderAsync(
+            renderedHtml = await razorTemplateCompiler.CompileAndRenderAsync(
                 request.TemplateId,
                 documentTemplate.Content,
                 model);
         }
         else
         {
-            renderedHtml = await _razorTemplateCompiler.RenderAsync(
+            renderedHtml = await razorTemplateCompiler.RenderAsync(
               request.TemplateId,
               model);
         }
@@ -98,7 +85,7 @@ public class CreateDocumentFromTemplateConsumer : IConsumer<CreateDocumentFromTe
     {
         modelJson = CleanUpJson(modelJson);
 
-        _logger.LogDebug($"Model (Json): {modelJson}");
+        logger.LogDebug($"Model (Json): {modelJson}");
 
         return JsonConvert.DeserializeObject<object>(modelJson);
     }
@@ -129,7 +116,7 @@ public class CreateDocumentFromTemplateConsumer : IConsumer<CreateDocumentFromTe
 
     private async Task<byte[]> GeneratePdf(string renderedHtml)
     {
-        var pdfStream = await _pdfGenerator.GeneratePdfFromHtmlAsync(renderedHtml);
+        var pdfStream = await pdfGenerator.GeneratePdfFromHtmlAsync(renderedHtml);
         return await ConvertStreamToBytes(pdfStream);
     }
 

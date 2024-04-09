@@ -4,15 +4,8 @@ using YourBrand.Customers.Domain.Events;
 
 namespace YourBrand.Customers.Application.Organizations.Events;
 
-public class OrganizationCreatedHandler : IDomainEventHandler<OrganizationCreated>
+public class OrganizationCreatedHandler(ICustomersContext context) : IDomainEventHandler<OrganizationCreated>
 {
-    private readonly ICustomersContext _context;
-
-    public OrganizationCreatedHandler(ICustomersContext context)
-    {
-        _context = context;
-    }
-
     public async Task Handle(OrganizationCreated notification, CancellationToken cancellationToken)
     {
         /*

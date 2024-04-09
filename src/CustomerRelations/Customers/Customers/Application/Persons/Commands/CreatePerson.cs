@@ -9,15 +9,8 @@ namespace YourBrand.Customers.Application.Persons.Commands;
 
 public record CreatePerson(string FirstName, string LastName, string SSN, string? Phone, string? PhoneMobile, string? Email, Address2Dto Address) : IRequest<PersonDto>
 {
-    public class Handler : IRequestHandler<CreatePerson, PersonDto>
+    public class Handler(ICustomersContext context) : IRequestHandler<CreatePerson, PersonDto>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task<PersonDto> Handle(CreatePerson request, CancellationToken cancellationToken)
         {
             var person = new Domain.Entities.Person(request.FirstName, request.LastName, request.SSN);
@@ -37,9 +30,9 @@ public record CreatePerson(string FirstName, string LastName, string SSN, string
                 Country = request.Address.Country
             });
 
-            _context.Persons.Add(person);
+            context.Persons.Add(person);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return person.ToDto();
         }

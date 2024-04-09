@@ -9,18 +9,11 @@ namespace YourBrand.IdentityManagement.Application.Tenants.Queries;
 
 public record GetTenantQuery(string TenantId) : IRequest<TenantDto>
 {
-    public class GetTenantQueryHandler : IRequestHandler<GetTenantQuery, TenantDto>
+    public class GetTenantQueryHandler(IApplicationDbContext context) : IRequestHandler<GetTenantQuery, TenantDto>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetTenantQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<TenantDto> Handle(GetTenantQuery request, CancellationToken cancellationToken)
         {
-            var tenant = await _context.Tenants
+            var tenant = await context.Tenants
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.TenantId, cancellationToken);

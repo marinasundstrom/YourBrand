@@ -8,15 +8,8 @@ namespace YourBrand.Marketing.Application.Campaigns.Commands;
 
 public record CreateCampaignCommand(string Name) : IRequest<CampaignDto>
 {
-    public class CreateCampaignCommandHandler : IRequestHandler<CreateCampaignCommand, CampaignDto>
+    public class CreateCampaignCommandHandler(IMarketingContext context) : IRequestHandler<CreateCampaignCommand, CampaignDto>
     {
-        private readonly IMarketingContext context;
-
-        public CreateCampaignCommandHandler(IMarketingContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<CampaignDto> Handle(CreateCampaignCommand request, CancellationToken cancellationToken)
         {
             var campaigns = await context.Campaigns.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);

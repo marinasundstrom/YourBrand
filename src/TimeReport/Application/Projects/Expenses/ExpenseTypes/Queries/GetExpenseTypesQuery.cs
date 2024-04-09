@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Querie
 
 public record GetExpenseTypesQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ExpenseTypeDto>>
 {
-    public class GetActivitiesQueryHandler : IRequestHandler<GetExpenseTypesQuery, ItemsResult<ExpenseTypeDto>>
+    public class GetActivitiesQueryHandler(ITimeReportContext context) : IRequestHandler<GetExpenseTypesQuery, ItemsResult<ExpenseTypeDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetActivitiesQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<ExpenseTypeDto>> Handle(GetExpenseTypesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.ExpenseTypes
+            var query = context.ExpenseTypes
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

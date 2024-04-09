@@ -10,15 +10,8 @@ namespace YourBrand.Messenger.Application.Messages.Queries;
 
 public record GetMessageQuery(string Id) : IRequest<MessageDto?>
 {
-    public class GetMessageQueryHandler : IRequestHandler<GetMessageQuery, MessageDto?>
+    public class GetMessageQueryHandler(IMessengerContext context) : IRequestHandler<GetMessageQuery, MessageDto?>
     {
-        private readonly IMessengerContext context;
-
-        public GetMessageQueryHandler(IMessengerContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<MessageDto?> Handle(GetMessageQuery request, CancellationToken cancellationToken)
         {
             var message = await context.Messages

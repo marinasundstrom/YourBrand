@@ -14,20 +14,13 @@ namespace YourBrand.HumanResources;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-public class OrganizationsController : Controller
+public class OrganizationsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public OrganizationsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<OrganizationDto>>> GetOrganizations(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, HumanResources.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetOrganizationsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetOrganizationsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
 
     }
 
@@ -35,7 +28,7 @@ public class OrganizationsController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<OrganizationDto>> GetOrganization(string id, CancellationToken cancellationToken)
     {
-        var organization = await _mediator.Send(new GetOrganizationQuery(id), cancellationToken);
+        var organization = await mediator.Send(new GetOrganizationQuery(id), cancellationToken);
 
         if (organization is null)
         {
@@ -51,7 +44,7 @@ public class OrganizationsController : Controller
     {
         try
         {
-            var organization = await _mediator.Send(new CreateOrganizationCommand(createOrganizationDto.Name, createOrganizationDto.FriendlyName), cancellationToken);
+            var organization = await mediator.Send(new CreateOrganizationCommand(createOrganizationDto.Name, createOrganizationDto.FriendlyName), cancellationToken);
 
             return Ok(organization);
         }
@@ -67,7 +60,7 @@ public class OrganizationsController : Controller
     {
         try
         {
-            var organization = await _mediator.Send(new UpdateOrganizationCommand(id, updateOrganizationDto.Name), cancellationToken);
+            var organization = await mediator.Send(new UpdateOrganizationCommand(id, updateOrganizationDto.Name), cancellationToken);
 
             return Ok(organization);
         }
@@ -83,7 +76,7 @@ public class OrganizationsController : Controller
     {
         try
         {
-            await _mediator.Send(new DeleteOrganizationCommand(id), cancellationToken);
+            await mediator.Send(new DeleteOrganizationCommand(id), cancellationToken);
 
             return Ok();
         }

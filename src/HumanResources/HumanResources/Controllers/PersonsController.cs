@@ -14,20 +14,13 @@ namespace YourBrand.HumanResources;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-public class PersonsController : Controller
+public class PersonsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public PersonsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<PersonDto>>> GetPersons(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, HumanResources.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetPersonsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetPersonsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
 
     }
 
@@ -35,7 +28,7 @@ public class PersonsController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<PersonDto>> GetPerson(string id, CancellationToken cancellationToken)
     {
-        var person = await _mediator.Send(new GetPersonQuery(id), cancellationToken);
+        var person = await mediator.Send(new GetPersonQuery(id), cancellationToken);
 
         if (person is null)
         {
@@ -49,7 +42,7 @@ public class PersonsController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ItemsResult<RoleDto>>> GetPersonRoles(string id, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, HumanResources.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetPersonRolesQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetPersonRolesQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
 
     }
 
@@ -59,7 +52,7 @@ public class PersonsController : Controller
     {
         try
         {
-            var person = await _mediator.Send(new CreatePersonCommand(createPersonDto.OrganizationId, createPersonDto.FirstName, createPersonDto.LastName, createPersonDto.DisplayName, createPersonDto.Title, createPersonDto.Role, createPersonDto.SSN, createPersonDto.Email, null, createPersonDto.ReportsTo, createPersonDto.Password), cancellationToken);
+            var person = await mediator.Send(new CreatePersonCommand(createPersonDto.OrganizationId, createPersonDto.FirstName, createPersonDto.LastName, createPersonDto.DisplayName, createPersonDto.Title, createPersonDto.Role, createPersonDto.SSN, createPersonDto.Email, null, createPersonDto.ReportsTo, createPersonDto.Password), cancellationToken);
 
             return Ok(person);
         }
@@ -75,7 +68,7 @@ public class PersonsController : Controller
     {
         try
         {
-            var person = await _mediator.Send(new UpdateOrganizationCommand(id, updatePersonDetailsDto.FirstName, updatePersonDetailsDto.LastName, updatePersonDetailsDto.DisplayName, updatePersonDetailsDto.Title, updatePersonDetailsDto.SSN, updatePersonDetailsDto.Email, updatePersonDetailsDto.ReportsTo), cancellationToken);
+            var person = await mediator.Send(new UpdateOrganizationCommand(id, updatePersonDetailsDto.FirstName, updatePersonDetailsDto.LastName, updatePersonDetailsDto.DisplayName, updatePersonDetailsDto.Title, updatePersonDetailsDto.SSN, updatePersonDetailsDto.Email, updatePersonDetailsDto.ReportsTo), cancellationToken);
 
             return Ok(person);
         }
@@ -91,7 +84,7 @@ public class PersonsController : Controller
     {
         try
         {
-            await _mediator.Send(new UpdatePersonRoleCommand(id, updatePersonRoleDtoDto.Role), cancellationToken);
+            await mediator.Send(new UpdatePersonRoleCommand(id, updatePersonRoleDtoDto.Role), cancellationToken);
 
             return Ok();
         }
@@ -107,7 +100,7 @@ public class PersonsController : Controller
     {
         try
         {
-            await _mediator.Send(new DeletePersonCommand(id), cancellationToken);
+            await mediator.Send(new DeletePersonCommand(id), cancellationToken);
 
             return Ok();
         }

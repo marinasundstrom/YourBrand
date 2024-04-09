@@ -11,22 +11,13 @@ namespace YourBrand.Showroom.Application.CompetenceAreas.Queries;
 
 public record GetCompetenceAreasQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CompetenceAreaDto>>
 {
-    class GetCompetenceAreasQueryHandler : IRequestHandler<GetCompetenceAreasQuery, Results<CompetenceAreaDto>>
+    class GetCompetenceAreasQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetCompetenceAreasQuery, Results<CompetenceAreaDto>>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetCompetenceAreasQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<Results<CompetenceAreaDto>> Handle(GetCompetenceAreasQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<CompetenceArea> result = _context
+            IQueryable<CompetenceArea> result = context
                     .CompetenceAreas
                      .OrderBy(o => o.Created)
                      .AsNoTracking()

@@ -12,34 +12,15 @@ public sealed record Checkout(
     ShippingDetailsDto ShippingDetails)
     : IRequest
 {
-    sealed class Handler : IRequestHandler<Checkout>
+    sealed class Handler(
+        YourBrand.Sales.IOrdersClient ordersClient,
+        YourBrand.Carts.ICartsClient cartsClient,
+        //YourBrand.Inventory.IItemsClient productsClient,
+        YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient,
+        YourBrand.Catalog.IProductsClient productsClient2,
+        //ICartHubService cartHubService,
+        IUserContext userContext) : IRequestHandler<Checkout>
     {
-        private readonly YourBrand.Sales.IOrdersClient _ordersClient;
-        private readonly YourBrand.Carts.ICartsClient cartsClient;
-        //private readonly IItemsClient productsClient;
-        private readonly YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient;
-        private readonly YourBrand.Catalog.IProductsClient productsClient2;
-        private readonly IUserContext userContext;
-        //private readonly ICartHubService cartHubService;
-
-        public Handler(
-            YourBrand.Sales.IOrdersClient ordersClient,
-            YourBrand.Carts.ICartsClient cartsClient,
-            //YourBrand.Inventory.IItemsClient productsClient,
-            YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient,
-            YourBrand.Catalog.IProductsClient productsClient2,
-            //ICartHubService cartHubService,
-            IUserContext userContext)
-        {
-            _ordersClient = ordersClient;
-            this.cartsClient = cartsClient;
-            //this.productsClient = productsClient;
-            this.warehouseItemsClient = warehouseItemsClient;
-            this.productsClient2 = productsClient2;
-            this.userContext = userContext;
-            //this.cartHubService = cartHubService;
-        }
-
         public async Task Handle(Checkout request, CancellationToken cancellationToken)
         {
             var customerId = userContext.CustomerNo;
@@ -55,7 +36,7 @@ public sealed record Checkout(
 
             const int OrderStatusOpen = 2;
 
-            await _ordersClient.CreateOrderAsync("organizationId", new CreateOrderRequest()
+            await ordersClient.CreateOrderAsync("organizationId", new CreateOrderRequest()
             {
                 Status = OrderStatusOpen,
                 Customer = new SetCustomer

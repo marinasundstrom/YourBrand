@@ -9,15 +9,8 @@ namespace YourBrand.TimeReport.Application.Teams
 
 public record DeleteTeamCommand(string Id) : IRequest
 {
-    public class DeleteTeamCommandHandler : IRequestHandler<DeleteTeamCommand>
+    public class DeleteTeamCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteTeamCommand>
     {
-        private readonly ITimeReportContext context;
-
-        public DeleteTeamCommandHandler(ITimeReportContext context)
-        {
-            this.context = context;
-        }
-
         public async Task Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams

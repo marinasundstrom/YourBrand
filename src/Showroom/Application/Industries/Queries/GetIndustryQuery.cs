@@ -9,22 +9,13 @@ namespace YourBrand.Showroom.Application.Industries.Queries;
 
 public record GetIndustryQuery(int Id) : IRequest<IndustryDto?>
 {
-    class GetIndustryQueryHandler : IRequestHandler<GetIndustryQuery, IndustryDto?>
+    class GetIndustryQueryHandler(
+        IShowroomContext context,
+        IUserContext userContext) : IRequestHandler<GetIndustryQuery, IndustryDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-
-        public GetIndustryQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<IndustryDto?> Handle(GetIndustryQuery request, CancellationToken cancellationToken)
         {
-            var industry = await _context
+            var industry = await context
                .Industries
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);

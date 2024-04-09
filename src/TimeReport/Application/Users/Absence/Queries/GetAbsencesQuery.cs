@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 
 public record GetAbsencesQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<AbsenceDto>>
 {
-    public class GetAbsencesQueryHandler : IRequestHandler<GetAbsencesQuery, ItemsResult<AbsenceDto>>
+    public class GetAbsencesQueryHandler(ITimeReportContext context) : IRequestHandler<GetAbsencesQuery, ItemsResult<AbsenceDto>>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetAbsencesQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<AbsenceDto>> Handle(GetAbsencesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Absence
+            var query = context.Absence
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

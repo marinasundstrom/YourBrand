@@ -9,22 +9,13 @@ namespace YourBrand.Inventory.Application.Warehouses.Queries;
 
 public record GetWarehouseQuery(string Id) : IRequest<WarehouseDto?>
 {
-    class GetWarehouseQueryHandler : IRequestHandler<GetWarehouseQuery, WarehouseDto?>
+    class GetWarehouseQueryHandler(
+        IInventoryContext context,
+        IUserContext userContext) : IRequestHandler<GetWarehouseQuery, WarehouseDto?>
     {
-        private readonly IInventoryContext _context;
-        private readonly IUserContext userContext;
-
-        public GetWarehouseQueryHandler(
-            IInventoryContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<WarehouseDto?> Handle(GetWarehouseQuery request, CancellationToken cancellationToken)
         {
-            var warehouse = await _context.Warehouses
+            var warehouse = await context.Warehouses
                 .Include(x => x.Site)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);

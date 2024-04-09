@@ -11,18 +11,11 @@ namespace YourBrand.TimeReport.Application.Projects.Queries;
 
 public record GetProjectStatisticsSummaryForProjectQuery(string ProjectId) : IRequest<StatisticsSummary>
 {
-    public class GetProjectStatisticsSummaryForQueryHandler : IRequestHandler<GetProjectStatisticsSummaryForProjectQuery, StatisticsSummary>
+    public class GetProjectStatisticsSummaryForQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsSummaryForProjectQuery, StatisticsSummary>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetProjectStatisticsSummaryForQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<StatisticsSummary> Handle(GetProjectStatisticsSummaryForProjectQuery request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                 .Include(p => p.Entries)
                 .ThenInclude(x => x.User)
                 .Include(p => p.Entries)

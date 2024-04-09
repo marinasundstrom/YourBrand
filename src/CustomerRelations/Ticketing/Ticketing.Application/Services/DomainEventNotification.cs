@@ -2,12 +2,7 @@
 
 namespace YourBrand.Ticketing.Application.Services;
 
-public sealed class DomainEventNotification<TDomainEvent> : INotification where TDomainEvent : DomainEvent
+public sealed class DomainEventNotification<TDomainEvent>(TDomainEvent domainEvent) : INotification where TDomainEvent : DomainEvent
 {
-    public DomainEventNotification(TDomainEvent domainEvent)
-    {
-        DomainEvent = domainEvent;
-    }
-
-    public TDomainEvent DomainEvent { get; }
+    public TDomainEvent DomainEvent { get; } = domainEvent;
 }

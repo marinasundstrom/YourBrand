@@ -15,17 +15,8 @@ public record GetUserInfo() : IRequest<Result<UserInfoDto>>
         }
     }
 
-    public class Handler : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
+    public sealed class Handler(IUserRepository userRepository, IUserContext userContext) : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
     {
-        private readonly IUserRepository userRepository;
-        private readonly IUserContext userContext;
-
-        public Handler(IUserRepository userRepository, IUserContext userContext)
-        {
-            this.userRepository = userRepository;
-            this.userContext = userContext;
-        }
-
         public async Task<Result<UserInfoDto>> Handle(GetUserInfo request, CancellationToken cancellationToken)
         {
             var user = await userRepository.FindByIdAsync(userContext.UserId.GetValueOrDefault(), cancellationToken);

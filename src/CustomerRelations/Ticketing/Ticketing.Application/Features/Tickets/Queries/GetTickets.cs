@@ -9,15 +9,8 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 
 public record GetTickets(int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<TicketDto>>
 {
-    public class Handler : IRequestHandler<GetTickets, ItemsResult<TicketDto>>
+    public class Handler(ITicketRepository ticketRepository) : IRequestHandler<GetTickets, ItemsResult<TicketDto>>
     {
-        private readonly ITicketRepository ticketRepository;
-
-        public Handler(ITicketRepository ticketRepository)
-        {
-            this.ticketRepository = ticketRepository;
-        }
-
         public async Task<ItemsResult<TicketDto>> Handle(GetTickets request, CancellationToken cancellationToken)
         {
             var query = ticketRepository.GetAll();

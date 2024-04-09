@@ -7,12 +7,8 @@ using ApplicationException = YourBrand.Analytics.Domain.Exceptions.ApplicationEx
 
 namespace YourBrand.Analytics.Web.Middleware;
 
-internal sealed class ExceptionHandlingMiddleware : IMiddleware
+internal sealed class ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger) : IMiddleware
 {
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-
-    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger) => _logger = logger;
-
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
@@ -21,7 +17,7 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            logger.LogError(e, e.Message);
 
             await HandleExceptionAsync(context, e);
         }

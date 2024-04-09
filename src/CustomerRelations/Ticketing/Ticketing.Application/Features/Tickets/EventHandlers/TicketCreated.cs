@@ -2,17 +2,8 @@
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
-public sealed class TicketCreatedEventHandler : IDomainEventHandler<TicketCreated>
+public sealed class TicketCreatedEventHandler(ITicketRepository ticketRepository, ITicketNotificationService ticketNotificationService) : IDomainEventHandler<TicketCreated>
 {
-    private readonly ITicketRepository ticketRepository;
-    private readonly ITicketNotificationService ticketNotificationService;
-
-    public TicketCreatedEventHandler(ITicketRepository ticketRepository, ITicketNotificationService ticketNotificationService)
-    {
-        this.ticketRepository = ticketRepository;
-        this.ticketNotificationService = ticketNotificationService;
-    }
-
     public async Task Handle(TicketCreated notification, CancellationToken cancellationToken)
     {
         var ticket = await ticketRepository.FindByIdAsync(notification.TicketId, cancellationToken);

@@ -10,27 +10,16 @@ using Microsoft.Extensions.Logging;
 
 namespace YourBrand.ApiKeys;
 
-public class ApiKeyProvider : IApiKeyProvider
+public class ApiKeyProvider(ILogger<IApiKeyProvider> logger, IConfiguration configuration, Client.IApiKeysClient apiKeysClient) : IApiKeyProvider
 {
-    private readonly ILogger<IApiKeyProvider> _logger;
-    private readonly IConfiguration _configuration;
-    private readonly Client.IApiKeysClient _apiKeysClient;
-
-    public ApiKeyProvider(ILogger<IApiKeyProvider> logger, IConfiguration configuration, Client.IApiKeysClient apiKeysClient)
-    {
-        _logger = logger;
-        _configuration = configuration;
-        _apiKeysClient = apiKeysClient;
-    }
-
     public async Task<IApiKey> ProvideAsync(string key)
     {
         try
         {
-            string secret = _configuration["ApiKeyService:Secret"];
-            string[] requestedResources = _configuration.GetSection("ApiKeyService:RequestedResources").Get<string[]>();
+            string secret = configuration["ApiKeyService:Secret"];
+            string[] requestedResources = configuration.GetSection("ApiKeyService:RequestedResources").Get<string[]>();
 
-            var result = await _apiKeysClient.CheckApiKeyAsync(secret, new Client.CheckApiKeyRequest()
+            var result = await apiKeysClient.CheckApiKeyAsync(secret, new Client.CheckApiKeyRequest()
             {
                 ApiKey = key,
                 RequestedResources = requestedResources
@@ -61,7 +50,7 @@ public class ApiKeyProvider : IApiKeyProvider
         }
         catch (System.Exception exception)
         {
-            _logger.LogError(exception, exception.Message);
+            logger.LogError(exception, exception.Message);
             throw;
         }
     }

@@ -8,27 +8,15 @@ using YourBrand.Messenger.Contracts;
 
 namespace YourBrand.Messenger.Application.Users.Queries;
 
-public class GetUserQuery : IRequest<UserDto>
+public class GetUserQuery(string userId) : IRequest<UserDto>
 {
-    public GetUserQuery(string userId)
+    public string UserId { get; } = userId;
+
+    public class GetUserQueryHandler(IMessengerContext context) : IRequestHandler<GetUserQuery, UserDto>
     {
-        UserId = userId;
-    }
-
-    public string UserId { get; }
-
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
-    {
-        readonly IMessengerContext _context;
-
-        public GetUserQueryHandler(IMessengerContext context)
-        {
-            _context = context;
-        }
-
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users
+            var user = await context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 

@@ -4,15 +4,8 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 
-public class TicketNotificationService : ITicketNotificationService
+public class TicketNotificationService(IHubContext<TicketsHub, ITicketsHubClient> hubsContext) : ITicketNotificationService
 {
-    private readonly IHubContext<TicketsHub, ITicketsHubClient> hubsContext;
-
-    public TicketNotificationService(IHubContext<TicketsHub, ITicketsHubClient> hubsContext)
-    {
-        this.hubsContext = hubsContext;
-    }
-
     public async Task Created(int ticketId, string title)
     {
         await hubsContext.Clients.All.Created(ticketId, title);

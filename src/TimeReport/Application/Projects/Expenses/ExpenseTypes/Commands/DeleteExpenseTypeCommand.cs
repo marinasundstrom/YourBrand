@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Comman
 
 public record DeleteExpenseTypeCommand(string ExpenseId) : IRequest
 {
-    public class DeleteExpenseCommandHandler : IRequestHandler<DeleteExpenseTypeCommand>
+    public class DeleteExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteExpenseTypeCommand>
     {
-        private readonly ITimeReportContext _context;
-
-        public DeleteExpenseCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteExpenseTypeCommand request, CancellationToken cancellationToken)
         {
-            var expenseType = await _context.ExpenseTypes
+            var expenseType = await context.ExpenseTypes
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
 
@@ -29,9 +22,9 @@ public record DeleteExpenseTypeCommand(string ExpenseId) : IRequest
                 throw new Exception();
             }
 
-            _context.ExpenseTypes.Remove(expenseType);
+            context.ExpenseTypes.Remove(expenseType);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

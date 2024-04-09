@@ -12,18 +12,8 @@ using YourBrand.Accounting.Application.Journal.Queries;
 namespace YourBrand.Accounting.Controllers;
 
 [Route("[controller]")]
-public class JournalEntriesController : Controller
+public class JournalEntriesController(IMediator mediator, IAccountingContext context, BlobServiceClient blobServiceClient) : Controller
 {
-    private readonly IMediator mediator;
-    private readonly IAccountingContext context;
-    private readonly BlobServiceClient blobServiceClient;
-
-    public JournalEntriesController(IMediator mediator, IAccountingContext context, BlobServiceClient blobServiceClient)
-    {
-        this.mediator = mediator;
-        this.context = context;
-        this.blobServiceClient = blobServiceClient;
-    }
 
     // GET: api/values
     [HttpGet]

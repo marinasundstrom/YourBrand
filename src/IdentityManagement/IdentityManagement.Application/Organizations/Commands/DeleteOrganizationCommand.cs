@@ -11,22 +11,11 @@ namespace YourBrand.IdentityManagement.Application.Organizations.Commands;
 
 public record DeleteOrganizationCommand(string OrganizationId) : IRequest
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteOrganizationCommand>
+    public sealed class DeleteUserCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<DeleteOrganizationCommand>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IUserContext _userContext;
-        private readonly IEventPublisher _eventPublisher;
-
-        public DeleteUserCommandHandler(IApplicationDbContext context, IUserContext userContext, IEventPublisher eventPublisher)
-        {
-            _context = context;
-            _userContext = userContext;
-            _eventPublisher = eventPublisher;
-        }
-
         public async Task Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _context.Organizations
+            var organization = await context.Organizations
                 .FirstOrDefaultAsync(p => p.Id == request.OrganizationId);
 
             if (organization is null)
@@ -34,11 +23,11 @@ public record DeleteOrganizationCommand(string OrganizationId) : IRequest
                 throw new UserNotFoundException(request.OrganizationId);
             }
 
-            _context.Organizations.Remove(organization);
+            context.Organizations.Remove(organization);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            await _eventPublisher.PublishEvent(new OrganizationDeleted(organization.Id));
+            await eventPublisher.PublishEvent(new OrganizationDeleted(organization.Id));
 
         }
     }

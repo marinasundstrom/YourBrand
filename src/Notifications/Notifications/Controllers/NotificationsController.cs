@@ -14,28 +14,21 @@ namespace YourBrand.Notifications.WebApi.Controllers;
 [Route("[controller]")]
 [ApiController]
 //[Authorize]
-public class NotificationsController : Controller
+public class NotificationsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public NotificationsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<ActionResult<NotificationsResults>> GetNotifications(
         string? userId, string? tag,
         bool includeUnreadNotificationsCount = false,
         int page = 1, int pageSize = 5, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetNotificationsQuery(userId, tag, includeUnreadNotificationsCount, page - 1, pageSize, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetNotificationsQuery(userId, tag, includeUnreadNotificationsCount, page - 1, pageSize, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateNotification(CreateNotificationDto dto, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateNotificationCommand(dto.Content, dto.Link, dto.UserId, dto.ScheduledFor), cancellationToken);
+        await mediator.Send(new CreateNotificationCommand(dto.Content, dto.Link, dto.UserId, dto.ScheduledFor), cancellationToken);
 
         return Ok();
     }
@@ -43,7 +36,7 @@ public class NotificationsController : Controller
     [HttpPost("{id}/MarkAsRead")]
     public async Task<ActionResult> MarkNotificationAsRead(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new MarkNotificationAsReadCommand(id), cancellationToken);
+        await mediator.Send(new MarkNotificationAsReadCommand(id), cancellationToken);
 
         return Ok();
     }
@@ -51,7 +44,7 @@ public class NotificationsController : Controller
     [HttpPost("MarkAllAsRead")]
     public async Task<ActionResult> MarkAllNotificationsAsRead(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new MarkAllNotificationsAsReadCommand(), cancellationToken);
+        await mediator.Send(new MarkAllNotificationsAsReadCommand(), cancellationToken);
 
         return Ok();
     }
@@ -59,7 +52,7 @@ public class NotificationsController : Controller
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteNotification(string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteNotificationCommand(id), cancellationToken);
+        await mediator.Send(new DeleteNotificationCommand(id), cancellationToken);
 
         return Ok();
     }
@@ -67,7 +60,7 @@ public class NotificationsController : Controller
     [HttpGet("UnreadCount")]
     public async Task<ActionResult<int>> GetUnreadNotificationsCount(string? userId, CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetUnreadNotificationsCountQuery(userId), cancellationToken));
+        return Ok(await mediator.Send(new GetUnreadNotificationsCountQuery(userId), cancellationToken));
     }
 }
 

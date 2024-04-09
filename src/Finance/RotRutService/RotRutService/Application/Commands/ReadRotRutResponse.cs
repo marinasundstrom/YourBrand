@@ -11,26 +11,15 @@ namespace YourBrand.RotRutService.Application.Commands;
 
 public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
 {
-    public class Handler : IRequestHandler<ReadRotRutResponse>
+    public class Handler(IRotRutContext context, IJournalEntriesClient verificationsClient, ITransactionsClient transactionsClient) : IRequestHandler<ReadRotRutResponse>
     {
-        private readonly IRotRutContext _context;
-        private readonly IJournalEntriesClient _verificationsClient;
-        private readonly ITransactionsClient _transactionsClient;
-
-        public Handler(IRotRutContext context, IJournalEntriesClient verificationsClient, ITransactionsClient transactionsClient)
-        {
-            _context = context;
-            _verificationsClient = verificationsClient;
-            _transactionsClient = transactionsClient;
-        }
-
         public async Task Handle(ReadRotRutResponse request, CancellationToken cancellationToken)
         {
             foreach (var beslut in request.BeslutJson.Beslut)
             {
                 foreach (var arende in beslut.Arenden)
                 {
-                    var rotRutCase = await _context.RotRutCases
+                    var rotRutCase = await context.RotRutCases
                         .Where(x => x.Status == RotRutCaseStatus.RequestSent)
                         .FirstOrDefaultAsync(x => x.InvoiceNo == arende.Fakturanummer, cancellationToken);
 
@@ -56,7 +45,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                         Credit = rotRutCase.RequestedAmount
                     });
 
-                    var verificationId2 = await _verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
+                    var verificationId2 = await verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
                     {
                         Description = $"Utbetalning RUT/RUT",
                         InvoiceNo = rotRutCase.InvoiceNo,
@@ -73,7 +62,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
 
             //await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);

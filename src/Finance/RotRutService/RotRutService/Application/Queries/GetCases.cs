@@ -10,15 +10,8 @@ namespace YourBrand.RotRutService.Application.Queries;
 
 public record GetCases(int Page = 0, int PageSize = 10, DomesticServiceKind? Kind = null, RotRutCaseStatus[]? Status = null) : IRequest<ItemsResult<RotRutCaseDto>>
 {
-    public class Handler : IRequestHandler<GetCases, ItemsResult<RotRutCaseDto>>
+    public class Handler(IRotRutContext context) : IRequestHandler<GetCases, ItemsResult<RotRutCaseDto>>
     {
-        private readonly IRotRutContext _context;
-
-        public Handler(IRotRutContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<RotRutCaseDto>> Handle(GetCases request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -31,7 +24,7 @@ public record GetCases(int Page = 0, int PageSize = 10, DomesticServiceKind? Kin
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.RotRutCases
+            var query = context.RotRutCases
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)

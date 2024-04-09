@@ -9,17 +9,8 @@ namespace YourBrand.Documents.Application.Queries;
 
 public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<DocumentDto>>
 {
-    public class Handler : IRequestHandler<GetDocuments, ItemsResult<DocumentDto>>
+    public class Handler(DocumentsContext context, IUrlResolver urlResolver) : IRequestHandler<GetDocuments, ItemsResult<DocumentDto>>
     {
-        private readonly DocumentsContext _context;
-        private readonly IUrlResolver _urlResolver;
-
-        public Handler(DocumentsContext context, IUrlResolver urlResolver)
-        {
-            _context = context;
-            _urlResolver = urlResolver;
-        }
-
         public async Task<ItemsResult<DocumentDto>> Handle(GetDocuments request, CancellationToken cancellationToken)
         {
             if (request.PageSize < 0)
@@ -32,7 +23,7 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
                 throw new Exception("Page Size must not be greater than 100.");
             }
 
-            var query = _context.Documents
+            var query = context.Documents
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Created)
@@ -47,7 +38,7 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<DocumentDto>(
-                items.Select(document => document.ToDto(_urlResolver.GetUrl)),
+                items.Select(document => document.ToDto(urlResolver.GetUrl)),
                 totalItems);
         }
     }

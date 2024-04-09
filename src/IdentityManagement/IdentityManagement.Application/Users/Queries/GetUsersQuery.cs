@@ -10,18 +10,11 @@ namespace YourBrand.IdentityManagement.Application.Users.Queries;
 
 public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, IdentityManagement.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<UserDto>>
 {
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
+    public class GetUsersQueryHandler(IApplicationDbContext context) : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetUsersQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemsResult<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Users
+            var query = context.Users
                 .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)

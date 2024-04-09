@@ -11,20 +11,11 @@ namespace YourBrand.Transactions.Application.Commands;
 
 public record UpdateTransactionReference(string TransactionId, string Reference) : IRequest
 {
-    public class Handler : IRequestHandler<UpdateTransactionReference>
+    public class Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint) : IRequestHandler<UpdateTransactionReference>
     {
-        private readonly ITransactionsContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
-
-        public Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint)
-        {
-            _context = context;
-            _publishEndpoint = publishEndpoint;
-        }
-
         public async Task Handle(UpdateTransactionReference request, CancellationToken cancellationToken)
         {
-            var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
+            var transaction = await context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
             if (transaction.Status != Domain.Enums.TransactionStatus.Unknown
                 && transaction.Status != Domain.Enums.TransactionStatus.Unverified)
@@ -34,7 +25,7 @@ public record UpdateTransactionReference(string TransactionId, string Reference)
 
             transaction.UpdateReference(request.Reference);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

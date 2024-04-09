@@ -11,22 +11,12 @@ namespace YourBrand.Catalog.Features.Currencies;
 
 public sealed record GetCurrenciesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<CurrencyDto>>
 {
-    sealed class GetCurrenciesQueryHandler : IRequestHandler<GetCurrenciesQuery, PagedResult<CurrencyDto>>
+    sealed class GetCurrenciesQueryHandler(
+        CatalogContext context) : IRequestHandler<GetCurrenciesQuery, PagedResult<CurrencyDto>>
     {
-        private readonly CatalogContext _context;
-        private readonly IUserContext userContext;
-
-        public GetCurrenciesQueryHandler(
-            CatalogContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<PagedResult<CurrencyDto>> Handle(GetCurrenciesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Currencies
+            var query = context.Currencies
                 .AsSplitQuery()
                 .AsNoTracking()
                 .AsQueryable();

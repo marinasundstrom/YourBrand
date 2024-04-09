@@ -8,18 +8,11 @@ namespace YourBrand.Inventory.Application.Items.Groups.Queries;
 
 public record GetItemGroup(string ItemGroupId) : IRequest<ItemGroupDto?>
 {
-    public class Handler : IRequestHandler<GetItemGroup, ItemGroupDto?>
+    public class Handler(IInventoryContext context) : IRequestHandler<GetItemGroup, ItemGroupDto?>
     {
-        private readonly IInventoryContext _context;
-
-        public Handler(IInventoryContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ItemGroupDto?> Handle(GetItemGroup request, CancellationToken cancellationToken)
         {
-            var person = await _context.ItemGroups
+            var person = await context.ItemGroups
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.ItemGroupId, cancellationToken);

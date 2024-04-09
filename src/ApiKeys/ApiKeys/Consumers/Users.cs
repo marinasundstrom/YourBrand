@@ -8,78 +8,45 @@ using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.ApiKeys.Consumers;
 
-public class ApiKeysUserCreatedConsumer : IConsumer<UserCreated>
+public sealed class ApiKeysUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ILogger<ApiKeysUserCreatedConsumer> logger) : IConsumer<UserCreated>
 {
-    private readonly IMediator _mediator;
-    private readonly IRequestClient<GetUser> _requestClient;
-    private readonly ILogger<ApiKeysUserCreatedConsumer> _logger;
-    private readonly IUserContext _userContext;
-
-    public ApiKeysUserCreatedConsumer(IMediator mediator, IUserContext userContext, IRequestClient<GetUser> requestClient, ILogger<ApiKeysUserCreatedConsumer> logger)
-    {
-        _mediator = mediator;
-        _userContext = userContext;
-        _requestClient = requestClient;
-        _logger = logger;
-    }
-
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
         try
         {
             var message = context.Message;
 
-            var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
+            var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
             var message2 = messageR.Message;
 
-            var result = await _mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
+            var result = await mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "FOO");
+            logger.LogError(e, "FOO");
         }
     }
 }
 
-public class ApiKeysUserDeletedConsumer : IConsumer<UserDeleted>
+public sealed class ApiKeysUserDeletedConsumer(IMediator mediator) : IConsumer<UserDeleted>
 {
-    private readonly IMediator _mediator;
-    private readonly IUserContext _userContext;
-
-    public ApiKeysUserDeletedConsumer(IMediator mediator, IUserContext userContext)
-    {
-        _mediator = mediator;
-        _userContext = userContext;
-    }
-
     public async Task Consume(ConsumeContext<UserDeleted> context)
     {
         var message = context.Message;
 
-        await _mediator.Send(new DeleteUserCommand(message.UserId));
+        await mediator.Send(new DeleteUserCommand(message.UserId));
     }
 }
 
-public class ApiKeysUserUpdatedConsumer : IConsumer<UserUpdated>
+public sealed class ApiKeysUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient) : IConsumer<UserUpdated>
 {
-    private readonly IMediator _mediator;
-    private readonly IRequestClient<GetUser> _requestClient;
-    private readonly IUserContext _userContext;
-
-    public ApiKeysUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, IUserContext userContext)
-    {
-        _mediator = mediator;
-        _requestClient = requestClient;
-        _userContext = userContext;
-    }
-
     public async Task Consume(ConsumeContext<UserUpdated> context)
     {
         var message = context.Message;
 
-        var messageR = await _requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
+        var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
         var message2 = messageR.Message;
 
-        var result = await _mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
+        var result = await mediator.Send(new UpdateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, message2.Email));
     }
 }

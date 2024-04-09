@@ -9,18 +9,11 @@ namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
 public record GetAttributes(string[]? Ids = null, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<AttributeDto>>
 {
-    public class Handler : IRequestHandler<GetAttributes, PagedResult<AttributeDto>>
+    public class Handler(CatalogContext context) : IRequestHandler<GetAttributes, PagedResult<AttributeDto>>
     {
-        private readonly CatalogContext _context;
-
-        public Handler(CatalogContext context)
-        {
-            _context = context;
-        }
-
         public async Task<PagedResult<AttributeDto>> Handle(GetAttributes request, CancellationToken cancellationToken)
         {
-            var query = _context.Attributes
+            var query = context.Attributes
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(o => o.Group)

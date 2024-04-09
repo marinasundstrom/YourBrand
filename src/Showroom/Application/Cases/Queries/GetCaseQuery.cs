@@ -9,25 +9,13 @@ namespace YourBrand.Showroom.Application.Cases.Queries;
 
 public record GetCaseQuery(string Id) : IRequest<CaseDto?>
 {
-    class GetCaseQueryHandler : IRequestHandler<GetCaseQuery, CaseDto?>
+    class GetCaseQueryHandler(
+        IShowroomContext context,
+        IUrlHelper urlHelper) : IRequestHandler<GetCaseQuery, CaseDto?>
     {
-        private readonly IShowroomContext _context;
-        private readonly IUserContext userContext;
-        private readonly IUrlHelper _urlHelper;
-
-        public GetCaseQueryHandler(
-            IShowroomContext context,
-            IUserContext userContext,
-            IUrlHelper urlHelper)
-        {
-            _context = context;
-            this.userContext = userContext;
-            _urlHelper = urlHelper;
-        }
-
         public async Task<CaseDto?> Handle(GetCaseQuery request, CancellationToken cancellationToken)
         {
-            var @case = await _context.Cases
+            var @case = await context.Cases
                .Include(c => c.CaseProfiles)
                .Include(c => c.CreatedBy)
                .Include(c => c.LastModifiedBy)
@@ -38,7 +26,7 @@ public record GetCaseQuery(string Id) : IRequest<CaseDto?>
                 return null;
             }
 
-            return @case.ToDto(_urlHelper);
+            return @case.ToDto(urlHelper);
         }
     }
 }

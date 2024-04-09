@@ -9,18 +9,11 @@ namespace YourBrand.TimeReport.Application.Activities.Commands;
 
 public record UpdateActivityCommand(string ActivityId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
 {
-    public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityCommand, ActivityDto>
+    public class UpdateActivityCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateActivityCommand, ActivityDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public UpdateActivityCommandHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ActivityDto> Handle(UpdateActivityCommand request, CancellationToken cancellationToken)
         {
-            var activity = await _context.Activities
+            var activity = await context.Activities
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
@@ -31,13 +24,13 @@ public record UpdateActivityCommand(string ActivityId, string Name, string Activ
             }
 
             activity.Name = request.Name;
-            activity.ActivityType = await _context.ActivityTypes.FirstAsync(at => at.Id == request.ActivityTypeId);
+            activity.ActivityType = await context.ActivityTypes.FirstAsync(at => at.Id == request.ActivityTypeId);
             activity.Description = request.Description;
             activity.HourlyRate = request.HourlyRate;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
-            activity = await _context.Activities
+            activity = await context.Activities
                .Include(x => x.ActivityType)
                .Include(x => x.Project)
                .ThenInclude(x => x.Organization)

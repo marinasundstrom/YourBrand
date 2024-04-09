@@ -9,18 +9,11 @@ namespace YourBrand.HumanResources.Application.Persons.Queries;
 
 public record GetPersonQuery(string PersonId) : IRequest<PersonDto>
 {
-    public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, PersonDto>
+    public class GetPersonQueryHandler(IApplicationDbContext context) : IRequestHandler<GetPersonQuery, PersonDto>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetPersonQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<PersonDto> Handle(GetPersonQuery request, CancellationToken cancellationToken)
         {
-            var person = await _context.Persons
+            var person = await context.Persons
                 .Include(u => u.Roles)
                 .Include(u => u.Organization)
                 .Include(u => u.Department)

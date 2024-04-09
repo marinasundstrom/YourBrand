@@ -13,22 +13,11 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
 public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? UserId = null, string? SearchString = null, string? SortBy = null, Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TimeSheetDto>>
 {
-    public class GetTimeSheetsQueryHandler : IRequestHandler<GetTimeSheetsQuery, ItemsResult<TimeSheetDto>>
+    public class GetTimeSheetsQueryHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<GetTimeSheetsQuery, ItemsResult<TimeSheetDto>>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-
-        public GetTimeSheetsQueryHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-        }
-
         public async Task<ItemsResult<TimeSheetDto>> Handle(GetTimeSheetsQuery request, CancellationToken cancellationToken)
         {
-            var query = _timeSheetRepository.GetTimeSheets()
+            var query = timeSheetRepository.GetTimeSheets()
                        .AsNoTracking()
                        .AsSplitQuery();
 
@@ -64,7 +53,7 @@ public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? Projec
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var period = await _context.ReportingPeriods
+            var period = await context.ReportingPeriods
                 .Where(x => x.Status == EntryStatus.Locked)
                 .ToArrayAsync(cancellationToken);
 

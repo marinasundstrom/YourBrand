@@ -4,11 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.Portal.Modules;
 
-public class ModuleLoader
+public class ModuleLoader(IServiceProvider serviceProvider)
 {
     static readonly List<Module> _modules = new List<Module>();
-
-    private readonly IServiceProvider _serviceProvider;
     private static readonly Type _moduleInitializerInterface;
 
     public IReadOnlyList<Module> Modules => _modules;
@@ -16,11 +14,6 @@ public class ModuleLoader
     public IEnumerable<Assembly> GetAssemblies() => _modules
         .Where(x => x.Enabled)
         .Select(x => x.Assembly);
-
-    public ModuleLoader(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
 
     static ModuleLoader()
     {
@@ -60,7 +53,7 @@ public class ModuleLoader
             if (initializer is not null)
             {
                 var moduleInitializeMethod = initializer.GetMethod("ConfigureServices");
-                moduleInitializeMethod?.Invoke(null, new object[] { _serviceProvider });
+                moduleInitializeMethod?.Invoke(null, new object[] { serviceProvider });
 
                 Console.WriteLine($"Module \"{module.Assembly.GetName().Name}\" was configured.");
             }

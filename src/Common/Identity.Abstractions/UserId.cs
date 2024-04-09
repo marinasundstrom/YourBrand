@@ -2,11 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace YourBrand.Identity;
 
-public struct UserId
+public struct UserId(string value)
 {
-    public UserId(string value) => Value = value;
-
-    public string Value { get; private set; }
+    public string Value { get; private set; } = value;
 
     public override bool Equals([NotNullWhen(true)] object? obj)
     {

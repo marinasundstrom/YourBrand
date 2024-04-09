@@ -30,18 +30,11 @@ public static class ServiceExtensions
     }
 }
 
-public class Handler : DelegatingHandler
+public class Handler(IUserContext userContext) : DelegatingHandler
 {
-    private readonly IUserContext _userContext;
-
-    public Handler(IUserContext userContext)
-    {
-        _userContext = userContext;
-    }
-
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _userContext.GetAccessToken());
+        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", userContext.GetAccessToken());
 
         return base.SendAsync(request, cancellationToken);
     }

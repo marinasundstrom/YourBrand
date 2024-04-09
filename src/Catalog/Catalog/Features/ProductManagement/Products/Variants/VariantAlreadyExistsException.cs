@@ -3,7 +3,6 @@
 using System;
 
 
-public class VariantAlreadyExistsException : Exception
+public class VariantAlreadyExistsException(string message) : Exception(message)
 {
-    public VariantAlreadyExistsException(string message) : base(message) { }
 }

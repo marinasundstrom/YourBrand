@@ -3,16 +3,10 @@ using YourBrand.Domain.Infrastructure;
 
 namespace YourBrand.Sales.Persistence.Repositories.Mocks;
 
-public sealed class MockUnitOfWork : IUnitOfWork
+public sealed class MockUnitOfWork(IDomainEventDispatcher domainEventDispatcher) : IUnitOfWork
 {
     private readonly List<object> items = new List<object>();
-    private readonly IDomainEventDispatcher domainEventDispatcher;
     private readonly List<object> newItems = new List<object>();
-
-    public MockUnitOfWork(IDomainEventDispatcher domainEventDispatcher)
-    {
-        this.domainEventDispatcher = domainEventDispatcher;
-    }
 
     public List<object> Items => items;
 

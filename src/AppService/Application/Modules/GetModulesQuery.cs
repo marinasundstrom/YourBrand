@@ -10,17 +10,8 @@ namespace YourBrand.Application.Modules;
 
 public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
 {
-    public class Handler : IRequestHandler<GetModulesQuery, IEnumerable<ModuleDto>>
+    public sealed class Handler(IAppServiceContext appServiceContext) : IRequestHandler<GetModulesQuery, IEnumerable<ModuleDto>>
     {
-        private readonly IUserContext _userContext;
-        private readonly IAppServiceContext _appServiceContext;
-
-        public Handler(IUserContext userContext, IAppServiceContext appServiceContext)
-        {
-            _userContext = userContext;
-            _appServiceContext = appServiceContext;
-        }
-
         public async Task<IEnumerable<ModuleDto>> Handle(GetModulesQuery request, CancellationToken cancellationToken)
         {
             /*
@@ -29,7 +20,7 @@ public record GetModulesQuery() : IRequest<IEnumerable<ModuleDto>>
             )!;
             */
 
-            return await _appServiceContext.Modules
+            return await appServiceContext.Modules
             //.Where(x => x.Enabled)
             .OrderBy(x => x.Index)
             .Select(x => new ModuleDto

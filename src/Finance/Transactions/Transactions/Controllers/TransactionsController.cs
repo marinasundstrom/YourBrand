@@ -9,19 +9,12 @@ using YourBrand.Transactions.Domain.Enums;
 namespace YourBrand.Invoicing.Controllers;
 
 [Route("[controller]")]
-public class TransactionsController : ControllerBase
+public class TransactionsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public TransactionsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<ActionResult<ItemsResult<TransactionDto>>> GetTransactionsAsync(int page, int pageSize, [FromQuery] TransactionStatus[]? status, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetTransactions(page, pageSize, status), cancellationToken);
+        var result = await mediator.Send(new GetTransactions(page, pageSize, status), cancellationToken);
         return Ok(result);
     }
 }

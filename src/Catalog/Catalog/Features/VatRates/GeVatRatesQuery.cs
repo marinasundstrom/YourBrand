@@ -11,22 +11,12 @@ namespace YourBrand.Catalog.Features.VatRates;
 
 public sealed record GetVatRatesQuery(int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<VatRateDto>>
 {
-    sealed class GetVatRatesQueryHandler : IRequestHandler<GetVatRatesQuery, PagedResult<VatRateDto>>
+    sealed class GetVatRatesQueryHandler(
+        CatalogContext context) : IRequestHandler<GetVatRatesQuery, PagedResult<VatRateDto>>
     {
-        private readonly CatalogContext _context;
-        private readonly IUserContext userContext;
-
-        public GetVatRatesQueryHandler(
-            CatalogContext context,
-            IUserContext userContext)
-        {
-            _context = context;
-            this.userContext = userContext;
-        }
-
         public async Task<PagedResult<VatRateDto>> Handle(GetVatRatesQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.VatRates
+            var query = context.VatRates
                 .AsSplitQuery()
                 .AsNoTracking()
                 .AsQueryable();

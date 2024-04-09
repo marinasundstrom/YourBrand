@@ -7,15 +7,8 @@ namespace YourBrand.ApiKeys.Application.Commands;
 
 public record CreateApiKeyCommand(string Name) : IRequest<CreateApiKeyResult>
 {
-    public class CreateApiKeyCommandHandler : IRequestHandler<CreateApiKeyCommand, CreateApiKeyResult>
+    public class CreateApiKeyCommandHandler(IApiKeysContext context) : IRequestHandler<CreateApiKeyCommand, CreateApiKeyResult>
     {
-        private readonly IApiKeysContext context;
-
-        public CreateApiKeyCommandHandler(IApiKeysContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<CreateApiKeyResult> Handle(CreateApiKeyCommand request, CancellationToken cancellationToken)
         {
             return null;

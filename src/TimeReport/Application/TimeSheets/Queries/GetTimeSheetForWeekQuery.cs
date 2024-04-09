@@ -14,31 +14,14 @@ namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
 public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRequest<TimeSheetDto?>
 {
-    public class GetTimeSheetForWeekQueryHandler : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
+    public sealed class GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext) : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
     {
-        private readonly ITimeSheetRepository _timeSheetRepository;
-        private readonly IReportingPeriodRepository _reportingPeriodRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITimeReportContext _context;
-        private readonly IUserContext _userContext;
-
-        public GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext)
-        {
-            _timeSheetRepository = timeSheetRepository;
-            _reportingPeriodRepository = reportingPeriodRepository;
-            _userRepository = userRepository;
-            _unitOfWork = unitOfWork;
-            _context = context;
-            _userContext = userContext;
-        }
-
         public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
         {
-            var query = _timeSheetRepository.GetTimeSheets()
+            var query = timeSheetRepository.GetTimeSheets()
                 .AsSplitQuery();
 
-            string? userId = request.UserId ?? _userContext.UserId;
+            string? userId = request.UserId ?? userContext.UserId;
 
             query = query.Where(x => x.UserId == userId);
 
@@ -46,7 +29,7 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
 
             if (timeSheet is null)
             {
-                User? user = await _userRepository.GetUser(userId!, cancellationToken);
+                User? user = await userRepository.GetUser(userId!, cancellationToken);
 
                 userId = user?.Id;
 
@@ -54,12 +37,12 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
 
                 timeSheet = new TimeSheet(user!, request.Year, request.Week);
 
-                _context.TimeSheets.Add(timeSheet);
+                context.TimeSheets.Add(timeSheet);
 
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.SaveChangesAsync(cancellationToken);
             }
 
-            var periods = await _reportingPeriodRepository.GetReportingPeriodForTimeSheet(timeSheet, cancellationToken);
+            var periods = await reportingPeriodRepository.GetReportingPeriodForTimeSheet(timeSheet, cancellationToken);
 
             return timeSheet.ToDto(periods);
         }

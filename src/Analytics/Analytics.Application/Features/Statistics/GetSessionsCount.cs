@@ -6,15 +6,8 @@ namespace YourBrand.Analytics.Application.Features.Statistics;
 
 public record GetSessionsCount(DateTime? From = null, DateTime? To = null, bool DistinctByClient = false) : IRequest<Data>
 {
-    public class Handler : IRequestHandler<GetSessionsCount, Data>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetSessionsCount, Data>
     {
-        private readonly IApplicationDbContext context;
-
-        public Handler(IApplicationDbContext context)
-        {
-            this.context = context;
-        }
-
         public async Task<Data> Handle(GetSessionsCount request, CancellationToken cancellationToken)
         {
             var sessions = context.Sessions

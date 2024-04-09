@@ -10,18 +10,11 @@ namespace YourBrand.TimeReport.Application.Projects.Queries;
 
 public record GetProjectMembershipQuery(string ProjectId, string MembershipId) : IRequest<ProjectMembershipDto>
 {
-    public class GetProjectMembershipQueryHandler : IRequestHandler<GetProjectMembershipQuery, ProjectMembershipDto>
+    public class GetProjectMembershipQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipQuery, ProjectMembershipDto>
     {
-        private readonly ITimeReportContext _context;
-
-        public GetProjectMembershipQueryHandler(ITimeReportContext context)
-        {
-            _context = context;
-        }
-
         public async Task<ProjectMembershipDto> Handle(GetProjectMembershipQuery request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects
+            var project = await context.Projects
                 .Include(x => x.Organization)
                 .Include(p => p.Memberships)
                 .Include(p => p.Memberships)

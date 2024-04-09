@@ -6,15 +6,8 @@ namespace YourBrand.Customers.Application.Commands;
 
 public record DeleteOrganization(string OrganizationId) : IRequest
 {
-    public class Handler : IRequestHandler<DeleteOrganization>
+    public class Handler(ICustomersContext context) : IRequestHandler<DeleteOrganization>
     {
-        private readonly ICustomersContext _context;
-
-        public Handler(ICustomersContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(DeleteOrganization request, CancellationToken cancellationToken)
         {
             /*

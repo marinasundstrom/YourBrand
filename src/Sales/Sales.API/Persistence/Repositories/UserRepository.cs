@@ -7,16 +7,9 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Persistence.Repositories.Mocks;
 
-public sealed class UserRepository : IUserRepository
+public sealed class UserRepository(SalesContext context) : IUserRepository
 {
-    readonly SalesContext context;
-    readonly DbSet<User> dbSet;
-
-    public UserRepository(SalesContext context)
-    {
-        this.context = context;
-        this.dbSet = context.Set<User>();
-    }
+    readonly DbSet<User> dbSet = context.Set<User>();
 
     public IQueryable<User> GetAll()
     {
