@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.Application.Industries.Queries;
 
 public record GetIndustriesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<IndustryDto>>
 {
-    class GetIndustriesQueryHandler(
+    sealed class GetIndustriesQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetIndustriesQuery, Results<IndustryDto>>
     {

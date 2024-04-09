@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 
-class OrganizationUserConfiguration : IEntityTypeConfiguration<OrganizationUser>
+sealed class OrganizationUserConfiguration : IEntityTypeConfiguration<OrganizationUser>
 {
     public void Configure(EntityTypeBuilder<OrganizationUser> builder)
     {

@@ -10,7 +10,7 @@ namespace YourBrand.Marketing.Application.Discounts.Queries;
 
 public record GetDiscountsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<DiscountDto>>
 {
-    class GetDiscountsQueryHandler(
+    sealed class GetDiscountsQueryHandler(
         IMarketingContext context,
         IUserContext userContext) : IRequestHandler<GetDiscountsQuery, ItemsResult<DiscountDto>>
     {

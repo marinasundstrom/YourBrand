@@ -6,7 +6,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-class PersonProfilCaseConfigurationConfiguration : IEntityTypeConfiguration<PersonProfile>
+sealed class PersonProfilCaseConfigurationConfiguration : IEntityTypeConfiguration<PersonProfile>
 {
     public void Configure(EntityTypeBuilder<PersonProfile> builder)
     {

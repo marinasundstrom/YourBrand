@@ -19,7 +19,7 @@ public record AddExperienceCommand(
     string? Description)
     : IRequest<ExperienceDto>
 {
-    class CreatePersonProfileCommandHandler(
+    sealed class CreatePersonProfileCommandHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<AddExperienceCommand, ExperienceDto>
     {

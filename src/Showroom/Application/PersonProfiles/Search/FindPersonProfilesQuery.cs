@@ -13,7 +13,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 public record FindPersonProfilesQuery(PersonProfileQuery Query, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<PersonProfileDto>>
 {
-    class FindPersonProfilesQueryHandler(
+    sealed class FindPersonProfilesQueryHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<FindPersonProfilesQuery, Results<PersonProfileDto>>
     {

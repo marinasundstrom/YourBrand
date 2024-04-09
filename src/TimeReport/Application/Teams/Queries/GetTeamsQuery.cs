@@ -12,7 +12,7 @@ namespace YourBrand.TimeReport.Application.Teams
 
 public record GetTeamsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TeamDto>>
 {
-    class GetTeamsQueryHandler(
+    sealed class GetTeamsQueryHandler(
         ITimeReportContext context,
         IUserContext userContext) : IRequestHandler<GetTeamsQuery, ItemsResult<TeamDto>>
     {

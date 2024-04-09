@@ -12,7 +12,7 @@ namespace YourBrand.TimeReport.Application.Organizations
 
 public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<OrganizationDto>>
 {
-    class GetOrganizationsQueryHandler(
+    sealed class GetOrganizationsQueryHandler(
         ITimeReportContext context,
         IUserContext userContext) : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
     {

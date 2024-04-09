@@ -10,7 +10,7 @@ namespace YourBrand.TimeReport.Application.Teams
 
 public record GetTeamQuery(string Id) : IRequest<TeamDto?>
 {
-    class GetTeamQueryHandler(
+    sealed class GetTeamQueryHandler(
         ITimeReportContext context,
         IUserContext userContext) : IRequestHandler<GetTeamQuery, TeamDto?>
     {

@@ -10,7 +10,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record CreatePersonProfileCommand(CreatePersonProfileDto PersonProfile) : IRequest<PersonProfileDto>
 {
-    class CreatePersonProfileCommandHandler(
+    sealed class CreatePersonProfileCommandHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<CreatePersonProfileCommand, PersonProfileDto>
     {

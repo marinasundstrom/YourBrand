@@ -6,7 +6,7 @@ using YourBrand.Messenger.Domain.Entities;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence.Configurations;
 
-class MessageReceiptConfiguration : IEntityTypeConfiguration<MessageReceipt>
+sealed class MessageReceiptConfiguration : IEntityTypeConfiguration<MessageReceipt>
 {
     public void Configure(EntityTypeBuilder<MessageReceipt> builder)
     {

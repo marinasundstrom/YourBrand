@@ -12,7 +12,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Queries;
 
 public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? PersonProfileId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ExperienceDto>>
 {
-    class GetExperiencesQueryHandler(
+    sealed class GetExperiencesQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetExperiencesQuery, Results<ExperienceDto>>
     {

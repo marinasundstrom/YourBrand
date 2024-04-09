@@ -7,7 +7,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record UpdatePersonProfileCommand(string Id, UpdatePersonProfileDto PersonProfile) : IRequest<PersonProfileDto>
 {
-    class UpdatePersonProfileCommandHandler(
+    sealed class UpdatePersonProfileCommandHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<UpdatePersonProfileCommand, PersonProfileDto>
     {

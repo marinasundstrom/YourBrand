@@ -6,7 +6,7 @@ using YourBrand.Messenger.Domain.Common;
 
 namespace YourBrand.Messenger.Infrastructure.Services;
 
-class DomainEventDispatcher(ILogger<DomainEventDispatcher> logger, IPublisher mediator) : IDomainEventDispatcher
+sealed class DomainEventDispatcher(ILogger<DomainEventDispatcher> logger, IPublisher mediator) : IDomainEventDispatcher
 {
     public async Task Dispatch(DomainEvent domainEvent, CancellationToken cancellationToken = default)
     {

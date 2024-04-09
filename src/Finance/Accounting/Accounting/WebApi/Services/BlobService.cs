@@ -4,7 +4,7 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Services;
 
-class BlobService(BlobServiceClient blobServiceClient) : IBlobService
+sealed class BlobService(BlobServiceClient blobServiceClient) : IBlobService
 {
     public async Task UploadBloadAsync(string name, Stream stream)
     {

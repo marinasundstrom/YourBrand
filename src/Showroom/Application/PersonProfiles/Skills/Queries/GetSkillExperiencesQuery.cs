@@ -9,8 +9,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 
 public record GetSkillExperiencesQuery(string PersonProfileId, string Id) : IRequest<PersonProfileSkillExperiencesDto?>
 {
-
-    class GetSkillExperiencesQueryHandler(
+    sealed class GetSkillExperiencesQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetSkillExperiencesQuery, PersonProfileSkillExperiencesDto?>
     {

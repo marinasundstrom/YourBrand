@@ -12,7 +12,7 @@ namespace YourBrand.Showroom.Application.Skills.SkillAreas.Queries;
 
 public record GetSkillAreasQuery(int Page = 0, int PageSize = 10, int? IndustryId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<SkillAreaDto>>
 {
-    class GetSkillAreasQueryHandler(
+    sealed class GetSkillAreasQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetSkillAreasQuery, Results<SkillAreaDto>>
     {

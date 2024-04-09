@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Queries;
 
 public record GetExperienceQuery(string PersonProfileId, string Id) : IRequest<ExperienceDto>
 {
-    class GetPersonProfileQueryHandler(
+    sealed class GetPersonProfileQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetExperienceQuery, ExperienceDto?>
     {

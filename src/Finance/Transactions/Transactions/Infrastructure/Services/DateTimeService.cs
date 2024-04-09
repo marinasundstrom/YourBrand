@@ -2,7 +2,7 @@
 
 namespace YourBrand.Transactions.Infrastructure.Services;
 
-class DateTimeService : IDateTime
+sealed class DateTimeService : IDateTime
 {
     public DateTime Now => DateTime.Now;
 }

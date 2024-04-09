@@ -96,7 +96,7 @@ public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDis
     }
 
 
-    private class InMemoryConfig : IProxyConfig
+    private sealed class InMemoryConfig : IProxyConfig
     {
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 

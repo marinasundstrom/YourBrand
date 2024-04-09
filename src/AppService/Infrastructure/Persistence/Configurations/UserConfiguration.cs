@@ -6,7 +6,7 @@ using YourBrand.Domain.Entities;
 
 namespace YourBrand.Infrastructure.Persistence.Configurations;
 
-class UserConfiguration : IEntityTypeConfiguration<User>
+sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

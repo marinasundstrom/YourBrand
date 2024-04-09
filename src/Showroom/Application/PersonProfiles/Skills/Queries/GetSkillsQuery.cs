@@ -12,7 +12,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
 
 public record GetSkillsQuery(string PersonProfileId, int Page = 0, int? PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<PersonProfileSkillDto>>
 {
-    class GetSkillsQueryHandler(
+    sealed class GetSkillsQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetSkillsQuery, Results<PersonProfileSkillDto>>
     {

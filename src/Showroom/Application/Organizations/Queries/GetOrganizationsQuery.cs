@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.Application.Organizations.Queries;
 
 public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<OrganizationDto>>
 {
-    class GetOrganizationsQueryHandler(
+    sealed class GetOrganizationsQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetOrganizationsQuery, Results<OrganizationDto>>
     {

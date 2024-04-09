@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Configurations;
 
-class ApplicationConfiguration : IEntityTypeConfiguration<Domain.Entities.Application>
+sealed class ApplicationConfiguration : IEntityTypeConfiguration<Domain.Entities.Application>
 {
     public void Configure(EntityTypeBuilder<Domain.Entities.Application> builder)
     {

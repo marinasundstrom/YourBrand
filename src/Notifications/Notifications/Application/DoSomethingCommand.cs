@@ -4,7 +4,7 @@ namespace YourBrand.Notifications.Application;
 
 public record DoSomethingCommand(double Lhs, double Rhs) : IRequest<double>
 {
-    class DoSomethingCommandHandler : IRequestHandler<DoSomethingCommand, double>
+    sealed class DoSomethingCommandHandler : IRequestHandler<DoSomethingCommand, double>
     {
         public async Task<double> Handle(DoSomethingCommand request, CancellationToken cancellationToken)
         {

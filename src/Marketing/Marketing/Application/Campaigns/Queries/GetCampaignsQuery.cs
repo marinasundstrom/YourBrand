@@ -10,7 +10,7 @@ namespace YourBrand.Marketing.Application.Campaigns.Queries;
 
 public record GetCampaignsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<CampaignDto>>
 {
-    class GetCampaignsQueryHandler(
+    sealed class GetCampaignsQueryHandler(
         IMarketingContext context,
         IUserContext userContext) : IRequestHandler<GetCampaignsQuery, ItemsResult<CampaignDto>>
     {

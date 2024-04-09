@@ -6,7 +6,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-class CompanyConfiguration : IEntityTypeConfiguration<Company>
+sealed class CompanyConfiguration : IEntityTypeConfiguration<Company>
 {
     public void Configure(EntityTypeBuilder<Company> builder)
     {

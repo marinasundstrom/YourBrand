@@ -6,7 +6,7 @@ using YourBrand.Messenger.Domain.Entities;
 
 namespace YourBrand.Messenger.Infrastructure.Persistence.Configurations;
 
-class ConversationParticipantConfiguration : IEntityTypeConfiguration<ConversationParticipant>
+sealed class ConversationParticipantConfiguration : IEntityTypeConfiguration<ConversationParticipant>
 {
     public void Configure(EntityTypeBuilder<ConversationParticipant> builder)
     {

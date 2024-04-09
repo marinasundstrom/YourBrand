@@ -9,7 +9,7 @@ namespace YourBrand.Inventory.Application.Sites.Queries;
 
 public record GetSiteQuery(string Id) : IRequest<SiteDto?>
 {
-    class GetSiteQueryHandler(
+    sealed class GetSiteQueryHandler(
         IInventoryContext context,
         IUserContext userContext) : IRequestHandler<GetSiteQuery, SiteDto?>
     {

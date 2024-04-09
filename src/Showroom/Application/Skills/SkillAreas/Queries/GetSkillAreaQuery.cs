@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.Skills.SkillAreas.Queries;
 
 public record GetSkillAreaQuery(string Id) : IRequest<SkillAreaDto?>
 {
-    class GetSkillAreaQueryHandler(
+    sealed class GetSkillAreaQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetSkillAreaQuery, SkillAreaDto?>
     {

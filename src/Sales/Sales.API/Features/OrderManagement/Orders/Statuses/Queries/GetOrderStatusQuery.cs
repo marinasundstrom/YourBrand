@@ -8,7 +8,7 @@ namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 
 public record GetOrderStatusQuery(int Id) : IRequest<OrderStatusDto?>
 {
-    class GetOrderStatusQueryHandler(
+    sealed class GetOrderStatusQueryHandler(
         ISalesContext context,
         IUserContext userContext) : IRequestHandler<GetOrderStatusQuery, OrderStatusDto?>
     {

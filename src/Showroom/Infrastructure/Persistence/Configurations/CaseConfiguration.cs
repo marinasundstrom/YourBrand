@@ -6,7 +6,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-class CaseConfiguration : IEntityTypeConfiguration<Case>
+sealed class CaseConfiguration : IEntityTypeConfiguration<Case>
 {
     public void Configure(EntityTypeBuilder<Case> builder)
     {

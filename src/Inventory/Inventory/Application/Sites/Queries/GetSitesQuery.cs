@@ -10,7 +10,7 @@ namespace YourBrand.Inventory.Application.Sites.Queries;
 
 public record GetSitesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<SiteDto>>
 {
-    class GetSitesQueryHandler(
+    sealed class GetSitesQueryHandler(
         IInventoryContext context,
         IUserContext userContext) : IRequestHandler<GetSitesQuery, ItemsResult<SiteDto>>
     {

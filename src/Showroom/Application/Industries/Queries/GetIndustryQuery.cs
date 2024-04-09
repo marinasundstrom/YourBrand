@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.Industries.Queries;
 
 public record GetIndustryQuery(int Id) : IRequest<IndustryDto?>
 {
-    class GetIndustryQueryHandler(
+    sealed class GetIndustryQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetIndustryQuery, IndustryDto?>
     {

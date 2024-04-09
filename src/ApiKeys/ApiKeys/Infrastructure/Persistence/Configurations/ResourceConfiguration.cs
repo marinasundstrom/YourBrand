@@ -6,7 +6,7 @@ using YourBrand.ApiKeys.Domain.Entities;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Configurations;
 
-class ResourceConfiguration : IEntityTypeConfiguration<Resource>
+sealed class ResourceConfiguration : IEntityTypeConfiguration<Resource>
 {
     public void Configure(EntityTypeBuilder<Resource> builder)
     {

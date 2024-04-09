@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.ApiKeys;
 
-internal class JwtBearerDefaults
+internal sealed class JwtBearerDefaults
 {
     public const string AuthenticationScheme = "Bearer";
 }

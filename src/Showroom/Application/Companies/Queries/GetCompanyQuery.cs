@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.Companies.Queries;
 
 public record GetCompanyQuery(string Id) : IRequest<CompanyDto?>
 {
-    class GetCompanyQueryHandler(
+    sealed class GetCompanyQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetCompanyQuery, CompanyDto?>
     {

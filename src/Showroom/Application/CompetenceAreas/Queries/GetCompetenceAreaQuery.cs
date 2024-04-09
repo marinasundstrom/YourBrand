@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.CompetenceAreas.Queries;
 
 public record GetCompetenceAreaQuery(string Id) : IRequest<CompetenceAreaDto?>
 {
-    class GetCompetenceAreaQueryHandler(
+    sealed class GetCompetenceAreaQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetCompetenceAreaQuery, CompetenceAreaDto?>
     {

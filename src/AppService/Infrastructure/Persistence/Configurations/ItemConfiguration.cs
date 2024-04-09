@@ -5,7 +5,7 @@ using YourBrand.Domain.Entities;
 
 namespace YourBrand.Infrastructure.Persistence.Configurations;
 
-class ItemConfiguration : IEntityTypeConfiguration<Item>
+sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
 {
     public void Configure(EntityTypeBuilder<Item> builder)
     {

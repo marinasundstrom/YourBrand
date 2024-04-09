@@ -12,7 +12,7 @@ namespace YourBrand.Showroom.Application.Companies;
 
 public record GetCompaniesQuery(int Page = 0, int PageSize = 10, int? IndustryId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CompanyDto>>
 {
-    class GetCompaniesQueryHandler(
+    sealed class GetCompaniesQueryHandler(
         IShowroomContext context) : IRequestHandler<GetCompaniesQuery, Results<CompanyDto>>
     {
         public async Task<Results<CompanyDto>> Handle(GetCompaniesQuery request, CancellationToken cancellationToken)

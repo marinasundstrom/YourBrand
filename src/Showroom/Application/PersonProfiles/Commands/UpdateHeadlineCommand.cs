@@ -7,7 +7,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record UpdateHeadlineCommand(string Id, string Text) : IRequest
 {
-    class UpdateHeadlineCommandHandler(
+    sealed class UpdateHeadlineCommandHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<UpdateHeadlineCommand>
     {

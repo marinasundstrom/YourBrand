@@ -9,7 +9,7 @@ namespace YourBrand.Inventory.Application.Warehouses.Queries;
 
 public record GetWarehouseQuery(string Id) : IRequest<WarehouseDto?>
 {
-    class GetWarehouseQueryHandler(
+    sealed class GetWarehouseQueryHandler(
         IInventoryContext context,
         IUserContext userContext) : IRequestHandler<GetWarehouseQuery, WarehouseDto?>
     {

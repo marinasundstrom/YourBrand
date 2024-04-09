@@ -11,7 +11,7 @@ namespace YourBrand.Showroom.Application.Cases.Queries;
 
 public record GetCasesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<CaseDto>>
 {
-    class GetCasesQueryHandler(
+    sealed class GetCasesQueryHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<GetCasesQuery, Results<CaseDto>>
     {

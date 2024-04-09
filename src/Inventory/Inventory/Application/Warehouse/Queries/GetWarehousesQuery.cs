@@ -10,7 +10,7 @@ namespace YourBrand.Inventory.Application.Warehouses.Queries;
 
 public record GetWarehousesQuery(int Page = 0, int PageSize = 10, string? SiteId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<WarehouseDto>>
 {
-    class GetWarehousesQueryHandler(
+    sealed class GetWarehousesQueryHandler(
         IInventoryContext context,
         IUserContext userContext) : IRequestHandler<GetWarehousesQuery, ItemsResult<WarehouseDto>>
     {

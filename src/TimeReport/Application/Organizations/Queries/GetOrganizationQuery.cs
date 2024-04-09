@@ -10,7 +10,7 @@ namespace YourBrand.TimeReport.Application.Organizations
 
 public record GetOrganizationQuery(string Id) : IRequest<OrganizationDto?>
 {
-    class GetOrganizationQueryHandler(
+    sealed class GetOrganizationQueryHandler(
         ITimeReportContext context,
         IUserContext userContext) : IRequestHandler<GetOrganizationQuery, OrganizationDto?>
     {

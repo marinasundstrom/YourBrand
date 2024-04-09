@@ -7,7 +7,7 @@ using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Infrastructure.Services;
 
-class DomainEventDispatcher(ILogger<DomainEventDispatcher> logger, IPublisher mediator) : IDomainEventDispatcher
+sealed class DomainEventDispatcher(ILogger<DomainEventDispatcher> logger, IPublisher mediator) : IDomainEventDispatcher
 {
     public async Task Dispatch(DomainEvent domainEvent, CancellationToken cancellationToken = default)
     {

@@ -9,7 +9,7 @@ namespace YourBrand.Marketing.Application.Campaigns.Queries;
 
 public record GetCampaignQuery(string Id) : IRequest<CampaignDto?>
 {
-    class GetCampaignQueryHandler(
+    sealed class GetCampaignQueryHandler(
         IMarketingContext context,
         IUserContext userContext) : IRequestHandler<GetCampaignQuery, CampaignDto?>
     {

@@ -7,7 +7,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record DeletePersonProfileCommand(string Id) : IRequest
 {
-    class DeletePersonProfileCommandHandler(
+    sealed class DeletePersonProfileCommandHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<DeletePersonProfileCommand>
     {

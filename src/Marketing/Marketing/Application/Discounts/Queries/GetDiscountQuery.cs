@@ -9,7 +9,7 @@ namespace YourBrand.Marketing.Application.Discounts.Queries;
 
 public record GetDiscountQuery(string Id) : IRequest<DiscountDto?>
 {
-    class GetDiscountQueryHandler(
+    sealed class GetDiscountQueryHandler(
         IMarketingContext context,
         IUserContext userContext) : IRequestHandler<GetDiscountQuery, DiscountDto?>
     {

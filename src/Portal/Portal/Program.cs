@@ -58,6 +58,6 @@ async Task LoadModules(IServiceCollection services)
     ModuleLoader.AddServices(builder.Services);
 }
 
-record ModuleEntry(Assembly Assembly, bool Enabled);
+sealed record ModuleEntry(Assembly Assembly, bool Enabled);
 
 public record ModuleDefinition(string Name, string Assembly, bool Enabled);

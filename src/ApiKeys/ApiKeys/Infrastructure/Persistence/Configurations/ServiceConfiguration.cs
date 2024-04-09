@@ -6,7 +6,7 @@ using YourBrand.ApiKeys.Domain.Entities;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Configurations;
 
-class ServiceConfiguration : IEntityTypeConfiguration<Service>
+sealed class ServiceConfiguration : IEntityTypeConfiguration<Service>
 {
     public void Configure(EntityTypeBuilder<Service> builder)
     {

@@ -59,5 +59,5 @@ public class AzureADClientCredentialsTokenProvider(IConfiguration configuration,
         return x.AccessToken;
     }
 
-    record ApiDef(string Name, string BaseUrl, string Scope);
+    sealed record ApiDef(string Name, string BaseUrl, string Scope);
 }

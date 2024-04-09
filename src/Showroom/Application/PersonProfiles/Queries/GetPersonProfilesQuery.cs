@@ -12,7 +12,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 public record GetPersonProfilesAsync(int Page = 0, int PageSize = 10, string? OrganizationId = null, string? CompetenceAreaId = null, DateTime? AvailableFrom = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<PersonProfileDto>>
 {
-    class GetPersonProfilesAsyncHandler(
+    sealed class GetPersonProfilesAsyncHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<GetPersonProfilesAsync, Results<PersonProfileDto>>
     {

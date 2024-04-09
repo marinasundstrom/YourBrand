@@ -10,7 +10,7 @@ namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 
 public record GetOrderStatusesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrderStatusDto>>
 {
-    class GetOrderStatusesQueryHandler(
+    sealed class GetOrderStatusesQueryHandler(
         ISalesContext context,
         IUserContext userContext) : IRequestHandler<GetOrderStatusesQuery, PagedResult<OrderStatusDto>>
     {

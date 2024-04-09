@@ -2,7 +2,7 @@
 
 namespace YourBrand.RotRutService.Infrastructure.Services;
 
-class DateTimeService : IDateTime
+sealed class DateTimeService : IDateTime
 {
     public DateTime Now => DateTime.Now;
 }

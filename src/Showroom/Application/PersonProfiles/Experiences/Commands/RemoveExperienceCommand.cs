@@ -10,7 +10,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 
 public record RemoveExperienceCommand(string PersonProfileId, string Id) : IRequest
 {
-    class RemoveExperienceCommandHandler(
+    sealed class RemoveExperienceCommandHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<RemoveExperienceCommand>
     {

@@ -6,7 +6,7 @@ using YourBrand.ApiKeys.Domain.Entities;
 
 namespace YourBrand.ApiKeys.Infrastructure.Persistence.Configurations;
 
-class SearchConfiguration : IEntityTypeConfiguration<User>
+sealed class SearchConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

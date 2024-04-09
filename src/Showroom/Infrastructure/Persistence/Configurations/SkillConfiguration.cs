@@ -6,7 +6,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-class SkillConfiguration : IEntityTypeConfiguration<Skill>
+sealed class SkillConfiguration : IEntityTypeConfiguration<Skill>
 {
     public void Configure(EntityTypeBuilder<Skill> builder)
     {

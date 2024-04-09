@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.Organizations.Queries;
 
 public record GetOrganizationQuery(string Id) : IRequest<OrganizationDto?>
 {
-    class GetOrganizationQueryHandler(
+    sealed class GetOrganizationQueryHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<GetOrganizationQuery, OrganizationDto?>
     {

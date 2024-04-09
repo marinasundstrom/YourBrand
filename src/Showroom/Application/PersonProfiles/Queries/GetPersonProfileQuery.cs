@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Queries;
 
 public record GetPersonProfileQuery(string Id) : IRequest<PersonProfileDto>
 {
-    class GetPersonProfileQueryHandler(
+    sealed class GetPersonProfileQueryHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<GetPersonProfileQuery, PersonProfileDto?>
     {

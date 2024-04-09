@@ -9,7 +9,7 @@ namespace YourBrand.Showroom.Application.Cases.Queries;
 
 public record GetCaseQuery(string Id) : IRequest<CaseDto?>
 {
-    class GetCaseQueryHandler(
+    sealed class GetCaseQueryHandler(
         IShowroomContext context,
         IUrlHelper urlHelper) : IRequestHandler<GetCaseQuery, CaseDto?>
     {

@@ -7,7 +7,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Commands;
 
 public record UpdatePresentationCommand(string Id, string Text) : IRequest
 {
-    class UpdatePresentationCommandHandler(
+    sealed class UpdatePresentationCommandHandler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<UpdatePresentationCommand>
     {
