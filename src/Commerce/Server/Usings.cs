@@ -1,1 +1,0 @@
-global using YourBrand.Catalog.Client;
