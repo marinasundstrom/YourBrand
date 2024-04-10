@@ -11,12 +11,15 @@ public static class ServiceCollectionExtensions
     {
         const string ConnectionStringKey = "mssql";
 
-        var connectionString = YourBrand.Marketing.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Marketing")
-            ?? configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<MarketingContext>((sp, options) =>
         {
-            options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif

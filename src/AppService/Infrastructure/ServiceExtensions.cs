@@ -7,6 +7,8 @@ using Quartz;
 
 using Scrutor;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Infrastructure.BackgroundJobs;
 using YourBrand.Infrastructure.Idempotence;
@@ -43,9 +45,19 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<AppServiceContext>(
-            configuration.GetConnectionString("mssql", "AppService") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddDbContext<AppServiceContext>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
+        });
 
         services.AddScoped<IAppServiceContext>(sp => sp.GetRequiredService<AppServiceContext>());
 

@@ -14,20 +14,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Infrastructure.Persistence;
 
 public class AppServiceContext(
-    DbContextOptions<AppServiceContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IAppServiceContext
+    DbContextOptions<AppServiceContext> options) : DbContext(options), IAppServiceContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -19,22 +19,8 @@ namespace YourBrand.Customers.Infrastructure.Persistence;
 
 public class CustomersContext(
     DbContextOptions<CustomersContext> options,
-    ITenantContext tenantContext,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), ICustomersContext
+    ITenantContext tenantContext) : DbContext(options), ICustomersContext
 {
-    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -67,7 +53,7 @@ public class CustomersContext(
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId!);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

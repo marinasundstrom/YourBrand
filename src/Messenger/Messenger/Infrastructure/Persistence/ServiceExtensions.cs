@@ -1,7 +1,11 @@
 ﻿
+using MassTransit;
+
 using MediatR;
 
 using Scrutor;
+
+using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Domain;
@@ -17,9 +21,19 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<MessengerContext>(
-            configuration.GetConnectionString("mssql", "Messenger") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddDbContext<MessengerContext>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
+        });
 
         services.AddScoped<IMessengerContext>(sp => sp.GetRequiredService<MessengerContext>());
 

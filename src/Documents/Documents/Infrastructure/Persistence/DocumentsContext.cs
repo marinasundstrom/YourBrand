@@ -14,20 +14,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Documents.Infrastructure.Persistence;
 
 public class DocumentsContext(
-    DbContextOptions<DocumentsContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IDocumentsContext
+    DbContextOptions<DocumentsContext> options) : DbContext(options), IDocumentsContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,9 +19,19 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<TimeReportContext>(
-            configuration.GetConnectionString("mssql", "TimeReport") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddDbContext<TimeReportContext>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+    #if DEBUG
+            options.EnableSensitiveDataLogging();
+    #endif
+        });
 
         services.AddScoped<ITimeReportContext>(sp => sp.GetRequiredService<TimeReportContext>());
 

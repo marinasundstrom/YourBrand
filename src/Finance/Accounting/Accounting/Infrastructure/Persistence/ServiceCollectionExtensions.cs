@@ -11,9 +11,15 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AccountingContext>(options =>
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddDbContext<AccountingContext>((sp, options) =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("mssql", "Accounting") ?? configuration.GetConnectionString("DefaultConnection"), o => o.EnableRetryOnFailure());
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif

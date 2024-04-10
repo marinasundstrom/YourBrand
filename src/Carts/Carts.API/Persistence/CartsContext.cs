@@ -14,8 +14,6 @@ namespace YourBrand.Carts.Persistence;
 
 public sealed class CartsContext(DbContextOptions options, ITenantContext tenantContext) : DbContext(options)
 {
-    private TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cart>()
@@ -53,7 +51,7 @@ public sealed class CartsContext(DbContextOptions options, ITenantContext tenant
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId!);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

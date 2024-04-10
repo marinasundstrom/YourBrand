@@ -19,22 +19,8 @@ namespace YourBrand.Invoicing.Infrastructure.Persistence;
 
 public class InvoicingContext(
     DbContextOptions<InvoicingContext> options,
-    ITenantContext tenantContext,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IInvoicingContext
+    ITenantContext tenantContext) : DbContext(options), IInvoicingContext
 {
-    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -65,7 +51,7 @@ public class InvoicingContext(
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

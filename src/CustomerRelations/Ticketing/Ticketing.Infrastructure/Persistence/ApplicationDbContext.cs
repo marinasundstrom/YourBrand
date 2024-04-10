@@ -10,18 +10,10 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;
 
-public sealed class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationDbContext
+public sealed class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options, ITenantContext tenantContext) : DbContext(options), IUnitOfWork, IApplicationDbContext
 {
     private readonly TenantId _tenantId;
-
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options, ITenantContext tenantContext)
-        : base(options)
-    {
-        _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
-        Console.WriteLine("TENANT: " + _tenantId);
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -57,7 +49,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationD
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

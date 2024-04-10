@@ -14,12 +14,14 @@ using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Configurations;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Outbox;
+using System.Linq.Expressions;
+using LinqKit;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 public class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
+    ITenantContext tenantContext) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -28,8 +30,6 @@ public class ApplicationDbContext(
 #endif
 
         base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +37,84 @@ public class ApplicationDbContext(
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
+
+        ConfigQueryFilterForEntity(modelBuilder);
+    }
+
+    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
+    {
+        foreach (var clrType in modelBuilder.Model
+            .GetEntityTypes()
+            .Select(entityType => entityType.ClrType))
+        {
+            /*
+            if (clrType.BaseType != typeof(object))
+            {
+                continue;
+            }
+            */
+
+            try
+            {
+                var entityTypeBuilder = modelBuilder.Entity(clrType);
+
+                var parameter = Expression.Parameter(clrType, "entity");
+
+                List<Expression> queryFilters = new();
+                
+                if (TenancyQueryFilter.CanApplyTo(clrType))
+                {
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId, true);
+
+                    queryFilters.Add(
+                        Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));
+                }
+
+                if (SoftDeleteQueryFilter.CanApplyTo(clrType))
+                {
+                    var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
+
+                    queryFilters.Add(
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDelete))));
+                }
+
+                Expression? queryFilter = null;
+
+                foreach (var qf in queryFilters)
+                {
+                    if (queryFilter is null)
+                    {
+                        queryFilter = qf;
+                    }
+                    else
+                    {
+                        queryFilter = Expression.AndAlso(
+                            queryFilter,
+                            qf)
+                            .Expand();
+                    }
+                }
+
+                if (queryFilters.Count == 0)
+                {
+                    continue;
+                }
+
+                var queryFilterLambda = Expression.Lambda(queryFilter.Expand(), parameter);
+
+                entityTypeBuilder.HasQueryFilter(queryFilterLambda);
+            }
+            catch (InvalidOperationException exc)
+                when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
+            {
+                Console.WriteLine("Skipping previously configured owned type");
+            }
+            catch (InvalidOperationException exc)
+                when (exc.Message.Contains("cannot be added to the model because its CLR type has been configured as a shared type"))
+            {
+                Console.WriteLine("Skipping previously configured shared type");
+            }
+        }
     }
 
     public DbSet<Tenant> Tenants { get; set; } = default!;

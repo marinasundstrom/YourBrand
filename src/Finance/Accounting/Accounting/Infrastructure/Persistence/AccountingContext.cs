@@ -20,22 +20,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Accounting.Infrastructure.Persistence;
 
 public class AccountingContext(DbContextOptions<AccountingContext> options,
-    ITenantContext tenantContext,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IAccountingContext
+    ITenantContext tenantContext) : DbContext(options), IAccountingContext
 {
-    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -66,7 +52,7 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

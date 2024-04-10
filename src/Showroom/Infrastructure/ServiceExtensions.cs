@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -43,10 +44,19 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<ShowroomContext>(
-            configuration.GetConnectionString("mssql", "Showroom") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+        services.AddDbContext<ShowroomContext>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
+        });
         services.AddScoped<IShowroomContext>(sp => sp.GetRequiredService<ShowroomContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();

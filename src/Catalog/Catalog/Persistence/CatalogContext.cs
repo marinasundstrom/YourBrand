@@ -46,7 +46,7 @@ public sealed class CatalogContext(DbContextOptions<CatalogContext> options, ITe
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId!);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

@@ -14,20 +14,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Marketing.Infrastructure.Persistence;
 
 public class MarketingContext(
-    DbContextOptions<MarketingContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IMarketingContext
+    DbContextOptions<MarketingContext> options) : DbContext(options), IMarketingContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

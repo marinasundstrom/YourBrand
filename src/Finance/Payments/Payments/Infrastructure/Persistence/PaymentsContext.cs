@@ -20,22 +20,8 @@ namespace YourBrand.Payments.Infrastructure.Persistence;
 
 public class PaymentsContext(
     DbContextOptions<PaymentsContext> options,
-    ITenantContext tenantContext,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IPaymentsContext
+    ITenantContext tenantContext) : DbContext(options), IPaymentsContext
 {
-    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -66,7 +52,7 @@ public class PaymentsContext(
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

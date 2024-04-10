@@ -5,6 +5,8 @@ using Quartz;
 
 using Scrutor;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Infrastructure.BackgroundJobs;
 using YourBrand.ApiKeys.Infrastructure.Idempotence;
@@ -41,9 +43,19 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<ApiKeysContext>(
-            configuration.GetConnectionString("mssql", "ApiKeys") ?? configuration.GetConnectionString("DefaultConnection"),
-            options => options.EnableRetryOnFailure());
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddDbContext<ApiKeysContext>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
+        });
 
         services.AddScoped<IApiKeysContext>(sp => sp.GetRequiredService<ApiKeysContext>());
 

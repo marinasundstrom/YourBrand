@@ -9,16 +9,15 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        const string ConnectionStringKey = "mssql";
-
-        var connectionString = YourBrand.Documents.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Documents")
-            ?? configuration.GetConnectionString("DefaultConnection");
-
-        Console.WriteLine(connectionString);
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<DocumentsContext>((sp, options) =>
         {
-            options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif

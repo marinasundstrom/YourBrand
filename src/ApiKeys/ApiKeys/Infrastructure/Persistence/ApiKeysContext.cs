@@ -15,20 +15,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.ApiKeys.Infrastructure.Persistence;
 
 public class ApiKeysContext(
-    DbContextOptions<ApiKeysContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IApiKeysContext
+    DbContextOptions<ApiKeysContext> options) : DbContext(options), IApiKeysContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

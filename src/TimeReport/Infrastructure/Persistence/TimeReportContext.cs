@@ -23,29 +23,19 @@ namespace YourBrand.TimeReport.Infrastructure.Persistence;
 public class TimeReportContext : DbContext, ITimeReportContext
 {
     private readonly ITenantContext _tenantContext;
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
     private readonly string _tenantId;
 
     public TimeReportContext(
         DbContextOptions<TimeReportContext> options,
-        ITenantContext tenantContext,
-        IApiApplicationContext apiApplicationContext,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
+        ITenantContext tenantContext) : base(options)
     {
         _tenantContext = tenantContext;
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         _tenantId = _tenantContext.TenantId!;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -78,7 +68,7 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantContext.TenantId!);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

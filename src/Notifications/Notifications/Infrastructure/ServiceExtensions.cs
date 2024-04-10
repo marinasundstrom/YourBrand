@@ -4,6 +4,8 @@ using Quartz;
 
 using Scrutor;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Infrastructure.BackgroundJobs;
 using YourBrand.Notifications.Infrastructure.Idempotence;
@@ -40,8 +42,19 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<NotificationsContext>(configuration.GetConnectionString("DefaultConnection"),
-        options => options.EnableRetryOnFailure());
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        services.AddDbContext<NotificationsContext>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
+        });
 
         services.AddScoped<IWorkerContext>(sp => sp.GetRequiredService<NotificationsContext>());
 

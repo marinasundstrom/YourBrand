@@ -14,20 +14,8 @@ using YourBrand.Transactions.Infrastructure.Persistence.Outbox;
 namespace YourBrand.Transactions.Infrastructure.Persistence;
 
 public class TransactionsContext(
-    DbContextOptions<TransactionsContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), ITransactionsContext
+    DbContextOptions<TransactionsContext> options) : DbContext(options), ITransactionsContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

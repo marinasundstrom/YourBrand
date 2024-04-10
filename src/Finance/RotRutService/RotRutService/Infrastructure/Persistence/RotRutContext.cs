@@ -14,20 +14,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.RotRutService.Infrastructure.Persistence;
 
 public class RotRutContext(
-    DbContextOptions<RotRutContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IRotRutContext
+    DbContextOptions<RotRutContext> options) : DbContext(options), IRotRutContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

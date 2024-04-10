@@ -11,17 +11,20 @@ public static class ServiceCollectionExtensions
     {
         const string ConnectionStringKey = "mssql";
 
-        var connectionString = YourBrand.Inventory.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Inventory")
-            ?? configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<InventoryContext>((sp, options) =>
         {
-            options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
+            options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
+
+            options.AddInterceptors(
+                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
         });
-
+        
         services.AddScoped<IInventoryContext>(sp => sp.GetRequiredService<InventoryContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();

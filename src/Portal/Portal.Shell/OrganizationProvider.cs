@@ -5,13 +5,13 @@ using YourBrand.Portal.Services;
 
 namespace YourBrand.Portal;
 
-public sealed class OrganizationProvider(IOrganizationsClient storesClient, ILocalStorageService localStorageService) : IOrganizationProvider
+public sealed class OrganizationProvider(IOrganizationsClient organizationsClient, ILocalStorageService localStorageService) : IOrganizationProvider
 {
     IEnumerable<Portal.Services.Organization> _organizations;
 
     public async Task<IEnumerable<Portal.Services.Organization>> GetAvailableOrganizationsAsync()
     {
-        var items = _organizations = (await storesClient.GetOrganizationsAsync(0, null, null, null, null)).Items
+        var items = _organizations = (await organizationsClient.GetOrganizationsAsync(0, null, null, null, null)).Items
             .Select(x => new Portal.Services.Organization(x.Id, x.Name, x.FriendlyName));
 
         if (CurrentOrganization is null)

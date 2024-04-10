@@ -14,20 +14,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Inventory.Infrastructure.Persistence;
 
 public class InventoryContext(
-    DbContextOptions<InventoryContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IInventoryContext
+    DbContextOptions<InventoryContext> options) : DbContext(options), IInventoryContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

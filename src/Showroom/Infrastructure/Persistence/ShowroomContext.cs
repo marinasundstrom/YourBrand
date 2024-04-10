@@ -20,32 +20,8 @@ namespace YourBrand.Showroom.Infrastructure.Persistence;
 
 public class ShowroomContext(
     DbContextOptions<ShowroomContext> options,
-    IApiApplicationContext apiApplicationContext,
-    ITenantContext tenantContext,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IShowroomContext
+    ITenantContext tenantContext) : DbContext(options), IShowroomContext
 {
-    private readonly TenantId _tenantId = tenantContext.TenantId.GetValueOrDefault();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Configurations.PersonProfilCaseConfigurationConfiguration).Assembly);
-
-        ConfigQueryFilterForEntity(modelBuilder);
-    }
-
     private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
     {
         foreach (var clrType in modelBuilder.Model
@@ -67,7 +43,7 @@ public class ShowroomContext(
 
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => _tenantId!);
+                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId!);
 
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));

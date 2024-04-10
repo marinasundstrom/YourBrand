@@ -15,22 +15,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.HumanResources.Infrastructure.Persistence;
 
 public class ApplicationDbContext(
-    DbContextOptions<ApplicationDbContext> options,
-    IUserContext currentPersonService,
-    IDateTime dateTime,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IApplicationDbContext
+    DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging(); //.LogTo(Console.WriteLine);
-#endif
-
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

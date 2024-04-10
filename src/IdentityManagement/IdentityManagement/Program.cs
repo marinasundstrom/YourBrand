@@ -101,31 +101,7 @@ services.AddMassTransit(x =>
 IdentityModelEventSource.ShowPII = true;
 #endif
 
-services.AddAuthorization();
-
-services.AddAuthenticationServices(configuration);
-
 var app = builder.ConfigureServices();
-
-app.UseSerilogRequestLogging();
-
-app.MapObservability();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-
-    app.UseOpenApiAndSwaggerUi();
-}
-
-app.UseHttpsRedirection();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
 
 if (args.Contains("--seed"))
 {

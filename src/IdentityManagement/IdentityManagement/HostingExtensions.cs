@@ -7,6 +7,7 @@ using Serilog;
 
 using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence;
+using YourBrand.Extensions;
 
 namespace YourBrand.IdentityManagement;
 
@@ -15,9 +16,6 @@ internal static class HostingExtensions
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddRazorPages();
-
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -41,7 +39,11 @@ internal static class HostingExtensions
             .AddExtensionGrantValidator<TokenExchangeGrantValidator>()
             .AddProfileService<CustomProfileService<User>>();
 
+        builder.Services.AddAuthorization();
 
+        builder.Services.AddAuthenticationServices(builder.Configuration);
+
+        /*
         builder.Services.AddAuthentication()
             .AddGoogle(options =>
             {
@@ -53,6 +55,7 @@ internal static class HostingExtensions
                 options.ClientId = "copy client ID from Google here";
                 options.ClientSecret = "copy client secret from Google here";
             });
+            */
 
         return builder.Build();
     }
@@ -61,15 +64,25 @@ internal static class HostingExtensions
     {
         app.UseSerilogRequestLogging();
 
+        app.MapObservability();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+
+            app.UseOpenApiAndSwaggerUi();
         }
 
         app.UseStaticFiles();
         app.UseRouting();
+
+        //app.UseAuthentication();
+
         app.UseIdentityServer();
+
         app.UseAuthorization();
+
+        app.MapControllers();
 
         app.MapRazorPages()
             .RequireAuthorization();

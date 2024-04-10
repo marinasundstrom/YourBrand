@@ -1,10 +1,12 @@
-﻿@using YourBrand.Portal.Services
+﻿@using Microsoft.AspNetCore.Authorization
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 @inject IOrdersClient OrdersClient
 @inject IOrderStatusesClient OrderStatusesClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
+@attribute [Authorize]
 
 @page "/orders"
 
@@ -99,14 +101,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        organizationId = OrganizationProvider.CurrentOrganization.Id;
-
         orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
     }
 
     private async Task<TableData<Order>> ServerReload(TableState state)
     {
         loading = true;
+
+        organizationId = OrganizationProvider.CurrentOrganization?.Id;
 
         try
         {

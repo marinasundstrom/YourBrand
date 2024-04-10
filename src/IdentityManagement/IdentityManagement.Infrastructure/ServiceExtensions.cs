@@ -44,10 +44,15 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("mssql", "Users") ?? configuration.GetConnectionString("DefaultConnection")));
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        
+        services.AddDbContext<ApplicationDbContext>((sp, options) => {
+            options.UseSqlServer(connectionString);
 
-        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+            options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+        });
+
+        services.AddTransient<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 

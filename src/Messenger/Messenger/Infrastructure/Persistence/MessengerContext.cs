@@ -15,20 +15,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Messenger.Infrastructure.Persistence;
 
 public class MessengerContext(
-    DbContextOptions<MessengerContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IMessengerContext
+    DbContextOptions<MessengerContext> options) : DbContext(options), IMessengerContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

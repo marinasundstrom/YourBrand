@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Application.Common.Models;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Application.Organizations.Queries;
 
@@ -15,6 +16,7 @@ public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? Sea
         public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
             var query = context.Organizations
+                .Include(x => x.Tenant)
                 .OrderBy(p => p.Created)
                 .Skip(request.PageSize * request.Page)
                 .Take(request.PageSize)

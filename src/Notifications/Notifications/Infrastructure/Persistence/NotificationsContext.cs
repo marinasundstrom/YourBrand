@@ -14,20 +14,8 @@ using YourBrand.Tenancy;
 namespace YourBrand.Notifications.Infrastructure.Persistence;
 
 public class NotificationsContext(
-    DbContextOptions<NotificationsContext> options,
-    AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : DbContext(options), IWorkerContext
+    DbContextOptions<NotificationsContext> options) : DbContext(options), IWorkerContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.AddInterceptors(auditableEntitySaveChangesInterceptor);
-
-#if DEBUG
-        optionsBuilder.EnableSensitiveDataLogging();
-#endif
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

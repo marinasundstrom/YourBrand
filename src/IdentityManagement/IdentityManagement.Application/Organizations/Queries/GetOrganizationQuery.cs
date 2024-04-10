@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Application.Organizations.Queries;
 
@@ -14,6 +15,7 @@ public record GetOrganizationQuery(string OrganizationId) : IRequest<Organizatio
         public async Task<OrganizationDto> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)
         {
             var organization = await context.Organizations
+                .Include(x => x.Tenant)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.OrganizationId, cancellationToken);
