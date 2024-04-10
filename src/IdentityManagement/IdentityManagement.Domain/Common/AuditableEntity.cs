@@ -1,6 +1,8 @@
-﻿namespace YourBrand.IdentityManagement.Domain.Common;
+﻿using YourBrand.IdentityManagement.Domain.Common.Interfaces;
 
-public abstract class AuditableEntity : Entity
+namespace YourBrand.IdentityManagement.Domain.Common;
+
+public abstract class AuditableEntity : Entity, IAuditableEntity
 {
     public DateTime Created { get; set; }
 

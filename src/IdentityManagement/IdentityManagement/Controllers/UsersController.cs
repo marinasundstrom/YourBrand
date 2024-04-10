@@ -52,7 +52,7 @@ public class UsersController(IMediator mediator) : Controller
     {
         try
         {
-            var user = await mediator.Send(new CreateUserCommand(createUserDto.OrganizationId, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.Role, createUserDto.Email), cancellationToken);
+            var user = await mediator.Send(new CreateUserCommand(createUserDto.OrganizationId, createUserDto.FirstName, createUserDto.LastName, createUserDto.DisplayName, createUserDto.Role, createUserDto.Email, createUserDto.Password), cancellationToken);
 
             return Ok(user);
         }

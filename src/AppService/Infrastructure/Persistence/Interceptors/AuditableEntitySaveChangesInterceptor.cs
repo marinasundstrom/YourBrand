@@ -32,17 +32,20 @@ public class AuditableEntitySaveChangesInterceptor(
     {
         if (context == null) return;
 
+        foreach (var entry in context.ChangeTracker.Entries<IHasTenant>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.TenantId = tenantContext.TenantId.GetValueOrDefault();
+            }
+        }
+
         foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedById = userContext.UserId;
                 entry.Entity.Created = dateTime.Now;
-
-                if (entry.Entity is IHasTenant hasTenant)
-                {
-                    hasTenant.TenantId = tenantContext.TenantId.GetValueOrDefault();
-                }
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {

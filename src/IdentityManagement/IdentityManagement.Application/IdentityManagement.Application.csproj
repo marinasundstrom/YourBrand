@@ -24,9 +24,10 @@
      <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-     <ProjectReference Include="..\IdentityManagement.Client\IdentityManagement.Client.csproj" />
-     <ProjectReference Include="..\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
-     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\IdentityManagement.Client\IdentityManagement.Client.csproj" />
+    <ProjectReference Include="..\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
+    <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

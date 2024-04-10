@@ -27,6 +27,7 @@ public record CreateOrganizationCommand(string Name, string? FriendlyName) : IRe
             organization = await context.Organizations
                .AsNoTracking()
                .AsSplitQuery()
+               .Include(o => o.Tenant)
                .FirstAsync(x => x.Id == organization.Id, cancellationToken);
 
             await eventPublisher.PublishEvent(new OrganizationCreated(organization.Id, organization.Tenant.Id, organization.Name));

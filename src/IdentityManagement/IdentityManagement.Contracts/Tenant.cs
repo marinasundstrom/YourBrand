@@ -8,7 +8,7 @@ public record CreateTenant
 
 public record GetTenant(string TenantId, string RequestedById);
 
-public record CreateTenantResponse(string Id, string Name, string? FriendlyName);
+public record CreateTenantResponse(string TenantId);
 
 public record TenantCreated(string TenantId, string Name);
 

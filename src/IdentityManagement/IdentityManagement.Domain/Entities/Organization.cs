@@ -1,15 +1,17 @@
+using YourBrand.Domain;
 using YourBrand.IdentityManagement.Domain.Common;
 using YourBrand.IdentityManagement.Domain.Events;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
-public class Organization : AuditableEntity
+public class Organization : AuditableEntity, IHasTenant
 {
     private readonly HashSet<User> _users = new HashSet<User>();
 
     private Organization() { }
 
-    public Organization(string id, string name, string? friendlyName)
+    public Organization(OrganizationId id, string name, string? friendlyName)
     {
         Id = id;
         Name = name;
@@ -23,7 +25,7 @@ public class Organization : AuditableEntity
 
     }
 
-    public string Id { get; private set; }
+    public OrganizationId Id { get; private set; }
 
     public string Name { get; private set; }
 
@@ -31,7 +33,7 @@ public class Organization : AuditableEntity
 
     public Tenant Tenant { get; set; }
 
-    public string TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public IReadOnlyCollection<User> Users => _users;
 

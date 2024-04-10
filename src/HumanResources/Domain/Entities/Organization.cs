@@ -1,5 +1,6 @@
 using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Events;
+using YourBrand.Tenancy;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 

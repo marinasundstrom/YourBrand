@@ -57,7 +57,6 @@ builder.Services
     .AddUserContext()
     .AddTenantContext();
 
-
 services
     .AddControllers()
     .AddNewtonsoftJson();

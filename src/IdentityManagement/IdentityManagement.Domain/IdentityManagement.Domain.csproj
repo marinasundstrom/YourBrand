@@ -12,4 +12,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+
+  </ItemGroup>
 </Project>

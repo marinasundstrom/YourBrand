@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 using YourBrand.IdentityManagement.Domain.Common.Interfaces;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationUser class
-public class User : IdentityUser, IAuditableEntity, ISoftDelete
+public class User : IdentityUser, IAuditableEntity, ISoftDelete, IHasTenant
 {
     readonly HashSet<Role> _roles = new HashSet<Role>();
     readonly HashSet<UserRole> _userRoles = new HashSet<UserRole>();
@@ -29,9 +30,9 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete
 
     public string? DisplayName { get; set; }
 
-    public Tenant? Tenant { get; set; }
+    public Tenant Tenant { get; set; }
 
-    public string? TenantId { get; set; }
+    public TenantId TenantId { get; set; }
 
     public Organization? Organization => Organizations.FirstOrDefault();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.IdentityManagement.Domain.Entities;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
@@ -10,7 +11,11 @@ public static class SeedData
     {
         using (var scope = serviceProvider.CreateScope())
         {
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
+            tenantContext.SetTenantId(TenantConstants.TenantId);
+            
+            using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 

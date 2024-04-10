@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using YourBrand.Identity;
+using YourBrand.Domain;
+using YourBrand.Tenancy;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Domain.Common;
 using YourBrand.IdentityManagement.Domain.Entities;
@@ -17,8 +19,6 @@ namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 public class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options,
-    IUserContext userContext,
-    IDateTime dateTime,
     AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -44,6 +44,13 @@ public class ApplicationDbContext(
     public DbSet<Organization> Organizations { get; set; } = default!;
 
     public DbSet<OrganizationUser> OrganizationUsers { get; set; } = default!;
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddTenantIdConverter();
+        configurationBuilder.AddOrganizationIdConverter();
+        configurationBuilder.AddUserIdConverter();
+    }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

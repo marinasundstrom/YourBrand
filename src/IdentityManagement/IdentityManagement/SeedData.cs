@@ -8,6 +8,7 @@ using Serilog;
 
 using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement;
 
@@ -17,7 +18,10 @@ public static class SeedData
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
+            tenantContext.SetTenantId(TenantConstants.TenantId);
+            
+            using var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();

@@ -3,6 +3,7 @@
 @using YourBrand.AppService.Client
 @inject NavigationManager NavigationManager
 @inject ISetupClient SetupClient
+@inject ISnackbar Snackbar
 
 <AppPageTitle>Set up - YourBrand</AppPageTitle>
 
@@ -69,7 +70,9 @@
         }
         catch (AccessTokenNotAvailableException exception)
         {
-            exception.Redirect();
+            Snackbar.Add(exception, Severity.Error);
+
+            //exception.Redirect();
         }
     }
 }

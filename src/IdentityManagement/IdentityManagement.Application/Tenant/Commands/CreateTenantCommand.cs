@@ -12,7 +12,7 @@ namespace YourBrand.IdentityManagement.Application.Tenants.Commands;
 
 public record CreateTenantCommand(string Name, string? FriendlyName) : IRequest<TenantDto>
 {
-    public class CreateTenantCommandHandler(IApplicationDbContext context, IUserContext currentTenantContext, IEventPublisher eventPublisher) : IRequestHandler<CreateTenantCommand, TenantDto>
+    public class CreateTenantCommandHandler(IApplicationDbContext context, IEventPublisher eventPublisher) : IRequestHandler<CreateTenantCommand, TenantDto>
     {
         public async Task<TenantDto> Handle(CreateTenantCommand request, CancellationToken cancellationToken)
         {

@@ -10,7 +10,7 @@ public record GetOrganization(string OrganizationId, string RequestedById);
 
 public record GetOrganizationResponse(string Id, string TenantId, string Name, string? FriendlyName);
 
-public record CreateOrganizationResponse(string Id, string Name, string? FriendlyName);
+public record CreateOrganizationResponse(string OrganizationId, string Name, string? FriendlyName);
 
 public record OrganizationCreated(string OrganizationId, string TenantId, string Name);
 

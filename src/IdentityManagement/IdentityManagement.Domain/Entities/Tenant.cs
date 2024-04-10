@@ -1,5 +1,6 @@
 using YourBrand.IdentityManagement.Domain.Common;
 using YourBrand.IdentityManagement.Domain.Events;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
@@ -10,7 +11,7 @@ public class Tenant : AuditableEntity
 
     private Tenant() { }
 
-    public Tenant(string id, string name, string? friendlyName)
+    public Tenant(TenantId id, string name, string? friendlyName)
     {
         Id = id;
         Name = name;
@@ -24,7 +25,7 @@ public class Tenant : AuditableEntity
 
     }
 
-    public string Id { get; private set; }
+    public TenantId Id { get; private set; }
 
     public string Name { get; private set; }
 
