@@ -116,6 +116,9 @@ public static class ServiceProviderExtensions
 
         var t = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        appBarTray.AddItem(new AppBarTrayItem("organization-selector", () => t["Organization"], typeof(Organizations.OrganizationSelector)));
+        var organizationSelector = new AppBarTrayItem("organization-selector", () => t["Organization"], typeof(Organizations.OrganizationSelector));
+        organizationSelector.RequiresAuthorization = true;
+
+        appBarTray.AddItem(organizationSelector);
     }
 }

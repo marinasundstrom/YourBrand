@@ -21,8 +21,11 @@ public static class ServiceProviderExtensions
 
         var t = services.GetRequiredService<IStringLocalizer<Notifications>>();
 
-        var themeSelectorId = "Shell.Notifications";
+        var notificationsId = "Shell.Notifications";
 
-        appBarTray.AddItem(new AppBarTrayItem(themeSelectorId, () => t["Notifications"], typeof(Notifications)));
+        var notifications = new AppBarTrayItem(notificationsId, () => t["Notifications"], typeof(Notifications));
+        notifications.RequiresAuthorization = true;
+
+        appBarTray.AddItem(notifications);
     }
 }

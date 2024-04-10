@@ -68,9 +68,9 @@
 
             NavigationManager.NavigateTo("/authentication/login");
         }
-        catch (AccessTokenNotAvailableException exception)
+        catch (Exception exception)
         {
-            Snackbar.Add(exception, Severity.Error);
+            Snackbar.Add(exception.ToString(), Severity.Error);
 
             //exception.Redirect();
         }

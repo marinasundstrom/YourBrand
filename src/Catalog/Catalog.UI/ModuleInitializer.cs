@@ -69,6 +69,9 @@ public class ModuleInitializer : IModuleInitializer
 
         var t = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        appBarTray.AddItem(new AppBarTrayItem("store-selector", () => t["Store"], typeof(Stores.StoreSelector)));
+        var storeSelector = new AppBarTrayItem("store-selector", () => t["Store"], typeof(Stores.StoreSelector));
+        storeSelector.RequiresAuthorization = true;
+        
+        appBarTray.AddItem(storeSelector);
     }
 }
