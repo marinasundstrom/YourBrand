@@ -102,6 +102,18 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
 
             await eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organizations.First()!.Id));
 
+            await Task.Delay(600);
+
+            var organizationUsers = await context.OrganizationUsers
+                .AsNoTracking()
+                .Where(x => x.UserId == user.Id)
+                .ToListAsync(cancellationToken);
+
+            foreach (var organizationUser in organizationUsers)
+            {
+                await eventPublisher.PublishEvent(new OrganizationUserAdded(organizationUser.TenantId, organizationUser.OrganizationId, organizationUser.UserId));
+            }
+
             return user.ToDto();
         }
     }
