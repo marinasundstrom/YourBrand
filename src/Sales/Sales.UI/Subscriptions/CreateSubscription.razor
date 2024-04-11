@@ -53,7 +53,7 @@
 
     async Task Submit()
     {
-        var order = await OrdersClient.CreateOrderAsync(OrganizationProvider.CurrentOrganization.Id, new CreateOrderRequest 
+        var order = await OrdersClient.CreateOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, new CreateOrderRequest 
         {
             Customer = new SetCustomer
             {

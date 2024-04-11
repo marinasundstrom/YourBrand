@@ -445,7 +445,7 @@ Delete
         }
         else
         {
-            order = await OrdersClient.CreateDraftOrderAsync(OrganizationProvider.CurrentOrganization.Id, new CreateDraftOrderRequest());
+            order = await OrdersClient.CreateDraftOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, new CreateDraftOrderRequest());
 
             if(order.Customer is not null) 
             {
@@ -472,7 +472,7 @@ Delete
 
     async Task Load() 
     {
-        order = await OrdersClient.GetOrderByNoAsync(OrganizationProvider.CurrentOrganization.Id, OrderNo.GetValueOrDefault());
+        order = await OrdersClient.GetOrderByNoAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, OrderNo.GetValueOrDefault());
 
         if(order.Customer is not null) 
         {
@@ -497,7 +497,7 @@ Delete
         if(customer is null)
             return;
 
-        await OrdersClient.SetCustomerAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, new SetCustomer {
+        await OrdersClient.SetCustomerAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id, new SetCustomer {
             Id = customer.Id.ToString(),
             Name = customer.Name
         });
@@ -565,7 +565,7 @@ Delete
 
         if (result.Cancelled) return;
 
-        await OrdersClient.UpdateStatusAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, ((OrderStatus)result.Data).Id);
+        await OrdersClient.UpdateStatusAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id, ((OrderStatus)result.Data).Id);
 
         Model.Status = (OrderStatus)result.Data;
     }
@@ -577,7 +577,7 @@ Delete
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.DeleteOrderAsync(OrganizationProvider.CurrentOrganization.Id, order.Id);
+        await OrdersClient.DeleteOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
 
         NavigationManager.NavigateTo("/orders");
     }
@@ -589,7 +589,7 @@ Delete
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.RemoveOrderItemAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, orderItem.Id);
+        await OrdersClient.RemoveOrderItemAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id, orderItem.Id);
 
         Model.RemoveItem(orderItem);
     }
@@ -631,7 +631,7 @@ Delete
         try 
         {
             orderItem.Quantity = quantity;
-            await OrdersClient.UpdateOrderItemQuantityAsync(OrganizationProvider.CurrentOrganization.Id, order.Id, orderItem.Id, new UpdateOrderItemQuantityRequest() { Quantity = quantity });
+            await OrdersClient.UpdateOrderItemQuantityAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id, orderItem.Id, new UpdateOrderItemQuantityRequest() { Quantity = quantity });
             Model.Update();
         } 
         catch 

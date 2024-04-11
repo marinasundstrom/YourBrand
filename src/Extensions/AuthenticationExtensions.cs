@@ -13,8 +13,6 @@ public static class AuthenticationExtensions
     {
         var isDev = configuration["ASPNETCORE_ENVIRONMENT"] == "Development";
 
-        Console.WriteLine("IsDev: " + isDev);
-
         if (isDev)
         {
             return AddAuthentication_IdentityServer(services, configuration);

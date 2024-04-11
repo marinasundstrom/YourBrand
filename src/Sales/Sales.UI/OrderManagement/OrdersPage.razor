@@ -108,7 +108,7 @@
     {
         loading = true;
 
-        organizationId = OrganizationProvider.CurrentOrganization?.Id;
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync())?.Id;
 
         try
         {
@@ -149,7 +149,7 @@
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.DeleteOrderAsync(OrganizationProvider.CurrentOrganization.Id, order.Id);
+        await OrdersClient.DeleteOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
         await table.ReloadServerData();
     }
 }

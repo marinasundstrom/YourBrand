@@ -7,33 +7,45 @@ namespace YourBrand.Portal;
 
 public sealed class OrganizationProvider(IOrganizationsClient organizationsClient, ILocalStorageService localStorageService) : IOrganizationProvider
 {
-    IEnumerable<Portal.Services.Organization> _organizations;
+    IEnumerable<Portal.Services.Organization>? _organizations;
+    private Services.Organization? _currentOrganization;
 
-    public async Task<IEnumerable<Portal.Services.Organization>> GetAvailableOrganizationsAsync()
+    public async Task<IEnumerable<Portal.Services.Organization>> GetAvailableOrganizationsAsync(CancellationToken cancellationToken = default)
     {
-        var items = _organizations = (await organizationsClient.GetOrganizationsAsync(0, null, null, null, null)).Items
+        _organizations = (await organizationsClient.GetOrganizationsAsync(0, null, null, null, null, cancellationToken)).Items
             .Select(x => new Portal.Services.Organization(x.Id, x.Name, x.FriendlyName));
 
-        if (CurrentOrganization is null)
-        {
-            var storeId = await localStorageService.GetItemAsStringAsync("organizationId");
-            await SetCurrentOrganization(storeId ?? items.First().Id);
-        }
-        return items;
+        _currentOrganization = await GetCurrentOrganizationAsync(cancellationToken);
+
+        return _organizations;
     }
 
-    public Portal.Services.Organization? CurrentOrganization { get; set; }
-
-    public async Task SetCurrentOrganization(string storeId)
+    public async Task<Portal.Services.Organization?> GetCurrentOrganizationAsync(CancellationToken cancellationToken)  
     {
         if (_organizations is null)
         {
             await GetAvailableOrganizationsAsync();
         }
 
-        CurrentOrganization = _organizations!.FirstOrDefault(x => x.Id == storeId);
+        if(_currentOrganization is null) 
+        {
+            var organizationId = await localStorageService.GetItemAsStringAsync("organizationId", cancellationToken);
+            _currentOrganization = _organizations!.FirstOrDefault(x => x.Id == organizationId);
+        }
 
-        await localStorageService.SetItemAsStringAsync("organizationId", storeId);
+        return _currentOrganization;
+    }
+
+    public async Task SetCurrentOrganization(string organizationId, CancellationToken cancellationToken = default)
+    {
+        if (_organizations is null)
+        {
+            await GetAvailableOrganizationsAsync();
+        }
+
+        _currentOrganization = _organizations!.FirstOrDefault(x => x.Id == organizationId);
+
+        await localStorageService.SetItemAsStringAsync("organizationId", organizationId, cancellationToken);
 
         CurrentOrganizationChanged?.Invoke(this, EventArgs.Empty);
     }

@@ -138,7 +138,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        organizationId = OrganizationProvider.CurrentOrganization.Id;
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
         subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(Guid.Parse(Id));
 
@@ -188,7 +188,7 @@ else
         if (!result.GetValueOrDefault())
             return;
 
-        await OrdersClient.DeleteOrderAsync(OrganizationProvider.CurrentOrganization.Id, order.Id);
+        await OrdersClient.DeleteOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
         await table.ReloadServerData();
     }
 }

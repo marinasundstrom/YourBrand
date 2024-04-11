@@ -119,12 +119,12 @@
         if (Model.Id == null)
         {
             var dto = Model.ToCreateOrderItemRequest();
-            item = await OrdersClient.AddOrderItemAsync(OrganizationProvider.CurrentOrganization.Id, OrderId, dto);
+            item = await OrdersClient.AddOrderItemAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, OrderId, dto);
         }
         else
         {
             var dto = Model.ToUpdateOrderItemRequest();
-            item = await OrdersClient.UpdateOrderItemAsync(OrganizationProvider.CurrentOrganization.Id, OrderId, Model.Id, dto);
+            item = await OrdersClient.UpdateOrderItemAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, OrderId, Model.Id, dto);
         }
 
         MudDialog.Close(DialogResult.Ok(item.ToModel()));

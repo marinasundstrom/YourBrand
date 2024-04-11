@@ -50,6 +50,8 @@
 
             items = await OrganizationProvider.GetAvailableOrganizationsAsync();
 
+            currentOrganization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
             StateHasChanged();
         }
         catch 
@@ -58,14 +60,16 @@
         }
     }
 
-    private void OnCurrentOrganizationChanged(object? sender, EventArgs e)
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs e)
     {
         var firstTime = currentOrganization is null;
 
-        if(currentOrganization == OrganizationProvider.CurrentOrganization)
+        var org = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        if (currentOrganization == org)
             return;
 
-        currentOrganization = OrganizationProvider.CurrentOrganization;
+        currentOrganization = org;
 
         if (currentOrganization is null) return;
 
@@ -83,6 +87,6 @@
     
     public void Dispose()
     {
-        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+       OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 }

@@ -2,11 +2,11 @@ namespace YourBrand.Portal.Services;
 
 public interface IOrganizationProvider
 {
-    Task<IEnumerable<Organization>> GetAvailableOrganizationsAsync();
+    Task<IEnumerable<Organization>> GetAvailableOrganizationsAsync(CancellationToken cancellationToken = default);
 
-    Organization? CurrentOrganization { get; set; }
+    Task<Organization?> GetCurrentOrganizationAsync(CancellationToken cancellationToken = default);
 
-    Task SetCurrentOrganization(string storeId);
+    Task SetCurrentOrganization(string storeId, CancellationToken cancellationToken = default);
 
     event EventHandler? CurrentOrganizationChanged;
 }

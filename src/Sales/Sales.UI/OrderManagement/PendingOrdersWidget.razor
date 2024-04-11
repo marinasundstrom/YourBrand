@@ -46,7 +46,7 @@
 
     private async Task<TableData<Order>> ServerReload(TableState state)
     {
-        organizationId = OrganizationProvider.CurrentOrganization.Id;
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
         loading = true;
 

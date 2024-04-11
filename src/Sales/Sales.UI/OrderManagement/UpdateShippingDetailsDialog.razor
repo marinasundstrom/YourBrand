@@ -130,7 +130,7 @@
 
     async Task Submit()
     {
-        await OrdersClient.UpdateShippingDetailsAsync(OrganizationProvider.CurrentOrganization.Id, OrderId, Model);
+        await OrdersClient.UpdateShippingDetailsAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, OrderId, Model);
 
         MudDialog.Close(DialogResult.Ok(Model));
     }
