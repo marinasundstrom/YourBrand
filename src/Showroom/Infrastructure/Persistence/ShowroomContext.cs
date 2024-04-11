@@ -22,6 +22,15 @@ public class ShowroomContext(
     DbContextOptions<ShowroomContext> options,
     ITenantContext tenantContext) : DbContext(options), IShowroomContext
 {
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ShowroomContext).Assembly);
+
+        ConfigQueryFilterForEntity(modelBuilder);
+    }
+
     private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
     {
         foreach (var clrType in modelBuilder.Model

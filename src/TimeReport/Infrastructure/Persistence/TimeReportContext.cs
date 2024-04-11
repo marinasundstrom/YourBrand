@@ -33,11 +33,6 @@ public class TimeReportContext : DbContext, ITimeReportContext
         _tenantId = _tenantContext.TenantId!;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
