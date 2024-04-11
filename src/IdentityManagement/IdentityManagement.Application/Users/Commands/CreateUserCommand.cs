@@ -32,7 +32,7 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                DisplayName = request.DisplayName ?? $"{request.FirstName} {request.LastName}", 
+                DisplayName = request.DisplayName ?? $"{request.FirstName} {request.LastName}",
                 UserName = request.Email,
                 Email = request.Email,
                 EmailConfirmed = true,

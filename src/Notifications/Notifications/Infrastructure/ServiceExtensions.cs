@@ -1,10 +1,10 @@
 ﻿using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using Quartz;
 
 using Scrutor;
-
-using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Infrastructure.BackgroundJobs;

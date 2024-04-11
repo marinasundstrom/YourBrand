@@ -13,7 +13,7 @@ public static class SeedData
         {
             var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
             tenantContext.SetTenantId(TenantConstants.TenantId);
-            
+
             using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             context.Database.EnsureDeleted();

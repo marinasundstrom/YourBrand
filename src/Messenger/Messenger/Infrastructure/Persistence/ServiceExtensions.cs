@@ -3,9 +3,9 @@ using MassTransit;
 
 using MediatR;
 
-using Scrutor;
-
 using Microsoft.EntityFrameworkCore;
+
+using Scrutor;
 
 using YourBrand.Messenger.Application.Common.Interfaces;
 using YourBrand.Messenger.Domain;

@@ -71,7 +71,7 @@ public class ModuleInitializer : IModuleInitializer
 
         var storeSelector = new AppBarTrayItem("store-selector", () => t["Store"], typeof(Stores.StoreSelector));
         storeSelector.RequiresAuthorization = true;
-        
+
         appBarTray.AddItem(storeSelector);
     }
 }

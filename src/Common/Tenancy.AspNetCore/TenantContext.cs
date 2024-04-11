@@ -6,25 +6,25 @@ public sealed class TenantContext(IHttpContextAccessor httpContextAccessor) : IS
 {
     private TenantId? _tenantId;
 
-/*
-    public TenantId? TenantId
-    {
-        get
+    /*
+        public TenantId? TenantId
         {
-            if(_tenantId is null)  
+            get
             {
-                var tenantIdStr = httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value;
-
-                if(tenantIdStr is not null) 
+                if(_tenantId is null)  
                 {
-                    return (TenantId)tenantIdStr;
-                }
-            }
+                    var tenantIdStr = httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value;
 
-            return _tenantId;
+                    if(tenantIdStr is not null) 
+                    {
+                        return (TenantId)tenantIdStr;
+                    }
+                }
+
+                return _tenantId;
+            }
         }
-    }
-    */
+        */
 
     public TenantId? TenantId => _tenantId ??= (httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value ?? null)!;
 

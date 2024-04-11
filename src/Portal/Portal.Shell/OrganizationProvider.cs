@@ -20,14 +20,14 @@ public sealed class OrganizationProvider(IOrganizationsClient organizationsClien
         return _organizations;
     }
 
-    public async Task<Portal.Services.Organization?> GetCurrentOrganizationAsync(CancellationToken cancellationToken)  
+    public async Task<Portal.Services.Organization?> GetCurrentOrganizationAsync(CancellationToken cancellationToken)
     {
         if (_organizations is null)
         {
             await GetAvailableOrganizationsAsync();
         }
 
-        if(_currentOrganization is null) 
+        if (_currentOrganization is null)
         {
             var organizationId = await localStorageService.GetItemAsStringAsync("organizationId", cancellationToken);
             _currentOrganization = _organizations!.FirstOrDefault(x => x.Id == organizationId);

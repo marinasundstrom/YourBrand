@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
+
 using LinqKit;
 
 namespace YourBrand.Tenancy;
@@ -22,7 +23,7 @@ public static class TenancyQueryFilter
             //Expression.Invoke(tenantIdAccessor));
             Expression.Call(Expression.Invoke(tenantIdAccessor), getValueOrDefaultMethod));
 
-        if (allowNull) 
+        if (allowNull)
         {
             var body2 = Expression.Equal(Expression.Invoke(tenantIdAccessor), Expression.Constant(null, typeof(TenantId?))); //new TenantId()
             body = Expression.OrElse(body2, body).Expand();

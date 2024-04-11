@@ -43,11 +43,13 @@ public static class Seed
 
         if (!context.ActivityTypes.Any())
         {
-            context.ActivityTypes.Add(new ActivityType("Chargeable", null) {
+            context.ActivityTypes.Add(new ActivityType("Chargeable", null)
+            {
                 OrganizationId = TenantConstants.OrganizationId
             });
 
-            context.ActivityTypes.Add(new ActivityType("Sick", null) {
+            context.ActivityTypes.Add(new ActivityType("Sick", null)
+            {
                 OrganizationId = TenantConstants.OrganizationId
             });
 

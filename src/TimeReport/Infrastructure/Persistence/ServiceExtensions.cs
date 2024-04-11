@@ -28,9 +28,9 @@ public static class ServiceExtensions
             options.AddInterceptors(
                 sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
-    #if DEBUG
+#if DEBUG
             options.EnableSensitiveDataLogging();
-    #endif
+#endif
         });
 
         services.AddScoped<ITimeReportContext>(sp => sp.GetRequiredService<TimeReportContext>());

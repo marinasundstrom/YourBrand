@@ -3,7 +3,7 @@
 public record CreateUser
 {
     public string OrganizationId { get; init; }
-    public  required string FirstName { get; init; }
+    public required string FirstName { get; init; }
     public string LastName { get; init; }
     public string? DisplayName { get; init; }
     public string Role { get; init; }

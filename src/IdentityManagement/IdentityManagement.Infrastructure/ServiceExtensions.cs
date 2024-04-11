@@ -32,7 +32,7 @@ public static class ServiceExtensions
                     .AddTrigger(trigger => trigger.ForJob(jobKey)
                         .WithSimpleSchedule(schedule => schedule
                             .WithIntervalInSeconds(10)
-                            .RepeatForever()));;
+                            .RepeatForever())); ;
             });
 
         services.AddQuartzHostedService();
@@ -43,8 +43,9 @@ public static class ServiceExtensions
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        
-        services.AddDbContext<ApplicationDbContext>((sp, options) => {
+
+        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        {
             options.UseSqlServer(connectionString);
 
             options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());

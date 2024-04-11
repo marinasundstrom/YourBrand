@@ -1,11 +1,11 @@
 ﻿
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using Quartz;
 
 using Scrutor;
-
-using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Infrastructure.BackgroundJobs;

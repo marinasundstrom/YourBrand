@@ -25,7 +25,7 @@ public class ActivityType : AuditableEntity, IHasTenant, ISoftDelete
     public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; }
-    
+
     public Organization Organization { get; set; } = null!;
 
     public OrganizationId OrganizationId { get; set; }

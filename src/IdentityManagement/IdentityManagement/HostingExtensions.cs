@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
+using YourBrand.Extensions;
 using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence;
-using YourBrand.Extensions;
 
 namespace YourBrand.IdentityManagement;
 

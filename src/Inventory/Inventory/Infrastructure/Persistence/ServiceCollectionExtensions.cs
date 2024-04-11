@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
             options.EnableSensitiveDataLogging();
 #endif
         });
-        
+
         services.AddScoped<IInventoryContext>(sp => sp.GetRequiredService<InventoryContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();

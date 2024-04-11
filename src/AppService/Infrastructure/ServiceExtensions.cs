@@ -1,13 +1,12 @@
 ﻿using MediatR;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Quartz;
 
 using Scrutor;
-
-using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
 using YourBrand.Infrastructure.BackgroundJobs;
