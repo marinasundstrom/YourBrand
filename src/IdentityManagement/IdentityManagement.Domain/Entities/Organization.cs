@@ -8,7 +8,8 @@ namespace YourBrand.IdentityManagement.Domain.Entities;
 public class Organization : AuditableEntity, IHasTenant
 {
     private readonly HashSet<User> _users = new HashSet<User>();
-
+    private readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
+    
     private Organization() { }
 
     public Organization(OrganizationId id, string name, string? friendlyName)
@@ -29,14 +30,6 @@ public class Organization : AuditableEntity, IHasTenant
 
     public string Name { get; private set; }
 
-    public string? FriendlyName { get; private set; }
-
-    public Tenant Tenant { get; set; }
-
-    public TenantId TenantId { get; set; }
-
-    public IReadOnlyCollection<User> Users => _users;
-
     public void ChangeName(string name)
     {
         if (Name != name)
@@ -45,17 +38,26 @@ public class Organization : AuditableEntity, IHasTenant
         }
     }
 
+    public string? FriendlyName { get; private set; }
+
+    public Tenant Tenant { get; set; }
+
+    public TenantId TenantId { get; set; }
+
+    public IReadOnlyCollection<User> Users => _users;
+
     public void AddUser(User user)
     {
-        //_users.Add(user);
-
-        OrganizationUsers.Add(new OrganizationUser
+        _organizationUsers.Add(new OrganizationUser
         {
             Tenant = Tenant,
+            TenantId = Tenant.Id,
             Organization = this,
-            User = user
+            OrganizationId = this.Id,
+            User = user,
+            UserId = user.Id
         });
     }
 
-    public List<OrganizationUser> OrganizationUsers { get; set; } = new List<OrganizationUser>();
+    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 }

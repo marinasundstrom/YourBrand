@@ -29,17 +29,33 @@ public class Tenant : AuditableEntity
 
     public string Name { get; private set; }
 
-    public string? FriendlyName { get; private set; }
-
-    public IReadOnlyCollection<Organization> Organizations => _organizations;
-
-    public IReadOnlyCollection<User> Users => _users;
-
     public void ChangeName(string name)
     {
         if (Name != name)
         {
             Name = name;
         }
+    }
+
+    public string? FriendlyName { get; private set; }
+
+    public IReadOnlyCollection<User> Users => _users;
+
+    public void AddUser(User user)
+    {
+        user.TenantId = Id;
+        user.Tenant = this;
+
+        _users.Add(user);
+    }
+
+    public IReadOnlyCollection<Organization> Organizations => _organizations;
+
+    public void AddOrganization(Organization organization)
+    {
+        organization.TenantId = Id;
+        organization.Tenant = this;
+
+        _organizations.Add(organization);
     }
 }

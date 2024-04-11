@@ -56,8 +56,10 @@ public static class SeedData
                     UserName = "alice",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
-                    Tenant = tenant
+                    //Tenant = tenant
                 };
+
+                tenant.AddUser(alice);
 
                 organization.AddUser(alice);
 
@@ -102,8 +104,10 @@ public static class SeedData
                     UserName = "bob",
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true,
-                    Tenant = tenant
+                    //Tenant = tenant
                 };
+
+                tenant.AddUser(bob);
 
                 organization.AddUser(bob);
 
