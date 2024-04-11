@@ -45,6 +45,10 @@ public class CartsApiFactory
             {
                 var connectionString = _dbContainer.GetConnectionString().Replace("master", CartsDbName);
                 options.UseSqlServer(connectionString);
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
             });
 
             services.AddMassTransitTestHarness(x =>

@@ -43,8 +43,6 @@ public static class ServiceCollectionExtensions
                         .WithSimpleSchedule(schedule => schedule
                             .WithIntervalInSeconds(10)
                             .RepeatForever()));
-
-                configure.UseMicrosoftDependencyInjectionJobFactory();
             });
 
         services.AddQuartzHostedService();

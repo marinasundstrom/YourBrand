@@ -32,9 +32,7 @@ public static class ServiceExtensions
                     .AddTrigger(trigger => trigger.ForJob(jobKey)
                         .WithSimpleSchedule(schedule => schedule
                             .WithIntervalInSeconds(10)
-                            .RepeatForever()));
-
-                configure.UseMicrosoftDependencyInjectionJobFactory();
+                            .RepeatForever()));;
             });
 
         services.AddQuartzHostedService();
@@ -50,9 +48,25 @@ public static class ServiceExtensions
             options.UseSqlServer(connectionString);
 
             options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
         });
 
-        services.AddTransient<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddDbContext<ApplicationDbContextWithTenantFilter>((sp, options) =>
+        {
+            options.UseSqlServer(connectionString);
+
+            options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+#if DEBUG
+            options.EnableSensitiveDataLogging();
+#endif
+        });
+
+
+        services.AddTransient<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContextWithTenantFilter>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 

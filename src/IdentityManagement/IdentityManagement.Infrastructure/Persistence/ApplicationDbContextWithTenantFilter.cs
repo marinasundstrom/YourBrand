@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,15 +12,15 @@ using YourBrand.IdentityManagement.Application.Common.Interfaces;
 using YourBrand.IdentityManagement.Domain.Common;
 using YourBrand.IdentityManagement.Domain.Entities;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Configurations;
-using YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Outbox;
 using System.Linq.Expressions;
 using LinqKit;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
-public class ApplicationDbContext(
-    DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
+public class ApplicationDbContextWithTenantFilter(
+    DbContextOptions<ApplicationDbContextWithTenantFilter> options,
+    ITenantContext tenantContext) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,8 +52,6 @@ public class ApplicationDbContext(
 
                 List<Expression> queryFilters = new();
 
-
-                /*
                 if (TenancyQueryFilter.CanApplyTo(clrType))
                 {
                     var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
@@ -61,7 +59,6 @@ public class ApplicationDbContext(
                     queryFilters.Add(
                         Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));
                 }
-                */
 
                 if (SoftDeleteQueryFilter.CanApplyTo(clrType))
                 {

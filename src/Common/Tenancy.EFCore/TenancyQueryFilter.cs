@@ -24,12 +24,11 @@ public static class TenancyQueryFilter
 
         if (allowNull) 
         {
-            var body2 = Expression.Equal(Expression.Invoke(tenantIdAccessor), Expression.Constant(null)); //new TenantId()
-            body = Expression.OrElse(body2, body);
             var body2 = Expression.Equal(Expression.Invoke(tenantIdAccessor), Expression.Constant(null, typeof(TenantId?))); //new TenantId()
+            body = Expression.OrElse(body2, body).Expand();
         }
 
-        return Expression.Lambda<Func<IHasTenant, bool>>(body, param);
+        return Expression.Lambda<Func<IHasTenant, bool>>(body.Expand(), param);
     }
 
     public static bool CanApplyTo(Type entityType) => hasTenantInterface.IsAssignableFrom(entityType);

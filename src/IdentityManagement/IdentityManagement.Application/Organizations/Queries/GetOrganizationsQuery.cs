@@ -11,10 +11,12 @@ namespace YourBrand.IdentityManagement.Application.Organizations.Queries;
 
 public record GetOrganizationsQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, IdentityManagement.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<OrganizationDto>>
 {
-    public class GetOrganizationsQueryHandler(IApplicationDbContext context) : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
+    public class GetOrganizationsQueryHandler(IApplicationDbContext context, ITenantContext tenantContext) : IRequestHandler<GetOrganizationsQuery, ItemsResult<OrganizationDto>>
     {
         public async Task<ItemsResult<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
+            Console.WriteLine("TC TenantId: " + tenantContext.TenantId);
+
             var query = context.Organizations
                 .Include(x => x.Tenant)
                 .OrderBy(p => p.Created)
