@@ -123,17 +123,6 @@
         {
             "splitTerminals": [
                 {
-                    "name": "Commerce",
-                    "commands": [
-                        "dotnet run --project src/Commerce/Server/Commerce.Server.csproj"
-                    ],
-                    "shouldRunCommands": false
-                }
-            ]
-        },
-        {
-            "splitTerminals": [
-                {
                     "name": "HumanResources",
                     "commands": [
                         "dotnet run --project src/HumanResources/HumanResources/HumanResources.csproj"
