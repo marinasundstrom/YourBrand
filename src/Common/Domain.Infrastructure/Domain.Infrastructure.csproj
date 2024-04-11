@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.5.0" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.1" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
   </ItemGroup>

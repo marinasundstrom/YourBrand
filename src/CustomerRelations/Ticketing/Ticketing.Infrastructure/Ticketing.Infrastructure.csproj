@@ -23,8 +23,8 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
 		<PackageReference Include="Polly" Version="7.2.3" />
-		<PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.5.0" />
-		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
+		<PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.1" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
 		<PackageReference Include="Scrutor" Version="4.2.0" />
 	</ItemGroup>
 
