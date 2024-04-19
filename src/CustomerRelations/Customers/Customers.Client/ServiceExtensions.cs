@@ -18,7 +18,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddPersonsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(PersonsClient) + "HR", configureClient)
+            .AddHttpClient(nameof(PersonsClient) + "CR", configureClient)
             .AddTypedClient<IPersonsClient>((http, sp) => new PersonsClient(http));
 
         builder?.Invoke(b);
@@ -29,7 +29,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddOrganizationsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(OrganizationsClient) + "HR", configureClient)
+            .AddHttpClient(nameof(OrganizationsClient) + "CR", configureClient)
             .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http));
 
         builder?.Invoke(b);
@@ -40,7 +40,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddCustomersClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(CustomersClient) + "HR", configureClient)
+            .AddHttpClient(nameof(CustomersClient) + "CR", configureClient)
             .AddTypedClient<ICustomersClient>((http, sp) => new CustomersClient(http));
 
         builder?.Invoke(b);

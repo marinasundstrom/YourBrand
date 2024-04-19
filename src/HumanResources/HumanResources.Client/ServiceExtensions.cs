@@ -22,7 +22,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddOrganizationsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(OrganizationsClient), configureClient)
+            .AddHttpClient(nameof(OrganizationsClient) + "HR", configureClient)
             .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http));
 
         builder?.Invoke(b);
@@ -33,7 +33,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddPersonsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(PersonsClient), configureClient)
+            .AddHttpClient(nameof(PersonsClient) + "HR", configureClient)
             .AddTypedClient<IPersonsClient>((http, sp) => new PersonsClient(http));
 
         builder?.Invoke(b);
@@ -44,7 +44,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddRolesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(RolesClient), configureClient)
+            .AddHttpClient(nameof(RolesClient) + "HR", configureClient)
             .AddTypedClient<IRolesClient>((http, sp) => new RolesClient(http));
 
         builder?.Invoke(b);
@@ -55,7 +55,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddSyncClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(SyncClient), configureClient)
+            .AddHttpClient(nameof(SyncClient) + "HR", configureClient)
             .AddTypedClient<ISyncClient>((http, sp) => new SyncClient(http));
 
         builder?.Invoke(b);
