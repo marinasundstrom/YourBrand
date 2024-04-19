@@ -3,14 +3,14 @@ using YourBrand.Identity;
 
 namespace YourBrand.Domain.Entities;
 
-public class Item : AuditableEntity, ISoftDelete
+public class SearchResultItem : AuditableEntity, ISoftDelete
 {
-    protected Item()
+    protected SearchResultItem()
     {
 
     }
 
-    public Item(string name, string? description = null)
+    public SearchResultItem(string name, string? description = null)
     {
         Id = Guid.NewGuid().ToString();
         Name = name;

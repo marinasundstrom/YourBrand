@@ -1,12 +1,15 @@
 ﻿
 using YourBrand.Domain.Common;
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public class User : AuditableEntity, ISoftDelete
+public class User : AuditableEntity, ISoftDelete, IHasTenant
 {
     public UserId Id { get; set; } = null!;
+
+    public TenantId TenantId { get; set; }
 
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Application.Modules;
+using YourBrand.Domain.Entities;
 
 namespace YourBrand.WebApi.Controllers;
 

@@ -16,7 +16,7 @@ public record SearchCommand(string SearchText,
         {
             var searchText = request.SearchText.Trim().ToLower();
 
-            var query = context.Items.Where(i =>
+            var query = context.SearchResultItems.Where(i =>
                 i.Name.Trim().ToLower().Contains(searchText)
                 || i.Description.Trim().ToLower().Contains(searchText))
                 .AsQueryable();

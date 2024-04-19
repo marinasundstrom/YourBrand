@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch and Debug Standalone Blazor WebAssembly App",
+            "name": "Launch and Debug Portal",
             "type": "blazorwasm",
             "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "url": "https://localhost" // Tell launch where to find site
+            "cwd": "${workspaceFolder}/src/Portal/Portal",
+            "url": "https://localhost:5174" // Tell launch where to find site
         },
         {
-            "name": "Attach",
+            "name": "Attach Portal",
             "type": "blazorwasm",
             "request": "attach",
-            "cwd": "${workspaceFolder}",
-            "url": "https://localhost",  // Tell launch where to find site
+            "cwd": "${workspaceFolder}/src/Portal/Portal",
+            "url": "https://localhost:5174",  // Tell launch where to find site
             "timeout": 120000, // Allows time for the site to launch
         }
     ]

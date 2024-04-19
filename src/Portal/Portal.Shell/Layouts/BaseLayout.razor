@@ -36,7 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ThemeManager.SetTheme(Themes.AppTheme);
+        //ThemeManager.SetTheme(Themes.AppTheme);
 
         _drawerOpen = await LocalStorage.GetItemAsync<bool?>("drawerOpen") ?? true;
     }
@@ -69,6 +69,8 @@
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
+        Console.WriteLine(ThemeManager.Theme.Palette.AppbarBackground);
+
         StateHasChanged();
     }
 
@@ -79,6 +81,7 @@
 
     public void Dispose()
     {
+        ThemeManager.ThemeChanged -= OnThemeChanged;
         ThemeManager.ColorSchemeChanged -= OnColorSchemeChanged;
     }
 }

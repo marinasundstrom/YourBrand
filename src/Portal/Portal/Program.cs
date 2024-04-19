@@ -6,8 +6,12 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
+using MudBlazor;
+using MudBlazor.Utilities;
+
 using YourBrand.Portal;
 using YourBrand.Portal.Modules;
+using YourBrand.Portal.Theming;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -41,6 +45,7 @@ app.Services.UseShell();
 
 await app.Services.Localize();
 
+await LoadBrandProfile(builder.Services);
 
 await app.RunAsync();
 
@@ -56,6 +61,45 @@ async Task LoadModules(IServiceCollection services)
         ModuleLoader.LoadModule(x.Name, Assembly.Load(x.Assembly), x.Enabled));
 
     ModuleLoader.AddServices(builder.Services);
+}
+
+async Task LoadBrandProfile(IServiceCollection services)
+{
+    var http = builder.Services
+        .BuildServiceProvider()
+        .GetRequiredService<HttpClient>();
+
+    var themeManager = builder.Services
+        .BuildServiceProvider()
+        .GetRequiredService<IThemeManager>();
+
+    themeManager.SetTheme(Themes.AppTheme);
+
+    var brandProfile = await http.GetFromJsonAsync<YourBrand.AppService.Client.BrandProfile>($"{ServiceUrls.AppServiceUrl}/v1/BrandProfile");
+
+    if (brandProfile is not null)
+    {
+        var theme = new MudTheme();
+
+        if(brandProfile.BackgroundColor is not null) 
+        {
+            theme.Palette.Background = brandProfile.BackgroundColor;
+        }
+        if (brandProfile.AppbarBackgroundColor is not null)
+        {
+            theme.Palette.AppbarBackground = brandProfile.AppbarBackgroundColor;
+        }
+        if (brandProfile.PrimaryColor is not null)
+        {
+            theme.Palette.Primary = brandProfile.PrimaryColor;
+        }
+        if (brandProfile.SecondaryColor is not null)
+        {
+            theme.Palette.Secondary = brandProfile.SecondaryColor;
+        }
+
+        themeManager.SetTheme(theme);
+    }
 }
 
 sealed record ModuleEntry(Assembly Assembly, bool Enabled);

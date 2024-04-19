@@ -2,25 +2,27 @@
 using System.Text.Json;
 
 using YourBrand.Domain.Common;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public sealed class Widget : AuditableEntity
+public sealed class Widget : AuditableEntity, IHasTenant
 {
     private Widget()
     {
 
     }
 
-    public Widget(string widgetId, string? userId, JsonDocument? settings)
+    public Widget(string widgetId, string? userId)
     {
         Id = Guid.NewGuid();
         WidgetId = widgetId;
         UserId = userId;
-        Settings = settings;
     }
 
     public Guid Id { get; set; } = default!;
+
+    public TenantId TenantId { get; set; }
 
     public string WidgetId { get; set; } = null!;
 

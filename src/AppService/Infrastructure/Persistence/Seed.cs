@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Application.Modules;
 using YourBrand.Domain.Entities;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Infrastructure.Persistence;
 
@@ -10,6 +11,10 @@ public static class Seed
     public static async Task SeedAsync(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
+
+        var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
+        tenantContext.SetTenantId(TenantConstants.TenantId);
+
         using var context = scope.ServiceProvider.GetRequiredService<AppServiceContext>();
 
         await context.Database.EnsureDeletedAsync();
@@ -30,13 +35,13 @@ public static class Seed
             await context.SaveChangesAsync();
         }
 
-        if (!context.Items.Any())
+        if (!context.SearchResultItems.Any())
         {
-            context.Items.Add(new Item("Item 1"));
-            context.Items.Add(new Item("Item 2"));
-            context.Items.Add(new Item("Item 3"));
-            context.Items.Add(new Item("Foo"));
-            context.Items.Add(new Item("Foobar"));
+            context.SearchResultItems.Add(new SearchResultItem("Item 1"));
+            context.SearchResultItems.Add(new SearchResultItem("Item 2"));
+            context.SearchResultItems.Add(new SearchResultItem("Item 3"));
+            context.SearchResultItems.Add(new SearchResultItem("Foo"));
+            context.SearchResultItems.Add(new SearchResultItem("Foobar"));
 
             await context.SaveChangesAsync();
         }
@@ -68,22 +73,42 @@ public static class Seed
 
         await context.SaveChangesAsync();
 
-        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null)
         {
             WidgetId = "analytics.engagements",
             WidgetAreaId = "dashboard"
         });
 
-        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null)
         {
             WidgetId = "tickets.overview",
             WidgetAreaId = "dashboard"
         });
 
-        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null, null)
+        context.Widgets.Add(new Widget(Guid.NewGuid().ToString(), null)
         {
             WidgetId = "orders.pendingOrders",
             WidgetAreaId = "dashboard"
+        });
+
+        await context.SaveChangesAsync();
+
+        context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
+        {
+            Name = "Default",
+            BackgroundColor = "rgb(248, 249, 250)",
+            AppbarBackgroundColor = "#137cdf",
+            PrimaryColor = "#4892d7",
+            SecondaryColor = null
+        });
+
+        context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
+        {
+            Name = "ACME",
+            BackgroundColor = null,
+            AppbarBackgroundColor = "#1b3b5d",
+            PrimaryColor = "#1c4168",
+            SecondaryColor = "#c1c1c1"
         });
 
         await context.SaveChangesAsync();

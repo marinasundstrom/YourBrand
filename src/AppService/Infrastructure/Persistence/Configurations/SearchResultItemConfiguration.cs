@@ -5,14 +5,14 @@ using YourBrand.Domain.Entities;
 
 namespace YourBrand.Infrastructure.Persistence.Configurations;
 
-sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
+sealed class SearchResultItemConfiguration : IEntityTypeConfiguration<SearchResultItem>
 {
-    public void Configure(EntityTypeBuilder<Item> builder)
+    public void Configure(EntityTypeBuilder<SearchResultItem> builder)
     {
-        builder.ToTable("Items");
+        builder.ToTable("SearchResultItems");
         builder.HasQueryFilter(i => i.Deleted == null);
 
-        builder.HasIndex(nameof(Item.Name), nameof(Item.Description));
+        builder.HasIndex(nameof(SearchResultItem.Name), nameof(SearchResultItem.Description));
 
         builder.Ignore(i => i.DomainEvents);
     }

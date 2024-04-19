@@ -12,6 +12,8 @@ public interface IThemeManager : IDisposable
 
     void SetTheme(MudTheme theme);
 
+    void RefreshTheme();
+
     event EventHandler<EventArgs>? ThemeChanged;
 
     ColorScheme CurrentColorScheme { get; }
@@ -33,6 +35,8 @@ public sealed class ThemeManager : IThemeManager
     private const string PreferredColorSchemeKey = "preferredColorScheme";
     private readonly SystemColorSchemeDetector _systemColorSchemeDetector;
     private readonly ISyncLocalStorageService _localStorage;
+    private bool initialized = false;
+    private static MudTheme s_mudTheme = new MudTheme();
 
     public ThemeManager(SystemColorSchemeDetector systemColorSchemeDetector, ISyncLocalStorageService localStorage)
     {
@@ -44,12 +48,24 @@ public sealed class ThemeManager : IThemeManager
 
     public void Initialize()
     {
+        if(initialized) 
+        {
+            return;
+        }
+
         CurrentColorScheme = PreferredColorScheme ?? _systemColorSchemeDetector.CurrentColorScheme;
 
         RaiseCurrentColorSchemeChanged();
+        RaiseThemeChanged();
+
+        initialized = true;
     }
 
-    public MudTheme Theme { get; private set; } = new MudTheme();
+    public MudTheme Theme 
+    {
+        get => s_mudTheme;
+        private set => s_mudTheme = value;
+    }
 
     public void SetTheme(MudTheme theme)
     {
@@ -59,6 +75,11 @@ public sealed class ThemeManager : IThemeManager
 
             RaiseThemeChanged();
         }
+    }
+
+    public void RefreshTheme()
+    {
+        RaiseThemeChanged();
     }
 
     private void RaiseThemeChanged()

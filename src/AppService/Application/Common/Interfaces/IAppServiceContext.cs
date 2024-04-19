@@ -6,7 +6,9 @@ namespace YourBrand.Application.Common.Interfaces;
 
 public interface IAppServiceContext
 {
-    DbSet<Item> Items { get; }
+    DbSet<BrandProfile> BrandProfiles { get; }
+
+    DbSet<SearchResultItem> SearchResultItems { get; }
 
     DbSet<Module> Modules { get; }
 

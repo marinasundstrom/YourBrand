@@ -6,6 +6,24 @@ info:
 servers:
 - url: https://localhost:5020
 paths:
+  /v1/BrandProfile:
+    get:
+      tags:
+      - BrandProfile
+      operationId: BrandProfile_GetBrandProfile
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandProfile'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/Modules:
     get:
       tags:
@@ -327,23 +345,24 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
 components:
   schemas:
-    Module:
+    BrandProfile:
       type: object
       additionalProperties: false
       properties:
         id:
           type: string
-          format: guid
-        name:
+        backgroundColor:
           type: string
-        assembly:
+          nullable: true
+        appbarBackgroundColor:
           type: string
-        enabled:
-          type: boolean
-        dependantOn:
-          type: array
-          items:
-            type: string
+          nullable: true
+        primaryColor:
+          type: string
+          nullable: true
+        secondaryColor:
+          type: string
+          nullable: true
     ProblemDetails:
       type: object
       additionalProperties:
@@ -368,6 +387,23 @@ components:
         extensions:
           type: object
           additionalProperties: {}
+    Module:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        assembly:
+          type: string
+        enabled:
+          type: boolean
+        dependantOn:
+          type: array
+          items:
+            type: string
     NotificationsResults:
       allOf:
       - $ref: '#/components/schemas/ItemResultOfNotification'
