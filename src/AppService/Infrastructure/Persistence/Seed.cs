@@ -99,7 +99,7 @@ public static class Seed
             BackgroundColor = "rgb(248, 249, 250)",
             AppbarBackgroundColor = "#137cdf",
             PrimaryColor = "#4892d7",
-            SecondaryColor = null
+            SecondaryColor = "#ee1919"
         });
 
         context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
@@ -108,7 +108,7 @@ public static class Seed
             BackgroundColor = null,
             AppbarBackgroundColor = "#1b3b5d",
             PrimaryColor = "#1c4168",
-            SecondaryColor = "#c1c1c1"
+            SecondaryColor = "#ee1919"
         });
 
         await context.SaveChangesAsync();
