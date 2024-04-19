@@ -51,6 +51,7 @@ public static class SeedData
             {
                 alice = new User
                 {
+                    Id = TenantConstants.UserAliceId,
                     FirstName = "Alice",
                     LastName = "Smith",
                     UserName = "alice",
@@ -99,6 +100,7 @@ public static class SeedData
             {
                 bob = new User
                 {
+                    Id = TenantConstants.UserBobId,
                     FirstName = "Bob",
                     LastName = "Smith",
                     UserName = "bob",

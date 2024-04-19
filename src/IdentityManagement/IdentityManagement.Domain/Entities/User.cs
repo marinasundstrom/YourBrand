@@ -13,15 +13,21 @@ public class User : IdentityUser, IAuditableEntity, ISoftDelete, IHasTenant
 
     public User() { }
 
-    public User(string firstName, string lastName, string? displayName, string email)
+
+    public User(string id, string firstName, string lastName, string? displayName, string email)
     {
-        Id = Guid.NewGuid().ToString();
+        Id = id;
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;
         Email = email;
 
         //AddDomainEvent(new UserCreated(Id));
+    }
+
+    public User(string firstName, string lastName, string? displayName, string email)
+        : this(Guid.NewGuid().ToString(), firstName, lastName, displayName, email)
+    {
     }
 
     public string FirstName { get; set; } = null!;
