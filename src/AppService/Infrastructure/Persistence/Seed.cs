@@ -113,7 +113,7 @@ public static class Seed
                 Light = new BrandColorPalette {
                     BackgroundColor = null,
                     AppbarBackgroundColor = "#3c6794",
-                    PrimaryColor = "#1c4168",
+                    PrimaryColor = "#4e7ba9",
                     SecondaryColor = "#ee1919"
                 }
             }
