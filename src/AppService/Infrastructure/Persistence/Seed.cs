@@ -111,7 +111,14 @@ public static class Seed
             Name = "ACME",
             Colors = new BrandColors {
                 Light = new BrandColorPalette {
-                    BackgroundColor = null,
+                    BackgroundColor = "#f9f7f7ff",
+                    AppbarBackgroundColor = "#3c6794",
+                    PrimaryColor = "#4e7ba9",
+                    SecondaryColor = "#e24b5aff"
+                },
+                Dark = new BrandColorPalette
+                {
+                    BackgroundColor = "#2b2a30ff",
                     AppbarBackgroundColor = "#3c6794",
                     PrimaryColor = "#4e7ba9",
                     SecondaryColor = "#e24b5aff"
