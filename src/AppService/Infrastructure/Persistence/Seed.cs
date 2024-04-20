@@ -101,7 +101,7 @@ public static class Seed
                     BackgroundColor = "rgb(248, 249, 250)",
                     AppbarBackgroundColor = "#137cdf",
                     PrimaryColor = "#4892d7",
-                    SecondaryColor = "#ee1919"
+                    SecondaryColor = "#e24b5aff"
                 }
             }
         });
@@ -114,7 +114,7 @@ public static class Seed
                     BackgroundColor = null,
                     AppbarBackgroundColor = "#3c6794",
                     PrimaryColor = "#4e7ba9",
-                    SecondaryColor = "#ee1919"
+                    SecondaryColor = "#e24b5aff"
                 }
             }
         });
