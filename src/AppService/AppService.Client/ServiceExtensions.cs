@@ -12,7 +12,8 @@ public static class ServiceExtensions
             .AddModulesClient(configureClient, builder)
             .AddDoSomethingClient(configureClient, builder)
             .AddWidgetsClient(configureClient, builder)
-            .AddOrganizationsClient(configureClient, builder);
+            .AddOrganizationsClient(configureClient, builder)
+            .AddBrandProfilesClient(configureClient, builder);
 
         return services;
     }
@@ -89,6 +90,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(OrganizationsClient), configureClient)
             .AddTypedClient<IOrganizationsClient>((http, sp) => new OrganizationsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddBrandProfilesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(BrandProfileClient), configureClient)
+            .AddTypedClient<IBrandProfileClient>((http, sp) => new BrandProfileClient(http));
 
         builder?.Invoke(b);
 

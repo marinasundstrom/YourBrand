@@ -15,7 +15,9 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
     {
         public async Task<BrandProfileDto?> Handle(GetBrandProfileQuery request, CancellationToken cancellationToken)
         {
-            var brandProfile = await appServiceContext.BrandProfiles.FirstOrDefaultAsync(cancellationToken);
+            var brandProfile = await appServiceContext.BrandProfiles
+                .OrderBy(x => x.Created)
+                .FirstOrDefaultAsync(cancellationToken);
 
             return brandProfile?.ToDto();
         }

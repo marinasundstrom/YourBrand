@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Utilities;
 
+using YourBrand.AppService.Client;
 using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Theming;
@@ -51,13 +52,13 @@ await app.RunAsync();
 
 async Task LoadModules(IServiceCollection services)
 {
-    var http = builder.Services
+    var modulesClient = builder.Services
         .BuildServiceProvider()
-        .GetRequiredService<HttpClient>();
+        .GetRequiredService<IModulesClient>();
 
-    var entries = await http.GetFromJsonAsync<IEnumerable<ModuleDefinition>>($"{ServiceUrls.AppServiceUrl}/v1/Modules");
+    var moduleEntries = await modulesClient.GetModulesAsync();
 
-    entries!.Where(x => x.Enabled).ToList().ForEach(x =>
+    moduleEntries!.Where(x => x.Enabled).ToList().ForEach(x =>
         ModuleLoader.LoadModule(x.Name, Assembly.Load(x.Assembly), x.Enabled));
 
     ModuleLoader.AddServices(builder.Services);
@@ -65,41 +66,45 @@ async Task LoadModules(IServiceCollection services)
 
 async Task LoadBrandProfile(IServiceCollection services)
 {
-    var http = builder.Services
-        .BuildServiceProvider()
-        .GetRequiredService<HttpClient>();
-
     var themeManager = builder.Services
         .BuildServiceProvider()
         .GetRequiredService<IThemeManager>();
 
+    var brandProfileClient = builder.Services
+        .BuildServiceProvider()
+        .GetRequiredService<IBrandProfileClient>();
+
     themeManager.SetTheme(Themes.AppTheme);
 
-    var brandProfile = await http.GetFromJsonAsync<YourBrand.AppService.Client.BrandProfile>($"{ServiceUrls.AppServiceUrl}/v1/BrandProfile");
-
-    if (brandProfile is not null)
+    try 
     {
-        var theme = new MudTheme();
+        var brandProfile = await brandProfileClient.GetBrandProfileAsync();
 
-        if(brandProfile.BackgroundColor is not null) 
+        if (brandProfile is not null)
         {
-            theme.Palette.Background = brandProfile.BackgroundColor;
-        }
-        if (brandProfile.AppbarBackgroundColor is not null)
-        {
-            theme.Palette.AppbarBackground = brandProfile.AppbarBackgroundColor;
-        }
-        if (brandProfile.PrimaryColor is not null)
-        {
-            theme.Palette.Primary = brandProfile.PrimaryColor;
-        }
-        if (brandProfile.SecondaryColor is not null)
-        {
-            theme.Palette.Secondary = brandProfile.SecondaryColor;
-        }
+            var theme = new MudTheme();
 
-        themeManager.SetTheme(theme);
+            if(brandProfile.BackgroundColor is not null) 
+            {
+                theme.Palette.Background = brandProfile.BackgroundColor;
+            }
+            if (brandProfile.AppbarBackgroundColor is not null)
+            {
+                theme.Palette.AppbarBackground = brandProfile.AppbarBackgroundColor;
+            }
+            if (brandProfile.PrimaryColor is not null)
+            {
+                theme.Palette.Primary = brandProfile.PrimaryColor;
+            }
+            if (brandProfile.SecondaryColor is not null)
+            {
+                theme.Palette.Secondary = brandProfile.SecondaryColor;
+            }
+
+            themeManager.SetTheme(theme);
+        }
     }
+    catch(Exception) {}
 }
 
 sealed record ModuleEntry(Assembly Assembly, bool Enabled);

@@ -18,7 +18,7 @@ public class BrandProfileController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public async Task<ActionResult<BrandProfileDto>> GetBrandProfile(
         [FromServices] IMediator mediator, CancellationToken cancellationToken)
     {

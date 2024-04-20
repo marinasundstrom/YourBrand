@@ -106,7 +106,7 @@ public static class Seed
         {
             Name = "ACME",
             BackgroundColor = null,
-            AppbarBackgroundColor = "#1b3b5d",
+            AppbarBackgroundColor = "#3c6794",
             PrimaryColor = "#1c4168",
             SecondaryColor = "#ee1919"
         });
