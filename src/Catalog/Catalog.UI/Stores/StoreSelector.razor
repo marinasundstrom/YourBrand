@@ -50,6 +50,10 @@
 
             items = await StoreProvider.GetAvailableStoresAsync();
 
+            currentStore = StoreProvider.CurrentStore;
+
+            AppBarTrayItem.Name = currentStore?.Name;
+
             StateHasChanged();
         }
         catch 

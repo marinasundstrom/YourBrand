@@ -52,6 +52,8 @@
 
             currentOrganization = await OrganizationProvider.GetCurrentOrganizationAsync();
 
+            AppBarTrayItem.Name = currentOrganization?.Name;
+
             StateHasChanged();
         }
         catch 

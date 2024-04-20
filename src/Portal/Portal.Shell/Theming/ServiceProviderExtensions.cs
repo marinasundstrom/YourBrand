@@ -19,10 +19,10 @@ public static class ServiceProviderExtensions
         var appBarTray = services
             .GetRequiredService<IAppBarTrayService>();
 
-        var t = services.GetRequiredService<IStringLocalizer<AppBar.AppBar>>();
+        var t = services.GetRequiredService<IStringLocalizer<ColorSchemeSelector>>();
 
-        var themeSelectorId = "Shell.ThemeSelector";
+        var ColorSchemeSelectorId = "Shell.ColorSchemeSelector";
 
-        appBarTray.AddItem(new AppBarTrayItem(themeSelectorId, () => t["Theme"], typeof(ThemeSelector)));
+        appBarTray.AddItem(new AppBarTrayItem(ColorSchemeSelectorId, () => t["ColorScheme"], typeof(ColorSchemeSelector)));
     }
 }

@@ -125,6 +125,8 @@ public sealed class AppBarTrayItem
     public void Hide() => IsVisible = false;
 
     public void Show() => IsVisible = true;
+
+    public void Refresh() => Updated?.Invoke(this, EventArgs.Empty);
 }
 
 public sealed class AppBarTrayService : IAppBarTrayService, IDisposable

@@ -1,5 +1,6 @@
+@using YourBrand.Portal.AppBar
 @inject IThemeManager ThemeManager
-@inject IStringLocalizer<ThemeSelector> T
+@inject IStringLocalizer<ColorSchemeSelector> T
 
 <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
              PopoverClass="docs-layout-menu-shadow" ListClass="pa-0 docs-menu-list" LockScroll="true">
@@ -45,17 +46,24 @@
 @code {
     ColorScheme? _currentColorScheme;
 
+    [CascadingParameter]
+    public AppBarTrayItem AppBarTrayItem { get; set; } = default!;
+
     protected override void OnInitialized()
     {
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
 
         // INFO: Not useful since CurrentColorScheme has not been loaded yet.
         _currentColorScheme = ThemeManager.CurrentColorScheme;
+
+        AppBarTrayItem.NameFunc = () => T[_currentColorScheme?.ToString()];
     }
 
     private void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs e)
     {
         _currentColorScheme = e.ColorScheme;
+
+        AppBarTrayItem.Refresh();
 
         StateHasChanged();
     }
