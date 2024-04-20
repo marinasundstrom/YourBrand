@@ -24,4 +24,8 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
     }
 }
 
-public record BrandProfileDto(string Id, string? BackgroundColor, string? AppbarBackgroundColor, string? PrimaryColor, string? SecondaryColor);
+public record BrandProfileDto(string Id, string Name, string? Description, BrandColorsDto Colors);
+
+public record BrandColorsDto(BrandColorPaletteDto? Light, BrandColorPaletteDto? Dark);
+
+public record BrandColorPaletteDto(string? BackgroundColor, string? AppbarBackgroundColor, string? PrimaryColor, string? SecondaryColor);

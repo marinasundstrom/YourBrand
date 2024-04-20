@@ -96,19 +96,27 @@ public static class Seed
         context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
         {
             Name = "Default",
-            BackgroundColor = "rgb(248, 249, 250)",
-            AppbarBackgroundColor = "#137cdf",
-            PrimaryColor = "#4892d7",
-            SecondaryColor = "#ee1919"
+            Colors = new BrandColors() {
+                Light = new BrandColorPalette() {
+                    BackgroundColor = "rgb(248, 249, 250)",
+                    AppbarBackgroundColor = "#137cdf",
+                    PrimaryColor = "#4892d7",
+                    SecondaryColor = "#ee1919"
+                }
+            }
         });
 
         context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
         {
             Name = "ACME",
-            BackgroundColor = null,
-            AppbarBackgroundColor = "#3c6794",
-            PrimaryColor = "#1c4168",
-            SecondaryColor = "#ee1919"
+            Colors = new BrandColors {
+                Light = new BrandColorPalette {
+                    BackgroundColor = null,
+                    AppbarBackgroundColor = "#3c6794",
+                    PrimaryColor = "#1c4168",
+                    SecondaryColor = "#ee1919"
+                }
+            }
         });
 
         await context.SaveChangesAsync();

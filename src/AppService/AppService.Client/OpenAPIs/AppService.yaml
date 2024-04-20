@@ -351,6 +351,29 @@ components:
       properties:
         id:
           type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        colors:
+          $ref: '#/components/schemas/BrandColors'
+    BrandColors:
+      type: object
+      additionalProperties: false
+      properties:
+        light:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BrandColorPalette'
+        dark:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BrandColorPalette'
+    BrandColorPalette:
+      type: object
+      additionalProperties: false
+      properties:
         backgroundColor:
           type: string
           nullable: true
