@@ -1,11 +1,8 @@
-
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
-using YourBrand.Domain.Entities;
-using YourBrand.Identity;
 
 namespace YourBrand.Application.BrandProfiles;
 

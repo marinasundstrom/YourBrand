@@ -24,6 +24,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+    post:
+      tags:
+      - BrandProfile
+      operationId: BrandProfile_UpdateBrandProfile
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBrandProfileRequest'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandProfile'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/Modules:
     get:
       tags:
@@ -410,6 +435,17 @@ components:
         extensions:
           type: object
           additionalProperties: {}
+    UpdateBrandProfileRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        colors:
+          $ref: '#/components/schemas/BrandColors'
     Module:
       type: object
       additionalProperties: false

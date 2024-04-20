@@ -82,47 +82,7 @@ async Task LoadBrandProfile(IServiceCollection services)
 
         if (brandProfile is not null)
         {
-            var theme = new MudTheme();
-
-            if(brandProfile.Colors.Light is BrandColorPalette colorPalette) 
-            {
-                if (colorPalette.BackgroundColor is not null) 
-                {
-                    theme.Palette.Background = colorPalette.BackgroundColor;
-                }
-                if (colorPalette.AppbarBackgroundColor is not null)
-                {
-                    theme.Palette.AppbarBackground = colorPalette.AppbarBackgroundColor;
-                }
-                if (colorPalette.PrimaryColor is not null)
-                {
-                    theme.Palette.Primary = colorPalette.PrimaryColor;
-                }
-                if (colorPalette.SecondaryColor is not null)
-                {
-                    theme.Palette.Secondary = colorPalette.SecondaryColor;
-                }
-            }
-
-            if (brandProfile.Colors.Dark is BrandColorPalette colorPalette2)
-            {
-                if (colorPalette2.BackgroundColor is not null)
-                {
-                    theme.PaletteDark.Background = colorPalette2.BackgroundColor;
-                }
-                if (colorPalette2.AppbarBackgroundColor is not null)
-                {
-                    theme.PaletteDark.AppbarBackground = colorPalette2.AppbarBackgroundColor;
-                }
-                if (colorPalette2.PrimaryColor is not null)
-                {
-                    theme.PaletteDark.Primary = colorPalette2.PrimaryColor;
-                }
-                if (colorPalette2.SecondaryColor is not null)
-                {
-                    theme.PaletteDark.Secondary = colorPalette2.SecondaryColor;
-                }
-            }
+            var theme = BrandProfileToThemeConverter.Convert(brandProfile);
 
             themeManager.SetTheme(theme);
         }
