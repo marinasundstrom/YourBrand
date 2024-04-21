@@ -12,6 +12,10 @@ public class SubscriptionViewModel
     [Required]
     public SubscriptionPlan SubscriptionPlan { get; set; }
 
+    public DateTime? StartDate { get; set; } = DateTime.Now;
+
+    public TimeSpan? StartTime { get; set; }
+
     [Required]
     public Customers.Client.Customer Customer { get; set; }
 

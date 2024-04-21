@@ -32,9 +32,9 @@ public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParam
 
     public Guid? SubscriptionPlanId { get; set; }
 
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
 
-    public DateTime? EndDate { get; set; }
+    public DateOnly? EndDate { get; set; }
 
     public SubscriptionStatus Status { get; set; }
 
@@ -59,7 +59,7 @@ public class Subscription : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParam
     public int? OnDay { get; set; }
     public DayOfWeek? OnDayOfWeek { get; set; }
     public Month? InMonth { get; set; }
-    public TimeSpan StartTime { get; set; }
+    public TimeOnly? StartTime { get; set; }
     public TimeSpan? Duration { get; set; }
     public bool AutoRenew { get; set; }
 }

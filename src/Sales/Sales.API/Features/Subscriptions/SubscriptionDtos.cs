@@ -7,8 +7,8 @@ public class SubscriptionDto : Domain.Entities.ISubscriptionParameters
 {
     public Guid Id { get; set; }
     public SubscriptionPlanShortDto Plan { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly? EndDate { get; set; }
     public OrderShortDto? Order { get; set; }
     public string? OrderItemId { get; set; }
     public bool AutoRenew { get; set; }
@@ -21,6 +21,6 @@ public class SubscriptionDto : Domain.Entities.ISubscriptionParameters
     public int? OnDay { get; set; }
     public DayOfWeek? OnDayOfWeek { get; set; }
     public Month? InMonth { get; set; }
-    public TimeSpan StartTime { get; set; }
+    public TimeOnly? StartTime { get; set; }
     public TimeSpan? Duration { get; set; }
 }

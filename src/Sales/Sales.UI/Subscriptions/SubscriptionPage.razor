@@ -1,4 +1,5 @@
-﻿@using YourBrand.Portal.Services
+﻿@using System.Globalization
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 @inject ISubscriptionsClient SubscriptionsClient
 @inject IOrdersClient OrdersClient
@@ -30,11 +31,11 @@ else
             </MudItem>
 
             <MudItem xs="12" sm="12" md="6" lg="6">
-                <MudField Label="Start date" Class="mb-2">@subscription.StartDate.ToString("g")</MudField>
+                <MudField Label="Start date" Class="mb-2">@subscription.StartDate.ToString("o", CultureInfo.InvariantCulture)</MudField>
             </MudItem>
 
             <MudItem xs="12" sm="12" md="6" lg="6">
-                <MudField Label="End date" Class="mb-2">@subscription.EndDate?.ToString("g")</MudField>
+                <MudField Label="End date" Class="mb-2">@subscription.EndDate?.ToString("o", CultureInfo.InvariantCulture)</MudField>
             </MudItem>
 
             @if (subscription.Order is not null)

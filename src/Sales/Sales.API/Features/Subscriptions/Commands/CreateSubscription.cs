@@ -4,30 +4,37 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Persistence;
+using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
-public record CreateSubscription(string ProductId, Guid SubscriptionPlanId, string CustomerId, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest
+public record CreateSubscription(string OrganizationId, string ProductId, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
 {
-    public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscription>
+    public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscription, OrderDto>
     {
-        public async Task Handle(CreateSubscription request, CancellationToken cancellationToken)
+        public async Task<OrderDto> Handle(CreateSubscription request, CancellationToken cancellationToken)
         {
             var subscriptionPlan = await salesContext.SubscriptionPlans.FirstOrDefaultAsync(x => x.Id == request.SubscriptionPlanId);
 
             var subscription = new Subscription()
             {
                 SubscriptionPlan = subscriptionPlan!,
-
+                StartDate = request.StartDate,
+                StartTime = request.StartTime,
+                OrganizationId = request.OrganizationId
             };
 
             var order = new Order()
             {
+                OrganizationId = request.OrganizationId,
                 Customer = new Customer
                 {
-                    Id = request.CustomerId
+                    Id = request.Customer.Id,
+                    CustomerNo = 0,
+                    Name = request.Customer.Name
                 }
             };
 
@@ -65,7 +72,15 @@ public record CreateSubscription(string ProductId, Guid SubscriptionPlanId, stri
             orderItem.Subscription = subscription;
             orderItem.SubscriptionPlan = subscription.SubscriptionPlan;
 
+            salesContext.Orders.Add(order);
+
             await salesContext.SaveChangesAsync();
+
+            order = await salesContext.Orders
+                .IncludeAll()
+                .FirstAsync(x => x.Id == order.Id, cancellationToken);
+
+            return order.ToDto();
         }
 
         private Sales.Domain.ValueObjects.Address Map(AddressDto address)

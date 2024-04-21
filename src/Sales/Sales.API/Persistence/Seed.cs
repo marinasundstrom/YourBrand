@@ -21,32 +21,32 @@ public static class Seed
         context.OrderStatuses.Add(new OrderStatus("Canceled", "canceled", string.Empty));
 
         var subscriptionPlan0 = SubscriptionPlanFactory
-                    .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeSpan.Parse("16:00"), null)
+                    .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeOnly.Parse("16:00"), null)
                     .WithName("Bi-weekly subscription")
-                    .WithEndTime(TimeSpan.Parse("17:00"));
+                    .WithEndTime(TimeOnly.Parse("17:00"));
 
         context.SubscriptionPlans.Add(subscriptionPlan0);
 
         var subscriptionPlan = SubscriptionPlanFactory
-                   .CreateMonthlyPlan(1, 1, DayOfWeek.Tuesday, TimeSpan.Parse("10:30"), TimeSpan.Parse("00:30"))
+                   .CreateMonthlyPlan(1, 1, DayOfWeek.Tuesday, TimeOnly.Parse("10:30"), TimeSpan.Parse("00:30"))
                    .WithName("Monthly subscription 1");
 
         context.SubscriptionPlans.Add(subscriptionPlan);
 
         var subscriptionPlan2 = SubscriptionPlanFactory
-            .CreateMonthlyPlan(1, 1, DayOfWeek.Tuesday, TimeSpan.Parse("07:30"), null) // , TimeSpan.Parse("00:45"))
+            .CreateMonthlyPlan(1, 1, DayOfWeek.Tuesday, TimeOnly.Parse("07:30"), null) // , TimeSpan.Parse("00:45"))
             .WithName("Monthly subscription 2");
 
         context.SubscriptionPlans.Add(subscriptionPlan2);
 
         var subscriptionPlan3 = SubscriptionPlanFactory
-                    .CreateYearlyPlan(1, Month.April, 15, TimeSpan.Parse("14:30"), TimeSpan.Parse("00:30"))
+                    .CreateYearlyPlan(1, Month.April, 15, TimeOnly.Parse("14:30"), TimeSpan.Parse("00:30"))
                     .WithName("Yearly subscription 1");
 
         context.SubscriptionPlans.Add(subscriptionPlan3);
 
         var subscriptionPlan4 = SubscriptionPlanFactory
-                    .CreateYearlyPlan(1, Month.April, 3, DayOfWeek.Thursday, TimeSpan.Parse("09:00"), TimeSpan.Parse("00:20"))
+                    .CreateYearlyPlan(1, Month.April, 3, DayOfWeek.Thursday, TimeOnly.Parse("09:00"), TimeSpan.Parse("00:20"))
                     .WithName("Yearly subscription 2");
 
         context.SubscriptionPlans.Add(subscriptionPlan4);
@@ -54,8 +54,8 @@ public static class Seed
         var subscription = new Subscription()
         {
             SubscriptionPlan = subscriptionPlan,
-            StartDate = DateTime.Now,
-            EndDate = DateTime.Now.AddMonths(12),
+            StartDate = DateOnly.FromDateTime(DateTime.Now),
+            EndDate = DateOnly.FromDateTime(DateTime.Now).AddMonths(12),
             Status = SubscriptionStatus.Active,
             StatusDate = DateTime.Now
         };

@@ -49,7 +49,7 @@ public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionP
 
     public Month? InMonth { get; set; }
 
-    public TimeSpan StartTime { get; set; }
+    public TimeOnly? StartTime { get; set; }
 
     public TimeSpan? Duration { get; set; }
 
@@ -71,7 +71,7 @@ public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionP
         return this;
     }
 
-    public SubscriptionPlan WithEndTime(TimeSpan value)
+    public SubscriptionPlan WithEndTime(TimeOnly value)
     {
         Duration = value - StartTime;
 

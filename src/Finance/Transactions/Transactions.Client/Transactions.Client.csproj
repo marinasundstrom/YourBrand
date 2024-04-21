@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs/transactions.json" Options="/UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourBrand.Transactions.Client">
+		<OpenApiReference Include="OpenAPIs/transactions.json" Options="/JsonLibrary:SystemTextJson /UseBaseUrl:false /GenerateClientInterfaces:true" Namespace="YourBrand.Transactions.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>TransactionsClient.cs</OutputPath>
@@ -18,11 +18,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.2">
+		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="NSwag.ApiDescription.Client" Version="13.17.0">
+		<PackageReference Include="NSwag.ApiDescription.Client" Version="14.0.7">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

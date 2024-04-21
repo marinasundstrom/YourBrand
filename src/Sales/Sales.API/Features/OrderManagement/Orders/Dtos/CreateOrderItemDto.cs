@@ -6,6 +6,8 @@ public sealed class CreateOrderItemDto
 
     public string? ItemId { get; set; }
 
+    public Guid? SubscriptionPlanId { get; set; }
+
     public double Quantity { get; set; }
 
     public string? Unit { get; set; }

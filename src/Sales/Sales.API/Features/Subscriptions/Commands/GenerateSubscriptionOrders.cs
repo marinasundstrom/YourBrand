@@ -25,7 +25,7 @@ public record GenerateSubscriptionOrders(string OrganizationId, string OrderId) 
                 throw new System.Exception();
             }
 
-            var orders = subscriptionOrderGenerator.GetOrders(order, DateTime.Now, DateTime.Now.AddDays(25));
+            var orders = subscriptionOrderGenerator.GenerateOrders(order, DateTime.Now, DateTime.Now.AddDays(25));
 
             var orderNo = (await salesContext.Orders.MaxAsync(x => x.OrderNo)) + 1;
 

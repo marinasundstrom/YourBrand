@@ -2,7 +2,7 @@
 @using YourBrand.Sales
 @using YourBrand.Catalog
 @inject IOrdersClient OrdersClient
-@inject ISubscriptionsClient SubscriptionsClient
+@inject ISubscriptionPlansClient SubscriptionPlansClient
 @using Humanizer
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
@@ -132,7 +132,7 @@
 
     async Task Submit()
     {
-
+        //await SubscriptionPlansClient.
         MudDialog.Close();
     }
 

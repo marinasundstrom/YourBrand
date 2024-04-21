@@ -1,6 +1,6 @@
 ﻿using YourBrand.Sales.Domain.Entities;
 
-namespace YourBrand.Carts.UnitTests;
+namespace YourBrand.Sales.UnitTests;
 
 public class UnitTest1
 {

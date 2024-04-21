@@ -14,6 +14,6 @@ public interface ISubscriptionParameters
     int? OnDay { get; set; }
     DayOfWeek? OnDayOfWeek { get; set; }
     Month? InMonth { get; set; }
-    TimeSpan StartTime { get; set; }
+    TimeOnly? StartTime { get; set; }
     TimeSpan? Duration { get; set; }
 }

@@ -19,11 +19,23 @@
                 <SubscriptionPlanSelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Model.SubscriptionPlan"
                     For="() => Model.SubscriptionPlan" />
 
+                <MudGrid>
+                    <MudItem md="6">
+                        <MudDatePicker Variant="Variant.Outlined" Class="mb-4" Label="Start Date" @bind-Date="Model.StartDate"
+                            For="() => Model.StartDate" />
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudTimePicker Variant="Variant.Outlined" Class="mb-4" Label="Start Time" @bind-Time="Model.StartTime"
+                            For="() => Model.StartTime" />
+                    </MudItem>
+                </MudGrid>
+
             @* <MudNumericField Label="Price" @bind-Value="Model.Price" For="() => Model.Price" Class="mb-4">
             </MudNumericField> *@
 
                 <YourBrand.Customers.CustomerSelector Variant="Variant.Outlined" Class="mb-4"
-                    @bind-Value="Model.Customer"                For="() => Model.Customer" />
+                    @bind-Value="Model.Customer" For="() => Model.Customer" />
 
                 <MudTextField Variant="Variant.Outlined" Label="Notes" Lines="5" @bind-Value="Model.Notes"
                     For="() => Model.Notes" Class="mb-4">
@@ -53,22 +65,21 @@
 
     async Task Submit()
     {
-        var order = await OrdersClient.CreateOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, new CreateOrderRequest 
-        {
+        var organizationsId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+        
+        var order = await SubscriptionsClient.CreateSubscriptionAsync(organizationsId, new CreateSubscriptionRequest {
+            ProductId = Model.Product.Id.ToString(),
+            SubscriptionPlanId = Model.SubscriptionPlan.Id,
+            StartDate = DateOnly.FromDateTime(Model.StartDate.GetValueOrDefault()),
+            StartTime = Model.StartTime is null ? null : TimeOnly.FromTimeSpan(Model.StartTime.GetValueOrDefault()),
             Customer = new SetCustomer
             {
                 Id = Model.Customer.Id.ToString(),
-                Name = Model.Customer.Name      
+                Name = Model.Customer.Name
             },
-            Items = [
-                new CreateOrderItem 
-                {
-                    Description = Model.Product.Name,
-                    ItemId = Model.Product.Id.ToString(),
-                    UnitPrice = Model.Product.Price,
-                    Quantity = 1
-                }
-            ]
+            BillingDetails = null!,
+            ShippingDetails = null!,
+            Notes = Model.Notes!
         });
 
         MudDialog.Close(order);

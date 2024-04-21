@@ -18,7 +18,7 @@ public class SubscriptionPlanDto : Domain.Entities.ISubscriptionParameters
     public int? OnDay { get; set; }
     public DayOfWeek? OnDayOfWeek { get; set; }
     public Month? InMonth { get; set; }
-    public TimeSpan StartTime { get; set; }
+    public TimeOnly? StartTime { get; set; }
     public TimeSpan? Duration { get; set; }
 }
 

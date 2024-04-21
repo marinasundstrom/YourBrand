@@ -14,7 +14,7 @@ public class SubscriptionOrderDateGenerator
     /// </remarks>
     public IEnumerable<(DateTime Start, DateTime? End)> GetOrderDatesFromSubscription(Subscription subscription, DateTime? startDate = null, DateTime? endDate = null)
     {
-        DateTime? after = subscription.StartDate;
+        DateTime? after = subscription.StartDate.ToDateTime(TimeOnly.MinValue);
 
         (DateTime Start, DateTime? End)? current = null;
 
@@ -54,7 +54,7 @@ public class SubscriptionOrderDateGenerator
             throw new Exception("EndDate cannot occur before StartDate.");
         }
 
-        StartingBuilder? startingBuilder = Recurs.Starting(subscription.StartDate);
+        StartingBuilder? startingBuilder = Recurs.Starting(subscription.StartDate.ToDateTime(TimeOnly.MinValue));
 
         Console.WriteLine(subscriptionPlan!.GetDescription());
 
@@ -66,7 +66,7 @@ public class SubscriptionOrderDateGenerator
 
             if (subscription.EndDate is not null)
             {
-                dailyBuilder = dailyBuilder.Ending(subscription.EndDate.GetValueOrDefault());
+                dailyBuilder = dailyBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
             }
 
             recurring = dailyBuilder.Build();
@@ -80,7 +80,7 @@ public class SubscriptionOrderDateGenerator
 
             if (subscription.EndDate is not null)
             {
-                weeklyBuilder = weeklyBuilder.Ending(subscription.EndDate.GetValueOrDefault());
+                weeklyBuilder = weeklyBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
             }
 
             recurring = weeklyBuilder.Build();
@@ -110,7 +110,7 @@ public class SubscriptionOrderDateGenerator
 
             if (subscription.EndDate is not null)
             {
-                monthsBuilder = monthsBuilder.Ending(subscription.EndDate.GetValueOrDefault());
+                monthsBuilder = monthsBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
             }
 
             recurring = monthsBuilder.Build();
@@ -151,7 +151,7 @@ public class SubscriptionOrderDateGenerator
 
             if (subscription.EndDate is not null)
             {
-                yearsBuilder = yearsBuilder.Ending(subscription.EndDate.GetValueOrDefault());
+                yearsBuilder = yearsBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
             }
 
             recurring = yearsBuilder.Build();
@@ -164,7 +164,7 @@ public class SubscriptionOrderDateGenerator
 
         if (after is not null)
         {
-            var startDateTime = after.GetValueOrDefault().Add(subscriptionPlan.StartTime);
+            var startDateTime = after.GetValueOrDefault().Add(subscriptionPlan.StartTime.GetValueOrDefault().ToTimeSpan());
 
             DateTime? endDateTime = null;
 

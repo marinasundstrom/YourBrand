@@ -2,12 +2,12 @@
 using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Features.Subscriptions;
 
-namespace YourBrand.Carts.UnitTests;
+namespace YourBrand.Sales.UnitTests;
 
 public class UnitTest2
 {
     [Fact]
-    public void SumOfOrderLines()
+    public void GenerateSubscriptions()
     {
         Order order = new()
         {
@@ -54,15 +54,15 @@ public class UnitTest2
         var item = order.AddItem("Item 1", null, 250m, null, null, null, 2, null, 0.25, null);
 
         var subscriptionPlan = SubscriptionPlanFactory
-                          .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeSpan.Parse("16:00"), null)
+                          .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeOnly.Parse("16:00"), null)
                           .WithName("Bi-weekly subscription")
-                          .WithEndTime(TimeSpan.Parse("17:00"));
+                          .WithEndTime(TimeOnly.Parse("17:00"));
 
         var subscription = new Subscription()
         {
             SubscriptionPlan = subscriptionPlan,
-            StartDate = DateTime.Now,
-            EndDate = DateTime.Now.AddMonths(12),
+            StartDate = DateOnly.FromDateTime(DateTime.Now),
+            EndDate = DateOnly.FromDateTime(DateTime.Now).AddMonths(12),
             Status = SubscriptionStatus.Active,
             StatusDate = DateTime.Now
         };
@@ -74,6 +74,6 @@ public class UnitTest2
             new SubscriptionOrderDateGenerator()
         );
 
-        var orders = subscriptionOrderGenerator.GetOrders(order, DateTime.Now, DateTime.Now.AddMonths(12)).ToList();
+        var orders = subscriptionOrderGenerator.GenerateOrders(order, DateTime.Now, DateTime.Now.AddMonths(12)).ToList();
     }
 }

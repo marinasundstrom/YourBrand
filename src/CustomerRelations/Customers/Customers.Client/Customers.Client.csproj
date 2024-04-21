@@ -10,7 +10,7 @@
 
 	<ItemGroup>
         <OpenApiReference Include="OpenAPIs/customers.yaml"
-            Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime"
+            Options="/JsonLibrary:SystemTextJson /UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime"
             Namespace="YourBrand.Customers.Client">
 			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.yaml</SourceUri>
 			<ClassName>{controller}Client</ClassName>
@@ -19,11 +19,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.2">
+		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="NSwag.ApiDescription.Client" Version="13.17.0">
+		<PackageReference Include="NSwag.ApiDescription.Client" Version="14.0.7">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

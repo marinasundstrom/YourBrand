@@ -1,4 +1,5 @@
-﻿@using YourBrand.Sales
+﻿@using System.Globalization
+@using YourBrand.Sales
 @inject ISubscriptionsClient SubscriptionsClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
@@ -44,8 +45,8 @@
     <RowTemplate Context="subscription">
         <MudTd DataLabel="Id">@subscription.Id</MudTd>
         <MudTd DataLabel="Plan">@subscription.Plan.Name</MudTd>
-        <MudTd DataLabel="Start Date">@subscription.StartDate.ToString("g")</MudTd>
-        <MudTd DataLabel="End Date">@subscription.EndDate?.ToString("g")</MudTd>
+        <MudTd DataLabel="Start Date">@subscription.StartDate.ToString("o", CultureInfo.InvariantCulture)</MudTd>
+        <MudTd DataLabel="End Date">@subscription.EndDate?.ToString("o", CultureInfo.InvariantCulture)</MudTd>
         @*<MudTd>
             @if (subscription.Status.Id == 1)
             {
