@@ -74,6 +74,6 @@ public class UnitTest2
             new SubscriptionOrderDateGenerator()
         );
 
-        var orders = subscriptionOrderGenerator.GenerateOrders(order, DateTime.Now, DateTime.Now.AddMonths(12)).ToList();
+        var orders = subscriptionOrderGenerator.GenerateOrders(order, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now).AddMonths(12)).ToList();
     }
 }

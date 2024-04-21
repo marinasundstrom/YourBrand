@@ -7,7 +7,7 @@ public class SubscriptionOrderGenerator(
     OrderFactory orderFactory,
     SubscriptionOrderDateGenerator orderDateGenerator)
 {
-    public IEnumerable<Order> GenerateOrders(Order order, DateTime? startDate = null, DateTime? endDate = null)
+    public IEnumerable<Order> GenerateOrders(Order order, DateOnly? startDate = null, DateOnly? endDate = null)
     {
         if (order.Subscription is null)
         {

@@ -12,7 +12,7 @@ public class SubscriptionOrderDateGenerator
     /// <remarks>
     /// Make sure to pass dates without time.
     /// </remarks>
-    public IEnumerable<(DateTime Start, DateTime? End)> GetOrderDatesFromSubscription(Subscription subscription, DateTime? startDate = null, DateTime? endDate = null)
+    public IEnumerable<(DateTime Start, DateTime? End)> GetOrderDatesFromSubscription(Subscription subscription, DateOnly? startDate = null, DateOnly? endDate = null)
     {
         DateTime? after = subscription.StartDate.ToDateTime(TimeOnly.MinValue);
 
