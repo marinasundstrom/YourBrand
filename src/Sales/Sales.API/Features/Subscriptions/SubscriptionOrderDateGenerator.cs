@@ -18,9 +18,11 @@ public class SubscriptionOrderDateGenerator
 
         (DateTime Start, DateTime? End)? current = null;
 
+        var generator = GetGenerator(subscription);
+
         while (true)
         {
-            current = GetOrderDate(subscription, after.GetValueOrDefault());
+            current = GetOrderDate(generator, subscription.SubscriptionPlan!, after.GetValueOrDefault());
             after = current?.Start;
 
             if (current is null)
@@ -32,10 +34,7 @@ public class SubscriptionOrderDateGenerator
         }
     }
 
-    /// <remarks>
-    /// Make sure to pass date without time.
-    /// </remarks>
-    public (DateTime Start, DateTime? End)? GetOrderDate(Subscription subscription, DateTime? after)
+    public IRecurring GetGenerator(Subscription subscription)
     {
         IRecurring? recurring = null;
 
@@ -160,6 +159,11 @@ public class SubscriptionOrderDateGenerator
         if (recurring is null)
             throw new Exception();
 
+        return recurring;
+    }
+
+    public (DateTime Start, DateTime? End)? GetOrderDate(IRecurring recurring, SubscriptionPlan subscriptionPlan, DateTime? after)
+    {
         after = recurring.Next(after.GetValueOrDefault());
 
         if (after is not null)

@@ -75,10 +75,15 @@ else
             </MudTh>
             @*<MudTh>Type</MudTh>*@
             <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="Date">Date</MudTableSortLabel>
+                <MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel>
+                <MudTableSortLabel T="Order" SortLabel="PlannedStartDate"
+                    InitialDirection="MudBlazor.SortDirection.Ascending">Planned
+                    start</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel T="Order" SortLabel="ActualStartDate">Actual start</MudTableSortLabel>
             </MudTh>
             <MudTh>Sub Total</MudTh>
             <MudTh>VAT</MudTh>
@@ -94,8 +99,13 @@ else
         <RowTemplate Context="order">
             <MudTd DataLabel="Id">@order.OrderNo</MudTd>
             @*<MudTd DataLabel="Type">@order.Type</MudTd>*@
-            <MudTd DataLabel="Date">@order.Date.ToString("yyyy-MM-dd")</MudTd>
+            @*<MudTd DataLabel="Date">@order.Date.ToString("yyyy-MM-dd")</MudTd> *@
+
             <MudTd DataLabel="Status">@order.Status.Name</MudTd>
+
+            <MudTd DataLabel="PlannedStartDate">@order.PlannedStartDate?.ToString("yyyy-MM-dd")</MudTd>
+            <MudTd DataLabel="ActualStartDate">@order.ActualStartDate?.ToString("yyyy-MM-dd")</MudTd>
+
             <MudTd DataLabel="Sub Total">@order.SubTotal.FormatCurrency(order.Currency)</MudTd>
             <MudTd DataLabel="VAT">@order.Vat.FormatCurrency(order.Currency)</MudTd>
             <MudTd DataLabel="Discount">@order.Discount?.FormatCurrency(order.Currency)</MudTd>
