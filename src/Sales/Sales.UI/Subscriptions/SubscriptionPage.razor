@@ -47,88 +47,95 @@ else
         </MudGrid>
     </MudPaper>
 
-    <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
-        Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
-        <ToolBarContent>
-            <MudText Typo="Typo.h5" Class="mb-1">Orders</MudText>
-            @* <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
-            SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
-            @foreach (var type in Enum.GetValues<OrderType>())
-            {
-            <MudSelectItem T="OrderType?" Value="@type">@Enum.GetName(typeof(OrderType), type)</MudSelectItem>
-            }
-            </MudSelect> *@
-            <MudSpacer />
-            <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
-                SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"
-                ToStringFunc="(o) => o.Name" Class="mt-0">
-                @foreach (var status in orderStatuses)
+    @if(subscription.Status == 0) 
+    {
+        <MudButton Variant="Variant.Filled" OnClick="ActivateSubscription">Activate</MudButton>
+    } 
+    else 
+    {
+        <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+            Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+            <ToolBarContent>
+                <MudText Typo="Typo.h5" Class="mb-1">Orders</MudText>
+                @* <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
+                SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
+                @foreach (var type in Enum.GetValues<OrderType>())
                 {
-                    <MudSelectItem T="OrderStatus?" Value="@status">@status.Name</MudSelectItem>
+                <MudSelectItem T="OrderType?" Value="@type">@Enum.GetName(typeof(OrderType), type)</MudSelectItem>
                 }
-            </MudSelect>
-        </ToolBarContent>
+                </MudSelect> *@
+                <MudSpacer />
+                <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
+                    SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"
+                    ToStringFunc="(o) => o.Name" Class="mt-0">
+                    @foreach (var status in orderStatuses)
+                    {
+                        <MudSelectItem T="OrderStatus?" Value="@status">@status.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </ToolBarContent>
 
-        <HeaderContent>
-            <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="OrderNo">#</MudTableSortLabel>
-            </MudTh>
-            @*<MudTh>Type</MudTh>*@
-            <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="PlannedStartDate"
-                    InitialDirection="MudBlazor.SortDirection.Ascending">Planned
-                    start</MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="ActualStartDate">Actual start</MudTableSortLabel>
-            </MudTh>
-            <MudTh>Sub Total</MudTh>
-            <MudTh>VAT</MudTh>
-            <MudTh>Discount</MudTh>
-            <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="Total">Total</MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel T="Order" SortLabel="Created">Created</MudTableSortLabel>
-            </MudTh>
-            <MudTh></MudTh>
-        </HeaderContent>
-        <RowTemplate Context="order">
-            <MudTd DataLabel="Id">@order.OrderNo</MudTd>
-            @*<MudTd DataLabel="Type">@order.Type</MudTd>*@
-            @*<MudTd DataLabel="Date">@order.Date.ToString("yyyy-MM-dd")</MudTd> *@
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel T="Order" SortLabel="OrderNo">#</MudTableSortLabel>
+                </MudTh>
+                @*<MudTh>Type</MudTh>*@
+                <MudTh>
+                    <MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Order" SortLabel="PlannedStartDate"
+                        InitialDirection="MudBlazor.SortDirection.Ascending">Planned
+                        start</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Order" SortLabel="ActualStartDate">Actual start</MudTableSortLabel>
+                </MudTh>
+                <MudTh>Sub Total</MudTh>
+                <MudTh>VAT</MudTh>
+                <MudTh>Discount</MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Order" SortLabel="Total">Total</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Order" SortLabel="Created">Created</MudTableSortLabel>
+                </MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate Context="order">
+                <MudTd DataLabel="Id">@order.OrderNo</MudTd>
+                @*<MudTd DataLabel="Type">@order.Type</MudTd>*@
+                @*<MudTd DataLabel="Date">@order.Date.ToString("yyyy-MM-dd")</MudTd> *@
 
-            <MudTd DataLabel="Status">@order.Status.Name</MudTd>
+                <MudTd DataLabel="Status">@order.Status.Name</MudTd>
 
-            <MudTd DataLabel="PlannedStartDate">@order.PlannedStartDate?.ToString("yyyy-MM-dd")</MudTd>
-            <MudTd DataLabel="ActualStartDate">@order.ActualStartDate?.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd DataLabel="PlannedStartDate">@order.PlannedStartDate?.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd DataLabel="ActualStartDate">@order.ActualStartDate?.ToString("yyyy-MM-dd")</MudTd>
 
-            <MudTd DataLabel="Sub Total">@order.SubTotal.FormatCurrency(order.Currency)</MudTd>
-            <MudTd DataLabel="VAT">@order.Vat.FormatCurrency(order.Currency)</MudTd>
-            <MudTd DataLabel="Discount">@order.Discount?.FormatCurrency(order.Currency)</MudTd>
-            <MudTd DataLabel="Total">@order.Total.FormatCurrency(order.Currency)</MudTd>
-            <MudTd DataLabel="Created">@order.Created.ToString("yyyy-MM-dd")</MudTd>
-            <MudTd>
-                @*
-                <MudIconButton Icon="@Icons.Filled.FileDownload" Size="Size.Small"
-                Link="@($"/api/invoicing/orders/{order.OrderNo}/file")" @onclick:stopPropagation /> *@
-                @if (order.Status.Id == 1)
-                {
-                    <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small"
-                        OnClick="async (e) => await DeleteOrder(order)" />
-                }
-            </MudTd>
-        </RowTemplate>
-        <LoadingContent>
-            <MudText>Loading...</MudText>
-        </LoadingContent>
-        <PagerContent>
-            <MudTablePager />
-        </PagerContent>
-    </MudTable>
+                <MudTd DataLabel="Sub Total">@order.SubTotal.FormatCurrency(order.Currency)</MudTd>
+                <MudTd DataLabel="VAT">@order.Vat.FormatCurrency(order.Currency)</MudTd>
+                <MudTd DataLabel="Discount">@order.Discount?.FormatCurrency(order.Currency)</MudTd>
+                <MudTd DataLabel="Total">@order.Total.FormatCurrency(order.Currency)</MudTd>
+                <MudTd DataLabel="Created">@order.Created.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd>
+                    @*
+                    <MudIconButton Icon="@Icons.Filled.FileDownload" Size="Size.Small"
+                    Link="@($"/api/invoicing/orders/{order.OrderNo}/file")" @onclick:stopPropagation /> *@
+                    @if (order.Status.Id == 1)
+                    {
+                        <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small"
+                            OnClick="async (e) => await DeleteOrder(order)" />
+                    }
+                </MudTd>
+            </RowTemplate>
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    }
 }
 
 @code
@@ -201,5 +208,12 @@ else
 
         await OrdersClient.DeleteOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
         await table.ReloadServerData();
+    }
+
+    async Task ActivateSubscription() 
+    {
+        await OrdersClient.ActivateSubscriptionOrderAsync(organizationId, subscription.Order.Id);
+
+        subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(Guid.Parse(Id));
     }
 }

@@ -10,7 +10,7 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Subscriptions</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="CreateSubscription" Class="mb-2">New subscription</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="CreateSubscription" Class="mb-2 me-2">New subscription</MudButton>
 
 <MudButton Variant="Variant.Filled" OnClick="CreateSubscriptionPlan" Class="mb-2">New subscription plan</MudButton>
 
@@ -117,7 +117,7 @@
         var dialogParameters = new DialogParameters();
         //dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
 
-        var dialogRef = DialogService.Show<CreateSubscription>("New subscription", dialogParameters, new DialogOptions
+        var dialogRef = DialogService.Show<CreateSubscriptionOrder>("New subscription", dialogParameters, new DialogOptions
             {
                 FullWidth = true,
                 MaxWidth = MaxWidth.Small,

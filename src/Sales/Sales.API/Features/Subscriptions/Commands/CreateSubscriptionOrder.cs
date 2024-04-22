@@ -11,11 +11,11 @@ using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
-public record CreateSubscription(string OrganizationId, string ProductId, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
+public record CreateSubscriptionOrder(string OrganizationId, string ProductId, string ProductName, decimal Price, decimal? OriginalPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
 {
-    public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscription, OrderDto>
+    public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscriptionOrder, OrderDto>
     {
-        public async Task<OrderDto> Handle(CreateSubscription request, CancellationToken cancellationToken)
+        public async Task<OrderDto> Handle(CreateSubscriptionOrder request, CancellationToken cancellationToken)
         {
             var subscriptionPlan = await salesContext.SubscriptionPlans.FirstOrDefaultAsync(x => x.Id == request.SubscriptionPlanId);
 
@@ -36,7 +36,8 @@ public record CreateSubscription(string OrganizationId, string ProductId, Guid S
                     Id = request.Customer.Id,
                     CustomerNo = 0,
                     Name = request.Customer.Name
-                }
+                },
+                Subscription = subscription
             };
 
             order.BillingDetails = request.BillingDetails is null ? null : new BillingDetails
@@ -69,33 +70,14 @@ public record CreateSubscription(string OrganizationId, string ProductId, Guid S
                 order.OrderNo = 1; // Order start number
             }
 
-            var orderItem = order.AddItem("Foo", request.ProductId, 20, null, null, null, 1, null, 0.25, request.Notes);
+            var orderItem = order.AddItem("Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes);
             orderItem.Subscription = subscription;
             orderItem.SubscriptionPlan = subscription.SubscriptionPlan;
 
             salesContext.Orders.Add(order);
 
-            await salesContext.SaveChangesAsync();
-
-            var orders = subscriptionOrderGenerator.GenerateOrders(order, subscription.StartDate, subscription.EndDate).ToList();
-
-            var orderNo = (await salesContext.Orders.MaxAsync(x => x.OrderNo)) + 1;
-
-            foreach (var order2 in orders)
-            {
-                try
-                {
-                    order2.OrderNo = orderNo++;
-                    order2.OrganizationId = request.OrganizationId;
-                }
-                catch (InvalidOperationException e)
-                {
-                    order2.OrderNo = 1; // Order start number
-                }
-
-                salesContext.Orders.Add(order2);
-            }
-
+            subscription.Order = order;
+           
             await salesContext.SaveChangesAsync();
 
             order = await salesContext.Orders

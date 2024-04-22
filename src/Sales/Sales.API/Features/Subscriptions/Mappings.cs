@@ -12,6 +12,7 @@ public static class Mappings
         {
             Id = subscription.Id,
             Plan = ToShortDto(subscription.SubscriptionPlan!),
+            Status = subscription.Status,
             StartDate = subscription.StartDate,
             EndDate = subscription.EndDate,
             Order = subscription.Order?.ToShortDto(),

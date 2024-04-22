@@ -85,8 +85,8 @@ public static class Endpoints
         group.MapDelete("{id}/items/{itemId}", RemoveOrderItem)
             .WithName($"Orders_{nameof(RemoveOrderItem)}");
 
-        group.MapPost("{id}/generate", GenerateSubscriptionOrders)
-                    .WithName($"Orders_{nameof(GenerateSubscriptionOrders)}")
+        group.MapPost("{id}/subscription/activate", ActivateSubscriptionOrder)
+                    .WithName($"Orders_{nameof(ActivateSubscriptionOrder)}")
                     .AllowAnonymous();
 
         return app;
@@ -289,9 +289,9 @@ public static class Endpoints
         return TypedResults.Ok();
     }
 
-    private static async Task<Results<Ok, NotFound>> GenerateSubscriptionOrders(string organizationId, string id, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    private static async Task<Results<Ok, NotFound>> ActivateSubscriptionOrder(string organizationId, string id, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        await mediator.Send(new GenerateSubscriptionOrders(organizationId, id), cancellationToken);
+        await mediator.Send(new ActivateSubscriptionOrder(organizationId, id), cancellationToken);
 
         return TypedResults.Ok();
     }

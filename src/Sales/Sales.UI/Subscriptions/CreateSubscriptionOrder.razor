@@ -67,8 +67,11 @@
     {
         var organizationsId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
         
-        var order = await SubscriptionsClient.CreateSubscriptionAsync(organizationsId, new CreateSubscriptionRequest {
+        var order = await SubscriptionsClient.CreateSubscriptionOrderAsync(organizationsId, new CreateSubscriptionRequest {
             ProductId = Model.Product.Id.ToString(),
+            ProductName = Model.Product.Name,
+            Price = Model.Product.Price,
+            RegularPrice = Model.Product.RegularPrice,
             SubscriptionPlanId = Model.SubscriptionPlan.Id,
             StartDate = DateOnly.FromDateTime(Model.StartDate.GetValueOrDefault()),
             StartTime = Model.StartTime is null ? null : TimeOnly.FromTimeSpan(Model.StartTime.GetValueOrDefault()),

@@ -30,8 +30,8 @@ public static class Endpoints
         group.MapGet("/{id}", GetSubscriptionById)
             .WithName($"Subscriptions_{nameof(GetSubscriptionById)}");
 
-        group.MapPost("/", CreateSubscription)
-            .WithName($"Subscriptions_{nameof(CreateSubscription)}");
+        group.MapPost("/", CreateSubscriptionOrder)
+            .WithName($"Subscriptions_{nameof(CreateSubscriptionOrder)}");
 
         return app;
     }
@@ -46,16 +46,16 @@ public static class Endpoints
         return await mediator.Send(new GetSubscriptionQuery(id), cancellationToken);
     }
 
-    private static async Task<OrderDto> CreateSubscription(string organizationId, CreateSubscriptionRequest request, IMediator mediator, CancellationToken cancellationToken) 
+    private static async Task<OrderDto> CreateSubscriptionOrder(string organizationId, CreateSubscriptionRequest request, IMediator mediator, CancellationToken cancellationToken) 
     {
-        return await mediator.Send(new CreateSubscription(
+        return await mediator.Send(new CreateSubscriptionOrder(
             organizationId,
-            request.ProductId, request.SubscriptionPlanId, request.StartDate, request.StartTime, request.Customer,
+            request.ProductId, request.ProductName, request.Price, request.RegularPrice, request.SubscriptionPlanId, request.StartDate, request.StartTime, request.Customer,
             request.BillingDetails, request.ShippingDetails, request.Notes
         ), cancellationToken);
     }
 }
 
 public sealed record CreateSubscriptionRequest(
-    string ProductId, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, SetCustomerDto Customer,
+    string ProductId, string ProductName, decimal Price, decimal? RegularPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, SetCustomerDto Customer,
     BillingDetailsDto BillingDetails, ShippingDetailsDto ShippingDetails, string Notes);

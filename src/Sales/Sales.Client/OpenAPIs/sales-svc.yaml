@@ -568,12 +568,12 @@ paths:
           description: ''
         404:
           description: ''
-  /v1/orders/{id}/generate:
+  /v1/orders/{id}/subscription/activate:
     post:
       tags:
       - Orders
       - Orders
-      operationId: Orders_GenerateSubscriptionOrders
+      operationId: Orders_ActivateSubscriptionOrder
       parameters:
       - name: organizationId
         in: query
@@ -780,7 +780,7 @@ paths:
       tags:
       - Subscriptions
       - Subscriptions
-      operationId: Subscriptions_CreateSubscription
+      operationId: Subscriptions_CreateSubscriptionOrder
       parameters:
       - name: organizationId
         in: query
@@ -1197,6 +1197,8 @@ components:
           format: guid
         plan:
           $ref: '#/components/schemas/SubscriptionPlanShort'
+        status:
+          $ref: '#/components/schemas/SubscriptionStatus'
         startDate:
           type: string
           format: date
@@ -1271,6 +1273,19 @@ components:
           type: number
           format: decimal
           nullable: true
+    SubscriptionStatus:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Created
+      - Active
+      - Suspended
+      - Canceled
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
     OrderShort:
       type: object
       additionalProperties: false
@@ -1809,6 +1824,15 @@ components:
       properties:
         productId:
           type: string
+        productName:
+          type: string
+        price:
+          type: number
+          format: decimal
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
         subscriptionPlanId:
           type: string
           format: guid
