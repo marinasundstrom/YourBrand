@@ -24,23 +24,15 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
+    public sealed class Handler(IOrderRepository orderRepository, OrderNumberFetcher orderNumberFetcher, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(CreateDraftOrder request, CancellationToken cancellationToken)
         {
             var order = new Order();
 
-            try
-            {
-                order.OrderNo = (await orderRepository
-                    .GetAll()
-                    .InOrganization(request.OrganizationId)
-                    .MaxAsync(x => x.OrderNo)) + 1;
-            }
-            catch (InvalidOperationException e)
-            {
-                order.OrderNo = 1; // Order start number
-            }
+            int orderNo;
+
+            order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
             order.OrganizationId = request.OrganizationId;
 

@@ -2,13 +2,15 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
 public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) : IRequest
 {
-    public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<ActivateSubscriptionOrder>
+    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<ActivateSubscriptionOrder>
     {
         public async Task Handle(ActivateSubscriptionOrder request, CancellationToken cancellationToken)
         {
@@ -30,7 +32,7 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
             var orders = subscriptionOrderGenerator.GenerateOrders(order, subscription.StartDate, subscription.EndDate);
 
-            var orderNo = (await salesContext.Orders.MaxAsync(x => x.OrderNo)) + 1;
+            var orderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
             foreach (var order2 in orders)
             {

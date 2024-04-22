@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Persistence;
 using YourBrand.Sales.Persistence.Repositories.Mocks;
@@ -13,7 +14,7 @@ namespace YourBrand.Sales.Features.Subscriptions;
 
 public record CreateSubscriptionOrder(string OrganizationId, string ProductId, string ProductName, decimal Price, decimal? OriginalPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
 {
-    public class Handler(SalesContext salesContext, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscriptionOrder, OrderDto>
+    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher, SubscriptionNumberFetcher subscriptionNumberFetcher, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscriptionOrder, OrderDto>
     {
         public async Task<OrderDto> Handle(CreateSubscriptionOrder request, CancellationToken cancellationToken)
         {
@@ -28,17 +29,7 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
                 OrganizationId = request.OrganizationId
             };
 
-            var subscriptionNo = (await salesContext.Subscriptions
-                .MaxAsync(x => x.SubscriptionNo)) + 1;
-
-            try
-            {
-                subscription.SubscriptionNo = subscriptionNo;
-            }
-            catch (InvalidOperationException e)
-            {
-                subscription.SubscriptionNo = 1; 
-            }
+            subscription.SubscriptionNo = await subscriptionNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
             var order = new Order()
             {
@@ -73,20 +64,15 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
                 };
             }
 
-            try
-            {
-                order.OrderNo = (await salesContext.Orders.MaxAsync(x => x.OrderNo)) + 1;
-            }
-            catch (InvalidOperationException e)
-            {
-                order.OrderNo = 1; // Order start number
-            }
+            order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
             var orderItem = order.AddItem("Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes);
             orderItem.Subscription = subscription;
             orderItem.SubscriptionPlan = subscription.SubscriptionPlan;
 
             salesContext.Orders.Add(order);
+
+            await salesContext.SaveChangesAsync();
 
             subscription.Order = order;
            

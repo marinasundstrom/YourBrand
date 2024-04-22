@@ -25,23 +25,13 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateOrder, Result<OrderDto>>
+    public sealed class Handler(OrderNumberFetcher orderNumberFetcher, IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateOrder, Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
             var order = new Order();
 
-            try
-            {
-                order.OrderNo = (await orderRepository
-                    .GetAll()
-                    .InOrganization(request.OrganizationId)
-                    .MaxAsync(x => x.OrderNo)) + 1;
-            }
-            catch (InvalidOperationException e)
-            {
-                order.OrderNo = 1; // Order start number
-            }
+            order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
             const int OrderStatusDraft = 1;
 

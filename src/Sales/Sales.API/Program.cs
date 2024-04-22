@@ -14,6 +14,8 @@ using YourBrand.Notifications.Client;
 using YourBrand.Sales;
 using YourBrand.Sales.Features;
 using YourBrand.Sales.Features.OrderManagement.Orders;
+using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
+using YourBrand.Sales.Features.Subscriptions;
 using YourBrand.Sales.Infrastructure;
 using YourBrand.Sales.Persistence;
 
@@ -88,6 +90,9 @@ builder.Services
 builder.Services
     .AddUserContext()
     .AddTenantContext();
+
+builder.Services.AddScoped<OrderNumberFetcher>();
+builder.Services.AddScoped<SubscriptionNumberFetcher>();
 
 builder.Services.AddNotificationsClients((sp, http) =>
 {
