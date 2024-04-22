@@ -29,7 +29,7 @@
 
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel T="Subscription" SortLabel="Id">Id</MudTableSortLabel>
+            <MudTableSortLabel T="Subscription" SortLabel="SubscriptionNo">No</MudTableSortLabel>
         </MudTh>
         <MudTh>
             <MudTableSortLabel T="Subscription" SortLabel="Plan">Plan</MudTableSortLabel>
@@ -43,7 +43,7 @@
         @*<MudTh></MudTh>*@
     </HeaderContent>
     <RowTemplate Context="subscription">
-        <MudTd DataLabel="Id">@subscription.Id</MudTd>
+        <MudTd DataLabel="SubscriptionNo">@subscription.SubscriptionNo</MudTd>
         <MudTd DataLabel="Plan">@subscription.Plan.Name</MudTd>
         <MudTd DataLabel="Start Date">@subscription.StartDate.ToString("o", CultureInfo.InvariantCulture)</MudTd>
         <MudTd DataLabel="End Date">@subscription.EndDate?.ToString("o", CultureInfo.InvariantCulture)</MudTd>
@@ -96,7 +96,7 @@
 
     public async Task GoTo(Subscription subscription)
     {
-        NavigationManager.NavigateTo($"/subscriptions/{subscription.Id}");
+        NavigationManager.NavigateTo($"/subscriptions/{subscription.SubscriptionNo}");
     }
 
     /*

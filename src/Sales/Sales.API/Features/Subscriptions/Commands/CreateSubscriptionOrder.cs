@@ -28,6 +28,18 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
                 OrganizationId = request.OrganizationId
             };
 
+            var subscriptionNo = (await salesContext.Subscriptions
+                .MaxAsync(x => x.SubscriptionNo)) + 1;
+
+            try
+            {
+                subscription.SubscriptionNo = subscriptionNo;
+            }
+            catch (InvalidOperationException e)
+            {
+                subscription.SubscriptionNo = 1; 
+            }
+
             var order = new Order()
             {
                 OrganizationId = request.OrganizationId,

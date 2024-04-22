@@ -30,6 +30,9 @@ public static class Endpoints
         group.MapGet("/{id}", GetSubscriptionById)
             .WithName($"Subscriptions_{nameof(GetSubscriptionById)}");
 
+        group.MapGet("/getByNo/{subscriptionNo}", GetSubscriptionByNo)
+            .WithName($"Subscriptions_{nameof(GetSubscriptionByNo)}");
+
         group.MapPost("/", CreateSubscriptionOrder)
             .WithName($"Subscriptions_{nameof(CreateSubscriptionOrder)}");
 
@@ -44,6 +47,13 @@ public static class Endpoints
     private static async Task<SubscriptionDto> GetSubscriptionById(Guid id, IMediator mediator, CancellationToken cancellationToken)
     {
         return await mediator.Send(new GetSubscriptionQuery(id), cancellationToken);
+    }
+
+    private static async Task<SubscriptionDto> GetSubscriptionByNo(string organizationId, int subscriptionNo, IMediator mediator, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetSubscriptionByNo(organizationId, subscriptionNo), cancellationToken);
+
+        return result.GetValue();
     }
 
     private static async Task<OrderDto> CreateSubscriptionOrder(string organizationId, CreateSubscriptionRequest request, IMediator mediator, CancellationToken cancellationToken) 

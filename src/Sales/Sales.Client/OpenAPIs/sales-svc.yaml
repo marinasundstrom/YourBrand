@@ -824,6 +824,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscription'
+  /v1/subscriptions/getByNo/{subscriptionNo}:
+    get:
+      tags:
+      - Subscriptions
+      - Subscriptions
+      operationId: Subscriptions_GetSubscriptionByNo
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: subscriptionNo
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
   /v1/Users:
     get:
       tags:
@@ -1195,6 +1222,9 @@ components:
         id:
           type: string
           format: guid
+        subscriptionNo:
+          type: integer
+          format: int32
         plan:
           $ref: '#/components/schemas/SubscriptionPlanShort'
         status:

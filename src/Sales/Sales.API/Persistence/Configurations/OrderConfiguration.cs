@@ -11,9 +11,9 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.ToTable("Orders");
 
-        builder.HasIndex(x => x.TenantId);
-
         builder.HasAlternateKey(o => new { o.OrganizationId, o.OrderNo });
+
+        builder.HasIndex(x => x.TenantId);
 
         builder.HasMany(order => order.Items)
             .WithOne(orderItem => orderItem.Order)

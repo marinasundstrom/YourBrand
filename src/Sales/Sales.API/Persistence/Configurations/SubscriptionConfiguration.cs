@@ -12,7 +12,7 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     {
         builder.ToTable("Subscriptions");
 
-        //builder.HasAlternateKey(o => new { o.OrganizationId, o.SubscriptionNo });
+        builder.HasAlternateKey(o => new { o.OrganizationId, o.SubscriptionNo });
 
         builder.HasIndex(x => x.TenantId);
 

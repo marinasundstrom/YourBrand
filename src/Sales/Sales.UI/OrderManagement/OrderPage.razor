@@ -18,7 +18,7 @@
 {
     <AppPageTitle>Order #@OrderNo</AppPageTitle>
 
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Order #@OrderNo</MudText>
+    <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">Order #@OrderNo</MudText>
 
     <div class="mb-4">
         <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/orders/{Id}/file")">
@@ -71,8 +71,8 @@
                     {
                         <MudItem xs="12" sm="12" md="12" lg="12">
                             <MudField Label="Subscription" Class="mb-2">
-                                <a href="@($"/subscriptions/{order.Subscription.Id}")">
-                                    @order.Subscription.Plan.Name (@order.Subscription.Plan.Id)
+                                <a href="@($"/subscriptions/{order.Subscription.SubscriptionNo}")">
+                                    #@order.Subscription.SubscriptionNo (@order.Subscription.Plan.Name)
                                 </a>
                             </MudField>
                         </MudItem>

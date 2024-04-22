@@ -8,7 +8,7 @@
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 
-@page "/subscriptions/{Id}"
+@page "/subscriptions/{SubscriptionNo:int}"
 
 @if (subscription is null) 
 {
@@ -16,9 +16,9 @@
 }
 else 
 {
-    <AppPageTitle>Subscription @Id</AppPageTitle>
+    <AppPageTitle>Subscription @SubscriptionNo</AppPageTitle>
 
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Subscription @Id</MudText>
+    <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">Subscription @SubscriptionNo</MudText>
 
     <MudPaper Class="pa-8 mb-8">
         <MudGrid Class="mb-4">
@@ -143,7 +143,7 @@ else
     Subscription? subscription;
 
     [Parameter]
-    public string Id { get; set; }
+    public int SubscriptionNo { get; set; }
 
     CancellationTokenSource cts = new();
     MudTable<YourBrand.Sales.Order> table;
@@ -158,7 +158,7 @@ else
     {
         organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-        subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(Guid.Parse(Id));
+        subscription = await SubscriptionsClient.GetSubscriptionByNoAsync(organizationId, SubscriptionNo);
 
         orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
     }
@@ -169,7 +169,7 @@ else
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(organizationId, selectedStatuses?.Select(x => x.Id), null, null, null, Guid.Parse(Id), state.Page +
+            var result = await OrdersClient.GetOrdersAsync(organizationId, selectedStatuses?.Select(x => x.Id), null, null, null, subscription.Id, state.Page +
             1,
             state.PageSize,
             state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
@@ -214,6 +214,6 @@ else
     {
         await OrdersClient.ActivateSubscriptionOrderAsync(organizationId, subscription.Order.Id);
 
-        subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(Guid.Parse(Id));
+        subscription = await SubscriptionsClient.GetSubscriptionByIdAsync(subscription.Id);
     }
 }
