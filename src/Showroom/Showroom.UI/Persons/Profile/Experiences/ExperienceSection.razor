@@ -44,7 +44,7 @@
 </MudCard>
 
 @code {
-    private List<ExperienceDto>? experiences = new List<ExperienceDto>();
+    private List<Experience>? experiences = new List<Experience>();
 
     bool isLoading = false;
 
@@ -93,7 +93,7 @@
         StateHasChanged();
     }
 
-    private async Task AddOrEditExperience(ExperienceDto? experience)
+    private async Task AddOrEditExperience(Experience? experience)
     {
         var parameters = new DialogParameters();
         parameters.Add(nameof(ExperienceDialog.PersonProfileId), PersonProfileId);
@@ -112,7 +112,7 @@
         total = experiencesResult.TotalCount;
     }
 
-    async Task DeleteExperience(ExperienceDto experience)
+    async Task DeleteExperience(Experience experience)
     {
         try
         {

@@ -42,7 +42,7 @@
     public string? SkillId { get; set; } = null!;
 
     [Required]
-    public SkillAreaDto Area { get; set; }
+    public SkillArea Area { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -63,7 +63,7 @@
     {
         if(SkillId is null) 
         {
-            var skill = await SkillsClient.CreateSkillAsync(new CreateSkillDto {
+            var skill = await SkillsClient.CreateSkillAsync(new CreateSkill {
                 SkillAreaId = Area.Id,
                 Name = Name
             });
@@ -74,7 +74,7 @@
         {
             if (context.IsModified())
             {
-                await SkillsClient.UpdateSkillAsync(SkillId, new UpdateSkillDto
+                await SkillsClient.UpdateSkillAsync(SkillId, new UpdateSkill
                 {
                     SkillAreaId = Area.Id,
                     Name = Name

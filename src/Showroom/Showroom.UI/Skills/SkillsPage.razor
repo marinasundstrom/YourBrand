@@ -18,7 +18,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="SkillDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="Skill" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
             <SkillAreaSelector Label="Area" Value="SkillArea" ValueChanged="OnSkillAreaChanged" For="() => SkillArea" />
@@ -28,9 +28,9 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Area">Area</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="SkillDto" SortLabel="Area.Industry">Industry</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Skill" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Skill" SortLabel="Area">Area</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Skill" SortLabel="Area.Industry">Industry</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -45,17 +45,17 @@
 
 
 @code {
-    MudTable<SkillDto> table; 
+    MudTable<Skill> table; 
     string? searchString;
 
-    public SkillAreaDto SkillArea { get; set; }
+    public SkillArea SkillArea { get; set; }
 
-    private async Task<TableData<SkillDto>> LoadData(TableState state)
+    private async Task<TableData<Skill>> LoadData(TableState state)
     {
         try
         {
             var results = await SkillsClient.GetSkillsAsync(state.Page + 1, state.PageSize, SkillArea?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
-            return new TableData<SkillDto> { Items = results.Items, TotalItems = results.TotalCount };
+            return new TableData<Skill> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
         {
@@ -71,7 +71,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<SkillDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Skill> ev)
     {
         var item = ev.Item;
 
@@ -84,13 +84,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnSkillAreaChanged(SkillAreaDto sa)
+    private async Task OnSkillAreaChanged(SkillArea sa)
     {
         SkillArea = sa;
         table.ReloadServerData();
     }
 
-    async Task OnSkillClicked(SkillDto? dto)
+    async Task OnSkillClicked(Skill? dto)
     {
         try
         {

@@ -51,7 +51,7 @@ public static class Mapper
     {
         // organization.Id, organization.Name, competenceArea.Created, competenceArea.CreatedBy?.ToDto(), competenceArea.LastModified, competenceArea.LastModifiedBy?.ToDto(
 
-        return new OrganizationDto(organization.Id, organization.Name, organization.Address.ToDto());
+        return new OrganizationDto(organization.Id, organization.Name, organization.Address?.ToDto());
     }
 
     public static AddressDto ToDto(this Domain.ValueObjects.Address address)

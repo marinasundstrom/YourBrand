@@ -1,0 +1,2284 @@
+x-generator: NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Showroom
+  version: v1
+servers:
+- url: https://localhost:5070
+paths:
+  /Cases:
+    get:
+      tags:
+      - Cases
+      operationId: Cases_GetCases
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfCase'
+    post:
+      tags:
+      - Cases
+      operationId: Cases_CreateCase
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCase'
+        required: true
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+  /Cases/{id}:
+    get:
+      tags:
+      - Cases
+      operationId: Cases_GetCase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+    put:
+      tags:
+      - Cases
+      operationId: Cases_UpdateCase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCase'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Cases
+      operationId: Cases_DeleteCase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Companies:
+    get:
+      tags:
+      - Companies
+      operationId: Companies_GetCompanies
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: industryId
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfCompany'
+    post:
+      tags:
+      - Companies
+      operationId: Companies_CreateCompany
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompany'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  /Companies/{id}:
+    get:
+      tags:
+      - Companies
+      operationId: Companies_GetCompany
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    put:
+      tags:
+      - Companies
+      operationId: Companies_UpdateCompany
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompany'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Companies
+      operationId: Companies_DeleteCompany
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /CompetenceAreas:
+    get:
+      tags:
+      - CompetenceAreas
+      operationId: CompetenceAreas_GetCompetenceAreas
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfCompetenceArea'
+    post:
+      tags:
+      - CompetenceAreas
+      operationId: CompetenceAreas_CreateCompetenceArea
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompetenceArea'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompetenceArea'
+  /CompetenceAreas/{id}:
+    get:
+      tags:
+      - CompetenceAreas
+      operationId: CompetenceAreas_GetCompetenceArea
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompetenceArea'
+    put:
+      tags:
+      - CompetenceAreas
+      operationId: CompetenceAreas_UpdateCompetenceArea
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompetenceArea'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - CompetenceAreas
+      operationId: CompetenceAreas_DeleteCompetenceArea
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Industries:
+    get:
+      tags:
+      - Industries
+      operationId: Industries_GetIndustries
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfIndustry'
+    post:
+      tags:
+      - Industries
+      operationId: Industries_CreateIndustry
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIndustry'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Industry'
+  /Industries/{id}:
+    get:
+      tags:
+      - Industries
+      operationId: Industries_GetIndustry
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Industry'
+    put:
+      tags:
+      - Industries
+      operationId: Industries_UpdateIndustry
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIndustry'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Industries
+      operationId: Industries_DeleteIndustry
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Organizations:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganizations
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfOrganization'
+    post:
+      tags:
+      - Organizations
+      operationId: Organizations_CreateOrganization
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganization'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Organizations/{id}:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    put:
+      tags:
+      - Organizations
+      operationId: Organizations_UpdateOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganization'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Organizations
+      operationId: Organizations_DeleteOrganization
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /PersonProfiles:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetPersonProfiles
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: competenceAreaId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: availableFrom
+        in: query
+        schema:
+          type: string
+          format: date-time
+          nullable: true
+        x-position: 5
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 8
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfPersonProfile'
+    post:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_CreatePersonProfile
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonProfile'
+        required: true
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonProfile'
+  /PersonProfiles/Find:
+    post:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_FindPersonProfiles
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      requestBody:
+        x-name: query
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonProfileQuery'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfPersonProfile'
+  /PersonProfiles/{id}:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetPersonProfile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonProfile'
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdatePersonProfile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonProfile'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_DeletePersonProfile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Details:
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdateDetails
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonProfileDetails'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Headline:
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdateHeadline
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: text
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Presentation:
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdatePresentation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: text
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Picture:
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdatePicture
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Experiences:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetExperiences
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfExperience'
+    post:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_AddExperience
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExperience'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Experiences/{experienceId}:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetExperience
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: experienceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Experience'
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdateExperience
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: experienceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExperience'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_RemoveExperience
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: experienceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Skills:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetSkills
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfPersonProfileSkill'
+    post:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_AddSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPersonProfileSkill'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonProfileSkill'
+  /PersonProfiles/{id}/Skills/{skillId}:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: skillId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonProfileSkillExperiences'
+    put:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdateSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: skillId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonProfileSkill'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonProfileSkill'
+    delete:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_RemoveSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: skillId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /PersonProfiles/{id}/Skills/{skillId}/Experiences:
+    post:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_UpdateSkillExperiences
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: skillId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: experiences
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UpdateSkillExperience'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /SkillAreas:
+    get:
+      tags:
+      - SkillAreas
+      operationId: SkillAreas_GetSkillAreas
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: industryId
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfSkillArea'
+    post:
+      tags:
+      - SkillAreas
+      operationId: SkillAreas_CreateSkillArea
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSkillArea'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /SkillAreas/{id}:
+    get:
+      tags:
+      - SkillAreas
+      operationId: SkillAreas_GetSkillArea
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillArea'
+    put:
+      tags:
+      - SkillAreas
+      operationId: SkillAreas_UpdateSkillArea
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSkillArea'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - SkillAreas
+      operationId: SkillAreas_DeleteSkillArea
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+  /Skills:
+    get:
+      tags:
+      - Skills
+      operationId: Skills_GetSkills
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: skillAreaId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfSkill'
+    post:
+      tags:
+      - Skills
+      operationId: Skills_CreateSkill
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSkill'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+  /Skills/{id}:
+    get:
+      tags:
+      - Skills
+      operationId: Skills_GetSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+    put:
+      tags:
+      - Skills
+      operationId: Skills_UpdateSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSkill'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Skills
+      operationId: Skills_DeleteSkill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+components:
+  schemas:
+    ResultsOfCase:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Case'
+        totalCount:
+          type: integer
+          format: int32
+    Case:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+          nullable: true
+        caseProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseProfile'
+        pricing:
+          $ref: '#/components/schemas/CasePricing'
+    CaseProfile:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        profile:
+          $ref: '#/components/schemas/PersonProfile'
+        presentation:
+          type: string
+          nullable: true
+    PersonProfile:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date-time
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        industry:
+          $ref: '#/components/schemas/Industry'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        competenceArea:
+          $ref: '#/components/schemas/CompetenceArea'
+        profileImage:
+          type: string
+          nullable: true
+        headline:
+          type: string
+        shortPresentation:
+          type: string
+        presentation:
+          type: string
+        profileVideo:
+          type: string
+          nullable: true
+        availableFromDate:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+    Industry:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        address:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        postalCode:
+          type: string
+        locality:
+          type: string
+        subAdminArea:
+          type: string
+        adminArea:
+          type: string
+        country:
+          type: string
+    CompetenceArea:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CasePricing:
+      type: object
+      additionalProperties: false
+      properties:
+        hourlyPrice:
+          type: number
+          format: decimal
+          nullable: true
+        hours:
+          type: number
+          format: double
+          nullable: true
+        total:
+          type: number
+          format: decimal
+          nullable: true
+    SortDirection:
+      type: string
+      description: ''
+      x-enumNames:
+      - Desc
+      - Asc
+      enum:
+      - Desc
+      - Asc
+    ProblemDetails:
+      type: object
+      additionalProperties:
+        nullable: true
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+        extensions:
+          type: object
+          additionalProperties: {}
+    CreateCase:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          nullable: true
+        pricing:
+          $ref: '#/components/schemas/UpdatePricing'
+    UpdatePricing:
+      type: object
+      additionalProperties: false
+      properties:
+        hourlyPrice:
+          type: number
+          format: decimal
+          nullable: true
+        hours:
+          type: number
+          format: double
+          nullable: true
+    UpdateCase:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          nullable: true
+    ResultsOfCompany:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+        totalCount:
+          type: integer
+          format: int32
+    Company:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        logo:
+          type: string
+          nullable: true
+        link:
+          type: string
+          nullable: true
+        industry:
+          $ref: '#/components/schemas/Industry'
+    CreateCompany:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        industryId:
+          type: integer
+          format: int32
+    UpdateCompany:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        industryId:
+          type: integer
+          format: int32
+    ResultsOfCompetenceArea:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompetenceArea'
+        totalCount:
+          type: integer
+          format: int32
+    CreateCompetenceArea:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    UpdateCompetenceArea:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    ResultsOfIndustry:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Industry'
+        totalCount:
+          type: integer
+          format: int32
+    CreateIndustry:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    UpdateIndustry:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    ResultsOfOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        totalCount:
+          type: integer
+          format: int32
+    CreateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    UpdateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    ResultsOfPersonProfile:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonProfile'
+        totalCount:
+          type: integer
+          format: int32
+    PersonProfileQuery:
+      type: object
+      additionalProperties: false
+      properties:
+        searchString:
+          type: string
+          nullable: true
+        industryId:
+          type: integer
+          format: int32
+          nullable: true
+        titleId:
+          type: integer
+          format: int32
+          nullable: true
+        organizationId:
+          type: string
+          nullable: true
+        competenceAreaId:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuerySkill'
+        experiences:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryExperience'
+    QuerySkill:
+      type: object
+      additionalProperties: false
+      properties:
+        skillId:
+          type: string
+        level:
+          $ref: '#/components/schemas/SkillLevel'
+    SkillLevel:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Novice
+      - AdvancedBeginner
+      - Competent
+      - Proficient
+      - Expert
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    QueryExperience:
+      type: object
+      additionalProperties: false
+      properties:
+        condition:
+          $ref: '#/components/schemas/ConditionalOperator'
+        industryId:
+          type: integer
+          format: int32
+        years:
+          type: integer
+          format: int32
+    ConditionalOperator:
+      type: integer
+      description: ''
+      x-enumNames:
+      - And
+      - Or
+      enum:
+      - 1
+      - 2
+    CreatePersonProfile:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        organizationId:
+          type: string
+        industryId:
+          type: integer
+          format: int32
+        competenceAreaId:
+          type: string
+        managerId:
+          type: string
+        headline:
+          type: string
+        shortPresentation:
+          type: string
+        presentation:
+          type: string
+        availableFromDate:
+          type: string
+          format: date-time
+          nullable: true
+    UpdatePersonProfile:
+      allOf:
+      - $ref: '#/components/schemas/PersonProfileViewModel'
+      - type: object
+        additionalProperties: false
+    PersonProfileViewModel:
+      type: object
+      x-abstract: true
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+        organizationId:
+          type: string
+        competenceAreaId:
+          type: string
+        managerId:
+          type: string
+        headline:
+          type: string
+        shortPresentation:
+          type: string
+        presentation:
+          type: string
+        availableFromDate:
+          type: string
+          format: date-time
+          nullable: true
+    PersonProfileDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        displayName:
+          type: string
+          nullable: true
+        birthDate:
+          type: string
+          format: date-time
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        industryId:
+          type: integer
+          format: int32
+        organizationId:
+          type: string
+        competenceAreaId:
+          type: string
+    ResultsOfExperience:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Experience'
+        totalCount:
+          type: integer
+          format: int32
+    Experience:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        employerName:
+          type: string
+          nullable: true
+        title:
+          type: string
+        company:
+          $ref: '#/components/schemas/Company'
+        location:
+          type: string
+          nullable: true
+        employmentType:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        current:
+          type: boolean
+        highlight:
+          type: boolean
+        description:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonProfileSkill'
+    PersonProfileSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        skill:
+          $ref: '#/components/schemas/Skill'
+        level:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SkillLevel'
+        comment:
+          type: string
+          nullable: true
+        link:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Link'
+    Skill:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        area:
+          $ref: '#/components/schemas/SkillArea'
+    SkillArea:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        industry:
+          $ref: '#/components/schemas/Industry'
+    Link:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        href:
+          type: string
+    CreateExperience:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        companyId:
+          type: string
+        location:
+          type: string
+          nullable: true
+        employmentType:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        current:
+          type: boolean
+        highlight:
+          type: boolean
+        description:
+          type: string
+          nullable: true
+    UpdateExperience:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        companyId:
+          type: string
+        location:
+          type: string
+          nullable: true
+        employmentType:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        current:
+          type: boolean
+        highlight:
+          type: boolean
+        description:
+          type: string
+          nullable: true
+    ResultsOfPersonProfileSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonProfileSkill'
+        totalCount:
+          type: integer
+          format: int32
+    PersonProfileSkillExperiences:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        skill:
+          $ref: '#/components/schemas/Skill'
+        level:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SkillLevel'
+        comment:
+          type: string
+          nullable: true
+        link:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Link'
+        experiences:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillExperience'
+    SkillExperience:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        company:
+          type: string
+        title:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+    UpdateSkillExperience:
+      type: object
+      additionalProperties: false
+      properties:
+        personProfileExperienceId:
+          type: string
+        checked:
+          type: boolean
+    AddPersonProfileSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        skillId:
+          type: string
+        level:
+          $ref: '#/components/schemas/SkillLevel'
+        comment:
+          type: string
+          nullable: true
+    UpdatePersonProfileSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        level:
+          $ref: '#/components/schemas/SkillLevel'
+        comment:
+          type: string
+          nullable: true
+    ResultsOfSkillArea:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillArea'
+        totalCount:
+          type: integer
+          format: int32
+    CreateSkillArea:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        industryId:
+          type: integer
+          format: int32
+    UpdateSkillArea:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        industryId:
+          type: integer
+          format: int32
+    ResultsOfSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+        totalCount:
+          type: integer
+          format: int32
+    CreateSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        skillAreaId:
+          type: string
+    UpdateSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        skillAreaId:
+          type: string

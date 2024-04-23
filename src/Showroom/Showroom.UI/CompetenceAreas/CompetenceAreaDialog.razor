@@ -41,7 +41,7 @@
     public string? CompetenceAreaId { get; set; } = null!;
 
     //[Required]
-    //public CompetenceAreaDto Area { get; set; }
+    //public CompetenceArea Area { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -62,7 +62,7 @@
     {
         if(CompetenceAreaId is null) 
         {
-            var competenceArea = await CompetenceAreasClient.CreateCompetenceAreaAsync(new CreateCompetenceAreaDto {
+            var competenceArea = await CompetenceAreasClient.CreateCompetenceAreaAsync(new CreateCompetenceArea {
                 //CompetenceAreaId = Area.Id,
                 Name = Name
             });
@@ -73,7 +73,7 @@
         {
             if (context.IsModified())
             {
-                await CompetenceAreasClient.UpdateCompetenceAreaAsync(CompetenceAreaId, new UpdateCompetenceAreaDto
+                await CompetenceAreasClient.UpdateCompetenceAreaAsync(CompetenceAreaId, new UpdateCompetenceArea
                 {
                     //CompetenceAreaId = Area.Id,
                     Name = Name

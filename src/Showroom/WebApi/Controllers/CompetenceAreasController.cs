@@ -14,7 +14,7 @@ namespace YourBrand.Showroom.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
+[Authorize]
 public class CompetenceAreasController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

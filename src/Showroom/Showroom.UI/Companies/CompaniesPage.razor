@@ -13,7 +13,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="CompanyDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="Company" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
             
@@ -24,8 +24,8 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="CompanyDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="CompanyDto" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Company" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Company" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -39,17 +39,17 @@
 
 
 @code {
-    MudTable<CompanyDto> table; 
+    MudTable<Company> table; 
     string? searchString;
 
-    public IndustryDto Industry { get; set; }
+    public Industry Industry { get; set; }
 
-    private async Task<TableData<CompanyDto>> LoadData(TableState state)
+    private async Task<TableData<Company>> LoadData(TableState state)
     {
         try
         {
             var results = await CompaniesClient.GetCompaniesAsync(state.Page + 1, state.PageSize, Industry?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
-            return new TableData<CompanyDto> { Items = results.Items, TotalItems = results.TotalCount };
+            return new TableData<Company> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
         {
@@ -65,7 +65,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<CompanyDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Company> ev)
     {
         var item = ev.Item;
 
@@ -78,13 +78,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnIndustryChanged(IndustryDto sa)
+    private async Task OnIndustryChanged(Industry sa)
     {
         Industry = sa;
         table.ReloadServerData();
     }
 
-    async Task OnCompanyClicked(CompanyDto? dto)
+    async Task OnCompanyClicked(Company? dto)
     {
         try
         {

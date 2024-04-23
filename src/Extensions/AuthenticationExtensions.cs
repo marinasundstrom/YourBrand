@@ -35,8 +35,8 @@ public static class AuthenticationExtensions
         IdentityModelEventSource.ShowPII = true;
 #endif
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+        services.AddAuthentication()
+                    .AddJwtBearer(options =>
                     {
                         options.Authority = configuration.GetValue<string>("Local:Authority");
                         options.Audience = configuration.GetValue<string>("Local:Audience");

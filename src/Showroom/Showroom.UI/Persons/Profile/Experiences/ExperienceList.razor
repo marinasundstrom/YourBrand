@@ -82,15 +82,15 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public IEnumerable<IGrouping<string, ExperienceDto>> Groups { get; set; } = null!;
+    public IEnumerable<IGrouping<string, Experience>> Groups { get; set; } = null!;
 
     [Parameter]
-    public EventCallback<ExperienceDto> AddOrEditExperience { get; set; }
+    public EventCallback<Experience> AddOrEditExperience { get; set; }
 
     [Parameter]
-    public EventCallback<ExperienceDto> DeleteExperience { get; set; }
+    public EventCallback<Experience> DeleteExperience { get; set; }
 
-    public Obj Foo(ExperienceDto experience, bool isSub)
+    public Obj Foo(Experience experience, bool isSub)
     {
         return new Obj(experience, isSub);
     }

@@ -29,7 +29,7 @@ public sealed class ApplicationDbContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (clrType.BaseType != typeof(object))
+            if (!clrType.IsAssignableTo(typeof(IHasDomainEvents)))
             {
                 continue;
             }

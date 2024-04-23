@@ -60,7 +60,7 @@
     public string? PersonProfileSkillId { get; set; } = null!;
 
     [Required]
-    public SkillDto? Skill { get; set; } = null!;
+    public Skill? Skill { get; set; } = null!;
 
     public SkillLevel SkillLevel { get; set; } = SkillLevel.Novice;
 
@@ -113,11 +113,11 @@
 
     public async Task OnValidSubmit()
     {
-        PersonProfileSkillDto? personProfileSkill = null;
+        PersonProfileSkill? personProfileSkill = null;
 
         if(PersonProfileSkillId is null) 
         {
-            personProfileSkill = await PersonProfilesClient.AddSkillAsync(PersonProfileId, new AddPersonProfileSkillDto
+            personProfileSkill = await PersonProfilesClient.AddSkillAsync(PersonProfileId, new AddPersonProfileSkill
             {
                 SkillId = Skill.Id,
                 Level = SkillLevel,
@@ -125,7 +125,7 @@
             });
 
             var dtos = experiences
-                .Select(x => new UpdateSkillExperienceDto()
+                .Select(x => new UpdateSkillExperience()
                 {
                     PersonProfileExperienceId = x.Id,
                     Checked = x.Checked
@@ -140,7 +140,7 @@
         {
             if (context.IsModified())
             {
-                personProfileSkill = await PersonProfilesClient.UpdateSkillAsync(PersonProfileId, PersonProfileSkillId, new UpdatePersonProfileSkillDto
+                personProfileSkill = await PersonProfilesClient.UpdateSkillAsync(PersonProfileId, PersonProfileSkillId, new UpdatePersonProfileSkill
                 {
                     Level = SkillLevel,
                     Comment = Comment
@@ -149,7 +149,7 @@
 
             var dtos = experiences
                 .Where(x => x.Checked != x.OriginalChecked)
-                .Select(x => new UpdateSkillExperienceDto()
+                .Select(x => new UpdateSkillExperience()
                 {
                     PersonProfileExperienceId = x.Id,
                     Checked = x.Checked
@@ -168,7 +168,7 @@
     {
         public string Id { get; set; }
 
-        public CompanyDto Company { get; set; }
+        public Company Company { get; set; }
 
         public string Title { get; set; }
 

@@ -33,8 +33,9 @@ public sealed class SalesContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (clrType.BaseType != typeof(object))
+            if (!clrType.IsAssignableTo(typeof(IHasDomainEvents)))
             {
+                Console.WriteLine($"Skipping type {clrType} because it is not implementing IHasDomainEvents.");
                 continue;
             }
 

@@ -8,7 +8,7 @@ namespace YourBrand.Showroom.Persons;
 public class SkillSelectorVm
 {
     [Required]
-    public SkillDto? Skill { get; set; }
+    public Skill? Skill { get; set; }
 
     [Required]
     public SkillLevel SkillLevel { get; set; } = Showroom.Client.SkillLevel.Competent;
@@ -36,7 +36,7 @@ public class SkillSelectorVm
 
 public class SkillVM
 {
-    public SkillDto Skill { get; set; }
+    public Skill Skill { get; set; }
 
     public SkillLevel Level { get; set; } = Showroom.Client.SkillLevel.Competent;
 

@@ -21,7 +21,9 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
     {
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var organization = await context.Organizations.FirstOrDefaultAsync(x => x.Id == request.OrganizationId, cancellationToken);
+            var organization = await context.Organizations
+                .Include(x => x.Tenant)
+                .FirstOrDefaultAsync(x => x.Id == request.OrganizationId, cancellationToken);
 
             if (organization is null)
             {
@@ -100,7 +102,7 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
                .AsSplitQuery()
                .FirstAsync(x => x.Id == user.Id, cancellationToken);
 
-            await eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organizations.First()!.Id));
+            await eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organizations.FirstOrDefault()?.Id ?? "X"));
 
             await Task.Delay(600);
 

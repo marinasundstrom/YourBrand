@@ -1,13 +1,10 @@
 ﻿using YourBrand.Domain.Common;
-using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public sealed class Module : Entity, IHasTenant
+public sealed class Module : Entity
 {
     public Guid Id { get; set; } = default!;
-
-    public TenantId TenantId { get; set; }
 
     public string Name { get; set; }
 

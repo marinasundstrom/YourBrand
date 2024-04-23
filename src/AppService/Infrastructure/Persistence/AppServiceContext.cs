@@ -44,6 +44,8 @@ public class AppServiceContext(
 
     public DbSet<Module> Modules { get; set; } = null!;
 
+    public DbSet<TenantModule> TenantModules { get; set; } = null!;
+
     public DbSet<WidgetArea> WidgetAreas { get; set; } = null!;
 
     public DbSet<Widget> Widgets { get; set; } = null!;
@@ -58,7 +60,7 @@ public class AppServiceContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (clrType.BaseType != typeof(object))
+            if (!clrType.IsAssignableTo(typeof(Entity)))
             {
                 continue;
             }

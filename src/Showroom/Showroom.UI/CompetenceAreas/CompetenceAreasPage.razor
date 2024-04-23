@@ -14,7 +14,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="CompetenceAreaDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="CompetenceArea" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
 
@@ -23,8 +23,8 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="CompetenceAreaDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-            @*<MudTh><MudTableSortLabel T="CompetenceAreaDto" SortLabel="Area">Area</MudTableSortLabel></MudTh>*@
+            <MudTh><MudTableSortLabel T="CompetenceArea" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            @*<MudTh><MudTableSortLabel T="CompetenceArea" SortLabel="Area">Area</MudTableSortLabel></MudTh>*@
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -38,17 +38,17 @@
 
 
 @code {
-    MudTable<CompetenceAreaDto> table; 
+    MudTable<CompetenceArea> table; 
     string? searchString;
 
-    public CompetenceAreaDto CompetenceArea { get; set; }
+    public CompetenceArea CompetenceArea { get; set; }
 
-    private async Task<TableData<CompetenceAreaDto>> LoadData(TableState state)
+    private async Task<TableData<CompetenceArea>> LoadData(TableState state)
     {
         try
         {
             var results = await CompetenceAreasClient.GetCompetenceAreasAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
-            return new TableData<CompetenceAreaDto> { Items = results.Items, TotalItems = results.TotalCount };
+            return new TableData<CompetenceArea> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
         {
@@ -64,7 +64,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<CompetenceAreaDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<CompetenceArea> ev)
     {
         var item = ev.Item;
 
@@ -77,13 +77,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnCompetenceAreaChanged(CompetenceAreaDto sa)
+    private async Task OnCompetenceAreaChanged(CompetenceArea sa)
     {
         CompetenceArea = sa;
         table.ReloadServerData();
     }
 
-    async Task OnCompetenceAreaClicked(CompetenceAreaDto? dto)
+    async Task OnCompetenceAreaClicked(CompetenceArea? dto)
     {
         try
         {

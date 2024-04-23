@@ -2,4 +2,4 @@
 
 namespace YourBrand.Showroom.Persons.Profile.Experiences;
 
-public record Obj(ExperienceDto experience, bool isSub);
+public record Obj(Experience experience, bool isSub);

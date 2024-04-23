@@ -114,7 +114,7 @@ services.AddAuthorization();
 
 services.AddAuthenticationServices(builder.Configuration);
 
-services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
+//services.AddApiKeyAuthentication("https://localhost:5174/api/apikeys/");
 
 var app = builder.Build();
 

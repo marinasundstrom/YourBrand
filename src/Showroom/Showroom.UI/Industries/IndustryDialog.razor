@@ -40,7 +40,7 @@
     public int? IndustryId { get; set; } = null!;
 
     //[Required]
-    //public IndustryDto Area { get; set; }
+    //public Industry Area { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -61,7 +61,7 @@
     {
         if(IndustryId is null) 
         {
-            var industry = await IndustriesClient.CreateIndustryAsync(new CreateIndustryDto {
+            var industry = await IndustriesClient.CreateIndustryAsync(new CreateIndustry {
                 //IndustryId = Area.Id,
                 Name = Name
             });
@@ -72,7 +72,7 @@
         {
             if (context.IsModified())
             {
-                await IndustriesClient.UpdateIndustryAsync(IndustryId.GetValueOrDefault(), new UpdateIndustryDto
+                await IndustriesClient.UpdateIndustryAsync(IndustryId.GetValueOrDefault(), new UpdateIndustry
                 {
                     //IndustryId = Area.Id,
                     Name = Name

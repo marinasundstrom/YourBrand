@@ -21,7 +21,7 @@ namespace YourBrand.Showroom.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
+[Authorize]
 public class PersonProfilesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

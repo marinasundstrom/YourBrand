@@ -13,9 +13,9 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
     {
         public async Task<BrandProfileDto?> Handle(UpdateBrandProfile request, CancellationToken cancellationToken)
         {
-            BrandProfile brandProfile = await appServiceContext.BrandProfiles
+            BrandProfile? brandProfile = await appServiceContext.BrandProfiles
                 .OrderBy(x => x.Created)
-                .FirstAsync(cancellationToken);
+                .FirstOrDefaultAsync(cancellationToken);
 
             bool @new = false;
 
@@ -30,8 +30,12 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
                 brandProfile.Description = request.Description;
             }
 
-            brandProfile.Colors ??= new BrandColors();
-
+            brandProfile.Colors ??= new BrandColors
+            {
+                Light = new BrandColorPalette(),
+                Dark = new BrandColorPalette()
+            };
+            
             Map(brandProfile.Colors.Light, request.Colors.Light);
             Map(brandProfile.Colors.Dark, request.Colors.Dark);
 

@@ -1,9 +1,11 @@
 @page "/profiles/create"
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using YourBrand.Portal.Services
 @attribute [Authorize]
 @inject IPersonProfilesClient PersonProfilesClient
 @inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
 
 <AppPageTitle>New Profile</AppPageTitle>
 
@@ -33,10 +35,6 @@
                 </MudItem>
 
                 <MudItem xs="12" md="6">
-                    <OrganizationSelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" />
-                </MudItem>
-
-                <MudItem xs="12" md="6">
                     <CompetenceAreaSelector Variant="Variant.Outlined" Class="mb-4" @bind-Value="CompetenceArea" For="() => CompetenceArea" />
                 </MudItem>
             </MudGrid>
@@ -55,23 +53,22 @@
     public string? DisplayName { get; set; }
 
     [Required]
-    public IndustryDto? Industry { get; set; }
+    public Industry? Industry { get; set; }
 
     [Required]
-    public OrganizationDto? Organization { get; set; }
-
-    [Required]
-    public CompetenceAreaDto? CompetenceArea { get; set; }
+    public CompetenceArea? CompetenceArea { get; set; }
 
     private async Task Submit()
     {
-        var dto = await PersonProfilesClient.CreatePersonProfileAsync(new CreatePersonProfileDto {
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        var dto = await PersonProfilesClient.CreatePersonProfileAsync(new CreatePersonProfile {
             FirstName = FirstName,
             LastName = LastName,
             DisplayName = DisplayName,
             Headline = "",
             IndustryId = Industry.Id,
-            OrganizationId = Organization!.Id,
+            OrganizationId = organization.Id,
             CompetenceAreaId = CompetenceArea!.Id,
             ShortPresentation = "",
             Presentation = "",

@@ -42,7 +42,7 @@
     public string? CompanyId { get; set; } = null!;
 
     [Required]
-    public IndustryDto Industry { get; set; }
+    public Industry Industry { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -63,7 +63,7 @@
     {
         if(CompanyId is null) 
         {
-            var company = await CompaniesClient.CreateCompanyAsync(new CreateCompanyDto {
+            var company = await CompaniesClient.CreateCompanyAsync(new CreateCompany {
                 Name = Name,
                 IndustryId = Industry.Id
             });
@@ -74,7 +74,7 @@
         {
             if (context.IsModified())
             {
-                await CompaniesClient.UpdateCompanyAsync(CompanyId, new UpdateCompanyDto
+                await CompaniesClient.UpdateCompanyAsync(CompanyId, new UpdateCompany
                 {
                     Name = Name,
                     IndustryId = Industry.Id

@@ -150,9 +150,9 @@ public static class OpenApiExtensions
         private static string GenerateName(Type type)
         {
             return type.Name
-                .Replace("Dto", string.Empty)
-                .Replace("Command", string.Empty)
-                .Replace("Query", string.Empty);
+                .Replace("Dto", string.Empty);
+                //.Replace("Command", string.Empty)
+                //.Replace("Query", string.Empty);
         }
     }
 }

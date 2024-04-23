@@ -48,7 +48,7 @@
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
-    public PersonProfileDto? PersonProfile { get; set; }
+    public PersonProfile? PersonProfile { get; set; }
 
     [Required]
     public string FirstName { get; set; } = null!;
@@ -62,11 +62,11 @@
 
     public string? Location { get; set; } = null!;
 
-    public IndustryDto? Industry { get; set; } = null!;
+    public Industry? Industry { get; set; } = null!;
 
-    public OrganizationDto? Organization { get; set; } = null!;
+    public Organization? Organization { get; set; } = null!;
 
-    public CompetenceAreaDto? CompetenceArea { get; set; } = null!;
+    public CompetenceArea? CompetenceArea { get; set; } = null!;
 
     protected override void OnInitialized()
     {
@@ -87,7 +87,7 @@
     {
         try
         {
-            await PersonProfilesClient.UpdateDetailsAsync(PersonProfile.Id, new PersonProfileDetailsDto
+            await PersonProfilesClient.UpdateDetailsAsync(PersonProfile.Id, new PersonProfileDetails
             {
                 FirstName = FirstName,
                 LastName = LastName,

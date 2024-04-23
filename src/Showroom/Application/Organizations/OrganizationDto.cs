@@ -6,5 +6,5 @@ public record OrganizationDto
 (
     string Id,
     string Name,
-    AddressDto Address
+    AddressDto? Address
 );

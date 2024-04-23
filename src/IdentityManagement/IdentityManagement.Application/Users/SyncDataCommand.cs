@@ -36,7 +36,7 @@ public record SyncDataCommand() : IRequest
 
             foreach (var user in users)
             {
-                await eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization!.Id));
+                await eventPublisher.PublishEvent(new UserCreated(user.Id, user.Tenant!.Id, user.Organization?.Id ?? "x"));
             }
 
             var organizationUsers = await context.OrganizationUsers

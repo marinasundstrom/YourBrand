@@ -8,6 +8,9 @@ namespace YourBrand.Showroom.Domain.Entities;
 
 public class User : AuditableEntity, IHasTenant, ISoftDelete
 {
+    readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
+    readonly HashSet<Organization> _organization = new HashSet<Organization>();
+
     public UserId Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; } = null!;
@@ -21,6 +24,9 @@ public class User : AuditableEntity, IHasTenant, ISoftDelete
     public string SSN { get; set; } = null!;
 
     public string Email { get; set; } = null!;
+
+    public IReadOnlyCollection<Organization> Organization => _organization;
+    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }

@@ -1,7 +1,7 @@
 @using System.Linq.Expressions
 @inject ISkillAreasClient SkillAreasClient
 
-<MudAutocomplete T="SkillAreaDto" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+<MudAutocomplete T="SkillArea" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
     For="For" SearchFunc="SearchSkillAreas" ToStringFunc="(x) => x.Name"
     ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
     <ItemTemplate Context="context2">
@@ -19,13 +19,13 @@
     public string Label { get; set; } = "Skill Area";
 
     [Parameter]
-    public SkillAreaDto Value { get; set; }
+    public SkillArea Value { get; set; }
 
     [Parameter]
-    public EventCallback<SkillAreaDto> ValueChanged { get; set; }
+    public EventCallback<SkillArea> ValueChanged { get; set; }
 
     [Parameter]
-    public Expression<Func<SkillAreaDto>> For { get; set; }
+    public Expression<Func<SkillArea>> For { get; set; }
 
     [Parameter]
     public string Style { get; set; }
@@ -39,7 +39,7 @@
     [Parameter]
     public int? IndustryId { get; set; }
 
-    async Task<IEnumerable<SkillAreaDto>> SearchSkillAreas(string text)
+    async Task<IEnumerable<SkillArea>> SearchSkillAreas(string text)
     {
         try
         {

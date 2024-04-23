@@ -38,9 +38,18 @@ public class CustomersContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (clrType.BaseType != typeof(object))
+            if (!clrType.IsAssignableTo(typeof(IHasDomainEvents)))
             {
                 continue;
+            }
+
+            if (!clrType.IsAbstract)
+            {
+                if (!clrType.BaseType.Name.StartsWith("Entity") && !clrType.BaseType.Name.StartsWith("AggregateRoot"))
+                {
+                    Console.WriteLine($"Skipping entity {clrType} because it is not a base type: " + clrType.BaseType.Name);
+                    continue;
+                }
             }
 
             try

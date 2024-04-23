@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Entities;
 
 namespace YourBrand.Application.BrandProfiles;
 
@@ -15,6 +16,17 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
             var brandProfile = await appServiceContext.BrandProfiles
                 .OrderBy(x => x.Created)
                 .FirstOrDefaultAsync(cancellationToken);
+
+            if (brandProfile is null)
+            {
+                brandProfile = new BrandProfile("Theme", null);
+            }
+
+            brandProfile.Colors ??= new BrandColors 
+            {
+                Light = new BrandColorPalette(),
+                Dark = new BrandColorPalette()
+            };
 
             return brandProfile?.ToDto();
         }

@@ -12,6 +12,8 @@ public interface IAppServiceContext
 
     DbSet<Module> Modules { get; }
 
+    DbSet<TenantModule> TenantModules { get; }
+
     DbSet<WidgetArea> WidgetAreas { get; }
 
     DbSet<Widget> Widgets { get; }

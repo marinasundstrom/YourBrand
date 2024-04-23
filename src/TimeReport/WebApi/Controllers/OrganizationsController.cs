@@ -13,7 +13,7 @@ namespace YourBrand.TimeReport.WebApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
+[Authorize]
 public class OrganizationsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

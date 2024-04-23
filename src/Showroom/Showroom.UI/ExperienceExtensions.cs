@@ -9,12 +9,12 @@ public static class ExperienceExtensions
         return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
     }
 
-    public static DateTime GetStartDate(this ExperienceDto experience)
+    public static DateTime GetStartDate(this Experience experience)
     {
         return new DateTime(experience.StartDate.Year, experience.StartDate.Month, 1);
     }
 
-    public static DateTime? GetEndDate(this ExperienceDto experience)
+    public static DateTime? GetEndDate(this Experience experience)
     {
         DateTime? endDate = null;
 

@@ -76,12 +76,12 @@
 
 
     //[Required]
-    public OrganizationDto? Organization { get; set; }
+    public Organization? Organization { get; set; }
 
     //[Required]
-    public CompetenceAreaDto? CompetenceArea { get; set; }
+    public CompetenceArea? CompetenceArea { get; set; }
 
-    public PersonProfileDto? Profile { get; set; }
+    public PersonProfile? Profile { get; set; }
 
     public decimal? HourlyPrice { get; set; }
 
@@ -91,9 +91,9 @@
 
     private async Task Submit()
     {
-        var dto = await CasesClient.CreateCaseAsync(new CreateCaseDto {
+        var dto = await CasesClient.CreateCaseAsync(new CreateCase {
             Description = Description,
-            Pricing = new UpdatePricingDto {
+            Pricing = new UpdatePricing {
                 HourlyPrice = HourlyPrice,
                 Hours = Hours
             }

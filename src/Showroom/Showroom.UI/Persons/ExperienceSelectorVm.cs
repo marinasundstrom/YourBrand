@@ -8,7 +8,7 @@ namespace YourBrand.Showroom.Persons;
 public class ExperienceSelectorVm
 {
     [Required]
-    public IndustryDto? Industry { get; set; }
+    public Industry? Industry { get; set; }
 
     //[Required]
     public int? Years { get; set; } = 1;
@@ -36,7 +36,7 @@ public class ExperienceSelectorVm
 
 public class IndustryVM
 {
-    public IndustryDto Industry { get; set; }
+    public Industry Industry { get; set; }
 
     public int? Years { get; set; } = 1;
 

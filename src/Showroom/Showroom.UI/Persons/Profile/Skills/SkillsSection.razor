@@ -64,7 +64,7 @@
     [Parameter]
     public EventCallback OnUpdated { get; set; }
 
-    public SkillDto Skill { get; set; }
+    public Skill Skill { get; set; }
 
     public List<SkillArea> SkillAreas  { get; set; } = new List<SkillArea>();
 
@@ -96,7 +96,7 @@
         }
     }
 
-    async Task AddSkill(PersonProfileSkillDto personProfileSkill)
+    async Task AddSkill(PersonProfileSkill personProfileSkill)
     {
         var skillGroup = SkillAreas.FirstOrDefault(x => x.Id == personProfileSkill.Skill.Area.Id);
         if(skillGroup is null)
@@ -126,7 +126,7 @@
         Skill = null;
     }
 
-    async Task RemoveSkill(SkillArea skillGroup, PersonProfileSkillDto skill)
+    async Task RemoveSkill(SkillArea skillGroup, PersonProfileSkill skill)
     {
         await PersonProfilesClient.RemoveSkillAsync(PersonProfileId, skill.Skill.Id);
 
@@ -146,10 +146,10 @@
 
         public string Name { get; set; } = null!;
 
-        public List<PersonProfileSkillDto> Skills  { get; set; } = new List<PersonProfileSkillDto>();
+        public List<PersonProfileSkill> Skills  { get; set; } = new List<PersonProfileSkill>();
     }
 
-    async Task OnSkillClicked(PersonProfileSkillDto dto)
+    async Task OnSkillClicked(PersonProfileSkill dto)
     {
         try
         {
@@ -185,7 +185,7 @@
             if(result.Cancelled)
                 return;
 
-            await AddSkill((PersonProfileSkillDto)result.Data);
+            await AddSkill((PersonProfileSkill)result.Data);
 
             await OnUpdated.InvokeAsync();
         }

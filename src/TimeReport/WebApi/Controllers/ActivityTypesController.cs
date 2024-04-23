@@ -14,7 +14,7 @@ namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
+[Authorize]
 public class ActivityTypesController(IMediator mediator, ITimeReportContext context) : ControllerBase
 {
     [HttpGet]

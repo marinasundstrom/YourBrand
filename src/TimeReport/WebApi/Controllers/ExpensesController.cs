@@ -13,7 +13,7 @@ namespace YourBrand.TimeReport.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(AuthenticationSchemes = AuthSchemes.Default)]
+[Authorize]
 public class ExpensesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]

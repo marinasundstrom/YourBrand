@@ -2,7 +2,7 @@
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
+public abstract class Entity<TId> : IEntity, IEquatable<Entity<TId>>, IHasDomainEvents
     where TId : notnull
 {
     private readonly HashSet<DomainEvent> domainEvents = new HashSet<DomainEvent>();

@@ -37,7 +37,7 @@ public class MarketingContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (clrType.BaseType != typeof(object))
+            if (!clrType.IsAssignableTo(typeof(Entity)))
             {
                 continue;
             }

@@ -12,7 +12,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="CaseDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="Case" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
             <MudSpacer />
@@ -20,9 +20,9 @@
             <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="CaseDto" SortLabel="Id">Id</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="CaseDto" SortLabel="Description">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="CaseDto" SortLabel="Status">Status</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Case" SortLabel="Id">Id</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Case" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Case" SortLabel="Status">Status</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -37,18 +37,18 @@
 
 
 @code {
-    MudTable<CaseDto> table; 
+    MudTable<Case> table; 
     string? searchString;
 
-    public OrganizationDto? Organization { get; set; }
-    public CompetenceAreaDto? CompetenceArea { get; set; }
+    public Organization? Organization { get; set; }
+    public CompetenceArea? CompetenceArea { get; set; }
 
-    private async Task<TableData<CaseDto>> LoadData(TableState state)
+    private async Task<TableData<Case>> LoadData(TableState state)
     {
         try
         {
             var results = await CasesClient.GetCasesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
-            return new TableData<CaseDto> { Items = results.Items, TotalItems = results.TotalCount };
+            return new TableData<Case> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
         {
@@ -64,7 +64,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<CaseDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<Case> ev)
     {
         var item = ev.Item;
 
@@ -77,13 +77,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnOrganizationChanged(OrganizationDto o)
+    private async Task OnOrganizationChanged(Organization o)
     {
         Organization = o;
         table.ReloadServerData();
     }
 
-    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
+    private async Task OnCompetenceAreaChanged(CompetenceArea ca)
     {
         CompetenceArea = ca;
         table.ReloadServerData();

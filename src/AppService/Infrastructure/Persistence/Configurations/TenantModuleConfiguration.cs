@@ -5,10 +5,10 @@ using YourBrand.Domain.Entities;
 
 namespace YourBrand.Infrastructure.Persistence.Configurations;
 
-public sealed class ModuleConfiguration : IEntityTypeConfiguration<Module>
+public sealed class TenantModuleConfiguration : IEntityTypeConfiguration<TenantModule>
 {
-    public void Configure(EntityTypeBuilder<Module> builder)
+    public void Configure(EntityTypeBuilder<TenantModule> builder)
     {
-        builder.ToTable("Modules");
+        builder.ToTable("TenantModules");
     }
 }

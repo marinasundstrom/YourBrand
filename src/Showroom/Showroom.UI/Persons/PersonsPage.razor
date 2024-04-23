@@ -19,7 +19,7 @@
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="PersonProfileDto" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+    <MudTable @ref="table" T="PersonProfile" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
             <OrganizationSelector Value="Organization" ValueChanged="OnOrganizationChanged" For="() => Organization" />
@@ -34,13 +34,13 @@
         </ToolBarContent>
         <HeaderContent>
             <MudTh></MudTh>
-            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
-            @*<MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Headline">Headline</MudTableSortLabel></MudTh>*@
-            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="CompetenceArea">Competence Area</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="PersonProfileDto" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfile" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfile" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfile" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+            @*<MudTh><MudTableSortLabel T="PersonProfile" SortLabel="Headline">Headline</MudTableSortLabel></MudTh>*@
+            <MudTh><MudTableSortLabel T="PersonProfile" SortLabel="Industry">Industry</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfile" SortLabel="CompetenceArea">Competence Area</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="PersonProfile" SortLabel="Organization">Organization</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd>
@@ -62,18 +62,18 @@
 
 
 @code {
-    MudTable<PersonProfileDto> table; 
+    MudTable<PersonProfile> table; 
     string? searchString;
 
-    public OrganizationDto? Organization { get; set; }
-    public CompetenceAreaDto? CompetenceArea { get; set; }
+    public Organization? Organization { get; set; }
+    public CompetenceArea? CompetenceArea { get; set; }
 
-    private async Task<TableData<PersonProfileDto>> LoadData(TableState state)
+    private async Task<TableData<PersonProfile>> LoadData(TableState state)
     {
         try
         {
             var results = await PersonProfilesClient.GetPersonProfilesAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
-            return new TableData<PersonProfileDto> { Items = results.Items, TotalItems = results.TotalCount };
+            return new TableData<PersonProfile> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
         {
@@ -89,7 +89,7 @@
         return null!;
     }
 
-    private async Task ItemOnClick(TableRowClickEventArgs<PersonProfileDto> ev)
+    private async Task ItemOnClick(TableRowClickEventArgs<PersonProfile> ev)
     {
         var item = ev.Item;
 
@@ -102,13 +102,13 @@
         table.ReloadServerData();
     }
 
-    private async Task OnOrganizationChanged(OrganizationDto o)
+    private async Task OnOrganizationChanged(Organization o)
     {
         Organization = o;
         table.ReloadServerData();
     }
 
-    private async Task OnCompetenceAreaChanged(CompetenceAreaDto ca)
+    private async Task OnCompetenceAreaChanged(CompetenceArea ca)
     {
         CompetenceArea = ca;
         table.ReloadServerData();

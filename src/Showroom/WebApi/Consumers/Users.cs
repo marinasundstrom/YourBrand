@@ -6,6 +6,7 @@ using YourBrand.Identity;
 using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Showroom.Application.Users.Commands;
 using YourBrand.Tenancy;
+
 namespace YourBrand.Showroom.Consumers;
 
 public class ShowroomUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ILogger<ShowroomUserCreatedConsumer> logger) : IConsumer<UserCreated>
