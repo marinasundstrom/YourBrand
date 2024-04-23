@@ -1,28 +1,12 @@
 @using YourBrand.AppService.Client
 
-<div class="d-flex flex-grow-1 gap-4">
-    <MudPaper Class="rounded d-flex flex-none"
-        Style="@($"height: 50px; width: 50px; background-color: {ColorPalette.AppbarBackgroundColor}")"></MudPaper>
-    <MudColorPicker Label="AppBar Background Color" @bind-Text="ColorPalette.AppbarBackgroundColor" Class="mb-4" />
-</div>
+<ColorPicker Label="AppBar Background Color" @bind-Text="ColorPalette.AppbarBackgroundColor" Class="mb-4" />
 
-<div class="d-flex flex-grow-1 gap-4">
-    <MudPaper Class="rounded d-flex flex-none"
-        Style="@($"height: 50px; width: 50px; background-color: {ColorPalette.PrimaryColor}")"></MudPaper>
-    <MudColorPicker Label="Primary Color" @bind-Text="ColorPalette.PrimaryColor" Class="mb-4" />
-</div>
+<ColorPicker Label="Primary Color" @bind-Text="ColorPalette.PrimaryColor" Class="mb-4" />
 
-<div class="d-flex flex-grow-1 gap-4">
-    <MudPaper Class="rounded d-flex flex-none"
-        Style="@($"height: 50px; width: 50px; background-color: {ColorPalette.SecondaryColor}")"></MudPaper>
-    <MudColorPicker Label="Secondary Color" @bind-Text="ColorPalette.SecondaryColor" Class="mb-4" />
-</div>
+<ColorPicker Label="Secondary Color" @bind-Text="ColorPalette.SecondaryColor" Class="mb-4" />
 
-<div class="d-flex flex-grow-1 gap-4">
-    <MudPaper Class="rounded d-flex flex-none"
-        Style="@($"height: 50px; width: 50px; background-color: {ColorPalette.BackgroundColor}")"></MudPaper>
-    <MudColorPicker Label="Background Color" @bind-Text="ColorPalette.BackgroundColor" Class="mb-4" />
-</div>
+<ColorPicker Label="Background Color" @bind-Text="ColorPalette.BackgroundColor" Class="mb-4" />
 
 @code {
     [Parameter]

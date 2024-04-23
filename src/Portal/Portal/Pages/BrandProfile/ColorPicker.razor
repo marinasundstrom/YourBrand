@@ -1,0 +1,27 @@
+<div class="d-flex flex-grow-1 gap-4 @Class">
+    <MudPaper Class="rounded d-flex flex-none" Style="@($"height: 50px; width: 50px; background-color: {Text}")" @onclick="OnColorDisplayClicked" />
+    <MudColorPicker @ref="colorPicker" Label="@Label" Text="@Text" TextChanged="@TextChanged" Class="mb-4" />
+    @*
+    <MudIconButton Icon="@Icons.Material.Outlined.ContentCopy" />
+    <MudIconButton Icon="@Icons.Material.Outlined.ContentPaste" />
+    *@
+</div>
+
+@code 
+{
+    MudColorPicker colorPicker;
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    void OnColorDisplayClicked() => colorPicker.Open();
+}
