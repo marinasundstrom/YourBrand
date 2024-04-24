@@ -43,16 +43,7 @@
 
     async Task<IEnumerable<Currency>> SearchCurrencies(string text)
     {
-        /*try
-        {*/
-        var results = await CurrenciesClient.GetCurrenciesAsync(0, 10, text, null, null);
+        var results = await CurrenciesClient.GetCurrenciesAsync(1, 10, text, null, null);
         return results.Items;
-        /* }
-        catch (AccessTokenNotAvailableException exception)
-        {
-        exception.Redirect();
-        } */
-
-        //return null;
     }
 }
