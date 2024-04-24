@@ -315,6 +315,62 @@ paths:
       responses:
         204:
           description: ''
+  /v1/TenantModules:
+    get:
+      tags:
+      - TenantModules
+      operationId: TenantModules_GetModules
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TenantModule'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/TenantModules/{id}/Toggle:
+    post:
+      tags:
+      - TenantModules
+      operationId: TenantModules_ToggleModule
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/TenantModules/PopulateModules:
+    post:
+      tags:
+      - TenantModules
+      operationId: TenantModules_PopulateModules
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/Widgets:
     get:
       tags:
@@ -595,6 +651,17 @@ components:
           type: string
         password:
           type: string
+    TenantModule:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        module:
+          $ref: '#/components/schemas/Module'
+        enabled:
+          type: boolean
     ItemResultOfWidget:
       type: object
       additionalProperties: false

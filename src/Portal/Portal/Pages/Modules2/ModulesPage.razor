@@ -1,10 +1,10 @@
-﻿@page "/modules"
+﻿@page "/modules2"
 @using YourBrand.AppService.Client
 @attribute [Authorize]
 @inject IStringLocalizer<ModulesPage> T
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
-@inject ITenantModulesClient ModulesClient
+@inject IModulesClient ModulesClient
 @inject IDialogService DialogService
 
 <AppPageTitle>@T["Modules"]</AppPageTitle>
@@ -13,26 +13,24 @@
 
 <MudButton Variant="@Variant.Filled" Class="mb-4" OnClick="Reload">Reload app</MudButton>
 
-<MudTable T="TenantModule" Dense="true" @ref="table" SortLabel="Sort By"
-    ServerData="@(new Func<TableState, Task<TableData<TenantModule>>>(ServerReload))" OnRowClick="RowClickEvent"
-    Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
+<MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel T="TenantModule" SortLabel="Enabled">@T["Enabled"]</MudTableSortLabel>
+            <MudTableSortLabel T="Module" SortLabel="Enabled">@T["Enabled"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TenantModule" SortLabel="Name">@T["Name"]</MudTableSortLabel>
+            <MudTableSortLabel T="Module" SortLabel="Name">@T["Name"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel T="TenantModule" SortLabel="Assembly">@T["Assembly"]</MudTableSortLabel>
+            <MudTableSortLabel T="Module" SortLabel="Assembly">@T["Assembly"]</MudTableSortLabel>
         </MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTh DataLabel="@T["Enabled"]">
             <MudCheckBox Value="context.Enabled" ValueChanged="async (bool e) => await ToggleModule(context)" />
         </MudTh>
-        <MudTd DataLabel="@T["Name"]">@context.Module.Name</MudTd>
-        <MudTd DataLabel="@T["Assembly"]">@context.Module.Assembly</MudTd>
+        <MudTd DataLabel="@T["Name"]">@context.Name</MudTd>
+        <MudTd DataLabel="@T["Assembly"]">@context.Assembly</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         <MudText>@T["NoRecordsFound"]</MudText>
@@ -45,19 +43,17 @@
     </PagerContent>
 </MudTable>
 
-<MudButton Variant="Variant.Filled" OnClick="PopulateModules" Class="mt-4">Populate modules</MudButton>
-
 @code {
-    MudTable<TenantModule> table;
+    MudTable<Module> table;
 
-    private async Task<TableData<TenantModule>> ServerReload(TableState state)
+    private async Task<TableData<Module>> ServerReload(TableState state)
     {
         try
         {
             var results = await ModulesClient.GetModulesAsync(); //false, state.Page + 1, state.PageSize, state.SortLabel,
                 //state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc);
 
-            return new TableData<TenantModule>() { TotalItems = results.Count, Items = results }; //  { TotalItems = results.TotalCount, Items = results.Items };
+            return new TableData<Module>() { TotalItems = results.Count, Items = results }; //  { TotalItems = results.TotalCount, Items = results.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -67,7 +63,7 @@
         return null;
     }
 
-    private async Task ToggleModule(TenantModule module)
+    private async Task ToggleModule(Module module)
     {
         try 
         {
@@ -83,7 +79,7 @@
         }
     }
 
-    private void RowClickEvent(TableRowClickEventArgs<TenantModule> args)
+    private void RowClickEvent(TableRowClickEventArgs<Module> args)
     {
         //NavigationManager.NavigateTo($"/modules/{args.Item.Id}");
     }
@@ -96,13 +92,6 @@
         {
             NavigationManager.Refresh(true);
         }
-    }
-
-    private async Task PopulateModules()
-    {
-        await ModulesClient.PopulateModulesAsync();
-
-        NavigationManager.Refresh(true);
     }
 }
 

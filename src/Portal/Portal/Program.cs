@@ -54,12 +54,12 @@ async Task LoadModules(IServiceCollection services)
 {
     var modulesClient = builder.Services
         .BuildServiceProvider()
-        .GetRequiredService<IModulesClient>();
+        .GetRequiredService<ITenantModulesClient>();
 
     var moduleEntries = await modulesClient.GetModulesAsync();
 
     moduleEntries!.Where(x => x.Enabled).ToList().ForEach(x =>
-        ModuleLoader.LoadModule(x.Name, Assembly.Load(x.Assembly), x.Enabled));
+        ModuleLoader.LoadModule(x.Module.Name, Assembly.Load(x.Module.Assembly), x.Enabled));
 
     ModuleLoader.AddServices(builder.Services);
 }

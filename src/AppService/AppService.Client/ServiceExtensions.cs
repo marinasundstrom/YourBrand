@@ -70,6 +70,12 @@ public static class ServiceExtensions
 
         builder?.Invoke(b);
 
+        var b2 = services
+            .AddHttpClient(nameof(TenantModulesClient), configureClient)
+            .AddTypedClient<ITenantModulesClient>((http, sp) => new TenantModulesClient(http));
+
+        builder?.Invoke(b2);
+
         return services;
     }
 
