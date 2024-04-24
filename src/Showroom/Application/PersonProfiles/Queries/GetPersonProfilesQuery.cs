@@ -25,7 +25,7 @@ public record GetPersonProfilesAsync(int Page = 0, int PageSize = 10, string? Or
 
             if (!string.IsNullOrEmpty(request.OrganizationId))
             {
-                var organization = await context.Organizations.FindAsync(request.OrganizationId);
+                var organization = await context.Organizations.FirstOrDefaultAsync(x => x.Id == request.OrganizationId);
                 if (organization == null)
                 {
                     throw new Exception("Org not found");
