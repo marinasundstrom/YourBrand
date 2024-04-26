@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Commands;
 
-public record UpdateOrderStatusCommand(int Id, string Name, string Handle, string? Description) : IRequest
+public record UpdateOrderStatusCommand(string OrganizationId, int Id, string Name, string Handle, string? Description) : IRequest
 {
     public class UpdateOrderStatusCommandHandler(ISalesContext context) : IRequestHandler<UpdateOrderStatusCommand>
     {
@@ -12,7 +12,9 @@ public record UpdateOrderStatusCommand(int Id, string Name, string Handle, strin
 
         public async Task Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var orderStatus = await context.OrderStatuses.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var orderStatus = await context.OrderStatuses
+                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (orderStatus is null) throw new Exception();
 

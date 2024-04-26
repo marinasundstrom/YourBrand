@@ -24,17 +24,17 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, OrderNumberFetcher orderNumberFetcher, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
+    public sealed class Handler(ISalesContext salesContext, IOrderRepository orderRepository, OrderNumberFetcher orderNumberFetcher, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(CreateDraftOrder request, CancellationToken cancellationToken)
         {
-            var order = new Order();
-
-            int orderNo;
+            var order = Order.Create(organizationId: request.OrganizationId);
 
             order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
-            order.OrganizationId = request.OrganizationId;
+            order.Status = await salesContext.OrderStatuses.FirstOrDefaultAsync(cancellationToken);
+
+            //order.UpdateStatus(1);
 
             order.VatIncluded = true;
 

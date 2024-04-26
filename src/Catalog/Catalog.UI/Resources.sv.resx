@@ -24,7 +24,7 @@
         <value>Produkter</value>
     </data>
     <data name="Categories">
-        <value>Kategories</value>
+        <value>Kategorier</value>
     </data>
     <data name="Attributes">
         <value>Attribut</value>
@@ -37,5 +37,8 @@
     </data>
     <data name="Store">
         <value>Butik</value>
+    </data>
+    <data name="Subscriptions">
+        <value>Prenumerationer</value>
     </data>
 </root>

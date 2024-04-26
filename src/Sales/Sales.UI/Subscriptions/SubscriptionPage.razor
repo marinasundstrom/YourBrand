@@ -160,7 +160,7 @@ else
 
         subscription = await SubscriptionsClient.GetSubscriptionByNoAsync(organizationId, SubscriptionNo);
 
-        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 1, 100, null, null, null)).Items.ToList();
     }
 
     private async Task<TableData<Order>> ServerReload(TableState state)

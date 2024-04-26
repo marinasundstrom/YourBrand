@@ -10,9 +10,17 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 {
     readonly HashSet<OrderItem> _items = new HashSet<OrderItem>();
 
-    public Order() : base(Guid.NewGuid().ToString())
+    private Order() : base(Guid.NewGuid().ToString())
     {
         StatusId = 1;
+    }
+
+    public static Order Create(OrganizationId organizationId) 
+    {
+        return new Order() 
+        {
+            OrganizationId = organizationId
+        };
     }
 
     public TenantId TenantId { get; set; }
@@ -23,9 +31,9 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     public DateTime Date { get; private set; } = DateTime.Now;
 
-    public OrderStatus Status { get; private set; } = null!;
+    public OrderStatus Status { get; set; } = null!;
 
-    public int StatusId { get; set; } = 1;
+    public int StatusId { get; set; }
 
     public DateTimeOffset? StatusDate { get; set; }
 
@@ -128,6 +136,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
                        string? notes)
     {
         var orderItem = new OrderItem(description, itemId!, price, regularPrice, discountRate, discount, quantity, unit, vatRate, notes);
+        orderItem.OrganizationId = OrganizationId;
         orderItem.Order = this;
         _items.Add(orderItem);
 

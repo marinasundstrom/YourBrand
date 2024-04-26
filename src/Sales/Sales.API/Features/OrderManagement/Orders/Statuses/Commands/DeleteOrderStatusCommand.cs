@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Commands;
 
-public record DeleteOrderStatusCommand(int Id) : IRequest
+public record DeleteOrderStatusCommand(string OrganizationId, int Id) : IRequest
 {
     public class DeleteOrderStatusCommandHandler(ISalesContext context) : IRequestHandler<DeleteOrderStatusCommand>
     {
@@ -13,6 +13,7 @@ public record DeleteOrderStatusCommand(int Id) : IRequest
         public async Task Handle(DeleteOrderStatusCommand request, CancellationToken cancellationToken)
         {
             var orderStatus = await context.OrderStatuses
+                .Where(x => x.OrganizationId == request.OrganizationId)
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (orderStatus is null) throw new Exception();

@@ -8,7 +8,7 @@ using YourBrand.Sales.Models;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 
-public record GetOrderStatusesQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrderStatusDto>>
+public record GetOrderStatusesQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrderStatusDto>>
 {
     sealed class GetOrderStatusesQueryHandler(
         ISalesContext context,
@@ -21,6 +21,7 @@ public record GetOrderStatusesQuery(int Page = 0, int PageSize = 10, string? Sea
         {
             IQueryable<OrderStatus> result = _context
                     .OrderStatuses
+                    .Where(x => x.OrganizationId == request.OrganizationId)
                     .OrderBy(o => o.Created)
                     .AsNoTracking()
                     .AsQueryable();

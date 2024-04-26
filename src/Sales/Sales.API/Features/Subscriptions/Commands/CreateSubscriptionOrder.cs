@@ -31,17 +31,16 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
 
             subscription.SubscriptionNo = await subscriptionNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
-            var order = new Order()
+            var order = Order.Create(organizationId: request.OrganizationId);
+
+            order.OrganizationId = request.OrganizationId;
+            order.Customer = new Customer
             {
-                OrganizationId = request.OrganizationId,
-                Customer = new Customer
-                {
-                    Id = request.Customer.Id,
-                    CustomerNo = 0,
-                    Name = request.Customer.Name
-                },
-                Subscription = subscription
+                Id = request.Customer.Id,
+                CustomerNo = 0,
+                Name = request.Customer.Name
             };
+            order.Subscription = subscription;
 
             order.BillingDetails = request.BillingDetails is null ? null : new BillingDetails
             {

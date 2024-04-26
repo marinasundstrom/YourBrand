@@ -35,4 +35,7 @@
     <data name="Send notification">
         <value>Skicka avisering</value>
     </data>
+    <data name="Brand Profile">
+        <value>Varumärkesprofil</value>
+    </data>
 </root>

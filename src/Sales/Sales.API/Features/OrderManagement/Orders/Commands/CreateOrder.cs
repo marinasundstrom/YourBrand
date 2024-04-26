@@ -25,17 +25,17 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
         }
     }
 
-    public sealed class Handler(OrderNumberFetcher orderNumberFetcher, IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateOrder, Result<OrderDto>>
+    public sealed class Handler(OrderNumberFetcher orderNumberFetcher, ISalesContext salesContext, IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateOrder, Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
-            var order = new Order();
+            var order = Order.Create(organizationId: request.OrganizationId);
 
             order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
             const int OrderStatusDraft = 1;
 
-            order.StatusId = request.Status ?? OrderStatusDraft;
+            order.UpdateStatus(request.Status ?? OrderStatusDraft);
 
             if (request.Customer is not null)
             {
@@ -47,8 +47,6 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
                 order.Customer.Id = request.Customer.Id;
                 order.Customer.Name = request.Customer.Name;
             }
-
-            order.OrganizationId = request.OrganizationId;
 
             order.VatIncluded = true;
 

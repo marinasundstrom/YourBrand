@@ -1,6 +1,8 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IOrdersClient OrdersClient
 @inject IOrderStatusesClient OrderStatusesClient
+@inject IOrganizationProvider OrganizationProvider
+@using YourBrand.Portal.Services
 @using YourBrand.Sales
 
 <EditForm Model="@this" OnValidSubmit="Submit">
@@ -38,7 +40,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 1, 100, null, null,
+        null)).Items.ToList();
         Status = orderStatuses.FirstOrDefault(x => x.Id == Status?.Id);
 
         StateHasChanged();

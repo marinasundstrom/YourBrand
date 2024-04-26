@@ -1,0 +1,143 @@
+@page "/orders/statuses"
+@using Microsoft.AspNetCore.Authorization
+@using YourBrand.Portal.Services
+@attribute [Authorize]
+@inject IOrderStatusesClient OrderStatusesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@inject IOrganizationProvider OrganizationProvider
+
+<AppPageTitle>Order Statuses</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Order Statuses</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnOrderStatusClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New OrderStatus
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="OrderStatus" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="OrderStatus" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrderStatus" SortLabel="Handle">Handle</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Handle">@context.Handle</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async (e) => await UpdateOrderStatus(context)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteOrderStatus(context)" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: false);
+    MudTable<OrderStatus> table; 
+    string? searchString;
+
+    public OrderStatus OrderStatus { get; set; }
+
+    private async Task<TableData<OrderStatus>> LoadData(TableState state)
+    {
+        try
+        {
+            var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+            var results = await OrderStatusesClient.GetOrderStatusesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc));
+            return new TableData<OrderStatus> { Items = results.Items, TotalItems = results.Total };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<OrderStatus> ev)
+    {
+        var item = ev.Item;
+
+        await OnOrderStatusClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnOrderStatusChanged(OrderStatus sa)
+    {
+        OrderStatus = sa;
+        await table.ReloadServerData();
+    }
+
+    async Task OnOrderStatusClicked(OrderStatus? dto)
+    {
+        await UpdateOrderStatus(dto);
+    }
+
+    async Task UpdateOrderStatus(OrderStatus? dto)
+    {
+        /*try
+        {*/
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(OrderStatusDialog.OrderStatusId), dto?.Id);
+
+            var dialogReference = DialogService.Show<OrderStatusDialog>(dto is null ? "New Order Status" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }*/
+    }
+
+    async Task DeleteOrderStatus(OrderStatus orderStatus)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the order status?", "The order status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        await OrderStatusesClient.DeleteOrderStatusAsync(organizationId, orderStatus.Id);
+
+        await table.ReloadServerData();
+    }
+}

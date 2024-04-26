@@ -38,4 +38,7 @@
     <data name="Store">
         <value>Store</value>
     </data>
+    <data name="Subscriptions">
+        <value>Subscriptions</value>
+    </data>
 </root>

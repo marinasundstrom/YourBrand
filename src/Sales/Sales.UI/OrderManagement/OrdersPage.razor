@@ -14,7 +14,9 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Orders</MudText>
 
-<MudButton Variant="Variant.Filled" Link="/orders/new" Class="mb-2">New order</MudButton>
+<MudButton Variant="Variant.Filled" Link="/orders/new" Class="mb-2 me-2">New order</MudButton>
+
+<MudButton Variant="Variant.Filled" Link="/orders/statuses" Class="mb-2">Statuses</MudButton>
 
 <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
@@ -101,7 +103,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(1, 100, null, null, null)).Items.ToList();
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 100, null, null, null,
+        null)).Items.ToList();
     }
 
     private async Task<TableData<Order>> ServerReload(TableState state)

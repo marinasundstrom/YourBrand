@@ -229,9 +229,9 @@ public static class Endpoints
         return TypedResults.Ok(result.GetValue());
     }
 
-    private static async Task<Results<Ok, NotFound>> UpdateStatus(string organizationId, string id, int status, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    private static async Task<Results<Ok, NotFound>> UpdateStatus(string organizationId, string id, int statusId, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        var result = await mediator.Send(new UpdateStatus(organizationId, id, status), cancellationToken);
+        var result = await mediator.Send(new UpdateStatus(organizationId, id, statusId), cancellationToken);
 
         if (result.HasError(Errors.Orders.OrderNotFound))
         {

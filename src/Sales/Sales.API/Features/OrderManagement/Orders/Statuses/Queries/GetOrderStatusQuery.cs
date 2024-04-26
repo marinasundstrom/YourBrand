@@ -6,7 +6,7 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
 
-public record GetOrderStatusQuery(int Id) : IRequest<OrderStatusDto?>
+public record GetOrderStatusQuery(string OrganizationId, int Id) : IRequest<OrderStatusDto?>
 {
     sealed class GetOrderStatusQueryHandler(
         ISalesContext context,
@@ -19,6 +19,7 @@ public record GetOrderStatusQuery(int Id) : IRequest<OrderStatusDto?>
         {
             var orderStatus = await _context
                .OrderStatuses
+               .Where(x => x.OrganizationId == request.OrganizationId)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

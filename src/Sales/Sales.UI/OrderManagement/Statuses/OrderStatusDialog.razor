@@ -1,0 +1,96 @@
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
+@inject IOrderStatusesClient OrderStatusesClient
+@inject ISnackbar Snackbar
+@inject IOrganizationProvider OrganizationProvider
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                    For="@(() => Name)" />
+
+                <MudTextField Label="Handle" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Handle"
+                    For="@(() => Handle)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if (OrderStatusId is null)
+                {
+                    <text>Add</text>
+                }
+                else
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = default!;
+
+    [Parameter]
+    public int? OrderStatusId { get; set; } = default!;
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    public string Handle { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+        
+        if(OrderStatusId is null)
+            return;
+
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        var orderStatus = await OrderStatusesClient.GetOrderStatusByIdAsync(organizationId, OrderStatusId.GetValueOrDefault());
+        Name = orderStatus.Name;
+        Handle = orderStatus.Handle;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        if (OrderStatusId is null)
+        {
+
+            var orderStatus = await OrderStatusesClient.CreateOrderAsync(organizationId, new CreateOrderStatus
+                {
+                    Name = Name,
+                    Handle = Handle
+                });
+
+            Dialog.Close(orderStatus);
+        }
+        else
+        {
+            if (context.IsModified())
+            {
+                await OrderStatusesClient.UpdateOrderStatusAsync(organizationId, OrderStatusId.GetValueOrDefault(), new UpdateOrderStatus
+                    {
+                        Name = Name,
+                        Handle = Handle,
+                    });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

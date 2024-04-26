@@ -15,10 +15,22 @@ public static class Seed
 
     private static void Version1(SalesContext context)
     {
-        context.OrderStatuses.Add(new OrderStatus("Draft", "draft", string.Empty));
-        context.OrderStatuses.Add(new OrderStatus("Open", "open", string.Empty));
-        context.OrderStatuses.Add(new OrderStatus("Archived", "archived", string.Empty));
-        context.OrderStatuses.Add(new OrderStatus("Canceled", "canceled", string.Empty));
+        context.OrderStatuses.Add(new OrderStatus(1, "Draft", "draft", string.Empty) 
+        {
+            OrganizationId = TenantConstants.OrganizationId
+        });
+        context.OrderStatuses.Add(new OrderStatus(2, "Open", "open", string.Empty)
+        {
+            OrganizationId = TenantConstants.OrganizationId
+        });
+        context.OrderStatuses.Add(new OrderStatus(3, "Archived", "archived", string.Empty)
+        {
+            OrganizationId = TenantConstants.OrganizationId
+        });
+        context.OrderStatuses.Add(new OrderStatus(4, "Canceled", "canceled", string.Empty)
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+        });
 
         var subscriptionPlan0 = SubscriptionPlanFactory
                     .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeOnly.Parse("16:00"), null)

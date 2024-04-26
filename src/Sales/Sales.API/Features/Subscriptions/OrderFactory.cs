@@ -6,7 +6,7 @@ public class OrderFactory
 {
     public Order CreateOrder(Order order)
     {
-        var targetOrder = new Order();
+        var targetOrder = Order.Create(order.OrganizationId);
 
         UpdateOrder(targetOrder, order);
         return targetOrder;
@@ -14,7 +14,8 @@ public class OrderFactory
 
     public Order CreateOrderFromOrderItem(OrderItem orderItem)
     {
-        var targerOrder = new Order();
+        var targerOrder = Order.Create(orderItem.OrganizationId);
+
         UpdateOrder(targerOrder, orderItem);
         return targerOrder;
     }
