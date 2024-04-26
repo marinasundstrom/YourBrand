@@ -105,7 +105,7 @@
     {
         organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 100, null, null, null,
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 1, 100, null, null,
         null)).Items.ToList();
     }
 
