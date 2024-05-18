@@ -1,36 +1,15 @@
 # Getting started
 
+* Aspire Dashboard: https://localhost:17125/
 * Portal: https://localhost:5174/ (Actually the reverse proxy)
 * Identity Management: https://localhost:5040/
 * Store: https://localhost:7188/
 
-## Run dependencies in Docker
+## Run with Aspire
 
-To run dependencies, like database, in Docker:
-
+```sh
+dotnet run --project src/YourBrand.AppHost/YourBrand.AppHost.csproj
 ```
-docker compose -f docker-compose.deps.yml up -d
-```
-
-## Seeding databases
-
-You need to seed the database for each service.
-
-```
-dotnet run -- --seed
-```
-
-If you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service. Each with a command already specified.
-
-## Running services
-
-Just run each service:
-
-```
-dotnet run
-```
-
-Again, if you use VS Code, and you have the Restore Terminals extension installed, there will be a terminal for each service. Just add the ``--seed`` to the command.
 
 ### Important service
 
