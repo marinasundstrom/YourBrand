@@ -23,6 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Showroom.Client\Showroom.Client.csproj" />
+    <ProjectReference Include="..\..\Showroom\Showroom.Client\Showroom.Client.csproj" />
   </ItemGroup>
 </Project>

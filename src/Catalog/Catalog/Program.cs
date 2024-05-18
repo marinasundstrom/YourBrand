@@ -36,10 +36,14 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+builder.AddServiceDefaults();
+
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Services.AddOutputCache(options =>
 {
@@ -97,7 +101,7 @@ builder.Services
 
 builder.Services.AddProductsServices();
 
-builder.Services.AddObservability("Catalog.API", "1.0", builder.Configuration);
+//builder.Services.AddObservability("Catalog.API", "1.0", builder.Configuration);
 
 builder.Services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
@@ -180,7 +184,9 @@ var reverseProxy = builder.Services
 
 var app = builder.Build();
 
-app.MapObservability();
+app.MapDefaultEndpoints();
+
+//app.MapObservability();
 
 app.MapReverseProxy();
 

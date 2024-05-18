@@ -33,10 +33,14 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+builder.AddServiceDefaults();
+
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
@@ -110,9 +114,11 @@ services.AddAuthenticationServices(configuration);
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.UseSerilogRequestLogging();
 
-app.MapObservability();
+//app.MapObservability();
 
 if (app.Environment.IsDevelopment())
 {

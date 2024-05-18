@@ -2,14 +2,19 @@
     "dotnet.defaultSolution": "YourBrand.sln",
     "editor.formatOnSave": false,
     "restoreTerminals.terminals": [
+        
         {
             "splitTerminals": [
                 {
                     "name": "Main",
+                    "commands": [
+                        "dotnet run --project src/YourBrand.AppHost/YourBrand.AppHost.csproj"
+                    ],
                     "shouldRunCommands": false
                 }
             ]
-        },
+        }
+        /*,
         {
             "splitTerminals": [
                 {
@@ -351,5 +356,6 @@
                 }
             ]
         }
+        */
     ]
 }

@@ -36,10 +36,14 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+builder.AddServiceDefaults();
+
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
@@ -49,7 +53,7 @@ builder.Services
     .AddUserContext()
     .AddTenantContext();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
@@ -104,9 +108,11 @@ builder.Services.AddMassTransit(x =>
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.UseSerilogRequestLogging();
 
-app.MapObservability();
+//app.MapObservability();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

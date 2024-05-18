@@ -30,10 +30,14 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
+
+builder.AddServiceDefaults();
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
@@ -99,9 +103,11 @@ builder.Services.AddPaymentsClients((sp, http) =>
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.UseSerilogRequestLogging();
 
-app.MapObservability();
+//app.MapObservability();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

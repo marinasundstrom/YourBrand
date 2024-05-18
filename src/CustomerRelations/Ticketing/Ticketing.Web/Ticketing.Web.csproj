@@ -24,10 +24,9 @@
 		</PackageReference>
         <PackageReference
             Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"
-            Version="8.0.0" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+            Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-            Version="8.0.0" />
+            Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
         <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
 	</ItemGroup>

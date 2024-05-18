@@ -30,16 +30,21 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+
+builder.AddServiceDefaults();
+
+//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
@@ -80,27 +85,20 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+var cs = configuration.GetConnectionString("HangfireConnection");
+
 // Add Hangfire services.
 builder.Services.AddHangfire(settings => settings
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-    .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
-    {
-        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-        QueuePollInterval = TimeSpan.Zero,
-        UseRecommendedIsolationLevel = true,
-        DisableGlobalLocks = true
-    }));
+    .UseSqlServerStorage(cs));
 
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
-//app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
-app.MapObservability();
+app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
@@ -128,7 +126,7 @@ if (args.Contains("--seed"))
 {
     await app.Services.SeedAsync();
 
-    using (var connection = new SqlConnection(configuration2.GetConnectionString("HangfireConnection", "HangfireDB")))
+    using (var connection = new SqlConnection(configuration.GetConnectionString("HangfireConnection")))
     {
         connection.Open();
 
@@ -141,9 +139,9 @@ if (args.Contains("--seed"))
         }
     }
 
-    return;
+    return; 
 }
 
-app.Services.InitializeJobs();
+//app.Services.InitializeJobs();
 
 app.Run();

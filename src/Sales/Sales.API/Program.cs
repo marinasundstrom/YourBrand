@@ -34,7 +34,9 @@ builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+builder.AddServiceDefaults();
+
+//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
@@ -51,10 +53,13 @@ builder.Services.AddOutputCache(options =>
     });
 });
 
+/*
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 if (builder.Environment.IsProduction())
 {
@@ -121,9 +126,11 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseSerilogRequestLogging();
+//app.UseSerilogRequestLogging();
 
-app.MapObservability();
+//app.MapObservability();
+
+app.MapDefaultEndpoints();
 
 app.UseExceptionHandler();
 app.UseStatusCodePages();

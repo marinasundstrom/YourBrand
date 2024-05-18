@@ -38,7 +38,7 @@ public static class ServiceUrls
 
     public const string NotificationsServiceUrl = $"{RootUrl}/notifications";
 
-    public const string OrdersServiceUrl = $"{RootUrl}/orders";
+    public const string OrdersServiceUrl = $"{RootUrl}/sales";
 
     public const string ShowroomServiceUrl = $"{RootUrl}/showroom";
 

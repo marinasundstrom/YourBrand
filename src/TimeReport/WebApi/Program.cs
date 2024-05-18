@@ -37,16 +37,20 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+builder.AddServiceDefaults();
+
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
@@ -113,9 +117,11 @@ services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(Program
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.UseSerilogRequestLogging();
 
-app.MapObservability();
+//app.MapObservability();
 
 if (app.Environment.IsDevelopment())
 {
