@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Documents": {
+    "Marketing": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5140",

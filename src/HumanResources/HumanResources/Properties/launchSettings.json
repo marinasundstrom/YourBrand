@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "YourBrand.HumanResources": {
+    "HumanResources": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5110",

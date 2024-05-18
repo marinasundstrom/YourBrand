@@ -46,7 +46,7 @@ builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 
