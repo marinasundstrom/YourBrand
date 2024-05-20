@@ -12,9 +12,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
-using Steeltoe.Common.Http.Discovery;
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Analytics.Client;
 using YourBrand.Carts;
@@ -41,10 +38,14 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Application", ServiceName)
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
+builder.AddServiceDefaults();
+
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Services.AddCors();
 
@@ -73,7 +74,7 @@ builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability("StoreFront.API", "1.0", builder.Configuration);
+//builder.Services.AddObservability("StoreFront.API", "1.0", builder.Configuration);
 
 builder.Services.AddSqlServer<StoreFrontContext>(
     builder.Configuration.GetValue<string>("yourbrand:carts-svc:db:connectionstring"),
@@ -152,7 +153,9 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
-app.MapObservability();
+app.MapDefaultEndpoints();
+
+//app.MapObservability();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -290,10 +293,12 @@ static void AddClients(WebApplicationBuilder builder)
 
         clientBuilder.AddStandardResilienceHandler();
 
+        /*
         if (builder.Environment.IsDevelopment())
         {
             clientBuilder.AddServiceDiscovery();
         }
+        */
     });
 }
 

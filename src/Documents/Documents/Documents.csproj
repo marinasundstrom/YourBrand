@@ -17,7 +17,7 @@
         <PackageReference Include="Quartz" Version="3.8.1" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
         <PackageReference Include="RazorLight" Version="2.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
         <PackageReference Include="IronPdf" Version="2022.9.9056" />
         <PackageReference Include="IronPdf.MacOs" Version="2022.9.9056" />
         <PackageReference Include="MediatR" Version="12.2.0" />

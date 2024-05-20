@@ -33,7 +33,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
             Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-        <PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="8.0.3" />
+        <PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="8.0.5" />
     </ItemGroup>
 
 </Project>
