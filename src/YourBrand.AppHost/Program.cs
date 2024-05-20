@@ -12,7 +12,7 @@ var messaging = builder.AddRabbitMQ("messaging", userName: username, password: p
 var storage = builder.AddAzureStorage("storage")
     .RunAsEmulator(container =>
                    {
-                       container.UseBlobPort(10000);
+                       container.WithBlobPort(10000);
                        container.WithBindMount("../../data/azurite", "/data");
                    });
 
