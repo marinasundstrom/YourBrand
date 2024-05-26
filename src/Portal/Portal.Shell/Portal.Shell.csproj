@@ -8,7 +8,6 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
-
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>

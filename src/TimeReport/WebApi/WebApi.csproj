@@ -34,10 +34,12 @@
     <ProjectReference Include="..\..\Contracts\Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\IdentityService\IdentityService.Contracts\IdentityService.Contracts.csproj">
+    <ProjectReference
+      Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj">
+    <ProjectReference
+      Include="..\..\IdentityManagement\IdentityManagement.Client\IdentityManagement.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\ApiKeys\ApiKeys.Integration\ApiKeys.Integration.csproj">
