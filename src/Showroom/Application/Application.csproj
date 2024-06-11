@@ -24,7 +24,6 @@
      <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-     <ProjectReference Include="..\..\IdentityService\IdentityService.Client\IdentityService.Client.csproj" />
      <ProjectReference Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
      <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>

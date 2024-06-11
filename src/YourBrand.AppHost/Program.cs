@@ -169,6 +169,14 @@ var analytics = builder.AddProject<Analytics>("analytics")
 .WithReference(messaging)
 .WithReference(blobStorage);
 
+var storefront = builder.AddProject<StoreFront>("storeFront")
+.WithReference(messaging)
+.WithReference(blobStorage);
+
+var store = builder.AddProject<Store>("store")
+.WithReference(messaging)
+.WithReference(blobStorage);
+
 builder.AddYarp("ingress")
        .WithEndpoint(port: 5174, scheme: "https")
        .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")

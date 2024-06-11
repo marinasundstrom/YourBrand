@@ -43,10 +43,14 @@ string serviceVersion = "1.0";
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
+/*
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDiscoveryClient();
 }
+*/
 
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
                         .Enrich.WithProperty("Application", serviceName)
@@ -110,7 +114,7 @@ builder.Services
     .AddOpenApi(serviceName)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
+//builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -206,7 +210,7 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-app.MapObservability();
+app.MapDefaultEndpoints();
 
 app.MapReverseProxy();
 

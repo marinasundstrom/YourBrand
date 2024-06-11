@@ -66,6 +66,12 @@
       AspireProjectMetadataTypeName="Messenger" />
     <ProjectReference Include="..\Analytics\Analytics.Web\Analytics.Web.csproj"
       AspireProjectMetadataTypeName="Analytics" />
+    <ProjectReference Include="..\Analytics\Analytics.Web\Analytics.Web.csproj"
+      AspireProjectMetadataTypeName="Analytics" />
+    <ProjectReference Include="..\StoreFront\StoreFront.API\StoreFront.API.csproj"
+      AspireProjectMetadataTypeName="StoreFront" />
+    <ProjectReference Include="..\Store\Web\Server\BlazorApp.csproj"
+      AspireProjectMetadataTypeName="Store" />
   </ItemGroup>
 
 </Project>
