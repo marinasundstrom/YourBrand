@@ -106,7 +106,7 @@ public static class OpenApiExtensions
         {
             configureOpenApi?.Invoke(options);
 
-            options.Path = "/swagger/{documentName}/swagger.yaml";
+            options.Path = "/openapi/{documentName}/openapi.yaml";
         });
 
         app.UseSwaggerUi(options =>
@@ -119,7 +119,7 @@ public static class OpenApiExtensions
             foreach (var description in descriptions)
             {
                 var name = $"v{description.ApiVersion}";
-                var url = $"/swagger/v{GetApiVersion(description)}/swagger.yaml";
+                var url = $"/openapi/v{GetApiVersion(description)}/openapi.yaml";
 
                 options.SwaggerRoutes.Add(new SwaggerUiRoute(name, url));
             }
