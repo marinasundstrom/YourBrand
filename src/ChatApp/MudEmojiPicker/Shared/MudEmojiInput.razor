@@ -1,0 +1,79 @@
+﻿@using System.Data
+@namespace MudEmojiPicker.Shared
+@using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs
+@inject EmojiService _emojiService
+
+@if(Loaded) 
+{
+<input name="Emoji" @bind="@Value" hidden/>
+
+<MudDialog 
+           Options="_dialogOptions"
+           ContentStyle="padding: 0"
+           Style="" >
+    <DialogContent>
+        <MudTabs
+            Elevation="2"
+            Rounded="true"
+            Outlined="true"
+            MinimumTabWidth="36px"
+            HideSlider="true">
+            @foreach (var emojiList in _emojiService.EmojiLists)
+            {
+                <EmojiRender
+                    Emojis="emojiList.emojiList"
+                    Title="@emojiList.emojiList[0].unicode"
+                    @bind-Value="Value" @bind-Value:after="OnValueChanged">
+                </EmojiRender>
+            }
+        </MudTabs>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Error" OnClick="() => Instance.Close(DialogResult.Cancel())">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+}
+
+@code {
+    private DialogOptions _dialogOptions = new() { FullScreen = false };
+    
+    private float _iconCardHeight = 36; // single icon card height includin margins
+    
+    [Parameter]
+    public string Value { get; set; } = "🙂";
+
+    private string _emoji = "";
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    bool Loaded = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await _emojiService.TaskInitialize();
+
+        _emojiService.GetSvgValue(Value);
+        base.OnInitialized();
+
+        Loaded = true;
+    }
+
+    private async Task OnValueChanged()
+    {
+       // Value = e.Value.ToString();
+        await ValueChanged.InvokeAsync(Value);
+        //IsVisible = false;
+       // StateHasChanged();
+
+       Instance.Close(Value);
+    }
+    
+    string activeClass = "e-active";
+
+    [CascadingParameter]
+    public MudDialogInstance Instance { get; set; }
+
+    [Parameter]
+    public bool IsVisible { get; set; } = false;
+}

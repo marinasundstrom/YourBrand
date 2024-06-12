@@ -1,0 +1,23 @@
+﻿@using Microsoft.FeatureManagement;
+@inject IStringLocalizer<NavMenu> T
+@inject IFeatureManager FeatureManager
+
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.List">@T["Home"]</MudNavLink>
+
+    <AuthorizeView>
+        @if (isFeatureEnabled)
+        {
+            <ChannelNavGroup />
+        }
+    </AuthorizeView>
+</MudNavMenu>
+
+@code {
+    bool isFeatureEnabled = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isFeatureEnabled = await FeatureManager.IsEnabledAsync("FeatureA");
+    }
+}

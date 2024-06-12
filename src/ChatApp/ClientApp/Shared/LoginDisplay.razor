@@ -1,0 +1,53 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject IStringLocalizer<LoginDisplay> T
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopCenter" PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+            <ActivatorContent>
+                <MudAvatar Size="Size.Small" Class="me-3">@GetInitials(UserView?.UserInfo?.Name)</MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem OnClick="BeginSignOut">
+                    <div class="d-flex">
+                        <MudIcon Icon="@Icons.Material.Filled.Logout" class="me-2" />
+                        <MudText Style="overflow: hidden; white-space: nowrap;">@T["LogOut"]</MudText>
+                    </div>
+                </MudMenuItem>
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Href="authentication/login" />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter(Name = "UserView")]
+    public UserView? UserView { get; set; } = null!;
+
+    [CascadingParameter(Name = "UserInfo")]
+    public UserInfo? UserInfo { get; set; } = null!;
+
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        var result = await DialogService.ShowMessageBox(T["LogOut"], T["AreYouSure"], T["Yes"], T["No"]);
+
+        if (!result.GetValueOrDefault())
+        {
+            return;
+        }
+
+        Navigation.NavigateToLogout("authentication/logout");
+    }
+
+    private string GetInitials(string? name)
+    {
+        if(name is null) return string.Empty;
+
+        return new string(name.Split(' ').Select(part => part.First()).ToArray());
+    }
+}

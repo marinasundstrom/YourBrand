@@ -1,0 +1,56 @@
+@using System.Globalization
+@inject IJSRuntime JSRuntime
+@inject IStringLocalizer<CultureSelector> T
+@inject NavigationManager Nav
+
+<EditForm Model="@this">
+    <MudDialog>
+        <DialogContent>
+            <MudSelect Label="@T["Locale"]" HelperText="@T["SelectYourLocale"]" @bind-Value="Culture">
+                @foreach (var culture in supportedCultures)
+                {
+                    <MudSelectItem Value="@culture">@T[culture.Name]</MudSelectItem>
+                }
+            </MudSelect>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">@T["Cancel"]</MudButton>
+            <MudButton Color="Color.Primary" OnClick="Submit">@T["Ok"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        var str = await JSRuntime.InvokeAsync<string>("blazorCulture.get");
+        Culture = supportedCultures.First(c => c.Name == str);
+    }
+
+    private CultureInfo[] supportedCultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("sv-SE"),
+    };
+
+    private CultureInfo Culture { get; set; } = null!;
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    void Submit()
+    {
+        if (CultureInfo.CurrentCulture != Culture)
+        {
+            var js = (IJSInProcessRuntime)JSRuntime;
+            js.InvokeVoid("blazorCulture.set", Culture.Name);
+
+            Nav.NavigateTo(Nav.Uri, forceLoad: true);
+        }
+
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

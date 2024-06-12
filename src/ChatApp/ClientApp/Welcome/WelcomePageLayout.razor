@@ -1,0 +1,64 @@
+@inherits LayoutComponentBase
+@using Blazored.LocalStorage
+@inject IThemeManager ThemeManager
+@inject ILocalStorageService LocalStorage
+
+<MudThemeProvider IsDarkMode="@(_currentColorScheme == ColorScheme.Dark)" Theme="_theme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<UserView>
+
+<MudLayout>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Small" Class="my-16">
+            @Body
+        </MudContainer>
+
+        <MudScrollToTop>
+            <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+        </MudScrollToTop>
+    </MudMainContent>
+</MudLayout>
+
+<MudScrollToTop>
+    <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+</MudScrollToTop>
+
+</UserView>
+
+@code {
+    private MudTheme _theme = new MudTheme()
+    {
+        Typography = new Typography()
+        {
+            Default = new Default()
+            {
+                FontFamily = new[] { "Roboto", "sans-serif" }
+            }
+        },
+        Palette = new Palette
+        {
+            Background = "#f9f9f9",
+            AppbarBackground = "#242222",
+            Primary = "#63a9cb",
+            //Secondary = "#00000000"
+        }
+    };
+
+    ColorScheme? _currentColorScheme;
+
+    protected override void OnInitialized()
+    {
+        _currentColorScheme = ThemeManager.CurrentColorScheme;
+        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+    } 
+
+
+    void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs ea)
+    {
+        _currentColorScheme = ea.ColorScheme;
+
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,8 @@
+@inject IStringLocalizer<AppBar> T
+
+<Microsoft.AspNetCore.Components.Web.PageTitle>@ChildContent - @T["Todo"]</Microsoft.AspNetCore.Components.Web.PageTitle>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

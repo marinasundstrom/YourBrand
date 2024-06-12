@@ -1,0 +1,76 @@
+@page "/welcome"
+@layout WelcomePageLayout
+@attribute [Authorize]
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
+@inject IUsersClient UsersService
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<WelcomePage> T
+
+<AppPageTitle>@T["Welcome"]</AppPageTitle>
+
+<MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">@T["Welcome"]</MudText>
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="@T["Name"]" Class="mt-4" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" HelperText="@T["NameHelperText"]"></MudTextField>
+
+    <MudTextField Label="@T["Email"]" Class="mt-4" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" HelperText="@T["EmailHelperText"]"></MudTextField>
+
+    <MudButton ButtonType="ButtonType.Submit" Class="mt-4" Variant="Variant.Filled" EndIcon="@Icons.Filled.KeyboardArrowRight">@T["Proceed"]</MudButton>
+
+</EditForm>
+
+@code {
+    CancellationTokenSource cts = new();
+    EditContext editContext = null!;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    [CascadingParameter(Name = "UserView")]
+    public UserView UserView { get; set; } = null!;
+
+    [Required]
+    [MaxLength(60)]
+    public string Name { get; set; } = null!;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticationState = await AuthenticationStateTask;
+
+        Email = authenticationState.User.Claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value!;
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            await UsersService.CreateUserAsync(new CreateUser()
+            {
+                Name = Name,
+                Email = Email
+            }, cts.Token);
+
+            //await UserView.ReloadUserInfo();
+
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    public void Dispose()
+    {
+        cts.Cancel();
+    }
+}

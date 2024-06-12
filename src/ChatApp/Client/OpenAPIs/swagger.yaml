@@ -1,0 +1,638 @@
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Chat API
+  version: v1
+servers:
+- url: https://localhost:5001
+paths:
+  /v1/Channels:
+    get:
+      tags:
+      - Channels
+      operationId: Channels_GetChannels
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+        x-position: 3
+      - name: sortDirection
+        in: query
+        schema:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SortDirection'
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfChannel'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfChannel'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Channels
+      operationId: Channels_CreateChannel
+      requestBody:
+        x-name: request
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChannelRequest'
+        required: true
+        x-position: 1
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Channels/{id}:
+    get:
+      tags:
+      - Channels
+      operationId: Channels_GetChannelById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Messages:
+    get:
+      tags:
+      - Messages
+      operationId: Messages_GetMessages
+      parameters:
+      - name: channelId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfMessage'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfMessage'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Messages
+      operationId: Messages_PostMessage
+      requestBody:
+        x-name: request
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMessageRequest'
+        required: true
+        x-position: 1
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+                format: guid
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Messages/{id}:
+    get:
+      tags:
+      - Messages
+      operationId: Messages_GetMessageById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Messages
+      operationId: Messages_DeleteMessage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Messages
+      operationId: Messages_EditMessage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      requestBody:
+        x-name: content
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Messages/{id}/Reaction:
+    post:
+      tags:
+      - Messages
+      operationId: Messages_React
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      requestBody:
+        x-name: reaction
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Messages
+      operationId: Messages_RemoveReaction
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 1
+      requestBody:
+        x-name: reaction
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Users:
+    get:
+      tags:
+      - Users
+      operationId: Users_GetUsers
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfUser'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Users
+      operationId: Users_CreateUser
+      requestBody:
+        x-name: request
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Users/UserInfo:
+    get:
+      tags:
+      - Users
+      operationId: Users_GetUserInfo
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+components:
+  schemas:
+    ItemsResultOfChannel:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Channel'
+        totalItems:
+          type: integer
+          format: int32
+    Channel:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+    SortDirection:
+      type: string
+      description: ''
+      x-enumNames:
+      - Ascending
+      - Descending
+      enum:
+      - Ascending
+      - Descending
+    ProblemDetails:
+      type: object
+      additionalProperties:
+        nullable: true
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+    CreateChannelRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+    ItemsResultOfMessage:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        totalItems:
+          type: integer
+          format: int32
+    Message:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        channelId:
+          type: string
+          format: guid
+        replyTo:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReplyMessage'
+        content:
+          type: string
+        published:
+          type: string
+          format: date-time
+        publishedBy:
+          $ref: '#/components/schemas/User'
+        lastEdited:
+          type: string
+          format: date-time
+          nullable: true
+        lastEditedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        deleted:
+          type: string
+          format: date-time
+          nullable: true
+        deletedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reaction'
+    ReplyMessage:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        channelId:
+          type: string
+          format: guid
+        content:
+          type: string
+        published:
+          type: string
+          format: date-time
+        publishedBy:
+          $ref: '#/components/schemas/User'
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        deleted:
+          type: string
+          format: date-time
+          nullable: true
+        deletedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+    User:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Reaction:
+      type: object
+      additionalProperties: false
+      properties:
+        content:
+          type: string
+        date:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+    PostMessageRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        channelId:
+          type: string
+          format: guid
+        replyToId:
+          type: string
+          format: guid
+          nullable: true
+        content:
+          type: string
+    ItemsResultOfUser:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        totalItems:
+          type: integer
+          format: int32
+    UserInfo:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CreateUser:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

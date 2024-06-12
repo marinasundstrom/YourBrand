@@ -1,0 +1,62 @@
+﻿
+
+@inject EmojiService _emojiService
+@namespace MudEmojiPicker.Shared
+@using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs
+
+<input name="Emoji" @bind="@Value" hidden @oninput="OnValueChanged"/>
+
+<MudTabPanel Text="@Title" >
+    <MudContainer Style="max-height: 300px; overflow-y: scroll">
+        <Virtualize Items="@Emojis" ItemSize="_iconCardHeight">
+            @{var toolTipsText = string.Join(" ", context.tags);}
+            <MudTooltip Text="@toolTipsText">
+            @if (context?.skins?.Count > 0)
+            {
+                            
+                <MudMenu Icon="@context.svg">
+                    <ChildContent>
+                        @foreach (var skin in context.skins)
+                        {
+                            <MudMenuItem Icon="@skin.svg" OnClick="async () => { await OnInsert(skin.unicode); }"/>
+                        }
+                    </ChildContent>
+                </MudMenu>
+            }
+            else
+            {
+                <MudIconButton Icon="@context.svg" OnClick="async () => { await OnInsert(context.unicode); }"/>
+            }
+            </MudTooltip>
+        </Virtualize>
+    </MudContainer>
+</MudTabPanel>
+
+@code {
+    [Parameter] 
+    public List<EmojiList> Emojis { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+    
+    [Parameter]
+    public string Value { get; set; } = "🙂";
+    
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+    
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = e.Value.ToString();
+        await ValueChanged.InvokeAsync(Value);
+    }
+    
+    private async Task OnInsert(string context)
+    {
+        Value = context;
+        await ValueChanged.InvokeAsync(Value);
+    }
+    
+    private double _iconCardWidth = 136.88; // single icon card width includin margins
+    private float _iconCardHeight = 36; // single icon card height includin margins
+}

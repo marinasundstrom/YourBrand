@@ -1,0 +1,65 @@
+﻿@using System.Linq.Expressions
+@inject IUsersClient UsersClient
+
+<MudAutocomplete T="User" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+                 For="For" SearchFunc="SearchUsers" ToStringFunc="(x) => x.Name"
+                 ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+    <ItemTemplate Context="context2">
+        <MudText Typo="Typo.body1">
+            <MudAvatar Size="Size.Small" Class="me-3">@GetInitials(context2.Name)</MudAvatar>
+            @context2.Name
+        </MudText>
+    </ItemTemplate>
+
+    <ItemSelectedTemplate Context="context2">
+        <MudText Typo="Typo.body1">
+            <MudAvatar Size="Size.Small" Class="me-3">@GetInitials(context2.Name)</MudAvatar>
+            @context2.Name
+        </MudText>    
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "User";
+
+    [Parameter]
+    public User Value { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<User> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<User>> For { get; set; } = null!;
+
+    [Parameter]
+    public string Style { get; set; } = null!;
+
+    [Parameter]
+    public string Class { get; set; } = null!;
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    async Task<IEnumerable<User>> SearchUsers(string text)
+    {
+        try
+        {
+            var results = await UsersClient.GetUsersAsync(1, 10, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null!;
+    }
+
+    private string GetInitials(string? name)
+    {
+        if(name is null) return string.Empty;
+
+        return new string(name.Split(' ').Select(part => part.First()).ToArray());
+    }
+}

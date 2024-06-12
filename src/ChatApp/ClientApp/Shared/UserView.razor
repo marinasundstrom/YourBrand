@@ -1,0 +1,58 @@
+@using System.Net
+@inject IUsersClient UsersClient
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<App> T
+
+@if(initialized) 
+{
+    <CascadingValue Value="this" Name="UserView">
+        <CascadingValue Value="UserInfo" Name="UserInfo">
+            @ChildContent
+        </CascadingValue>
+    </CascadingValue>
+}
+
+@code {
+    bool initialized = false;
+
+    [Parameter]
+    public UserInfo? UserInfo { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try 
+        {
+            UserInfo = await UsersClient.GetUserInfoAsync();
+            
+            initialized = true;
+        }
+        catch(ApiException e) when (e.StatusCode == (int)HttpStatusCode.NotFound)
+        {
+            NavigationManager.NavigateTo("/welcome");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch(Exception e)
+        {
+            throw;
+        }
+        finally 
+        {
+            initialized = true;
+        }
+    }
+
+    public async Task ReloadUserInfo() 
+    {
+        // TODO: Investigate why this does not propagate changes to LoginDisplay.
+
+        UserInfo = await UsersClient.GetUserInfoAsync();
+
+        StateHasChanged();
+    }
+}

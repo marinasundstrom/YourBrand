@@ -1,0 +1,22 @@
+@using System.ComponentModel.DataAnnotations
+@inject ISnackbar Snackbar
+@inject IChannelsClient ChannelsClient
+@inject IStringLocalizer<NewChannelDialog> T
+
+<div style="width: 350px; max-width: 350px;">
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudDialog>
+            <DialogContent>
+                <MudTextField Label="@T["Name"]" HelperText="@T["NameHelp"]"
+                              @bind-Value="model.Name" For="@(() => model.Name)" />
+            </DialogContent>
+
+            <DialogActions>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => MudDialog.Cancel()">@T["Cancel"]</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">@T["Create"]</MudButton>
+            </DialogActions>
+        </MudDialog>
+
+    </EditForm>
+</div>

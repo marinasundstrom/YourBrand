@@ -1,0 +1,10 @@
+﻿@page "/"
+@attribute [Authorize]
+@using Microsoft.AspNetCore.Authorization
+@inject IStringLocalizer<HomePage> T
+
+<AppPageTitle>@T["Title"]</AppPageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">@T["Title"]</MudText>
+
+<MudText Typo="Typo.body1">@T["Text"]</MudText>

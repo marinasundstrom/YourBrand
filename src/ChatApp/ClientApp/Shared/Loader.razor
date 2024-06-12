@@ -1,0 +1,14 @@
+<div @attributes="AdditionalAttributes" style="display: contents;">
+    <div class="loadingContainer1">
+        <div class="ball1"></div>
+        <div class="ball2"></div>
+        <div class="ball3"></div>
+        <div class="ball4"></div>
+    </div>
+</div>
+
+@code 
+{
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; } = default!;
+}

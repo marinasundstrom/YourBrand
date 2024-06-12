@@ -1,0 +1,67 @@
+@inject IThemeManager ThemeManager
+@inject IStringLocalizer<ThemeSelector> T
+
+<MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+    PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list" LockScroll="true">
+    <ActivatorContent>
+        <MudIconButton
+            Icon="@(ThemeManager.IsAutoColorScheme ? Icons.Material.Filled.AutoMode : (_currentColorScheme == ColorScheme.Light ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode))"
+            Color="Color.Inherit" Edge="Edge.End" Class="me-2" />
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem OnClick="@(async (e) => ThemeManager.SetPreferredColorScheme(ColorScheme.Light))">
+            <div class="d-flex">
+                <MudIcon Icon="@Icons.Material.Filled.LightMode" class="me-2" />
+                <MudText Style="overflow: hidden; white-space: nowrap;">@T["Light"]</MudText>
+                @if (!ThemeManager.IsAutoColorScheme
+                && ThemeManager.CurrentColorScheme == ColorScheme.Light)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" class="ms-2" />
+                }
+            </div>
+        </MudMenuItem>
+        <MudMenuItem OnClick="@(async (e) => ThemeManager.SetPreferredColorScheme(ColorScheme.Dark))">
+            <div class="d-flex">
+                <MudIcon Icon="@Icons.Material.Filled.DarkMode" class="me-2" />
+                <MudText Style="overflow: hidden; white-space: nowrap;">@T["Dark"]</MudText>
+                @if (!ThemeManager.IsAutoColorScheme
+                && ThemeManager.CurrentColorScheme == ColorScheme.Dark)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" class="ms-2" />
+                }
+            </div>
+        </MudMenuItem>
+        <MudMenuItem OnClick="(e) => ThemeManager.UseSystemColorScheme()">
+            <div class="d-flex">
+                <MudIcon Icon="@Icons.Material.Filled.AutoMode" class="me-2" />
+                <MudText Style="overflow: hidden; white-space: nowrap;">@T["System"]</MudText>
+                @if (ThemeManager.IsAutoColorScheme)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" class="ms-2" />
+                }
+            </div>
+        </MudMenuItem>
+    </ChildContent>
+</MudMenu>
+
+@code {
+    ColorScheme? _currentColorScheme;
+
+    protected override void OnInitialized()
+    {
+        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+        _currentColorScheme = ThemeManager.CurrentColorScheme;
+    }
+
+    private void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs e)
+    {
+        _currentColorScheme = e.ColorScheme;
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+
+    }
+}

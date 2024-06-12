@@ -1,0 +1,32 @@
+@inject IStringLocalizer<App> T
+
+<CascadingAuthenticationState>
+    <UserView>
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <Authorizing>
+                        <span>@T["AuthorizingMessage"]</span>
+                    </Authorizing>
+                    <NotAuthorized>
+                        @if (context.User.Identity?.IsAuthenticated != true)
+                        {
+                            <RedirectToLogin />
+                        }
+                        else
+                        {
+                            <p role="alert">@T["UnauthorizedMessage"]</p>
+                        }
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Found>
+            <NotFound>
+                <AppPageTitle>@T["NotFound"]</AppPageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">@T["NotFoundMessage"]</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </UserView>
+</CascadingAuthenticationState>

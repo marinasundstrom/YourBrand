@@ -16,6 +16,8 @@ var storage = builder.AddAzureStorage("storage")
                        container.WithBindMount("../../data/azurite", "/data");
                    });
 
+var redis = builder.AddRedis("redis");
+
 var blobStorage = storage.AddBlobs("blobs");
 
 /*
@@ -162,6 +164,13 @@ var messenger = builder.AddProject<Messenger>("messenger")
 .WithReference(messengerDb)
 .WithReference(messaging)
 .WithReference(blobStorage);
+
+var chatAppDb = sqlServer.AddDatabase("chatAppDb", "ChatApp");
+var chatApp = builder.AddProject<ChatApp>("chatApp")
+.WithReference(chatAppDb)
+.WithReference(messaging)
+.WithReference(blobStorage)
+.WithReference(redis);
 
 var analyticsDb = sqlServer.AddDatabase("analyticsDb", "Analytics");
 var analytics = builder.AddProject<Analytics>("analytics")
