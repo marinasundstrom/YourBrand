@@ -79,7 +79,7 @@
     {
         "Id": "88c581bd-e49b-48b1-9d2a-5d7b84444310",
         "Name": "Messenger",
-        "Assembly": "Messenger.UI",
+        "Assembly": "ChatApp.UI",
         "Enabled": true
     },
     {

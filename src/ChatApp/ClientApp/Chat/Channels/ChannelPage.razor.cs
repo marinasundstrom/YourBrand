@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using ChatApp.Theming;
+using YourBrand.ChatApp.Theming;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
 using Microsoft.AspNetCore.Components.Authorization;
-using ChatApp.Features.Chat;
+using YourBrand.ChatApp.Features.Chat;
 
-namespace ChatApp.Chat.Channels
+namespace YourBrand.ChatApp.Chat.Channels
 {
     public partial class ChannelPage : IChatHubClient
     {
@@ -41,8 +41,8 @@ namespace ChatApp.Chat.Channels
 
             StateHasChanged();
 
-            currentUserId = await CurrentUserService.GetUserIdAsync();
-            isInAdminRole = await CurrentUserService.IsInRoleAsync("admin");
+            currentUserId = await UserContext.GetUserIdAsync();
+            isInAdminRole = await UserContext.IsInRoleAsync("admin");
 
             userInfo = await UsersClient.GetUserInfoAsync();
 

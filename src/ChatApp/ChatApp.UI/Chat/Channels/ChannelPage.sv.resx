@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="Message" xml:space="preserve">
+		<value>Meddelande</value>
+	</data>
+	<data name="WriteMessage" xml:space="preserve">
+		<value>Skriv ditt meddelande</value>
+	</data>
+	<data name="Send" xml:space="preserve">
+		<value>Skicka</value>
+	</data>
+	<data name="Required" xml:space="preserve">
+		<value>Obligatorisk</value>
+	  </data>
+	<data name="Now" xml:space="preserve">
+		<value>Nu</value>
+	</data>
+	<data name="Me" xml:space="preserve">
+		<value>Jag</value>
+	</data>
+	<data name="TimeDisplay" xml:space="preserve">
+		<value>{0} sedan</value>
+	</data>
+	<data name="EditedBy" xml:space="preserve">
+		<value>Redigerat {0} av {1}</value>
+	</data>
+	<data name="Deleted" xml:space="preserve">
+		<value>Meddelande borttaget</value>
+	</data>
+	<data name="DeletedBy" xml:space="preserve">
+		<value>Meddelande borttaget av {0}</value>
+	</data>
+	<data name="DeletedByAt" xml:space="preserve">
+		<value>Meddelande borttaget {0} av {1}</value>
+	</data>
+	<data name="Edit" xml:space="preserve">
+		<value>Redigera</value>
+	</data>
+	<data name="Delete" xml:space="preserve">
+		<value>Ta bort</value>
+	</data>
+	<data name="Report" xml:space="preserve">
+		<value>Rapportera</value>
+	</data>
+	<data name="Connecting" xml:space="preserve">
+		<value>Ansluter</value>
+	</data>
+	<data name="Connected" xml:space="preserve">
+		<value>Ansluten</value>
+	</data>
+	<data name="Disconnected" xml:space="preserve">
+		<value>Frånkopplad</value>
+	</data>
+	<data name="Reconnecting" xml:space="preserve">
+	  <value>Återansluter</value>
+	</data>
+	<data name="Reconnected" xml:space="preserve">
+	  <value>Återansluten</value>
+	</data>
+</root>

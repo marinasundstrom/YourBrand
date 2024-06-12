@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
+		<NoWarn>1701;1702;CS1591</NoWarn>
+		<RootNamespace>YourBrand.ChatApp</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<OpenApiReference Include="OpenAPIs\swagger.yaml" Options="/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true" Namespace="YourBrand.ChatApp">
+			<SourceUri>https://localhost:5001/swagger/v1/swagger.yaml</SourceUri>
+			<ClassName>{controller}Client</ClassName>
+			<OutputPath>ChatAppClient.cs</OutputPath>
+		</OpenApiReference>
+	</ItemGroup>
+
+	<ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NSwag.ApiDescription.Client" Version="14.0.7">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
+            Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+	</ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MudEmojiPicker\MudEmojiPicker.csproj" />
+    </ItemGroup>
+
+
+</Project>

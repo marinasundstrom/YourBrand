@@ -63,9 +63,7 @@
       AspireProjectMetadataTypeName="RotRutService" />
     <ProjectReference Include="..\Documents\Documents\Documents.csproj"
       AspireProjectMetadataTypeName="Documents" />
-    <ProjectReference Include="..\Messenger\Messenger\Messenger.csproj"
-      AspireProjectMetadataTypeName="Messenger" />
-      <ProjectReference Include="..\ChatApp\Web\Web.csproj"
+    <ProjectReference Include="..\ChatApp\ChatApp\ChatApp.csproj"
       AspireProjectMetadataTypeName="ChatApp" />
     <ProjectReference Include="..\Analytics\Analytics.Web\Analytics.Web.csproj"
       AspireProjectMetadataTypeName="Analytics" />

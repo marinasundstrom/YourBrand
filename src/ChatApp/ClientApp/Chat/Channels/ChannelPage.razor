@@ -5,14 +5,14 @@
 @inject IThemeManager ThemeManager
 @inject NavigationManager NavigationManager
 @inject Services.IAccessTokenProvider AccessTokenProvider
-@inject Services.ICurrentUserService CurrentUserService
+@inject Services.IUserContext UserContext
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject IMessagesClient MessagesClient
 @inject IUsersClient UsersClient
 @inject IJSRuntime JSRuntime
 @implements IDisposable
-@using ChatApp.Chat.Messages
+@using YourBrand.ChatApp.Chat.Messages
 @using Microsoft.AspNetCore.Authorization;
 @using System.ComponentModel.DataAnnotations
 @using MudEmojiPicker.Shared

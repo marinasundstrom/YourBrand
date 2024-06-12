@@ -159,12 +159,6 @@ var documents = builder.AddProject<Documents>("documents")
 .WithReference(messaging)
 .WithReference(blobStorage);
 
-var messengerDb = sqlServer.AddDatabase("messengerDb", "Messenger");
-var messenger = builder.AddProject<Messenger>("messenger")
-.WithReference(messengerDb)
-.WithReference(messaging)
-.WithReference(blobStorage);
-
 var chatAppDb = sqlServer.AddDatabase("chatAppDb", "ChatApp");
 var chatApp = builder.AddProject<ChatApp>("chatApp")
 .WithReference(chatAppDb)

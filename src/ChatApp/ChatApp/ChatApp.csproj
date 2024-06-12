@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>ChatApp.Web</RootNamespace>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<!-- <WarningsAsErrors>nullable</WarningsAsErrors> -->
+		<NoWarn>1701;1702;CS1591</NoWarn>
+		<AssemblyName>Web</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+	</PropertyGroup>	   
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="IntegrationTests" />
+		<InternalsVisibleTo Include="Application.Tests" />
+		<InternalsVisibleTo Include="Infrastructure.Tests" />
+	</ItemGroup>
+
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Web' " />
+	<ItemGroup>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
+        <PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
+        <PackageReference Include="Hangfire.Core" Version="1.8.12" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.12" />
+        <PackageReference Include="Hangfire.SqlServer" Version="1.8.12" />
+        <PackageReference Include="Polly" Version="8.3.0" />
+        <PackageReference Include="Quartz" Version="3.8.1" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
+        <PackageReference Include="Scrutor" Version="4.2.0" />
+        <PackageReference Include="FluentValidation" Version="11.4.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+        <PackageReference Include="LinqKit" Version="1.2.3" />
+        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+        <ProjectReference
+            Include="..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
+
+        <ProjectReference Include="..\ChatApp.Shared\ChatApp.Shared.csproj" />
+        <ProjectReference Include="..\ChatApp.Contracts\ChatApp.Contracts.csproj" />
+        <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\Common\Domain.Infrastructure\Domain.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Common\Domain.Persistence\Domain.Persistence.csproj" />
+        <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
+        <ProjectReference
+            Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+        <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+        <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+        <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
+    </ItemGroup>
+
+</Project>

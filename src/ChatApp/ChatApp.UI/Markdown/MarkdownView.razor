@@ -1,0 +1,11 @@
+@inherits MarkdownModel
+
+@HtmlContent
+
+@code
+{  
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

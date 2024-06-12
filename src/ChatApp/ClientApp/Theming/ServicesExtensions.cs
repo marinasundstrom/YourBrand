@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChatApp.Theming;
+namespace YourBrand.ChatApp.Theming;
 
 public static class ServicesExtensions
 {

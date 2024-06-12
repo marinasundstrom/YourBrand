@@ -58,6 +58,22 @@ public abstract class NavItemsCollection
         return navItem;
     }
 
+    public NavItem CreateItem(string id, string name, string icon, Func<Task> onClick)
+    {
+        var navItem = new NavItem()
+        {
+            Id = id,
+            Name = name,
+            Icon = icon,
+            OnClick = onClick
+        };
+        _items.Add(navItem);
+
+        Updated?.Invoke(this, EventArgs.Empty);
+
+        return navItem;
+    }
+
     public NavItem CreateItem(string id, Func<string> name, string icon, string href)
     {
         var navItem = new NavItem()
@@ -66,6 +82,22 @@ public abstract class NavItemsCollection
             NameFunc = name,
             Icon = icon,
             Href = href
+        };
+        _items.Add(navItem);
+
+        Updated?.Invoke(this, EventArgs.Empty);
+
+        return navItem;
+    }
+
+    public NavItem CreateItem(string id, Func<string> name, string icon, Func<Task> onClick)
+    {
+        var navItem = new NavItem()
+        {
+            Id = id,
+            NameFunc = name,
+            Icon = icon,
+            OnClick = onClick
         };
         _items.Add(navItem);
 
@@ -86,6 +118,7 @@ public abstract class NavItemsCollection
             NameFunc = options.NameFunc,
             Icon = options.Icon,
             Href = options.Href,
+            OnClick = options.OnClick,
             RequiresAuthorization = options.RequiresAuthorization,
             Roles = options.Roles,
             Policy = options.Policy

@@ -1,0 +1,283 @@
+@page "/channels"
+@page "/channels/{Id}"
+@attribute [Authorize]
+@inject IStringLocalizer<ChannelPage> T
+@inject IThemeManager ThemeManager
+@inject NavigationManager NavigationManager
+@inject IUserContext UserContext
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IMessagesClient MessagesClient
+@inject IUsersClient UsersClient
+@inject IJSRuntime JSRuntime
+@inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
+@implements IDisposable
+@using YourBrand.ChatApp.Chat.Messages
+@using Microsoft.AspNetCore.Authorization;
+@using System.ComponentModel.DataAnnotations
+@using MudEmojiPicker.Shared
+
+<style>
+    .message-content {
+        position: relative;
+    }
+</style>
+
+<div class="@(isDarkMode ? "dark" : null)">
+
+@foreach (var message in loadedMessages.OrderBy(x => x.Published))
+{
+    bool first = IsFirst(message);
+    bool last = IsLast(message);
+
+    var isAuthorizedToDelete = isInAdminRole || message.PostedById == currentUserId;
+    var isAuthorizedToEdit = message.PostedById == currentUserId;
+
+    <Message @key="message.GetHashCode()" Direction="@(message.IsFromCurrentUser ? MessageDirection.Right : MessageDirection.Left)"
+        First=@first Last=@last IsFooterVisible=@(last || message.Reactions.Any()) IsSideAreaVisible=@(message.PostedById != currentUserId)>
+        <SideAreaTemplate>
+            @if(first) 
+            {   
+                <MudTooltip Text="@message.PostedByName">
+                    <MudAvatar Class="mt-2" Size="Size.Small">@message.PostedByInitials</MudAvatar>
+                </MudTooltip>
+            }
+        </SideAreaTemplate>
+        <ChildContent>
+             <Bubble Class="@(message.Deleted is not null ? "deleted" : string.Empty)">
+                @if (message.Deleted is not null)
+                {
+                    <p class="me-2">
+                        <MudTooltip Text="@($"{T["DeletedByAt", message.Deleted.Humanize()!, message.DeletedByName!]}")">
+                            <MudIcon Icon="@Icons.Filled.Delete" Size="Size.Small" Class="me-1" Style="height: 0.8em; top: 3px; position: relative;" />
+                        </MudTooltip>
+
+                        @if(message.DeletedById != message.PostedById) 
+                        { 
+                            <text>@($"{T["DeletedBy", message.DeletedByName!]}")</text> 
+                        }
+                        else 
+                        {
+                            <text>@($"{T["Deleted"]}")</text> 
+                        }
+                    </p>
+                }
+                else
+                {
+                    if (message.ReplyTo is not null)
+                    {
+                        <div class="reply-bubble @(message.ReplyTo.Deleted is not null ? "deleted" : string.Empty)  @(message.ReplyTo.PostedById == currentUserId ? "right" : "left")">
+
+                        @if (message.ReplyTo.Deleted is not null)
+                        {
+                            <p class="me-2">
+                                <MudTooltip Text="@($"{T["DeletedByAt", message.ReplyTo.Deleted.Humanize()!, message.ReplyTo.DeletedByName!]}")">
+                                    <MudIcon Icon="@Icons.Filled.Delete" Size="Size.Small" Class="me-1" Style="height: 0.8em; top: 3px; position: relative;" />
+                                </MudTooltip>
+
+                                @if(message.ReplyTo.DeletedById != message.ReplyTo.PostedById) 
+                                { 
+                                    <text>@($"{T["DeletedBy", message.ReplyTo.DeletedByName!]}")</text> 
+                                }
+                                else 
+                                {
+                                    <text>@($"{T["Deleted"]}")</text> 
+                                }
+                            </p>
+                        }
+                        else 
+                        {
+                            <small><b>@(message.ReplyTo.PostedById == currentUserId ? T["Me"] : message.ReplyTo.PostedByName)</b></small>
+                            <YourBrand.ChatApp.Markdown.MarkdownView Content="@message.ReplyTo.Content" />
+                        }
+                        </div>
+                    }
+
+                    <YourBrand.ChatApp.Markdown.MarkdownView Content="@message.Content" />
+
+                    <div style="float: right" class="mt-2">
+                        <TimeDisplay Message="@message" class="ms-1" />
+
+                        @if(message.PostedById == currentUserId || message.Edited is not null) 
+                        {
+                            <div class="d-inline-flex">
+
+                                @if(message.PostedById == currentUserId) 
+                                {
+                                    if(message.Confirmed) 
+                                    {
+                                        <MudIcon Icon="@Icons.Filled.CheckCircle" Size="Size.Small" Class="ms-1" Style="height: 0.8em; top: 3px; position: relative;" />
+                                    }
+                                }
+
+                                @if (message.Edited is not null)
+                                {
+                                    <MudTooltip Text="@($"{T["EditedBy", message.Edited.Humanize()!, message.EditedByName!]}")">
+                                        <MudIcon Icon="@Icons.Filled.Edit" Size="Size.Small" Style="height: 0.8em; top: 3px; position: relative;" />
+                                    </MudTooltip>
+                                }
+
+                            </div>
+                        }
+                    </div>
+            }
+            </Bubble>
+
+            @if (message.Deleted is null)
+            {
+                <ReactionsDisplay Message="@message" CurrentUserId="@currentUserId" />
+            }
+        </ChildContent>
+        
+        @*
+        <FooterTemplate>
+            @if(last) 
+            {
+                <TimeDisplay Message="@message" />
+            }
+        </FooterTemplate>
+        *@
+
+        <ActionsTemplate>
+            @if (message.Deleted is null)
+            {
+                string[] reactionEmojis = { "👍", "👎", "🙏", "❤️", "😊", "😂", "🤣", "🙁", "😢", "😡" };
+
+                <MudTooltip @bind-IsVisible="message.IsReactionsVisible" ShowOnClick="true" ShowOnFocus="false" ShowOnHover="false" Arrow="true">
+                    <ChildContent>
+                        <MudIconButton Icon="@Icons.Filled.InsertEmoticon" Style="margin-top: -5px; padding: 10px;" Size="Size.Medium" />
+                    </ChildContent>
+                    <TooltipContent>
+                        <div class="d-flex gap-3 gap-3 mt-2 mb-1" @onclick="() => { message.IsReactionsVisible = false; }">
+                            @foreach(var emoji in reactionEmojis)
+                            {
+                                <div style="z-index: 99999; padding-top: 2px; display: block;" class="grow2">
+                                    <span style="font-size: 21px; cursor: pointer;" @onclick="async () => await React(message, emoji)">@emoji</span>
+                                </div>
+                            }
+                            <MudIconButton Color="Color.Primary" Style="margin: 0; padding: 0; margin-top: -5px;" Icon="@Icons.Filled.InsertEmoticon" OnClick="async () => await InsertReaction(message)" Size="Size.Small" />
+                        </div>
+                    </TooltipContent>
+                </MudTooltip>
+
+                <MudIconButton Icon="@Icons.Filled.Reply" Style="margin-top: -5px; padding: 10px;" Size="Size.Medium" OnClick="() => ReplyToMessage(message)" />
+                
+                <MudMenu AnchorOrigin="Origin.BottomLeft">
+                    <ActivatorContent>
+                        <MudIconButton Style="margin-top: -5px; padding: 10px;" Icon="@Icons.Filled.MoreVert"
+                                        Variant="Variant.Text" Color="Color.Secondary" />
+                    </ActivatorContent>
+                    <ChildContent>
+                        @if (isAuthorizedToEdit)
+                        {
+                            <MudMenuItem OnClick="() => EditMessage(message)">
+                                <div class="d-flex flex-row flex-grow-1 gap-2">
+                                    <MudIcon Icon="@Icons.Filled.Edit" Size="Size.Medium" />
+                                     @T["Edit"]
+                                </div>
+                            </MudMenuItem>
+                        }
+                        @if (isAuthorizedToDelete)
+                        {
+                            <MudMenuItem OnClick="async () => await DeleteMessage(message)">
+                                <div class="d-flex flex-row flex-grow-1 gap-2">
+                                    <MudIcon Icon="@Icons.Filled.Delete" Size="Size.Medium" />
+                                     @T["Delete"]
+                                </div>
+                            </MudMenuItem>
+                        }
+                        <MudMenuItem>
+                            <div class="d-flex flex-row flex-grow-1 gap-2">
+                                <MudIcon Icon="@Icons.Filled.Report" Size="Size.Medium" />
+                                @T["Report"]
+                            </div>
+                        </MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+            }
+        </ActionsTemplate>
+    </Message>   
+}
+
+@* <Loader class="my-4" /> *@
+
+@if (loaded)
+{
+    <div class="bottom">
+                <EditForm OnValidSubmit="Send" Model="@this">
+                    <DataAnnotationsValidator />
+
+                    @if (replyToMessage is not null)
+                    {
+                        <div class="reply-bubble @(replyToMessage.PostedById == currentUserId ? "right" : "left")" style="border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                            <div class="d-flex justify-space-between" style="padding-top: 4px">
+                                <small><b>@(replyToMessage.PostedById == currentUserId ? T["Me"] : replyToMessage.PostedByName)</b></small>
+                                <MudIconButton Icon="@Icons.Filled.Cancel" Size="Size.Small" OnClick="AbortReplyToMessage" />
+                            </div>
+                            <div>
+                                @replyToMessage.Content
+                            </div>
+                        </div>
+                    }
+
+                    @if (editingMessageId is not null)
+                    {
+                        <div class="d-flex flex-grow-1 gap-4">
+                            <MudText Typo="Typo.h6">Editing</MudText>
+                            <MudIconButton Icon="@Icons.Filled.Cancel" Size="Size.Small" OnClick="AbortEditMessage" />
+                        </div>
+                    }
+
+                     <div class="d-flex flex-grow-1 gap-3">
+                        <div class="flex-auto d-flex" style="width: 100%">
+                            <MudIconButton Icon="@Icons.Filled.InsertEmoticon" OnClick="InsertEmoticon" Style="margin-top: -5px; padding: 10px;" Size="Size.Medium" />
+                            <MudTextField @bind-Value="Text" For="() => Text" aria-label="@T["Message"]" Variant="Variant.Outlined" Class="rounded-lg test" Lines="2" Placeholder="@T["WriteMessage"]"></MudTextField>
+                        </div>
+                        <div class="flex-auto d-flex" style="width: 81px">
+                            <MudIconButton ButtonType="ButtonType.Submit" aria-label="@T["Send"]" Variant="Variant.Filled" Color="Color.Primary" Icon="@Icons.Material.Filled.Send" Class="mt-2" Style="border-radius: 50%; padding: 15px; height: 70px; width: 70px;" />
+                        </div>
+                    </div>
+                </EditForm>
+    </div>
+}
+</div>
+
+<style>
+.grow2 {
+	transition: all 0.2s ease-in-out;
+}
+
+.grow2:hover { 
+    transform: scale(2.3);
+    font-size: 13px !important;
+}
+</style>
+
+@code 
+{
+    async Task InsertEmoticon() 
+    {
+        var dialogRef = await DialogService.ShowAsync<MudEmojiInput>("Emoji Picker");
+        var result = await dialogRef.Result;
+
+        if(result.Canceled) return;
+
+        var str = (string)result.Data;
+
+        Text += str;
+    }
+
+    async Task InsertReaction(MessageViewModel message) 
+    {
+        var dialogRef = await DialogService.ShowAsync<MudEmojiInput>("Emoji Picker");
+        var result = await dialogRef.Result;
+
+        if(result.Canceled) return;
+
+        var emoji = (string)result.Data;
+
+        await React(message, emoji);
+
+        StateHasChanged();
+    }
+}

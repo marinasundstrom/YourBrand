@@ -2,7 +2,7 @@
 
 using MudBlazor;
 
-namespace ChatApp.Theming;
+namespace YourBrand.ChatApp.Theming;
 
 public interface IThemeManager : IDisposable 
 {

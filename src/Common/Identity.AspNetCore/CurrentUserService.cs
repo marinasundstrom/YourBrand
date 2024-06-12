@@ -24,7 +24,7 @@ public class UserContext : ISettableUserContext
     {
         if (_currentUserId is not null)
         {
-            throw new Exception("User has already been set.");
+            //throw new Exception("User has already been set.");
         }
         _currentUserId = userId;
     }
@@ -37,12 +37,21 @@ public class UserContext : ISettableUserContext
 
     public string? Role => _claimsPrincipal?.FindFirst(ClaimTypes.Role)?.Value;
 
+    public bool IsInRole(string role) => _claimsPrincipal?.IsInRole(role) ?? false;
+
+    public string? ConnectionId { get; private set; }
+
     public void SetCurrentUser(ClaimsPrincipal claimsPrincipal)
     {
         if (_claimsPrincipal is not null)
         {
-            throw new Exception("User has already been set.");
+            //throw new Exception("User has already been set.");
         }
         _claimsPrincipal = claimsPrincipal;
+    }
+
+    public void SetConnectionId(string connectionId)
+    {
+        ConnectionId = connectionId;
     }
 }

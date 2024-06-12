@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.JSInterop;
 
-namespace ChatApp;
+namespace YourBrand.ChatApp;
 
 public static class ServiceExtensions
 {

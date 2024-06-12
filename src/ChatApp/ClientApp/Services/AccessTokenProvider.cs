@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace ChatApp.Services;
+namespace YourBrand.ChatApp.Services;
 
 public interface IAccessTokenProvider
 {

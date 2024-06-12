@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace ChatApp;
+namespace YourBrand.ChatApp;
 
 public sealed class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {

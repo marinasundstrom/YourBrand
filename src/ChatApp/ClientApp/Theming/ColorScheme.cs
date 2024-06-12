@@ -1,4 +1,4 @@
-﻿namespace ChatApp.Theming;
+﻿namespace YourBrand.ChatApp.Theming;
 
 public enum ColorScheme
 {

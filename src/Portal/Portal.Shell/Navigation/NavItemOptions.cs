@@ -20,6 +20,8 @@ public class NavItemOptions
 
     public string Href { get; set; }
 
+    public Func<Task> OnClick { get; set; }
+
     public bool RequiresAuthorization { get; set; }
 
     public IEnumerable<string>? Roles { get; set; }

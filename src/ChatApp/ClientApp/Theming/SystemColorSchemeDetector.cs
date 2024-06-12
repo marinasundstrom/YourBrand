@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace ChatApp.Theming;
+namespace YourBrand.ChatApp.Theming;
 
 public class SystemColorSchemeDetector : IDisposable
 {

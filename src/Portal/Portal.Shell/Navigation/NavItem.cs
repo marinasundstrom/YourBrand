@@ -28,6 +28,8 @@ public class NavItem : INavItem
 
     public string Href { get; set; } = null!;
 
+    public Func<Task> OnClick { get; set; }
+
     public bool Visible { get; set; } = true;
 
     public bool RequiresAuthorization { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ChatApp.Extensions;
+namespace YourBrand.ChatApp.Extensions;
 
 public static class ExpressionTreesExtension
 {

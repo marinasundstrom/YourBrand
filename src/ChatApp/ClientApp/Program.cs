@@ -6,11 +6,11 @@ using MudBlazor.Services;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
-using ChatApp;
-using ChatApp.Theming;
-using ChatApp.Chat.Messages;
+using YourBrand.ChatApp;
+using YourBrand.ChatApp.Theming;
+using YourBrand.ChatApp.Chat.Messages;
 using MudBlazor;
-using ChatApp.Markdown;
+using YourBrand.ChatApp.Markdown;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,45 +22,6 @@ builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
 
 builder.Services.AddMarkdownServices();
 
-builder.Services.AddHttpClient("WebAPI",
-        client => client.BaseAddress = new Uri("https://localhost:5001/"));
-
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-    .CreateClient("WebAPI"));
-
-builder.Services.AddHttpClient<IChannelsClient>(nameof(ChannelsClient), (sp, http) =>
-{
-    http.BaseAddress = new Uri("https://localhost:5001/");
-})
-.AddTypedClient<IChannelsClient>((http, sp) => new ChannelsClient(http))
-.AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
-.SetHandlerLifetime(TimeSpan.FromMinutes(5))  //Set lifetime to five minutes
-.AddPolicyHandler(GetRetryPolicy());
-
-builder.Services.AddHttpClient<IMessagesClient>(nameof(MessagesClient), (sp, http) =>
-{
-    http.BaseAddress = new Uri("https://localhost:5001/");
-})
-.AddTypedClient<IMessagesClient>((http, sp) => new MessagesClient(http))
-.AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
-.SetHandlerLifetime(TimeSpan.FromMinutes(5))  //Set lifetime to five minutes
-.AddPolicyHandler(GetRetryPolicy());
-
-builder.Services.AddHttpClient<IUsersClient>(nameof(UsersClient), (sp, http) =>
-{
-    http.BaseAddress = new Uri("https://localhost:5001/");
-})
-.AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http))
-.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-//.SetHandlerLifetime(TimeSpan.FromMinutes(5))  //Set lifetime to five minutes
-//.AddPolicyHandler(GetRetryPolicy());
-
-builder.Services.AddHttpClient<MudEmojiPicker.Data.EmojiService>(nameof(MudEmojiPicker.Data.EmojiService), (sp, http) =>
-{
-    http.BaseAddress = new Uri("https://localhost:5021/");
-})
-.AddTypedClient<MudEmojiPicker.Data.EmojiService>((http, sp) => new MudEmojiPicker.Data.EmojiService(http));
-
 builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("Local", options.ProviderOptions);
@@ -68,7 +29,7 @@ builder.Services.AddOidcAuthentication(options =>
 
 builder.Services.AddScoped<ChatApp.Services.IAccessTokenProvider, ChatApp.Services.AccessTokenProvider>();
 
-builder.Services.AddScoped<ChatApp.Services.ICurrentUserService, ChatApp.Services.CurrentUserService>();
+builder.Services.AddScoped<ChatApp.Services.IUserContext, ChatApp.Services.UserContext>();
 
 builder.Services.AddMudServices(config =>
 {
