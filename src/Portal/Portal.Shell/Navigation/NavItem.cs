@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components;
+
 namespace YourBrand.Portal.Navigation;
 
 public class NavItem : INavItem
@@ -24,11 +26,13 @@ public class NavItem : INavItem
         NameFunc = nameFunc;
     }
 
+    public Type? Component { get; set; }
+
     public string? Icon { get; set; }
 
-    public string Href { get; set; } = null!;
+    public string? Href { get; set; }
 
-    public Func<Task> OnClick { get; set; }
+    public Func<Task>? OnClick { get; set; }
 
     public bool Visible { get; set; } = true;
 

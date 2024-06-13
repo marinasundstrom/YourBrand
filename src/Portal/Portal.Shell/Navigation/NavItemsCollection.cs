@@ -116,6 +116,7 @@ public abstract class NavItemsCollection
             Id = id,
             Name = options.Name,
             NameFunc = options.NameFunc,
+            Component = options.Component,
             Icon = options.Icon,
             Href = options.Href,
             OnClick = options.OnClick,
@@ -178,6 +179,7 @@ public abstract class NavItemsCollection
             Id = id,
             Name = options.Name,
             NameFunc = options.NameFunc,
+            Component = options.Component,
             Icon = options.Icon,
             RequiresAuthorization = options.RequiresAuthorization
         };

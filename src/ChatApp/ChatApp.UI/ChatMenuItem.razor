@@ -1,0 +1,34 @@
+@using YourBrand.ChatApp.Chat.Channels;
+@inject IStringLocalizer<Resources> T
+@inject IChannelsClient ChannelsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@foreach (var channel in channels)
+{
+    <MudNavLink Href="@($"/channels/{channel.Id}")" Icon="@Icons.Material.Filled.Chat">@T[@channel.Name]</MudNavLink>
+}
+<MudNavLink OnClick="CreateChannel" Icon="@Icons.Material.Filled.Add">@T["NewChannel"]</MudNavLink>
+
+@code {
+    List<ChatApp.Channel> channels = new List<ChatApp.Channel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        channels = (await ChannelsClient.GetChannelsAsync(1, 100, null, null)).Items.ToList();
+    }
+
+    async Task CreateChannel()
+    {
+        var dialogRef = await DialogService.ShowAsync<NewChannelDialog>(T["NewChannel"]);
+        var result = await dialogRef.Result;
+
+        if (result.Canceled) return;
+
+        var channel = (ChatApp.Channel)result.Data;
+
+        channels.Add(channel);
+
+        NavigationManager.NavigateTo($"/channels/{channel.Id}");
+    }
+}

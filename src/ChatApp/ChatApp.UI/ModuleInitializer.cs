@@ -42,10 +42,14 @@ public class ModuleInitializer : IModuleInitializer
 
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        var group = navManager.CreateGroup("messenger", () => resources["Messenger"]);
+        var group = navManager.CreateGroup("messenger", options => {
+            options.NameFunc = () => resources["Messenger"];
+            options.Component = typeof(ChatMenuItem);
+        });
+
         group.RequiresAuthorization = true;
 
-        group.CreateItem("new-channel", () => resources["New channel"], MudBlazor.Icons.Material.Filled.Add, async () => await CreateChannel(services));
+        //group.CreateItem("new-channel", () => resources["New channel"], MudBlazor.Icons.Material.Filled.Add, async () => await CreateChannel(services));
         //group.CreateItem("channels", () => resources["Channels"], MudBlazor.Icons.Material.Filled.Chat, "/channels");
     }
 

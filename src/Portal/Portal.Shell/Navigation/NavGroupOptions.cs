@@ -2,13 +2,11 @@ using Microsoft.AspNetCore.Components;
 
 namespace YourBrand.Portal.Navigation;
 
-public class NavItemOptions
+public class NavGroupOptions
 {
     public string Name { get; set; }
 
     public Func<string> NameFunc { get; set; }
-
-    public Type? Component { get; set; }
 
     public void SetName(string name)
     {
@@ -20,17 +18,13 @@ public class NavItemOptions
         NameFunc = nameFunc;
     }
 
-    public string? Icon { get; set; }
+    public Type? Component { get; set; }
 
-    public string? Href { get; set; }
+    //public string Icon { get; set; }
 
-    public Func<Task>? OnClick { get; set; }
+    //public string Href { get; set; }
 
     public bool RequiresAuthorization { get; set; }
 
     public IEnumerable<string>? Roles { get; set; }
-
-    public string? Policy { get; set; }
-
-    public int? Index { get; set; }
 }

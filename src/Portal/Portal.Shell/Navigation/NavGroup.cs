@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Portal.Navigation;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace YourBrand.Portal.Navigation;
 
 public class NavGroup : NavItemsCollection, INavItem
 {
@@ -15,6 +17,8 @@ public class NavGroup : NavItemsCollection, INavItem
     }
 
     public Func<string>? NameFunc { get; set; }
+
+    public Type? Component { get; set; }
 
     public bool Expanded { get; set; }
 

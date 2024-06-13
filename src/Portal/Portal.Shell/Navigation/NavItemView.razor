@@ -1,4 +1,11 @@
-<MudNavLink Icon="@Item.Icon" Href="@Item.Href" OnClick="@Item.OnClick">@Item.Name</MudNavLink>
+@if(Item.Component is not null) 
+{
+    <DynamicComponent Type="@Item.Component" />
+}
+else 
+{
+    <MudNavLink Icon="@Item.Icon" Href="@Item.Href" OnClick="@Item.OnClick">@Item.Name</MudNavLink>
+}
 
 @code 
 {
