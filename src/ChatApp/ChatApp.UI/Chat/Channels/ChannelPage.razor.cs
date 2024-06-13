@@ -116,9 +116,11 @@ public partial class ChannelPage : IChatHubClient
 
             await hubConnection.StartAsync();
 
+            /*
             Snackbar.Add(T["Connected"], configure: options => {
                 options.Icon = Icons.Material.Filled.Cable;
             });
+            */
         }
         catch (Exception exc)
         {
