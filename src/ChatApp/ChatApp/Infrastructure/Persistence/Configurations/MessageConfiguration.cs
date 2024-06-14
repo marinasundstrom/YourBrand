@@ -9,6 +9,6 @@ public sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
     {
         builder.ToTable("Messages");
 
-        builder.OwnsMany(x => x.Reactions);
+        builder.OwnsMany(x => x.Reactions, x => x.ToJson());
     }
 }

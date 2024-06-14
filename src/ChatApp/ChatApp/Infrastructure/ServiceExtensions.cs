@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Quartz;
+
+using Scrutor;
+
 using YourBrand.ChatApp.Infrastructure.BackgroundJobs;
 using YourBrand.ChatApp.Infrastructure.Idempotence;
 using YourBrand.ChatApp.Infrastructure.Persistence;
@@ -17,24 +20,51 @@ public static class ServiceExtensions
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IEmailService, EmailService>();
 
-        services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
+        RemoveFaultyDomainEventHandlerRegistrations(services);
+
+        try
+        {
+            services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
+        }
+        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
+        {
+            Console.WriteLine(exc);
+        }
 
         services.AddQuartz(configure =>
-        {
-            var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+            {
+                var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
 
-            configure
-                .AddJob<ProcessOutboxMessagesJob>(jobKey)
-                .AddTrigger(trigger => trigger.ForJob(jobKey)
-                    .WithSimpleSchedule(schedule => schedule
-                        .WithIntervalInSeconds(2)
-                        .RepeatForever()));
+                configure
+                    .AddJob<ProcessOutboxMessagesJob>(jobKey)
+                    .AddTrigger(trigger => trigger.ForJob(jobKey)
+                        .WithSimpleSchedule(schedule => schedule
+                            .WithIntervalInSeconds(2)
+                            .RepeatForever()));
 
-            configure.UseMicrosoftDependencyInjectionJobFactory();
-        });
+                configure.UseMicrosoftDependencyInjectionJobFactory();
+            });
 
         services.AddQuartzHostedService();
-
+        
         return services;
+    }
+
+    private static void RemoveFaultyDomainEventHandlerRegistrations(IServiceCollection services)
+    {
+        // This removes registrations between INotificationHandler<T> to IdempotentDomainEventHandler<T>. This was not a problem before MediatR 12.0.
+        // An alternative would be to put IdempotentDomainEventHandler in a library separate from Application logic, so that MediatR doesn't register that implementation as a real handler.
+
+        foreach (var reg in services.Where(reg => reg.ServiceType.Name.Contains("INotificationHandler")).ToList())
+        {
+            var notificationHandlerType = reg.ServiceType!;
+            var notificationHandlerImplType = reg.ImplementationType!;
+
+            var requestType = notificationHandlerType.GetGenericArguments().FirstOrDefault();
+
+            if (!notificationHandlerImplType.Name.Contains("IdempotentDomainEventHandler")) continue;
+
+            services.Remove(reg);
+        }
     }
 }

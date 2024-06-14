@@ -9,6 +9,6 @@ public sealed class ChannelConfiguration : IEntityTypeConfiguration<Channel>
     {
         builder.ToTable("Channels");
 
-        builder.OwnsMany(x => x.Participants);
+        builder.OwnsMany(x => x.Participants, x => x.ToTable("ChannelParticipants"));
     }
 }

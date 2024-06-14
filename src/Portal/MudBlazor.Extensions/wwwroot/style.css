@@ -8,7 +8,9 @@
     width: 30px;
 }
 
-.message .message-content {}
+.message .message-content {
+    font-size: 16px !important;
+}
 
 .message .message-side {
     width: 30px;
