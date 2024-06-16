@@ -16,6 +16,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddCoreServices();
+
         services.AddPersistence(configuration);
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();

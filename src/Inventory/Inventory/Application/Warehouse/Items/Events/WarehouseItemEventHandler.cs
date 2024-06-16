@@ -8,13 +8,13 @@ using YourBrand.Inventory.Contracts;
 using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Domain.Entities;
 using YourBrand.Inventory.Domain.Events;
-using YourBrand.Notifications.Client;
+using YourBrand.Notifications;
 using YourBrand.Notifications.Contracts;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Events;
 
 public class WarehouseItemEventHandler(
-    IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationsClient notificationsClient,
+    IInventoryContext context, IPublishEndpoint publishEndpoint, INotificationService notificationService,
     ILogger<WarehouseItemEventHandler> logger, IUserContext userContext)
 : IDomainEventHandler<WarehouseItemCreated>,
   IDomainEventHandler<WarehouseItemQuantityOnHandUpdated>,
@@ -81,9 +81,8 @@ public class WarehouseItemEventHandler(
     {
         try
         {
-            await notificationsClient.CreateNotificationAsync(new CreateNotification
+            await notificationService.PublishNotificationAsync(new Notification($"Quantity available of {item.Item.Name} is below threshold.")
             {
-                Content = $"Quantity available of {item.Item.Name} is below threshold.",
                 UserId = item.CreatedById,
                 //Link = Link
             });

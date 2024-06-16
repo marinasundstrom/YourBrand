@@ -6,12 +6,9 @@ using MediatR;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
-using YourBrand.Identity;
 using YourBrand.Identity;
 using YourBrand.Integration;
 using YourBrand.Inventory;
