@@ -4,9 +4,9 @@ using MudBlazor;
 
 namespace YourBrand.Catalog.Products.Attributes;
 
-partial class ProductAttributesView : ComponentBase
+sealed partial class ProductAttributesView : ComponentBase
 {
-    MudTable<ProductAttribute> productAttributesTable = default!;
+    readonly MudTable<ProductAttribute> productAttributesTable = default!;
     readonly TableGroupDefinition<ProductAttribute> tableGroupDefinition = new TableGroupDefinition<ProductAttribute>()
     {
         GroupName = "Group",
@@ -15,7 +15,7 @@ partial class ProductAttributesView : ComponentBase
         Selector = (e) => e.Attribute.Group?.Name
     };
 
-    ProductAttribute? selectedProductAttribute;
+    readonly ProductAttribute? selectedProductAttribute;
     ProductAttribute? productAttributeBeforeEdit;
 
     string? searchString;

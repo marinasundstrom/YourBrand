@@ -1,6 +1,7 @@
-using YourBrand.ChatApp.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+
+using YourBrand.ChatApp.Common;
 using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages.EventHandlers;
@@ -13,7 +14,7 @@ public sealed class MessagePostedEventHandler : IDomainEventHandler<MessagePoste
     private readonly IDtoComposer dtoComposer;
 
     public MessagePostedEventHandler(
-        IMessageRepository messagesRepository, 
+        IMessageRepository messagesRepository,
         IUserRepository userRepository,
         IChatNotificationService chatNotificationService,
         IDtoComposer dtoComposer)
@@ -49,7 +50,7 @@ public sealed class MessagePostedEventHandler : IDomainEventHandler<MessagePoste
 
     private async Task NotifyChannel(Message message, User user, CancellationToken cancellationToken)
     {
-        MessageDto messageDto = await dtoComposer.ComposeMessageDto(message,cancellationToken);
+        MessageDto messageDto = await dtoComposer.ComposeMessageDto(message, cancellationToken);
 
         await chatNotificationService.NotifyMessagePosted(
             messageDto, cancellationToken);
@@ -63,7 +64,7 @@ public sealed class MessageEditedEventHandler : IDomainEventHandler<MessageEdite
     private readonly IChatNotificationService chatNotificationService;
 
     public MessageEditedEventHandler(
-        IMessageRepository messagesRepository, 
+        IMessageRepository messagesRepository,
         IUserRepository userRepository,
         IChatNotificationService chatNotificationService)
     {
@@ -89,7 +90,7 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
     private readonly IChatNotificationService chatNotificationService;
 
     public MessageDeletedEventHandler(
-        IMessageRepository messagesRepository, 
+        IMessageRepository messagesRepository,
         IUserRepository userRepository,
         IChatNotificationService chatNotificationService)
     {
@@ -116,7 +117,7 @@ public sealed class UserReactedToMessageEventHandler : IDomainEventHandler<UserR
     private readonly IChatNotificationService chatNotificationService;
 
     public UserReactedToMessageEventHandler(
-        IMessageRepository messagesRepository, 
+        IMessageRepository messagesRepository,
         IUserRepository userRepository,
         IDtoFactory dtoFactory,
         IChatNotificationService chatNotificationService)
@@ -148,7 +149,7 @@ public sealed class UserRemovedReactionFromMessageEventHandler : IDomainEventHan
     private readonly IChatNotificationService chatNotificationService;
 
     public UserRemovedReactionFromMessageEventHandler(
-        IMessageRepository messagesRepository, 
+        IMessageRepository messagesRepository,
         IChatNotificationService chatNotificationService)
     {
         this.messagesRepository = messagesRepository;

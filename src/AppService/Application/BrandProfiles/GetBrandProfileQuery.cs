@@ -22,7 +22,7 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
                 brandProfile = new BrandProfile("Theme", null);
             }
 
-            brandProfile.Colors ??= new BrandColors 
+            brandProfile.Colors ??= new BrandColors
             {
                 Light = new BrandColorPalette(),
                 Dark = new BrandColorPalette()

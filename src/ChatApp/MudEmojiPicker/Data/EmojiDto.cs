@@ -7,7 +7,7 @@ public class EmojiList
     public string svg { get; set; }
     public List<string> tags { get; set; }
     public List<Skin> skins { get; set; }
-    
+
 }
 
 public class EmojiGroup

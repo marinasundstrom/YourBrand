@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Domain.Specifications;
 
 namespace YourBrand.ChatApp.Infrastructure.Persistence;

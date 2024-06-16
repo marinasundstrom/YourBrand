@@ -83,7 +83,7 @@ public static class YarpResoruceExtensions
             [
                 preservePath || path is null
                 ? []
-                : new Dictionary<string, string>{ ["PathRemovePrefix"] = path }
+                : new Dictionary<string, string> { ["PathRemovePrefix"] = path }
             ]
         };
 
@@ -117,7 +117,7 @@ public class YarpResource(string name) : Resource(name), IResourceWithServiceDis
 }
 
 // This starts up the YARP reverse proxy with the configuration from the resource
-internal class YarpResourceLifecyclehook(
+internal sealed class YarpResourceLifecyclehook(
     DistributedApplicationExecutionContext executionContext,
     ResourceNotificationService resourceNotificationService,
     ResourceLoggerService resourceLoggerService) : IDistributedApplicationLifecycleHook, IAsyncDisposable
@@ -266,7 +266,7 @@ internal class YarpResourceLifecyclehook(
         return _app?.DisposeAsync() ?? default;
     }
 
-    private class ResourceLoggerProvider(ILogger logger) : ILoggerProvider
+    private sealed class ResourceLoggerProvider(ILogger logger) : ILoggerProvider
     {
         public ILogger CreateLogger(string categoryName)
         {
@@ -277,7 +277,7 @@ internal class YarpResourceLifecyclehook(
         {
         }
 
-        private class ResourceLogger(ILogger logger) : ILogger
+        private sealed class ResourceLogger(ILogger logger) : ILogger
         {
             public IDisposable? BeginScope<TState>(TState state) where TState : notnull
             {

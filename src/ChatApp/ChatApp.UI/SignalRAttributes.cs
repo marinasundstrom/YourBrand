@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.SignalR.Client;
 namespace YourBrand.ChatApp;
 
 [AttributeUsage(AttributeTargets.Method)]
-internal class HubServerProxyAttribute : Attribute { }
+internal sealed class HubServerProxyAttribute : Attribute { }
 
 [AttributeUsage(AttributeTargets.Method)]
-internal class HubClientProxyAttribute : Attribute { }
+internal sealed class HubClientProxyAttribute : Attribute { }
 
 public static partial class HubConnectionExtensions
 {

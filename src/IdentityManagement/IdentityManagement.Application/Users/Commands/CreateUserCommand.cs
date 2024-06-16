@@ -59,9 +59,9 @@ public record CreateUserCommand(string OrganizationId, string FirstName, string 
 
             result = userManager.AddClaimsAsync(user, [
                         new Claim(JwtClaimTypes.Name, user.DisplayName!),
-                            new Claim(JwtClaimTypes.GivenName, user.FirstName),
-                            new Claim(JwtClaimTypes.FamilyName, user.LastName),
-                            new Claim("tenant_id", tenantContext.TenantId.GetValueOrDefault())
+                new Claim(JwtClaimTypes.GivenName, user.FirstName),
+                new Claim(JwtClaimTypes.FamilyName, user.LastName),
+                new Claim("tenant_id", tenantContext.TenantId.GetValueOrDefault())
                     ]).Result;
 
             if (!result.Succeeded)

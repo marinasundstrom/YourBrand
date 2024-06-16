@@ -2,8 +2,8 @@
 
 using MediatR;
 
-using YourBrand.IdentityManagement.Contracts;
 using YourBrand.ChatApp.Features.Users;
+using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.ChatApp.Consumers;
 

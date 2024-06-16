@@ -1,6 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
-using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.ChatApp.Features.Chat;
 

@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
+
 using YourBrand.ChatApp.Domain.Exceptions;
+
 using ApplicationException = YourBrand.ChatApp.Domain.Exceptions.ApplicationException;
 
 namespace YourBrand.ChatApp.Web.Middleware;

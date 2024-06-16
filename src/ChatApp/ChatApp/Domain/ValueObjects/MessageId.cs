@@ -8,7 +8,7 @@ public struct MessageId
 
     public MessageId() => Value = Guid.NewGuid();
 
-    public Guid Value { get; set; } 
+    public Guid Value { get; set; }
 
     public override int GetHashCode()
     {

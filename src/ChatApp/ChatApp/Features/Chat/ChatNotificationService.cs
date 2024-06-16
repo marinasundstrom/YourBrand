@@ -1,6 +1,7 @@
-using YourBrand.ChatApp.Features.Chat.Messages;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Distributed;
+
+using YourBrand.ChatApp.Features.Chat.Messages;
 
 namespace YourBrand.ChatApp.Features.Chat;
 
@@ -46,14 +47,14 @@ public class ChatNotificationService : IChatNotificationService
             .OnMessagePostedConfirmed(messageId);
     }
 
-    public async Task NotifyMessageEdited(Guid channelId, MessageEditedData data, CancellationToken cancellationToken = default) 
+    public async Task NotifyMessageEdited(Guid channelId, MessageEditedData data, CancellationToken cancellationToken = default)
     {
         await hubsContext.Clients
             .Group($"channel-{channelId}")
             .OnMessageEdited(channelId, data);
     }
 
-    public async Task NotifyMessageDeleted(Guid channelId, MessageDeletedData data, CancellationToken cancellationToken = default) 
+    public async Task NotifyMessageDeleted(Guid channelId, MessageDeletedData data, CancellationToken cancellationToken = default)
     {
         await hubsContext.Clients
             .Group($"channel-{channelId}")

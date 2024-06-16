@@ -1,10 +1,12 @@
 using FluentValidation;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
-
-using Microsoft.Extensions.Caching.Distributed;
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 
 public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
@@ -26,7 +28,7 @@ public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
         private readonly IUserContext userContext;
 
         public Handler(
-            IChannelRepository channelRepository, 
+            IChannelRepository channelRepository,
             IUnitOfWork unitOfWork,
             IUserContext userContext)
         {

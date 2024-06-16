@@ -2,9 +2,9 @@ using FluentValidation;
 
 using MediatR;
 
+using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.Entities;
 using YourBrand.ChatApp.Domain.Repositories;
-using YourBrand.ChatApp.Domain;
 
 namespace YourBrand.ChatApp.Features.Organizations;
 

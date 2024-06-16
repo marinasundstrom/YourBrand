@@ -96,8 +96,10 @@ public static class Seed
         context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
         {
             Name = "Default",
-            Colors = new BrandColors() {
-                Light = new BrandColorPalette() {
+            Colors = new BrandColors()
+            {
+                Light = new BrandColorPalette()
+                {
                     BackgroundColor = "rgb(248, 249, 250)",
                     AppbarBackgroundColor = "#137cdf",
                     PrimaryColor = "#4892d7",
@@ -109,8 +111,10 @@ public static class Seed
         context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
         {
             Name = "ACME",
-            Colors = new BrandColors {
-                Light = new BrandColorPalette {
+            Colors = new BrandColors
+            {
+                Light = new BrandColorPalette
+                {
                     BackgroundColor = "#f9f7f7ff",
                     AppbarBackgroundColor = "#3c6794",
                     PrimaryColor = "#4e7ba9",

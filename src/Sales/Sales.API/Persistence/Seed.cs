@@ -15,7 +15,7 @@ public static class Seed
 
     private static void Version1(SalesContext context)
     {
-        context.OrderStatuses.Add(new OrderStatus(1, "Draft", "draft", string.Empty) 
+        context.OrderStatuses.Add(new OrderStatus(1, "Draft", "draft", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });

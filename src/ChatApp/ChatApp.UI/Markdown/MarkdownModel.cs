@@ -1,81 +1,81 @@
 using Ganss.Xss;
+
 using Markdig;
 using Markdig.Renderers;
 using Markdig.Syntax;
 
 using Microsoft.AspNetCore.Components;
 
-namespace YourBrand.ChatApp.Markdown
-{
+namespace YourBrand.ChatApp.Markdown;
+
 public class MarkdownModel : ComponentBase
+{
+    private string? _content;
+
+    [Inject] public IHtmlSanitizer HtmlSanitizer { get; set; } = default!;
+
+    [Parameter]
+    public string? Content
     {
-        private string? _content;
-
-        [Inject] public IHtmlSanitizer HtmlSanitizer { get; set; } = default!;
-
-        [Parameter]
-        public string? Content
+        get => _content;
+        set
         {
-            get => _content;
-            set
-            {
-                _content = value;
-                HtmlContent = ConvertStringToMarkupString(_content!);
-            }
+            _content = value;
+            HtmlContent = ConvertStringToMarkupString(_content!);
         }
+    }
 
-        [Parameter]
-        public bool Truncate { get; set; }
+    [Parameter]
+    public bool Truncate { get; set; }
 
-        public MarkupString HtmlContent { get; private set; }
+    public MarkupString HtmlContent { get; private set; }
 
-        private MarkupString ConvertStringToMarkupString(string value)
+    private MarkupString ConvertStringToMarkupString(string value)
+    {
+        if (!string.IsNullOrWhiteSpace(_content))
         {
-            if (!string.IsNullOrWhiteSpace(_content))
+            var pipeline = new MarkdownPipelineBuilder()
+                    .UseYamlFrontMatter()
+                    .UseAdvancedExtensions()
+                    .UseGenericAttributes()
+                    .Build();
+
+            //var markdownDocument = Markdig.Markdown.Parse(value, pipeline);
+
+            var html = Markdig.Markdown.ToHtml(value, pipeline); //ToHtml(pipeline, markdownDocument);
+
+            if (!HtmlSanitizer.AllowedAttributes.Contains("id"))
+                HtmlSanitizer.AllowedAttributes.Add("id");
+
+            // Sanitize HTML before rendering
+            var sanitizedHtml = HtmlSanitizer.Sanitize(html);
+
+            if (Truncate)
             {
-                var pipeline = new MarkdownPipelineBuilder()
-                        .UseYamlFrontMatter()
-                        .UseAdvancedExtensions()
-                        .UseGenericAttributes()
-                        .Build();
-
-                //var markdownDocument = Markdig.Markdown.Parse(value, pipeline);
-
-                var html = Markdig.Markdown.ToHtml(value, pipeline); //ToHtml(pipeline, markdownDocument);
-
-                if(!HtmlSanitizer.AllowedAttributes.Contains("id"))
-                    HtmlSanitizer.AllowedAttributes.Add("id");
-
-                // Sanitize HTML before rendering
-                var sanitizedHtml = HtmlSanitizer.Sanitize(html);
-
-                if (Truncate)
-                {
-                    sanitizedHtml = sanitizedHtml.TruncateHtml(500);
-                }
-
-                // Return sanitized HTML as a MarkupString that Blazor can render
-                return new MarkupString(sanitizedHtml!);
+                sanitizedHtml = sanitizedHtml.TruncateHtml(500);
             }
 
-            return new MarkupString();
+            // Return sanitized HTML as a MarkupString that Blazor can render
+            return new MarkupString(sanitizedHtml!);
         }
 
-        private static string ToHtml(MarkdownPipeline pipeline, MarkdownDocument markdownDocument)
-        {
-            var writer = new StringWriter();
+        return new MarkupString();
+    }
 
-            // Create a HTML Renderer and setup it with the pipeline
-            var renderer = new HtmlRenderer(writer);
-            pipeline.Setup(renderer);
+    private static string ToHtml(MarkdownPipeline pipeline, MarkdownDocument markdownDocument)
+    {
+        var writer = new StringWriter();
 
-            // Renders markdown to HTML (to the writer)
-            renderer.Render(markdownDocument);
+        // Create a HTML Renderer and setup it with the pipeline
+        var renderer = new HtmlRenderer(writer);
+        pipeline.Setup(renderer);
 
-            // Gets the rendered string
-            var html = writer.ToString();
+        // Renders markdown to HTML (to the writer)
+        renderer.Render(markdownDocument);
 
-            return html;
-        }
+        // Gets the rendered string
+        var html = writer.ToString();
+
+        return html;
     }
 }

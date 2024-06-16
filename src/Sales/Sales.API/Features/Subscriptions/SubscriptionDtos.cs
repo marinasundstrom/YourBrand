@@ -8,7 +8,7 @@ public class SubscriptionDto : Domain.Entities.ISubscriptionParameters
     public Guid Id { get; set; }
     public int SubscriptionNo { get; set; }
     public SubscriptionPlanShortDto Plan { get; set; }
-    public SubscriptionStatus Status{ get; set; }
+    public SubscriptionStatus Status { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public OrderShortDto? Order { get; set; }

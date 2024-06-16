@@ -38,7 +38,7 @@ public class UnitTest2
                 Country = "Testland"
             }
         };
-        
+
         order.ShippingDetails = new Sales.Domain.ValueObjects.ShippingDetails()
         {
             FirstName = "Test",

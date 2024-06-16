@@ -7,7 +7,7 @@ public interface ITimeViewService : IDisposable
 
 public sealed class TimeViewService : ITimeViewService
 {
-    Task task = default!;
+    readonly Task task = default!;
     PeriodicTimer? timer;
     CancellationTokenSource? cts;
     DateTimeOffset dateTime;

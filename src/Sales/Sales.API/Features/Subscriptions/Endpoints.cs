@@ -56,7 +56,7 @@ public static class Endpoints
         return result.GetValue();
     }
 
-    private static async Task<OrderDto> CreateSubscriptionOrder(string organizationId, CreateSubscriptionRequest request, IMediator mediator, CancellationToken cancellationToken) 
+    private static async Task<OrderDto> CreateSubscriptionOrder(string organizationId, CreateSubscriptionRequest request, IMediator mediator, CancellationToken cancellationToken)
     {
         return await mediator.Send(new CreateSubscriptionOrder(
             organizationId,

@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using YourBrand.ChatApp.Domain;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;

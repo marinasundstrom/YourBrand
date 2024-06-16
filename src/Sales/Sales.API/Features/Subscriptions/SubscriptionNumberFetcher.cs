@@ -4,7 +4,7 @@ using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.Subscriptions;
 
-public sealed class SubscriptionNumberFetcher (SalesContext salesContext)
+public sealed class SubscriptionNumberFetcher(SalesContext salesContext)
 {
     public async Task<int> GetNextNumberAsync(string organizationId, CancellationToken cancellationToken)
     {

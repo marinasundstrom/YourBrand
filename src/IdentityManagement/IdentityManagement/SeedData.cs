@@ -79,10 +79,10 @@ public static class SeedData
 
                 result = userMgr.AddClaimsAsync(alice, [
                             new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Alice"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim("tenant_id", alice.Tenant.Id)
+                    new Claim(JwtClaimTypes.GivenName, "Alice"),
+                    new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                    new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
+                    new Claim("tenant_id", alice.Tenant.Id)
                         ]).Result;
                 if (!result.Succeeded)
                 {
@@ -121,10 +121,10 @@ public static class SeedData
 
                 result = userMgr.AddClaimsAsync(bob, [
                             new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Bob"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                            new Claim("tenant_id", bob.Tenant.Id)
+                    new Claim(JwtClaimTypes.GivenName, "Bob"),
+                    new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                    new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
+                    new Claim("tenant_id", bob.Tenant.Id)
                         ]).Result;
                 if (!result.Succeeded)
                 {

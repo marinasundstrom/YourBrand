@@ -13,7 +13,7 @@ using YourBrand.Tenancy;
 namespace YourBrand.Catalog.Persistence;
 
 public sealed class CatalogContext(
-    DbContextOptions<CatalogContext> options, 
+    DbContextOptions<CatalogContext> options,
     ITenantContext tenantContext,
     ILogger<CatalogContext> logger) : DbContext(options)
 {
@@ -34,7 +34,7 @@ public sealed class CatalogContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if(!clrType.IsAssignableTo(typeof(IEntity)))
+            if (!clrType.IsAssignableTo(typeof(IEntity)))
             {
                 Console.WriteLine($"Skipping type {clrType} because it is not implementing IEntity.");
                 continue;
@@ -42,11 +42,11 @@ public sealed class CatalogContext(
 
             if (!clrType.IsAbstract)
             {
-                if(!clrType.BaseType.Name.StartsWith("Entity") && !clrType.BaseType.Name.StartsWith("AggregateRoot")) 
+                if (!clrType.BaseType.Name.StartsWith("Entity") && !clrType.BaseType.Name.StartsWith("AggregateRoot"))
                 {
                     Console.WriteLine($"Skipping entity {clrType} because it is not a base type: " + clrType.BaseType.Name);
                     continue;
-                }             
+                }
             }
 
             try

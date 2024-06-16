@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using YourBrand.ChatApp.Behaviors;
 using YourBrand.ChatApp.Features.Chat;
 

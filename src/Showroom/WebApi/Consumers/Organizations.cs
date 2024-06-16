@@ -4,8 +4,8 @@ using MediatR;
 
 using YourBrand.Identity;
 using YourBrand.IdentityManagement.Contracts;
-using YourBrand.Tenancy;
 using YourBrand.Showroom.Application.Organizations.Commands;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Consumers;
 

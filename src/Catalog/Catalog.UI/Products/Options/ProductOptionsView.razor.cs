@@ -4,9 +4,9 @@ using MudBlazor;
 
 namespace YourBrand.Catalog.Products.Options;
 
-partial class ProductOptionsView : ComponentBase
+sealed partial class ProductOptionsView : ComponentBase
 {
-    MudTable<ProductOption> productOptionsTable = default!;
+    readonly MudTable<ProductOption> productOptionsTable = default!;
 
     readonly TableGroupDefinition<ProductOption> tableGroupDefinition = new TableGroupDefinition<ProductOption>()
     {
@@ -16,7 +16,7 @@ partial class ProductOptionsView : ComponentBase
         Selector = (e) => e.Option.Group?.Name
     };
 
-    ProductOption? selectedProductOption;
+    readonly ProductOption? selectedProductOption;
 
     string? searchString;
 

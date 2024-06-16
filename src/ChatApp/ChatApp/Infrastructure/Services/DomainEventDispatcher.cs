@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Infrastructure.Services;

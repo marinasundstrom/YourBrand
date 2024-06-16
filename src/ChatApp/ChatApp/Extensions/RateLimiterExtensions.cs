@@ -1,4 +1,5 @@
 using System.Threading.RateLimiting;
+
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace YourBrand.ChatApp.Web.Extensions;

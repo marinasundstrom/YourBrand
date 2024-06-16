@@ -1,11 +1,14 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
-using YourBrand.Portal.Theming;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.SignalR.Client;
-using MudBlazor;
+
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.SignalR.Client;
+
+using MudBlazor;
+
 using YourBrand.ChatApp.Features.Chat;
+using YourBrand.Portal.Theming;
 
 namespace YourBrand.ChatApp.Chat.Channels;
 
@@ -17,16 +20,16 @@ public partial class ChannelPage : IChatHubClient
     Guid? editingMessageId = null;
     MessageViewModel? replyToMessage = null;
 
-    List<MessageViewModel> messagesCache = new List<MessageViewModel>();
-    List<MessageViewModel> loadedMessages = new List<MessageViewModel>();
+    readonly List<MessageViewModel> messagesCache = new List<MessageViewModel>();
+    readonly List<MessageViewModel> loadedMessages = new List<MessageViewModel>();
 
     bool loaded = false;
-   
+
     [Parameter]
     public string? Id { get; set; }
 
     [CascadingParameter]
-    public Task<AuthenticationState> AuthenticationStateTask { get; set; }  = default!;
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
 
     HubConnection hubConnection = null!;
     IChatHub hubProxy = default!;
@@ -84,12 +87,14 @@ public partial class ChannelPage : IChatHubClient
             {
                 if (error is not null)
                 {
-                    Snackbar.Add($"{error.Message}", Severity.Error, configure: options => {
+                    Snackbar.Add($"{error.Message}", Severity.Error, configure: options =>
+                    {
                         options.Icon = Icons.Material.Filled.Cable;
                     });
                 }
 
-                Snackbar.Add(T["Disconnected"], configure: options => {
+                Snackbar.Add(T["Disconnected"], configure: options =>
+                {
                     options.Icon = Icons.Material.Filled.Cable;
                 });
 
@@ -98,7 +103,8 @@ public partial class ChannelPage : IChatHubClient
 
             hubConnection.Reconnected += (error) =>
             {
-                Snackbar.Add(T["Reconnected"], configure: options => {
+                Snackbar.Add(T["Reconnected"], configure: options =>
+                {
                     options.Icon = Icons.Material.Filled.Cable;
                 });
 
@@ -107,7 +113,8 @@ public partial class ChannelPage : IChatHubClient
 
             hubConnection.Reconnecting += (error) =>
             {
-                Snackbar.Add(T["Reconnecting"], configure: options => {
+                Snackbar.Add(T["Reconnecting"], configure: options =>
+                {
                     options.Icon = Icons.Material.Filled.Cable;
                 });
 
@@ -160,7 +167,7 @@ public partial class ChannelPage : IChatHubClient
 
             // This is a new incoming message:
 
-            if (message.PublishedBy.Id != currentUserId) 
+            if (message.PublishedBy.Id != currentUserId)
             {
                 messageVm.Id = message.Id;
                 messageVm.PostedById = message.PublishedBy.Id;
@@ -200,9 +207,9 @@ public partial class ChannelPage : IChatHubClient
 
     private MessageViewModel? GetOrCreateReplyMessageVm(ReplyMessage replyMessage)
     {
-        var existingMessageVm =  messagesCache.FirstOrDefault(x => x.Id == replyMessage.Id);
+        var existingMessageVm = messagesCache.FirstOrDefault(x => x.Id == replyMessage.Id);
 
-        if(existingMessageVm is not null) 
+        if (existingMessageVm is not null)
         {
             return existingMessageVm;
         }
@@ -277,23 +284,23 @@ public partial class ChannelPage : IChatHubClient
     [Required(
         ErrorMessageResourceName = "Required", 
         ErrorMessageResourceType = typeof(ChannelPage))] */
-    public string Text { get; set; } = default !;
+    public string Text { get; set; } = default!;
 
     async Task Send()
     {
-        if(string.IsNullOrWhiteSpace(Text))  
+        if (string.IsNullOrWhiteSpace(Text))
         {
             return;
         }
 
-        if(editingMessageId is not null) 
+        if (editingMessageId is not null)
         {
             await UpdateMessage();
 
             return;
         }
 
-        var message = new MessageViewModel() 
+        var message = new MessageViewModel()
         {
             Id = Guid.Empty,
             Published = DateTimeOffset.UtcNow,
@@ -320,7 +327,7 @@ public partial class ChannelPage : IChatHubClient
     {
         var messageVm = loadedMessages.FirstOrDefault(x => x.Id == editingMessageId);
 
-        if(messageVm is not null) 
+        if (messageVm is not null)
         {
             messageVm.Content = Text;
 
@@ -331,18 +338,18 @@ public partial class ChannelPage : IChatHubClient
         }
     }
 
-    async Task DeleteMessage(MessageViewModel messageVm) 
+    async Task DeleteMessage(MessageViewModel messageVm)
     {
         await MessagesClient.DeleteMessageAsync(messageVm.Id);
 
-        if(messageVm is not null) 
+        if (messageVm is not null)
         {
-            if(replyToMessage?.Id == messageVm.Id)
+            if (replyToMessage?.Id == messageVm.Id)
             {
                 AbortReplyToMessage();
             }
 
-            if(editingMessageId == messageVm.Id)
+            if (editingMessageId == messageVm.Id)
             {
                 AbortEditMessage();
             }
@@ -351,7 +358,7 @@ public partial class ChannelPage : IChatHubClient
         StateHasChanged();
     }
 
-    void EditMessage(MessageViewModel messageVm) 
+    void EditMessage(MessageViewModel messageVm)
     {
         replyToMessage = null;
         editingMessageId = messageVm.Id;
@@ -360,13 +367,13 @@ public partial class ChannelPage : IChatHubClient
         StateHasChanged();
     }
 
-    void AbortEditMessage() 
+    void AbortEditMessage()
     {
         editingMessageId = null;
         Text = string.Empty;
     }
 
-    async Task ReplyToMessage(MessageViewModel messageVm) 
+    async Task ReplyToMessage(MessageViewModel messageVm)
     {
         editingMessageId = null;
         replyToMessage = messageVm;
@@ -377,7 +384,7 @@ public partial class ChannelPage : IChatHubClient
         await JSRuntime.InvokeVoidAsyncIgnoreErrors("helpers.scrollToBottom");
     }
 
-    void AbortReplyToMessage() 
+    void AbortReplyToMessage()
     {
         replyToMessage = null;
         Text = string.Empty;
@@ -400,7 +407,7 @@ public partial class ChannelPage : IChatHubClient
 
         var previousMessage = loadedMessages[index - 1];
 
-        if(previousMessage.PostedById != currentMessage.PostedById) 
+        if (previousMessage.PostedById != currentMessage.PostedById)
         {
             return true;
         }
@@ -423,7 +430,7 @@ public partial class ChannelPage : IChatHubClient
 
         var nextMessage = loadedMessages[index + 1];
 
-        if(nextMessage.PostedById != currentMessage.PostedById) 
+        if (nextMessage.PostedById != currentMessage.PostedById)
         {
             return true;
         }
@@ -437,19 +444,19 @@ public partial class ChannelPage : IChatHubClient
     }
 
     static string GetInitials(string name)
-    {                       
+    {
         // StringSplitOptions.RemoveEmptyEntries excludes empty spaces returned by the Split method
 
-        string[] nameSplit = name.Split(new string[] { "," , " "}, StringSplitOptions.RemoveEmptyEntries);
-                    
+        string[] nameSplit = name.Split(new string[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+
         string initials = "";
 
         foreach (string item in nameSplit)
-        {                
+        {
             initials += item.Substring(0, 1).ToUpper();
         }
 
-        return initials;           
+        return initials;
     }
 
     public async Task OnMessagePosted(MessageData message)
@@ -477,7 +484,7 @@ public partial class ChannelPage : IChatHubClient
     {
         var messageVm = messagesCache.FirstOrDefault(x => x.Id == data.Id);
 
-        if(messageVm is not null) 
+        if (messageVm is not null)
         {
             messageVm.Content = data.Content;
             messageVm.Edited = data.LastEdited;
@@ -492,7 +499,7 @@ public partial class ChannelPage : IChatHubClient
     {
         var messageVm = messagesCache.FirstOrDefault(x => x.Id == data.Id);
 
-        if(messageVm is not null) 
+        if (messageVm is not null)
         {
             //messages.Remove(messageVm);
 
@@ -511,13 +518,13 @@ public partial class ChannelPage : IChatHubClient
     {
         var messageVm = loadedMessages.FirstOrDefault(x => x.Id == messageId);
 
-        if(messageVm is null) return;
+        if (messageVm is null) return;
 
-        messageVm.Reactions.Add(new Reaction() 
+        messageVm.Reactions.Add(new Reaction()
         {
             Content = reaction.Content,
             Date = reaction.Date,
-            User = new User 
+            User = new User
             {
                 Id = reaction.User.Id,
                 Name = reaction.User.Name
@@ -530,13 +537,13 @@ public partial class ChannelPage : IChatHubClient
     public async Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string userId)
     {
         var messageVm = loadedMessages.FirstOrDefault(x => x.Id == messageId);
-        
-        if(messageVm is null) return;
+
+        if (messageVm is null) return;
 
         // TODO: Pass the person removing the reaction
         var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.User.Id == userId);
 
-        if(reaction2 is null) return;
+        if (reaction2 is null) return;
 
         messageVm.Reactions.Remove(reaction2);
 

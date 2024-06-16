@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using YourBrand.ChatApp.Domain;
 
 namespace YourBrand.ChatApp.Behaviors;

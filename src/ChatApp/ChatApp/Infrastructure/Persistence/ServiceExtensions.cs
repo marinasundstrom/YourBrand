@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Infrastructure.Persistence.Repositories;
 using YourBrand.ChatApp.Persistence.Interceptors;

@@ -1,6 +1,9 @@
 ﻿using Asp.Versioning.Builder;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Extensions;
@@ -26,7 +29,7 @@ public static class Endpoints
             .RequireAuthorization()
             .WithOpenApi();
 
-          
+
         group.MapGet("/", GetChannels)
             .WithName($"Channels_{nameof(GetChannels)}")
             .Produces<ItemsResult<ChannelDto>>(StatusCodes.Status200OK)
@@ -37,7 +40,7 @@ public static class Endpoints
             .WithName($"Channels_{nameof(GetChannelById)}")
             .Produces<ChannelDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
-            
+
         group.MapPost("/", CreateChannel)
             .WithName($"Channels_{nameof(CreateChannel)}")
             .Produces<ChannelDto>(StatusCodes.Status201Created)
@@ -81,8 +84,8 @@ public static class Endpoints
                     return Results.NotFound();
                 }
                 return Results.Problem(detail: error.Detail, title: error.Title, type: error.Id);
-    });
-           
+            });
+
 }
 
 public sealed record CreateChannelRequest(string Name);

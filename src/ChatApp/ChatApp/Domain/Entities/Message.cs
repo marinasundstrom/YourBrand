@@ -5,7 +5,7 @@ namespace YourBrand.ChatApp.Domain.Entities;
 
 public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
 {
-    private HashSet<MessageReaction> _reactions = new HashSet<MessageReaction>();
+    private readonly HashSet<MessageReaction> _reactions = new HashSet<MessageReaction>();
 
     private Message() : base(new MessageId())
     {
@@ -25,7 +25,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
     {
         ChannelId = channelId;
         Content = content;
-        
+
         ReplyToId = replyToId;
 
         AddDomainEvent(new MessagePosted(ChannelId, Id, ReplyToId));
@@ -35,9 +35,9 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
 
     public string Content { get; private set; } = null!;
 
-    public bool UpdateContent(string newContent) 
+    public bool UpdateContent(string newContent)
     {
-        if(newContent == Content) 
+        if (newContent == Content)
             return false;
 
         Content = newContent;
@@ -49,11 +49,11 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
 
     public IReadOnlyCollection<MessageReaction> Reactions => _reactions;
 
-    public bool React(UserId userId, string reaction) 
+    public bool React(UserId userId, string reaction)
     {
         var r = Reactions.FirstOrDefault(x => x.UserId == userId && x.Reaction == reaction);
 
-        if(r is not null)
+        if (r is not null)
             return false;
 
         _reactions.Add(new MessageReaction(userId, reaction));
@@ -63,13 +63,13 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
         return true;
     }
 
-    public bool RemoveReaction(UserId userId, string reaction) 
+    public bool RemoveReaction(UserId userId, string reaction)
     {
         var r = Reactions.FirstOrDefault(x => x.UserId == userId && x.Reaction == reaction);
 
-        if(r is null)
+        if (r is null)
             return false;
-            
+
         _reactions.Remove(r);
 
         AddDomainEvent(new UserRemovedReactionFromMessage(ChannelId, Id, userId, r.Reaction));
@@ -77,7 +77,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
         return true;
     }
 
-    public void RemoveAllReactions() 
+    public void RemoveAllReactions()
     {
         _reactions.Clear();
     }

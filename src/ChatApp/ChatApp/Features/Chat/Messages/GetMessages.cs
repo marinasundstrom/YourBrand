@@ -1,10 +1,13 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Extensions;
-using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.ChatApp.Features.Users;
+using YourBrand.ChatApp.Infrastructure.Persistence;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
@@ -31,7 +34,7 @@ public record GetMessages(Guid? ChannelId, int Page = 1, int PageSize = 10, stri
 
             var totalCount = await query.CountAsync(cancellationToken);
 
-            if(request.ChannelId is not null) 
+            if (request.ChannelId is not null)
             {
                 query = query.Where(x => x.ChannelId == request.ChannelId);
             }

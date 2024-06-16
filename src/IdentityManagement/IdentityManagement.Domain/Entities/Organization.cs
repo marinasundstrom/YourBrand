@@ -9,7 +9,7 @@ public class Organization : AuditableEntity, IHasTenant
 {
     private readonly HashSet<User> _users = new HashSet<User>();
     private readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
-    
+
     private Organization() { }
 
     public Organization(OrganizationId id, string name, string? friendlyName)

@@ -4,7 +4,7 @@ using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
-public sealed class OrderNumberFetcher (IOrderRepository orderRepository)
+public sealed class OrderNumberFetcher(IOrderRepository orderRepository)
 {
     public async Task<int> GetNextNumberAsync(string organizationId, CancellationToken cancellationToken)
     {

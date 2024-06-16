@@ -1,5 +1,7 @@
 using FluentValidation;
+
 using MediatR;
+
 using YourBrand.ChatApp.Domain;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
@@ -41,7 +43,7 @@ public sealed record React(Guid MessageId, string Reaction) : IRequest<Result>
             var userId = userContext.UserId.GetValueOrDefault();
 
             message.React(userId, request.Reaction);
-            
+
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

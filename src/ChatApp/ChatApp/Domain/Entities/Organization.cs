@@ -1,6 +1,5 @@
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
-
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;

@@ -4,4 +4,3 @@ public interface IDateTime
 {
     DateTimeOffset Now { get; }
 }
-

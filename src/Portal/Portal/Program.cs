@@ -76,7 +76,7 @@ async Task LoadBrandProfile(IServiceCollection services)
 
     themeManager.SetTheme(Themes.AppTheme);
 
-    try 
+    try
     {
         var brandProfile = await brandProfileClient.GetBrandProfileAsync();
 
@@ -87,7 +87,7 @@ async Task LoadBrandProfile(IServiceCollection services)
             themeManager.SetTheme(theme);
         }
     }
-    catch(Exception) {}
+    catch (Exception) { }
 }
 
 sealed record ModuleEntry(Assembly Assembly, bool Enabled);

@@ -8,14 +8,14 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddNotificationsClients(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder> builder)
     {
-        if(registered)
-           return services;
+        if (registered)
+            return services;
 
-            builder(
-                services.AddHttpClient(nameof(INotificationsClient), configureClient)
-                .AddTypedClient<INotificationsClient>((http, sp) => new NotificationsClient(http)));
+        builder(
+            services.AddHttpClient(nameof(INotificationsClient), configureClient)
+            .AddTypedClient<INotificationsClient>((http, sp) => new NotificationsClient(http)));
 
-            registered = true;
+        registered = true;
 
         return services;
     }

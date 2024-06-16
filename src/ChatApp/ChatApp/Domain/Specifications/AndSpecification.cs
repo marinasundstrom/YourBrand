@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+
 using LinqKit;
 
 namespace YourBrand.ChatApp.Domain.Specifications;

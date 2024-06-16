@@ -1,8 +1,11 @@
 using System.Collections.Concurrent;
 using System.Runtime.ExceptionServices;
+
 using Aspire.Hosting.Lifecycle;
+
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+
 using Polly;
 using Polly.Retry;
 
@@ -39,12 +42,12 @@ public static class WaitForDependenciesExtensions
         return builder;
     }
 
-    private class WaitOnAnnotation(IResource resource) : IResourceAnnotation
+    private sealed class WaitOnAnnotation(IResource resource) : IResourceAnnotation
     {
         public IResource Resource { get; } = resource;
     }
 
-    private class WaitForDependenciesRunningHook(DistributedApplicationExecutionContext executionContext,
+    private sealed class WaitForDependenciesRunningHook(DistributedApplicationExecutionContext executionContext,
         ResourceNotificationService resourceNotificationService) :
         IDistributedApplicationLifecycleHook,
         IAsyncDisposable

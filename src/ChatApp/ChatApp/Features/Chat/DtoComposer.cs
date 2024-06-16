@@ -1,6 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.ChatApp.Features.Chat;
 
@@ -28,15 +29,15 @@ public sealed class DtoComposer : IDtoComposer
 
         ExtractUserIds(message, userIds);
         ExtractReplyIds(message, messageIds);
-        
+
         var replyMessages = await context.Messages
             .IgnoreQueryFilters()
             .Where(x => messageIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
-        if(replyMessages.Any()) 
+        if (replyMessages.Any())
         {
-            foreach(var replyMessage in replyMessages.Select(x => x.Value)) 
+            foreach (var replyMessage in replyMessages.Select(x => x.Value))
             {
                 ExtractUserIds(replyMessage, userIds);
             }
@@ -74,7 +75,7 @@ public sealed class DtoComposer : IDtoComposer
             userIds.Add(message.DeletedById.GetValueOrDefault());
         }
 
-        foreach(var reaction in message.Reactions) 
+        foreach (var reaction in message.Reactions)
         {
             userIds.Add(reaction.UserId);
         }
@@ -96,14 +97,14 @@ public sealed class DtoComposer : IDtoComposer
             .Where(x => messageIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
-        if(replyMessages.Any()) 
+        if (replyMessages.Any())
         {
-            foreach(var replyMessage in replyMessages.Select(x => x.Value)) 
+            foreach (var replyMessage in replyMessages.Select(x => x.Value))
             {
                 ExtractUserIds(replyMessage, userIds);
             }
         }
-        
+
         var users = await context.Users
             .Where(x => userIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Infrastructure.Persistence;
-using YourBrand.Domain.Outbox;
 using YourBrand.Domain;
+using YourBrand.Domain.Outbox;
 
 namespace YourBrand.ChatApp.Infrastructure.Idempotence;
 
@@ -46,4 +47,3 @@ public sealed class IdempotentDomainEventHandler<TDomainEvent> : IDomainEventHan
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
-

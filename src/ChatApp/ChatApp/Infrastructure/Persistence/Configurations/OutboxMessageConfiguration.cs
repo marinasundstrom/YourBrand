@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using YourBrand.Domain.Outbox;
 
 namespace YourBrand.ChatApp.Infrastructure.Persistence.Configurations;

@@ -1,6 +1,8 @@
-using YourBrand.ChatApp.Features.Chat;
 using MassTransit;
+
 using Microsoft.Extensions.DependencyInjection;
+
+using YourBrand.ChatApp.Features.Chat;
 
 namespace YourBrand.ChatApp.Web.Extensions;
 

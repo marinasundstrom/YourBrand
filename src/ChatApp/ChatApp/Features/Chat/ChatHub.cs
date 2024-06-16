@@ -1,8 +1,10 @@
-using YourBrand.ChatApp.Domain.ValueObjects;
-using YourBrand.ChatApp.Features.Chat.Messages;
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+
+using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Features.Chat.Messages;
 
 namespace YourBrand.ChatApp.Features.Chat;
 

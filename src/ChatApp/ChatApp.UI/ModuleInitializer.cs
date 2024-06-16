@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+
+using MudBlazor;
+
+using YourBrand.ChatApp.Chat.Messages;
+using YourBrand.ChatApp.Client;
+using YourBrand.ChatApp.Markdown;
 using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
-using YourBrand.ChatApp.Markdown;
-
-using YourBrand.ChatApp.Client;
-using MudBlazor;
-using YourBrand.ChatApp.Chat.Messages;
 
 namespace YourBrand.ChatApp;
 
@@ -30,8 +31,8 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddEmojiService((sp, http) =>
         {
-           var navigationManager = sp.GetRequiredService<NavigationManager>();
-           http.BaseAddress = new Uri($"{navigationManager.BaseUri}/");
+            var navigationManager = sp.GetRequiredService<NavigationManager>();
+            http.BaseAddress = new Uri($"{navigationManager.BaseUri}/");
         }, builder => builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>());
     }
 
@@ -42,7 +43,8 @@ public class ModuleInitializer : IModuleInitializer
 
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
-        var group = navManager.CreateGroup("messenger", options => {
+        var group = navManager.CreateGroup("messenger", options =>
+        {
             options.NameFunc = () => resources["Messenger"];
             options.Component = typeof(ChatMenuItem);
         });

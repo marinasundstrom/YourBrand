@@ -1,12 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Newtonsoft.Json;
+
 using Polly;
 using Polly.Retry;
+
 using Quartz;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Infrastructure.Persistence;
-using YourBrand.Domain.Outbox;
 using YourBrand.Domain;
+using YourBrand.Domain.Outbox;
 
 namespace YourBrand.ChatApp.Infrastructure.BackgroundJobs;
 
@@ -65,4 +69,3 @@ public sealed class ProcessOutboxMessagesJob : IJob
         await dbContext.SaveChangesAsync(context.CancellationToken);
     }
 }
-

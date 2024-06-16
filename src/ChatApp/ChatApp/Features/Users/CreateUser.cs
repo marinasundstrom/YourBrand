@@ -2,8 +2,8 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.ChatApp.Domain.Entities;
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.Entities;
 
 namespace YourBrand.ChatApp.Features.Users;
 

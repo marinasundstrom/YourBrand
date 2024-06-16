@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using ValidationException = YourBrand.ChatApp.Domain.Exceptions.ValidationException;
 
 namespace YourBrand.ChatApp.Behaviors;

@@ -19,7 +19,8 @@ public sealed record CreateStoreCommand(string Name, string Handle, string Curre
             var currency = await context.Currencies.FirstAsync(i => i.Code == request.Currency, cancellationToken);
 
             store = new Catalog.Domain.Entities.Store(request.Name, request.Handle, currency);
-            store.CurrencyDisplayOptions = new Domain.Entities.CurrencyDisplayOptions() {
+            store.CurrencyDisplayOptions = new Domain.Entities.CurrencyDisplayOptions()
+            {
                 IncludeVatInSalesPrice = true
             };
 

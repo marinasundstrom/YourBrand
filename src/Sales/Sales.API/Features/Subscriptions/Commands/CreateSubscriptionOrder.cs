@@ -74,7 +74,7 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
             await salesContext.SaveChangesAsync();
 
             subscription.Order = order;
-           
+
             await salesContext.SaveChangesAsync();
 
             order = await salesContext.Orders

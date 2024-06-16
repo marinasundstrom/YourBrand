@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain.Entities;
-using YourBrand.ChatApp.Domain.Specifications;
 using YourBrand.ChatApp.Domain.Repositories;
+using YourBrand.ChatApp.Domain.Specifications;
+using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Infrastructure.Persistence.Repositories;
 

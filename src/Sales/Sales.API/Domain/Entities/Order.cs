@@ -15,9 +15,9 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
         StatusId = 1;
     }
 
-    public static Order Create(OrganizationId organizationId) 
+    public static Order Create(OrganizationId organizationId)
     {
-        return new Order() 
+        return new Order()
         {
             OrganizationId = organizationId
         };

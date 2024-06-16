@@ -1,5 +1,5 @@
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain.Entities;
+using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Domain.Repositories;
 

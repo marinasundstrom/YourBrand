@@ -1,6 +1,9 @@
 ﻿using Asp.Versioning.Builder;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Extensions;
@@ -26,7 +29,7 @@ public static class Endpoints
             .RequireAuthorization()
             .WithOpenApi();
 
-          
+
         group.MapGet("/", GetMessages)
             .WithName($"Messages_{nameof(GetMessages)}")
             .Produces<ItemsResult<MessageDto>>(StatusCodes.Status200OK)
@@ -66,28 +69,28 @@ public static class Endpoints
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
-  /*
-        group.MapPut("/{id}/Description", UpdateDescription)
-            .Produces(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+        /*
+              group.MapPut("/{id}/Description", UpdateDescription)
+                  .Produces(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound);
 
-        group.MapPut("/{id}/Status", UpdateStatus)
-            .Produces(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+              group.MapPut("/{id}/Status", UpdateStatus)
+                  .Produces(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound);
 
-        group.MapPut("/{id}/AssignedUser", UpdateAssignedUser)
-            .Produces(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+              group.MapPut("/{id}/AssignedUser", UpdateAssignedUser)
+                  .Produces(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound);
 
-        group.MapPut("/{id}/EstimatedHours", UpdateEstimatedHours)
-            .Produces(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+              group.MapPut("/{id}/EstimatedHours", UpdateEstimatedHours)
+                  .Produces(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound);
 
-        group.MapPut("/{id}/RemainingHours", UpdateRemainingHours)
-            .Produces(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+              group.MapPut("/{id}/RemainingHours", UpdateRemainingHours)
+                  .Produces(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound);
 
-        */
+              */
     }
 
     public static async Task<ItemsResult<MessageDto>> GetMessages(Guid channelId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
@@ -132,37 +135,37 @@ public static class Endpoints
         return HandleResult(result);
     }
 
-   /*
-    public static async Task<IResult> UpdateDescription(int id, [FromBody] string? description, CancellationToken cancellationToken, IMediator mediator)
-    {
-        var result = await mediator.Send(new UpdateDescription(id, description), cancellationToken);
-        return HandleResult(result);
-    }
+    /*
+     public static async Task<IResult> UpdateDescription(int id, [FromBody] string? description, CancellationToken cancellationToken, IMediator mediator)
+     {
+         var result = await mediator.Send(new UpdateDescription(id, description), cancellationToken);
+         return HandleResult(result);
+     }
 
-    public static async Task<IResult> UpdateStatus(int id, [FromBody] MessageStatusDto status, CancellationToken cancellationToken, IMediator mediator)
-    {
-        var result = await mediator.Send(new UpdateStatus(id, status), cancellationToken);
-        return HandleResult(result);
-    }
+     public static async Task<IResult> UpdateStatus(int id, [FromBody] MessageStatusDto status, CancellationToken cancellationToken, IMediator mediator)
+     {
+         var result = await mediator.Send(new UpdateStatus(id, status), cancellationToken);
+         return HandleResult(result);
+     }
 
-    public static async Task<IResult> UpdateAssignedUser(int id, [FromBody] string? userId, CancellationToken cancellationToken, IMediator mediator)
-    {
-        var result = await mediator.Send(new UpdateAssignedUser(id, userId), cancellationToken);
-        return HandleResult(result);
-    }
+     public static async Task<IResult> UpdateAssignedUser(int id, [FromBody] string? userId, CancellationToken cancellationToken, IMediator mediator)
+     {
+         var result = await mediator.Send(new UpdateAssignedUser(id, userId), cancellationToken);
+         return HandleResult(result);
+     }
 
-    public static async Task<IResult> UpdateEstimatedHours(int id, [FromBody] double? hours, CancellationToken cancellationToken, IMediator mediator)
-    {
-        var result = await mediator.Send(new UpdateEstimatedHours(id, hours), cancellationToken);
-        return HandleResult(result);
-    }
+     public static async Task<IResult> UpdateEstimatedHours(int id, [FromBody] double? hours, CancellationToken cancellationToken, IMediator mediator)
+     {
+         var result = await mediator.Send(new UpdateEstimatedHours(id, hours), cancellationToken);
+         return HandleResult(result);
+     }
 
-    public static async Task<IResult> UpdateRemainingHours(int id, [FromBody] double? hours, CancellationToken cancellationToken, IMediator mediator)
-    {
-        var result = await mediator.Send(new UpdateRemainingHours(id, hours), cancellationToken);
-        return HandleResult(result);
-    }
-            */
+     public static async Task<IResult> UpdateRemainingHours(int id, [FromBody] double? hours, CancellationToken cancellationToken, IMediator mediator)
+     {
+         var result = await mediator.Send(new UpdateRemainingHours(id, hours), cancellationToken);
+         return HandleResult(result);
+     }
+             */
 
     private static IResult HandleResult(Result result) => result.Handle(
             onSuccess: () => Results.Ok(),

@@ -19,12 +19,12 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
 
             bool @new = false;
 
-            if(brandProfile is null) 
+            if (brandProfile is null)
             {
                 brandProfile = new BrandProfile(request.Name, request.Description);
                 @new = true;
             }
-            else 
+            else
             {
                 brandProfile.Name = request.Name;
                 brandProfile.Description = request.Description;
@@ -35,11 +35,11 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
                 Light = new BrandColorPalette(),
                 Dark = new BrandColorPalette()
             };
-            
+
             Map(brandProfile.Colors.Light, request.Colors.Light);
             Map(brandProfile.Colors.Dark, request.Colors.Dark);
 
-            if(@new)
+            if (@new)
             {
                 appServiceContext.BrandProfiles.Add(brandProfile);
             }

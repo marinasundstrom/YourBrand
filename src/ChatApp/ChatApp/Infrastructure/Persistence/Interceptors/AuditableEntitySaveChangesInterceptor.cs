@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain.Entities;
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Persistence.Interceptors;

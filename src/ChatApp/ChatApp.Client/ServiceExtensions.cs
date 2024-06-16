@@ -23,9 +23,9 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddEmojiService(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder> builder)
     {
-            builder(
-            services.AddHttpClient(nameof(MudEmojiPicker.Data.EmojiService), configureClient)
-            .AddTypedClient<MudEmojiPicker.Data.EmojiService>((http, sp) => new MudEmojiPicker.Data.EmojiService(http)));
+        builder(
+        services.AddHttpClient(nameof(MudEmojiPicker.Data.EmojiService), configureClient)
+        .AddTypedClient<MudEmojiPicker.Data.EmojiService>((http, sp) => new MudEmojiPicker.Data.EmojiService(http)));
 
         return services;
     }

@@ -27,7 +27,7 @@ public class MarketingContext(
         modelBuilder.HasSequence<int>("MarketingIds");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MarketingContext).Assembly);
-        
+
         ConfigQueryFilterForEntity(modelBuilder);
     }
 

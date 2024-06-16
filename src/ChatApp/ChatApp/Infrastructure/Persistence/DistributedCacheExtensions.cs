@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.Caching.Distributed;
 
 public static class DistributedCacheExtensions
 {
-    private static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
+    private static readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
     {
         ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
     };

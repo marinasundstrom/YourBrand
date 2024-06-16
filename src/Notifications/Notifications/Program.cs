@@ -139,7 +139,7 @@ if (args.Contains("--seed"))
         }
     }
 
-    return; 
+    return;
 }
 
 //app.Services.InitializeJobs();

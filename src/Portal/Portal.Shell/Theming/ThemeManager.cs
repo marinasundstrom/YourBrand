@@ -48,7 +48,7 @@ public sealed class ThemeManager : IThemeManager
 
     public void Initialize()
     {
-        if(initialized) 
+        if (initialized)
         {
             return;
         }
@@ -61,7 +61,7 @@ public sealed class ThemeManager : IThemeManager
         initialized = true;
     }
 
-    public MudTheme Theme 
+    public MudTheme Theme
     {
         get => s_mudTheme;
         private set => s_mudTheme = value;

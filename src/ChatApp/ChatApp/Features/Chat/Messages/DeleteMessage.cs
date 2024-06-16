@@ -1,6 +1,9 @@
 using FluentValidation;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Domain;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
@@ -35,7 +38,7 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
         {
             var message = await messageRepository.FindByIdAsync(request.MessageId, cancellationToken);
 
-            if(message is null)
+            if (message is null)
             {
                 return Result.Failure(Errors.Messages.MessageNotFound);
             }
@@ -43,7 +46,7 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
             var userId = userContext.UserId;
             var isAdmin = userContext.IsInRole("admin");
 
-            if(!isAdmin && message.CreatedById != userId) 
+            if (!isAdmin && message.CreatedById != userId)
             {
                 return Result.Failure(Errors.Messages.NotAllowedToDelete);
             }

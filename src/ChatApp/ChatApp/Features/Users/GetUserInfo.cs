@@ -2,8 +2,8 @@
 
 using MediatR;
 
-using YourBrand.ChatApp.Domain.Repositories;
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.Repositories;
 using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.ChatApp.Features.Users;

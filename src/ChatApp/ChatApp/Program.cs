@@ -1,20 +1,23 @@
 using HealthChecks.UI.Client;
+
+using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
+
 using NSwag.AspNetCore;
+
+using Serilog;
+
 using YourBrand.ChatApp;
 using YourBrand.ChatApp.Extensions;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.ChatApp.Web;
 using YourBrand.ChatApp.Web.Extensions;
 using YourBrand.ChatApp.Web.Middleware;
-using YourBrand.ChatApp.Web;
-
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Integration;
 using YourBrand.Tenancy;
-
-using Serilog;
-using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 

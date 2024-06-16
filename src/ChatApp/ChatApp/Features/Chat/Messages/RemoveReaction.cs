@@ -1,5 +1,7 @@
 using FluentValidation;
+
 using MediatR;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.Identity;
 
@@ -42,7 +44,7 @@ public sealed record RemoveReaction(Guid MessageId, string Reaction) : IRequest<
             var userId = userContext.UserId.GetValueOrDefault();
 
             message.RemoveReaction(userId, request.Reaction);
-            
+
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

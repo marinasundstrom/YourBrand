@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Domain.Entities;

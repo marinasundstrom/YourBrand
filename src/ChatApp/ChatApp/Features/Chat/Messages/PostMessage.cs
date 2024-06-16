@@ -1,10 +1,12 @@
 using FluentValidation;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
-
-using Microsoft.Extensions.Caching.Distributed;
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
 public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content) : IRequest<Result<MessageId>>
@@ -57,16 +59,16 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
             }
 
             Message message;
-            
-            if(request.ReplyToId is not null) 
-            { 
-                message = new Message(request.ChannelId, request.ReplyToId.GetValueOrDefault(), request.Content); 
-            } 
-            else 
+
+            if (request.ReplyToId is not null)
             {
-                message = new Message(request.ChannelId, request.Content); 
-            } 
-            
+                message = new Message(request.ChannelId, request.ReplyToId.GetValueOrDefault(), request.Content);
+            }
+            else
+            {
+                message = new Message(request.ChannelId, request.Content);
+            }
+
             messageRepository.Add(message);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);

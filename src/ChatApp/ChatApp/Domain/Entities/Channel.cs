@@ -24,11 +24,11 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
 
     public string Title { get; private set; } = null!;
 
-    public bool Rename(string newTitle) 
+    public bool Rename(string newTitle)
     {
         var oldTitle = Title;
 
-        if(newTitle == Title) 
+        if (newTitle == Title)
             return false;
 
         Title = newTitle;
@@ -41,17 +41,17 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
 
     public bool BlockPosting { get; set; }
 
-    public bool DisallowNicknames { get; set; } 
+    public bool DisallowNicknames { get; set; }
 
-    HashSet<ChannelParticipant> _participants = new HashSet<ChannelParticipant>();
+    readonly HashSet<ChannelParticipant> _participants = new HashSet<ChannelParticipant>();
 
     public IReadOnlyCollection<ChannelParticipant> Participants => _participants;
 
-    public bool AddParticipant(UserId userId) 
+    public bool AddParticipant(UserId userId)
     {
         var participant = Participants.First(x => x.UserId == userId);
 
-        if(participant is not null) return false;
+        if (participant is not null) return false;
 
         _participants.Add(new ChannelParticipant(userId, DateTimeOffset.UtcNow));
 
@@ -60,11 +60,11 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
         return true;
     }
 
-    public bool RemoveParticipant(UserId userId) 
+    public bool RemoveParticipant(UserId userId)
     {
         var participant = Participants.First(x => x.UserId == userId);
 
-        if(participant is null) return false;
+        if (participant is null) return false;
 
         participant.Left = DateTimeOffset.UtcNow;
         _participants.Remove(participant);

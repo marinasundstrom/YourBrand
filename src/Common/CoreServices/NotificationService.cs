@@ -9,7 +9,7 @@ public interface INotificationService
 
 public sealed class NotificationService(INotificationsClient notificationClients) : INotificationService
 {
-    public async Task PublishNotificationAsync(Notification notification) 
+    public async Task PublishNotificationAsync(Notification notification)
     {
         await notificationClients.CreateNotificationAsync(new CreateNotification
         {
@@ -21,7 +21,8 @@ public sealed class NotificationService(INotificationsClient notificationClients
     }
 }
 
-public record class Notification(string Content) {
+public record class Notification(string Content)
+{
     public string? Link { get; set; }
     public string? UserId { get; set; }
     public DateTimeOffset? ScheduledFor { get; set; }

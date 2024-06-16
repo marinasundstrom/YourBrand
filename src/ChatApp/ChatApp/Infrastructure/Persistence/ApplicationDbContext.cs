@@ -1,14 +1,17 @@
 ﻿using System.Linq.Expressions;
+
+using LinqKit;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Infrastructure.Persistence.ValueConverters;
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
 using YourBrand.Domain.Outbox;
-using LinqKit;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Infrastructure.Persistence;
 
@@ -116,7 +119,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     {
         configurationBuilder.Properties<ChannelId>().HaveConversion<ChannelIdConverter>();
         configurationBuilder.Properties<MessageId>().HaveConversion<MessageIdConverter>();
-        
+
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
         configurationBuilder.AddUserIdConverter();

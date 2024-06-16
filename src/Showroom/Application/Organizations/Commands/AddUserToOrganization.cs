@@ -1,10 +1,11 @@
 using MediatR;
 
-using YourBrand.Identity;
-using YourBrand.Tenancy;
-using YourBrand.Showroom.Domain;
-using YourBrand.Showroom.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Identity;
+using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Application.Organizations.Commands;
 

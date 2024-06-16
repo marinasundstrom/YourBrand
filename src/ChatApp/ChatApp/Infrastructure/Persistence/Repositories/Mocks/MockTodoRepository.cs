@@ -55,4 +55,3 @@ public sealed class MockTodoRepository : IMessageRepository
         mockUnitOfWork.Items.Remove(item);
     }
 }
-

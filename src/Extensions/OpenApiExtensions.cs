@@ -151,8 +151,8 @@ public static class OpenApiExtensions
         {
             return type.Name
                 .Replace("Dto", string.Empty);
-                //.Replace("Command", string.Empty)
-                //.Replace("Query", string.Empty);
+            //.Replace("Command", string.Empty)
+            //.Replace("Query", string.Empty);
         }
     }
 }

@@ -37,6 +37,6 @@ public record GetModulesQuery() : IRequest<IEnumerable<TenantModuleDto>>
                     },
                     Enabled = x.Enabled,
                 }).ToListAsync(cancellationToken);
-            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using Quartz;
 
 using Scrutor;
@@ -46,7 +47,7 @@ public static class ServiceExtensions
             });
 
         services.AddQuartzHostedService();
-        
+
         return services;
     }
 

@@ -1,5 +1,7 @@
 using FluentValidation;
+
 using MediatR;
+
 using YourBrand.ChatApp.Domain;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
@@ -40,13 +42,13 @@ public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Resu
 
             var userId = userContext.UserId;
 
-            if(message.CreatedById != userId) 
+            if (message.CreatedById != userId)
             {
                 return Result.Failure(Errors.Messages.NotAllowedToEdit);
             }
 
             message.UpdateContent(request.Content);
-            
+
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

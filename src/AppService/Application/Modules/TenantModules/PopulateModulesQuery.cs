@@ -15,7 +15,8 @@ public record PopulateModulesQuery() : IRequest
     {
         public async Task Handle(PopulateModulesQuery request, CancellationToken cancellationToken)
         {
-            var tenantModules = appServiceContext.Modules.Select( module => new TenantModule() {
+            var tenantModules = appServiceContext.Modules.Select(module => new TenantModule()
+            {
                 Module = module,
                 Enabled = false
             });

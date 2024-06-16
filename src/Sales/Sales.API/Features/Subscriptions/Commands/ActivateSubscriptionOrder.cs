@@ -48,7 +48,7 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
                 salesContext.Orders.Add(order2);
             }
-            
+
             order.UpdateStatus(2);
 
             //order.Subscription.Order = order;
