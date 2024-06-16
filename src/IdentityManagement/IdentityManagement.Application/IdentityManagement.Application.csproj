@@ -21,9 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IdentityManagement.Domain\IdentityManagement.Domain.csproj" />
-     <ProjectReference Include="..\..\Notifications\Notifications.Client\Notifications.Client.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Common\CoreServices\CoreServices.csproj" />
     <ProjectReference Include="..\IdentityManagement.Client\IdentityManagement.Client.csproj" />
     <ProjectReference Include="..\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />

@@ -7,10 +7,9 @@ public class UnitTest1
     [Fact]
     public void SumOfOrderLines()
     {
-        Order order = new()
-        {
+        Organization organization = new Organization("id", "TestOrg");
 
-        };
+        Order order = Order.Create(organization.Id);
 
         order.AddItem("Item 1", null, 250m, null, null, null, 3, null, 0.25, null);
 

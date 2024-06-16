@@ -1,5 +1,5 @@
 using YourBrand.Domain;
-using YourBrand.Notifications.Client;
+using YourBrand.Notifications;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
@@ -8,12 +8,12 @@ namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository,
     IOrderNotificationService orderNotificationService,
-    INotificationsClient notificationsClient,
+    INotificationService notificationsService,
     ILogger<OrderStatusUpdatedEventHandler> logger) : IDomainEventHandler<OrderStatusUpdated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
     private readonly IOrderNotificationService orderNotificationService = orderNotificationService;
-    private readonly INotificationsClient _notificationsClient = notificationsClient;
+    private readonly INotificationService _notificationService = notificationsService;
 
     public async Task Handle(OrderStatusUpdated notification, CancellationToken cancellationToken)
     {
@@ -41,9 +41,8 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
     {
         try
         {
-            await _notificationsClient.CreateNotificationAsync(new CreateNotification
+            await _notificationService.PublishNotificationAsync(new Notification($"New order #{order.OrderNo}.")
             {
-                Content = $"New order #{order.OrderNo}.",
                 UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"
             });

@@ -1,12 +1,12 @@
 ﻿using YourBrand.Domain;
-using YourBrand.Notifications.Client;
+using YourBrand.Notifications;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
-public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, INotificationsClient notificationsClient,
+public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, INotificationService notificationService,
     ILogger<OrderCreatedEventHandler> logger) : IDomainEventHandler<OrderCreated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
@@ -30,9 +30,8 @@ public sealed class OrderCreatedEventHandler(IOrderRepository orderRepository, I
     {
         try
         {
-            await notificationsClient.CreateNotificationAsync(new CreateNotification
+            await notificationService.PublishNotificationAsync(new Notifications.Notification($"New order #{order.OrderNo}.")
             {
-                Content = $"New order #{order.OrderNo}.",
                 UserId = order.CreatedById,
                 Link = $"/orders/{order.OrderNo}"
             });

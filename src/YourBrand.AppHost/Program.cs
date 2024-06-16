@@ -16,9 +16,9 @@ var storage = builder.AddAzureStorage("storage")
                        container.WithBindMount("../../data/azurite", "/data");
                    });
 
-var redis = builder.AddRedis("redis");
-
 var blobStorage = storage.AddBlobs("blobs");
+
+var redis = builder.AddRedis("redis");
 
 /*
 var customContainer = builder.AddContainer("consul-server", "hashicorp/consul", "latest")

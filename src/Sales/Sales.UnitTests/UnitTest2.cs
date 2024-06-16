@@ -9,45 +9,49 @@ public class UnitTest2
     [Fact]
     public void GenerateSubscriptions()
     {
-        Order order = new()
+
+        Organization organization = new Organization("id", "TestOrg");
+
+        Order order = Order.Create(organization.Id);
+
+        order.Customer = new Customer
         {
-            Customer = new Customer
+            Id = "foobar",
+            CustomerNo = 1337,
+            Name = "ACME"
+        };
+
+        order.BillingDetails = new Sales.Domain.ValueObjects.BillingDetails()
+        {
+            FirstName = "Test",
+            LastName = "Testsson",
+            SSN = "12345",
+            Email = "test@email.com",
+            Address = new Sales.Domain.ValueObjects.Address
             {
-                Id = "foobar",
-                CustomerNo = 1337,
-                Name = "ACME"
-            },
-            BillingDetails = new Sales.Domain.ValueObjects.BillingDetails()
+                Thoroughfare = "Testgatan",
+                Premises = "1",
+                PostalCode = "12345",
+                Locality = "Teststad",
+                SubAdministrativeArea = "Testkommun",
+                AdministrativeArea = "Testregion",
+                Country = "Testland"
+            }
+        };
+        
+        order.ShippingDetails = new Sales.Domain.ValueObjects.ShippingDetails()
+        {
+            FirstName = "Test",
+            LastName = "Testsson",
+            Address = new Sales.Domain.ValueObjects.Address
             {
-                FirstName = "Test",
-                LastName = "Testsson",
-                SSN = "12345",
-                Email = "test@email.com",
-                Address = new Sales.Domain.ValueObjects.Address
-                {
-                    Thoroughfare = "Testgatan",
-                    Premises = "1",
-                    PostalCode = "12345",
-                    Locality = "Teststad",
-                    SubAdministrativeArea = "Testkommun",
-                    AdministrativeArea = "Testregion",
-                    Country = "Testland"
-                }
-            },
-            ShippingDetails = new Sales.Domain.ValueObjects.ShippingDetails()
-            {
-                FirstName = "Test",
-                LastName = "Testsson",
-                Address = new Sales.Domain.ValueObjects.Address
-                {
-                    Thoroughfare = "Testgatan",
-                    Premises = "1",
-                    PostalCode = "12345",
-                    Locality = "Teststad",
-                    SubAdministrativeArea = "Testkommun",
-                    AdministrativeArea = "Testregion",
-                    Country = "Testland"
-                }
+                Thoroughfare = "Testgatan",
+                Premises = "1",
+                PostalCode = "12345",
+                Locality = "Teststad",
+                SubAdministrativeArea = "Testkommun",
+                AdministrativeArea = "Testregion",
+                Country = "Testland"
             }
         };
 
