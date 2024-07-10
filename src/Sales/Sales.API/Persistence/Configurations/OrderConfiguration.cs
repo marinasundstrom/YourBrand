@@ -14,8 +14,10 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasAlternateKey(o => new { o.OrganizationId, o.OrderNo });
 
         builder.HasOne(o => o.Status).WithOne()
-            .HasForeignKey<Order>(nameof(Order.OrganizationId), nameof(Order.StatusId))
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey<Order>(o => new { o.OrganizationId, o.StatusId })
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder.HasIndex(o => new { o.OrganizationId, o.StatusId }).IsUnique(false);
 
         builder.HasIndex(x => x.TenantId);
 
