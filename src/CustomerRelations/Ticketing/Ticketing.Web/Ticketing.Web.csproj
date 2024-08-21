@@ -24,7 +24,7 @@
 		</PackageReference>
         <PackageReference
             Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"
-            Version="8.0.5" />
+            Version="8.0.8" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
             Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
