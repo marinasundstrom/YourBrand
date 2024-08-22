@@ -52,7 +52,7 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
 
             if (shouldSoftDelete) 
             {
-                var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+                var participant = channel.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
                 message.Deleted = DateTimeOffset.UtcNow;
                 message.DeletedById = participant.Id;

@@ -43,7 +43,7 @@ public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Resu
 
             var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
 
-            var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+            var participant = channel.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
             message.LastEdited = DateTimeOffset.UtcNow;
             message.LastEditedById = participant.Id;

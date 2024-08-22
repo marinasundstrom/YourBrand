@@ -68,9 +68,9 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
 
             messageRepository.Add(message);
 
-            var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
+            var channel = await channelRepository.FindByIdAsync(request.ChannelId, cancellationToken);
 
-            var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+            var participant = channel.Participants.First(x => x.UserId == userContext.UserId);
 
             message.Posted = DateTimeOffset.UtcNow;
             message.PostedById = participant.Id;

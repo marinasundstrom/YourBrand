@@ -11,7 +11,7 @@ public sealed class ChannelConfiguration : IEntityTypeConfiguration<Channel>
 
         builder.OwnsOne(x => x.Settings);
 
-        //builder.OwnsMany(x => x.Participants, x => x.ToTable("ChannelParticipants"));
+        builder.Navigation(x => x.Participants).AutoInclude();
     }
 }
 
