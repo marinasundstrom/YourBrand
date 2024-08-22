@@ -11,10 +11,6 @@ public static class ServiceExtensions
             .AddTypedClient<IChannelsClient>((http, sp) => new ChannelsClient(http)));
 
         builder(
-            services.AddHttpClient(nameof(IMessagesClient), configureClient)
-            .AddTypedClient<IMessagesClient>((http, sp) => new MessagesClient(http)));
-
-        builder(
             services.AddHttpClient(nameof(IUsersClient), configureClient)
             .AddTypedClient<IUsersClient>((http, sp) => new UsersClient(http)));
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
@@ -23,7 +24,7 @@ public static class Endpoints
 
     private static void MapVersion1(IVersionedEndpointRouteBuilder channels)
     {
-        var group = channels.MapGroup("/v{version:apiVersion}/Messages")
+        var group = channels.MapGroup("/v{version:apiVersion}/Channels/{channelId}/Messages")
             //.WithTags("Messages")
             .HasApiVersion(1, 0)
             .RequireAuthorization()
@@ -31,41 +32,41 @@ public static class Endpoints
 
 
         group.MapGet("/", GetMessages)
-            .WithName($"Messages_{nameof(GetMessages)}")
+            .WithName($"Channels_{nameof(GetMessages)}")
             .Produces<ItemsResult<MessageDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status429TooManyRequests)
             .RequireRateLimiting("fixed");
 
 
         group.MapGet("/{id}", GetMessageById)
-            .WithName($"Messages_{nameof(GetMessageById)}")
+            .WithName($"Channels_{nameof(GetMessageById)}")
             .Produces<MessageDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithName(nameof(GetMessageById));
 
         group.MapPost("/", PostMessage)
-            .WithName($"Messages_{nameof(PostMessage)}")
+            .WithName($"Channels_{nameof(PostMessage)}")
             .Produces<Guid>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
 
         group.MapDelete("/{id}", DeleteMessage)
-            .WithName($"Messages_{nameof(DeleteMessage)}")
+            .WithName($"Channels_{nameof(DeleteMessage)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPut("/{id}", EditMessage)
-            .WithName($"Messages_{nameof(EditMessage)}")
+            .WithName($"Channels_{nameof(EditMessage)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPost("/{id}/Reaction", React)
-            .WithName($"Messages_{nameof(React)}")
+            .WithName($"Channels_{nameof(React)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapDelete("/{id}/Reaction", RemoveReaction)
-            .WithName($"Messages_{nameof(RemoveReaction)}")
+            .WithName($"Channels_{nameof(RemoveReaction)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
@@ -93,17 +94,17 @@ public static class Endpoints
               */
     }
 
-    public static async Task<ItemsResult<MessageDto>> GetMessages(Guid channelId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
+    public static async Task<ItemsResult<MessageDto>> GetMessages(ChannelId channelId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
         => await mediator.Send(new GetMessages(channelId, page, pageSize, sortBy, sortDirection), cancellationToken);
 
 
-    public static async Task<IResult> GetMessageById(Guid id, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> GetMessageById(ChannelId channelId, Guid id, CancellationToken cancellationToken, IMediator mediator)
     {
         var result = await mediator.Send(new GetMessageById(id), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> PostMessage(PostMessageRequest request, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> PostMessage(ChannelId channelId, PostMessageRequest request, CancellationToken cancellationToken, IMediator mediator)
     {
         var result = await mediator.Send(new PostMessage(request.ChannelId, request.ReplyToId, request.Content), cancellationToken);
         return result.Handle(
@@ -111,25 +112,25 @@ public static class Endpoints
             onError: error => Results.Problem(detail: error.Detail, title: error.Title, type: error.Id));
     }
 
-    public static async Task<IResult> DeleteMessage(Guid id, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> DeleteMessage(ChannelId channelId, Guid id, CancellationToken cancellationToken, IMediator mediator)
     {
         var result = await mediator.Send(new DeleteMessage(id), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> EditMessage(Guid id, [FromBody] string content, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> EditMessage(ChannelId channelId, Guid id, [FromBody] string content, CancellationToken cancellationToken, IMediator mediator)
     {
         var result = await mediator.Send(new EditMessage(id, content), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> React(Guid id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> React(ChannelId channelId, Guid id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
     {
         var result = await mediator.Send(new React(id, reaction), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> RemoveReaction(Guid id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> RemoveReaction(ChannelId channelId, Guid id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
     {
         var result = await mediator.Send(new RemoveReaction(id, reaction), cancellationToken);
         return HandleResult(result);

@@ -137,7 +137,7 @@ public partial class ChannelPage : IChatHubClient
 
     private async Task LoadMessages()
     {
-        var result = await MessagesClient.GetMessagesAsync(Guid.Parse(Id!), 1, 10, null, null);
+        var result = await ChannelsClient.GetMessagesAsync(Id, 1, 10, null, null);
 
         loadedMessages.Clear();
 
@@ -184,6 +184,7 @@ public partial class ChannelPage : IChatHubClient
         messageVm = new MessageViewModel
         {
             Id = message.Id,
+            ChannelId = message.ChannelId,
             PostedById = message.PostedBy.Id,
             PostedByName = message.PostedBy.Name,
             PostedByInitials = GetInitials(message.PostedBy.Name),
@@ -331,7 +332,7 @@ public partial class ChannelPage : IChatHubClient
         {
             messageVm.Content = Text;
 
-            await MessagesClient.EditMessageAsync(editingMessageId.GetValueOrDefault(), Text);
+            await ChannelsClient.EditMessageAsync(Id, editingMessageId.GetValueOrDefault(), Text);
 
             Text = string.Empty;
             editingMessageId = null;
@@ -340,7 +341,7 @@ public partial class ChannelPage : IChatHubClient
 
     async Task DeleteMessage(MessageViewModel messageVm)
     {
-        await MessagesClient.DeleteMessageAsync(messageVm.Id);
+        await ChannelsClient.DeleteMessageAsync(Id, messageVm.Id);
 
         if (messageVm is not null)
         {
@@ -392,7 +393,7 @@ public partial class ChannelPage : IChatHubClient
 
     async Task React(MessageViewModel messageVm, string reaction)
     {
-        await MessagesClient.ReactAsync(messageVm.Id, reaction);
+        await ChannelsClient.ReactAsync(Id, messageVm.Id, reaction);
 
         await InvokeAsync(StateHasChanged);
     }

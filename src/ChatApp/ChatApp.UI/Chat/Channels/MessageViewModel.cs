@@ -4,6 +4,8 @@ public class MessageViewModel : IComparable<MessageViewModel>
 {
     public Guid Id { get; set; }
 
+    public Guid ChannelId { get; set; }
+
     public DateTimeOffset Posted { get; set; }
     public string PostedById { get; set; } = default!;
     public string PostedByName { get; set; } = default!;

@@ -1,5 +1,5 @@
 @inject IStringLocalizer<ChannelPage> T
-@inject IMessagesClient MessagesClient
+@inject IChannelsClient ChannelsClient
 
 <div class="reactions-pane">
     @foreach (var reactionGroup in Message.Reactions.GroupBy(x => x.Content))
@@ -46,12 +46,12 @@
     {
         if(!reactions.Any(x => x.User.Id == CurrentUserId)) 
         {
-             await MessagesClient.ReactAsync(Message.Id, reactions.Key);
+            await ChannelsClient.ReactAsync(Message.ChannelId.ToString(), Message.Id, reactions.Key);
 
              return;
         };
 
-        await MessagesClient.RemoveReactionAsync(Message.Id, reactions.Key);
+        await ChannelsClient.RemoveReactionAsync(Message.ChannelId.ToString(), Message.Id, reactions.Key);
     }
 
     private bool IsInReactions(IEnumerable<Reaction> reactions) 

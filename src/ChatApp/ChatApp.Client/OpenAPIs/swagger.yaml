@@ -137,18 +137,17 @@ paths:
       security:
       - ApiKey: []
       - JWT: []
-  /v1/Messages:
+  /v1/Channels/{channelId}/Messages:
     get:
       tags:
       - Messages
-      operationId: Messages_GetMessages
+      operationId: Channels_GetMessages
       parameters:
       - name: channelId
-        in: query
+        in: path
         required: true
         schema:
-          type: string
-          format: guid
+          $ref: '#/components/schemas/ChannelId'
         x-position: 1
       - name: page
         in: query
@@ -197,7 +196,14 @@ paths:
     post:
       tags:
       - Messages
-      operationId: Messages_PostMessage
+      operationId: Channels_PostMessage
+      parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
       requestBody:
         x-name: request
         content:
@@ -205,7 +211,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PostMessageRequest'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         201:
           description: ''
@@ -223,19 +229,25 @@ paths:
       security:
       - ApiKey: []
       - JWT: []
-  /v1/Messages/{id}:
+  /v1/Channels/{channelId}/Messages/{id}:
     get:
       tags:
       - Messages
-      operationId: Messages_GetMessageById
+      operationId: Channels_GetMessageById
       parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
           format: guid
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -255,15 +267,21 @@ paths:
     delete:
       tags:
       - Messages
-      operationId: Messages_DeleteMessage
+      operationId: Channels_DeleteMessage
       parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
           format: guid
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -279,15 +297,21 @@ paths:
     put:
       tags:
       - Messages
-      operationId: Messages_EditMessage
+      operationId: Channels_EditMessage
       parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
           format: guid
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: content
         content:
@@ -295,7 +319,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -308,19 +332,25 @@ paths:
       security:
       - ApiKey: []
       - JWT: []
-  /v1/Messages/{id}/Reaction:
+  /v1/Channels/{channelId}/Messages/{id}/Reaction:
     post:
       tags:
       - Messages
-      operationId: Messages_React
+      operationId: Channels_React
       parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
           format: guid
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: reaction
         content:
@@ -328,7 +358,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -344,15 +374,21 @@ paths:
     delete:
       tags:
       - Messages
-      operationId: Messages_RemoveReaction
+      operationId: Channels_RemoveReaction
       parameters:
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
           format: guid
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: reaction
         content:
@@ -360,7 +396,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
