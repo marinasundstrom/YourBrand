@@ -23,7 +23,7 @@ public sealed record ReactionDto(string Content, DateTimeOffset Date, UserData U
 
 public sealed record MessageEditedData(Guid Id, DateTimeOffset LastEdited, UserData LastEditedBy, string Content);
 
-public sealed record MessageDeletedData(Guid Id, DateTimeOffset Deleted, UserData DeletedBy);
+public sealed record MessageDeletedData(Guid Id, bool HardDelete, DateTimeOffset? Deleted, UserData? DeletedBy);
 
 public sealed record MessageReactionData(string Content, DateTimeOffset Date, UserData User);
 

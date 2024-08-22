@@ -85,15 +85,18 @@ public sealed class MessageEditedEventHandler : IDomainEventHandler<MessageEdite
 
 public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDeleted>
 {
+    private readonly IChannelRepository channelRepository;
     private readonly IMessageRepository messagesRepository;
     private readonly IUserRepository userRepository;
     private readonly IChatNotificationService chatNotificationService;
 
     public MessageDeletedEventHandler(
+        IChannelRepository channelRepository,
         IMessageRepository messagesRepository,
         IUserRepository userRepository,
         IChatNotificationService chatNotificationService)
     {
+        this.channelRepository = channelRepository;
         this.messagesRepository = messagesRepository;
         this.userRepository = userRepository;
         this.chatNotificationService = chatNotificationService;
@@ -101,11 +104,23 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
 
     public async Task Handle(MessageDeleted notification, CancellationToken cancellationToken)
     {
-        var message = await messagesRepository.FindByIdAsync(notification.MessageId);
-        var user = await userRepository.FindByIdAsync(message!.DeletedBy!.UserId);
+        var channel = await channelRepository.FindByIdAsync(notification.ChannelId, cancellationToken);
 
-        await chatNotificationService.NotifyMessageDeleted(
-            notification.ChannelId, new MessageDeletedData(notification.MessageId, message!.Deleted.GetValueOrDefault(), new UserData(user!.Id, user.Name)), cancellationToken);
+        var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
+
+        if (shouldSoftDelete) 
+        {
+            var message = await messagesRepository.FindByIdAsync(notification.MessageId);
+            var user = await userRepository.FindByIdAsync(message!.DeletedBy!.UserId);
+
+            await chatNotificationService.NotifyMessageDeleted(
+                notification.ChannelId, new MessageDeletedData(notification.MessageId, false, message!.Deleted.GetValueOrDefault(), new UserData(user!.Id, user.Name)), cancellationToken);
+        }
+        else 
+        {
+            await chatNotificationService.NotifyMessageDeleted(
+                notification.ChannelId, new MessageDeletedData(notification.MessageId, true, null, null), cancellationToken);
+        }
     }
 }
 

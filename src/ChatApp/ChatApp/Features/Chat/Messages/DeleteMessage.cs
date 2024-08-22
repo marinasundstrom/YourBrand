@@ -46,12 +46,12 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
             
             var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
 
+            message.RemoveAllReactions();
+
+            message.MarkAsDeleted();
+
             if (shouldSoftDelete) 
             {
-                message.RemoveAllReactions();
-
-                message.MarkAsDeleted();
-
                 var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
 
                 message.Deleted = DateTimeOffset.UtcNow;

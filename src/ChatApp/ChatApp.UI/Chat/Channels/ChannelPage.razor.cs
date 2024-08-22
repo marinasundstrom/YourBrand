@@ -501,12 +501,18 @@ public partial class ChannelPage : IChatHubClient
 
         if (messageVm is not null)
         {
-            //messages.Remove(messageVm);
-
-            messageVm.Content = string.Empty;
-            messageVm.Deleted = data.Deleted;
-            messageVm.DeletedById = data.DeletedBy.Id;
-            messageVm.DeletedByName = data.DeletedBy.Name;
+            if(data.HardDelete) 
+            {
+                loadedMessages.Remove(messageVm);
+                messagesCache.Remove(messageVm);
+            }
+            else 
+            {
+                messageVm.Content = string.Empty;
+                messageVm.Deleted = data.Deleted;
+                messageVm.DeletedById = data.DeletedBy.Id;
+                messageVm.DeletedByName = data.DeletedBy.Name;
+            }
 
             StateHasChanged();
         }
