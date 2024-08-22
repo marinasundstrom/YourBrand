@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ChatApp.Domain;
 
+using static YourBrand.ChatApp.Domain.Errors.Messages;
+
+
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
 public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
@@ -18,37 +21,24 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
         }
     }
 
-    public sealed class Handler : IRequestHandler<DeleteMessage, Result>
+    public sealed class Handler(
+        IMessageRepository messageRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<DeleteMessage, Result>
     {
-        private readonly IMessageRepository messageRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IUserContext userContext;
-
-        public Handler(
-            IMessageRepository messageRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext)
-        {
-            this.messageRepository = messageRepository;
-            this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
-            this.userContext = userContext;
-        }
-
         public async Task<Result> Handle(DeleteMessage request, CancellationToken cancellationToken)
         {
             var message = await messageRepository.FindByIdAsync(request.MessageId, cancellationToken);
 
             if (message is null)
             {
-                return Result.Failure(Errors.Messages.MessageNotFound);
+                return MessageNotFound;
             }
 
             var userId = userContext.UserId;
             var isAdmin = userContext.IsInRole("admin");
 
-            if (!isAdmin && message.CreatedById != userId)
+            if (!isAdmin && message.PostedBy!.UserId != userId)
             {
-                return Result.Failure(Errors.Messages.NotAllowedToDelete);
+                return NotAllowedToDelete;
             }
 
             message.RemoveAllReactions();
@@ -59,7 +49,7 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
 
             /*
             var deleted = await messageRepository

@@ -63,7 +63,7 @@ public sealed class AdminCommandProcessor : IAdminCommandProcessor
             await SendMessage(messageDto, cancellationToken);
         }
 
-        return Result.Success(new MessageId());
+        return Result.SuccessWith(new MessageId());
     }
 
     private static MessageDto CreateMessage(string channelId, string content)

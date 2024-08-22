@@ -8,4 +8,4 @@ You can use tools to generate client code from the specification.
 
 You can view the specification in Swagger when the app is running.
 
-[https://localhost:5020/api/swagger/](https://localhost:5020/api/swagger/) 
+[https://localhost:5020/api/openapi/](https://localhost:5020/api/openapi/) 

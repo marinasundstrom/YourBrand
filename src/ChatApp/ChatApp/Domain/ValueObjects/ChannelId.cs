@@ -1,37 +1,42 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace YourBrand.ChatApp.Domain.ValueObjects;
 
-public struct ChannelId
+public record ChannelId(Guid Value)
 {
-    public ChannelId(Guid value) => Value = value;
-
-    public ChannelId() => Value = Guid.NewGuid();
-
-    public Guid Value { get; set; }
-
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return Value.GetHashCode();
-    }
-
     public override string ToString()
     {
         return Value.ToString();
     }
-
-    public static bool operator ==(ChannelId lhs, ChannelId rhs) => lhs.Value == rhs.Value;
-
-    public static bool operator !=(ChannelId lhs, ChannelId rhs) => lhs.Value != rhs.Value;
 
     public static implicit operator ChannelId(Guid id) => new ChannelId(id);
 
     public static implicit operator ChannelId?(Guid? id) => id is null ? (ChannelId?)null : new ChannelId(id.GetValueOrDefault());
 
     public static implicit operator Guid(ChannelId id) => id.Value;
+
+    public static bool TryParse(string? value, out ChannelId? channelId) 
+    { 
+        return TryParse(value, CultureInfo.CurrentCulture, out channelId);
+    }
+
+    public static bool TryParse(string? value, IFormatProvider? provider, out ChannelId? channelId)
+    {
+        if (value is null)
+        {
+            channelId = default;
+            return false;
+        }
+
+        Guid cid;
+        var r = Guid.TryParse(value, provider, out cid);
+        if (!r)
+        {
+            channelId = default;
+            return false;
+        }
+        channelId = cid;
+        return true;
+    }
 }

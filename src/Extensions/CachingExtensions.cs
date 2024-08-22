@@ -11,31 +11,35 @@ public static class CachingExtensions
     {
         services.AddMemoryCache();
 
-        IConnectionMultiplexer? connection = null;
-
-        var connectionString = configuration.GetConnectionString("redis") ?? "localhost";
-        var c = ConfigurationOptions.Parse(connectionString, true);
-
-        connection = ConnectionMultiplexer.Connect(c);
-
-        services.AddSingleton<IConnectionMultiplexer>(sp =>
+        try 
         {
-            /*
-            var connectionString = builder.Configuration.GetConnectionString("redis");
-            var configuration = ConfigurationOptions.Parse(connectionString, true);
-            return connection = ConnectionMultiplexer.Connect(configuration); */
+            IConnectionMultiplexer? connection = null;
 
-            return connection;
-        });
+            var connectionString = configuration.GetConnectionString("redis") ?? "localhost";
+            var c = ConfigurationOptions.Parse(connectionString, true);
 
-        services.AddStackExchangeRedisCache(options =>
-        {
-            //o.Configuration = builder.Configuration.GetConnectionString("redis");
-            options.ConnectionMultiplexerFactory = () =>
+            connection = ConnectionMultiplexer.Connect(c);
+
+            services.AddSingleton<IConnectionMultiplexer>(sp =>
             {
-                return Task.FromResult(connection!);
-            };
-        });
+                /*
+                var connectionString = builder.Configuration.GetConnectionString("redis");
+                var configuration = ConfigurationOptions.Parse(connectionString, true);
+                return connection = ConnectionMultiplexer.Connect(configuration); */
+
+                return connection;
+            });
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                //o.Configuration = builder.Configuration.GetConnectionString("redis");
+                options.ConnectionMultiplexerFactory = () =>
+                {
+                    return Task.FromResult(connection!);
+                };
+            });
+        }
+        catch {}
 
         return services;
     }

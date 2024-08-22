@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ChatApp.Common;
+using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Extensions;
 using YourBrand.ChatApp.Features.Users;
 using YourBrand.ChatApp.Infrastructure.Persistence;
@@ -13,19 +14,8 @@ namespace YourBrand.ChatApp.Features.Chat.Messages;
 
 public record GetMessages(Guid? ChannelId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<MessageDto>>
 {
-    public class Handler : IRequestHandler<GetMessages, ItemsResult<MessageDto>>
+    public class Handler(IMessageRepository messageRepository, ApplicationDbContext context, IDtoComposer dtoComposer) : IRequestHandler<GetMessages, ItemsResult<MessageDto>>
     {
-        private readonly IMessageRepository messageRepository;
-        private readonly ApplicationDbContext context;
-        private readonly IDtoComposer dtoComposer;
-
-        public Handler(IMessageRepository messageRepository, ApplicationDbContext context, IDtoComposer dtoComposer)
-        {
-            this.messageRepository = messageRepository;
-            this.context = context;
-            this.dtoComposer = dtoComposer;
-        }
-
         public async Task<ItemsResult<MessageDto>> Handle(GetMessages request, CancellationToken cancellationToken)
         {
             var query = context.Messages
@@ -36,7 +26,8 @@ public record GetMessages(Guid? ChannelId, int Page = 1, int PageSize = 10, stri
 
             if (request.ChannelId is not null)
             {
-                query = query.Where(x => x.ChannelId == request.ChannelId);
+                var cid = new ChannelId(request.ChannelId.GetValueOrDefault());
+                query = query.Where(x => x.ChannelId == cid);
             }
 
             if (request.SortBy is not null)
@@ -45,7 +36,7 @@ public record GetMessages(Guid? ChannelId, int Page = 1, int PageSize = 10, stri
             }
             else
             {
-                query = query.OrderByDescending(x => x.Created);
+                query = query.OrderByDescending(x => x.Posted);
             }
 
             var messages = await query

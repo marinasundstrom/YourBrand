@@ -8,6 +8,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5050",
+      "launchUrl": "openapi",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -16,6 +17,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:37577",
+      "launchUrl": "openapi",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -5,10 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 using NJsonSchema;
 using NJsonSchema.Generation;
+using NJsonSchema.Generation.TypeMappers;
 
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.AspNetCore;
+using NSwag.Generation.Processors;
+using NSwag.Generation.Processors.Contexts;
 using NSwag.Generation.Processors.Security;
 
 namespace YourBrand.Extensions;
@@ -111,6 +114,8 @@ public static class OpenApiExtensions
 
         app.UseSwaggerUi(options =>
         {
+            options.Path = "/openapi";
+            
             configureSwaggerUi?.Invoke(options);
 
             var descriptions = app.DescribeApiVersions();

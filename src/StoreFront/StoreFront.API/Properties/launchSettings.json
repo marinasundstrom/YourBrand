@@ -12,7 +12,7 @@
     "Development": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "openapi",
       "applicationUrl": "https://localhost:7174;http://localhost:5275",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -22,7 +22,7 @@
     "Production": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "openapi",
       "applicationUrl": "https://localhost:7174;http://localhost:5275",
       "environmentVariables": {
         //"AZURE_CLIENT_ID": "",

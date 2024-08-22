@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
@@ -45,6 +46,11 @@ public static class Endpoints
             .WithName($"Channels_{nameof(CreateChannel)}")
             .Produces<ChannelDto>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status404NotFound);
+
+        group.MapPost("/{id}/join", JoinChannel)
+        .WithName($"Channels_{nameof(JoinChannel)}")
+        .Produces(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status404NotFound);
     }
 
     public static async Task<ItemsResult<ChannelDto>> GetChannels(int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
@@ -61,6 +67,14 @@ public static class Endpoints
         var result = await mediator.Send(new CreateChannel(request.Name), cancellationToken);
         return result.Handle(
             onSuccess: data => Results.CreatedAtRoute($"Channels_{nameof(GetChannelById)}", new { id = data.Id }, data),
+            onError: error => Results.Problem(detail: error.Detail, title: error.Title, type: error.Id));
+    }
+
+    public static async Task<IResult> JoinChannel(ChannelId id, CancellationToken cancellationToken, IMediator mediator)
+    {
+        var result = await mediator.Send(new JoinChannel(id), cancellationToken);
+        return result.Handle(
+            onSuccess: () => Results.Ok(),
             onError: error => Results.Problem(detail: error.Detail, title: error.Title, type: error.Id));
     }
 

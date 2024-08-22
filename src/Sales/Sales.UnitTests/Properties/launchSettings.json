@@ -8,6 +8,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:49724",
+      "launchUrl": "openapi",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

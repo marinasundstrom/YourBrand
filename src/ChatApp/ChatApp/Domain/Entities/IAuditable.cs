@@ -1,6 +1,4 @@
-﻿using YourBrand.ChatApp.Domain.ValueObjects;
-
-namespace YourBrand.ChatApp.Domain.Entities;
+﻿namespace YourBrand.ChatApp.Domain.Entities;
 
 public interface IAuditable
 {

@@ -2,8 +2,13 @@ using FluentValidation;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.Identity;
+
+using static YourBrand.ChatApp.Domain.Errors.Messages;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
@@ -19,35 +24,28 @@ public sealed record RemoveReaction(Guid MessageId, string Reaction) : IRequest<
         }
     }
 
-    public sealed class Handler : IRequestHandler<RemoveReaction, Result>
+    public sealed class Handler(ApplicationDbContext applicationDbContext, IChannelRepository channelRepository, IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<RemoveReaction, Result>
     {
-        private readonly IMessageRepository messageRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IUserContext userContext;
-
-        public Handler(IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext)
-        {
-            this.messageRepository = messageRepository;
-            this.unitOfWork = unitOfWork;
-            this.userContext = userContext;
-        }
-
         public async Task<Result> Handle(RemoveReaction request, CancellationToken cancellationToken)
         {
             var message = await messageRepository.FindByIdAsync(request.MessageId, cancellationToken);
 
             if (message is null)
             {
-                return Result.Failure(Errors.Messages.MessageNotFound);
+                return MessageNotFound;
             }
 
             var userId = userContext.UserId.GetValueOrDefault();
 
-            message.RemoveReaction(userId, request.Reaction);
+            var channel = await applicationDbContext.Channels.Include(x => x.Participants).FirstOrDefaultAsync(x => x.Id == message.ChannelId, cancellationToken);
+
+            var participant = channel.Participants.FirstOrDefault(x => x.UserId == userId);
+
+            message.RemoveReaction(participant.Id, request.Reaction);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

@@ -4,6 +4,9 @@ using MediatR;
 
 using YourBrand.ChatApp.Domain;
 
+using static YourBrand.ChatApp.Domain.Errors.Messages;
+
+
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
 public record GetMessageById(Guid Id) : IRequest<Result<MessageDto>>
@@ -16,28 +19,18 @@ public record GetMessageById(Guid Id) : IRequest<Result<MessageDto>>
         }
     }
 
-    public class Handler : IRequestHandler<GetMessageById, Result<MessageDto>>
+    public class Handler(IMessageRepository messageRepository, IDtoComposer dtoComposer) : IRequestHandler<GetMessageById, Result<MessageDto>>
     {
-        private readonly IMessageRepository messageRepository;
-        private readonly IDtoComposer dtoComposer;
-
-        public Handler(IMessageRepository messageRepository, IDtoComposer dtoComposer)
-        {
-            this.messageRepository = messageRepository;
-            this.dtoComposer = dtoComposer;
-        }
-
         public async Task<Result<MessageDto>> Handle(GetMessageById request, CancellationToken cancellationToken)
         {
             var message = await messageRepository.FindByIdAsync(request.Id, cancellationToken);
 
             if (message is null)
             {
-                return Result.Failure<MessageDto>(Errors.Messages.MessageNotFound);
+                return MessageNotFound;
             }
 
-            return Result.Success(
-                await dtoComposer.ComposeMessageDto(message, cancellationToken));
+            return await dtoComposer.ComposeMessageDto(message, cancellationToken);
         }
     }
 }

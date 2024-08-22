@@ -46,9 +46,9 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (!clrType.IsAssignableTo(typeof(IHasDomainEvents)))
+            if (!clrType.IsAssignableTo(typeof(IEntity)))
             {
-                Console.WriteLine($"Skipping type {clrType} because it is not implementing IHasDomainEvents.");
+                Console.WriteLine($"Skipping type {clrType} because it is not implementing IEntity.");
                 continue;
             }
 
@@ -105,12 +105,12 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
             catch (InvalidOperationException exc)
                 when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
             {
-                Console.WriteLine("Skipping previously configured owned type");
+                Console.WriteLine($"Skipping previously configured owned type: {clrType}");
             }
             catch (InvalidOperationException exc)
                 when (exc.Message.Contains("cannot be added to the model because its CLR type has been configured as a shared type"))
             {
-                Console.WriteLine("Skipping previously configured shared type");
+                Console.WriteLine($"Skipping previously configured shared type: {clrType}");
             }
         }
     }
@@ -118,6 +118,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<ChannelId>().HaveConversion<ChannelIdConverter>();
+        configurationBuilder.Properties<ChannelParticipantId>().HaveConversion<ChannelParticipantIdConverter>();
         configurationBuilder.Properties<MessageId>().HaveConversion<MessageIdConverter>();
 
         configurationBuilder.AddTenantIdConverter();
@@ -129,7 +130,11 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 
     public DbSet<Channel> Channels { get; set; }
 
+    public DbSet<ChannelParticipant> ChannelParticipants { get; set; }
+
     public DbSet<Message> Messages { get; set; }
+
+    //public DbSet<MessageReaction> MessageReactions { get; set; }
 
     public DbSet<User> Users { get; set; }
 

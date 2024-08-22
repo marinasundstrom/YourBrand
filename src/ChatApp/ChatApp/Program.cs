@@ -4,11 +4,15 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
+using NJsonSchema;
+using NJsonSchema.Generation.TypeMappers;
+
 using NSwag.AspNetCore;
 
 using Serilog;
 
 using YourBrand.ChatApp;
+using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Extensions;
 using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.ChatApp.Web;
@@ -65,6 +69,11 @@ builder.Services
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All, settings =>
     {
+        settings.SchemaSettings.TypeMappers.Add(new ObjectTypeMapper(typeof(ChannelId), new NJsonSchema.JsonSchema
+        {
+            Type = JsonObjectType.String
+        }));
+        
         settings
             .AddApiKeySecurity()
             .AddJwtSecurity();
@@ -130,11 +139,6 @@ app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthCheck
 
 app.MapApplicationHubs();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseOpenApi();
-}
-
 app.UseRateLimiter();
 
 using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -142,9 +146,6 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    //await context.Database.EnsureDeletedAsync();
-    await context.Database.EnsureCreatedAsync();
 
     var dbProviderName = context.Database.ProviderName;
 

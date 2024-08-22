@@ -4,7 +4,7 @@ using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity, IHasDomainEvents
     where TId : notnull
 {
     private readonly List<DomainEvent> domainEvents = new List<DomainEvent>();

@@ -7,6 +7,9 @@ using Microsoft.Extensions.Caching.Distributed;
 
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
+
+using Errors = YourBrand.ChatApp.Domain.Errors.Channels;
+
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 
 public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
@@ -21,22 +24,11 @@ public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
         }
     }
 
-    public sealed class Handler : IRequestHandler<CreateChannel, Result<ChannelDto>>
+    public sealed class Handler(
+        IChannelRepository channelRepository,
+        IUnitOfWork unitOfWork,
+        IUserContext userContext) : IRequestHandler<CreateChannel, Result<ChannelDto>>
     {
-        private readonly IChannelRepository channelRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IUserContext userContext;
-
-        public Handler(
-            IChannelRepository channelRepository,
-            IUnitOfWork unitOfWork,
-            IUserContext userContext)
-        {
-            this.channelRepository = channelRepository;
-            this.unitOfWork = unitOfWork;
-            this.userContext = userContext;
-        }
-
         public async Task<Result<ChannelDto>> Handle(CreateChannel request, CancellationToken cancellationToken)
         {
             var hasChannel = await channelRepository
@@ -45,7 +37,7 @@ public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
 
             if (hasChannel)
             {
-                return Result.Failure<ChannelDto>(Errors.Channels.ChannelWithNameAlreadyExists);
+                return Errors.ChannelWithNameAlreadyExists;
             }
 
             var channel = new Channel(request.Name);
@@ -54,7 +46,7 @@ public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(channel.ToDto());
+            return channel.ToDto();
         }
     }
 }

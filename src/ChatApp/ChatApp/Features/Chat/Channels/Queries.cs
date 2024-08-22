@@ -10,21 +10,14 @@ using YourBrand.ChatApp.Extensions;
 using YourBrand.ChatApp.Features.Users;
 using YourBrand.ChatApp.Infrastructure.Persistence;
 
+using Errors = YourBrand.ChatApp.Domain.Errors.Channels;
+
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 
 public record GetChannels(int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<ChannelDto>>
 {
-    public class Handler : IRequestHandler<GetChannels, ItemsResult<ChannelDto>>
+    public class Handler(IChannelRepository channelRepository, ApplicationDbContext context) : IRequestHandler<GetChannels, ItemsResult<ChannelDto>>
     {
-        private readonly IChannelRepository channelRepository;
-        private readonly ApplicationDbContext context;
-
-        public Handler(IChannelRepository channelRepository, ApplicationDbContext context)
-        {
-            this.channelRepository = channelRepository;
-            this.context = context;
-        }
-
         public async Task<ItemsResult<ChannelDto>> Handle(GetChannels request, CancellationToken cancellationToken)
         {
             var query = context.Channels.AsQueryable();
@@ -62,25 +55,18 @@ public record GetChannelById(Guid Id) : IRequest<Result<ChannelDto>>
         }
     }
 
-    public class Handler : IRequestHandler<GetChannelById, Result<ChannelDto>>
+    public class Handler(IChannelRepository channelRepository) : IRequestHandler<GetChannelById, Result<ChannelDto>>
     {
-        private readonly IChannelRepository channelRepository;
-
-        public Handler(IChannelRepository channelRepository)
-        {
-            this.channelRepository = channelRepository;
-        }
-
         public async Task<Result<ChannelDto>> Handle(GetChannelById request, CancellationToken cancellationToken)
         {
             var todo = await channelRepository.FindByIdAsync(request.Id, cancellationToken);
 
             if (todo is null)
             {
-                return Result.Failure<ChannelDto>(Errors.Channels.ChannelNotFound);
+                return Errors.ChannelNotFound;
             }
 
-            return Result.Success(todo.ToDto());
+            return todo.ToDto();
         }
     }
 }

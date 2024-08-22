@@ -4,12 +4,12 @@ namespace YourBrand.ChatApp.Domain.Entities;
 
 public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
 {
-    private Channel() : base(new ChannelId())
+    private Channel() : base(new ChannelId(Guid.NewGuid()))
     {
     }
 
     public Channel(string title)
-        : base(new ChannelId())
+        : base(new ChannelId(Guid.NewGuid()))
     {
         Title = title;
 
@@ -39,25 +39,27 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
         return true;
     }
 
-    public bool BlockPosting { get; set; }
+    public bool IsReadOnly { get; set; }
 
-    public bool DisallowNicknames { get; set; }
+    public bool DisallowDisplayNames { get; set; }
 
     readonly HashSet<ChannelParticipant> _participants = new HashSet<ChannelParticipant>();
 
     public IReadOnlyCollection<ChannelParticipant> Participants => _participants;
 
-    public bool AddParticipant(UserId userId)
+    public Result AddParticipant(UserId userId)
     {
-        var participant = Participants.First(x => x.UserId == userId);
+        var participant = Participants.FirstOrDefault(x => x.UserId == userId);
 
-        if (participant is not null) return false;
+        if (participant is not null) return Result.Failure(Errors.Channels.NotParticipantInChannel);
 
-        _participants.Add(new ChannelParticipant(userId, DateTimeOffset.UtcNow));
+        participant = new ChannelParticipant(userId, DateTimeOffset.UtcNow);
 
-        AddDomainEvent(new ParticipantAddedToChannel(Id, userId));
+        _participants.Add(participant);
 
-        return true;
+        AddDomainEvent(new ParticipantAddedToChannel(Id, participant.Id));
+
+        return Result.Success;
     }
 
     public bool RemoveParticipant(UserId userId)
@@ -69,7 +71,7 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
         participant.Left = DateTimeOffset.UtcNow;
         _participants.Remove(participant);
 
-        AddDomainEvent(new ParticipantRemovedFromChannel(Id, userId));
+        AddDomainEvent(new ParticipantRemovedFromChannel(Id, participant.Id));
 
         return true;
     }
@@ -81,21 +83,25 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
     public DateTimeOffset? LastModified { get; set; }
 }
 
-public class ChannelParticipant
+public sealed class ChannelParticipant : Entity<ChannelParticipantId>
 {
-    private ChannelParticipant()
+    private ChannelParticipant() : base(new ChannelParticipantId())
     {
     }
 
     public ChannelParticipant(UserId userId, DateTimeOffset joined)
+        : base(new ChannelParticipantId())
     {
+
         UserId = userId;
         Joined = joined;
     }
 
+    public ChannelId ChannelId { get; private set; }
+
     public UserId UserId { get; set; }
 
-    public string? Nickname { get; set; }
+    public string? DisplayName { get; set; }
 
     public DateTimeOffset Joined { get; set; }
 

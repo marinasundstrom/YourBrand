@@ -113,6 +113,30 @@ paths:
       security:
       - ApiKey: []
       - JWT: []
+  /v1/Channels/{id}/join:
+    post:
+      tags:
+      - Channels
+      operationId: Channels_JoinChannel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 1
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - ApiKey: []
+      - JWT: []
   /v1/Messages:
     get:
       tags:
@@ -395,10 +419,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemsResultOfUser'
-      security:
-      - ApiKey: []
-      - JWT: []
+                $ref: '#/components/schemas/PagedResultOfUser'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
     post:
       tags:
       - Users
@@ -424,6 +457,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
       security:
       - ApiKey: []
       - JWT: []
@@ -440,6 +479,102 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserInfo'
         404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Organizations:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganizations
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfOrganization'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    post:
+      tags:
+      - Organizations
+      operationId: Organizations_CreateOrganization
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganization'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
           description: ''
           content:
             application/json:
@@ -506,6 +641,8 @@ components:
       properties:
         name:
           type: string
+    ChannelId:
+      type: string
     ItemsResultOfMessage:
       type: object
       additionalProperties: false
@@ -623,7 +760,7 @@ components:
           nullable: true
         content:
           type: string
-    ItemsResultOfUser:
+    PagedResultOfUser:
       type: object
       additionalProperties: false
       properties:
@@ -631,7 +768,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
-        totalItems:
+        total:
           type: integer
           format: int32
     UserInfo:
@@ -643,6 +780,33 @@ components:
         name:
           type: string
     CreateUser:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    PagedResultOfOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        total:
+          type: integer
+          format: int32
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CreateOrganization:
       type: object
       additionalProperties: false
       properties:

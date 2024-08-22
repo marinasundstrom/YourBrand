@@ -12,6 +12,14 @@ internal sealed class ChannelIdConverter : ValueConverter<ChannelId, Guid>
     }
 }
 
+internal sealed class ChannelParticipantIdConverter : ValueConverter<ChannelParticipantId, Guid>
+{
+    public ChannelParticipantIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
 internal sealed class MessageIdConverter : ValueConverter<MessageId, Guid>
 {
     public MessageIdConverter()

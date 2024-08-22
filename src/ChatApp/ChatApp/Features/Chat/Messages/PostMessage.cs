@@ -3,10 +3,15 @@ using FluentValidation;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Infrastructure.Persistence;
+
+using static YourBrand.ChatApp.Domain.Errors.Channels;
+
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
 public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content) : IRequest<Result<MessageId>>
@@ -21,25 +26,14 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
         }
     }
 
-    public sealed class Handler : IRequestHandler<PostMessage, Result<MessageId>>
+    public sealed class Handler(
+        IUserContext userContext,
+        ApplicationDbContext applicationDbContext,
+        IChannelRepository channelRepository,
+        IMessageRepository messageRepository,
+        IUnitOfWork unitOfWork,
+        IAdminCommandProcessor adminCommandProcessor) : IRequestHandler<PostMessage, Result<MessageId>>
     {
-        private readonly IChannelRepository channelRepository;
-        private readonly IMessageRepository messageRepository;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IAdminCommandProcessor adminCommandProcessor;
-
-        public Handler(
-            IChannelRepository channelRepository,
-            IMessageRepository messageRepository,
-            IUnitOfWork unitOfWork,
-            IAdminCommandProcessor adminCommandProcessor)
-        {
-            this.channelRepository = channelRepository;
-            this.messageRepository = messageRepository;
-            this.unitOfWork = unitOfWork;
-            this.adminCommandProcessor = adminCommandProcessor;
-        }
-
         public async Task<Result<MessageId>> Handle(PostMessage request, CancellationToken cancellationToken)
         {
             var notification = request;
@@ -50,7 +44,7 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
 
             if (!hasChannel)
             {
-                return Result.Failure<MessageId>(Errors.Channels.ChannelNotFound);
+                return ChannelNotFound;
             }
 
             if (IsAdminCommand(notification.Content, out var args))
@@ -69,11 +63,14 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
                 message = new Message(request.ChannelId, request.Content);
             }
 
+            message.PostedBy = await applicationDbContext.ChannelParticipants
+                .FirstOrDefaultAsync(x => x.UserId == userContext.UserId, cancellationToken);
+
             messageRepository.Add(message);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(message.Id);
+            return message.Id;
         }
 
         private bool IsAdminCommand(string message, out string[] args)

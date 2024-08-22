@@ -18,8 +18,8 @@ public sealed class DtoFactory : IDtoFactory
             (Guid)replyMessage.Id,
             replyMessage.ChannelId,
             replyMessage.Content,
-            replyMessage.Created, CreateUserDto(replyMessagePublishedBy),
-            replyMessage.LastModified, replyMessage.LastModifiedById is null ? null : CreateUserDto(replyMessageEditedBy!),
+            replyMessage.Posted, CreateUserDto(replyMessagePublishedBy),
+            replyMessage.Edited, replyMessage.EditedById is null ? null : CreateUserDto(replyMessageEditedBy!),
             replyMessage.Deleted, replyMessage.DeletedById is null ? null : CreateUserDto(replyMessageDeletedBy!));
     }
 
@@ -30,8 +30,8 @@ public sealed class DtoFactory : IDtoFactory
             message.ChannelId,
             replyMessageDto,
             message.Content,
-            message.Created, CreateUserDto(publishedBy),
-            message.LastModified, message.LastModifiedById is null ? null : CreateUserDto(editedBy!),
+            message.Posted, CreateUserDto(publishedBy),
+            message.Edited, message.EditedById is null ? null : CreateUserDto(editedBy!),
             message.Deleted, message.DeletedById is null ? null : CreateUserDto(deletedBy!),
             reactions);
     }

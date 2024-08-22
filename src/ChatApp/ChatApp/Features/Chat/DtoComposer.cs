@@ -24,10 +24,10 @@ public sealed class DtoComposer : IDtoComposer
 
     public async Task<MessageDto> ComposeMessageDto(Message message, CancellationToken cancellationToken = default)
     {
-        HashSet<UserId> userIds = new();
+        HashSet<ChannelParticipantId> participantIds = new();
         HashSet<MessageId> messageIds = new();
 
-        ExtractUserIds(message, userIds);
+        ExtractChannelParticipantIds(message, participantIds);
         ExtractReplyIds(message, messageIds);
 
         var replyMessages = await context.Messages
@@ -39,15 +39,26 @@ public sealed class DtoComposer : IDtoComposer
         {
             foreach (var replyMessage in replyMessages.Select(x => x.Value))
             {
-                ExtractUserIds(replyMessage, userIds);
+                ExtractChannelParticipantIds(replyMessage, participantIds);
             }
         }
+
+        var participants = await context.ChannelParticipants
+            .Where(x => x.ChannelId == message.ChannelId)
+            .Where(x => participantIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        var userIds = participants.Select(x => x.Value.UserId).ToList();
 
         var users = await context.Users
             .Where(x => userIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
-        return ComposeMessageDtoInternal(message, users, replyMessages);
+        var participantIdUsers = participants
+            .Select(x => (participantId: x.Key, user: users.FirstOrDefault(x2 => x2.Key == x.Value.UserId).Value))
+            .ToDictionary(x => x.participantId, x => x.user);
+
+        return ComposeMessageDtoInternal(message, participantIdUsers, replyMessages);
     }
 
     private static void ExtractReplyIds(Message message, HashSet<MessageId> messageIds)
@@ -58,37 +69,37 @@ public sealed class DtoComposer : IDtoComposer
         }
     }
 
-    private static void ExtractUserIds(Message message, HashSet<UserId> userIds)
+    private static void ExtractChannelParticipantIds(Message message, HashSet<ChannelParticipantId> participantIds)
     {
-        if (message.CreatedById is not null)
+        if (message.PostedById is not null)
         {
-            userIds.Add(message.CreatedById.GetValueOrDefault());
+            participantIds.Add(message.PostedById.GetValueOrDefault());
         }
 
-        if (message.LastModifiedById is not null)
+        if (message.EditedById is not null)
         {
-            userIds.Add(message.LastModifiedById.GetValueOrDefault());
+            participantIds.Add(message.EditedById.GetValueOrDefault());
         }
 
         if (message.DeletedById is not null)
         {
-            userIds.Add(message.DeletedById.GetValueOrDefault());
+            participantIds.Add(message.DeletedById.GetValueOrDefault());
         }
 
         foreach (var reaction in message.Reactions)
         {
-            userIds.Add(reaction.UserId);
+            participantIds.Add(reaction.AddedById);
         }
     }
 
     public async Task<IEnumerable<MessageDto>> ComposeMessageDtos(Message[] messages, CancellationToken cancellationToken = default)
     {
-        HashSet<UserId> userIds = new();
+        HashSet<ChannelParticipantId> participantIds = new();
         HashSet<MessageId> messageIds = new();
 
         foreach (var message in messages)
         {
-            ExtractUserIds(message, userIds);
+            ExtractChannelParticipantIds(message, participantIds);
             ExtractReplyIds(message, messageIds);
         }
 
@@ -101,27 +112,38 @@ public sealed class DtoComposer : IDtoComposer
         {
             foreach (var replyMessage in replyMessages.Select(x => x.Value))
             {
-                ExtractUserIds(replyMessage, userIds);
+                ExtractChannelParticipantIds(replyMessage, participantIds);
             }
         }
+
+        var participants = await context.ChannelParticipants
+            //.Where(x => x.ChannelId == message.ChannelId)
+            .Where(x => participantIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        var userIds = participants.Select(x => x.Value.UserId).ToList();
 
         var users = await context.Users
             .Where(x => userIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
+        var participantIdUsers = participants
+            .Select(x => (participantId: x.Key, user: users.FirstOrDefault(x2 => x2.Key == x.Value.UserId).Value))
+            .ToDictionary(x => x.participantId, x => x.user);
+
         return messages.Select(message =>
         {
-            return ComposeMessageDtoInternal(message, users, replyMessages);
+            return ComposeMessageDtoInternal(message, participantIdUsers, replyMessages);
         });
     }
 
-    private MessageDto ComposeMessageDtoInternal(Message message, Dictionary<UserId, User> users, Dictionary<MessageId, Message> repliedMessages)
+    private MessageDto ComposeMessageDtoInternal(Message message, Dictionary<ChannelParticipantId, User> users, Dictionary<MessageId, Message> repliedMessages)
     {
         repliedMessages.TryGetValue(message.ReplyToId.GetValueOrDefault(), out var replyMessage);
 
-        users.TryGetValue(message.CreatedById.GetValueOrDefault(), out var publishedBy);
+        users.TryGetValue(message.PostedById.GetValueOrDefault(), out var publishedBy);
 
-        users.TryGetValue(message.LastModifiedById.GetValueOrDefault(), out var editedBy);
+        users.TryGetValue(message.EditedById.GetValueOrDefault(), out var editedBy);
 
         users.TryGetValue(message.DeletedById.GetValueOrDefault(), out var deletedBy);
 
@@ -129,16 +151,16 @@ public sealed class DtoComposer : IDtoComposer
 
         if (replyMessage is not null)
         {
-            users.TryGetValue(replyMessage.CreatedById.GetValueOrDefault(), out var replyMessagePublishedBy);
+            users.TryGetValue(replyMessage.PostedById.GetValueOrDefault(), out var replyMessagePublishedBy);
 
-            users.TryGetValue(replyMessage.LastModifiedById.GetValueOrDefault(), out var replyMessageEditedBy);
+            users.TryGetValue(replyMessage.EditedById.GetValueOrDefault(), out var replyMessageEditedBy);
 
             users.TryGetValue(replyMessage.DeletedById.GetValueOrDefault(), out var replyMessageDeletedBy);
 
             replyMessageDto = dtoFactory.CreateReplyMessageDto(replyMessage, replyMessagePublishedBy!, replyMessageEditedBy, replyMessageDeletedBy);
         }
 
-        var reactions = message.Reactions.Select(x => dtoFactory.CreateReactionDto(x, users[x.UserId]));
+        var reactions = message.Reactions.Select(x => dtoFactory.CreateReactionDto(x, users[x.AddedById]));
 
         return dtoFactory.CreateMessageDto(message, publishedBy!, editedBy, deletedBy, replyMessageDto, reactions);
     }

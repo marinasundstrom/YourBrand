@@ -11,7 +11,7 @@
 
 	<ItemGroup>
 		<OpenApiReference Include="OpenAPIs/rotrutservice.json" Options="/JsonLibrary:SystemTextJson /UseBaseUrl:false /GenerateClientInterfaces:true /GenerateNullableReferenceTypes:true /DateType:System.DateTime /DateTimeType:System.DateTime" Namespace="YourBrand.RotRutService.Client">
-			<SourceUri>https://localhost:8080/api/swagger/v1/swagger.json</SourceUri>
+			<SourceUri>https://localhost:8080/api/openapi/v1/openapi.json</SourceUri>
 			<ClassName>{controller}Client</ClassName>
 			<OutputPath>InvoicesClient.cs</OutputPath>
 		</OpenApiReference>

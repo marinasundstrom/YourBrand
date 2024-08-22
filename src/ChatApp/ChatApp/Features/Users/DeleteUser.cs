@@ -31,7 +31,7 @@ public record DeleteUser(string UserId) : IRequest<Result<DeleteUser>>
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(user.ToDto2());
+            return Result.SuccessWith(user.ToDto2());
         }
     }
 }

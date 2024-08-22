@@ -6,7 +6,7 @@ namespace YourBrand.Catalog.Products.Options;
 
 sealed partial class ProductOptionsView : ComponentBase
 {
-    readonly MudTable<ProductOption> productOptionsTable = default!;
+    MudTable<ProductOption> productOptionsTable = default!;
 
     readonly TableGroupDefinition<ProductOption> tableGroupDefinition = new TableGroupDefinition<ProductOption>()
     {
@@ -16,7 +16,7 @@ sealed partial class ProductOptionsView : ComponentBase
         Selector = (e) => e.Option.Group?.Name
     };
 
-    readonly ProductOption? selectedProductOption;
+    ProductOption? selectedProductOption;
 
     string? searchString;
 

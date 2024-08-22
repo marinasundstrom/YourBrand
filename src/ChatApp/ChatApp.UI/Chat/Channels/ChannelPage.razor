@@ -7,6 +7,7 @@
 @inject IUserContext UserContext
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
+@inject IChannelsClient ChannelsClient
 @inject IMessagesClient MessagesClient
 @inject IUsersClient UsersClient
 @inject IJSRuntime JSRuntime
@@ -22,6 +23,8 @@
         position: relative;
     }
 </style>
+
+<MudButton OnClick="async () => await ChannelsClient.JoinChannelAsync(Id)">Join channel</MudButton>
 
 <div class="@(isDarkMode ? "dark" : null)">
 

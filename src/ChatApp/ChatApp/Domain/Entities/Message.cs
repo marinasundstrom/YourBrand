@@ -3,7 +3,7 @@ using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
+public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, ISoftDelete
 {
     private readonly HashSet<MessageReaction> _reactions = new HashSet<MessageReaction>();
 
@@ -49,30 +49,30 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
 
     public IReadOnlyCollection<MessageReaction> Reactions => _reactions;
 
-    public bool React(UserId userId, string reaction)
+    public bool React(ChannelParticipantId participantId, string reaction)
     {
-        var r = Reactions.FirstOrDefault(x => x.UserId == userId && x.Reaction == reaction);
+        var r = Reactions.FirstOrDefault(x => x.AddedById == participantId && x.Reaction == reaction);
 
         if (r is not null)
             return false;
 
-        _reactions.Add(new MessageReaction(userId, reaction));
+        _reactions.Add(new MessageReaction(participantId, reaction, DateTimeOffset.UtcNow));
 
-        AddDomainEvent(new UserReactedToMessage(ChannelId, Id, userId, reaction));
+        AddDomainEvent(new UserReactedToMessage(ChannelId, Id, participantId, reaction));
 
         return true;
     }
 
-    public bool RemoveReaction(UserId userId, string reaction)
+    public bool RemoveReaction(ChannelParticipantId participantId, string reaction)
     {
-        var r = Reactions.FirstOrDefault(x => x.UserId == userId && x.Reaction == reaction);
+        var r = Reactions.FirstOrDefault(x => x.AddedById == participantId && x.Reaction == reaction);
 
         if (r is null)
             return false;
 
         _reactions.Remove(r);
 
-        AddDomainEvent(new UserRemovedReactionFromMessage(ChannelId, Id, userId, r.Reaction));
+        AddDomainEvent(new UserRemovedReactionFromMessage(ChannelId, Id, participantId, r.Reaction));
 
         return true;
     }
@@ -89,30 +89,34 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditable, ISoftDelete
         AddDomainEvent(new MessageDeleted(ChannelId, Id));
     }
 
-    public DateTimeOffset Published => Created;
+    public DateTimeOffset Published => Posted;
 
     public ChannelId ChannelId { get; private set; }
 
-    public UserId? CreatedById { get; set; } = null!;
-    public DateTimeOffset Created { get; set; }
+    public ChannelParticipant? PostedBy { get; set; }
+    public ChannelParticipantId? PostedById { get; set; }
+    public DateTimeOffset Posted { get; set; }
 
-    public UserId? LastModifiedById { get; set; }
-    public DateTimeOffset? LastModified { get; set; }
+    public ChannelParticipant? EditedBy { get; set; }
+    public ChannelParticipantId? EditedById { get; set; }
+    public DateTimeOffset? Edited { get; set; }
 
-    public UserId? DeletedById { get; set; }
+    public ChannelParticipant? DeletedBy { get; set; }
+    public ChannelParticipantId? DeletedById { get; set; }
     public DateTimeOffset? Deleted { get; set; }
 }
 
-public class MessageReaction
+public class MessageReaction : IEntity
 {
-    public MessageReaction(UserId userId, string reaction)
+    public MessageReaction(ChannelParticipantId addedById, string reaction, DateTimeOffset date)
     {
-        UserId = userId;
+        AddedById = addedById;
         Reaction = reaction;
-        Date = DateTime.UtcNow;
+        Date = date;
     }
 
-    public UserId UserId { get; private set; }
-    public string Reaction { get; private set; }
-    public DateTime Date { get; private set; }
+    //public ChannelParticipant AddedBy { get; private set; }
+    public ChannelParticipantId AddedById { get; set; }
+    public string Reaction { get; set; }
+    public DateTimeOffset Date { get; set; }
 }
