@@ -12,26 +12,26 @@ public interface IDtoFactory
 
 public sealed class DtoFactory : IDtoFactory
 {
-    public ReplyMessageDto CreateReplyMessageDto(Message replyMessage, User replyMessagePublishedBy, User? replyMessageEditedBy, User? replyMessageDeletedBy)
+    public ReplyMessageDto CreateReplyMessageDto(Message replyMessage, User replyMessagePostedBy, User? replyMessageLastEditedBy, User? replyMessageDeletedBy)
     {
         return new ReplyMessageDto(
             (Guid)replyMessage.Id,
             replyMessage.ChannelId,
             replyMessage.Content,
-            replyMessage.Posted, CreateUserDto(replyMessagePublishedBy),
-            replyMessage.Edited, replyMessage.EditedById is null ? null : CreateUserDto(replyMessageEditedBy!),
+            replyMessage.Posted, CreateUserDto(replyMessagePostedBy),
+            replyMessage.LastEdited, replyMessage.LastEditedById is null ? null : CreateUserDto(replyMessageLastEditedBy!),
             replyMessage.Deleted, replyMessage.DeletedById is null ? null : CreateUserDto(replyMessageDeletedBy!));
     }
 
-    public MessageDto CreateMessageDto(Message message, User publishedBy, User? editedBy, User? deletedBy, ReplyMessageDto? replyMessageDto, IEnumerable<ReactionDto> reactions)
+    public MessageDto CreateMessageDto(Message message, User postedBy, User? editedBy, User? deletedBy, ReplyMessageDto? replyMessageDto, IEnumerable<ReactionDto> reactions)
     {
         return new MessageDto(
             message.Id,
             message.ChannelId,
             replyMessageDto,
             message.Content,
-            message.Posted, CreateUserDto(publishedBy),
-            message.Edited, message.EditedById is null ? null : CreateUserDto(editedBy!),
+            message.Posted, CreateUserDto(postedBy),
+            message.LastEdited, message.LastEditedById is null ? null : CreateUserDto(editedBy!),
             message.Deleted, message.DeletedById is null ? null : CreateUserDto(deletedBy!),
             reactions);
     }

@@ -76,9 +76,9 @@ public sealed class DtoComposer : IDtoComposer
             participantIds.Add(message.PostedById.GetValueOrDefault());
         }
 
-        if (message.EditedById is not null)
+        if (message.LastEditedById is not null)
         {
-            participantIds.Add(message.EditedById.GetValueOrDefault());
+            participantIds.Add(message.LastEditedById.GetValueOrDefault());
         }
 
         if (message.DeletedById is not null)
@@ -143,7 +143,7 @@ public sealed class DtoComposer : IDtoComposer
 
         users.TryGetValue(message.PostedById.GetValueOrDefault(), out var publishedBy);
 
-        users.TryGetValue(message.EditedById.GetValueOrDefault(), out var editedBy);
+        users.TryGetValue(message.LastEditedById.GetValueOrDefault(), out var editedBy);
 
         users.TryGetValue(message.DeletedById.GetValueOrDefault(), out var deletedBy);
 
@@ -153,7 +153,7 @@ public sealed class DtoComposer : IDtoComposer
         {
             users.TryGetValue(replyMessage.PostedById.GetValueOrDefault(), out var replyMessagePublishedBy);
 
-            users.TryGetValue(replyMessage.EditedById.GetValueOrDefault(), out var replyMessageEditedBy);
+            users.TryGetValue(replyMessage.LastEditedById.GetValueOrDefault(), out var replyMessageEditedBy);
 
             users.TryGetValue(replyMessage.DeletedById.GetValueOrDefault(), out var replyMessageDeletedBy);
 

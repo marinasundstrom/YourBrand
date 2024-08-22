@@ -153,26 +153,26 @@ public partial class ChannelPage : IChatHubClient
 
         if (messageVm is not null)
         {
-            messageVm.Published = message.Published;
+            messageVm.Posted = message.Posted;
             messageVm.Content = message.Content;
-            messageVm.Edited = message.LastEdited;
-            messageVm.EditedById = message.LastEditedBy?.Id;
-            messageVm.EditedByName = message.LastEditedBy?.Name;
+            messageVm.LastEdited = message.LastEdited;
+            messageVm.LastEditedById = message.LastEditedBy?.Id;
+            messageVm.LastEditedByName = message.LastEditedBy?.Name;
             messageVm.Deleted = message.Deleted;
             messageVm.DeletedById = message.DeletedBy?.Id;
             messageVm.DeletedByName = message.DeletedBy?.Name;
-            messageVm.IsFromCurrentUser = message.PublishedBy.Id == currentUserId;
+            messageVm.IsFromCurrentUser = message.PostedBy.Id == currentUserId;
 
             messageVm.Reactions = message.Reactions.ToList();
 
             // This is a new incoming message:
 
-            if (message.PublishedBy.Id != currentUserId)
+            if (message.PostedBy.Id != currentUserId)
             {
                 messageVm.Id = message.Id;
-                messageVm.PostedById = message.PublishedBy.Id;
-                messageVm.PostedByName = message.PublishedBy.Name;
-                messageVm.PostedByInitials = GetInitials(message.PublishedBy.Name);
+                messageVm.PostedById = message.PostedBy.Id;
+                messageVm.PostedByName = message.PostedBy.Name;
+                messageVm.PostedByInitials = GetInitials(message.PostedBy.Name);
                 messageVm.Content = message.Content;
                 messageVm.ReplyTo = message.ReplyTo is null ? null : GetOrCreateReplyMessageVm(message.ReplyTo);
                 messageVm.Confirmed = true;
@@ -184,15 +184,15 @@ public partial class ChannelPage : IChatHubClient
         messageVm = new MessageViewModel
         {
             Id = message.Id,
-            PostedById = message.PublishedBy.Id,
-            PostedByName = message.PublishedBy.Name,
-            PostedByInitials = GetInitials(message.PublishedBy.Name),
-            Published = message.Published,
-            Edited = message.LastEdited,
-            EditedById = message.LastEditedBy?.Id,
-            EditedByName = message.LastEditedBy?.Name,
+            PostedById = message.PostedBy.Id,
+            PostedByName = message.PostedBy.Name,
+            PostedByInitials = GetInitials(message.PostedBy.Name),
+            Posted = message.Posted,
+            LastEdited = message.LastEdited,
+            LastEditedById = message.LastEditedBy?.Id,
+            LastEditedByName = message.LastEditedBy?.Name,
             Content = message.Content,
-            IsFromCurrentUser = message.PublishedBy.Id == currentUserId,
+            IsFromCurrentUser = message.PostedBy.Id == currentUserId,
             ReplyTo = message.ReplyTo is null ? null : GetOrCreateReplyMessageVm(message.ReplyTo),
             Deleted = message.Deleted,
             DeletedById = message.DeletedBy?.Id,
@@ -218,9 +218,9 @@ public partial class ChannelPage : IChatHubClient
         {
             Id = replyMessage.Id,
             Content = replyMessage.Content,
-            Published = replyMessage.Published,
+            Posted = replyMessage.Posted,
             Deleted = replyMessage.Deleted,
-            //IsFromCurrentUser = replyMessage.PublishedBy.Id == currentUserId,
+            //IsFromCurrentUser = replyMessage.PostedBy.Id == currentUserId,
             Confirmed = true
         };
 
@@ -233,7 +233,7 @@ public partial class ChannelPage : IChatHubClient
     {
         if (message.ReplyTo is null)
         {
-            if (message.PublishedBy.Id == currentUserId)
+            if (message.PostedBy.Id == currentUserId)
             {
                 await JSRuntime.InvokeVoidAsyncIgnoreErrors("helpers.scrollToBottom");
             }
@@ -241,7 +241,7 @@ public partial class ChannelPage : IChatHubClient
             {
                 // TODO: Only display when outside viewport
 
-                Snackbar.Add($"{message.PublishedBy.Name} said: \"{message.Content}\"", Severity.Normal, options =>
+                Snackbar.Add($"{message.PostedBy.Name} said: \"{message.Content}\"", Severity.Normal, options =>
                 {
                     options.Onclick = async (sb) =>
                     {
@@ -303,7 +303,7 @@ public partial class ChannelPage : IChatHubClient
         var message = new MessageViewModel()
         {
             Id = Guid.Empty,
-            Published = DateTimeOffset.UtcNow,
+            Posted = DateTimeOffset.UtcNow,
             PostedById = currentUserId,
             PostedByName = userInfo.Name,
             PostedByInitials = GetInitials(userInfo.Name), // TODO: Fix with my name,
@@ -412,7 +412,7 @@ public partial class ChannelPage : IChatHubClient
             return true;
         }
 
-        if (!(currentMessage.Published.Year == previousMessage.Published.Year && currentMessage.Published.Month == previousMessage.Published.Month && currentMessage.Published.Day == previousMessage.Published.Day && currentMessage.Published.Hour == previousMessage.Published.Hour && currentMessage.Published.Minute == previousMessage.Published.Minute))
+        if (!(currentMessage.Posted.Year == previousMessage.Posted.Year && currentMessage.Posted.Month == previousMessage.Posted.Month && currentMessage.Posted.Day == previousMessage.Posted.Day && currentMessage.Posted.Hour == previousMessage.Posted.Hour && currentMessage.Posted.Minute == previousMessage.Posted.Minute))
         {
             return true;
         }
@@ -435,7 +435,7 @@ public partial class ChannelPage : IChatHubClient
             return true;
         }
 
-        if (!(currentMessage.Published.Year == nextMessage.Published.Year && currentMessage.Published.Month == nextMessage.Published.Month && currentMessage.Published.Day == nextMessage.Published.Day && currentMessage.Published.Hour == nextMessage.Published.Hour && currentMessage.Published.Minute == nextMessage.Published.Minute))
+        if (!(currentMessage.Posted.Year == nextMessage.Posted.Year && currentMessage.Posted.Month == nextMessage.Posted.Month && currentMessage.Posted.Day == nextMessage.Posted.Day && currentMessage.Posted.Hour == nextMessage.Posted.Hour && currentMessage.Posted.Minute == nextMessage.Posted.Minute))
         {
             return true;
         }
@@ -487,9 +487,9 @@ public partial class ChannelPage : IChatHubClient
         if (messageVm is not null)
         {
             messageVm.Content = data.Content;
-            messageVm.Edited = data.LastEdited;
-            messageVm.EditedById = data.LastEditedBy.Id;
-            messageVm.EditedByName = data.LastEditedBy.Name;
+            messageVm.LastEdited = data.LastEdited;
+            messageVm.LastEditedById = data.LastEditedBy.Id;
+            messageVm.LastEditedByName = data.LastEditedBy.Name;
 
             await InvokeAsync(StateHasChanged);
         }

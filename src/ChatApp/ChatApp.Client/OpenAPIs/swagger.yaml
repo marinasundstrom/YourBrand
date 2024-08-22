@@ -670,10 +670,10 @@ components:
           - $ref: '#/components/schemas/ReplyMessage'
         content:
           type: string
-        published:
+        posted:
           type: string
           format: date-time
-        publishedBy:
+        postedBy:
           $ref: '#/components/schemas/User'
         lastEdited:
           type: string
@@ -707,16 +707,16 @@ components:
           format: guid
         content:
           type: string
-        published:
+        posted:
           type: string
           format: date-time
-        publishedBy:
+        postedBy:
           $ref: '#/components/schemas/User'
-        lastModified:
+        lastEdited:
           type: string
           format: date-time
           nullable: true
-        lastModifiedBy:
+        lastEditedBy:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/User'

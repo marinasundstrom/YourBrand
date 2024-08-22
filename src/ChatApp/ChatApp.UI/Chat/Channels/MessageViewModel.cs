@@ -4,7 +4,7 @@ public class MessageViewModel : IComparable<MessageViewModel>
 {
     public Guid Id { get; set; }
 
-    public DateTimeOffset Published { get; set; }
+    public DateTimeOffset Posted { get; set; }
     public string PostedById { get; set; } = default!;
     public string PostedByName { get; set; } = default!;
     public string PostedByInitials { get; set; } = default!;
@@ -13,9 +13,9 @@ public class MessageViewModel : IComparable<MessageViewModel>
     public string? DeletedById { get; set; }
     public string? DeletedByName { get; set; }
 
-    public DateTimeOffset? Edited { get; set; }
-    public string? EditedById { get; set; }
-    public string? EditedByName { get; set; }
+    public DateTimeOffset? LastEdited { get; set; }
+    public string? LastEditedById { get; set; }
+    public string? LastEditedByName { get; set; }
 
     public MessageViewModel? ReplyTo { get; set; }
 
@@ -32,6 +32,6 @@ public class MessageViewModel : IComparable<MessageViewModel>
     {
         if (other is null) return 1;
 
-        return this.Published.CompareTo(other.Published);
+        return this.Posted.CompareTo(other.Posted);
     }
 }

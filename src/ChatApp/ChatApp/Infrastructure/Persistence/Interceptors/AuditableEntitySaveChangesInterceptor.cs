@@ -62,6 +62,30 @@ public sealed class AuditableEntitySaveChangesInterceptor(
                 }
             }
         }
+
+         foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedById = userContext.UserId!;
+                entry.Entity.Created = dateTime.Now;
+            }
+            else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+            {
+                entry.Entity.LastModifiedById = userContext.UserId;
+                entry.Entity.LastModified = dateTime.Now;
+            }
+            else if (entry.State == EntityState.Deleted)
+            {
+                if (entry.Entity is ISoftDelete softDelete)
+                {
+                    softDelete.DeletedById = userContext.UserId;
+                    softDelete.Deleted = dateTime.Now;
+
+                    entry.State = EntityState.Modified;
+                }
+            }
+        }
     }
 }
 

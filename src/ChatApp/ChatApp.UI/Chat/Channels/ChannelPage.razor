@@ -28,7 +28,7 @@
 
 <div class="@(isDarkMode ? "dark" : null)">
 
-@foreach (var message in loadedMessages.OrderBy(x => x.Published))
+@foreach (var message in loadedMessages.OrderBy(x => x.Posted))
 {
     bool first = IsFirst(message);
     bool last = IsLast(message);
@@ -101,7 +101,7 @@
                     <div style="float: right" class="mt-2">
                         <TimeDisplay Message="@message" class="ms-1" />
 
-                        @if(message.PostedById == currentUserId || message.Edited is not null) 
+                        @if(message.PostedById == currentUserId || message.LastEdited is not null) 
                         {
                             <div class="d-inline-flex">
 
@@ -113,9 +113,9 @@
                                     }
                                 }
 
-                                @if (message.Edited is not null)
+                                @if (message.LastEdited is not null)
                                 {
-                                    <MudTooltip Text="@($"{T["EditedBy", message.Edited.Humanize()!, message.EditedByName!]}")">
+                                    <MudTooltip Text="@($"{T["EditedBy", message.LastEdited.Humanize()!, message.LastEditedByName!]}")">
                                         <MudIcon Icon="@Icons.Filled.Edit" Size="Size.Small" Style="height: 0.8em; top: 3px; position: relative;" />
                                     </MudTooltip>
                                 }

@@ -22,6 +22,7 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
     }
 
     public sealed class Handler(
+        IChannelRepository channelRepository,
         IMessageRepository messageRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<DeleteMessage, Result>
     {
         public async Task<Result> Handle(DeleteMessage request, CancellationToken cancellationToken)
@@ -46,6 +47,13 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
             message.MarkAsDeleted();
 
             messageRepository.Remove(message);
+
+            var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
+
+            var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+
+            message.Deleted = DateTimeOffset.UtcNow;
+            message.DeletedById = participant.Id;
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

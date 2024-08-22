@@ -20,7 +20,8 @@ public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Resu
         }
     }
 
-    public sealed class Handler(IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<EditMessage, Result>
+    public sealed class Handler(IChannelRepository channelRepository,
+        IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<EditMessage, Result>
     {
         public async Task<Result> Handle(EditMessage request, CancellationToken cancellationToken)
         {
@@ -39,6 +40,13 @@ public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Resu
             }
 
             message.UpdateContent(request.Content);
+
+            var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
+
+            var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+
+            message.LastEdited = DateTimeOffset.UtcNow;
+            message.LastEditedById = participant.Id;
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

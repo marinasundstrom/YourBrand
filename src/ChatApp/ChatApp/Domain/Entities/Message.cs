@@ -89,17 +89,15 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
         AddDomainEvent(new MessageDeleted(ChannelId, Id));
     }
 
-    public DateTimeOffset Published => Posted;
-
     public ChannelId ChannelId { get; private set; }
 
     public ChannelParticipant? PostedBy { get; set; }
     public ChannelParticipantId? PostedById { get; set; }
     public DateTimeOffset Posted { get; set; }
 
-    public ChannelParticipant? EditedBy { get; set; }
-    public ChannelParticipantId? EditedById { get; set; }
-    public DateTimeOffset? Edited { get; set; }
+    public ChannelParticipant? LastEditedBy { get; set; }
+    public ChannelParticipantId? LastEditedById { get; set; }
+    public DateTimeOffset? LastEdited { get; set; }
 
     public ChannelParticipant? DeletedBy { get; set; }
     public ChannelParticipantId? DeletedById { get; set; }

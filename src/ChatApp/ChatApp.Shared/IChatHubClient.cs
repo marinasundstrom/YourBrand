@@ -15,9 +15,9 @@ public interface IChatHubClient
     Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string userId);
 }
 
-public sealed record MessageData(Guid Id, Guid ChannelId, ReplyMessageData? ReplyTo, string Content, DateTimeOffset Published, UserData PublishedBy, DateTimeOffset? LastEdited, UserData? LastEditedBy, DateTimeOffset? Deleted, UserData? DeletedBy, IEnumerable<MessageReactionData> Reactions);
+public sealed record MessageData(Guid Id, Guid ChannelId, ReplyMessageData? ReplyTo, string Content, DateTimeOffset Posted, UserData PostedBy, DateTimeOffset? LastEdited, UserData? LastEditedBy, DateTimeOffset? Deleted, UserData? DeletedBy, IEnumerable<MessageReactionData> Reactions);
 
-public sealed record ReplyMessageData(Guid Id, Guid ChannelId, string Content, DateTimeOffset Published, UserData PublishedBy, DateTimeOffset? LastModified, UserData? LastModifiedBy, DateTimeOffset? Deleted, UserData? DeletedBy);
+public sealed record ReplyMessageData(Guid Id, Guid ChannelId, string Content, DateTimeOffset Posted, UserData PostedBy, DateTimeOffset? LastEdited, UserData? LastEditedBy, DateTimeOffset? Deleted, UserData? DeletedBy);
 
 public sealed record ReactionDto(string Content, DateTimeOffset Date, UserData User);
 

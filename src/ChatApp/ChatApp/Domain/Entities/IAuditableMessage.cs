@@ -7,8 +7,8 @@ public interface IAuditableMessage
     ChannelParticipantId? PostedById { get; set; }
     DateTimeOffset Posted { get; set; }
 
-    ChannelParticipantId? EditedById { get; set; }
-    DateTimeOffset? Edited { get; set; }
+    ChannelParticipantId? LastEditedById { get; set; }
+    DateTimeOffset? LastEdited { get; set; }
 
     ChannelParticipantId? DeletedById { get; set; }
     DateTimeOffset? Deleted { get; set; }

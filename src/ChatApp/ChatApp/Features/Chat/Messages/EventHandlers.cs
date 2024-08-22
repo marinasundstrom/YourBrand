@@ -76,10 +76,10 @@ public sealed class MessageEditedEventHandler : IDomainEventHandler<MessageEdite
     public async Task Handle(MessageEdited notification, CancellationToken cancellationToken)
     {
         var message = await messagesRepository.FindByIdAsync(notification.MessageId);
-        var user = await userRepository.FindByIdAsync(message!.EditedBy!.UserId);
+        var user = await userRepository.FindByIdAsync(message!.LastEditedBy!.UserId);
 
         await chatNotificationService.NotifyMessageEdited(
-            notification.ChannelId, new MessageEditedData(notification.MessageId, message.Edited.GetValueOrDefault(), new UserData(user!.Id, user.Name), notification.Content), cancellationToken);
+            notification.ChannelId, new MessageEditedData(notification.MessageId, message.LastEdited.GetValueOrDefault(), new UserData(user!.Id, user.Name), notification.Content), cancellationToken);
     }
 }
 

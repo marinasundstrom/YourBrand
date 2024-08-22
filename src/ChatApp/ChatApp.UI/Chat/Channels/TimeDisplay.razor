@@ -4,8 +4,8 @@
 <small @attributes="@AdditionalAttributes"> @* time *@
     <TimeView Context="now">
         @{
-            var published = Message.Published;
-            var timeSince = now - published;
+            var posted = Message.Posted;
+            var timeSince = now - posted;
         }
         @if (timeSince.TotalMinutes < 30)
         {
@@ -21,7 +21,7 @@
         }
         else
         {
-            <text>@published.ToString("HH:mm")</text>
+            <text>@posted.ToString("HH:mm")</text>
         }
     </TimeView>
 </small>
