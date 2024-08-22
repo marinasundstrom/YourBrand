@@ -39,9 +39,7 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
         return true;
     }
 
-    public bool IsReadOnly { get; set; }
-
-    public bool DisallowDisplayNames { get; set; }
+    public ChannelSettings Settings { get; set; } = new ChannelSettings();
 
     readonly HashSet<ChannelParticipant> _participants = new HashSet<ChannelParticipant>();
 
@@ -81,6 +79,15 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
 
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
+}
+
+public class ChannelSettings 
+{
+    public bool? IsReadOnly { get; set; }
+
+    public bool? DisallowDisplayNames { get; set; }
+
+    public bool? SoftDeleteMessages { get; set; }
 }
 
 public sealed class ChannelParticipant : Entity<ChannelParticipantId>

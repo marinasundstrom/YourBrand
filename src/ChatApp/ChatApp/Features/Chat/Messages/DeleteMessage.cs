@@ -42,18 +42,25 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
                 return NotAllowedToDelete;
             }
 
-            message.RemoveAllReactions();
-
-            message.MarkAsDeleted();
-
-            messageRepository.Remove(message);
-
             var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
+            
+            var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
 
-            var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+            if (shouldSoftDelete) 
+            {
+                message.RemoveAllReactions();
 
-            message.Deleted = DateTimeOffset.UtcNow;
-            message.DeletedById = participant.Id;
+                message.MarkAsDeleted();
+
+                var participant = channel.Participants.FirstOrDefault(x => x.UserId == x.UserId);
+
+                message.Deleted = DateTimeOffset.UtcNow;
+                message.DeletedById = participant.Id;
+            }
+            else 
+            {
+                messageRepository.Remove(message);
+            }
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
