@@ -13,11 +13,11 @@ public static class Mappings
             ReplyTo = message.ReplyTo?.Map(),
             Content = message.Content,
             Posted = message.Posted,
-            PostedBy = null, // message.PostedBy.Map(),
+            PostedBy = message.PostedBy.Map(),
             LastEdited = message.LastEdited,
-            LastEditedBy = null, // message.LastEditedBy?.Map(),
+            LastEditedBy = message.LastEditedBy?.Map(),
             Deleted = message.Deleted,
-            DeletedBy = null, // message.DeletedBy?.Map(),
+            DeletedBy = message.DeletedBy?.Map(),
             Reactions = message.Reactions.Select(x => x.Map()).ToList()
         };
     }
@@ -30,9 +30,9 @@ public static class Mappings
             ChannelId = message.ChannelId,
             Content = message.Content,
             Posted = message.Posted,
-            PostedBy = null, //  message.PostedBy.Map(),
+            PostedBy = message.PostedBy.Map(),
             Deleted =  message.Deleted,
-            DeletedBy = null, // message.DeletedBy?.Map(),
+            DeletedBy = message.DeletedBy?.Map(),
         };
     }
 
