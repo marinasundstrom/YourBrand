@@ -35,9 +35,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to container
 
-builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                        .Enrich.WithProperty("Application", ServiceName)
-                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+builder.Host.UseSerilog((ctx, cfg) => { 
+        cfg.ReadFrom.Configuration(builder.Configuration)
+        .WriteTo.OpenTelemetry(options =>
+        {
+            options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+            var headers = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]?.Split(',') ?? [];
+            foreach (var header in headers)
+            {
+                var (key, value) = header.Split('=') switch
+                {
+                [string k, string v] => (k, v),
+                    var v => throw new Exception($"Invalid header format {v}")
+                };
+
+                options.Headers.Add(key, value);
+            }
+            options.ResourceAttributes.Add("service.name", ServiceName);
+        })
+        .Enrich.WithProperty("Application", ServiceName)
+        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
+});
 
 /*
 if (builder.Environment.IsDevelopment())

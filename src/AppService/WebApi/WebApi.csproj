@@ -29,6 +29,7 @@
     <PackageReference Include="MiniValidation" Version="0.6.0-pre.20220527.55" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

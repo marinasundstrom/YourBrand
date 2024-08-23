@@ -42,6 +42,7 @@
       Version="8.0.8" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
     <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
     <PackageReference Include="Asp.Versioning.Http" Version="7.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc" Version="7.1.0" />
