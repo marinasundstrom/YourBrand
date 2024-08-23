@@ -6,9 +6,4 @@ public static class UserContextExtensions
     {
         return userContext.UserId == userId;
     }
-
-    public static bool IsUserInRole(this IUserContext userContext, string role)
-    {
-        return userContext.Role == role;
-    }
 }

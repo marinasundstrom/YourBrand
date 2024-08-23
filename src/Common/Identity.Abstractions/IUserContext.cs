@@ -6,7 +6,7 @@ public interface IUserContext
     string? FirstName { get; }
     string? LastName { get; }
     string? Email { get; }
-    string? Role { get; }
+    IEnumerable<string>? Roles { get; }
 
     bool IsInRole(string role);
 

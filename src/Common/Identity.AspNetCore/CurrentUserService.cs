@@ -35,7 +35,7 @@ public class UserContext : ISettableUserContext
 
     public string? Email => _claimsPrincipal?.FindFirst(ClaimTypes.Email)?.Value;
 
-    public string? Role => _claimsPrincipal?.FindFirst(ClaimTypes.Role)?.Value;
+    public IEnumerable<string>? Roles => _claimsPrincipal?.FindAll(ClaimTypes.Role).Select(x => x.Value);
 
     public bool IsInRole(string role) => _claimsPrincipal?.IsInRole(role) ?? false;
 
