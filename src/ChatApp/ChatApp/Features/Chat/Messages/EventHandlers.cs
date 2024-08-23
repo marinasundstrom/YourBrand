@@ -143,7 +143,7 @@ public sealed class UserReactedToMessageEventHandler(
 
         var user = await userRepository.FindByIdAsync(participant!.UserId, cancellationToken);
 
-        var reactionDto = dtoFactory.CreateReactionDto(reaction, participant);
+        var reactionDto = dtoFactory.CreateReactionDto(reaction, participant, new Dictionary<Domain.ValueObjects.ChannelParticipantId, User> { { participant.Id, user! } });
 
         await chatNotificationService.NotifyReaction(
             notification.ChannelId, message.Id, reactionDto, cancellationToken);

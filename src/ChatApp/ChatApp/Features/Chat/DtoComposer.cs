@@ -157,11 +157,11 @@ public sealed class DtoComposer : IDtoComposer
 
             participants.TryGetValue(replyMessage.DeletedById.GetValueOrDefault(), out var replyMessageDeletedBy);
 
-            replyMessageDto = dtoFactory.CreateReplyMessageDto(replyMessage, replyMessagePublishedBy!, replyMessageEditedBy, replyMessageDeletedBy);
+            replyMessageDto = dtoFactory.CreateReplyMessageDto(replyMessage, replyMessagePublishedBy!, replyMessageEditedBy, replyMessageDeletedBy, users);
         }
 
-        var reactions = message.Reactions.Select(x => dtoFactory.CreateReactionDto(x, participants[x.AddedById]));
+        var reactions = message.Reactions.Select(x => dtoFactory.CreateReactionDto(x, participants[x.AddedById], users));
 
-        return dtoFactory.CreateMessageDto(message, publishedBy!, editedBy, deletedBy, replyMessageDto, reactions);
+        return dtoFactory.CreateMessageDto(message, publishedBy!, editedBy, deletedBy, replyMessageDto, reactions, users);
     }
 }
