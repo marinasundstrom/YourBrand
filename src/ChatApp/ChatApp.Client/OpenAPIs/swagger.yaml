@@ -710,7 +710,7 @@ components:
           type: string
           format: date-time
         postedBy:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/Participant'
         lastEdited:
           type: string
           format: date-time
@@ -718,7 +718,7 @@ components:
         lastEditedBy:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/Participant'
         deleted:
           type: string
           format: date-time
@@ -726,7 +726,7 @@ components:
         deletedBy:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/Participant'
         reactions:
           type: array
           items:
@@ -747,7 +747,7 @@ components:
           type: string
           format: date-time
         postedBy:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/Participant'
         lastEdited:
           type: string
           format: date-time
@@ -755,7 +755,7 @@ components:
         lastEditedBy:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/Participant'
         deleted:
           type: string
           format: date-time
@@ -763,15 +763,22 @@ components:
         deletedBy:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
-    User:
+          - $ref: '#/components/schemas/Participant'
+    Participant:
       type: object
       additionalProperties: false
       properties:
         id:
           type: string
+          format: guid
+        channelId:
+          type: string
+          format: guid
         name:
           type: string
+        userId:
+          type: string
+          nullable: true
     Reaction:
       type: object
       additionalProperties: false
@@ -781,10 +788,8 @@ components:
         date:
           type: string
           format: date-time
-        user:
-          $ref: '#/components/schemas/User'
-        participantId:
-          type: string
+        addedBy:
+          $ref: '#/components/schemas/Participant'
     PostMessageRequest:
       type: object
       additionalProperties: false
@@ -809,6 +814,14 @@ components:
         total:
           type: integer
           format: int32
+    User:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
     UserInfo:
       type: object
       additionalProperties: false

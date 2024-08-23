@@ -1,4 +1,5 @@
 using YourBrand.ChatApp;
+using YourBrand.ChatApp.Features.Chat.Channels;
 using YourBrand.ChatApp.Features.Users;
 
 namespace YourBrand.ChatApp.Features.Chat;
@@ -48,14 +49,23 @@ public static class Mappings
         );
     }
 
+    public static ParticipantData Map(this ParticipantDto participant)
+    {
+        return new ParticipantData
+        (
+            participant.Id.ToString(),
+            participant.Name,
+            participant.UserId
+        );
+    }
+
     public static MessageReactionData Map(this ReactionDto reaction)
     {
         return new MessageReactionData
         (
             reaction.Content,
             reaction.Date,
-            reaction.User.Map(),
-            reaction.ParticipantId
+            reaction.AddedBy.Map()
         );
     }
 }

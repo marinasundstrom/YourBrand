@@ -15,16 +15,18 @@ public interface IChatHubClient
     Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string participantId);
 }
 
-public sealed record MessageData(Guid Id, Guid ChannelId, ReplyMessageData? ReplyTo, string Content, DateTimeOffset Posted, UserData PostedBy, DateTimeOffset? LastEdited, UserData? LastEditedBy, DateTimeOffset? Deleted, UserData? DeletedBy, IEnumerable<MessageReactionData> Reactions);
+public sealed record MessageData(Guid Id, Guid ChannelId, ReplyMessageData? ReplyTo, string Content, DateTimeOffset Posted, ParticipantData PostedBy, DateTimeOffset? LastEdited, ParticipantData? LastEditedBy, DateTimeOffset? Deleted, ParticipantData? DeletedBy, IEnumerable<MessageReactionData> Reactions);
 
-public sealed record ReplyMessageData(Guid Id, Guid ChannelId, string Content, DateTimeOffset Posted, UserData PostedBy, DateTimeOffset? LastEdited, UserData? LastEditedBy, DateTimeOffset? Deleted, UserData? DeletedBy);
+public sealed record ReplyMessageData(Guid Id, Guid ChannelId, string Content, DateTimeOffset Posted, ParticipantData PostedBy, DateTimeOffset? LastEdited, ParticipantData? LastEditedBy, DateTimeOffset? Deleted, ParticipantData? DeletedBy);
 
-public sealed record ReactionDto(string Content, DateTimeOffset Date, UserData User);
+public sealed record ReactionDto(string Content, DateTimeOffset Date, ParticipantData User);
 
-public sealed record MessageEditedData(Guid Id, DateTimeOffset LastEdited, UserData LastEditedBy, string Content);
+public sealed record MessageEditedData(Guid Id, DateTimeOffset LastEdited, ParticipantData LastEditedBy, string Content);
 
-public sealed record MessageDeletedData(Guid Id, bool HardDelete, DateTimeOffset? Deleted, UserData? DeletedBy);
+public sealed record MessageDeletedData(Guid Id, bool HardDelete, DateTimeOffset? Deleted, ParticipantData? DeletedBy);
 
-public sealed record MessageReactionData(string Content, DateTimeOffset Date, UserData User, string ParticipantId);
+public sealed record MessageReactionData(string Content, DateTimeOffset Date, ParticipantData AddedBy);
 
 public sealed record UserData(string Id, string Name);
+
+public sealed record ParticipantData(string Id, string Name, string? UserId);

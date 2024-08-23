@@ -7,16 +7,17 @@ public class MessageViewModel : IComparable<MessageViewModel>
     public Guid ChannelId { get; set; }
 
     public DateTimeOffset Posted { get; set; }
-    public string PostedById { get; set; } = default!;
+    public Guid PostedById { get; set; } = default!;
+    public string? PostedByUserId { get; set; }
     public string PostedByName { get; set; } = default!;
     public string PostedByInitials { get; set; } = default!;
 
     public DateTimeOffset? Deleted { get; set; }
-    public string? DeletedById { get; set; }
+    public Guid? DeletedById { get; set; }
     public string? DeletedByName { get; set; }
 
     public DateTimeOffset? LastEdited { get; set; }
-    public string? LastEditedById { get; set; }
+    public Guid? LastEditedById { get; set; }
     public string? LastEditedByName { get; set; }
 
     public MessageViewModel? ReplyTo { get; set; }

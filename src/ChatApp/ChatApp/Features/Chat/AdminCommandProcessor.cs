@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Features.Chat.Channels;
 
 namespace YourBrand.ChatApp.Features.Chat;
 
@@ -68,7 +69,7 @@ public sealed class AdminCommandProcessor : IAdminCommandProcessor
 
     private static MessageDto CreateMessage(string channelId, string content)
     {
-        return new MessageDto(Guid.NewGuid(), Guid.Parse(channelId), null, content, DateTimeOffset.UtcNow, new Users.UserDto("system", "System"), null, null, null, null, Enumerable.Empty<ReactionDto>());
+        return new MessageDto(Guid.NewGuid(), Guid.Parse(channelId), null, content, DateTimeOffset.UtcNow, new ParticipantDto(Guid.NewGuid(), Guid.Parse(channelId), "System", null), null, null, null, null, Enumerable.Empty<ReactionDto>());
     }
 
     private async Task SendMessage(MessageDto messageDto, CancellationToken cancellationToken)

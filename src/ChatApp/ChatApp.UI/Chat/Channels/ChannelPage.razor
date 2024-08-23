@@ -33,11 +33,11 @@
     bool first = IsFirst(message);
     bool last = IsLast(message);
 
-    var isAuthorizedToDelete = isInAdminRole || message.PostedById == currentUserId;
-    var isAuthorizedToEdit = message.PostedById == currentUserId;
+    var isAuthorizedToDelete = isInAdminRole || message.PostedByUserId == currentUserId;
+    var isAuthorizedToEdit = message.PostedByUserId == currentUserId;
 
     <Message @key="message.GetHashCode()" Direction="@(message.IsFromCurrentUser ? MessageDirection.Right : MessageDirection.Left)"
-        First=@first Last=@last IsFooterVisible=@(last || message.Reactions.Any()) IsSideAreaVisible=@(message.PostedById != currentUserId)>
+        First=@first Last=@last IsFooterVisible=@(last || message.Reactions.Any()) IsSideAreaVisible=@(message.PostedByUserId != currentUserId)>
         <SideAreaTemplate>
             @if(first) 
             {   
@@ -69,7 +69,7 @@
                 {
                     if (message.ReplyTo is not null)
                     {
-                        <div class="reply-bubble @(message.ReplyTo.Deleted is not null ? "deleted" : string.Empty)  @(message.ReplyTo.PostedById == currentUserId ? "right" : "left")">
+                        <div class="reply-bubble @(message.ReplyTo.Deleted is not null ? "deleted" : string.Empty)  @(message.ReplyTo.PostedByUserId == currentUserId ? "right" : "left")">
 
                         @if (message.ReplyTo.Deleted is not null)
                         {
@@ -90,7 +90,7 @@
                         }
                         else 
                         {
-                            <small><b>@(message.ReplyTo.PostedById == currentUserId ? T["Me"] : message.ReplyTo.PostedByName)</b></small>
+                            <small><b>@(message.ReplyTo.PostedByUserId == currentUserId ? T["Me"] : message.ReplyTo.PostedByName)</b></small>
                             <YourBrand.ChatApp.Markdown.MarkdownView Content="@message.ReplyTo.Content" />
                         }
                         </div>
@@ -101,11 +101,11 @@
                     <div style="float: right" class="mt-2">
                         <TimeDisplay Message="@message" class="ms-1" />
 
-                        @if(message.PostedById == currentUserId || message.LastEdited is not null) 
+                        @if(message.PostedByUserId == currentUserId || message.LastEdited is not null) 
                         {
                             <div class="d-inline-flex">
 
-                                @if(message.PostedById == currentUserId) 
+                                @if(message.PostedByUserId == currentUserId) 
                                 {
                                     if(message.Confirmed) 
                                     {
@@ -212,9 +212,9 @@
 
                     @if (replyToMessage is not null)
                     {
-                        <div class="reply-bubble @(replyToMessage.PostedById == currentUserId ? "right" : "left")" style="border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                        <div class="reply-bubble @(replyToMessage.PostedByUserId == currentUserId ? "right" : "left")" style="border-top-left-radius: 4px; border-top-right-radius: 4px;">
                             <div class="d-flex justify-space-between" style="padding-top: 4px">
-                                <small><b>@(replyToMessage.PostedById == currentUserId ? T["Me"] : replyToMessage.PostedByName)</b></small>
+                                <small><b>@(replyToMessage.PostedByUserId == currentUserId ? T["Me"] : replyToMessage.PostedByName)</b></small>
                                 <MudIconButton Icon="@Icons.Filled.Cancel" Size="Size.Small" OnClick="AbortReplyToMessage" />
                             </div>
                             <div>

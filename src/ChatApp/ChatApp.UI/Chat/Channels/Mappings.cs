@@ -13,11 +13,11 @@ public static class Mappings
             ReplyTo = message.ReplyTo?.Map(),
             Content = message.Content,
             Posted = message.Posted,
-            PostedBy = message.PostedBy.Map(),
+            PostedBy = null, // message.PostedBy.Map(),
             LastEdited = message.LastEdited,
-            LastEditedBy = message.LastEditedBy?.Map(),
+            LastEditedBy = null, // message.LastEditedBy?.Map(),
             Deleted = message.Deleted,
-            DeletedBy = message.DeletedBy?.Map(),
+            DeletedBy = null, // message.DeletedBy?.Map(),
             Reactions = message.Reactions.Select(x => x.Map()).ToList()
         };
     }
@@ -30,9 +30,9 @@ public static class Mappings
             ChannelId = message.ChannelId,
             Content = message.Content,
             Posted = message.Posted,
-            PostedBy = message.PostedBy.Map(),
-            Deleted = message.Deleted,
-            DeletedBy = message.DeletedBy?.Map(),
+            PostedBy = null, //  message.PostedBy.Map(),
+            Deleted =  message.Deleted,
+            DeletedBy = null, // message.DeletedBy?.Map(),
         };
     }
 
@@ -45,13 +45,23 @@ public static class Mappings
         };
     }
 
+    public static Participant Map(this ParticipantData participant)
+    {
+        return new Participant
+        {
+            Id = Guid.Parse(participant.Id),
+            Name = participant.Name,
+            UserId = participant.UserId
+        };
+    }
+
     public static Reaction Map(this MessageReactionData reaction)
     {
         return new Reaction
         {
             Content = reaction.Content,
             Date = reaction.Date,
-            User = reaction.User.Map()
+            AddedBy = reaction.AddedBy.Map()
         };
     }
 }

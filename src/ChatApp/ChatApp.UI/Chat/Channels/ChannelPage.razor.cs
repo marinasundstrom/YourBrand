@@ -161,16 +161,17 @@ public partial class ChannelPage : IChatHubClient
             messageVm.Deleted = message.Deleted;
             messageVm.DeletedById = message.DeletedBy?.Id;
             messageVm.DeletedByName = message.DeletedBy?.Name;
-            messageVm.IsFromCurrentUser = message.PostedBy.Id == currentUserId;
+            messageVm.IsFromCurrentUser = message.PostedBy.UserId == currentUserId;
 
             messageVm.Reactions = message.Reactions.ToList();
 
             // This is a new incoming message:
 
-            if (message.PostedBy.Id != currentUserId)
+            if (message.PostedBy.UserId != currentUserId)
             {
                 messageVm.Id = message.Id;
                 messageVm.PostedById = message.PostedBy.Id;
+                messageVm.PostedByUserId = message.PostedBy.UserId;
                 messageVm.PostedByName = message.PostedBy.Name;
                 messageVm.PostedByInitials = GetInitials(message.PostedBy.Name);
                 messageVm.Content = message.Content;
@@ -186,6 +187,7 @@ public partial class ChannelPage : IChatHubClient
             Id = message.Id,
             ChannelId = message.ChannelId,
             PostedById = message.PostedBy.Id,
+            PostedByUserId = message.PostedBy.UserId,
             PostedByName = message.PostedBy.Name,
             PostedByInitials = GetInitials(message.PostedBy.Name),
             Posted = message.Posted,
@@ -193,7 +195,7 @@ public partial class ChannelPage : IChatHubClient
             LastEditedById = message.LastEditedBy?.Id,
             LastEditedByName = message.LastEditedBy?.Name,
             Content = message.Content,
-            IsFromCurrentUser = message.PostedBy.Id == currentUserId,
+            IsFromCurrentUser = message.PostedBy.UserId == currentUserId,
             ReplyTo = message.ReplyTo is null ? null : GetOrCreateReplyMessageVm(message.ReplyTo),
             Deleted = message.Deleted,
             DeletedById = message.DeletedBy?.Id,
@@ -234,7 +236,7 @@ public partial class ChannelPage : IChatHubClient
     {
         if (message.ReplyTo is null)
         {
-            if (message.PostedBy.Id == currentUserId)
+            if (message.PostedBy.UserId == currentUserId)
             {
                 await JSRuntime.InvokeVoidAsyncIgnoreErrors("helpers.scrollToBottom");
             }
@@ -305,7 +307,8 @@ public partial class ChannelPage : IChatHubClient
         {
             Id = Guid.Empty,
             Posted = DateTimeOffset.UtcNow,
-            PostedById = currentUserId,
+            PostedById = Guid.NewGuid(), // Todo fix
+            PostedByUserId =currentUserId,
             PostedByName = userInfo.Name,
             PostedByInitials = GetInitials(userInfo.Name), // TODO: Fix with my name,
             ReplyTo = replyToMessage,
@@ -489,7 +492,7 @@ public partial class ChannelPage : IChatHubClient
         {
             messageVm.Content = data.Content;
             messageVm.LastEdited = data.LastEdited;
-            messageVm.LastEditedById = data.LastEditedBy.Id;
+            messageVm.LastEditedById = Guid.Parse(data.LastEditedBy.Id);
             messageVm.LastEditedByName = data.LastEditedBy.Name;
 
             await InvokeAsync(StateHasChanged);
@@ -511,7 +514,7 @@ public partial class ChannelPage : IChatHubClient
             {
                 messageVm.Content = string.Empty;
                 messageVm.Deleted = data.Deleted;
-                messageVm.DeletedById = data.DeletedBy.Id;
+                messageVm.DeletedById = Guid.Parse(data.DeletedBy.Id);
                 messageVm.DeletedByName = data.DeletedBy.Name;
             }
 
@@ -531,11 +534,11 @@ public partial class ChannelPage : IChatHubClient
         {
             Content = reaction.Content,
             Date = reaction.Date,
-            ParticipantId = reaction.ParticipantId,
-            User = new User
+            AddedBy = new Participant
             {
-                Id = reaction.User.Id,
-                Name = reaction.User.Name
+                Id = Guid.Parse(reaction.AddedBy.Id),
+                Name = reaction.AddedBy.Name,
+                UserId = reaction.AddedBy.UserId
             }
         });
 
@@ -549,7 +552,7 @@ public partial class ChannelPage : IChatHubClient
         if (messageVm is null) return;
 
         // TODO: Pass the person removing the reaction
-        var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.ParticipantId == participantId);
+        var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.AddedBy.Id == Guid.Parse(participantId));
 
         if (reaction2 is null) return;
 

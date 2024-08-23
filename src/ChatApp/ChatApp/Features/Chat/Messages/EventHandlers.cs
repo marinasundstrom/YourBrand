@@ -79,7 +79,7 @@ public sealed class MessageEditedEventHandler : IDomainEventHandler<MessageEdite
         var user = await userRepository.FindByIdAsync(message!.LastEditedBy!.UserId);
 
         await chatNotificationService.NotifyMessageEdited(
-            notification.ChannelId, new MessageEditedData(notification.MessageId, message.LastEdited.GetValueOrDefault(), new UserData(user!.Id, user.Name), notification.Content), cancellationToken);
+            notification.ChannelId, new MessageEditedData(notification.MessageId, message.LastEdited.GetValueOrDefault(), new ParticipantData(message!.LastEditedBy!.Id.ToString(), message!.LastEditedBy.DisplayName, message!.LastEditedBy.UserId), notification.Content), cancellationToken);
     }
 }
 
@@ -114,7 +114,7 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
             var user = await userRepository.FindByIdAsync(message!.DeletedBy!.UserId);
 
             await chatNotificationService.NotifyMessageDeleted(
-                notification.ChannelId, new MessageDeletedData(notification.MessageId, false, message!.Deleted.GetValueOrDefault(), new UserData(user!.Id, user.Name)), cancellationToken);
+                notification.ChannelId, new MessageDeletedData(notification.MessageId, false, message!.Deleted.GetValueOrDefault(), new ParticipantData(message.DeletedById.ToString()!, user.Name, user.Id)), cancellationToken);
         }
         else 
         {
@@ -143,7 +143,7 @@ public sealed class UserReactedToMessageEventHandler(
 
         var user = await userRepository.FindByIdAsync(participant!.UserId, cancellationToken);
 
-        var reactionDto = dtoFactory.CreateReactionDto(reaction, user!, participant.Id.ToString());
+        var reactionDto = dtoFactory.CreateReactionDto(reaction, participant);
 
         await chatNotificationService.NotifyReaction(
             notification.ChannelId, message.Id, reactionDto, cancellationToken);

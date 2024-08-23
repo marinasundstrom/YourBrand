@@ -25,7 +25,7 @@
                 <ul>
                     @foreach (var reaction in reactionGroup)
                     {
-                        <li>@((reaction.User.Id == CurrentUserId) ? T["Me"] : reaction.User.Name)</li>
+                        <li>@((reaction.AddedBy.UserId == CurrentUserId) ? T["Me"] : reaction.AddedBy.Name)</li>
                     }
                 </ul>
             </TooltipContent>
@@ -45,7 +45,7 @@
 
     public async Task OnReactionClicked(IGrouping<string, Reaction> reactions) 
     {
-        if(!reactions.Any(x => x.User.Id == CurrentUserId)) 
+        if(!reactions.Any(x => x.AddedBy.UserId == CurrentUserId)) 
         {
             await MessagesClient.ReactAsync(Message.ChannelId.ToString(), Message.Id, reactions.Key);
 
@@ -57,6 +57,6 @@
 
     private bool IsInReactions(IEnumerable<Reaction> reactions) 
     {
-        return reactions.Any(x => x.User.Id == CurrentUserId);
+        return reactions.Any(x => x.AddedBy.UserId == CurrentUserId);
     }
 }
