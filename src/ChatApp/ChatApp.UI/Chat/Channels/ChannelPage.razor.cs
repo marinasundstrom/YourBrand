@@ -332,7 +332,7 @@ public partial class ChannelPage : IChatHubClient
         {
             messageVm.Content = Text;
 
-            await ChannelsClient.EditMessageAsync(Id, editingMessageId.GetValueOrDefault(), Text);
+            await MessagesClient.EditMessageAsync(Id, editingMessageId.GetValueOrDefault(), Text);
 
             Text = string.Empty;
             editingMessageId = null;
@@ -393,7 +393,7 @@ public partial class ChannelPage : IChatHubClient
 
     async Task React(MessageViewModel messageVm, string reaction)
     {
-        await ChannelsClient.ReactAsync(Id, messageVm.Id, reaction);
+        await MessagesClient.ReactAsync(Id, messageVm.Id, reaction);
 
         await InvokeAsync(StateHasChanged);
     }

@@ -297,7 +297,7 @@ paths:
     put:
       tags:
       - Messages
-      operationId: Channels_EditMessage
+      operationId: Messages_EditMessage
       parameters:
       - name: channelId
         in: path
@@ -336,7 +336,7 @@ paths:
     post:
       tags:
       - Messages
-      operationId: Channels_React
+      operationId: Messages_React
       parameters:
       - name: channelId
         in: path
@@ -374,7 +374,7 @@ paths:
     delete:
       tags:
       - Messages
-      operationId: Channels_RemoveReaction
+      operationId: Messages_RemoveReaction
       parameters:
       - name: channelId
         in: path

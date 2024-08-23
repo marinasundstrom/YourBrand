@@ -30,13 +30,11 @@ public static class Endpoints
             .RequireAuthorization()
             .WithOpenApi();
 
-
         group.MapGet("/", GetMessages)
             .WithName($"Channels_{nameof(GetMessages)}")
             .Produces<ItemsResult<MessageDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status429TooManyRequests)
             .RequireRateLimiting("fixed");
-
 
         group.MapGet("/{id}", GetMessageById)
             .WithName($"Channels_{nameof(GetMessageById)}")
@@ -56,42 +54,19 @@ public static class Endpoints
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPut("/{id}", EditMessage)
-            .WithName($"Channels_{nameof(EditMessage)}")
+            .WithName($"Messages_{nameof(EditMessage)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPost("/{id}/Reaction", React)
-            .WithName($"Channels_{nameof(React)}")
+            .WithName($"Messages_{nameof(React)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapDelete("/{id}/Reaction", RemoveReaction)
-            .WithName($"Channels_{nameof(RemoveReaction)}")
+            .WithName($"Messages_{nameof(RemoveReaction)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
-
-        /*
-              group.MapPut("/{id}/Description", UpdateDescription)
-                  .Produces(StatusCodes.Status200OK)
-                  .ProducesProblem(StatusCodes.Status404NotFound);
-
-              group.MapPut("/{id}/Status", UpdateStatus)
-                  .Produces(StatusCodes.Status200OK)
-                  .ProducesProblem(StatusCodes.Status404NotFound);
-
-              group.MapPut("/{id}/AssignedUser", UpdateAssignedUser)
-                  .Produces(StatusCodes.Status200OK)
-                  .ProducesProblem(StatusCodes.Status404NotFound);
-
-              group.MapPut("/{id}/EstimatedHours", UpdateEstimatedHours)
-                  .Produces(StatusCodes.Status200OK)
-                  .ProducesProblem(StatusCodes.Status404NotFound);
-
-              group.MapPut("/{id}/RemainingHours", UpdateRemainingHours)
-                  .Produces(StatusCodes.Status200OK)
-                  .ProducesProblem(StatusCodes.Status404NotFound);
-
-              */
     }
 
     public static async Task<ItemsResult<MessageDto>> GetMessages(ChannelId channelId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
