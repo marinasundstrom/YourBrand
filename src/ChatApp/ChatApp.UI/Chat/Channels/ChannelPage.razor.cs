@@ -137,7 +137,7 @@ public partial class ChannelPage : IChatHubClient
 
     private async Task LoadMessages()
     {
-        var result = await ChannelsClient.GetMessagesAsync(Id, 1, 10, null, null);
+        var result = await MessagesClient.GetMessagesAsync(Id, 1, 10, null, null);
 
         loadedMessages.Clear();
 
@@ -341,7 +341,7 @@ public partial class ChannelPage : IChatHubClient
 
     async Task DeleteMessage(MessageViewModel messageVm)
     {
-        await ChannelsClient.DeleteMessageAsync(Id, messageVm.Id);
+        await MessagesClient.DeleteMessageAsync(Id, messageVm.Id);
 
         if (messageVm is not null)
         {

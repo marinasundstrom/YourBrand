@@ -141,7 +141,7 @@ paths:
     get:
       tags:
       - Messages
-      operationId: Channels_GetMessages
+      operationId: Messages_GetMessages
       parameters:
       - name: channelId
         in: path
@@ -196,7 +196,7 @@ paths:
     post:
       tags:
       - Messages
-      operationId: Channels_PostMessage
+      operationId: Messages_PostMessage
       parameters:
       - name: channelId
         in: path
@@ -233,7 +233,7 @@ paths:
     get:
       tags:
       - Messages
-      operationId: Channels_GetMessageById
+      operationId: Messages_GetMessageById
       parameters:
       - name: channelId
         in: path
@@ -267,7 +267,7 @@ paths:
     delete:
       tags:
       - Messages
-      operationId: Channels_DeleteMessage
+      operationId: Messages_DeleteMessage
       parameters:
       - name: channelId
         in: path

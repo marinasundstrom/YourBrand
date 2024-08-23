@@ -31,25 +31,25 @@ public static class Endpoints
             .WithOpenApi();
 
         group.MapGet("/", GetMessages)
-            .WithName($"Channels_{nameof(GetMessages)}")
+            .WithName($"Messages_{nameof(GetMessages)}")
             .Produces<ItemsResult<MessageDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status429TooManyRequests)
             .RequireRateLimiting("fixed");
 
         group.MapGet("/{id}", GetMessageById)
-            .WithName($"Channels_{nameof(GetMessageById)}")
+            .WithName($"Messages_{nameof(GetMessageById)}")
             .Produces<MessageDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithName(nameof(GetMessageById));
 
         group.MapPost("/", PostMessage)
-            .WithName($"Channels_{nameof(PostMessage)}")
+            .WithName($"Messages_{nameof(PostMessage)}")
             .Produces<Guid>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
 
         group.MapDelete("/{id}", DeleteMessage)
-            .WithName($"Channels_{nameof(DeleteMessage)}")
+            .WithName($"Messages_{nameof(DeleteMessage)}")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
