@@ -125,7 +125,6 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
 }
 
 public sealed class UserReactedToMessageEventHandler(
-    IUserContext userContext,
     IChannelRepository channelRepository,
     IMessageRepository messagesRepository,
     IUserRepository userRepository,
@@ -140,7 +139,7 @@ public sealed class UserReactedToMessageEventHandler(
 
         var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
         
-        var participant = channel.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+        var participant = channel.Participants.FirstOrDefault(x => x.Id == notification.ParticipantId);
 
         var user = await userRepository.FindByIdAsync(participant!.UserId, cancellationToken);
 
