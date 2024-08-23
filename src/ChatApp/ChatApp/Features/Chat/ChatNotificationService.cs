@@ -68,10 +68,10 @@ public class ChatNotificationService : IChatNotificationService
             .OnMessageReaction(channelId, messageId, reaction.Map());
     }
 
-    public async Task NotifyReactionRemoved(Guid channelId, Guid messageId, string reaction, string userId, CancellationToken cancellationToken = default)
+    public async Task NotifyReactionRemoved(Guid channelId, Guid messageId, string reaction, string participantId, CancellationToken cancellationToken = default)
     {
         await hubsContext.Clients
             .Group($"channel-{channelId}")
-            .OnMessageReactionRemoved(channelId, messageId, reaction, userId);
+            .OnMessageReactionRemoved(channelId, messageId, reaction, participantId);
     }
 }

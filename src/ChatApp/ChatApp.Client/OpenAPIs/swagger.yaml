@@ -783,6 +783,8 @@ components:
           format: date-time
         user:
           $ref: '#/components/schemas/User'
+        participantId:
+          type: string
     PostMessageRequest:
       type: object
       additionalProperties: false

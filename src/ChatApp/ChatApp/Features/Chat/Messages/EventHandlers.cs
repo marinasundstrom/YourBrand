@@ -143,7 +143,7 @@ public sealed class UserReactedToMessageEventHandler(
 
         var user = await userRepository.FindByIdAsync(participant!.UserId, cancellationToken);
 
-        var reactionDto = dtoFactory.CreateReactionDto(reaction, user!);
+        var reactionDto = dtoFactory.CreateReactionDto(reaction, user!, participant.Id.ToString());
 
         await chatNotificationService.NotifyReaction(
             notification.ChannelId, message.Id, reactionDto, cancellationToken);
@@ -152,21 +152,16 @@ public sealed class UserReactedToMessageEventHandler(
 
 public sealed class UserRemovedReactionFromMessageEventHandler : IDomainEventHandler<UserRemovedReactionFromMessage>
 {
-    private readonly IMessageRepository messagesRepository;
     private readonly IChatNotificationService chatNotificationService;
 
     public UserRemovedReactionFromMessageEventHandler(
-        IMessageRepository messagesRepository,
         IChatNotificationService chatNotificationService)
     {
-        this.messagesRepository = messagesRepository;
         this.chatNotificationService = chatNotificationService;
     }
 
     public async Task Handle(UserRemovedReactionFromMessage notification, CancellationToken cancellationToken)
     {
-        var message = await messagesRepository.FindByIdAsync(notification.MessageId);
-
         var reaction2 = notification.Reaction;
 
         await chatNotificationService.NotifyReactionRemoved(

@@ -7,7 +7,7 @@ public interface IDtoFactory
     ReplyMessageDto CreateReplyMessageDto(Message replyMessage, User replyMessagePublishedBy, User? replyMessageEditedBy, User? replyMessageDeletedBy);
     MessageDto CreateMessageDto(Message message, User publishedBy, User? editedBy, User? deletedBy, ReplyMessageDto? replyMessageDto, IEnumerable<ReactionDto> reactions);
     UserDto CreateUserDto(User user);
-    ReactionDto CreateReactionDto(MessageReaction reaction, User user);
+    ReactionDto CreateReactionDto(MessageReaction reaction, User user, string ParticipantId);
 }
 
 public sealed class DtoFactory : IDtoFactory
@@ -41,8 +41,8 @@ public sealed class DtoFactory : IDtoFactory
         return new UserDto(user!.Id.ToString(), user.Name);
     }
 
-    public ReactionDto CreateReactionDto(MessageReaction reaction, User user)
+    public ReactionDto CreateReactionDto(MessageReaction reaction, User user, string ParticipantId)
     {
-        return new ReactionDto(reaction.Reaction, reaction.Date, CreateUserDto(user));
+        return new ReactionDto(reaction.Reaction, reaction.Date, CreateUserDto(user), ParticipantId);
     }
 }

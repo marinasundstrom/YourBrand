@@ -160,7 +160,7 @@ public sealed class DtoComposer : IDtoComposer
             replyMessageDto = dtoFactory.CreateReplyMessageDto(replyMessage, replyMessagePublishedBy!, replyMessageEditedBy, replyMessageDeletedBy);
         }
 
-        var reactions = message.Reactions.Select(x => dtoFactory.CreateReactionDto(x, users[x.AddedById]));
+        var reactions = message.Reactions.Select(x => dtoFactory.CreateReactionDto(x, users[x.AddedById], x.AddedById.ToString()));
 
         return dtoFactory.CreateMessageDto(message, publishedBy!, editedBy, deletedBy, replyMessageDto, reactions);
     }

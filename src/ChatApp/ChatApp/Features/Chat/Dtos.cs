@@ -6,7 +6,7 @@ public sealed record MessageDto(Guid Id, Guid ChannelId, ReplyMessageDto? ReplyT
 
 public sealed record ReplyMessageDto(Guid Id, Guid ChannelId, string Content, DateTimeOffset Posted, UserDto PostedBy, DateTimeOffset? LastEdited, UserDto? LastEditedBy, DateTimeOffset? Deleted, UserDto? DeletedBy);
 
-public sealed record ReactionDto(string Content, DateTimeOffset Date, UserDto User);
+public sealed record ReactionDto(string Content, DateTimeOffset Date, UserDto User, string ParticipantId);
 
 public enum TodoStatusDto
 {

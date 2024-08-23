@@ -54,7 +54,8 @@ public static class Mappings
         (
             reaction.Content,
             reaction.Date,
-            reaction.User.Map()
+            reaction.User.Map(),
+            reaction.ParticipantId
         );
     }
 }

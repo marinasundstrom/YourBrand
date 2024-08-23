@@ -531,6 +531,7 @@ public partial class ChannelPage : IChatHubClient
         {
             Content = reaction.Content,
             Date = reaction.Date,
+            ParticipantId = reaction.ParticipantId,
             User = new User
             {
                 Id = reaction.User.Id,
@@ -541,14 +542,14 @@ public partial class ChannelPage : IChatHubClient
         StateHasChanged();
     }
 
-    public async Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string userId)
+    public async Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string participantId)
     {
         var messageVm = loadedMessages.FirstOrDefault(x => x.Id == messageId);
 
         if (messageVm is null) return;
 
         // TODO: Pass the person removing the reaction
-        var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.User.Id == userId);
+        var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.ParticipantId == participantId);
 
         if (reaction2 is null) return;
 
