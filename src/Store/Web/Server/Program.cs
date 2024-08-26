@@ -38,8 +38,8 @@ using YourBrand.StoreFront;
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 
-string serviceName = "Store.Web";
-string serviceVersion = "1.0";
+string ServiceName = "Store.Web";
+string ServiceVersion = "1.0";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,9 +52,28 @@ if (builder.Environment.IsDevelopment())
 }
 */
 
-builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
-                        .Enrich.WithProperty("Application", serviceName)
-                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+builder.Host.UseSerilog((ctx, cfg) =>
+{
+    cfg.ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.OpenTelemetry(options =>
+    {
+        options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+        var headers = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]?.Split(',') ?? [];
+        foreach (var header in headers)
+        {
+            var (key, value) = header.Split('=') switch
+            {
+            [string k, string v] => (k, v),
+                var v => throw new Exception($"Invalid header format {v}")
+            };
+
+            options.Headers.Add(key, value);
+        }
+        options.ResourceAttributes.Add("service.name", ServiceName);
+    })
+    .Enrich.WithProperty("Application", ServiceName)
+    .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
+});
 
 builder.Services.AddRateLimiterForIPAddress(builder.Configuration);
 
@@ -111,7 +130,7 @@ if (builder.Environment.IsProduction())
 }
 
 builder.Services
-    .AddOpenApi(serviceName)
+    .AddOpenApi(ServiceName)
     .AddApiVersioningServices();
 
 //builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
