@@ -26,11 +26,10 @@
     <PackageReference Include="MassTransit" Version="8.2.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
     <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="8.2.0" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"
       Version="8.0.8" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
-    <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

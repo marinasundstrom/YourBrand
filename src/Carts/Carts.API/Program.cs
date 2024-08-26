@@ -9,8 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Carts;
 using YourBrand.Carts.Features.CartsManagement;
@@ -48,10 +46,7 @@ builder.Host.UseSerilog((ctx, cfg) => {
         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
+builder.AddServiceDefaults();
 
 string GetCartsExpire20 = nameof(GetCartsExpire20);
 
@@ -82,7 +77,7 @@ builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
-builder.Services.AddObservability("Carts.API", "1.0", builder.Configuration);
+//builder.Services.AddObservability("Carts.API", "1.0", builder.Configuration);
 
 builder.Services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
@@ -155,7 +150,9 @@ builder.Services.AddScoped<IDateTime, DateTimeService>();
 
 var app = builder.Build();
 
-app.MapObservability();
+app.MapDefaultEndpoints();
+
+//app.MapObservability();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
