@@ -26,7 +26,7 @@ public sealed class TenantContext(IHttpContextAccessor httpContextAccessor) : IS
         }
         */
 
-    public TenantId? TenantId => _tenantId ??= (httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value ?? null)!;
+    public TenantId? TenantId => _tenantId ??= (httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value ?? null)! ?? (httpContextAccessor.HttpContext?.User?.FindFirst("client_tenant_id")?.Value ?? null)!;
 
 
     public void SetTenantId(TenantId tenantId) => _tenantId = tenantId;

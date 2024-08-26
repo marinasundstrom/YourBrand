@@ -120,19 +120,7 @@ var inventory = builder.AddProject<Inventory>("inventory")
     .WithReference(blobStorage)
     .WaitFor(inventoryDb)
     .WaitFor(messaging);
-
-//
-
-var identityserviceDb = sqlServer.AddDatabase("identityserviceDb", "AspIdUsers");
-var identityService = builder.AddProject<IdentityService>("identityservice")
-    .WithReference(identityserviceDb)
-    .WithReference(messaging)
-    .WithReference(blobStorage)
-    .WaitFor(identityserviceDb)
-    .WaitFor(messaging);
-
-//
-
+    
 var timereportDb = sqlServer.AddDatabase("timereportDb", "TimeReport");
 var timereport = builder.AddProject<TimeReport>("timereport")
     .WithReference(timereportDb)
@@ -213,13 +201,40 @@ var analytics = builder.AddProject<Analytics>("analytics")
     .WaitFor(analyticsDb)
     .WaitFor(messaging);
 
-var storefront = builder.AddProject<StoreFront>("storeFront")
+var cartsDb = sqlServer.AddDatabase("cartsDb", "Carts");
+var carts = builder.AddProject<Carts>("carts")
+    .WithReference(cartsDb)
     .WithReference(messaging)
-    .WithReference(blobStorage);
+    .WithReference(blobStorage)
+    .WaitFor(cartsDb)
+    .WaitFor(messaging);
+
+
+var identityserviceDb = sqlServer.AddDatabase("identityserviceDb", "AspIdUsers");
+var identityService = builder.AddProject<IdentityService>("identityservice")
+    .WithReference(identityserviceDb)
+    .WithReference(messaging)
+    .WithReference(blobStorage)
+    .WaitFor(identityserviceDb)
+    .WaitFor(messaging);
+
+var storefront = builder.AddProject<StoreFront>("storefront")
+    .WithReference(messaging)
+    .WithReference(blobStorage)
+    .WithReference(catalog)
+    .WithReference(carts)
+    .WithReference(sales)
+    .WithReference(inventory)
+    .WithReference(analytics)
+    .WithReference(identityService)
+    .WaitFor(messaging);
 
 var store = builder.AddProject<Store>("store")
     .WithReference(messaging)
-    .WithReference(blobStorage);
+    .WithReference(storefront)
+    .WithReference(blobStorage)
+    .WaitFor(storefront)
+    .WaitFor(messaging);
 
 builder.AddYarp("ingress")
        .WithEndpoint(port: 5174, scheme: "https")

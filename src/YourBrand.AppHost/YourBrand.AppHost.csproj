@@ -45,7 +45,7 @@
     <ProjectReference Include="..\Documents\Documents\Documents.csproj" AspireProjectMetadataTypeName="Documents" />
     <ProjectReference Include="..\ChatApp\ChatApp\ChatApp.csproj" AspireProjectMetadataTypeName="ChatApp" />
     <ProjectReference Include="..\Analytics\Analytics.Web\Analytics.Web.csproj" AspireProjectMetadataTypeName="Analytics" />
-    <ProjectReference Include="..\Analytics\Analytics.Web\Analytics.Web.csproj" AspireProjectMetadataTypeName="Analytics" />
+    <ProjectReference Include="..\Carts\Carts.API\Carts.API.csproj" AspireProjectMetadataTypeName="Carts" />
     <ProjectReference Include="..\StoreFront\StoreFront.API\StoreFront.API.csproj" AspireProjectMetadataTypeName="StoreFront" />
     <ProjectReference Include="..\Store\Web\Server\BlazorApp.csproj" AspireProjectMetadataTypeName="Store" />
   </ItemGroup>

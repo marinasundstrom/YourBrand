@@ -250,10 +250,7 @@ static void AddClients(WebApplicationBuilder builder)
 
         clientBuilder.AddStandardResilienceHandler();
 
-        if (builder.Environment.IsDevelopment())
-        {
-            clientBuilder.AddServiceDiscovery();
-        }
+        clientBuilder.AddServiceDiscovery();
     });
 
     var cartsApiHttpClient = builder.Services.AddCartsClient(new Uri(builder.Configuration["yourbrand:carts-svc:url"]!),
@@ -263,10 +260,7 @@ static void AddClients(WebApplicationBuilder builder)
 
         clientBuilder.AddStandardResilienceHandler();
 
-        if (builder.Environment.IsDevelopment())
-        {
-            clientBuilder.AddServiceDiscovery();
-        }
+        clientBuilder.AddServiceDiscovery();
     });
 
     var salesApiHttpClient = builder.Services.AddSalesClients((sp, http) =>
@@ -279,10 +273,7 @@ static void AddClients(WebApplicationBuilder builder)
 
         clientBuilder.AddStandardResilienceHandler();
 
-        if (builder.Environment.IsDevelopment())
-        {
-            clientBuilder.AddServiceDiscovery();
-        }
+        clientBuilder.AddServiceDiscovery();
     });
 
     var inventoryApiHttpClient = builder.Services.AddInventoryClients((sp, http) =>
@@ -295,10 +286,7 @@ static void AddClients(WebApplicationBuilder builder)
 
         clientBuilder.AddStandardResilienceHandler();
 
-        if (builder.Environment.IsDevelopment())
-        {
-            clientBuilder.AddServiceDiscovery();
-        }
+        clientBuilder.AddServiceDiscovery();
     });
 
     var analyticsApiHttpClient = builder.Services.AddAnalyticsClients((sp, http) =>
@@ -311,12 +299,7 @@ static void AddClients(WebApplicationBuilder builder)
 
         clientBuilder.AddStandardResilienceHandler();
 
-        /*
-        if (builder.Environment.IsDevelopment())
-        {
-            clientBuilder.AddServiceDiscovery();
-        }
-        */
+        clientBuilder.AddServiceDiscovery();
     });
 }
 

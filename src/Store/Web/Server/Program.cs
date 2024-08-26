@@ -130,7 +130,7 @@ if (builder.Environment.IsProduction())
 }
 
 builder.Services
-    .AddOpenApi(ServiceName)
+    .AddOpenApi(ServiceName, ApiVersions.All)
     .AddApiVersioningServices();
 
 //builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
@@ -214,16 +214,11 @@ builder.Services
 
 builder.Services.AddBlazoredToast();
 
-var reverseProxy = builder.Services.AddReverseProxy();
+builder.Services.AddHttpForwarderWithServiceDiscovery();
 
-if (builder.Environment.IsDevelopment())
-{
-    reverseProxy.LoadFromMemory();
-}
-else
-{
-    reverseProxy.LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
-}
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddServiceDiscoveryDestinationResolver();
 
 var app = builder.Build();
 
@@ -247,7 +242,7 @@ else
     app.UseHsts();
 }
 
-app.UseOpenApi();
+app.UseOpenApiAndSwaggerUi();
 
 //app.UseHttpsRedirection();
 
