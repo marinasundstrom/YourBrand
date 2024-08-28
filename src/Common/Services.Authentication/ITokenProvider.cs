@@ -1,4 +1,4 @@
-namespace YourBrand.Authentication;
+namespace YourBrand.Services.Authentication;
 
 public interface ITokenProvider
 {

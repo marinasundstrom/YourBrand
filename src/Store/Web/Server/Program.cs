@@ -130,7 +130,7 @@ if (builder.Environment.IsProduction())
 }
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
     .AddApiVersioningServices();
 
 //builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);

@@ -15,8 +15,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Accounting.Server' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation"
-      Version="3.2.0-rc1.20223.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0-beta.1" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
@@ -37,8 +36,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\..\..\Extensions\Extensions.csproj" />
-    <ProjectReference
-      Include="..\..\..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
+    <ProjectReference Include="..\..\..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

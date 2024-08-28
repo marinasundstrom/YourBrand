@@ -42,7 +42,7 @@ public static class Config
             {
                 Scopes = ["cartsapi"]
             },
-            new ApiResource("salesapi", "The Carts API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "tenant_id"])
+            new ApiResource("salesapi", "The Sales API", [JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "tenant_id"])
             {
                 Scopes = ["salesapi"]
             }
@@ -54,7 +54,7 @@ public static class Config
             new ApiScope("myapi", "Access the api", ["role", "tenant_id"]),
             new ApiScope("catalogapi", "Access the Catalog API"),
             new ApiScope("cartsapi", "Access the Carts API"),
-            new ApiScope("salesapi", "Access the Carts API")
+            new ApiScope("salesapi", "Access the Sales API")
         ];
 
     public static IEnumerable<Duende.IdentityServer.Models.Client> Clients =>

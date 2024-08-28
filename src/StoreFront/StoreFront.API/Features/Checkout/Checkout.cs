@@ -19,6 +19,7 @@ public sealed record Checkout(
         YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient,
         YourBrand.Catalog.IProductsClient productsClient2,
         //ICartHubService cartHubService,
+        IConfiguration configuration,
         IUserContext userContext) : IRequestHandler<Checkout>
     {
         public async Task Handle(Checkout request, CancellationToken cancellationToken)
@@ -36,7 +37,7 @@ public sealed record Checkout(
 
             const int OrderStatusOpen = 2;
 
-            await ordersClient.CreateOrderAsync("organizationId", new CreateOrderRequest()
+            await ordersClient.CreateOrderAsync(configuration["OrganizationId"]!, new CreateOrderRequest()
             {
                 Status = OrderStatusOpen,
                 Customer = new SetCustomer

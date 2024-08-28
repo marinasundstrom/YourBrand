@@ -74,7 +74,7 @@ if (builder.Environment.IsProduction())
 // Add services to the container.
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
     .AddApiVersioningServices();
 
 //builder.Services.AddObservability("Carts.API", "1.0", builder.Configuration);
@@ -97,6 +97,10 @@ builder.Services.AddDbContext<CartsContext>((sp, options) =>
         .EnableSensitiveDataLogging();
 #endif
 });
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Program>());
 
@@ -163,6 +167,10 @@ if (app.Environment.IsDevelopment())
 app.UseOutputCache();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapCartsEndpoints();
 

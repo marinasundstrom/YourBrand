@@ -1,5 +1,7 @@
 using MassTransit;
 
+using YourBrand.Tenancy;
+
 namespace YourBrand.StoreFront.API.Features.Cart;
 
 public sealed class MassTransitCartsClient(
@@ -10,7 +12,9 @@ public sealed class MassTransitCartsClient(
     IRequestClient<Carts.Contracts.UpdateCartItemData> updateCartItemDataClient,
     IRequestClient<Carts.Contracts.RemoveCartItem> removeCartItemClient,
     IRequestClient<Carts.Contracts.GetCartByTag> getCartByTagClient,
-    IRequestClient<Carts.Contracts.CreateCart> createCartClient)
+    IRequestClient<Carts.Contracts.CreateCart> createCartClient,
+    ITenantContext tenantContext,
+    ILogger<MassTransitCartsClient> logger)
 {
     public async Task<Cart> GetCartById(string cartId, CancellationToken cancellationToken = default)
     {
@@ -22,6 +26,8 @@ public sealed class MassTransitCartsClient(
 
     public async Task<Cart> GetCartByTag(string tag, CancellationToken cancellationToken = default)
     {
+        logger.LogError("GetCartByTag: {TenantId}", tenantContext.TenantId);
+
         var response = await getCartByTagClient.GetResponse<Carts.Contracts.GetCartByTagResponse>(
             new Carts.Contracts.GetCartByTag { Tag = tag }, cancellationToken);
 

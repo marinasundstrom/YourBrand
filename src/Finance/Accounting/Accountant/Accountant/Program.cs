@@ -19,6 +19,7 @@ using YourBrand.Extensions;
 using YourBrand.Integration;
 using YourBrand.Invoicing.Client;
 using YourBrand.Payments.Client;
+using YourBrand.Services.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,7 @@ builder.Host.UseSerilog((ctx, cfg) => {
 });
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
     .AddApiVersioningServices();
 
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);

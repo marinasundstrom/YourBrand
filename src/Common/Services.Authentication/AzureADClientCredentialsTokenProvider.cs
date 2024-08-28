@@ -1,4 +1,8 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Client;
+
+namespace YourBrand.Services.Authentication;
 
 /// <summary>
 /// Provides token from Client Credentials in Azure AD.
@@ -22,7 +26,7 @@ public class AzureADClientCredentialsTokenProvider(IConfiguration configuration,
 
         if (!cached || !accessTokens.TryGetValue(baseUrl, out var accessToken))
         {
-            accessToken = await RequestTokenAsync(baseUrl, api.Scope);
+            accessToken = await RequestTokenAsync(api.Scope);
 
             logger.LogInformation("Retrieved new access token");
 
@@ -42,7 +46,7 @@ public class AzureADClientCredentialsTokenProvider(IConfiguration configuration,
         return apis.FirstOrDefault(x => x.BaseUrl.TrimEnd('/').Contains(baseUrl));
     }
 
-    async Task<string?> RequestTokenAsync(string baseUrl, string scope)
+    async Task<string?> RequestTokenAsync(string scope)
     {
         IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
                .Create(configuration.GetValue<string>("AzureAd:ClientId"))

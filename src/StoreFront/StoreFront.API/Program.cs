@@ -21,6 +21,7 @@ using YourBrand.Identity;
 using YourBrand.Integration;
 using YourBrand.Inventory.Client;
 using YourBrand.Sales;
+using YourBrand.Services.Authentication;
 using YourBrand.StoreFront.API;
 using YourBrand.StoreFront.API.Features.Brands;
 using YourBrand.StoreFront.API.Features.Cart;
@@ -89,7 +90,7 @@ if (builder.Environment.IsProduction())
 // Add services to the container.
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
     .AddApiVersioningServices();
 
 //builder.Services.AddObservability("StoreFront.API", "1.0", builder.Configuration);

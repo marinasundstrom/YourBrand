@@ -3,11 +3,11 @@ using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace YourBrand.Authentication;
+namespace YourBrand.Services.Authentication;
 
 /// <summary>
 /// Provides token from Client Credentials in Identity Server.
-/// </summary>
+/// /// </summary>
 public class IdentityServerClientCredentialsTokenProvider(IConfiguration configuration, ILogger<IdentityServerClientCredentialsTokenProvider> logger) : ITokenProvider
 {
     private string? cachedAccessToken;
@@ -36,7 +36,7 @@ public class IdentityServerClientCredentialsTokenProvider(IConfiguration configu
         // discover endpoints from metadata
         var client = new HttpClient();
 
-        var disco = await client.GetDiscoveryDocumentAsync(configuration.GetValue<string>("Local:Authority"));
+        var disco = await client.GetDiscoveryDocumentAsync(configuration.GetValue<string>("StoreFront:Authority"));
         if (disco.IsError)
         {
             Console.WriteLine(disco.Error);
@@ -48,16 +48,16 @@ public class IdentityServerClientCredentialsTokenProvider(IConfiguration configu
         {
             Address = disco.TokenEndpoint,
 
-            ClientId = configuration.GetValue<string>("Local:ClientCredentials:ClientId")!,
-            ClientSecret = configuration.GetValue<string>("Local:ClientCredentials:ClientSecret"),
-            Scope = configuration.GetValue<string>("Local:Scope"),
+            ClientId = configuration.GetValue<string>("StoreFront:ClientCredentials:ClientId")!,
+            ClientSecret = configuration.GetValue<string>("StoreFront:ClientCredentials:ClientSecret"),
+            Scope = configuration.GetValue<string>("StoreFront:Scope"),
         });
         if (tokenResponse.IsError)
         {
             Console.WriteLine(tokenResponse.Error);
         }
 
-        Console.WriteLine(tokenResponse.Json);
+        //Console.WriteLine(tokenResponse.Json);
 
         return tokenResponse.AccessToken;
     }

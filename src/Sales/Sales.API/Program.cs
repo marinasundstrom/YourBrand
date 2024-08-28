@@ -6,15 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Notifications.Client;
 using YourBrand.Sales;
 using YourBrand.Sales.Features;
 using YourBrand.Sales.Features.OrderManagement.Orders;
-using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Features.Subscriptions;
 using YourBrand.Sales.Infrastructure;
 using YourBrand.Sales.Persistence;
@@ -49,7 +46,7 @@ builder.Host.UseSerilog((ctx, cfg) => {
 });
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All)
+    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
     .AddApiVersioningServices();
 
 builder.AddServiceDefaults();
@@ -117,24 +114,21 @@ builder.Services
 builder.Services.AddScoped<OrderNumberFetcher>();
 builder.Services.AddScoped<SubscriptionNumberFetcher>();
 
+//builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+
 builder.Services.AddNotificationsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"https://localhost:5174/api/notifications/");
-}, b => { });
+}, 
+b => {
+    //b.AddServiceDiscovery();
 
-//builder.Services.AddTenantContext();
-//builder.Services.AddUserContext();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddAuthentication_IdentityServer(builder.Configuration);
-}
-else if (builder.Environment.IsProduction())
-{
-    builder.Services.AddAuthentication_Entra(builder.Configuration);
-}
+    //b.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+});
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
 
 builder.Services
     .AddHealthChecksServices()

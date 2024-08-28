@@ -17,6 +17,7 @@ public static class Endpoints
 
         var group = versionedApi.MapGroup("/v{version:apiVersion}/carts")
             .WithTags("Carts")
+            .RequireAuthorization()
             .HasApiVersion(ApiVersions.V1)
             .WithOpenApi();
 

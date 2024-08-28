@@ -56,9 +56,11 @@
     <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
-    <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
+    <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj" />
+      <!-- <ProjectReference
+        Include="..\..\Common\Services.Authentication\Services.Authentication.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    </ProjectReference> -->
     <ProjectReference Include="..\..\Common\CoreServices\CoreServices.csproj" />
   </ItemGroup>
 
