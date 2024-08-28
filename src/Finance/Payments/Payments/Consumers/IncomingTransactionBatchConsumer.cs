@@ -3,12 +3,11 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Payments.Domain;
-using YourBrand.Transactions.Client;
 using YourBrand.Transactions.Contracts;
 
 namespace YourBrand.Payments.Consumers;
 
-public class IncomingTransactionBatchConsumer(IPaymentsContext context, ITransactionsClient transactionsClient) : IConsumer<IncomingTransactionBatch>
+public class IncomingTransactionBatchConsumer(IPaymentsContext context, YourBrand.Transactions.Client.ITransactionsClient transactionsClient) : IConsumer<IncomingTransactionBatch>
 {
     public async Task Consume(ConsumeContext<IncomingTransactionBatch> context)
     {

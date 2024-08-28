@@ -14,7 +14,7 @@
 
 <MudButton Variant="Variant.Filled" OnClick="NewTransaction" Class="mb-2">New transaction</MudButton>
 
-<MudTable T="TransactionDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+<MudTable T="Transaction" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateTransactionReference(e.Item)" >
      <ToolBarContent>
         <MudSpacer />
@@ -54,13 +54,13 @@
 
 @code
 {
-    MudTable<TransactionDto> table = null!;
+    MudTable<Transaction> table = null!;
     bool loading = false;
     HubConnection hubConnection = null!;
     TransactionStatus? Status;
     IEnumerable<TransactionStatus?> selectedStatuses = new List<TransactionStatus?>();
 
-    private async Task<TableData<TransactionDto>> ServerReload(TableState state)
+    private async Task<TableData<Transaction>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -68,7 +68,7 @@
         {
             var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!));
 
-            return new TableData<TransactionDto>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Transaction>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {
@@ -87,7 +87,7 @@
         await table.ReloadServerData();
     }
 
-    public async Task UpdateTransactionReference(TransactionDto transaction)
+    public async Task UpdateTransactionReference(Transaction transaction)
     {
         DialogParameters dialogParameters = new ();
         dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.TransactionId), transaction.Id);
@@ -174,9 +174,9 @@
         StateHasChanged();
     }
 
-    private TableData<TransactionDto>? GetTableData()
+    private TableData<Transaction>? GetTableData()
     {
-        return (TableData<TransactionDto>?)table?.GetType()?
+        return (TableData<Transaction>?)table?.GetType()?
             .GetField("_server_data", System.Reflection.BindingFlags.NonPublic |
                          System.Reflection.BindingFlags.Instance)?
             .GetValue(table);

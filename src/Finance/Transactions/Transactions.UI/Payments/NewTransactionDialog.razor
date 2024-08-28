@@ -56,7 +56,7 @@
 
     async Task Submit()
     {
-        await TransactionsClient.PostTransactionsAsync(new TransactionDto[] {
+        await TransactionsClient.PostTransactionsAsync(new Transaction[] {
             new ()
             {
                 Id = Id,

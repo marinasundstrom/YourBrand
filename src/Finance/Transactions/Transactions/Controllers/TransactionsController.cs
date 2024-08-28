@@ -1,3 +1,5 @@
+using Asp.Versioning;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,9 @@ using YourBrand.Transactions.Domain.Enums;
 
 namespace YourBrand.Invoicing.Controllers;
 
-[Route("[controller]")]
+[ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class TransactionsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
