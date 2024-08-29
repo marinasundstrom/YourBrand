@@ -17,3 +17,11 @@
         <MudText Typo="Typo.h4" GutterBottom="true" Class="d-inline-flex">@T["Welcome!"]</MudText>
     </NotAuthorized>
 </AuthorizeView>
+
+<span>Current org: @Organization?.Name</span>
+
+@code 
+{
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+}

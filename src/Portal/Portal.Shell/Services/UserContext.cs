@@ -26,6 +26,23 @@ public class UserContext(AuthenticationStateProvider authenticationStateProvider
         return name;
     }
 
+    public async Task<string?> GetTenantId()
+    {
+        ClaimsPrincipal user = await GetUser();
+
+#if DEBUG
+        //Console.WriteLine("Claims: {0}", System.Text.Json.JsonSerializer.Serialize(user.Claims.Select(x => x.Type + " " + x.Value)));
+#endif
+
+        var tenantId = user?.FindFirst("tenant_id")?.Value;
+
+#if DEBUG
+        Console.WriteLine("Tenant Id: {0}", tenantId);
+#endif
+
+        return tenantId;
+    }
+
     public async Task<IEnumerable<string>> GetRoles()
     {
         ClaimsPrincipal user = await GetUser();
@@ -57,11 +74,5 @@ public class UserContext(AuthenticationStateProvider authenticationStateProvider
         var authenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
         var user = authenticationState.User;
         return user;
-    }
-
-    public async Task<string?> GetOrganizationId()
-    {
-        ClaimsPrincipal user = await GetUser();
-        return user?.FindFirst("organizationId")?.Value;
     }
 }

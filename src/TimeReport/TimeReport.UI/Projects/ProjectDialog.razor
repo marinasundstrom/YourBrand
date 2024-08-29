@@ -1,6 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @inject IProjectsClient ProjectsClient
-@inject IUserContext UserContext
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -52,7 +52,7 @@
     {
         Project? result = null;
 
-        var organizationId = await UserContext.GetOrganizationId();
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
 
         if (ProjectId is null)
         {

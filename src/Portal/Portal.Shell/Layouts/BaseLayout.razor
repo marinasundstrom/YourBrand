@@ -2,29 +2,35 @@
 @using Blazored.LocalStorage
 @using YourBrand.Portal.AppBar
 @using YourBrand.Portal.Navigation
+@using YourBrand.Portal.Services
 @using YourBrand.Portal.Theming
 @implements IDisposable
 @inject IThemeManager ThemeManager
 @inject ILocalStorageService LocalStorage
+@inject IOrganizationProvider OrganizationProvider
 
-<MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
-<MudDialogProvider />
-<MudSnackbarProvider />
+<CascadingValue Name="Organization" Value="organization">
 
-<MudLayout>
-    <AppBar DrawerToggleCallback="DrawerToggle" />
-    <MudDrawer Open="_drawerOpen" OpenChanged="OpenChanged" ClipMode="DrawerClipMode.Always"
-        DisableOverlay="_disableOverlay" Elevation="25" Variant="DrawerVariant.Responsive">
-        <NavMenu />
-    </MudDrawer>
-    <MudMainContent>
-        @Body
+    <MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
 
-        <MudScrollToTop>
-            <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
-        </MudScrollToTop>
-    </MudMainContent>
-</MudLayout>
+    <MudLayout>
+        <AppBar DrawerToggleCallback="DrawerToggle" />
+        <MudDrawer Open="_drawerOpen" OpenChanged="OpenChanged" ClipMode="DrawerClipMode.Always"
+            DisableOverlay="_disableOverlay" Elevation="25" Variant="DrawerVariant.Responsive">
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent>
+            @Body
+
+            <MudScrollToTop>
+                <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+            </MudScrollToTop>
+        </MudMainContent>
+    </MudLayout>
+    
+</CascadingValue>
 
 <MudScrollToTop>
     <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
@@ -33,12 +39,24 @@
 @code {
     bool _drawerOpen = false;
     bool _disableOverlay = true;
+    Organization? organization;
 
     protected override async Task OnInitializedAsync()
     {
         //ThemeManager.SetTheme(Themes.AppTheme);
 
         _drawerOpen = await LocalStorage.GetItemAsync<bool?>("drawerOpen") ?? true;
+
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    async void OnCurrentOrganizationChanged(object? sender, EventArgs eventArgs) 
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -83,5 +101,7 @@
     {
         ThemeManager.ThemeChanged -= OnThemeChanged;
         ThemeManager.ColorSchemeChanged -= OnColorSchemeChanged;
+
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 }
