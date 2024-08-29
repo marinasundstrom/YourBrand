@@ -8,6 +8,8 @@ public interface IInvoicingContext
 {
     DbSet<Invoice> Invoices { get; }
 
+    DbSet<InvoiceStatus> InvoiceStatuses { get; }
+
     DbSet<InvoiceItem> InvoiceItems { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

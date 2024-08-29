@@ -27,7 +27,7 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, IPaymentsCli
 
         if (invoice is not null)
         {
-            if (invoice.Status == InvoiceStatus.Sent)
+            if (invoice.Status.Id == (int)Domain.Enums.InvoiceStatus.Sent)
             {
                 await publishEndpoint.Publish(new InvoicesBatch(new[]
                 {

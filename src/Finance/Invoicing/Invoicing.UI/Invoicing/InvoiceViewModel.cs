@@ -11,7 +11,7 @@ public class InvoiceViewModel
 
     public string Id { get; set; }
 
-    public string? InvoiceNo { get; set; }
+    public int? InvoiceNo { get; set; }
 
     [Required]
     public DateTime? Date { get; set; }

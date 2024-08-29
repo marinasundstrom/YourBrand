@@ -1,5 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @inject IInvoicesClient InvoicesClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
@@ -80,7 +82,9 @@
             RequestedAmount = RequestedAmount
         };
 
-        await InvoicesClient.ActivateRotAndRutAsync(Invoice.Id, dto);
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        await InvoicesClient.ActivateRotAndRutAsync(organization.Id, Invoice.Id, dto);
 
         dto.RequestedAmount = -dto.RequestedAmount; // TODO: Fix
 

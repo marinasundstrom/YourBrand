@@ -113,6 +113,8 @@ public class InvoicingContext(
 
     public DbSet<Invoice> Invoices { get; set; } = null!;
 
+    public DbSet<InvoiceStatus> InvoiceStatuses { get; set; } = null!;
+
     public DbSet<InvoiceItem> InvoiceItems { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

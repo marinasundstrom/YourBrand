@@ -6,7 +6,7 @@ using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record DeleteInvoice(string InvoiceId) : IRequest
+public record DeleteInvoice(string OrganizationId, string InvoiceId) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<DeleteInvoice>
     {
@@ -16,6 +16,7 @@ public record DeleteInvoice(string InvoiceId) : IRequest
                 .Include(i => i.Items)
                 .AsSplitQuery()
                 .AsNoTracking()
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             if (invoice is null)
@@ -23,7 +24,7 @@ public record DeleteInvoice(string InvoiceId) : IRequest
                 throw new Exception();
             }
 
-            if (invoice.Status != Domain.Enums.InvoiceStatus.Draft)
+            if (invoice.StatusId != (int)Domain.Enums.InvoiceStatus.Draft)
             {
                 throw new Exception();
             }

@@ -12,7 +12,9 @@ public class InvoicePaidConsumer(IRotRutContext context, IJournalEntriesClient v
 {
     public async Task Consume(ConsumeContext<InvoicePaid> context)
     {
-        var invoice = await invoicesClient.GetInvoiceAsync(context.Message.Id, context.CancellationToken);
+        string organizationId = "";
+
+        var invoice = await invoicesClient.GetInvoiceAsync(organizationId, context.Message.Id, context.CancellationToken);
 
         await CreateRotRutCase(invoice, context.CancellationToken);
     }

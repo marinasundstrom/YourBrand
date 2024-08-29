@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public sealed record SetCustomer(string Id, string CustomerId, string Name) : IRequest<Result>
+public sealed record SetCustomer(string OrganizationId, string Id, string CustomerId, string Name) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<SetCustomer>
     {
@@ -23,6 +23,7 @@ public sealed record SetCustomer(string Id, string CustomerId, string Name) : IR
         public async Task<Result> Handle(SetCustomer request, CancellationToken cancellationToken)
         {
             var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (invoice is null)

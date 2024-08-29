@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record ActivateRotAndRut(string InvoiceId, InvoiceDomesticServiceDto? DomesticService) : IRequest<InvoiceDto>
+public record ActivateRotAndRut(string OrganizationId, string InvoiceId, InvoiceDomesticServiceDto? DomesticService) : IRequest<InvoiceDto>
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<ActivateRotAndRut, InvoiceDto>
     {
@@ -15,6 +15,7 @@ public record ActivateRotAndRut(string InvoiceId, InvoiceDomesticServiceDto? Dom
         {
             var invoice = await context.Invoices
                 .Include(i => i.Items)
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             if (invoice is null)
@@ -22,7 +23,7 @@ public record ActivateRotAndRut(string InvoiceId, InvoiceDomesticServiceDto? Dom
                 throw new Exception("Not found");
             }
 
-            if (invoice.Status != InvoiceStatus.Draft)
+            if (invoice.StatusId != (int)Domain.Enums.InvoiceStatus.Draft)
             {
                 throw new Exception();
             }

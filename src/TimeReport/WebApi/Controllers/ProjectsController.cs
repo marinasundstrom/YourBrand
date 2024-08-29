@@ -231,11 +231,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPost("{id}/Bill")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> BillProject(string id, DateTime from, DateTime to, CancellationToken cancellationToken)
+    public async Task<ActionResult> BillProject(string organizationId, string id, DateTime from, DateTime to, CancellationToken cancellationToken)
     {
         try
         {
-            await mediator.Send(new BillProjectCommand(id, from, to), cancellationToken);
+            await mediator.Send(new BillProjectCommand(organizationId, id, from, to), cancellationToken);
 
             return Ok();
         }

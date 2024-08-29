@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Domain.Entities;
 namespace YourBrand.Invoicing.Application.Commands;
 
 
-public sealed record UpdateBillingDetails(string Id, BillingDetailsDto BillingDetails) : IRequest<Result>
+public sealed record UpdateBillingDetails(string OrganizationId, string Id, BillingDetailsDto BillingDetails) : IRequest<Result>
 {
     public sealed class Handler(IInvoicingContext context) : IRequestHandler<UpdateBillingDetails, Result>
     {
@@ -18,6 +18,7 @@ public sealed record UpdateBillingDetails(string Id, BillingDetailsDto BillingDe
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (invoice is null)

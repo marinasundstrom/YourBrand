@@ -28,7 +28,7 @@
     </ItemGroup>
 
 	<ItemGroup>
-        <ProjectReference Include="..\Invoicing.Contracts\Invoicing.Contracts.csproj" />
+    <ProjectReference Include="..\Invoicing.Contracts\Invoicing.Contracts.csproj" />
 		<ProjectReference Include="..\..\..\Documents\Documents.Client\Documents.Client.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
@@ -38,18 +38,20 @@
 		<ProjectReference Include="..\..\Formulas\Formulas.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
-        <ProjectReference
-            Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
-        <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
-        <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
-        <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
-        <ProjectReference Include="..\..\..\Common\SampleTenant\SampleTenant.csproj" />
-        <ProjectReference Include="..\..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
-        <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
-        <ProjectReference Include="..\..\..\Extensions\Extensions.csproj" />
-        <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
-        <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
-        <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
+    <ProjectReference
+      Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\SampleTenant\SampleTenant.csproj" />
+    <ProjectReference Include="..\..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
+    <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
+    <ProjectReference
+      Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Calculations.cs">

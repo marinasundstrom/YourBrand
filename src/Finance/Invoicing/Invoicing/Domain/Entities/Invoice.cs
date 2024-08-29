@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Domain.Events;
@@ -7,19 +8,19 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class Invoice : AuditableEntity, IHasTenant
+public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 {
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 
     private Invoice() { }
 
-    public Invoice(DateTime? date, InvoiceType type = InvoiceType.Invoice, InvoiceStatus status = InvoiceStatus.Draft, string currency = "SEK", string? note = null)
+    public Invoice(DateTime? date, InvoiceType type = InvoiceType.Invoice, int status = 1, string currency = "SEK", string? note = null)
     {
         Id = Guid.NewGuid().ToString();
 
         IssueDate = date ?? DateTime.Now;
         Type = type;
-        Status = status;
+        StatusId = status;
         Currency = currency;
         Notes = note;
 
@@ -30,7 +31,9 @@ public class Invoice : AuditableEntity, IHasTenant
 
     public TenantId TenantId { get; set; }
 
-    public string InvoiceNo { get; set; }
+    public OrganizationId OrganizationId { get; set; }
+
+    public int InvoiceNo { get; set; }
 
     public DateTime? IssueDate { get; set; }
 
@@ -56,13 +59,25 @@ public class Invoice : AuditableEntity, IHasTenant
 
     public InvoiceStatus Status { get; private set; }
 
-    public void SetStatus(InvoiceStatus status)
+    public int StatusId { get; set; }
+
+    public DateTimeOffset? StatusDate { get; set; }
+
+    public bool UpdateStatus(int status)
     {
-        if (Status != status)
+        var oldStatus = StatusId;
+        if (status != oldStatus)
         {
-            Status = status;
-            AddDomainEvent(new InvoiceStatusChanged(Id, Status));
+            StatusId = status;
+            StatusDate = DateTimeOffset.UtcNow;
+
+            //AddDomainEvent(new OrderUpdated(Id));
+            //AddDomainEvent(new OrderStatusUpdated(Id, status, oldStatus));
+
+            return true;
         }
+
+        return false;
     }
 
     public DateTime? DeliveryDate { get; private set; }
@@ -192,7 +207,7 @@ public class Invoice : AuditableEntity, IHasTenant
 
     public void DeleteItem(InvoiceItem item)
     {
-        if (Status != InvoiceStatus.Draft)
+        if (Status.Id != (int)Enums.InvoiceStatus.Draft)
         {
             throw new Exception();
         }

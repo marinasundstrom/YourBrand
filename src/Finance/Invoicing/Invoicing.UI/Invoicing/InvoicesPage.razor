@@ -1,8 +1,11 @@
 ﻿@inject IInvoicesClient InvoicesClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
 
 @page "/invoices"
+@using YourBrand.Portal.Services
 
 <AppPageTitle>Invoices</AppPageTitle>
 
@@ -20,10 +23,10 @@
             }
         </MudSelect>
         <MudSpacer />
-        <MudSelect T="InvoiceStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
-            @foreach (var status in Enum.GetValues<InvoiceStatus>())
+        <MudSelect T="InvoiceStatus2?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+            @foreach (var status in Enum.GetValues<InvoiceStatus2>())
             {
-                <MudSelectItem T="InvoiceStatus?" Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+                <MudSelectItem T="InvoiceStatus2?" Value="@status">@Enum.GetName(typeof(InvoiceStatus2), status)</MudSelectItem>
             }
         </MudSelect>
     </ToolBarContent>
@@ -50,7 +53,7 @@
         <MudTd DataLabel="Paid">@invoice.Paid?.FormatCurrency(invoice.Currency)</MudTd>
         <MudTd>
             <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
-            @if(invoice.Status == InvoiceStatus.Draft) 
+            @if(invoice.Status.Id == 1) 
             {
                 <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small" OnClick="async (e) => await DeleteInvoice(invoice)" />
             }
@@ -70,8 +73,22 @@
     bool loading = false;
     InvoiceType? Type;
     IEnumerable<InvoiceType?> selectedTypes = new List<InvoiceType?>();
-    InvoiceStatus? Status;
-    IEnumerable<InvoiceStatus?> selectedStatuses = new List<InvoiceStatus?>();
+    InvoiceStatus2? Status;
+    IEnumerable<InvoiceStatus2?> selectedStatuses = new List<InvoiceStatus2?>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
 
     private async Task<TableData<Invoice>> ServerReload(TableState state)
     {
@@ -79,7 +96,8 @@
 
         try
         {
-            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, selectedTypes.Select(s => (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus)s!), null);
+            var result = await InvoicesClient.GetInvoicesAsync(organization.Id, state.Page, state.PageSize, selectedTypes.Select(s =>
+            (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus2)s), null);
 
             return new TableData<Invoice>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -111,7 +129,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus?> selectedValues)
+    private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus2?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table.ReloadServerData();
@@ -124,7 +142,12 @@
         if (!result.GetValueOrDefault())
             return;
 
-        await InvoicesClient.DeleteInvoiceAsync(invoice.Id);
+        await InvoicesClient.DeleteInvoiceAsync(organization.Id, invoice.Id);
         await table.ReloadServerData();
+    }
+
+    public void Dispose() 
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 }

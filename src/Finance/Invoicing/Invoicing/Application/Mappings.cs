@@ -11,7 +11,8 @@ public static class Mappings
             invoice.InvoiceNo,
             invoice.IssueDate,
             invoice.Type,
-            invoice.Status,
+            invoice.Status.ToDto(),
+            invoice.StatusDate,
             invoice.Customer?.ToDto(),
             invoice.DueDate,
             invoice.Currency,
@@ -56,6 +57,8 @@ public static class Mappings
     }
 
     public static CustomerDto ToDto(this Customer customer) => new CustomerDto(customer.Id, customer.CustomerNo, customer.Name);
+
+    public static InvoiceStatusDto ToDto(this InvoiceStatus status) => new InvoiceStatusDto(status.Id, status.Name);
 
     public static InvoiceItemDomesticServiceDto ToDto(this Domain.Entities.InvoiceItemDomesticService domesticService)
     {

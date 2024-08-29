@@ -1,6 +1,8 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using YourBrand.Invoicing.Invoicing
+@using YourBrand.Portal.Services
 @inject IInvoicesClient InvoicesClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
@@ -172,15 +174,17 @@
 
     async Task Submit()
     {
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
         if(Model.Id == null)
         {
             var dto = Model.ToAddInvoiceItem();
-            item = await InvoicesClient.AddItemAsync(InvoiceId, dto);
+            item = await InvoicesClient.AddItemAsync(organization.Id, InvoiceId, dto);
         }
         else
         {
             var dto = Model.ToUpdateInvoiceItem();
-            item = await InvoicesClient.UpdateItemAsync(InvoiceId, Model.Id, dto);         
+            item = await InvoicesClient.UpdateItemAsync(organization.Id, InvoiceId, Model.Id, dto);
         }
 
         MudDialog.Close(DialogResult.Ok(item.ToModel()));

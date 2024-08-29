@@ -1,5 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @inject IInvoicesClient InvoicesClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
@@ -10,7 +12,7 @@
             <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
                 @foreach(var status in statuses)
                 {
-                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus2), status)</MudSelectItem>
                 }    
             </MudSelect>
             
@@ -29,17 +31,17 @@
     [Parameter] public string InvoiceId { get; set; }
 
     [Required]
-    [Parameter] public InvoiceStatus Status { get; set; }
+    [Parameter] public InvoiceStatus2 Status { get; set; }
 
-    InvoiceStatus currentStatus;
-    IEnumerable<InvoiceStatus> statuses = Array.Empty<InvoiceStatus>();
+    InvoiceStatus2 currentStatus;
+    IEnumerable<InvoiceStatus2> statuses = Array.Empty<InvoiceStatus2>();
 
     protected override void OnInitialized() 
     {
-        statuses = Enum.GetValues<InvoiceStatus>().Skip(1);
+        statuses = Enum.GetValues<InvoiceStatus2>().Skip(1);
         currentStatus = Status;
 
-        if(currentStatus >= InvoiceStatus.Sent) 
+        if((int)currentStatus >= 2) 
         {
             statuses = statuses.Skip(1);
         }
@@ -47,7 +49,9 @@
 
     async Task Submit()
     {
-        await InvoicesClient.SetInvoiceStatusAsync(InvoiceId, Status);
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        await InvoicesClient.SetInvoiceStatusAsync(organization.Id, InvoiceId.ToString(), (int)Status);
 
         MudDialog.Close(DialogResult.Ok(Status));
     }

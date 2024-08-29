@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record AddItem(string InvoiceId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
+public record AddItem(string OrganizationId, string InvoiceId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<AddItem, InvoiceItemDto>
     {
@@ -18,6 +18,7 @@ public record AddItem(string InvoiceId, ProductType ProductType, string Descript
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             if (invoice is null)
@@ -25,7 +26,7 @@ public record AddItem(string InvoiceId, ProductType ProductType, string Descript
                 throw new Exception("Not found");
             }
 
-            if (invoice.Status != InvoiceStatus.Draft)
+            if (invoice.StatusId != (int)Domain.Enums.InvoiceStatus.Draft)
             {
                 throw new Exception();
             }

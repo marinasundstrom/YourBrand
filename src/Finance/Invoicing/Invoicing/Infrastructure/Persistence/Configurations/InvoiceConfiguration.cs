@@ -11,6 +11,11 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
     {
         builder.ToTable("Invoices");
 
+        builder.HasAlternateKey(o => new { o.OrganizationId, o.InvoiceNo });
+
+        builder.HasOne(o => o.Status).WithMany()
+            .HasForeignKey(o => new { o.OrganizationId, o.StatusId });
+
         builder.HasIndex(x => x.TenantId);
 
         builder.HasMany(invoice => invoice.Items)

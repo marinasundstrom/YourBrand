@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Invoicing;
 
-public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) : IRequest
+public record BillProjectCommand(string OrganizationId, string ProjectId, DateTime From, DateTime To) : IRequest
 {
     public class Handler(ITimeReportContext context, IInvoicesClient invoicesClient) : IRequestHandler<BillProjectCommand>
     {
@@ -34,6 +34,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
 
             var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
             {
+                OrganizationId = request.OrganizationId,
                 Date = DateTime.Now,
                 Note = entriesByActivity.First().Key.Project.Name
             });
@@ -46,6 +47,7 @@ public record BillProjectCommand(string ProjectId, DateTime From, DateTime To) :
                 var hours = entryGroup.Sum(e => e.Hours.GetValueOrDefault());
 
                 await invoicesClient.AddItemAsync(
+                    request.OrganizationId,
                     invoice.Id,
                     new AddInvoiceItem
                     {

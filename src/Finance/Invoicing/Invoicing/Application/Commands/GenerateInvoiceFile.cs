@@ -9,7 +9,7 @@ using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record GenerateInvoiceFile(string InvoiceId) : IRequest<Stream>
+public record GenerateInvoiceFile(string OrganizationId, string InvoiceId) : IRequest<Stream>
 {
     public class Handler(IInvoicingContext context, IDocumentsClient documentsClient) : IRequestHandler<GenerateInvoiceFile, Stream>
     {
@@ -17,6 +17,7 @@ public record GenerateInvoiceFile(string InvoiceId) : IRequest<Stream>
         {
             var invoice = await context.Invoices
                 .Include(i => i.Items)
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             if (invoice is null)

@@ -1,5 +1,6 @@
 @using System.ComponentModel.DataAnnotations
 @inject IProjectsClient ProjectsClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -38,7 +39,9 @@
 
     async Task OnSubmit()
     {
-        await ProjectsClient.BillProjectAsync(Project.Id, SelectedDateRange.Start, SelectedDateRange.End);
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        await ProjectsClient.BillProjectAsync(organization.Id, Project.Id, SelectedDateRange.Start, SelectedDateRange.End);
 
         Modal.Close();
     }

@@ -13,12 +13,18 @@ paths:
       - Invoices
       operationId: Invoices_GetInvoice
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -26,6 +32,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+      security:
+      - JWT: []
     delete:
       tags:
       - Invoices
@@ -33,15 +41,23 @@ paths:
       - Invoices
       operationId: Invoices_DeleteInvoice
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/ByNo/{invoiceNo}:
     get:
       tags:
@@ -50,12 +66,19 @@ paths:
       - Invoices
       operationId: Invoices_GetInvoiceByNo
       parameters:
-      - name: invoiceNo
-        in: path
+      - name: organizationId
+        in: query
         required: true
         schema:
           type: string
         x-position: 1
+      - name: invoiceNo
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
       responses:
         200:
           description: ''
@@ -63,6 +86,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+      security:
+      - JWT: []
   /v1/invoices/{invoiceNo}/billingDetails:
     put:
       tags:
@@ -71,12 +96,18 @@ paths:
       - Invoices
       operationId: Invoices_UpdateBillingDetails
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceNo
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: billingDetails
         content:
@@ -84,12 +115,14 @@ paths:
             schema:
               $ref: '#/components/schemas/BillingDetails'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
         404:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceNo}/shippingDetails:
     put:
       tags:
@@ -98,12 +131,18 @@ paths:
       - Invoices
       operationId: Invoices_UpdateShippingDetails
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceNo
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: shippingDetails
         content:
@@ -111,13 +150,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ShippingDetails'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
         404:
           description: ''
-  /v1/invoices/invoices/activateRotAndRut:
+      security:
+      - JWT: []
+  /v1/invoices/invoices/{invoiceId}/activateRotAndRut:
     post:
       tags:
       - Invoices
@@ -125,12 +166,18 @@ paths:
       - Invoices
       operationId: Invoices_ActivateRotAndRut
       parameters:
-      - name: invoiceId
+      - name: organizationId
         in: query
         required: true
         schema:
           type: string
         x-position: 1
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       requestBody:
         x-name: dto
         content:
@@ -138,7 +185,7 @@ paths:
             schema:
               $ref: '#/components/schemas/InvoiceDomesticService'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -146,7 +193,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
-  /v1/invoices/{invoiceId}/File:
+      security:
+      - JWT: []
+  /v1/invoices/invoices/{invoiceId}/file:
     get:
       tags:
       - Invoices
@@ -154,12 +203,18 @@ paths:
       - Invoices
       operationId: Invoices_GetInvoiceFile
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -168,6 +223,8 @@ paths:
               schema:
                 type: string
                 format: binary
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Items:
     post:
       tags:
@@ -176,12 +233,18 @@ paths:
       - Invoices
       operationId: Invoices_AddItem
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: dto
         content:
@@ -189,7 +252,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AddInvoiceItem'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -197,6 +260,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceItem'
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Items/{invoiceItemId}:
     put:
       tags:
@@ -205,18 +270,24 @@ paths:
       - Invoices
       operationId: Invoices_UpdateItem
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: invoiceItemId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: dto
         content:
@@ -224,7 +295,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateInvoiceItem'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -232,6 +303,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceItem'
+      security:
+      - JWT: []
     delete:
       tags:
       - Invoices
@@ -239,21 +312,29 @@ paths:
       - Invoices
       operationId: Invoices_DeleteInvoiceItem
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: invoiceItemId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Items/{invoiceItemId}/quantity:
     put:
       tags:
@@ -262,18 +343,24 @@ paths:
       - Invoices
       operationId: Invoices_UpdateItemQuantity
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: invoiceItemId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: dto
         content:
@@ -281,7 +368,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateInvoiceItemQuantity'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -289,6 +376,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceItem'
+      security:
+      - JWT: []
   /v1/invoices:
     post:
       tags:
@@ -311,6 +400,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Status:
     put:
       tags:
@@ -319,21 +410,30 @@ paths:
       - Invoices
       operationId: Invoices_SetInvoiceStatus
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: status
         in: query
         required: true
         schema:
-          $ref: '#/components/schemas/InvoiceStatus'
-        x-position: 2
+          type: integer
+          format: int32
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Customer:
     put:
       tags:
@@ -342,12 +442,18 @@ paths:
       - Invoices
       operationId: Invoices_SetCustomer
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: customer
         content:
@@ -355,7 +461,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SetCustomer'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -363,6 +469,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Result'
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/PaidAmount:
     put:
       tags:
@@ -371,22 +479,30 @@ paths:
       - Invoices
       operationId: Invoices_SetPaidAmount
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: amount
         in: query
         required: true
         schema:
           type: number
           format: decimal
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Date:
     put:
       tags:
@@ -395,22 +511,30 @@ paths:
       - Invoices
       operationId: Invoices_SetDate
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: date
         in: query
         required: true
         schema:
           type: string
           format: date-time
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Type:
     put:
       tags:
@@ -419,21 +543,29 @@ paths:
       - Invoices
       operationId: Invoices_SetType
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: type
         in: query
         required: true
         schema:
           $ref: '#/components/schemas/InvoiceType'
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/DueDate:
     put:
       tags:
@@ -442,22 +574,30 @@ paths:
       - Invoices
       operationId: Invoices_SetDueDate
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: dueDate
         in: query
         required: true
         schema:
           type: string
           format: date-time
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Reference:
     put:
       tags:
@@ -466,21 +606,29 @@ paths:
       - Invoices
       operationId: Invoices_SetReference
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: reference
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Note:
     put:
       tags:
@@ -489,39 +637,52 @@ paths:
       - Invoices
       operationId: Invoices_SetNote
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: invoiceId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: note
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/Invoices:
     get:
       tags:
       - Invoices
       operationId: Invoices_GetInvoices
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: page
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 2
+        x-position: 3
       - name: type
         in: query
         style: form
@@ -531,7 +692,7 @@ paths:
           nullable: true
           items:
             $ref: '#/components/schemas/InvoiceType'
-        x-position: 3
+        x-position: 4
       - name: status
         in: query
         style: form
@@ -540,14 +701,14 @@ paths:
           type: array
           nullable: true
           items:
-            $ref: '#/components/schemas/InvoiceStatus'
-        x-position: 4
+            $ref: '#/components/schemas/InvoiceStatus2'
+        x-position: 5
       - name: reference
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       responses:
         200:
           description: ''
@@ -564,7 +725,8 @@ components:
         id:
           type: string
         invoiceNo:
-          type: string
+          type: integer
+          format: int32
           nullable: true
         issueDate:
           type: string
@@ -574,6 +736,10 @@ components:
           $ref: '#/components/schemas/InvoiceType'
         status:
           $ref: '#/components/schemas/InvoiceStatus'
+        statusDate:
+          type: string
+          format: date-time
+          nullable: true
         customer:
           nullable: true
           oneOf:
@@ -639,28 +805,15 @@ components:
       - Cash
       - Credit
     InvoiceStatus:
-      type: string
-      description: ''
-      x-enumNames:
-      - Draft
-      - Sent
-      - Paid
-      - PartiallyPaid
-      - Overpaid
-      - Repaid
-      - PartiallyRepaid
-      - Reminder
-      - Void
-      enum:
-      - Draft
-      - Sent
-      - Paid
-      - PartiallyPaid
-      - Overpaid
-      - Repaid
-      - PartiallyRepaid
-      - Reminder
-      - Void
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
     Customer:
       type: object
       additionalProperties: false
@@ -983,14 +1136,16 @@ components:
       type: object
       additionalProperties: false
       properties:
+        organizationId:
+          type: string
         date:
           type: string
           format: date-time
           nullable: true
         status:
+          type: integer
+          format: int32
           nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/InvoiceStatus'
         note:
           type: string
           nullable: true
@@ -1025,3 +1180,32 @@ components:
         totalItems:
           type: integer
           format: int32
+    InvoiceStatus2:
+      type: string
+      description: ''
+      x-enumNames:
+      - Draft
+      - Sent
+      - Paid
+      - PartiallyPaid
+      - Overpaid
+      - Repaid
+      - PartiallyRepaid
+      - Reminder
+      - Void
+      enum:
+      - Draft
+      - Sent
+      - Paid
+      - PartiallyPaid
+      - Overpaid
+      - Repaid
+      - PartiallyRepaid
+      - Reminder
+      - Void
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

@@ -7,15 +7,17 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record SetInvoiceStatus(string InvoiceId, InvoiceStatus Status) : IRequest
+public record SetInvoiceStatus(string OrganizationId, string InvoiceId, int Status) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetInvoiceStatus>
     {
         public async Task Handle(SetInvoiceStatus request, CancellationToken cancellationToken)
         {
-            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            invoice.SetStatus(request.Status);
+            invoice.UpdateStatus(request.Status);
 
             await context.SaveChangesAsync(cancellationToken);
 

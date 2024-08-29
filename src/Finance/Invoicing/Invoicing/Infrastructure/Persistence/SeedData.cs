@@ -1,4 +1,5 @@
-﻿using YourBrand.Tenancy;
+﻿using YourBrand.Invoicing.Domain.Entities;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Infrastructure.Persistence;
 
@@ -18,6 +19,57 @@ public class SeedData
             await context.Database.EnsureDeletedAsync();
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
+
+            /*
+               Draft,
+    Sent,
+    Paid,
+    PartiallyPaid,
+    Overpaid,
+    Repaid,
+    PartiallyRepaid,
+    Reminder,
+    Void
+    */
+
+            context.InvoiceStatuses.Add(new InvoiceStatus(1, "Draft", "draft", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(2, "Sent", "sent", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(3, "Paid", "paid", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(4, "PartiallyPaid", "partially-paid", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId,
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(5, "Overpaid", "overpaid", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId,
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(6, "Repaid", "repaid", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId,
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(7, "PartiallyRepaid", "partially-repaid", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId,
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(8, "Reminder", "reminder", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId,
+            });
+            context.InvoiceStatuses.Add(new InvoiceStatus(9, "Void", "void", string.Empty)
+            {
+                OrganizationId = TenantConstants.OrganizationId,
+            });
+
+            await context.SaveChangesAsync();
 
             /*
 

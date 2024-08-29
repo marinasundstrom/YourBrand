@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
+public record UpdateInvoiceItem(string OrganizationId, string InvoiceId, string InvoiceItemId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<UpdateInvoiceItem, InvoiceItemDto>
     {
@@ -17,6 +17,7 @@ public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductT
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             if (invoice is null)
@@ -24,7 +25,7 @@ public record UpdateInvoiceItem(string InvoiceId, string InvoiceItemId, ProductT
                 throw new Exception("Not found");
             }
 
-            if (invoice.Status != InvoiceStatus.Draft)
+            if (invoice.StatusId != (int)Domain.Enums.InvoiceStatus.Draft)
             {
                 throw new Exception();
             }

@@ -173,20 +173,20 @@ var group = versionedApi.MapGroup("/v{version:apiVersion}/invoices")
     .RequireAuthorization()
     .WithOpenApi();
 
-group.MapGet("/{invoiceId}", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetInvoice(invoiceId), cancellationToken))
+group.MapGet("/{invoiceId}", async (string organizationId, string invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetInvoice(organizationId, invoiceId), cancellationToken))
     .WithName("Invoices_GetInvoice")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-group.MapGet("/ByNo/{invoiceNo}", async (string invoiceNo, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetInvoiceByNo(invoiceNo), cancellationToken))
+group.MapGet("/ByNo/{invoiceNo}", async (string organizationId, int invoiceNo, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetInvoiceByNo(organizationId, invoiceNo), cancellationToken))
     .WithName("Invoices_GetInvoiceByNo")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceNo}/billingDetails", async Task<Results<Ok, NotFound>> (string invoiceNo, BillingDetailsDto billingDetails, IMediator mediator = default!, CancellationToken cancellationToken = default!) =>
+group.MapPut("/{invoiceNo}/billingDetails", async Task<Results<Ok, NotFound>> (string organizationId, string invoiceNo, BillingDetailsDto billingDetails, IMediator mediator = default!, CancellationToken cancellationToken = default!) =>
     {
-        var result = await mediator.Send(new UpdateBillingDetails(invoiceNo, billingDetails), cancellationToken);
+        var result = await mediator.Send(new UpdateBillingDetails(organizationId, invoiceNo, billingDetails), cancellationToken);
 
         if (result.HasError(Errors.Invoices.InvoiceNotFound))
         {
@@ -199,9 +199,9 @@ group.MapPut("/{invoiceNo}/billingDetails", async Task<Results<Ok, NotFound>> (s
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceNo}/shippingDetails", async Task<Results<Ok, NotFound>> (string invoiceNo, ShippingDetailsDto shippingDetails, IMediator mediator = default!, CancellationToken cancellationToken = default!) =>
+group.MapPut("/{invoiceNo}/shippingDetails", async Task<Results<Ok, NotFound>> (string organizationId, string invoiceNo, ShippingDetailsDto shippingDetails, IMediator mediator = default!, CancellationToken cancellationToken = default!) =>
     {
-        var result = await mediator.Send(new UpdateShippingDetails(invoiceNo, shippingDetails), cancellationToken);
+        var result = await mediator.Send(new UpdateShippingDetails(organizationId, invoiceNo, shippingDetails), cancellationToken);
 
         if (result.HasError(Errors.Invoices.InvoiceNotFound))
         {
@@ -214,112 +214,112 @@ group.MapPut("/{invoiceNo}/shippingDetails", async Task<Results<Ok, NotFound>> (
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPost("/invoices/{invoiceId}/activateRotAndRut", async (string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
-    => await mediator.Send(new ActivateRotAndRut(invoiceId, dto)))
+group.MapPost("/invoices/{invoiceId}/activateRotAndRut", async (string organizationId, string invoiceId, InvoiceDomesticServiceDto dto, IMediator mediator)
+    => await mediator.Send(new ActivateRotAndRut(organizationId, invoiceId, dto)))
     .WithName("Invoices_ActivateRotAndRut")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapGet("/invoices/{invoiceId}/file", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
-    => Microsoft.AspNetCore.Http.Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
+group.MapGet("/invoices/{invoiceId}/file", async (string organizationId, string invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => Microsoft.AspNetCore.Http.Results.File(await mediator.Send(new GenerateInvoiceFile(organizationId, invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);
 
-group.MapPost("/{invoiceId}/Items", async (string invoiceId,
+group.MapPost("/{invoiceId}/Items", async (string organizationId, string invoiceId,
     AddInvoiceItem dto,
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(organizationId, invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Items/{invoiceItemId}", async (string invoiceId, string invoiceItemId,
+group.MapPut("/{invoiceId}/Items/{invoiceItemId}", async (string organizationId, string invoiceId, string invoiceItemId,
     UpdateInvoiceItem dto,
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItem(invoiceId, invoiceItemId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItem(organizationId, invoiceId, invoiceItemId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService), cancellationToken))
     .WithName("Invoices_UpdateItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Items/{invoiceItemId}/quantity", async (string invoiceId, string invoiceItemId,
+group.MapPut("/{invoiceId}/Items/{invoiceItemId}/quantity", async (string organizationId, string invoiceId, string invoiceItemId,
     UpdateInvoiceItemQuantity dto,
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItemQuantity(invoiceId, invoiceItemId, dto.Quantity), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.UpdateInvoiceItemQuantity(organizationId, invoiceId, invoiceItemId, dto.Quantity), cancellationToken))
     .WithName("Invoices_UpdateItemQuantity")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
-group.MapPost("", async (CreateInvoice command, IMediator mediator, CancellationToken cancellationToken)
+group.MapPost("/", async (CreateInvoice command, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(command, cancellationToken))
     .WithName("Invoices_CreateInvoice")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Status", async (string invoiceId, InvoiceStatus status,
+group.MapPut("/{invoiceId}/Status", async (string organizationId, string invoiceId, int status,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetInvoiceStatus(invoiceId, status), cancellationToken))
+    => await mediator.Send(new SetInvoiceStatus(organizationId, invoiceId, status), cancellationToken))
     .WithName("Invoices_SetInvoiceStatus")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Customer", async (string invoiceId, SetCustomerDto customer,
+group.MapPut("/{invoiceId}/Customer", async (string organizationId, string invoiceId, SetCustomerDto customer,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetCustomer(invoiceId, customer.Id, customer.Name), cancellationToken))
+    => await mediator.Send(new SetCustomer(organizationId, invoiceId, customer.Id, customer.Name), cancellationToken))
     .WithName("Invoices_SetCustomer")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/PaidAmount", async (string invoiceId, decimal amount,
+group.MapPut("/{invoiceId}/PaidAmount", async (string organizationId, string invoiceId, decimal amount,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetPaidAmount(invoiceId, amount), cancellationToken))
+    => await mediator.Send(new SetPaidAmount(organizationId, invoiceId, amount), cancellationToken))
     .WithName("Invoices_SetPaidAmount")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Date", async (string invoiceId, DateTime date,
+group.MapPut("/{invoiceId}/Date", async (string organizationId, string invoiceId, DateTime date,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetDate(invoiceId, date), cancellationToken))
+    => await mediator.Send(new SetDate(organizationId, invoiceId, date), cancellationToken))
     .WithName("Invoices_SetDate")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Type", async (string invoiceId, InvoiceType type,
+group.MapPut("/{invoiceId}/Type", async (string organizationId, string invoiceId, InvoiceType type,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetType(invoiceId, type), cancellationToken))
+    => await mediator.Send(new SetType(organizationId, invoiceId, type), cancellationToken))
     .WithName("Invoices_SetType")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/DueDate", async (string invoiceId, DateTime dueDate,
+group.MapPut("/{invoiceId}/DueDate", async (string organizationId, string invoiceId, DateTime dueDate,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetDueDate(invoiceId, dueDate), cancellationToken))
+    => await mediator.Send(new SetDueDate(organizationId, invoiceId, dueDate), cancellationToken))
     .WithName("Invoices_SetDueDate")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Reference", async (string invoiceId, string? reference,
+group.MapPut("/{invoiceId}/Reference", async (string organizationId, string invoiceId, string? reference,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetReference(invoiceId, reference), cancellationToken))
+    => await mediator.Send(new SetReference(organizationId, invoiceId, reference), cancellationToken))
     .WithName("Invoices_SetReference")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{invoiceId}/Note", async (string invoiceId, string? note,
+group.MapPut("/{invoiceId}/Note", async (string organizationId, string invoiceId, string? note,
 IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetNote(invoiceId, note), cancellationToken))
+    => await mediator.Send(new SetNote(organizationId, invoiceId, note), cancellationToken))
     .WithName("Invoices_SetNote")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapDelete("/{invoiceId}", async (string invoiceId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeleteInvoice(invoiceId), cancellationToken))
+group.MapDelete("/{invoiceId}", async (string organizationId, string invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new DeleteInvoice(organizationId, invoiceId), cancellationToken))
     .WithName("Invoices_DeleteInvoice")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-group.MapDelete("/{invoiceId}/Items/{invoiceItemId}", async (string invoiceId, string invoiceItemId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new DeleteInvoiceItem(invoiceId, invoiceItemId), cancellationToken))
+group.MapDelete("/{invoiceId}/Items/{invoiceItemId}", async (string organizationId, string invoiceId, string invoiceItemId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new DeleteInvoiceItem(organizationId, invoiceId, invoiceItemId), cancellationToken))
     .WithName("Invoices_DeleteInvoiceItem")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);

@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record SetPaidAmount(string InvoiceId, decimal Amount) : IRequest
+public record SetPaidAmount(string OrganizationId, string InvoiceId, decimal Amount) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetPaidAmount>
     {
@@ -23,13 +23,15 @@ public record SetPaidAmount(string InvoiceId, decimal Amount) : IRequest
     }
 }
 
-public record SetDate(string InvoiceId, DateTime Date) : IRequest
+public record SetDate(string OrganizationId, string InvoiceId, DateTime Date) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetDate>
     {
         public async Task Handle(SetDate request, CancellationToken cancellationToken)
         {
-            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             invoice.SetIssueDate(request.Date);
 
@@ -39,13 +41,15 @@ public record SetDate(string InvoiceId, DateTime Date) : IRequest
     }
 }
 
-public record SetType(string InvoiceId, InvoiceType Type) : IRequest
+public record SetType(string OrganizationId, string InvoiceId, InvoiceType Type) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetType>
     {
         public async Task Handle(SetType request, CancellationToken cancellationToken)
         {
-            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             invoice.SetType(request.Type);
 
@@ -55,13 +59,15 @@ public record SetType(string InvoiceId, InvoiceType Type) : IRequest
     }
 }
 
-public record SetDueDate(string InvoiceId, DateTime DueDate) : IRequest
+public record SetDueDate(string OrganizationId, string InvoiceId, DateTime DueDate) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetDueDate>
     {
         public async Task Handle(SetDueDate request, CancellationToken cancellationToken)
         {
-            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             invoice.SetDueDate(request.DueDate);
 
@@ -71,13 +77,15 @@ public record SetDueDate(string InvoiceId, DateTime DueDate) : IRequest
     }
 }
 
-public record SetReference(string InvoiceId, string? Reference) : IRequest
+public record SetReference(string OrganizationId, string InvoiceId, string? Reference) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetReference>
     {
         public async Task Handle(SetReference request, CancellationToken cancellationToken)
         {
-            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             invoice.SetReference(request.Reference);
 
@@ -87,13 +95,15 @@ public record SetReference(string InvoiceId, string? Reference) : IRequest
     }
 }
 
-public record SetNote(string InvoiceId, string? Note) : IRequest
+public record SetNote(string OrganizationId, string InvoiceId, string? Note) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<SetNote>
     {
         public async Task Handle(SetNote request, CancellationToken cancellationToken)
         {
-            var invoice = await context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await context.Invoices
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             invoice.SetNote(request.Note);
 

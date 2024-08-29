@@ -6,7 +6,7 @@ public abstract class AuditableEntity : Entity
 {
     public DateTime Created { get; set; }
 
-    public UserId CreatedById { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTime? LastModified { get; set; }
 

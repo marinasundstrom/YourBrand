@@ -1,5 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
 @inject IInvoicesClient InvoicesClient
+@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="Submit">
     <DataAnnotationsValidator />

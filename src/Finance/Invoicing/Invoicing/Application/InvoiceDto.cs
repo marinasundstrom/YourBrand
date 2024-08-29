@@ -5,10 +5,11 @@ namespace YourBrand.Invoicing.Application;
 
 public record InvoiceDto(
     string Id,
-    string? InvoiceNo,
+    int? InvoiceNo,
     DateTime? IssueDate,
     Domain.Enums.InvoiceType Type,
-    Domain.Enums.InvoiceStatus Status,
+    InvoiceStatusDto Status,
+    DateTimeOffset? StatusDate,
     CustomerDto? Customer,
     DateTime? DueDate,
     string Currency,
@@ -24,6 +25,10 @@ public record InvoiceDto(
     decimal Total,
     decimal? Paid,
     InvoiceDomesticServiceDto? DomesticService);
+
+public record InvoiceStatusDto(
+    int Id,
+    string? Name);
 
 public record CustomerDto(
     string Id,

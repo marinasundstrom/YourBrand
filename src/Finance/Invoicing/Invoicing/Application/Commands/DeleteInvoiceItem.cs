@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IRequest
+public record DeleteInvoiceItem(string OrganizationId, string InvoiceId, string InvoiceItemId) : IRequest
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<DeleteInvoiceItem>
     {
@@ -15,6 +15,7 @@ public record DeleteInvoiceItem(string InvoiceId, string InvoiceItemId) : IReque
         {
             var invoice = await context.Invoices
                 .Include(i => i.Items)
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             if (invoice is null)
