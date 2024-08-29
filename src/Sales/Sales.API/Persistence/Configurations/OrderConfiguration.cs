@@ -16,8 +16,6 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasOne(o => o.Status).WithMany()
             .HasForeignKey(o => new { o.OrganizationId, o.StatusId });
 
-        //builder.HasIndex(o => new { o.OrganizationId, o.StatusId }).IsUnique(false);
-
         builder.HasIndex(x => x.TenantId);
 
         builder.HasMany(order => order.Items)

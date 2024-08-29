@@ -16,7 +16,7 @@ public class UserContext : ISettableUserContext
         _claimsPrincipal = _httpContextAccessor.HttpContext?.User;
     }
 
-    public UserId? UserId => _currentUserId ??= _claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? _claimsPrincipal?.FindFirst("client_id")?.Value!;
+    public UserId? UserId => _currentUserId ??= _claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value!; // ?? _claimsPrincipal?.FindFirst("client_id")?.Value!;
 
     public string? GetAccessToken() => _claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
 
