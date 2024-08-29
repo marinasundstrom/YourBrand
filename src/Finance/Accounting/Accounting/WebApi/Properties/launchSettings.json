@@ -8,18 +8,10 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "YourBrand.Accounting": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:52007;http://localhost:54695",
+      "applicationUrl": "https://localhost:5092;http://localhost:54695",
       "launchUrl": "openapi",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

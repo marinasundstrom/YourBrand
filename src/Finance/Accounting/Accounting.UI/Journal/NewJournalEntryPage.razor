@@ -27,14 +27,14 @@
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<LedgerEntryDto, object>(x=>x.Account.AccountNo)">Account
+                    <MudTableSortLabel SortBy="new Func<LedgerEntry, object>(x=>x.Account.AccountNo)">Account
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<LedgerEntryDto, object?>(x=>x.Debit)">Debit</MudTableSortLabel>
+                    <MudTableSortLabel SortBy="new Func<LedgerEntry, object?>(x=>x.Debit)">Debit</MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<LedgerEntryDto, object?>(x=>x.Credit)">Credit</MudTableSortLabel>
+                    <MudTableSortLabel SortBy="new Func<LedgerEntry, object?>(x=>x.Credit)">Credit</MudTableSortLabel>
                 </MudTh>
             </HeaderContent>
             <RowTemplate Context="account">
@@ -129,7 +129,7 @@
     {
         MudTable<EntryFormModel> table = null!;
 
-        List<AccountDto> accounts = new List<AccountDto>();
+        List<Account> accounts = new List<Account>();
 
         VerificationFormModel formModel = new VerificationFormModel();
 
@@ -232,11 +232,11 @@
             NavigationManager.NavigateTo("/journal");
         }
 
-        private Task<IEnumerable<AccountDto>> Search(string value)
+        private Task<IEnumerable<Account>> Search(string value)
         {
             if (string.IsNullOrEmpty(value))
             {
-                return Task.FromResult<IEnumerable<AccountDto>>(accounts);
+                return Task.FromResult<IEnumerable<Account>>(accounts);
             }
 
             return Task.FromResult(accounts.Where(a => a.AccountNo.ToString().Contains(value) ||
@@ -260,7 +260,7 @@
         class EntryFormModel
         {
             [Required]
-            public AccountDto? Account { get; set; }
+            public Account? Account { get; set; }
 
             public decimal? Debit { get; set; }
 

@@ -25,11 +25,11 @@
             <MudTr>
 
                 <td colspan="4">
-                    <MudTable T="AccountDto" Elevation="25" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+                    <MudTable T="Account" Elevation="25" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<Account> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
                         <HeaderContent>
                             <MudTh></MudTh>
                             <MudTh colspan="2">Account</MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<Account, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
                         </HeaderContent>
 
                         <RowTemplate Context="account">
@@ -97,7 +97,7 @@
         StateHasChanged();
     }
 
-    void ItemClicked(TableRowClickEventArgs<AccountDto> e)
+    void ItemClicked(TableRowClickEventArgs<Account> e)
     {
         NavigationManager.NavigateTo($"/accounts/{e.Item.AccountNo}");
     }
@@ -105,7 +105,7 @@
     class AccountClassSummaryItemViewModel
     {
         public AccountClassSummary AccountClass { get; set; } = null!;
-        public IEnumerable<AccountDto> Accounts { get; set; } = null!;
+        public IEnumerable<Account> Accounts { get; set; } = null!;
         public bool IsExpanded { get; set; } = false;
     }
 }

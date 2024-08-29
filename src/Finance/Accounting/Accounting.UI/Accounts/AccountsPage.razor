@@ -12,13 +12,13 @@
 
 <MudCheckBox Checked="includeUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnIncludeUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
 
-<MudTable T="AccountDto" Items="accounts" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<AccountDto, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+<MudTable T="Account" Items="accounts" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<Account, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<Account> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
     <ToolBarContent>
         @if (accountClasses is not null)
         {
             <MudSelect T="int?" Label="Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mt-0">
                 <MudSelectItem Value="@((int?)null)">All</MudSelectItem>
-                @foreach (AccountClassDto accountClass in accountClasses)
+                @foreach (AccountClass accountClass in accountClasses)
                 {
                     <MudSelectItem Value="@((int?)accountClass.Id)">@accountClass.Description</MudSelectItem>
                 }
@@ -31,7 +31,7 @@
         <MudTh>Account No</MudTh>
         <MudTh>Name</MudTh>
         <MudTh>Description</MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Account, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate Context="account">
         <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
@@ -44,8 +44,8 @@
 @code
 {
     string currency = "SEK";
-    IEnumerable<AccountClassDto>? accountClasses = null;
-    IEnumerable<AccountDto>? accounts = null;
+    IEnumerable<AccountClass>? accountClasses = null;
+    IEnumerable<Account>? accounts = null;
     bool includeBlankAccounts = false;
     bool includeUnusedAccounts = false;
     int? accountClass = null;
@@ -90,14 +90,14 @@
         StateHasChanged();
     }
 
-    void ItemClicked(TableRowClickEventArgs<AccountDto> e)
+    void ItemClicked(TableRowClickEventArgs<Account> e)
     {
         NavigationManager.NavigateTo($"/accounts/{e.Item.AccountNo}");
     }
 
-    private bool FilterFunc(AccountDto account) => FilterFunc2(account, searchString);
+    private bool FilterFunc(Account account) => FilterFunc2(account, searchString);
 
-    private bool FilterFunc2(AccountDto account, string searchString)
+    private bool FilterFunc2(Account account, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;

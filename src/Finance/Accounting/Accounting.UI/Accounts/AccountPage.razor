@@ -39,7 +39,7 @@
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
 
-    <MudTable ServerData="@(new Func<TableState, Task<TableData<LedgerEntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable ServerData="@(new Func<TableState, Task<TableData<LedgerEntry>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Date</MudTh>
             <MudTh>Journal Entry</MudTh>
@@ -73,7 +73,7 @@
 {
     string currency = "SEK";
 
-    AccountDto? account;
+    Account? account;
     bool loading;
 
     ChartOptions options = new ChartOptions();
@@ -101,7 +101,7 @@
         StateHasChanged();
     }
 
-    private async Task<TableData<LedgerEntryDto>> ServerReload(TableState state)
+    private async Task<TableData<LedgerEntry>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -109,7 +109,7 @@
         {
             var result = await LedgerEntriesClient.GetLedgerEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
 
-            return new TableData<LedgerEntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
+            return new TableData<LedgerEntry>() { TotalItems = result.TotalItems, Items = result.Entries };
         }
         finally
         {

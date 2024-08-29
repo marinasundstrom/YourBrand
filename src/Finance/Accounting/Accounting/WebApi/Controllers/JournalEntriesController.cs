@@ -1,4 +1,6 @@
-﻿using Azure.Storage.Blobs;
+﻿using Asp.Versioning;
+
+using Azure.Storage.Blobs;
 
 using MediatR;
 
@@ -11,7 +13,9 @@ using YourBrand.Accounting.Application.Journal.Queries;
 
 namespace YourBrand.Accounting.Controllers;
 
-[Route("[controller]")]
+[ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class JournalEntriesController(IMediator mediator, IAccountingContext context, BlobServiceClient blobServiceClient) : Controller
 {
 

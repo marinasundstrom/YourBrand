@@ -37,7 +37,7 @@
     </MudCard>
 }
 
-<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<LedgerEntryDto>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<LedgerEntry>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Date</MudTh>
         <MudTh>Journal Entry</MudTh>
@@ -73,8 +73,8 @@
 {
     string currency = "SEK";
 
-    MudTable<LedgerEntryDto>? table = null!;
-    JournalEntryDto? journalEntry;
+    MudTable<LedgerEntry>? table = null!;
+    JournalEntry? journalEntry;
 
     string title = "Ledger";
     bool loading = false;
@@ -104,7 +104,7 @@
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    private async Task<TableData<LedgerEntryDto>> ServerReload(TableState state)
+    private async Task<TableData<LedgerEntry>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -130,7 +130,7 @@
 
             StateHasChanged();
 
-            return new TableData<LedgerEntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
+            return new TableData<LedgerEntry>() { TotalItems = result.TotalItems, Items = result.Entries };
         }
         finally
         {

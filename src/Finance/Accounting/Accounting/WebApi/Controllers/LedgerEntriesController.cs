@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +9,9 @@ using YourBrand.Accounting.Application.Ledger.Queries;
 
 namespace YourBrand.Accounting.Controllers;
 
-[Route("[controller]")]
+[ApiController]
+[ApiVersion("1")]
+[Route("v{version:apiVersion}/[controller]")]
 public class LedgerEntriesController(IMediator mediator) : Controller
 {
     [HttpGet]
