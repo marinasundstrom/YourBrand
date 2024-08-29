@@ -4,7 +4,7 @@ using YourBrand.Invoicing.Client;
 
 namespace YourBrand.Accountant.Services;
 
-public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient verificationsClient, ILogger<RefundService> logger) : IRefundService
+public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient journalEntriesClient, ILogger<RefundService> logger) : IRefundService
 {
     public async Task CheckForRefund()
     {
@@ -24,7 +24,7 @@ public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient
                 var subTotal = amountToRefund / (1m + 0.25m);
                 var vat = amountToRefund - subTotal;
 
-                var journalEntryId = await verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
+                var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
                 {
                     Description = $"Betalade tillbaka för överbetalad faktura #{invoice.InvoiceNo}",
                     InvoiceNo = int.Parse(invoice.InvoiceNo),

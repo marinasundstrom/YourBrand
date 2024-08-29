@@ -7,7 +7,7 @@ using YourBrand.Payments.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 
-public class PaymentCapturedConsumer(IJournalEntriesClient verificationsClient, IInvoicesClient invoicesClient, IPaymentsClient paymentsClient) : IConsumer<PaymentCaptured>
+public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient, IInvoicesClient invoicesClient, IPaymentsClient paymentsClient) : IConsumer<PaymentCaptured>
 {
     public async Task Consume(ConsumeContext<PaymentCaptured> context)
     {
@@ -99,13 +99,13 @@ public class PaymentCapturedConsumer(IJournalEntriesClient verificationsClient, 
                     }
                 };
 
-        var journalEntryId = await verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
+        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
         {
             Description = $"Betalade faktura #{invoice.InvoiceNo}",
             InvoiceNo = int.Parse(invoice.InvoiceNo),
             Entries = entries
         }, cancellationToken);
 
-        //await _verificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());
+        //await _journalEntriesClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());
     }
 }

@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 
-public class InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
+public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
     IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory,
     ILogger<InvoicesBatchConsumer> logger) : IConsumer<InvoicesBatch>
 {
@@ -43,7 +43,7 @@ public class InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
     {
         var entries = entriesFactory.CreateEntriesFromInvoice(invoice);
 
-        var journalEntryId = await verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
+        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
         {
             Description = $"Skickade ut faktura #{invoice.InvoiceNo}",
             InvoiceNo = int.Parse(invoice.InvoiceNo),
@@ -81,7 +81,7 @@ public class InvoicesBatchConsumer(IJournalEntriesClient verificationsClient,
         stream2.Seek(0, SeekOrigin.Begin);
         stream.Seek(0, SeekOrigin.Begin);
 
-        await verificationsClient.AddFileToJournalEntryAsVerificationAsync(
+        await journalEntriesClient.AddFileToJournalEntryAsVerificationAsync(
             journalEntryId, null, int.Parse(invoice.Id),
             new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 

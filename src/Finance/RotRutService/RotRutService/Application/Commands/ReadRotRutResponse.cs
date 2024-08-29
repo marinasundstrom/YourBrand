@@ -11,7 +11,7 @@ namespace YourBrand.RotRutService.Application.Commands;
 
 public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
 {
-    public class Handler(IRotRutContext context, IJournalEntriesClient verificationsClient, ITransactionsClient transactionsClient) : IRequestHandler<ReadRotRutResponse>
+    public class Handler(IRotRutContext context, IJournalEntriesClient journalEntriesClient, ITransactionsClient transactionsClient) : IRequestHandler<ReadRotRutResponse>
     {
         public async Task Handle(ReadRotRutResponse request, CancellationToken cancellationToken)
         {
@@ -45,7 +45,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                         Credit = rotRutCase.RequestedAmount
                     });
 
-                    var verificationId2 = await verificationsClient.CreateJournalEntryAsync(new CreateJournalEntry
+                    var verificationId2 = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
                     {
                         Description = $"Utbetalning RUT/RUT",
                         InvoiceNo = rotRutCase.InvoiceNo,
