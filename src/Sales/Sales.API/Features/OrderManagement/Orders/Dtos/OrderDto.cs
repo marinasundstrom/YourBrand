@@ -25,6 +25,7 @@ public sealed record OrderDto(
     IEnumerable<OrderItemDto> Items,
     decimal SubTotal,
     IEnumerable<OrderVatAmountDto> VatAmounts,
+    double? VatRate,
     decimal Vat,
     IEnumerable<OrderDiscountDto> Discounts,
     decimal? Discount,

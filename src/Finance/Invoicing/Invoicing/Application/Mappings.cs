@@ -23,6 +23,7 @@ public static class Mappings
             invoice.Items.Select(i => i.ToDto()),
             invoice.SubTotal,
             invoice.VatAmounts.Select(x => new InvoiceVatAmountDto(x.Name, x.VatRate, x.SubTotal, x.Vat, x.Total)),
+            invoice.VatRate,
             invoice.Vat,
             invoice.Discount,
             invoice.Total,

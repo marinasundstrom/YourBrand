@@ -944,6 +944,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceVatAmount'
+        vatRate:
+          type: number
+          format: double
+          nullable: true
         vat:
           type: number
           format: decimal

@@ -53,6 +53,8 @@ public class InvoiceViewModel
 
     public decimal Vat => Items.Sum(i => i.LineTotal.GetVatFromTotal(i.VatRate));
 
+    public double? VatRate { get; set; }
+
     public decimal Total
     {
         get
@@ -126,6 +128,7 @@ public class InvoiceViewModel
         {
             if (!harMoreThanOneVatRate)
             {
+                SetVatRate();
                 return;
             }
 
@@ -143,12 +146,29 @@ public class InvoiceViewModel
         if (!harMoreThanOneVatRate && totalVatAmount is not null)
         {
             _vatAmounts.Remove(totalVatAmount);
+            SetVatRate();
             return;
         }
 
         totalVatAmount.SubTotal = Items.Sum(x => x.SubTotal);
         totalVatAmount.Vat = Items.Sum(x => x.Vat);
         totalVatAmount.Total = Items.Sum(x => x.LineTotal);
+
+        SetVatRate();
+    }
+
+    private void SetVatRate()
+    {
+        if (_vatAmounts.Count == 1)
+        {
+            var vatAmount = _vatAmounts.First();
+
+            VatRate = vatAmount.VatRate;
+        }
+        else
+        {
+            VatRate = null;
+        }
     }
 }
 

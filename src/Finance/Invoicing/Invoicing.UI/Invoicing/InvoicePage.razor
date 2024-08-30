@@ -115,7 +115,7 @@
                         </MudItem>
 
                         <MudItem xs="6" sm="6" md="6" lg="4">
-                            <MudField Label="VAT">@Model.Vat.FormatCurrency(invoice.Currency)</MudField>
+                            <MudField  Label="@($"VAT ({(Model.VatRate.GetValueOrDefault() * 100)}%)")">@Model.Vat.FormatCurrency(invoice.Currency)</MudField>
                         </MudItem>
 
                         <MudItem xs="6" sm="6" md="6" lg="4">

@@ -50,6 +50,8 @@ public class OrderViewModel
 
     public decimal Vat => Math.Round(Items.Select(i => VatIncluded ? i.Total.GetVatFromTotal(i.VatRate.GetValueOrDefault()) : i.Total.AddVat(i.VatRate.GetValueOrDefault())).Sum(), 2, MidpointRounding.AwayFromZero);
 
+    public double? VatRate { get; set;}
+
     public decimal Total
     {
         get
@@ -120,6 +122,7 @@ public class OrderViewModel
         {
             if (!harMoreThanOneVatRate)
             {
+                SetVatRate();
                 return;
             }
 
@@ -137,12 +140,29 @@ public class OrderViewModel
         if (!harMoreThanOneVatRate && totalVatAmount is not null)
         {
             _vatAmounts.Remove(totalVatAmount);
+            SetVatRate();
             return;
         }
 
         totalVatAmount.SubTotal = Items.Sum(x => x.SubTotal);
         totalVatAmount.Vat = Items.Sum(x => x.Vat);
         totalVatAmount.Total = Items.Sum(x => x.Total);
+
+        SetVatRate();
+    }
+
+    private void SetVatRate()
+    {
+        if (_vatAmounts.Count == 1)
+        {
+            var vatAmount = _vatAmounts.First();
+
+            VatRate = vatAmount.VatRate;
+        }
+        else
+        {
+            VatRate = null;
+        }
     }
 }
 public sealed record OrderVatAmountViewModel

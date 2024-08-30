@@ -221,7 +221,6 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
     {
         UpdateVatAmounts();
 
-        //VatRate = 0.25;
         Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
         Total = Items.Sum(x => x.Total);
         SubTotal = Total - Vat;
@@ -273,6 +272,17 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
                 VatAmounts.Remove(x);
             }
         });
+
+        if(VatAmounts.Count == 1) 
+        {
+            var vatAmount = VatAmounts.First();
+
+            VatRate = vatAmount.VatRate;
+        }
+        else 
+        {
+            VatRate = null;
+        }
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }

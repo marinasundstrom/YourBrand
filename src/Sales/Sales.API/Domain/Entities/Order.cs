@@ -161,7 +161,6 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
     {
         UpdateVatAmounts();
 
-        VatRate = 0.25;
         Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
         Total = Items.Sum(x => x.Total);
         SubTotal = VatIncluded ? (Total - Vat.GetValueOrDefault()) : Total;
@@ -187,12 +186,12 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
         {
             item.Update();
 
-            var vatAmount = VatAmounts.FirstOrDefault(x => x.Rate == item.VatRate);
+            var vatAmount = VatAmounts.FirstOrDefault(x => x.VatRate == item.VatRate);
             if (vatAmount is null)
             {
                 vatAmount = new OrderVatAmount()
                 {
-                    Rate = item.VatRate.GetValueOrDefault(),
+                    VatRate = item.VatRate.GetValueOrDefault(),
                     Name = $"{item.VatRate * 100}%"
                 };
 
@@ -206,11 +205,22 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
         VatAmounts.ToList().ForEach(x =>
         {
-            if (x.Vat == 0 && x.Rate != 0)
+            if (x.Vat == 0 && x.VatRate != 0)
             {
                 VatAmounts.Remove(x);
             }
         });
+
+        if (VatAmounts.Count == 1)
+        {
+            var vatAmount = VatAmounts.First();
+
+            VatRate = vatAmount.VatRate;
+        }
+        else
+        {
+            VatRate = null;
+        }
     }
 
     public User? CreatedBy { get; set; }
@@ -247,7 +257,7 @@ public sealed class OrderVatAmount
 {
     public string Name { get; set; } = default!;
 
-    public double Rate { get; set; }
+    public double VatRate { get; set; }
 
     public decimal SubTotal { get; set; }
 

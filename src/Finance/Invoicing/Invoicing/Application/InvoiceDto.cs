@@ -20,6 +20,7 @@ public record InvoiceDto(
     IEnumerable<InvoiceItemDto> Items,
     decimal SubTotal,
     IEnumerable<InvoiceVatAmountDto> VatAmounts,
+    double? VatRate,
     decimal Vat,
     decimal? Discount,
     decimal Total,
