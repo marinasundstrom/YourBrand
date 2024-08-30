@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Queries;
 
-public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, InvoiceStatus[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
+public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, int[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
     {
@@ -44,7 +44,7 @@ public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10
 
             if (request.Status?.Any() ?? false)
             {
-                var statuses = request.Status.Select(x => (int)x);
+                var statuses = request.Status.Select(x => x);
                 query = query.Where(i => statuses.Any(s => s == i.Status.Id));
             }
 

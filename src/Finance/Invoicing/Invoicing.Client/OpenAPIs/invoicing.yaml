@@ -869,7 +869,8 @@ paths:
           type: array
           nullable: true
           items:
-            $ref: '#/components/schemas/InvoiceStatus2'
+            type: integer
+            format: int32
         x-position: 5
       - name: reference
         in: query
@@ -1390,29 +1391,6 @@ components:
         totalItems:
           type: integer
           format: int32
-    InvoiceStatus2:
-      type: string
-      description: ''
-      x-enumNames:
-      - Draft
-      - Sent
-      - Paid
-      - PartiallyPaid
-      - Overpaid
-      - Repaid
-      - PartiallyRepaid
-      - Reminder
-      - Void
-      enum:
-      - Draft
-      - Sent
-      - Paid
-      - PartiallyPaid
-      - Overpaid
-      - Repaid
-      - PartiallyRepaid
-      - Reminder
-      - Void
   securitySchemes:
     JWT:
       type: apiKey

@@ -104,7 +104,7 @@
         try
         {
             var result = await InvoicesClient.GetInvoicesAsync(organization.Id, state.Page, state.PageSize, selectedTypes.Select(s =>
-            (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus2)s.Id), null);
+            (InvoiceType)s!), selectedStatuses.Select(s => s.Id), null);
 
             return new TableData<Invoice>() { TotalItems = result.TotalItems, Items = result.Items };
         }

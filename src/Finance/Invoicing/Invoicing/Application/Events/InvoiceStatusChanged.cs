@@ -15,7 +15,7 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, IPaymentsCli
 {
     public async Task Handle(InvoiceStatusChanged notification, CancellationToken cancellationToken)
     {
-        if (notification.Status == InvoiceStatus.Paid)
+        if (notification.Status == (int)InvoiceStatus.Paid)
         {
             await publishEndpoint.Publish(new InvoicePaid(notification.InvoiceId));
             return;
