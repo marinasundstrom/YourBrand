@@ -5,7 +5,7 @@ using MediatR;
 using YourBrand.ChatApp.Behaviors;
 using YourBrand.ChatApp.Features.Chat;
 
-namespace YourBrand.ChatApp.Extensions;
+namespace YourBrand.Extensions;
 
 public static class ServiceExtensions
 {

@@ -660,6 +660,174 @@ paths:
           description: ''
       security:
       - JWT: []
+  /v1/invoices/statuses:
+    get:
+      tags:
+      - InvoiceStatuses
+      - InvoiceStatuses
+      operationId: InvoiceStatuses_GetInvoiceStatuses
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfInvoiceStatus'
+    post:
+      tags:
+      - InvoiceStatuses
+      - InvoiceStatuses
+      operationId: InvoiceStatuses_CreateInvoiceStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInvoiceStatus'
+        required: true
+        x-position: 2
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceStatus'
+        404:
+          description: ''
+  /v1/invoices/statuses/{id}:
+    get:
+      tags:
+      - InvoiceStatuses
+      - InvoiceStatuses
+      operationId: InvoiceStatuses_GetInvoiceStatusById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceStatus'
+        404:
+          description: ''
+    post:
+      tags:
+      - InvoiceStatuses
+      - InvoiceStatuses
+      operationId: InvoiceStatuses_UpdateInvoiceStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInvoiceStatus'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+    delete:
+      tags:
+      - InvoiceStatuses
+      - InvoiceStatuses
+      operationId: InvoiceStatuses_DeleteInvoiceStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
   /v1/Invoices:
     get:
       tags:
@@ -1169,6 +1337,48 @@ components:
           type: boolean
         isFailure:
           type: boolean
+    ItemsResultOfInvoiceStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceStatus'
+        totalItems:
+          type: integer
+          format: int32
+    SortDirection:
+      type: string
+      description: ''
+      x-enumNames:
+      - Desc
+      - Asc
+      enum:
+      - Desc
+      - Asc
+    CreateInvoiceStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateInvoiceStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
     ItemsResultOfInvoice:
       type: object
       additionalProperties: false

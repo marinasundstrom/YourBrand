@@ -1,6 +1,6 @@
 ﻿using YourBrand.ChatApp.Domain;
 
-namespace YourBrand.ChatApp.Extensions;
+namespace YourBrand.Extensions;
 
 public static class ResultExtensions
 {

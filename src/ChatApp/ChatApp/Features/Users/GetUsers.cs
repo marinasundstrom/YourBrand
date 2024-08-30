@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ChatApp;
-using YourBrand.ChatApp.Extensions;
+using YourBrand.Extensions;
 using YourBrand.ChatApp.Models;
 
 namespace YourBrand.ChatApp.Features.Users;

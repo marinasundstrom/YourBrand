@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using YourBrand.Portal.Services
 @inject IInvoicesClient InvoicesClient
+@inject IInvoiceStatusesClient InvoiceStatusesClient
 @inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="Submit">
@@ -10,12 +11,12 @@
         <DialogContent>
 
             <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
-                @foreach(var status in statuses)
+                @foreach (var status in invoiceStatuses)
                 {
-                    <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus2), status)</MudSelectItem>
-                }    
+                    <MudSelectItem Value="@status">@status.Name</MudSelectItem>
+                }
             </MudSelect>
-            
+
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
@@ -31,27 +32,26 @@
     [Parameter] public string InvoiceId { get; set; }
 
     [Required]
-    [Parameter] public InvoiceStatus2 Status { get; set; }
+    [Parameter] public InvoiceStatus Status { get; set; }
 
-    InvoiceStatus2 currentStatus;
-    IEnumerable<InvoiceStatus2> statuses = Array.Empty<InvoiceStatus2>();
+    InvoiceStatus currentStatus;
+    IEnumerable<InvoiceStatus> invoiceStatuses = Array.Empty<InvoiceStatus>();
 
-    protected override void OnInitialized() 
+    protected override async Task OnInitializedAsync() 
     {
-        statuses = Enum.GetValues<InvoiceStatus2>().Skip(1);
-        currentStatus = Status;
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-        if((int)currentStatus >= 2) 
-        {
-            statuses = statuses.Skip(1);
-        }
+        invoiceStatuses = (await InvoiceStatusesClient.GetInvoiceStatusesAsync(organizationId, 1, 100, null, null,
+        null)).Items.ToList();
+        Status = invoiceStatuses.FirstOrDefault(x => x.Id == Status?.Id);
+
     }
 
     async Task Submit()
     {
         var organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
 
-        await InvoicesClient.SetInvoiceStatusAsync(organization.Id, InvoiceId.ToString(), (int)Status);
+        await InvoicesClient.SetInvoiceStatusAsync(organization.Id, InvoiceId.ToString(), (int)Status.Id);
 
         MudDialog.Close(DialogResult.Ok(Status));
     }

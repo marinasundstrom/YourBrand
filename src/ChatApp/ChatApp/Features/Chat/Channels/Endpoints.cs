@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
-using YourBrand.ChatApp.Extensions;
+using YourBrand.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 

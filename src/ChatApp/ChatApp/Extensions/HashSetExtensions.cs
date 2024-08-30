@@ -1,4 +1,4 @@
-﻿namespace YourBrand.ChatApp.Extensions;
+﻿namespace YourBrand.Extensions;
 
 public static class HashSetExtensions
 {

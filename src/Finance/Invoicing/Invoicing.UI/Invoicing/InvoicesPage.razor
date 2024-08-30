@@ -1,4 +1,5 @@
 ﻿@inject IInvoicesClient InvoicesClient
+@inject IInvoiceStatusesClient InvoiceStatusesClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
@@ -23,10 +24,12 @@
             }
         </MudSelect>
         <MudSpacer />
-        <MudSelect T="InvoiceStatus2?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
-            @foreach (var status in Enum.GetValues<InvoiceStatus2>())
+        <MudSelect T="InvoiceStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
+            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"
+            ToStringFunc="(o) => o.Name" Class="mt-0">
+            @foreach (var status in invoiceStatuses)
             {
-                <MudSelectItem T="InvoiceStatus2?" Value="@status">@Enum.GetName(typeof(InvoiceStatus2), status)</MudSelectItem>
+                <MudSelectItem T="InvoiceStatus?" Value="@status">@status.Name</MudSelectItem>
             }
         </MudSelect>
     </ToolBarContent>
@@ -73,14 +76,18 @@
     bool loading = false;
     InvoiceType? Type;
     IEnumerable<InvoiceType?> selectedTypes = new List<InvoiceType?>();
-    InvoiceStatus2? Status;
-    IEnumerable<InvoiceStatus2?> selectedStatuses = new List<InvoiceStatus2?>();
+    InvoiceStatus? Status;
+    IEnumerable<InvoiceStatus> invoiceStatuses = new List<InvoiceStatus>();
+    IEnumerable<InvoiceStatus?> selectedStatuses = new List<InvoiceStatus?>();
 
     protected override async Task OnInitializedAsync()
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
 
         OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        invoiceStatuses = (await InvoiceStatusesClient.GetInvoiceStatusesAsync(organization.Id, 1, 100, null, null,
+        null)).Items.ToList();
     }
 
     Organization organization = default!;
@@ -97,7 +104,7 @@
         try
         {
             var result = await InvoicesClient.GetInvoicesAsync(organization.Id, state.Page, state.PageSize, selectedTypes.Select(s =>
-            (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus2)s), null);
+            (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus2)s.Id), null);
 
             return new TableData<Invoice>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -129,7 +136,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus2?> selectedValues)
+    private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table.ReloadServerData();

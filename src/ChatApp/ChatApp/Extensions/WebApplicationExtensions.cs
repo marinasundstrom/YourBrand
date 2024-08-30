@@ -3,7 +3,7 @@ using YourBrand.ChatApp.Features.Chat.Channels;
 using YourBrand.ChatApp.Features.Chat.Messages;
 using YourBrand.ChatApp.Features.Users;
 
-namespace YourBrand.ChatApp.Extensions;
+namespace YourBrand.Extensions;
 
 public static class WebApplicationExtensions
 {

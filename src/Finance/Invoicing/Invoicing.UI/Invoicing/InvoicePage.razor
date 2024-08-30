@@ -589,7 +589,7 @@
 
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoiceId);
-        dialogParameters.Add(nameof(SetStatusDialog.Status), (InvoiceStatus2)Model.Status.Id);
+        dialogParameters.Add(nameof(SetStatusDialog.Status), Model.Status);
 
         var dialogRef = DialogService.Show<SetStatusDialog>("Update status", dialogParameters);
 

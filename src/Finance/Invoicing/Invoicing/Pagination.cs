@@ -1,15 +1,25 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
-namespace YourBrand.Extensions;
+using Newtonsoft.Json.Converters;
 
-public static class ExpressionTreesExtension
+namespace YourBrand.Invoicing;
+
+[JsonConverter(typeof(StringEnumConverter))]
+public enum SortDirection
+{
+    Asc = 2,
+    Desc = 1
+}
+
+public static class ExpressionTreeExtension
 {
     static readonly MethodInfo orderByMethodInfo;
     static readonly MethodInfo orderByDescendingMethodInfo;
     static readonly MethodInfo lambdaMethodInfo;
 
-    static ExpressionTreesExtension()
+    static ExpressionTreeExtension()
     {
         var queryableType = typeof(Queryable);
 
@@ -49,8 +59,8 @@ public static class ExpressionTreesExtension
 
         var _orderByMethodInfo = sortDirection switch
         {
-            SortDirection.Ascending => orderByMethodInfo,
-            SortDirection.Descending => orderByDescendingMethodInfo,
+            SortDirection.Asc => orderByMethodInfo,
+            SortDirection.Desc => orderByDescendingMethodInfo,
             _ => throw new Exception()
         };
 
@@ -96,15 +106,4 @@ public static class ExpressionTreesExtension
 
         return memberExpression!;
     }
-}
-
-[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-public enum SortDirection
-{
-    Ascending,
-    Descending
-}
-
-public class PropertyNotFoundException(Type type, string propertyName) : Exception($"Type {type.FullName} does not have a property named {propertyName}.")
-{
 }

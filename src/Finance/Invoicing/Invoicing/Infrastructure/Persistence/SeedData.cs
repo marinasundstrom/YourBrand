@@ -44,7 +44,7 @@ public class SeedData
             {
                 OrganizationId = TenantConstants.OrganizationId
             });
-            context.InvoiceStatuses.Add(new InvoiceStatus(4, "PartiallyPaid", "partially-paid", string.Empty)
+            context.InvoiceStatuses.Add(new InvoiceStatus(4, "Partially Paid", "partially-paid", string.Empty)
             {
                 OrganizationId = TenantConstants.OrganizationId,
             });
@@ -56,7 +56,7 @@ public class SeedData
             {
                 OrganizationId = TenantConstants.OrganizationId,
             });
-            context.InvoiceStatuses.Add(new InvoiceStatus(7, "PartiallyRepaid", "partially-repaid", string.Empty)
+            context.InvoiceStatuses.Add(new InvoiceStatus(7, "Partially Repaid", "partially-repaid", string.Empty)
             {
                 OrganizationId = TenantConstants.OrganizationId,
             });

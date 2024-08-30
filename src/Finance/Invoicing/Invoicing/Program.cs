@@ -26,6 +26,7 @@ using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Infrastructure;
 using YourBrand.Invoicing.Infrastructure.Persistence;
 using YourBrand.Payments.Client;
+using YourBrand.Sales.Features.InvoiceManagement.Invoices.Statuses;
 using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -323,6 +324,8 @@ group.MapDelete("/{invoiceId}/Items/{invoiceItemId}", async (string organization
     .WithName("Invoices_DeleteInvoiceItem")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
+
+app.MapInvoiceStatusEndpoints();
 
 app.MapControllers();
 

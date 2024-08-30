@@ -2,25 +2,27 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Sales.Domain.Entities;
-using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.Models;
+using YourBrand.Identity;
+using YourBrand.Invoicing;
+using YourBrand.Invoicing.Application;
+using YourBrand.Invoicing.Domain;
+using YourBrand.Invoicing.Domain.Entities;
 
-namespace YourBrand.Sales.Features.OrderManagement.Orders.Statuses.Queries;
+namespace YourBrand.Sales.Features.InvoiceManagement.Invoices.Statuses.Queries;
 
-public record GetOrderStatusesQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrderStatusDto>>
+public record GetInvoiceStatusesQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<InvoiceStatusDto>>
 {
-    sealed class GetOrderStatusesQueryHandler(
-        ISalesContext context,
-        IUserContext userContext) : IRequestHandler<GetOrderStatusesQuery, PagedResult<OrderStatusDto>>
+    sealed class GetInvoiceStatusesQueryHandler(
+        IInvoicingContext context,
+        IUserContext userContext) : IRequestHandler<GetInvoiceStatusesQuery, ItemsResult<InvoiceStatusDto>>
     {
-        private readonly ISalesContext _context = context;
+        private readonly IInvoicingContext _context = context;
         private readonly IUserContext userContext = userContext;
 
-        public async Task<PagedResult<OrderStatusDto>> Handle(GetOrderStatusesQuery request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<InvoiceStatusDto>> Handle(GetInvoiceStatusesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<OrderStatus> result = _context
-                    .OrderStatuses
+            IQueryable<InvoiceStatus> result = _context
+                    .InvoiceStatuses
                     .Where(x => x.OrganizationId == request.OrganizationId)
                     .OrderBy(o => o.Created)
                     .AsNoTracking()
@@ -47,7 +49,7 @@ public record GetOrderStatusesQuery(string OrganizationId, int Page = 0, int Pag
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);
 
-            return new PagedResult<OrderStatusDto>(items.Select(cp => cp.ToDto()), totalCount);
+            return new ItemsResult<InvoiceStatusDto>(items.Select(cp => cp.ToDto()), totalCount);
         }
     }
 }

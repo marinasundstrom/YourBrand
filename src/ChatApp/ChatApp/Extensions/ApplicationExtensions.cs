@@ -1,5 +1,5 @@
 ﻿using YourBrand.ChatApp.Domain;
-using YourBrand.ChatApp.Extensions;
+using YourBrand.Extensions;
 using YourBrand.ChatApp.Infrastructure;
 
 namespace YourBrand.ChatApp.Web.Extensions;

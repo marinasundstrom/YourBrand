@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.ChatApp.Extensions;
+using YourBrand.Extensions;
 using YourBrand.ChatApp.Models;
 
 namespace YourBrand.ChatApp.Features.Organizations;
