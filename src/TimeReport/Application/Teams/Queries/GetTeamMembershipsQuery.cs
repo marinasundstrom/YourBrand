@@ -10,7 +10,7 @@ using YourBrand.TimeReport.Domain.Entities;
 namespace YourBrand.TimeReport.Application.Teams
 .Queries;
 
-public record GetTeamMembershipsQuery(string Id, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TeamMembershipDto>>
+public record GetTeamMembershipsQuery(string OrganizationId, string Id, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TeamMembershipDto>>
 {
     sealed class GetTeamMembershipsQueryHandler(
         ITimeReportContext context,

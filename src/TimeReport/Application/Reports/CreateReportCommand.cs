@@ -11,7 +11,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Reports.Queries;
 
-public record CreateReportCommand(string[] ProjectIds, string? UserId, DateTime StartDate, DateTime EndDate, int[] Statuses, ReportMode Mode) : IRequest<Stream?>
+public record CreateReportCommand(string OrganizationId, string[] ProjectIds, string? UserId, DateTime StartDate, DateTime EndDate, int[] Statuses, ReportMode Mode) : IRequest<Stream?>
 {
     public class CreateReportCommandHandler(ITimeReportContext context) : IRequestHandler<CreateReportCommand, Stream?>
     {

@@ -73,6 +73,9 @@
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -83,7 +86,7 @@
         var user = (await authenticationStateTask).User;
         var userId = user.FindFirst(x => x.Type.Contains("sub")).Value;
 
-        var page = await TimeSheetsClient.GetTimeSheetsAsync(state.Page, state.PageSize, null, userId, searchString,
+        var page = await TimeSheetsClient.GetTimeSheetsAsync(Organization.Id, state.Page, state.PageSize, null, userId, searchString,
         state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<TimeSheet>() { TotalItems = page.TotalItems, Items = page.Items };
@@ -93,13 +96,13 @@
     {
         if(timeSheet.Status == TimeSheetStatus.Closed)
         {
-            await TimeSheetsClient.OpenWeekAsync(timeSheet.Id);
+            await TimeSheetsClient.OpenWeekAsync(Organization.Id, timeSheet.Id);
 
             timeSheet.Status = TimeSheetStatus.Open;
         }
         else
         {
-            await TimeSheetsClient.CloseWeekAsync(timeSheet.Id);
+            await TimeSheetsClient.CloseWeekAsync(Organization.Id, timeSheet.Id);
 
             timeSheet.Status = TimeSheetStatus.Closed;
         }

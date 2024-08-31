@@ -9,7 +9,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record LockMonthCommand(string TimeSheetId) : IRequest
+public record LockMonthCommand(string OrganizationId, string TimeSheetId) : IRequest
 {
     public class LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<LockMonthCommand>
     {

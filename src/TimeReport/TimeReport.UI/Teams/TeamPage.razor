@@ -55,13 +55,16 @@
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     [Parameter] public string Id { get; set; } = null!;
 
     Team? Team { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Team = await TeamsClient.GetTeamAsync(Id);
+        Team = await TeamsClient.GetTeamAsync(Organization.Id, Id);
 
         _items.AddRange(new[] {
             new BreadcrumbItem("Teams", href: "/teams"),
@@ -71,7 +74,7 @@
 
     private async Task<TableData<TeamMembership>> ServerReload(TableState state)
     {
-        var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
+        var page = await TeamsClient.GetMembershipsAsync(Organization.Id, Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<TeamMembership>() { TotalItems = page.TotalItems, Items = page.Items };
@@ -122,7 +125,7 @@
             return;
         }
 
-        await TeamsClient.RemoveMemberAsync(Id, membership.Id);
+        await TeamsClient.RemoveMemberAsync(Organization.Id, Id, membership.Id);
 
         await table.ReloadServerData();
     }

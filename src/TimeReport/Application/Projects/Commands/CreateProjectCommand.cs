@@ -8,13 +8,14 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record CreateProjectCommand(string Name, string? Description, string OrganizationId) : IRequest<ProjectDto>
+public record CreateProjectCommand(string OrganizationId, string Name, string? Description) : IRequest<ProjectDto>
 {
     public class CreateProjectCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectCommand, ProjectDto>
     {
         public async Task<ProjectDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
             var project = new Project(request.Name, request.Description);
+            project.OrganizationId = request.OrganizationId;
 
             project.Organization = await context.Organizations.FirstAsync(x => x.Id == request.OrganizationId, cancellationToken);
 

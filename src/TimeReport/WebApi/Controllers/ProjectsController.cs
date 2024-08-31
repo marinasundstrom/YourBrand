@@ -21,18 +21,18 @@ public class ProjectsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(string organizationId, int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
         var user = Request.HttpContext.User;
 
-        return Ok(await mediator.Send(new GetProjectsQuery(page, pageSize, userId, searchString, sortBy, sortDirection), cancellationToken));
+        return Ok(await mediator.Send(new GetProjectsQuery(organizationId, page, pageSize, userId, searchString, sortBy, sortDirection), cancellationToken));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectDto>> GetProject(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectDto>> GetProject(string organizationId, string id, CancellationToken cancellationToken)
     {
-        var project = await mediator.Send(new GetProjectQuery(id), cancellationToken);
+        var project = await mediator.Send(new GetProjectQuery(organizationId, id), cancellationToken);
 
         if (project is null)
         {
@@ -45,11 +45,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPost]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectDto>> CreateProject(CreateProjectDto createProjectDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectDto>> CreateProject(string organizationId, CreateProjectDto createProjectDto, CancellationToken cancellationToken)
     {
         try
         {
-            var project = await mediator.Send(new CreateProjectCommand(createProjectDto.Name, createProjectDto.Description, createProjectDto.OrganizationId), cancellationToken);
+            var project = await mediator.Send(new CreateProjectCommand(organizationId, createProjectDto.Name, createProjectDto.Description), cancellationToken);
 
             return Ok(project);
         }
@@ -62,11 +62,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPut("{id}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectDto>> UpdateProject(string id, UpdateProjectDto updateProjectDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectDto>> UpdateProject(string organizationId, string id, UpdateProjectDto updateProjectDto, CancellationToken cancellationToken)
     {
         try
         {
-            var project = await mediator.Send(new UpdateProjectCommand(id, updateProjectDto.Name, updateProjectDto.Description, updateProjectDto.OrganizationId), cancellationToken);
+            var project = await mediator.Send(new UpdateProjectCommand(organizationId, id, updateProjectDto.Name, updateProjectDto.Description), cancellationToken);
 
             return Ok(project);
         }
@@ -79,11 +79,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpDelete("{id}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteProject(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteProject(string organizationId, string id, CancellationToken cancellationToken)
     {
         try
         {
-            await mediator.Send(new DeleteProjectCommand(id), cancellationToken);
+            await mediator.Send(new DeleteProjectCommand(organizationId, id), cancellationToken);
 
             return Ok();
         }
@@ -94,11 +94,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("Statistics/Summary")]
-    public async Task<ActionResult<StatisticsSummary>> GetStatisticsSummary(CancellationToken cancellationToken)
+    public async Task<ActionResult<StatisticsSummary>> GetStatisticsSummary(string organizationId, CancellationToken cancellationToken)
     {
         try
         {
-            return Ok(await mediator.Send(new GetProjectStatisticsSummaryQuery(), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsSummaryQuery(organizationId), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -107,11 +107,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("Statistics")]
-    public async Task<ActionResult<Data>> GetStatistics(DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<Data>> GetStatistics(string organizationId, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
     {
         try
         {
-            return Ok(await mediator.Send(new GetProjectStatisticsQuery(from, to), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsQuery(organizationId, from, to), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -120,11 +120,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id}/Statistics/Summary")]
-    public async Task<ActionResult<StatisticsSummary>> GetStatisticsSummary(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<StatisticsSummary>> GetStatisticsSummary(string organizationId, string id, CancellationToken cancellationToken)
     {
         try
         {
-            return Ok(await mediator.Send(new GetProjectStatisticsSummaryForProjectQuery(id), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsSummaryForProjectQuery(organizationId, id), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -133,11 +133,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id}/Statistics")]
-    public async Task<ActionResult<Data>> GetProjectStatistics(string id, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<Data>> GetProjectStatistics(string organizationId, string id, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
     {
         try
         {
-            return Ok(await mediator.Send(new GetProjectStatisticsForProjectQuery(id, from, to), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectStatisticsForProjectQuery(organizationId, id, from, to), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -147,11 +147,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
 
     [HttpGet("{id}/Memberships")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ProjectMembershipDto>>> GetProjectMemberships(string id, int page = 0, int pageSize = 10, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ProjectMembershipDto>>> GetProjectMemberships(string organizationId, string id, int page = 0, int pageSize = 10, string? sortBy = null, TimeReport.Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
         try
         {
-            return Ok(await mediator.Send(new GetProjectMembershipsQuery(id, page, pageSize, sortBy, sortDirection), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectMembershipsQuery(organizationId, id, page, pageSize, sortBy, sortDirection), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -161,11 +161,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
 
     [HttpGet("{id}/Memberships/{membershipId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectMembershipDto>> GetProjectMembership(string id, string membershipId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectMembershipDto>> GetProjectMembership(string organizationId, string id, string membershipId, CancellationToken cancellationToken)
     {
         try
         {
-            return Ok(await mediator.Send(new GetProjectMembershipQuery(id, membershipId), cancellationToken));
+            return Ok(await mediator.Send(new GetProjectMembershipQuery(organizationId, id, membershipId), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -176,11 +176,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPost("{id}/Memberships")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectMembershipDto>> CreateProjectMembership(string id, CreateProjectMembershipDto createProjectMembershipDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectMembershipDto>> CreateProjectMembership(string organizationId, string id, CreateProjectMembershipDto createProjectMembershipDto, CancellationToken cancellationToken)
     {
         try
         {
-            return Ok(await mediator.Send(new CreateProjectMembershipCommand(id, createProjectMembershipDto.UserId, createProjectMembershipDto.From, createProjectMembershipDto.Thru), cancellationToken));
+            return Ok(await mediator.Send(new CreateProjectMembershipCommand(organizationId, id, createProjectMembershipDto.UserId, createProjectMembershipDto.From, createProjectMembershipDto.Thru), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -191,11 +191,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPut("{id}/Memberships/{membershipId}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectMembershipDto>> UpdateProjectMembership(string id, string membershipId, UpdateProjectMembershipDto updateProjectMembershipDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectMembershipDto>> UpdateProjectMembership(string organizationId, string id, string membershipId, UpdateProjectMembershipDto updateProjectMembershipDto, CancellationToken cancellationToken)
     {
         try
         {
-            return Ok(await mediator.Send(new UpdateProjectMembershipCommand(id, membershipId, updateProjectMembershipDto.From, updateProjectMembershipDto.Thru), cancellationToken));
+            return Ok(await mediator.Send(new UpdateProjectMembershipCommand(organizationId, id, membershipId, updateProjectMembershipDto.From, updateProjectMembershipDto.Thru), cancellationToken));
         }
         catch (ProjectNotFoundException)
         {
@@ -210,11 +210,11 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpDelete("{id}/Memberships/{membershipId}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteProjectMembership(string id, string membershipId, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteProjectMembership(string organizationId, string id, string membershipId, CancellationToken cancellationToken)
     {
         try
         {
-            await mediator.Send(new DeleteProjectMembershipCommand(id, membershipId), cancellationToken);
+            await mediator.Send(new DeleteProjectMembershipCommand(organizationId, id, membershipId), cancellationToken);
 
             return Ok();
         }

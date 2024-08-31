@@ -11,7 +11,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
-public record GetTimeSheetsQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? UserId = null, string? SearchString = null, string? SortBy = null, Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TimeSheetDto>>
+public record GetTimeSheetsQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? ProjectId = null, string? UserId = null, string? SearchString = null, string? SortBy = null, Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<TimeSheetDto>>
 {
     public class GetTimeSheetsQueryHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<GetTimeSheetsQuery, ItemsResult<TimeSheetDto>>
     {

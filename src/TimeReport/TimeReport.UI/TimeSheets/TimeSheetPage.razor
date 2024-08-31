@@ -149,6 +149,9 @@ else
     ActivityModel? selectedActivity;
     EntryModel? selectedEntry;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     [Parameter]
     public int? Year { get; set; }
 
@@ -182,7 +185,7 @@ else
                 User = Users.FirstOrDefault(x => x.Id == user.FindFirst(c => c.Type == "sub").Value); */
             }
 
-            var page2 = await ActivitiesClient.GetActivitiesAsync(0, 10, null, null, null, null, null);
+            var page2 = await ActivitiesClient.GetActivitiesAsync(Organization.Id, 0, 10, null, null, null, null, null);
             activities = page2.Items;
         }
         catch (ApiException<ProblemDetails> e)
@@ -232,7 +235,7 @@ else
 
         try
         {
-            timeSheet = await TimeSheetsClient.GetTimeSheetForWeekAsync(Year.GetValueOrDefault(), Week.GetValueOrDefault(), UserId ?? User?.Id);
+            timeSheet = await TimeSheetsClient.GetTimeSheetForWeekAsync(Organization.Id, Year.GetValueOrDefault(), Week.GetValueOrDefault(), UserId ?? User?.Id);
 
             User = timeSheet.User.ToUser();
             UserId = User.Id;
@@ -346,7 +349,7 @@ else
 
         try
         {
-            await TimeSheetsClient.DeleteActvityEntriesAsync(timeSheet.Id, activityLine.Activity.Id);
+            await TimeSheetsClient.DeleteActvityEntriesAsync(Organization.Id, timeSheet.Id, activityLine.Activity.Id);
 
             await LoadTimeSheet();
         }
@@ -428,7 +431,7 @@ else
                 {
                     var a = activity.Activity;
 
-                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntry
+                    var result = await TimeSheetsClient.CreateEntryAsync(Organization.Id, timeSheet.Id, new CreateEntry
                     {
                         ProjectId = a.Project.Id,
                         ActivityId = a.Id,
@@ -443,7 +446,7 @@ else
                 }
                 else
                 {
-                    await TimeSheetsClient.UpdateEntryAsync(timeSheet.Id, entry.Id, new UpdateEntry
+                    await TimeSheetsClient.UpdateEntryAsync(Organization.Id, timeSheet.Id, entry.Id, new UpdateEntry
                     {
                         Hours = value,
                         Description = entry.Description
@@ -484,7 +487,7 @@ else
                 {
                     var a = activity.Activity;
 
-                    var result = await TimeSheetsClient.CreateEntryAsync(timeSheet.Id, new CreateEntry
+                    var result = await TimeSheetsClient.CreateEntryAsync(Organization.Id, timeSheet.Id, new CreateEntry
                     {
                         ProjectId = a.Project.Id,
                         ActivityId = a.Id,
@@ -497,7 +500,7 @@ else
                 }
                 else
                 {
-                    await TimeSheetsClient.UpdateEntryDetailsAsync(timeSheet.Id, entry.Id, new UpdateEntryDetails
+                    await TimeSheetsClient.UpdateEntryDetailsAsync(Organization.Id, timeSheet.Id, entry.Id, new UpdateEntryDetails
                     {
                         Description = value
                     });
@@ -528,7 +531,7 @@ else
             return;
         try
         {
-            await TimeSheetsClient.UpdateTimeSheetStatusAsync(timeSheet.Id, (int)TimeSheetStatus.Closed);
+            await TimeSheetsClient.UpdateTimeSheetStatusAsync(Organization.Id, timeSheet.Id, (int)TimeSheetStatus.Closed);
 
             timeSheet.Status = TimeSheetStatus.Closed;
         }
@@ -553,7 +556,7 @@ else
             if (!result.GetValueOrDefault())
                 return;
 
-            await TimeSheetsClient.LockMonthAsync(timeSheet.Id);
+            await TimeSheetsClient.LockMonthAsync(Organization.Id, timeSheet.Id);
 
             // Reload
             await LoadTimeSheet();

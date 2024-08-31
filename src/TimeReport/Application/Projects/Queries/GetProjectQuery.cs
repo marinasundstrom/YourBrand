@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectQuery(string ProjectId) : IRequest<ProjectDto?>
+public record GetProjectQuery(string OrganizationId, string ProjectId) : IRequest<ProjectDto?>
 {
     public class GetProjectQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectQuery, ProjectDto?>
     {

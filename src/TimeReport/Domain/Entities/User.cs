@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;

@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.ActivityTypes.Commands;
 
-public record UpdateActivityTypeCommand(string ActivityId, string Name, string? Description, string OrganizationId, string? ProjectId, bool ExcludeHours) : IRequest<ActivityTypeDto>
+public record UpdateActivityTypeCommand(string OrganizationId, string ActivityId, string Name, string? Description, string? ProjectId, bool ExcludeHours) : IRequest<ActivityTypeDto>
 {
     public class UpdateActivityCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateActivityTypeCommand, ActivityTypeDto>
     {

@@ -31,11 +31,14 @@
 
     public string? Description { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         if(TeamId is not null)
         {
-            var result = await TeamsClient.GetTeamAsync(TeamId);
+            var result = await TeamsClient.GetTeamAsync(Organization.Id, TeamId);
 
             Name = result.Name;
             //Description = result.Description;
@@ -48,7 +51,7 @@
 
         if (TeamId is null)
         {
-            result = await TeamsClient.CreateTeamAsync(new CreateTeam
+            result = await TeamsClient.CreateTeamAsync(Organization.Id, new CreateTeam
             {
                 Name = Name
             });

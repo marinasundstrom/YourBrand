@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectMembershipQuery(string ProjectId, string MembershipId) : IRequest<ProjectMembershipDto>
+public record GetProjectMembershipQuery(string OrganizationId, string ProjectId, string MembershipId) : IRequest<ProjectMembershipDto>
 {
     public class GetProjectMembershipQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipQuery, ProjectMembershipDto>
     {

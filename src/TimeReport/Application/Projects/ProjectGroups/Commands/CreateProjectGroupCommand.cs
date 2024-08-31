@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Commands;
 
-public record CreateProjectGroupCommand(string Name, string? Description) : IRequest<ProjectGroupDto>
+public record CreateProjectGroupCommand(string OrganizationId, string Name, string? Description) : IRequest<ProjectGroupDto>
 {
     public class CreateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectGroupCommand, ProjectGroupDto>
     {
@@ -26,6 +26,7 @@ public record CreateProjectGroupCommand(string Name, string? Description) : IReq
             var projectGroup = new ProjectGroup
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,
                 //Project = project

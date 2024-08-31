@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record ApproveWeekCommand(string TimeSheetId) : IRequest
+public record ApproveWeekCommand(string OrganizationId, string TimeSheetId) : IRequest
 {
     public class ApproveWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork) : IRequestHandler<ApproveWeekCommand>
     {

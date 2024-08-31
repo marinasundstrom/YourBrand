@@ -15,20 +15,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class ActivitiesController(IMediator mediator, ITimeReportContext context) : ControllerBase
+public class ActivitiesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ActivityDto>>> GetActivities(int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ActivityDto>>> GetActivities(string organizationId, int page = 0, int pageSize = 10, string? projectId = null, string? userId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await mediator.Send(new GetActivitiesQuery(page, pageSize, projectId, userId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetActivitiesQuery(organizationId, page, pageSize, projectId, userId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ActivityDto>> GetActivity(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ActivityDto>> GetActivity(string organizationId, string id, CancellationToken cancellationToken)
     {
-        var activity = await mediator.Send(new GetActivityQuery(id), cancellationToken);
+        var activity = await mediator.Send(new GetActivityQuery(organizationId, id), cancellationToken);
 
         if (activity is null)
         {
@@ -41,11 +41,11 @@ public class ActivitiesController(IMediator mediator, ITimeReportContext context
     [HttpPost]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ActivityDto>> CreateActivity(string projectId, CreateActivityDto createActivityDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ActivityDto>> CreateActivity(string organizationId, string projectId, CreateActivityDto createActivityDto, CancellationToken cancellationToken)
     {
         try
         {
-            var activity = await mediator.Send(new CreateActivityCommand(projectId, createActivityDto.Name, createActivityDto.ActivityTypeId, createActivityDto.Description, createActivityDto.HourlyRate), cancellationToken);
+            var activity = await mediator.Send(new CreateActivityCommand(organizationId, projectId, createActivityDto.Name, createActivityDto.ActivityTypeId, createActivityDto.Description, createActivityDto.HourlyRate), cancellationToken);
 
             return Ok(activity);
         }
@@ -57,11 +57,11 @@ public class ActivitiesController(IMediator mediator, ITimeReportContext context
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ActivityDto>> UpdateActivity(string id, UpdateActivityDto updateActivityDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ActivityDto>> UpdateActivity(string organizationId, string id, UpdateActivityDto updateActivityDto, CancellationToken cancellationToken)
     {
         try
         {
-            var activity = await mediator.Send(new UpdateActivityCommand(id, updateActivityDto.Name, updateActivityDto.ActivityTypeId, updateActivityDto.Description, updateActivityDto.HourlyRate), cancellationToken);
+            var activity = await mediator.Send(new UpdateActivityCommand(organizationId, id, updateActivityDto.Name, updateActivityDto.ActivityTypeId, updateActivityDto.Description, updateActivityDto.HourlyRate), cancellationToken);
 
             return Ok(activity);
         }
@@ -74,11 +74,11 @@ public class ActivitiesController(IMediator mediator, ITimeReportContext context
     [HttpDelete("{id}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteActivity(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteActivity(string organizationId, string id, CancellationToken cancellationToken)
     {
         try
         {
-            await mediator.Send(new DeleteActivityCommand(id), cancellationToken);
+            await mediator.Send(new DeleteActivityCommand(organizationId, id), cancellationToken);
 
             return Ok();
         }
@@ -89,13 +89,13 @@ public class ActivitiesController(IMediator mediator, ITimeReportContext context
     }
 
     [HttpGet("{id}/Statistics/Summary")]
-    public async Task<ActionResult<StatisticsSummary>> GetStatisticsSummary(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<StatisticsSummary>> GetStatisticsSummary(string organizationId, string id, CancellationToken cancellationToken)
     {
         try
         {
-            var statistics = await mediator.Send(new GetActivityStatisticsSummaryQuery(id), cancellationToken);
+            var statistics = await mediator.Send(new GetActivityStatisticsSummaryQuery(organizationId, id), cancellationToken);
 
-            return Ok(mediator.Send(new GetActivityStatisticsSummaryQuery(id)));
+            return Ok(mediator.Send(new GetActivityStatisticsSummaryQuery(organizationId, id)));
         }
         catch (Exception)
         {

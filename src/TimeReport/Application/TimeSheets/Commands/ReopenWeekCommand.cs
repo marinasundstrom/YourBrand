@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record ReopenWeekCommand(string TimeSheetId) : IRequest
+public record ReopenWeekCommand(string OrganizationId, string TimeSheetId) : IRequest
 {
     public class ReopenWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<ReopenWeekCommand>
     {

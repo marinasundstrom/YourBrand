@@ -18,7 +18,7 @@ public class TimeReportUserCreatedConsumer(IMediator mediator, IRequestClient<Ge
         var messageR = await requestClient.GetResponse<GetUserResponse>(new GetUser(message.UserId));
         var message2 = messageR.Message;
 
-        var result = await mediator.Send(new CreateUserCommand(message2.UserId, message2.OrganizationId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
+        var result = await mediator.Send(new CreateUserCommand(message2.UserId, message2.FirstName, message2.LastName, message2.DisplayName, "SSN", message2.Email));
     }
 }
 

@@ -3,11 +3,12 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Queries;
 
-public record GetProjectGroupQuery(string ExpenseId) : IRequest<ProjectGroupDto>
+public record GetProjectGroupQuery(string OrganizationId, string ExpenseId) : IRequest<ProjectGroupDto>
 {
     public class GetExpenseQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectGroupQuery, ProjectGroupDto>
     {

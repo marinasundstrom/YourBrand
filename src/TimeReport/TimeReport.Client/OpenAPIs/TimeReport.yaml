@@ -147,192 +147,8 @@ paths:
       - Teams
       operationId: Teams_GetTeams
       parameters:
-      - name: page
+      - name: organizationId
         in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 5
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfTeam'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - Teams
-      operationId: Teams_CreateTeam
-      requestBody:
-        x-name: dto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateTeam'
-        required: true
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Team'
-      security:
-      - JWT: []
-  /Teams/{id}:
-    get:
-      tags:
-      - Teams
-      operationId: Teams_GetTeam
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Team'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - Teams
-      operationId: Teams_UpdateTeam
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: dto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateTeam'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Team'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - Teams
-      operationId: Teams_DeleteTeam
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT: []
-  /Teams/{id}/Members:
-    post:
-      tags:
-      - Teams
-      operationId: Teams_AddMember
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: dto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddMember'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT: []
-  /Teams/{id}/Members/{userId}:
-    delete:
-      tags:
-      - Teams
-      operationId: Teams_RemoveMember
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT: []
-  /Teams/{id}/Memberships:
-    get:
-      tags:
-      - Teams
-      operationId: Teams_GetMemberships
-      parameters:
-      - name: id
-        in: path
-        required: true
         schema:
           type: string
         x-position: 1
@@ -376,6 +192,231 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/ItemsResultOfTeam'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Teams
+      operationId: Teams_CreateTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeam'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+      security:
+      - JWT: []
+  /Teams/{id}:
+    get:
+      tags:
+      - Teams
+      operationId: Teams_GetTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Teams
+      operationId: Teams_UpdateTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Teams
+      operationId: Teams_DeleteTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /Teams/{id}/Members:
+    post:
+      tags:
+      - Teams
+      operationId: Teams_AddMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMember'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /Teams/{id}/Members/{userId}:
+    delete:
+      tags:
+      - Teams
+      operationId: Teams_RemoveMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /Teams/{id}/Memberships:
+    get:
+      tags:
+      - Teams
+      operationId: Teams_GetMemberships
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/ItemsResultOfTeamMembership'
       security:
       - JWT: []
@@ -385,25 +426,952 @@ paths:
       - Activities
       operationId: Activities_GetActivities
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 0
-        x-position: 1
+        x-position: 2
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 2
+        x-position: 3
       - name: projectId
         in: query
         schema:
           type: string
           nullable: true
+        x-position: 4
+      - name: userId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 8
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfActivity'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Activities
+      operationId: Activities_CreateActivity
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: projectId
+        in: query
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: createActivityDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActivity'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Activities/{id}:
+    get:
+      tags:
+      - Activities
+      operationId: Activities_GetActivity
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Activities
+      operationId: Activities_UpdateActivity
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateActivityDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActivity'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Activities
+      operationId: Activities_DeleteActivity
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Activities/{id}/Statistics/Summary:
+    get:
+      tags:
+      - Activities
+      operationId: Activities_GetStatisticsSummary
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsSummary'
+      security:
+      - JWT: []
+  /ActivityTypes:
+    get:
+      tags:
+      - ActivityTypes
+      operationId: ActivityTypes_GetActivityTypes
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfActivityType'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - ActivityTypes
+      operationId: ActivityTypes_CreateActivityType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: createActivityTypeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActivityType'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityType'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /ActivityTypes/{id}:
+    get:
+      tags:
+      - ActivityTypes
+      operationId: ActivityTypes_GetActivityType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityType'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - ActivityTypes
+      operationId: ActivityTypes_UpdateActivityType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateActivityTypeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActivityType'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityType'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - ActivityTypes
+      operationId: ActivityTypes_DeleteActivityType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Expenses:
+    get:
+      tags:
+      - Expenses
+      operationId: Expenses_GetExpenses
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfExpense'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Expenses
+      operationId: Expenses_CreateExpense
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: projectId
+        in: query
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: createExpenseDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpense'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+      security:
+      - JWT: []
+  /Expenses/{id}:
+    get:
+      tags:
+      - Expenses
+      operationId: Expenses_GetExpense
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Expenses
+      operationId: Expenses_UpdateExpense
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateExpenseDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExpense'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Expenses
+      operationId: Expenses_DeleteExpense
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /Expenses/{id}/Attachment:
+    post:
+      tags:
+      - Expenses
+      operationId: Expenses_UploadAttachment
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - JWT: []
+  /ExpenseTypes:
+    get:
+      tags:
+      - ExpenseTypes
+      operationId: ExpenseTypes_GetExpenseTypes
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfExpenseType'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - ExpenseTypes
+      operationId: ExpenseTypes_CreateExpenseType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: createExpenseTypeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseType'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseType'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /ExpenseTypes/{id}:
+    get:
+      tags:
+      - ExpenseTypes
+      operationId: ExpenseTypes_GetExpenseType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseType'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - ExpenseTypes
+      operationId: ExpenseTypes_UpdateExpenseType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateExpenseTypeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExpenseType'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseType'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - ExpenseTypes
+      operationId: ExpenseTypes_DeleteExpenseType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /ProjectGroups:
+    get:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_GetProjectGroups
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfProjectGroup'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_CreateProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: createProjectGroupDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectGroup'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroup'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /ProjectGroups/{id}:
+    get:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_GetProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroup'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_UpdateProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateProjectGroupDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectGroup'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroup'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_DeleteProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Projects:
+    get:
+      tags:
+      - Projects
+      operationId: Projects_GetProjects
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
         x-position: 3
       - name: userId
         in: query
@@ -437,790 +1405,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemsResultOfActivity'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - Activities
-      operationId: Activities_CreateActivity
-      parameters:
-      - name: projectId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: createActivityDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateActivity'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Activity'
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /Activities/{id}:
-    get:
-      tags:
-      - Activities
-      operationId: Activities_GetActivity
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Activity'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - Activities
-      operationId: Activities_UpdateActivity
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: updateActivityDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateActivity'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Activity'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - Activities
-      operationId: Activities_DeleteActivity
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /Activities/{id}/Statistics/Summary:
-    get:
-      tags:
-      - Activities
-      operationId: Activities_GetStatisticsSummary
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StatisticsSummary'
-      security:
-      - JWT: []
-  /ActivityTypes:
-    get:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_GetActivityTypes
-      parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: projectId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfActivityType'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_CreateActivityType
-      requestBody:
-        x-name: createActivityTypeDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateActivityType'
-        required: true
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityType'
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /ActivityTypes/{id}:
-    get:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_GetActivityType
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityType'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_UpdateActivityType
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: updateActivityTypeDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateActivityType'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityType'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_DeleteActivityType
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /Expenses:
-    get:
-      tags:
-      - Expenses
-      operationId: Expenses_GetExpenses
-      parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: projectId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfExpense'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - Expenses
-      operationId: Expenses_CreateExpense
-      parameters:
-      - name: projectId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: createExpenseDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateExpense'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Expense'
-      security:
-      - JWT: []
-  /Expenses/{id}:
-    get:
-      tags:
-      - Expenses
-      operationId: Expenses_GetExpense
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Expense'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - Expenses
-      operationId: Expenses_UpdateExpense
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: updateExpenseDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateExpense'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Expense'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - Expenses
-      operationId: Expenses_DeleteExpense
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT: []
-  /Expenses/{id}/Attachment:
-    post:
-      tags:
-      - Expenses
-      operationId: Expenses_UploadAttachment
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: string
-      security:
-      - JWT: []
-  /ExpenseTypes:
-    get:
-      tags:
-      - ExpenseTypes
-      operationId: ExpenseTypes_GetExpenseTypes
-      parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: projectId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfExpenseType'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - ExpenseTypes
-      operationId: ExpenseTypes_CreateExpenseType
-      requestBody:
-        x-name: createExpenseTypeDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateExpenseType'
-        required: true
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExpenseType'
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /ExpenseTypes/{id}:
-    get:
-      tags:
-      - ExpenseTypes
-      operationId: ExpenseTypes_GetExpenseType
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExpenseType'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - ExpenseTypes
-      operationId: ExpenseTypes_UpdateExpenseType
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: updateExpenseTypeDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateExpenseType'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExpenseType'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - ExpenseTypes
-      operationId: ExpenseTypes_DeleteExpenseType
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /ProjectGroups:
-    get:
-      tags:
-      - ProjectGroups
-      operationId: ProjectGroups_GetProjectGroups
-      parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: projectId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfProjectGroup'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - ProjectGroups
-      operationId: ProjectGroups_CreateProjectGroup
-      requestBody:
-        x-name: createProjectGroupDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectGroup'
-        required: true
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectGroup'
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /ProjectGroups/{id}:
-    get:
-      tags:
-      - ProjectGroups
-      operationId: ProjectGroups_GetProjectGroup
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectGroup'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - ProjectGroups
-      operationId: ProjectGroups_UpdateProjectGroup
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: updateProjectGroupDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProjectGroup'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectGroup'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - ProjectGroups
-      operationId: ProjectGroups_DeleteProjectGroup
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /Projects:
-    get:
-      tags:
-      - Projects
-      operationId: Projects_GetProjects
-      parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: userId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
                 $ref: '#/components/schemas/ItemsResultOfProject'
       security:
       - JWT: []
@@ -1228,6 +1412,12 @@ paths:
       tags:
       - Projects
       operationId: Projects_CreateProject
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: createProjectDto
         content:
@@ -1235,7 +1425,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProject'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1253,12 +1443,17 @@ paths:
       - Projects
       operationId: Projects_GetProject
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1273,12 +1468,17 @@ paths:
       - Projects
       operationId: Projects_UpdateProject
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: updateProjectDto
         content:
@@ -1286,7 +1486,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateProject'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1303,12 +1503,17 @@ paths:
       - Projects
       operationId: Projects_DeleteProject
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1321,6 +1526,12 @@ paths:
       tags:
       - Projects
       operationId: Projects_GetStatisticsSummary
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
           description: ''
@@ -1336,20 +1547,25 @@ paths:
       - Projects
       operationId: Projects_GetStatistics
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: from
         in: query
         schema:
           type: string
           format: date-time
           nullable: true
-        x-position: 1
+        x-position: 2
       - name: to
         in: query
         schema:
           type: string
           format: date-time
           nullable: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1365,12 +1581,17 @@ paths:
       - Projects
       operationId: Projects_GetStatisticsSummary2
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1386,26 +1607,31 @@ paths:
       - Projects
       operationId: Projects_GetProjectStatistics
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: from
         in: query
         schema:
           type: string
           format: date-time
           nullable: true
-        x-position: 2
+        x-position: 3
       - name: to
         in: query
         schema:
           type: string
           format: date-time
           nullable: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -1421,32 +1647,37 @@ paths:
       - Projects
       operationId: Projects_GetProjectMemberships
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 0
-        x-position: 2
+        x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 3
+        x-position: 4
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: sortDirection
         in: query
         schema:
@@ -1454,7 +1685,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 5
+        x-position: 6
       responses:
         200:
           description: ''
@@ -1469,12 +1700,17 @@ paths:
       - Projects
       operationId: Projects_CreateProjectMembership
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: createProjectMembershipDto
         content:
@@ -1482,7 +1718,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProjectMembership'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1500,18 +1736,23 @@ paths:
       - Projects
       operationId: Projects_GetProjectMembership
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: membershipId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1526,18 +1767,23 @@ paths:
       - Projects
       operationId: Projects_UpdateProjectMembership
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: membershipId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: updateProjectMembershipDto
         content:
@@ -1545,7 +1791,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateProjectMembership'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -1562,18 +1808,23 @@ paths:
       - Projects
       operationId: Projects_DeleteProjectMembership
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: membershipId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1623,6 +1874,11 @@ paths:
       - Reports
       operationId: Reports_GetReport
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: projectIds
         in: query
         style: form
@@ -1631,25 +1887,25 @@ paths:
           type: array
           items:
             type: string
-        x-position: 1
+        x-position: 2
       - name: userId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       - name: startDate
         in: query
         schema:
           type: string
           format: date-time
-        x-position: 3
+        x-position: 4
       - name: endDate
         in: query
         schema:
           type: string
           format: date-time
-        x-position: 4
+        x-position: 5
       - name: statuses
         in: query
         style: form
@@ -1659,14 +1915,14 @@ paths:
           items:
             type: integer
             format: int32
-        x-position: 5
+        x-position: 6
       - name: mode
         in: query
         schema:
           default: 1
           oneOf:
           - $ref: '#/components/schemas/ReportMode'
-        x-position: 6
+        x-position: 7
       responses:
         200:
           description: ''
@@ -1683,44 +1939,49 @@ paths:
       - TimeSheets
       operationId: TimeSheets_GetTimeSheets
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 0
-        x-position: 1
+        x-position: 2
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 2
+        x-position: 3
       - name: projectId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 3
+        x-position: 4
       - name: userId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: searchString
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 6
+        x-position: 7
       - name: sortDirection
         in: query
         schema:
@@ -1728,7 +1989,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 7
+        x-position: 8
       responses:
         200:
           description: ''
@@ -1744,12 +2005,17 @@ paths:
       - TimeSheets
       operationId: TimeSheets_GetTimeSheet
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1765,26 +2031,31 @@ paths:
       - TimeSheets
       operationId: TimeSheets_GetTimeSheetForWeek
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: year
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       - name: week
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 2
+        x-position: 3
       - name: userId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -1800,12 +2071,17 @@ paths:
       - TimeSheets
       operationId: TimeSheets_CreateEntry
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: dto
         content:
@@ -1813,7 +2089,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateEntry'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1841,18 +2117,23 @@ paths:
       - TimeSheets
       operationId: TimeSheets_UpdateEntry
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: entryId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: dto
         content:
@@ -1860,7 +2141,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateEntry'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -1888,18 +2169,23 @@ paths:
       - TimeSheets
       operationId: TimeSheets_UpdateEntryDetails
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: entryId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: dto
         content:
@@ -1907,7 +2193,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateEntryDetails'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -1935,18 +2221,23 @@ paths:
       - TimeSheets
       operationId: TimeSheets_DeleteActvityEntries
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: activityId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1964,12 +2255,17 @@ paths:
       - TimeSheets
       operationId: TimeSheets_CloseWeek
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1987,12 +2283,17 @@ paths:
       - TimeSheets
       operationId: TimeSheets_OpenWeek
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2010,12 +2311,17 @@ paths:
       - TimeSheets
       operationId: TimeSheets_ApproveWeek
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2033,18 +2339,23 @@ paths:
       - TimeSheets
       operationId: TimeSheets_UpdateTimeSheetStatus
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: statusCode
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -2062,12 +2373,17 @@ paths:
       - TimeSheets
       operationId: TimeSheets_LockMonth
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: timeSheetId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''

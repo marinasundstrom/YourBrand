@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Users.Commands;
 
-public record CreateUserCommand(string? Id, string OrganizationId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
+public record CreateUserCommand(string? Id, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
 {
     public class CreateUserCommandHandler(ITimeReportContext context) : IRequestHandler<CreateUserCommand, UserDto>
     {

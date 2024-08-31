@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 namespace YourBrand.TimeReport.Application.Teams
 .Queries;
 
-public record GetTeamQuery(string Id) : IRequest<TeamDto?>
+public record GetTeamQuery(string OrganizationId, string Id) : IRequest<TeamDto?>
 {
     sealed class GetTeamQueryHandler(
         ITimeReportContext context,

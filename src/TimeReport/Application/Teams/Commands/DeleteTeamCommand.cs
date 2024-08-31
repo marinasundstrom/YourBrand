@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 namespace YourBrand.TimeReport.Application.Teams
 .Commands;
 
-public record DeleteTeamCommand(string Id) : IRequest
+public record DeleteTeamCommand(string OrganizationId, string Id) : IRequest
 {
     public class DeleteTeamCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteTeamCommand>
     {

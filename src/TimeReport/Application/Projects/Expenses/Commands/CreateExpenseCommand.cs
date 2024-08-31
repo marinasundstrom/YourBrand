@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
-public record CreateExpenseCommand(string ProjectId, DateTime Date, string ExpenseTypeId, decimal Amount, string? Description) : IRequest<ExpenseDto>
+public record CreateExpenseCommand(string OrganizationId, string ProjectId, DateTime Date, string ExpenseTypeId, decimal Amount, string? Description) : IRequest<ExpenseDto>
 {
     public class CreateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<CreateExpenseCommand, ExpenseDto>
     {
@@ -26,6 +26,7 @@ public record CreateExpenseCommand(string ProjectId, DateTime Date, string Expen
             var expense = new Expense
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = request.OrganizationId,
                 ExpenseType = await context.ExpenseTypes.FirstAsync(et => et.Id == request.ExpenseTypeId),
                 Date = DateOnly.FromDateTime(request.Date),
                 Amount = request.Amount,

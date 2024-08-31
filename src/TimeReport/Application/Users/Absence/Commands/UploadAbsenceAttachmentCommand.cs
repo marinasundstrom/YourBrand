@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public record UploadAbsenceAttachmentCommand(string AbsenceId, string Name, Stream Stream) : IRequest<string?>
+public record UploadAbsenceAttachmentCommand(string OrganizationId, string AbsenceId, string Name, Stream Stream) : IRequest<string?>
 {
     public class UploadAbsenceAttachmentCommandHandler(ITimeReportContext context, IBlobService blobService) : IRequestHandler<UploadAbsenceAttachmentCommand, string?>
     {

@@ -14,9 +14,9 @@ namespace YourBrand.TimeReport.Controllers;
 public class ReportsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<FileStreamResult> GetReport([FromQuery] string[] projectIds, [FromQuery] string? userId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int[] statuses, ReportModeDto mode = ReportModeDto.Project, CancellationToken cancellationToken = default)
+    public async Task<FileStreamResult> GetReport(string organizationId, [FromQuery] string[] projectIds, [FromQuery] string? userId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int[] statuses, ReportModeDto mode = ReportModeDto.Project, CancellationToken cancellationToken = default)
     {
-        var stream = await mediator.Send(new CreateReportCommand(projectIds, userId, startDate, endDate, statuses, (ReportMode?)mode ?? ReportMode.Project), cancellationToken);
+        var stream = await mediator.Send(new CreateReportCommand(organizationId, projectIds, userId, startDate, endDate, statuses, (ReportMode?)mode ?? ReportMode.Project), cancellationToken);
 
         if (stream is null) throw new Exception();
 

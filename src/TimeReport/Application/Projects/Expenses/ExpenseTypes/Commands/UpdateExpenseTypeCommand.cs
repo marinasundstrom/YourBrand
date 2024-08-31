@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Commands;
 
-public record UpdateExpenseTypeCommand(string ExpenseId, string Name, string? Description) : IRequest<ExpenseTypeDto>
+public record UpdateExpenseTypeCommand(string OrganizationId, string ExpenseId, string Name, string? Description) : IRequest<ExpenseTypeDto>
 {
     public class UpdateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateExpenseTypeCommand, ExpenseTypeDto>
     {

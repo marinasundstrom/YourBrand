@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
-public record GetTimeSheetQuery(string TimeSheetId) : IRequest<TimeSheetDto?>
+public record GetTimeSheetQuery(string OrganizationId, string TimeSheetId) : IRequest<TimeSheetDto?>
 {
     public class GetTimeSheetQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<GetTimeSheetQuery, TimeSheetDto?>
     {

@@ -12,7 +12,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
-public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRequest<TimeSheetDto?>
+public record GetTimeSheetForWeekQuery(string OrganizationId, int Year, int Week, string? UserId) : IRequest<TimeSheetDto?>
 {
     public sealed class GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext) : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
     {
@@ -36,6 +36,7 @@ public record GetTimeSheetForWeekQuery(int Year, int Week, string? UserId) : IRe
                 var startDate = ISOWeek.ToDateTime(request.Year, request.Week, DayOfWeek.Monday);
 
                 timeSheet = new TimeSheet(user!, request.Year, request.Week);
+                timeSheet.OrganizationId = request.OrganizationId;
 
                 context.TimeSheets.Add(timeSheet);
 

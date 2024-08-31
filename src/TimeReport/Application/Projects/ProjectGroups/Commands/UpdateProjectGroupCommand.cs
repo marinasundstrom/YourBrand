@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Commands;
 
-public record UpdateProjectGroupCommand(string ExpenseId, string Name, string? Description) : IRequest<ProjectGroupDto>
+public record UpdateProjectGroupCommand(string OrganizationId, string ExpenseId, string Name, string? Description) : IRequest<ProjectGroupDto>
 {
     public class UpdateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectGroupCommand, ProjectGroupDto>
     {

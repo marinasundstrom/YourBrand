@@ -9,7 +9,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectStatisticsForProjectQuery(string ProjectId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
+public record GetProjectStatisticsForProjectQuery(string OrganizationId, string ProjectId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
 {
     public class GetProjectStatisticsForProjectQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsForProjectQuery, Data>
     {

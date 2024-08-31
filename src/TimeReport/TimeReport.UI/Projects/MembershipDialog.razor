@@ -30,6 +30,9 @@
 
     [Parameter] public string? MembershipId { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     [Required]
     public Portal.User User { get; set; }
 
@@ -37,7 +40,7 @@
     {
         if (MembershipId is not null)
         {
-            var result = await ProjectsClient.GetProjectMembershipAsync(ProjectId, MembershipId);
+            var result = await ProjectsClient.GetProjectMembershipAsync(Organization.Id, ProjectId, MembershipId);
 
             User = result.User.ToUser();
         }
@@ -49,14 +52,14 @@
 
         if (MembershipId is null)
         {
-            result = await ProjectsClient.CreateProjectMembershipAsync(ProjectId, new CreateProjectMembership
+            result = await ProjectsClient.CreateProjectMembershipAsync(Organization.Id, ProjectId, new CreateProjectMembership
             {
                 UserId = User.Id
             });
         }
         else
         {
-            result = await ProjectsClient.UpdateProjectMembershipAsync(ProjectId, MembershipId, new UpdateProjectMembership());
+            result = await ProjectsClient.UpdateProjectMembershipAsync(Organization.Id, ProjectId, MembershipId, new UpdateProjectMembership());
         }
 
         Modal.Close(DialogResult.Ok(result));

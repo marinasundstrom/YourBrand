@@ -54,6 +54,9 @@
 
     Portal.User? User { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         _items.AddRange(new[] {
@@ -63,7 +66,7 @@
 
     private async Task<TableData<Team>> ServerReload(TableState state)
     {
-        var page = await TeamsClient.GetTeamsAsync(state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
+        var page = await TeamsClient.GetTeamsAsync(Organization.Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<Team>() { TotalItems = page.TotalItems, Items = page.Items };

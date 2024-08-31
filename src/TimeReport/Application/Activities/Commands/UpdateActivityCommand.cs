@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Activities.Commands;
 
-public record UpdateActivityCommand(string ActivityId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
+public record UpdateActivityCommand(string OrganizationId, string ActivityId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
 {
     public class UpdateActivityCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateActivityCommand, ActivityDto>
     {

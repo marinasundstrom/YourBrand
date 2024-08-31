@@ -15,20 +15,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class ExpenseTypesController(IMediator mediator, ITimeReportContext context) : ControllerBase
+public class ExpenseTypesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ExpenseTypeDto>>> GetExpenseTypes(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ExpenseTypeDto>>> GetExpenseTypes(string organizationId, int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await mediator.Send(new GetExpenseTypesQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetExpenseTypesQuery(organizationId, page, pageSize, projectId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ExpenseTypeDto>> GetExpenseType(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ExpenseTypeDto>> GetExpenseType(string organizationId, string id, CancellationToken cancellationToken)
     {
-        var expense = await mediator.Send(new GetExpenseTypeQuery(id), cancellationToken);
+        var expense = await mediator.Send(new GetExpenseTypeQuery(organizationId, id), cancellationToken);
 
         if (expense is null)
         {
@@ -41,11 +41,11 @@ public class ExpenseTypesController(IMediator mediator, ITimeReportContext conte
     [HttpPost]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ExpenseTypeDto>> CreateExpenseType(CreateExpenseTypeDto createExpenseTypeDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ExpenseTypeDto>> CreateExpenseType(string organizationId, CreateExpenseTypeDto createExpenseTypeDto, CancellationToken cancellationToken)
     {
         try
         {
-            var expense = await mediator.Send(new CreateExpenseTypeCommand(createExpenseTypeDto.Name, createExpenseTypeDto.Description), cancellationToken);
+            var expense = await mediator.Send(new CreateExpenseTypeCommand(organizationId, createExpenseTypeDto.Name, createExpenseTypeDto.Description), cancellationToken);
 
             return Ok(expense);
         }
@@ -57,11 +57,11 @@ public class ExpenseTypesController(IMediator mediator, ITimeReportContext conte
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ExpenseTypeDto>> UpdateExpenseType(string id, UpdateExpenseTypeDto updateExpenseTypeDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ExpenseTypeDto>> UpdateExpenseType(string organizationId, string id, UpdateExpenseTypeDto updateExpenseTypeDto, CancellationToken cancellationToken)
     {
         try
         {
-            var expense = await mediator.Send(new UpdateExpenseTypeCommand(id, updateExpenseTypeDto.Name, updateExpenseTypeDto.Description), cancellationToken);
+            var expense = await mediator.Send(new UpdateExpenseTypeCommand(organizationId, id, updateExpenseTypeDto.Name, updateExpenseTypeDto.Description), cancellationToken);
 
             return Ok(expense);
         }
@@ -74,11 +74,11 @@ public class ExpenseTypesController(IMediator mediator, ITimeReportContext conte
     [HttpDelete("{id}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteExpenseType(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteExpenseType(string organizationId, string id, CancellationToken cancellationToken)
     {
         try
         {
-            await mediator.Send(new DeleteExpenseTypeCommand(id), cancellationToken);
+            await mediator.Send(new DeleteExpenseTypeCommand(organizationId, id), cancellationToken);
 
             return Ok();
         }

@@ -32,6 +32,9 @@
 
     //[Parameter] public string? MembershipId { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     [Required]
     public Portal.User User { get; set; }
 
@@ -56,7 +59,7 @@
         /* if (MembershipId is null)
         { */
 
-        await TeamsClient.AddMemberAsync(TeamId, new AddMember {
+        await TeamsClient.AddMemberAsync(Organization.Id, TeamId, new AddMember {
             UserId = User.Id
         });
 

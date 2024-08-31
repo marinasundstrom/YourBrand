@@ -1,6 +1,5 @@
 @using System.ComponentModel.DataAnnotations
 @inject IProjectsClient ProjectsClient
-@inject IOrganizationProvider OrganizationProvider
 
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
@@ -31,6 +30,9 @@
     [Required]
     public Project Project { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     public DateRange SelectedDateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
 
     protected override async Task OnInitializedAsync()
@@ -39,16 +41,14 @@
 
     async Task OnSubmit()
     {
-        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
-
-        await ProjectsClient.BillProjectAsync(organization.Id, Project.Id, SelectedDateRange.Start, SelectedDateRange.End);
+        await ProjectsClient.BillProjectAsync(Organization.Id, Project.Id, SelectedDateRange.Start, SelectedDateRange.End);
 
         Modal.Close();
     }
 
     private async Task<IEnumerable<Project>> Search(string value)
     {
-        var page = await ProjectsClient.GetProjectsAsync(0, 10, null, value, null, null);
+        var page = await ProjectsClient.GetProjectsAsync(Organization.Id, 0, 10, null, value, null, null);
 
         return page.Items;
     }

@@ -8,13 +8,14 @@ using YourBrand.TimeReport.Application.Teams.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 
+/*
 public class TimeReportTeamCreatedConsumer(IMediator mediator, IRequestClient<GetTeam> requestClient) : IConsumer<TeamCreated>
 {
     public async Task Consume(ConsumeContext<TeamCreated> context)
     {
         var message = context.Message;
 
-        var result = await mediator.Send(new CreateTeamCommand(message.TeamId, message.OrganizationId, message.Name, message.Description));
+        var result = await mediator.Send(new CreateTeamCommand(message.OrganizationId, message.TeamId, message.Name, message.Description));
     }
 }
 
@@ -24,7 +25,7 @@ public class TimeReportTeamDeletedConsumer(IMediator mediator) : IConsumer<TeamD
     {
         var message = context.Message;
 
-        await mediator.Send(new DeleteTeamCommand(message.TeamId));
+        await mediator.Send(new DeleteTeamCommand(message.OrganizationId, message.TeamId));
     }
 }
 
@@ -34,10 +35,10 @@ public class TimeReportTeamUpdatedConsumer(IMediator mediator, IRequestClient<Ge
     {
         var message = context.Message;
 
-        var messageR = await requestClient.GetResponse<GetTeamResponse>(new GetTeam(message.TeamId));
+        var messageR = await requestClient.GetResponse<GetTeamResponse>(new GetTeam(message.OrganizationId, message.TeamId));
         var message2 = messageR.Message;
 
-        var result = await mediator.Send(new UpdateTeamCommand(message2.TeamId, message.Name, message.Description));
+        var result = await mediator.Send(new UpdateTeamCommand(message.OrganizationId, message2.TeamId, message.Name, message.Description));
     }
 }
 
@@ -47,6 +48,7 @@ public class TimeReportTeamMemberAddedConsumer(IMediator mediator, IRequestClien
     {
         var message = context.Message;
 
-        await mediator.Send(new AddTeamMemberCommand(message.TeamId, message.PersonId));
+        await mediator.Send(new AddTeamMemberCommand(message.OrganizationId, message.TeamId, message.PersonId));
     }
 }
+*/

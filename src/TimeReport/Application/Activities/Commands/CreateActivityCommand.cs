@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Activities.Commands;
 
-public record CreateActivityCommand(string ProjectId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
+public record CreateActivityCommand(string OrganizationId, string ProjectId, string Name, string ActivityTypeId, string? Description, decimal? HourlyRate) : IRequest<ActivityDto>
 {
     public class CreateActivityCommandHandler(ITimeReportContext context) : IRequestHandler<CreateActivityCommand, ActivityDto>
     {
@@ -39,6 +39,7 @@ public record CreateActivityCommand(string ProjectId, string Name, string Activi
 
             var activity = new Activity(request.Name, activityType, request.Description)
             {
+                OrganizationId = request.OrganizationId,
                 Project = project,
                 HourlyRate = request.HourlyRate
             };

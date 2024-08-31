@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record CloseWeekCommand(string TimeSheetId) : IRequest
+public record CloseWeekCommand(string OrganizationId, string TimeSheetId) : IRequest
 {
     public class CloseWeekCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork) : IRequestHandler<CloseWeekCommand>
     {

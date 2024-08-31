@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record UpdateTimeSheetStatusCommand(string TimeSheetId) : IRequest
+public record UpdateTimeSheetStatusCommand(string OrganizationId, string TimeSheetId) : IRequest
 {
     public class UpdateTimeSheetStatusCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<UpdateTimeSheetStatusCommand>
     {

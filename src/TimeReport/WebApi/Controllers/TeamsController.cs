@@ -17,53 +17,51 @@ namespace YourBrand.TimeReport.WebApi.Controllers;
 public class TeamsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<ItemsResult<TeamDto>> GetTeams(int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<TeamDto>> GetTeams(string organizationId, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await mediator.Send(new GetTeamsQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetTeamsQuery(organizationId, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}")]
-    public async Task<TeamDto?> GetTeam(string id, CancellationToken cancellationToken)
+    public async Task<TeamDto?> GetTeam(string organizationId, string id, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new GetTeamQuery(id), cancellationToken);
+        return await mediator.Send(new GetTeamQuery(organizationId, id), cancellationToken);
     }
 
     [HttpPost]
-    public async Task<TeamDto> CreateTeam(CreateTeamDto dto, CancellationToken cancellationToken)
+    public async Task<TeamDto> CreateTeam(string organizationId, CreateTeamDto dto, CancellationToken cancellationToken)
     {
-        //return await _mediator.Send(new CreateTeamCommand(dto.Name, dto.Description), cancellationToken);
-
-        return null!;
+        return await mediator.Send(new CreateTeamCommand(organizationId, null!, dto.Name, dto.Description), cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task<TeamDto> UpdateTeam(string id, UpdateTeamDto dto, CancellationToken cancellationToken)
+    public async Task<TeamDto> UpdateTeam(string organizationId, string id, UpdateTeamDto dto, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new UpdateTeamCommand(id, dto.Name, dto.Description), cancellationToken);
+        return await mediator.Send(new UpdateTeamCommand(organizationId, id, dto.Name, dto.Description), cancellationToken);
     }
 
     [HttpDelete("{id}")]
-    public async Task DeleteTeam(string id, CancellationToken cancellationToken)
+    public async Task DeleteTeam(string organizationId, string id, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteTeamCommand(id), cancellationToken);
+        await mediator.Send(new DeleteTeamCommand(organizationId, id), cancellationToken);
     }
 
     [HttpPost("{id}/Members")]
-    public async Task AddMember(string id, AddMemberDto dto, CancellationToken cancellationToken)
+    public async Task AddMember(string organizationId, string id, AddMemberDto dto, CancellationToken cancellationToken)
     {
-        await mediator.Send(new AddTeamMemberCommand(id, dto.UserId), cancellationToken);
+        await mediator.Send(new AddTeamMemberCommand(organizationId, id, dto.UserId), cancellationToken);
     }
 
     [HttpDelete("{id}/Members/{userId}")]
-    public async Task RemoveMember(string id, string userId, CancellationToken cancellationToken)
+    public async Task RemoveMember(string organizationId, string id, string userId, CancellationToken cancellationToken)
     {
-        await mediator.Send(new RemoveTeamMemberCommand(id, userId), cancellationToken);
+        await mediator.Send(new RemoveTeamMemberCommand(organizationId, id, userId), cancellationToken);
     }
 
     [HttpGet("{id}/Memberships")]
-    public async Task<ItemsResult<TeamMembershipDto>> GetMemberships(string id, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ItemsResult<TeamMembershipDto>> GetMemberships(string organizationId, string id, int page = 0, int pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await mediator.Send(new GetTeamMembershipsQuery(id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetTeamMembershipsQuery(organizationId, id, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 }
 

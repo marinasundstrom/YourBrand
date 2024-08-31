@@ -15,20 +15,20 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class ProjectGroupsController(IMediator mediator, ITimeReportContext context) : ControllerBase
+public class ProjectGroupsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ProjectGroupDto>>> GetProjectGroups(int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ProjectGroupDto>>> GetProjectGroups(string organizationId, int page = 0, int pageSize = 10, string? projectId = null, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return Ok(await mediator.Send(new GetProjectGroupsQuery(page, pageSize, projectId, searchString, sortBy, sortDirection)));
+        return Ok(await mediator.Send(new GetProjectGroupsQuery(organizationId, page, pageSize, projectId, searchString, sortBy, sortDirection)));
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectGroupDto>> GetProjectGroup(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectGroupDto>> GetProjectGroup(string organizationId, string id, CancellationToken cancellationToken)
     {
-        var expense = await mediator.Send(new GetProjectGroupQuery(id), cancellationToken);
+        var expense = await mediator.Send(new GetProjectGroupQuery(organizationId, id), cancellationToken);
 
         if (expense is null)
         {
@@ -41,11 +41,11 @@ public class ProjectGroupsController(IMediator mediator, ITimeReportContext cont
     [HttpPost]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectGroupDto>> CreateProjectGroup(CreateProjectGroupDto createProjectGroupDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectGroupDto>> CreateProjectGroup(string organizationId, CreateProjectGroupDto createProjectGroupDto, CancellationToken cancellationToken)
     {
         try
         {
-            var expense = await mediator.Send(new CreateProjectGroupCommand(createProjectGroupDto.Name, createProjectGroupDto.Description), cancellationToken);
+            var expense = await mediator.Send(new CreateProjectGroupCommand(organizationId, createProjectGroupDto.Name, createProjectGroupDto.Description), cancellationToken);
 
             return Ok(expense);
         }
@@ -57,11 +57,11 @@ public class ProjectGroupsController(IMediator mediator, ITimeReportContext cont
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProjectGroupDto>> UpdateProjectGroup(string id, UpdateProjectGroupDto updateProjectGroupDto, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProjectGroupDto>> UpdateProjectGroup(string organizationId, string id, UpdateProjectGroupDto updateProjectGroupDto, CancellationToken cancellationToken)
     {
         try
         {
-            var expense = await mediator.Send(new UpdateProjectGroupCommand(id, updateProjectGroupDto.Name, updateProjectGroupDto.Description), cancellationToken);
+            var expense = await mediator.Send(new UpdateProjectGroupCommand(organizationId, id, updateProjectGroupDto.Name, updateProjectGroupDto.Description), cancellationToken);
 
             return Ok(expense);
         }
@@ -74,11 +74,11 @@ public class ProjectGroupsController(IMediator mediator, ITimeReportContext cont
     [HttpDelete("{id}")]
     [Authorize(Roles = Roles.AdministratorManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteProjectGroup(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteProjectGroup(string organizationId, string id, CancellationToken cancellationToken)
     {
         try
         {
-            await mediator.Send(new DeleteProjectGroupCommand(id), cancellationToken);
+            await mediator.Send(new DeleteProjectGroupCommand(organizationId, id), cancellationToken);
 
             return Ok();
         }

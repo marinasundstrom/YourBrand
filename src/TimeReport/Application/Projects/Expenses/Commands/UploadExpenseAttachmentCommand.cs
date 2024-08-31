@@ -9,7 +9,7 @@ using static YourBrand.TimeReport.Application.Projects.Expenses.ExpensesHelpers;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
-public record UploadExpenseAttachmentCommand(string ExpenseId, string Name, Stream Stream) : IRequest<string?>
+public record UploadExpenseAttachmentCommand(string OrganizationId, string ExpenseId, string Name, Stream Stream) : IRequest<string?>
 {
     public class UploadExpenseAttachmentCommandHandler(ITimeReportContext context, IBlobService blobService) : IRequestHandler<UploadExpenseAttachmentCommand, string?>
     {

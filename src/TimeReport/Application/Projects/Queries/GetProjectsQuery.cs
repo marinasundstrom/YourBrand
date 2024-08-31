@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectsQuery(int Page = 0, int PageSize = 10, string? UserId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectDto>>
+public record GetProjectsQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? UserId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectDto>>
 {
     public class GetProjectsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectsQuery, ItemsResult<ProjectDto>>
     {

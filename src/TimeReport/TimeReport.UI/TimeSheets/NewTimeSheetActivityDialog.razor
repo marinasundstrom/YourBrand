@@ -9,7 +9,7 @@
     <MudDialog>
         <DialogContent>
 
-            <ProjectSelector Class="mb-6" Variant="Variant.Outlined" Value="Project" ValueChanged="OnProjectChanged" For="() => Project" />
+            <ProjectSelector OrganizationId="@(Organization?.Id)" Class="mb-6" Variant="Variant.Outlined" Value="Project" ValueChanged="OnProjectChanged" For="() => Project" />
             
             @if (Activities is not null)
             {
@@ -33,6 +33,9 @@
 @code {
     [Parameter]
     public string? UserId { get; set; }
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
     [Parameter]
     public IEnumerable<Project> Projects { get; set; }
@@ -70,7 +73,7 @@
             return;
         };
 
-        var page = await ActivitiesClient.GetActivitiesAsync(0, 10, project?.Id, UserId, null, null, null);
+        var page = await ActivitiesClient.GetActivitiesAsync(Organization.Id, 0, 10, project?.Id, UserId, null, null, null);
         Activities = page.Items;
 
         Project = project;

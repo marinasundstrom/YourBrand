@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 namespace YourBrand.TimeReport.Application.Teams
 .Commands;
 
-public record RemoveTeamMemberCommand(string Id, string UserId) : IRequest
+public record RemoveTeamMemberCommand(string OrganizationId, string Id, string UserId) : IRequest
 {
     public class RemoveTeamMemberCommandHandler(ITimeReportContext context) : IRequestHandler<RemoveTeamMemberCommand>
     {

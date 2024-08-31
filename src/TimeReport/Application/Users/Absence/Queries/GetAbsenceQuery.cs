@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 
-public record GetAbsenceQuery(string AbsenceId) : IRequest<AbsenceDto>
+public record GetAbsenceQuery(string OrganizationId, string AbsenceId) : IRequest<AbsenceDto>
 {
     public class GetAbsenceQueryHandler(ITimeReportContext context) : IRequestHandler<GetAbsenceQuery, AbsenceDto>
     {

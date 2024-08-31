@@ -9,7 +9,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectMembershipsQuery(string ProjectId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectMembershipDto>>
+public record GetProjectMembershipsQuery(string OrganizationId, string ProjectId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectMembershipDto>>
 {
     public class GetProjectMembershipsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
     {

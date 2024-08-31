@@ -11,7 +11,7 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record UpdateEntryCommand(string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
+public record UpdateEntryCommand(string OrganizationId, string TimeSheetId, string EntryId, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
 {
     public class UpdateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<UpdateEntryCommand, Result<EntryDto, DomainException>>
     {

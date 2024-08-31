@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
@@ -6,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Project : AuditableEntity, ISoftDelete, IHasTenant
+public class Project : AuditableEntity, ISoftDelete, IHasTenant, IHasOrganization
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<Expense> _expenses = new HashSet<Expense>();
@@ -36,6 +37,8 @@ public class Project : AuditableEntity, ISoftDelete, IHasTenant
     public string? Description { get; set; }
 
     public Organization Organization { get; set; } = null!;
+
+    public OrganizationId OrganizationId { get; set; } = null!;
 
     /// <summary>
     /// Expected hours per week / timesheet

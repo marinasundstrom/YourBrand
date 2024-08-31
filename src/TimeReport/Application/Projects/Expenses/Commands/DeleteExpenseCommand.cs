@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.Commands;
 
-public record DeleteExpenseCommand(string ExpenseId) : IRequest
+public record DeleteExpenseCommand(string OrganizationId, string ExpenseId) : IRequest
 {
     public class DeleteExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteExpenseCommand>
     {

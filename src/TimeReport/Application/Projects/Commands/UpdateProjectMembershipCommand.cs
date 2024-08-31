@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record UpdateProjectMembershipCommand(string ProjectId, string MembershipId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
+public record UpdateProjectMembershipCommand(string OrganizationId, string ProjectId, string MembershipId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
 {
     public class UpdateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectMembershipCommand, ProjectMembershipDto>
     {

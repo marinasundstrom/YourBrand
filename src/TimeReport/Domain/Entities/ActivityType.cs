@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ActivityType : AuditableEntity, IHasTenant, ISoftDelete
+public class ActivityType : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelete
 {
 
     protected ActivityType()

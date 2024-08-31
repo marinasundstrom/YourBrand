@@ -11,7 +11,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record DeleteActivityCommand(string TimeSheetId, string ActivityId) : IRequest
+public record DeleteActivityCommand(string OrganizationId, string TimeSheetId, string ActivityId) : IRequest
 {
     public class DeleteActivityCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<DeleteActivityCommand>
     {

@@ -25,6 +25,7 @@
 </EditForm>
 
 @code {
+
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
     [Parameter] public string? ProjectId { get; set; }
@@ -40,7 +41,7 @@
     {
         if(ProjectId is not null)
         {
-            var result = await ProjectsClient.GetProjectAsync(ProjectId);
+            var result = await ProjectsClient.GetProjectAsync(Organization.Id, ProjectId);
 
             Name = result.Name;
             Description = result.Description;
@@ -56,7 +57,7 @@
 
         if (ProjectId is null)
         {
-            result = await ProjectsClient.CreateProjectAsync(new CreateProject
+            result = await ProjectsClient.CreateProjectAsync(Organization.Id, new CreateProject
             {
                 Name = Name,
                 Description = Description,
@@ -65,7 +66,7 @@
         }
         else
         {
-            result = await ProjectsClient.UpdateProjectAsync(ProjectId, new UpdateProject
+            result = await ProjectsClient.UpdateProjectAsync(Organization.Id, ProjectId, new UpdateProject
             {
                 Name = Name,
                 Description = Description,

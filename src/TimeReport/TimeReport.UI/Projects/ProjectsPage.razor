@@ -74,6 +74,9 @@
 
     Data? data;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     private ChartOptions options = new ChartOptions()
     {
         YAxisFormat = "0 h",
@@ -84,7 +87,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        data = await ProjectsClient.GetStatisticsAsync(null, null);
+        data = await ProjectsClient.GetStatisticsAsync(Organization.Id, null, null);
 
         XAxisLabels = data.Labels.ToArray();
 
@@ -93,12 +96,12 @@
             Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
 
-        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
+        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);
     }
 
     private async Task<TableData<Project>> ServerReload(TableState state)
     {
-        var page = await ProjectsClient.GetProjectsAsync(state.Page, state.PageSize, null, searchString,
+        var page = await ProjectsClient.GetProjectsAsync(Organization.Id, state.Page, state.PageSize, null, searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<Project>() { TotalItems = page.TotalItems, Items = page.Items };

@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Activities.Commands;
 
-public record DeleteActivityCommand(string ActivityId) : IRequest
+public record DeleteActivityCommand(string OrganizationId, string ActivityId) : IRequest
 {
     public class DeleteActivityCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteActivityCommand>
     {

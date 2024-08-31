@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record DeleteProjectMembershipCommand(string ProjectId, string MembershipId) : IRequest
+public record DeleteProjectMembershipCommand(string OrganizationId, string ProjectId, string MembershipId) : IRequest
 {
     public class DeleteProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteProjectMembershipCommand>
     {

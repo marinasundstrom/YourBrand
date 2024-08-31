@@ -19,7 +19,7 @@ public class Organization : AuditableEntity, ISoftDelete, IHasTenant
 
     }
 
-    public Organization(string id, string name, string? description)
+    public Organization(OrganizationId id, string name, string? description)
     {
         Id = id;
         Name = name;

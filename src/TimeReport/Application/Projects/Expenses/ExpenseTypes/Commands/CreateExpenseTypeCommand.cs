@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Commands;
 
-public record CreateExpenseTypeCommand(string Name, string? Description) : IRequest<ExpenseTypeDto>
+public record CreateExpenseTypeCommand(string OrganizationId, string Name, string? Description) : IRequest<ExpenseTypeDto>
 {
     public class CreateExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<CreateExpenseTypeCommand, ExpenseTypeDto>
     {
@@ -26,6 +26,7 @@ public record CreateExpenseTypeCommand(string Name, string? Description) : IRequ
             var expenseType = new ExpenseType
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,
                 //Project = project

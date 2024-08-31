@@ -149,6 +149,9 @@ else
     MudTable<Expense> table3;
     StatisticsSummary statisticsSummary;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     private ChartOptions options = new ChartOptions()
     {
         YAxisFormat = "0 h",
@@ -162,8 +165,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        project = await ProjectsClient.GetProjectAsync(ProjectId);
-        data = await ProjectsClient.GetProjectStatisticsAsync(ProjectId, null, null);
+        project = await ProjectsClient.GetProjectAsync(Organization.Id, ProjectId);
+        data = await ProjectsClient.GetProjectStatisticsAsync(Organization.Id, ProjectId, null, null);
 
         XAxisLabels = data.Labels.ToArray();
 
@@ -172,12 +175,12 @@ else
             Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
 
-        statisticsSummary = await ProjectsClient.GetStatisticsSummary2Async(ProjectId);
+        statisticsSummary = await ProjectsClient.GetStatisticsSummary2Async(Organization.Id, ProjectId);
     }
 
     private async Task<TableData<Activity>> ServerReload(TableState state)
     {
-        var result = await ActivitiesClient.GetActivitiesAsync(state.Page, state.PageSize, ProjectId, null, null,
+        var result = await ActivitiesClient.GetActivitiesAsync(Organization.Id, state.Page, state.PageSize, ProjectId, null, null,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<Activity>() { TotalItems = result.TotalItems, Items = result.Items };
@@ -185,7 +188,7 @@ else
 
     private async Task<TableData<ProjectMembership>> ServerReload2(TableState state)
     {
-        var result = await ProjectsClient.GetProjectMembershipsAsync(ProjectId, state.Page, state.PageSize,
+        var result = await ProjectsClient.GetProjectMembershipsAsync(Organization.Id, ProjectId, state.Page, state.PageSize,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<ProjectMembership>() { TotalItems = result.TotalItems, Items = result.Items };
@@ -193,7 +196,7 @@ else
 
     private async Task<TableData<Expense>> ServerReload3(TableState state)
     {
-        var result = await ExpensesClient.GetExpensesAsync(state.Page, state.PageSize, ProjectId, null,
+        var result = await ExpensesClient.GetExpensesAsync(Organization.Id, state.Page, state.PageSize, ProjectId, null,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<Expense>() { TotalItems = result.TotalItems, Items = result.Items };
@@ -268,7 +271,7 @@ else
             return;
         }
 
-        await ProjectsClient.DeleteProjectMembershipAsync(ProjectId, membership.Id);
+        await ProjectsClient.DeleteProjectMembershipAsync(Organization.Id, ProjectId, membership.Id);
 
         table2.ReloadServerData();
     }
@@ -292,7 +295,7 @@ else
 
         table3.ReloadServerData();
 
-        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
+        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);
     }
 
     private async Task OnEditExpenseClicked(Expense expense)
@@ -310,7 +313,7 @@ else
 
         table3.ReloadServerData();
 
-        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
+        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);
     }
 
     async Task DeleteExpense(Expense expense)
@@ -321,11 +324,11 @@ else
             return;
         }
 
-        await ExpensesClient.DeleteExpenseAsync(expense.Id);
+        await ExpensesClient.DeleteExpenseAsync(Organization.Id, expense.Id);
 
         table3.ReloadServerData();
 
-        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync();
+        statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);
     }
 
     private void GotToExpense(Expense expense)

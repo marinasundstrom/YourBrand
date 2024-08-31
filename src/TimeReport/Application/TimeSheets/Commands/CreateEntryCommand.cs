@@ -12,7 +12,7 @@ using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record CreateEntryCommand(string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
+public record CreateEntryCommand(string OrganizationId, string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
 {
     public class CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork) : IRequestHandler<CreateEntryCommand, Result<EntryDto, DomainException>>
     {
@@ -35,6 +35,7 @@ public record CreateEntryCommand(string TimeSheetId, string ProjectId, string Ac
             if (group is null)
             {
                 group = new ReportingPeriod(timeSheet.User, request.Date.Year, request.Date.Month);
+                group.OrganizationId = request.OrganizationId;
 
                 reportingPeriodRepository.AddReportingPeriod(group);
             }

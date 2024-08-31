@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
@@ -6,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ProjectTeam : AuditableEntity, IHasTenant, ISoftDelete
+public class ProjectTeam : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelete
 {
     private ProjectTeam()
     {
@@ -20,6 +21,8 @@ public class ProjectTeam : AuditableEntity, IHasTenant, ISoftDelete
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; } = null!;
 
     public Project Project { get; set; } = null!;
 

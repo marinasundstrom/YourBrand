@@ -68,6 +68,9 @@
     MudTable<TimeSheet> table;
     string searchString;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     private TableGroupDefinition<TimeSheet> _groupDefinition = new()
     {
         GroupName = "Week",
@@ -85,7 +88,7 @@
 
     private async Task<TableData<TimeSheet>> ServerReload(TableState state)
     {
-        var page = await TimeSheetsClient.GetTimeSheetsAsync(state.Page, state.PageSize, null, User?.Id, searchString,
+        var page = await TimeSheetsClient.GetTimeSheetsAsync(Organization.Id, state.Page, state.PageSize, null, User?.Id, searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
 
         return new TableData<TimeSheet>() { TotalItems = page.TotalItems, Items = page.Items };
@@ -95,13 +98,13 @@
     {
         if(timeSheet.Status == TimeSheetStatus.Closed)
         {
-            await TimeSheetsClient.OpenWeekAsync(timeSheet.Id);
+            await TimeSheetsClient.OpenWeekAsync(Organization.Id, timeSheet.Id);
 
             timeSheet.Status = TimeSheetStatus.Open;
         }
         else
         {
-            await TimeSheetsClient.CloseWeekAsync(timeSheet.Id);
+            await TimeSheetsClient.CloseWeekAsync(Organization.Id, timeSheet.Id);
 
             timeSheet.Status = TimeSheetStatus.Closed;
         }
@@ -109,7 +112,7 @@
 
     async Task Approve(TimeSheet timeSheet)
     {
-        await TimeSheetsClient.ApproveWeekAsync(timeSheet.Id);
+        await TimeSheetsClient.ApproveWeekAsync(Organization.Id, timeSheet.Id);
 
         timeSheet.Status = TimeSheetStatus.Approved;
     }

@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes.Queries;
 
-public record GetExpenseTypesQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ExpenseTypeDto>>
+public record GetExpenseTypesQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ExpenseTypeDto>>
 {
     public class GetActivitiesQueryHandler(ITimeReportContext context) : IRequestHandler<GetExpenseTypesQuery, ItemsResult<ExpenseTypeDto>>
     {

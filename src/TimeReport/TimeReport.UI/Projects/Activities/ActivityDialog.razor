@@ -35,6 +35,9 @@
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     [Parameter] public string? ProjectId { get; set; }
 
     [Parameter] public string? ActivityId { get; set; }
@@ -53,7 +56,7 @@
     {
         if (ActivityId is not null)
         {
-            var result = await ActivitiesClient.GetActivityAsync(ActivityId);
+            var result = await ActivitiesClient.GetActivityAsync(Organization.Id, ActivityId);
 
             Name = result.Name;
             ActivityType = result.ActivityType;
@@ -68,7 +71,7 @@
 
         if (ActivityId is null)
         {
-            result = await ActivitiesClient.CreateActivityAsync(ProjectId, new CreateActivity
+            result = await ActivitiesClient.CreateActivityAsync(Organization.Id, ProjectId, new CreateActivity
             {
                 Name = Name,
                 ActivityTypeId = ActivityType.Id,
@@ -78,7 +81,7 @@
         }
         else
         {
-            result = await ActivitiesClient.UpdateActivityAsync(ActivityId, new UpdateActivity
+            result = await ActivitiesClient.UpdateActivityAsync(Organization.Id, ActivityId, new UpdateActivity
             {
                 Name = Name,
                 ActivityTypeId = ActivityType.Id,
@@ -92,7 +95,7 @@
 
     private async Task<IEnumerable<ActivityType>> Search1(string value)
     {
-        var page = await ActivityTypesClient.GetActivityTypesAsync(0, 10, null!, value, null, null);
+        var page = await ActivityTypesClient.GetActivityTypesAsync(Organization.Id, 0, 10, null!, value, null, null);
 
         return page.Items;
     }

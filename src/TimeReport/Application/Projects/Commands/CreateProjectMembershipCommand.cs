@@ -9,7 +9,7 @@ using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record CreateProjectMembershipCommand(string ProjectId, string UserId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
+public record CreateProjectMembershipCommand(string OrganizationId, string ProjectId, string UserId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
 {
     public class CreateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectMembershipCommand, ProjectMembershipDto>
     {
@@ -45,6 +45,7 @@ public record CreateProjectMembershipCommand(string ProjectId, string UserId, Da
             var m = new ProjectMembership()
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = request.OrganizationId,
                 Project = project,
                 User = user,
                 From = request.From,

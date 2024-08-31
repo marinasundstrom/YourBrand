@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Teams.Commands;
 
-public record CreateTeamCommand(string Id, string OrganizationId, string Name, string? Description) : IRequest<TeamDto>
+public record CreateTeamCommand(string OrganizationId, string Id, string Name, string? Description) : IRequest<TeamDto>
 {
     public class CreateTeamCommandHandler(ITimeReportContext context) : IRequestHandler<CreateTeamCommand, TeamDto>
     {

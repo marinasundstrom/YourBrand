@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectStatisticsQuery(DateTime? From = null, DateTime? To = null) : IRequest<Data>
+public record GetProjectStatisticsQuery(string OrganizationId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
 {
     public class GetProjectStatisticsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsQuery, Data>
     {

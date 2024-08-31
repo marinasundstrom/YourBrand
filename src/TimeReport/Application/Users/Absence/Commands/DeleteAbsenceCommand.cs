@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public record DeleteAbsenceCommand(string AbsenceId) : IRequest
+public record DeleteAbsenceCommand(string OrganizationId, string AbsenceId) : IRequest
 {
     public class DeleteAbsenceCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteAbsenceCommand>
     {

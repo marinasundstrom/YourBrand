@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Queries;
 
-public record GetAbsencesQuery(int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<AbsenceDto>>
+public record GetAbsencesQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<AbsenceDto>>
 {
     public class GetAbsencesQueryHandler(ITimeReportContext context) : IRequestHandler<GetAbsencesQuery, ItemsResult<AbsenceDto>>
     {

@@ -61,6 +61,7 @@ public static class Seed
             context.AbsenceTypes.Add(new AbsenceType
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = TenantConstants.OrganizationId,
                 Name = "Vacation",
                 FullDays = true
             });
@@ -68,12 +69,14 @@ public static class Seed
             context.AbsenceTypes.Add(new AbsenceType
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = TenantConstants.OrganizationId,
                 Name = "Sick leave"
             });
 
             context.AbsenceTypes.Add(new AbsenceType
             {
                 Id = Guid.NewGuid().ToString(),
+                OrganizationId = TenantConstants.OrganizationId,
                 Name = "Compensatory leave"
             });
 

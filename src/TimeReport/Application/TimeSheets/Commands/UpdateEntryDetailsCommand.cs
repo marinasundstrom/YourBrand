@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record UpdateEntryDetailsCommand(string TimeSheetId, string EntryId, string? Description) : IRequest<EntryDto>
+public record UpdateEntryDetailsCommand(string OrganizationId, string TimeSheetId, string EntryId, string? Description) : IRequest<EntryDto>
 {
     public class UpdateEntryDetailsCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<UpdateEntryDetailsCommand, EntryDto>
     {

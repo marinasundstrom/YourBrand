@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Users.Absence.Commands;
 
-public record ReportAbsenceCommand(string ProjectId, DateTime Date, decimal Amount, string? Description) : IRequest<AbsenceDto>
+public record ReportAbsenceCommand(string OrganizationId, string ProjectId, DateTime Date, decimal Amount, string? Description) : IRequest<AbsenceDto>
 {
     public class ReportAbsenceCommandHandler(ITimeReportContext context) : IRequestHandler<ReportAbsenceCommand, AbsenceDto>
     {

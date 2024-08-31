@@ -79,11 +79,14 @@ else
 
     private ReportMode mode = ReportMode.Project;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected async Task OnUserChanged(Portal.User user)
     {
         this.user = user;
 
-        var page = await ProjectsClient.GetProjectsAsync(0, 10, user?.Id, null, null, null);
+        var page = await ProjectsClient.GetProjectsAsync(Organization.Id, 0, 10, user?.Id, null, null, null);
         projects = page.Items;
         options = new HashSet<Project>();
     }
@@ -94,7 +97,7 @@ else
         {
             isLoading = true;
 
-            var page2 = await ProjectsClient.GetProjectsAsync(0, 10, null, null, null, null);
+            var page2 = await ProjectsClient.GetProjectsAsync(Organization.Id, 0, 10, null, null, null, null);
             projects = page2.Items;
 
             statuses = Enum.GetValues<TimeSheetStatus>().Select(x => (TimeSheetStatus)x);
@@ -112,7 +115,7 @@ else
 
     private async Task CreateReport()
     {
-        var fileResponse = await ReportsClient.GetReportAsync(options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End, selectedStatuses.Select(x => (int)x), mode);
+        var fileResponse = await ReportsClient.GetReportAsync(Organization.Id, options.Select(x => x.Id), user?.Id, selectedDateRange.Start, selectedDateRange.End, selectedStatuses.Select(x => (int)x), mode);
 
         using var streamRef = new DotNetStreamReference(stream: fileResponse.Stream);
 

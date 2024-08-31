@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Activities.Queries;
 
-public record GetActivityQuery(string ActivityId) : IRequest<ActivityDto>
+public record GetActivityQuery(string OrganizationId, string ActivityId) : IRequest<ActivityDto>
 {
     public class GetActivityQueryHandler(ITimeReportContext context) : IRequestHandler<GetActivityQuery, ActivityDto>
     {

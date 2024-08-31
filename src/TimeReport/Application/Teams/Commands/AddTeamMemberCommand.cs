@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 namespace YourBrand.TimeReport.Application.Teams
 .Commands;
 
-public record AddTeamMemberCommand(string Id, string UserId) : IRequest
+public record AddTeamMemberCommand(string OrganizationId, string Id, string UserId) : IRequest
 {
     public class AddTeamMemberCommandHandler(ITimeReportContext context) : IRequestHandler<AddTeamMemberCommand>
     {

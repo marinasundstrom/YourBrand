@@ -1,6 +1,7 @@
 ﻿
 using System.Globalization;
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
@@ -9,7 +10,7 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheet : AuditableEntity, IHasTenant, ISoftDelete
+public class TimeSheet : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelete
 {
     private readonly HashSet<TimeSheetActivity> _activities = new HashSet<TimeSheetActivity>();
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
@@ -33,6 +34,8 @@ public class TimeSheet : AuditableEntity, IHasTenant, ISoftDelete
     public string Id { get; private set; } = null!;
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; } = null!;
 
     public User User { get; private set; } = null!;
 
@@ -70,6 +73,8 @@ public class TimeSheet : AuditableEntity, IHasTenant, ISoftDelete
     public TimeSheetActivity AddActivity(Activity activity)
     {
         var tsActivity = new TimeSheetActivity(this, activity.Project, activity);
+        tsActivity.OrganizationId = OrganizationId;
+        
         _activities.Add(tsActivity);
         return tsActivity;
     }
