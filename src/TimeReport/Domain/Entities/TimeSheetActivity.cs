@@ -58,7 +58,7 @@ public class TimeSheetActivity : AuditableEntity, IHasTenant, IHasOrganization, 
             throw new InvalidOperationException("Date is not in Week.");
         }
 
-        if (TimeSheet.Entries.Any(e => e.Date == date))
+        if (TimeSheet.Entries.Any(e => e.Activity.Id == Activity.Id && e.Date == date))
         {
             throw new InvalidOperationException("Entry for this date already exists");
         }
