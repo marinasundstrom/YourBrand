@@ -19,21 +19,6 @@ public static class Seed
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
-        if (!context.Users.Any())
-        {
-            context.Users.Add(new User
-            {
-                Id = "api",
-                FirstName = "API",
-                LastName = "User",
-                SSN = "213",
-                Email = "test@foo.com",
-                Hidden = true
-            });
-
-            await context.SaveChangesAsync();
-        }
-
         if (!context.Organizations.Any())
         {
             context.Organizations.Add(new Organization(TenantConstants.OrganizationId, TenantConstants.OrganizationName, null));
