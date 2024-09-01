@@ -36,13 +36,13 @@ public class AccountsController(IMediator mediator) : Controller
     }
 
     [HttpGet("Classes/Summary")]
-    public async Task<IEnumerable<AccountClassSummary>> GetAccountClassSummary(string organizationId, int[] accountNo, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AccountClassSummary>> GetAccountClassSummary(string organizationId, [FromQuery] int[] accountNo, CancellationToken cancellationToken)
     {
         return await mediator.Send(new GetAccountsClassesSummaryQuery(organizationId, accountNo), cancellationToken);
     }
 
     [HttpGet("History")]
-    public async Task<AccountBalanceHistory> GetAccountHistory(string organizationId, int[] accountNo, CancellationToken cancellationToken)
+    public async Task<AccountBalanceHistory> GetAccountHistory(string organizationId, [FromQuery] int[] accountNo, CancellationToken cancellationToken)
     {
         return await mediator.Send(new GetAccountHistoryQuery(organizationId, accountNo), cancellationToken);
     }
