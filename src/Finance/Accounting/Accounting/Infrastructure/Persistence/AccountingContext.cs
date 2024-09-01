@@ -13,7 +13,6 @@ using YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 using YourBrand.Accounting.Infrastructure.Persistence.Interceptors;
 using YourBrand.Accounting.Infrastructure.Persistence.Outbox;
 using YourBrand.Domain;
-using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
@@ -34,8 +33,8 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
     private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
     {
         foreach (var clrType in modelBuilder.Model
-            .GetEntityTypes()
-            .Select(entityType => entityType.ClrType))
+                    .GetEntityTypes()
+                    .Select(entityType => entityType.ClrType))
         {
             if (!clrType.IsAssignableTo(typeof(Entity)))
             {

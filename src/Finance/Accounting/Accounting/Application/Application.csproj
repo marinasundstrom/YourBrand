@@ -26,5 +26,9 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Accounts/Commands/" />
+  </ItemGroup>
   
 </Project>

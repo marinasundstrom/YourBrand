@@ -51,16 +51,19 @@
     int? accountClass = null;
     private string searchString = "";
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        accountClasses = await AccountsClient.GetAccountClassesAsync();
+        accountClasses = await AccountsClient.GetAccountClassesAsync(Organization.Id);
 
         await LoadData();
     }
 
     async Task LoadData()
     {
-        accounts = await AccountsClient.GetAccountsAsync(accountClass, includeBlankAccounts, includeUnusedAccounts);
+        accounts = await AccountsClient.GetAccountsAsync(Organization.Id, accountClass, includeBlankAccounts, includeUnusedAccounts);
     }
 
     async Task OnIncludeUnusedAccountsChecked(bool v)

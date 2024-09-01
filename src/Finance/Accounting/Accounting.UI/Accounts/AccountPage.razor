@@ -83,14 +83,17 @@
     [Parameter]
     public int AccountNo { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        account = await AccountsClient.GetAccountAsync(AccountNo);
+        account = await AccountsClient.GetAccountAsync(Organization.Id, AccountNo);
 
         options.YAxisFormat = "c2";
         options.YAxisTicks = 10_000;
 
-        var data = await AccountsClient.GetAccountHistoryAsync(new int[] { AccountNo });
+        var data = await AccountsClient.GetAccountHistoryAsync(Organization.Id, new int[] { AccountNo });
         XAxisLabels = data.Labels.ToArray();
 
         foreach (var d in data.Series)
@@ -107,7 +110,7 @@
 
         try
         {
-            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
+            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
 
             return new TableData<LedgerEntry>() { TotalItems = result.TotalItems, Items = result.Entries };
         }

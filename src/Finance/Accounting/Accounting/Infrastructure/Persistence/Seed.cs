@@ -9,9 +9,9 @@ public static class Seed
 {
     public static bool Run { get; set; } = true;
 
-    public static bool RecreateDatabase { get; set; } = true;
+    public static bool RecreateDatabase { get; set; } = false;
 
-    public static bool SeedAccounts { get; set; } = true;
+    public static bool SeedAccounts { get; set; } = false;
 
     public static bool SeedVerifications { get; set; } = true;
 
@@ -39,41 +39,42 @@ public static class Seed
 
         if (SeedAccounts)
         {
-            DoSeedAccounts(context);
+            DoSeedAccounts(context, TenantConstants.OrganizationId);
         }
 
         if (SeedVerifications)
         {
-            DoSeedVerifications(context);
+            DoSeedVerifications(context, TenantConstants.OrganizationId);
         }
 
         await context.SaveChangesAsync();
     }
 
-    private static void DoSeedAccounts(AccountingContext context)
+    private static void DoSeedAccounts(AccountingContext context, string organizationId)
     {
-        context.Accounts.AddRange(Accounts.GetAll());
+        context.Accounts.AddRange(Accounts.GetAll(organizationId));
     }
 
-    private static void DoSeedVerifications(AccountingContext context)
+    private static void DoSeedVerifications(AccountingContext context, string organizationId)
     {
-        InsertMoney(context);
+        InsertMoney(context, organizationId);
 
-        YouSendAnInvoiceToCustomer(context);
-        TheCustomerPaysTheInvoice(context);
-        YouReceiveAInvoice(context);
-        YouTransferFromPlusGiroToCorporateAccount(context);
-        YouPayForTheInvoice(context);
-        YouWithdrawMoneyAsSalary(context);
+        YouSendAnInvoiceToCustomer(context, organizationId);
+        TheCustomerPaysTheInvoice(context, organizationId);
+        YouReceiveAInvoice(context, organizationId);
+        YouTransferFromPlusGiroToCorporateAccount(context, organizationId);
+        YouPayForTheInvoice(context, organizationId);
+        YouWithdrawMoneyAsSalary(context, organizationId);
 
-        //YouTransferFromTaxAccountToCorporateAccount(context);
+        //YouTransferFromTaxAccountToCorporateAccount(context, organizationId);
     }
 
-    private static void InsertMoney(AccountingContext context)
+    private static void InsertMoney(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(
             DateTime.Now.Subtract(TimeSpan.FromDays(19)),
             "Du sätter in egna pengar på företagskontot");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -95,9 +96,10 @@ public static class Seed
         context.SaveChanges();
     }
 
-    private static void YouSendAnInvoiceToCustomer(AccountingContext context)
+    private static void YouSendAnInvoiceToCustomer(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du skickar en faktura");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -123,9 +125,10 @@ public static class Seed
         });
     }
 
-    private static async void TheCustomerPaysTheInvoice(AccountingContext context)
+    private static async void TheCustomerPaysTheInvoice(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Kunden betalar fakturan");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -145,9 +148,10 @@ public static class Seed
         });
     }
 
-    private static void YouReceiveAInvoice(AccountingContext context)
+    private static void YouReceiveAInvoice(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar emot fakturan");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -173,9 +177,10 @@ public static class Seed
         });
     }
 
-    private static void YouPayForTheInvoice(AccountingContext context)
+    private static void YouPayForTheInvoice(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du betalar fakturan");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -195,9 +200,10 @@ public static class Seed
     }
 
 
-    private static void YouWithdrawMoneyAsSalary(AccountingContext context)
+    private static void YouWithdrawMoneyAsSalary(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar ut egen lön");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -217,9 +223,10 @@ public static class Seed
         });
     }
 
-    private static void YouTransferFromPlusGiroToCorporateAccount(AccountingContext context)
+    private static void YouTransferFromPlusGiroToCorporateAccount(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från PlusGiro till företagskonto");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
@@ -239,9 +246,10 @@ public static class Seed
         });
     }
 
-    private static void YouTransferFromTaxAccountToCorporateAccount(AccountingContext context)
+    private static void YouTransferFromTaxAccountToCorporateAccount(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från skattekonto till företagskonto");
+        verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 

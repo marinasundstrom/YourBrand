@@ -7,7 +7,7 @@ using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Application.Journal.Commands;
 
-public record CreateJournalEntryCommand(string Description, int? InvoiceNo, List<CreateEntry> Entries) : IRequest<int>
+public record CreateJournalEntryCommand(string OrganizationId, string Description, int? InvoiceNo, List<CreateEntry> Entries) : IRequest<int>
 {
     public class CreateJournalEntryCommandHandler(IAccountingContext context) : IRequestHandler<CreateJournalEntryCommand, int>
     {
@@ -24,6 +24,7 @@ public record CreateJournalEntryCommand(string Description, int? InvoiceNo, List
                 request.Description,
                 invoiceNo: request.InvoiceNo
             );
+            journalEntry.OrganizationId = request.OrganizationId;
 
             foreach (var entryDto in request.Entries)
             {

@@ -13,7 +13,7 @@ using YourBrand.RotRutService.Domain.Enums;
 
 namespace YourBrand.RotRutService.Application.Commands;
 
-public record CreateRutFile(string? NamnPaBegaran) : IRequest<string>
+public record CreateRutFile(string OrganizationId, string? NamnPaBegaran) : IRequest<string>
 {
     public class Handler(IRotRutContext context) : IRequestHandler<CreateRutFile, string>
     {

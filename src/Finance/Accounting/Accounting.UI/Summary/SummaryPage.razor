@@ -62,9 +62,12 @@
 
     IEnumerable<AccountClassSummaryItemViewModel>? accountClasses = null;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        var results = await AccountsClient.GetAccountClassSummaryAsync(default);
+        var results = await AccountsClient.GetAccountClassSummaryAsync(Organization.Id, default);
 
         accountClasses = results.Select(x => new AccountClassSummaryItemViewModel { AccountClass = x }).ToList();
 
@@ -72,7 +75,7 @@
         options.YAxisFormat = "c2";
         options.YAxisTicks = 10_000;
 
-        var data = await AccountsClient.GetAccountHistoryAsync(accounts);
+        var data = await AccountsClient.GetAccountHistoryAsync(Organization.Id, accounts);
         XAxisLabels = data.Labels.ToArray();
 
         foreach (var d in data.Series)
@@ -89,7 +92,7 @@
 
         if (vm.Accounts is null)
         {
-            vm.Accounts = await AccountsClient.GetAccountsAsync(vm.AccountClass.Id, false, false);
+            vm.Accounts = await AccountsClient.GetAccountsAsync(Organization.Id, vm.AccountClass.Id, false, false);
         }
 
         vm.IsExpanded = !vm.IsExpanded;

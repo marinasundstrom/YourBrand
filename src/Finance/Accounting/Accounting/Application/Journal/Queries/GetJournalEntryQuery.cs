@@ -6,13 +6,14 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Journal.Queries;
 
-public record GetJournalEntryQuery(int VerificationId) : IRequest<JournalEntryDto>
+public record GetJournalEntryQuery(string OrganizationId, int VerificationId) : IRequest<JournalEntryDto>
 {
     public class GetJournalEntryQueryHandler(IAccountingContext context) : IRequestHandler<GetJournalEntryQuery, JournalEntryDto>
     {
         public async Task<JournalEntryDto> Handle(GetJournalEntryQuery request, CancellationToken cancellationToken)
         {
             var v = await context.JournalEntries
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Entries)
                 .Include(x => x.Verifications)
                 .OrderBy(x => x.Date)

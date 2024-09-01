@@ -62,6 +62,9 @@
     private int? invoiceNo = null;
     private MudTable<JournalEntry> table;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     private void OnSearch(int? value)
     {
         invoiceNo = value;
@@ -74,7 +77,7 @@
 
         try
         {
-            var result = await JournalEntriesClient.GetJournalEntriesAsync(state.Page, state.PageSize, invoiceNo);
+            var result = await JournalEntriesClient.GetJournalEntriesAsync(Organization.Id, state.Page, state.PageSize, invoiceNo);
 
             return new TableData<JournalEntry>() { TotalItems = result.TotalItems, Items = result.Verifications };
         }

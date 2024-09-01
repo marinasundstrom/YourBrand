@@ -8,13 +8,14 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Accounts.Queries;
 
-public record GetAccountsClassesSummaryQuery(int[] AccountNo) : IRequest<IEnumerable<AccountClassSummary>>
+public record GetAccountsClassesSummaryQuery(string OrganizationId, int[] AccountNo) : IRequest<IEnumerable<AccountClassSummary>>
 {
     public class GetAccountsClassesSummaryQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountsClassesSummaryQuery, IEnumerable<AccountClassSummary>>
     {
         public async Task<IEnumerable<AccountClassSummary>> Handle(GetAccountsClassesSummaryQuery request, CancellationToken cancellationToken)
         {
             var query = context.Accounts
+                .InOrganization(request.OrganizationId)
                 .Include(a => a.Entries)
                 .Where(a => a.Entries.Any())
                 .AsNoTracking()

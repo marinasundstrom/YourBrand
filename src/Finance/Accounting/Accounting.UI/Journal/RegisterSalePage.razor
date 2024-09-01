@@ -56,6 +56,7 @@
         </RowTemplate>
         <RowEditingTemplate Context="entry">
             <MudTd DataLabel="Type">
+    using YourBrand.AppService.Client;
                 <MudSelect Variant="Variant.Outlined" @bind-Value="entry.EntryType" For="@(() => entry.EntryType)">
                     @foreach (EntryType entryType in Enum.GetValues<EntryType>())
                     {
@@ -137,6 +138,9 @@
     FormModel formModel = new FormModel();
 
     bool isEditingEntry = false;
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
     void AddEntry()
     {
@@ -267,11 +271,11 @@
 
         createJournalEntry.Entries = entries;
 
-        var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(createJournalEntry);
+        var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(Organization.Id, createJournalEntry);
 
         if (file is not null)
         {
-            await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(journalEntryId, string.Empty, null, new
+            await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(Organization.Id, journalEntryId, string.Empty, null, new
             FileParameter(file.OpenReadStream(10 * 10000), file.Name));
         }
 

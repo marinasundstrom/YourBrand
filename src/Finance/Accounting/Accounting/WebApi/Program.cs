@@ -86,6 +86,11 @@ builder.Services
     .AddUserContext()
     .AddTenantContext();
 
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
+builder.Services.AddAuthorization();
+
+
 builder.Services.AddScoped<IBlobService, BlobService>();
 
 // Add services to the container.
@@ -163,7 +168,8 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

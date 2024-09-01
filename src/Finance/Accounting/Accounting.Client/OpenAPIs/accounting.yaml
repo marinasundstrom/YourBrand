@@ -4,7 +4,7 @@ info:
   title: Accounting
   version: v1
 servers:
-- url: https://localhost:52007
+- url: https://localhost:5092
 paths:
   /v1/Accounts:
     get:
@@ -12,25 +12,30 @@ paths:
       - Accounts
       operationId: Accounts_GetAccounts
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: accountClass
         in: query
         schema:
           type: integer
           format: int32
           nullable: true
-        x-position: 1
+        x-position: 2
       - name: includeBlankAccounts
         in: query
         schema:
           type: boolean
           default: true
-        x-position: 2
+        x-position: 3
       - name: includeUnusedAccounts
         in: query
         schema:
           type: boolean
           default: false
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -40,19 +45,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Account'
+    post:
+      tags:
+      - Accounts
+      operationId: Accounts_CreateAccounts
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
   /v1/Accounts/{accountNo}:
     get:
       tags:
       - Accounts
       operationId: Accounts_GetAccount
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: accountNo
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -65,6 +88,12 @@ paths:
       tags:
       - Accounts
       operationId: Accounts_GetAccountClasses
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
           description: ''
@@ -79,6 +108,12 @@ paths:
       tags:
       - Accounts
       operationId: Accounts_GetAccountClassSummary
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: accountNo
         content:
@@ -89,7 +124,7 @@ paths:
                 type: integer
                 format: int32
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -104,6 +139,12 @@ paths:
       tags:
       - Accounts
       operationId: Accounts_GetAccountHistory
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: accountNo
         content:
@@ -114,7 +155,7 @@ paths:
                 type: integer
                 format: int32
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -128,27 +169,32 @@ paths:
       - JournalEntries
       operationId: JournalEntries_GetJournalEntries
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 0
-        x-position: 1
+        x-position: 2
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 2
+        x-position: 3
       - name: invoiceNo
         in: query
         schema:
           type: integer
           format: int32
           nullable: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -160,6 +206,12 @@ paths:
       tags:
       - JournalEntries
       operationId: JournalEntries_CreateJournalEntry
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: dto
         content:
@@ -167,7 +219,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateJournalEntry'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -182,13 +234,18 @@ paths:
       - JournalEntries
       operationId: JournalEntries_GetJournalEntry
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -208,26 +265,31 @@ paths:
       - JournalEntries
       operationId: JournalEntries_AddFileToJournalEntryAsVerification
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       - name: description
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       - name: invoiceId
         in: query
         schema:
           type: integer
           format: int32
           nullable: true
-        x-position: 3
+        x-position: 4
       requestBody:
         content:
           multipart/form-data:
@@ -256,41 +318,46 @@ paths:
       - LedgerEntries
       operationId: LedgerEntries_GetLedgerEntries
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: accountNo
         in: query
         schema:
           type: integer
           format: int32
           nullable: true
-        x-position: 1
+        x-position: 2
       - name: journalEntryId
         in: query
         schema:
           type: integer
           format: int32
           nullable: true
-        x-position: 2
+        x-position: 3
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 0
-        x-position: 3
+        x-position: 4
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 4
+        x-position: 5
       - name: direction
         in: query
         schema:
           default: Asc
           oneOf:
           - $ref: '#/components/schemas/ResultDirection'
-        x-position: 5
+        x-position: 6
       responses:
         200:
           description: ''

@@ -137,10 +137,13 @@
 
         bool isEditingEntry = false;
 
+        [CascadingParameter(Name = "Organization")]
+        public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             accounts.AddRange(
-            await AccountsClient.GetAccountsAsync(null, true, true));
+            await AccountsClient.GetAccountsAsync(Organization.Id, null, true, true));
         }
 
         void AddEntry()
@@ -221,11 +224,11 @@
 
             createJournalEntry.Entries = entries;
 
-            var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(createJournalEntry);
+            var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(Organization.Id, createJournalEntry);
 
             foreach (var file in files)
             {
-                await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(journalEntryId, string.Empty, null, new FileParameter(file.OpenReadStream(10
+                await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(Organization.Id, journalEntryId, string.Empty, null, new FileParameter(file.OpenReadStream(10
                 * 10000), file.Name));
             }
 

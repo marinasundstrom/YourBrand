@@ -8,13 +8,14 @@ using static YourBrand.Accounting.Application.Accounts.Mappings;
 
 namespace YourBrand.Accounting.Application.Accounts.Queries;
 
-public record GetAccountQuery(int AccountNo) : IRequest<AccountDto>
+public record GetAccountQuery(string OrganizationId, int AccountNo) : IRequest<AccountDto>
 {
     public class GetAccountQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountQuery, AccountDto>
     {
         public async Task<AccountDto> Handle(GetAccountQuery request, CancellationToken cancellationToken)
         {
             var account = await context.Accounts
+                .InOrganization(request.OrganizationId)
                 .Include(a => a.Entries)
                 .AsNoTracking()
                 .AsQueryable()

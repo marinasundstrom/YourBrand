@@ -6,7 +6,7 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Journal.Queries;
 
-public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10, int? InvoiceNo = null) : IRequest<JournalEntryResult>
+public record GetJournalEntriesQuery(string OrganizationId, int Page = 0, int PageSize = 10, int? InvoiceNo = null) : IRequest<JournalEntryResult>
 {
     public class GetJournalEntriesQueryHandler(IAccountingContext context) : IRequestHandler<GetJournalEntriesQuery, JournalEntryResult>
     {
@@ -23,6 +23,7 @@ public record GetJournalEntriesQuery(int Page = 0, int PageSize = 10, int? Invoi
             }
 
             var query = context.JournalEntries
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Entries)
                 .Include(x => x.Verifications)
                 .OrderBy(x => x.Date)

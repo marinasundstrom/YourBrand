@@ -56,6 +56,8 @@
         <MudTd DataLabel="Account No"><MudLink Href="@($"/accounts/{entry.Account.AccountNo}")">@entry.Account.AccountNo</MudLink></MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
         @*
+    using YourBrand.AppService.Client;
+    using YourBrand.AppService.Client;
         <MudTd DataLabel="Debit">@entry.Debit?.FormatCurrency(currency)</MudTd>
         <MudTd DataLabel="Credit">@entry.Credit?.FormatCurrency(currency)</MudTd>
         *@
@@ -82,6 +84,9 @@
     [SupplyParameterFromQuery]
     [Parameter]
     public int? JournalEntryId { get; set; }
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
     protected override void OnInitialized()
     {
@@ -110,7 +115,7 @@
 
         try
         {
-            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(null, JournalEntryId, state.Page, state.PageSize, ResultDirection.Desc);
+            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, null, JournalEntryId, state.Page, state.PageSize, ResultDirection.Desc);
 
             Console.WriteLine($"JournalEntryId: {JournalEntryId}");
 
@@ -120,7 +125,7 @@
 
                 title = (!string.IsNullOrEmpty(description) ? $"{JournalEntryId} - {description}" : JournalEntryId.ToString())!;
 
-                journalEntry = await JournalEntriesClient.GetJournalEntryAsync(JournalEntryId.GetValueOrDefault());
+                journalEntry = await JournalEntriesClient.GetJournalEntryAsync(Organization.Id, JournalEntryId.GetValueOrDefault());
             }
             else
             {

@@ -7,7 +7,7 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Accounts.Queries;
 
-public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceHistory>
+public record GetAccountHistoryQuery(string OrganizationId, int[] AccountNo) : IRequest<AccountBalanceHistory>
 {
     public class GetAccountHistoryQueryHandler(IAccountingContext context) : IRequestHandler<GetAccountHistoryQuery, AccountBalanceHistory>
     {
@@ -23,6 +23,7 @@ public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceH
             }
 
             var query = context.Accounts
+                .InOrganization(request.OrganizationId)
                 .Include(a => a.Entries)
                 .ThenInclude(e => e.JournalEntry)
                 .Where(a => a.Entries.Any())

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace YourBrand.Accounting.Application.Accounts.Queries;
 
-public record GetAccountClassesQuery : IRequest<IEnumerable<AccountClassDto>>
+public record GetAccountClassesQuery(string OrganizationId) : IRequest<IEnumerable<AccountClassDto>>
 {
     public class GetAccountClassesQueryHandler : IRequestHandler<GetAccountClassesQuery, IEnumerable<AccountClassDto>>
     {

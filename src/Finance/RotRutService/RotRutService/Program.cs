@@ -153,14 +153,14 @@ else
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapPost("/BeslutFile", async (RotRut.Beslut.BeslutFil file, IMediator mediator)
-    => await mediator.Send(new ReadRotRutResponse(file)))
+app.MapPost("/BeslutFile", async (string organizationId, RotRut.Beslut.BeslutFil file, IMediator mediator)
+    => await mediator.Send(new ReadRotRutResponse(organizationId, file)))
     .WithName("RotRutService_BeslutFile")
     .WithTags("RotRutService")
     .Produces<string>(StatusCodes.Status200OK);
 
-app.MapGet("/RutFile", async (string? name, IMediator mediator)
-    => await mediator.Send(new CreateRutFile(name)))
+app.MapGet("/RutFile", async (string organizationId, string? name, IMediator mediator)
+    => await mediator.Send(new CreateRutFile(organizationId, name)))
     .WithName("RotRutService_CreateRutFile")
     .WithTags("RotRutService")
     .Produces<string>(StatusCodes.Status200OK, contentType: "application/xml");

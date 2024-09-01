@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using YourBrand.Accounting.Domain.Common;
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class JournalEntry : AuditableEntity, IHasTenant
+public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
 {
     private readonly HashSet<LedgerEntry> _entries = new();
     private readonly HashSet<Verification> _verifications = new HashSet<Verification>();
@@ -28,6 +29,8 @@ public class JournalEntry : AuditableEntity, IHasTenant
 
     public TenantId TenantId { get; set; }
 
+    public OrganizationId OrganizationId { get; set; }
+
     public DateTime Date { get; private set; }
 
     public string Description { get; private set; } = null!;
@@ -38,11 +41,15 @@ public class JournalEntry : AuditableEntity, IHasTenant
 
     public IReadOnlyCollection<LedgerEntry> Entries => _entries;
 
-    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(x => _entries.Add(x));
+    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(x => {
+        x.OrganizationId = OrganizationId;
+        _entries.Add(x); 
+    });
 
     public LedgerEntry AddDebitEntry(Account account, decimal debit, string? description = null)
     {
         var entry = new LedgerEntry(Date, account, debit, null, description);
+        entry.OrganizationId = OrganizationId;
         _entries.Add(entry);
         return entry;
     }
@@ -50,6 +57,7 @@ public class JournalEntry : AuditableEntity, IHasTenant
     public LedgerEntry AddCreditEntry(Account account, decimal credit, string? description = null)
     {
         var entry = new LedgerEntry(Date, account, null, credit, description);
+        entry.OrganizationId = OrganizationId;
         _entries.Add(entry);
         return entry;
     }
@@ -58,6 +66,7 @@ public class JournalEntry : AuditableEntity, IHasTenant
 
     public void AddVerification(Verification verification)
     {
+        verification.OrganizationId = OrganizationId;
         _verifications.Add(verification);
     }
 

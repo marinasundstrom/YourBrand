@@ -10,6 +10,7 @@ using static YourBrand.Accounting.Application.Accounts.Mappings;
 namespace YourBrand.Accounting.Application.Accounts.Queries;
 
 public record GetAccountsQuery(
+    string OrganizationId,
     int? AccountClass = null,
     bool IncludeBlankAccounts = true,
     bool IncludeUnusedAccounts = false)
@@ -20,6 +21,7 @@ public record GetAccountsQuery(
         public async Task<IEnumerable<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
         {
             var query = context.Accounts
+                            .InOrganization(request.OrganizationId)
                             .Include(a => a.Entries)
                             .AsNoTracking()
                             .AsQueryable();

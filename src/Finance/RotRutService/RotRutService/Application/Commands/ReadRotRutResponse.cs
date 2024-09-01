@@ -3,13 +3,14 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Accounting.Client;
+using YourBrand.Domain;
 using YourBrand.RotRutService.Domain;
 using YourBrand.RotRutService.Domain.Entities;
 using YourBrand.Transactions.Client;
 
 namespace YourBrand.RotRutService.Application.Commands;
 
-public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
+public record ReadRotRutResponse(string OrganizationId, RotRut.Beslut.BeslutFil BeslutJson) : IRequest
 {
     public class Handler(IRotRutContext context, IJournalEntriesClient journalEntriesClient, ITransactionsClient transactionsClient) : IRequestHandler<ReadRotRutResponse>
     {
@@ -45,7 +46,7 @@ public record ReadRotRutResponse(RotRut.Beslut.BeslutFil BeslutJson) : IRequest
                         Credit = rotRutCase.RequestedAmount
                     });
 
-                    var verificationId2 = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
+                    var verificationId2 = await journalEntriesClient.CreateJournalEntryAsync(request.OrganizationId, new CreateJournalEntry
                     {
                         Description = $"Utbetalning RUT/RUT",
                         InvoiceNo = rotRutCase.InvoiceNo,

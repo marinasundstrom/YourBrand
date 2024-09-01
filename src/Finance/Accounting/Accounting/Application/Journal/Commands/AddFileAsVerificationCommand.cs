@@ -9,13 +9,14 @@ using static YourBrand.Accounting.Application.Shared;
 
 namespace YourBrand.Accounting.Application.Journal.Commands;
 
-public record AddFileAsVerificationCommand(int JournalEntryId, string Name, string ContentType, string? Description, int? invoiceId, Stream Stream) : IRequest<string>
+public record AddFileAsVerificationCommand(string OrganizationId, int JournalEntryId, string Name, string ContentType, string? Description, int? invoiceId, Stream Stream) : IRequest<string>
 {
     public class AddFileAsVerificationCommandHandler(IAccountingContext context, IBlobService blobService) : IRequestHandler<AddFileAsVerificationCommand, string>
     {
         public async Task<string> Handle(AddFileAsVerificationCommand request, CancellationToken cancellationToken)
         {
             var journalEntry = await context.JournalEntries
+                .InOrganization(request.OrganizationId)
                 .Include(v => v.Verifications)
                 .FirstAsync(x => x.Id == request.JournalEntryId, cancellationToken);
 
@@ -31,6 +32,7 @@ public record AddFileAsVerificationCommand(int JournalEntryId, string Name, stri
             var verification = new Verification();
 
             verification.Id = blobName;
+            verification.OrganizationId = request.OrganizationId;
             verification.Name = request.Name;
             verification.ContentType = request.ContentType;
             verification.Description = request.Description;
