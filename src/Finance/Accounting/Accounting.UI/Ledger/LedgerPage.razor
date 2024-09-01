@@ -2,7 +2,8 @@
 @using Accounting
 @inject NavigationManager NavigationManager
 @inject ILedgerEntriesClient LedgerEntriesClient
-@inject IJournalEntriesClient JournalEntriesClient 
+@inject IJournalEntriesClient JournalEntriesClient
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <AppPageTitle>@title</AppPageTitle>
@@ -110,11 +111,6 @@
         }
     }
 
-    public void Dispose()
-    {
-        NavigationManager.LocationChanged -= OnLocationChanged;
-    }
-
     private async Task<TableData<LedgerEntry>> ServerReload(TableState state)
     {
         loading = true;
@@ -142,6 +138,12 @@
             StateHasChanged();
 
             return new TableData<LedgerEntry>() { TotalItems = result.TotalItems, Items = result.Entries };
+        }
+        catch (ApiException<ProblemDetails> exc)
+        {
+            Snackbar.Add(exc.Result.Title, Severity.Error);
+
+            return new TableData<LedgerEntry>() { TotalItems = 0, Items = [] };
         }
         finally
         {

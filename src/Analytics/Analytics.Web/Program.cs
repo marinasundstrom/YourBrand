@@ -209,7 +209,7 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     if (dbProviderName!.Contains("SqlServer"))
     {
-        //await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
         try

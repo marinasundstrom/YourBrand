@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Organization : AuditableEntity, ISoftDelete, IHasTenant
+public class Organization : AuditableEntity, IOrganization, ISoftDelete, IHasTenant
 {
     readonly HashSet<User> _users = new HashSet<User>();
     readonly HashSet<Organization> _subOrganizations = new HashSet<Organization>();
@@ -79,4 +79,9 @@ public class Organization : AuditableEntity, ISoftDelete, IHasTenant
     public UserId? DeletedById { get; set; }
 
     public User? DeletedBy { get; set; }
+
+    public bool HasUser(UserId userId)
+    {
+        return Users.Any(x => x.Id == userId);
+    }
 }

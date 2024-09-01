@@ -7,4 +7,8 @@
     <RootNamespace>YourBrand.Domain</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Identity.Abstractions\Identity.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

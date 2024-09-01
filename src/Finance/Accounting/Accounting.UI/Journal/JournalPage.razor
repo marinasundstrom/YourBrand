@@ -81,6 +81,12 @@
 
             return new TableData<JournalEntry>() { TotalItems = result.TotalItems, Items = result.Verifications };
         }
+        catch (ApiException<ProblemDetails> exc)
+        {
+            Snackbar.Add(exc.Result.Title, Severity.Error);
+
+            return new TableData<JournalEntry>() { TotalItems = 0, Items = [] };
+        }
         finally
         {
             loading = false;

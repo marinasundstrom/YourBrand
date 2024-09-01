@@ -1,11 +1,12 @@
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.IdentityManagement.Domain.Common;
 using YourBrand.IdentityManagement.Domain.Events;
 using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
-public class Organization : AuditableEntity, IHasTenant
+public class Organization : AuditableEntity, IOrganization, IHasTenant
 {
     private readonly HashSet<User> _users = new HashSet<User>();
     private readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
@@ -60,4 +61,9 @@ public class Organization : AuditableEntity, IHasTenant
     }
 
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
+
+    public bool HasUser(UserId userId)
+    {
+        return Users.Any(x => x.Id == userId);
+    }
 }

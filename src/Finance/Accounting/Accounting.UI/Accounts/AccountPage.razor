@@ -3,6 +3,7 @@
 @using Accounting
 @inject IAccountsClient AccountsClient
 @inject ILedgerEntriesClient LedgerEntriesClient
+@inject ISnackbar Snackbar
 
 @if (account is not null)
 {
@@ -113,6 +114,12 @@
             var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
 
             return new TableData<LedgerEntry>() { TotalItems = result.TotalItems, Items = result.Entries };
+        }
+        catch (ApiException<ProblemDetails> exc)
+        {
+            Snackbar.Add(exc.Result.Title, Severity.Error);
+
+            return new TableData<LedgerEntry>() { TotalItems = 0, Items = [] };
         }
         finally
         {

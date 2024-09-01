@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Organization : AggregateRoot<OrganizationId>, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditable, IHasTenant
 {
     public Organization(OrganizationId id, string name)
         : base(id)
@@ -33,4 +33,9 @@ public class Organization : AggregateRoot<OrganizationId>, IAuditable, IHasTenan
     public List<User> Users { get; set; }
 
     public List<OrganizationUser> OrganizationUsers { get; set; }
+
+    public bool HasUser(UserId userId)
+    {
+        return Users.Any(x => x.Id == userId);
+    }
 }
