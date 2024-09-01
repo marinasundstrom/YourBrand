@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Accounting.Application.Journal;
+﻿using YourBrand.Accounting.Application.Ledger;
+
+namespace YourBrand.Accounting.Application.Journal;
 
 public class JournalEntryDto
 {
@@ -13,6 +15,8 @@ public class JournalEntryDto
     public decimal Credit { get; set; }
 
     public int? InvoiceNo { get; set; }
+
+    public IEnumerable<LedgerEntryDto> Entries { get; set; } = null!;
 
     public IEnumerable<VerificationDto> Verifications { get; set; } = null!;
 }

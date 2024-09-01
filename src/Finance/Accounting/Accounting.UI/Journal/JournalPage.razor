@@ -34,17 +34,17 @@
         *@
         <MudTh>Amount</MudTh>
     </HeaderContent>
-    <RowTemplate Context="verification">
+    <RowTemplate Context="ledgerEntry">
         <MudTd DataLabel="Id">
-            <MudLink Href="@($"/ledger?journalEntryId={verification.Id}")">@verification.Id</MudLink>
+            <MudLink Href="@($"/ledger?journalEntryId={ledgerEntry.Id}")">@ledgerEntry.Id</MudLink>
         </MudTd>
-        <MudTd DataLabel="Date">@verification.Date.ToString("g")</MudTd>
-        <MudTd DataLabel="Description">@verification.Description</MudTd>
+        <MudTd DataLabel="Date">@ledgerEntry.Date.ToString("g")</MudTd>
+        <MudTd DataLabel="Description">@ledgerEntry.Description</MudTd>
         @*
-        <MudTd DataLabel="Debit">@verification.Debit.FormatCurrency(currency)</MudTd>
-        <MudTd DataLabel="Credit">@verification.Credit.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Debit">@ledgerEntry.Debit.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Credit">@ledgerEntry.Credit.FormatCurrency(currency)</MudTd>
         *@
-        <MudTd DataLabel="Amount">@verification.Debit.FormatCurrency(currency)</MudTd>
+        <MudTd DataLabel="Amount">@Amount(ledgerEntry).FormatCurrency(currency)</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
@@ -113,5 +113,22 @@
         public decimal Debit { get; set; }
 
         public decimal Credit { get; set; }
+    }
+
+    public static decimal Amount(JournalEntry journalEntry) 
+    {
+        /*
+        var liablity = journalEntry.Entries.FirstOrDefault(x => x.Account.Class.Id == 2);
+
+        if(liablity is not null) 
+        {
+            if (liablity.Credit is not null) 
+            {
+                return -liablity.Credit.GetValueOrDefault();
+            }
+        }
+        */
+
+        return journalEntry.Debit;
     }
 }

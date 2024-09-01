@@ -1,4 +1,6 @@
-﻿using YourBrand.Accounting.Application.Accounts;
+﻿using System.ComponentModel.DataAnnotations;
+
+using YourBrand.Accounting.Application.Accounts;
 using YourBrand.Accounting.Application.Journal;
 using YourBrand.Accounting.Application.Ledger;
 using YourBrand.Accounting.Domain.Entities;
@@ -23,6 +25,11 @@ public static class Mappings
                     new AccountShortDto
                     {
                         AccountNo = e.Account.AccountNo,
+                        Class = new AccountClassDto
+                        {
+                            Id = (int)e.Account.Class,
+                            Description = e.Account.Class.GetAttribute<DisplayAttribute>()!.Name!
+                        },
                         Name = e.Account.Name
                     },
                     e.Description,
@@ -41,6 +48,7 @@ public static class Mappings
             Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
             Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
             InvoiceNo = v.InvoiceNo,
+            Entries = v.Entries.Select(e => e.ToDto()),
             Verifications = v.Verifications.Select(e => e.ToDto())
         };
     }

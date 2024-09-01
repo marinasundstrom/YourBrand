@@ -15,6 +15,7 @@ public record GetJournalEntryQuery(string OrganizationId, int VerificationId) : 
             var v = await context.JournalEntries
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Entries)
+                .ThenInclude(x => x.Account)
                 .Include(x => x.Verifications)
                 .OrderBy(x => x.Date)
                 .AsNoTracking()

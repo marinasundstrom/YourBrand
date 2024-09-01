@@ -480,10 +480,61 @@ components:
           type: integer
           format: int32
           nullable: true
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LedgerEntry'
         verifications:
           type: array
           items:
             $ref: '#/components/schemas/Verification'
+    LedgerEntry:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+        verification:
+          $ref: '#/components/schemas/JournalEntryShort'
+        account:
+          $ref: '#/components/schemas/AccountShort'
+        description:
+          type: string
+        debit:
+          type: number
+          format: decimal
+          nullable: true
+        credit:
+          type: number
+          format: decimal
+          nullable: true
+    JournalEntryShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+    AccountShort:
+      type: object
+      additionalProperties: false
+      properties:
+        accountNo:
+          type: integer
+          format: int32
+        class:
+          $ref: '#/components/schemas/AccountClass'
+        name:
+          type: string
     Verification:
       type: object
       additionalProperties: false
@@ -571,51 +622,6 @@ components:
         totalItems:
           type: integer
           format: int32
-    LedgerEntry:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: integer
-          format: int32
-        date:
-          type: string
-          format: date-time
-        verification:
-          $ref: '#/components/schemas/JournalEntryShort'
-        account:
-          $ref: '#/components/schemas/AccountShort'
-        description:
-          type: string
-        debit:
-          type: number
-          format: decimal
-          nullable: true
-        credit:
-          type: number
-          format: decimal
-          nullable: true
-    JournalEntryShort:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: integer
-          format: int32
-        date:
-          type: string
-          format: date-time
-        description:
-          type: string
-    AccountShort:
-      type: object
-      additionalProperties: false
-      properties:
-        accountNo:
-          type: integer
-          format: int32
-        name:
-          type: string
     ResultDirection:
       type: string
       description: ''
