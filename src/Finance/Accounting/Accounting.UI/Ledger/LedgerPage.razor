@@ -3,6 +3,7 @@
 @inject NavigationManager NavigationManager
 @inject ILedgerEntriesClient LedgerEntriesClient
 @inject IJournalEntriesClient JournalEntriesClient 
+@implements IDisposable
 
 <AppPageTitle>@title</AppPageTitle>
 
@@ -93,6 +94,11 @@
         title = $"Ledger";
 
         NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    public void Dispose() 
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
     private async void OnLocationChanged(object? sender, LocationChangedEventArgs ea)
