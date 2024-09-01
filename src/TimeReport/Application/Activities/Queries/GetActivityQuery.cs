@@ -14,6 +14,7 @@ public record GetActivityQuery(string OrganizationId, string ActivityId) : IRequ
         public async Task<ActivityDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities
+               .InOrganization(request.OrganizationId)
                .Include(x => x.ActivityType)
                .Include(x => x.Project)
                .ThenInclude(x => x.Organization)

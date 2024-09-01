@@ -15,6 +15,7 @@ public record UpdateActivityTypeCommand(string OrganizationId, string ActivityId
         public async Task<ActivityTypeDto> Handle(UpdateActivityTypeCommand request, CancellationToken cancellationToken)
         {
             var activityType = await context.ActivityTypes
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);

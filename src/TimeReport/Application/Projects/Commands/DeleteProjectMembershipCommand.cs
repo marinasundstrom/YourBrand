@@ -15,6 +15,7 @@ public record DeleteProjectMembershipCommand(string OrganizationId, string Proje
         public async Task Handle(DeleteProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .Include(p => p.Organization)
                 .Include(p => p.Memberships)
                 .ThenInclude(m => m.User)

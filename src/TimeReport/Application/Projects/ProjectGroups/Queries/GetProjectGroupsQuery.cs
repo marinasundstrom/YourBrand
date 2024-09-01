@@ -8,13 +8,14 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.ProjectGroups.Queries;
 
-public record GetProjectGroupsQuery(string OrganozationId, int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectGroupDto>>
+public record GetProjectGroupsQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? ProjectId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectGroupDto>>
 {
     public class GetActivitiesQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectGroupsQuery, ItemsResult<ProjectGroupDto>>
     {
         public async Task<ItemsResult<ProjectGroupDto>> Handle(GetProjectGroupsQuery request, CancellationToken cancellationToken)
         {
             var query = context.ProjectGroups
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

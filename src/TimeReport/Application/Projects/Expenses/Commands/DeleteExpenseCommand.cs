@@ -14,6 +14,7 @@ public record DeleteExpenseCommand(string OrganizationId, string ExpenseId) : IR
         public async Task Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
         {
             var expense = await context.Expenses
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
 

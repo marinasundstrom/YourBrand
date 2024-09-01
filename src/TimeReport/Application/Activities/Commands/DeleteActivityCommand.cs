@@ -14,6 +14,7 @@ public record DeleteActivityCommand(string OrganizationId, string ActivityId) : 
         public async Task Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 

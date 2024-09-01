@@ -16,6 +16,7 @@ public record GetProjectStatisticsSummaryForProjectQuery(string OrganizationId, 
         public async Task<StatisticsSummary> Handle(GetProjectStatisticsSummaryForProjectQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .Include(p => p.Entries)
                 .ThenInclude(x => x.User)
                 .Include(p => p.Entries)

@@ -18,6 +18,7 @@ public record GetTeamQuery(string OrganizationId, string Id) : IRequest<TeamDto?
         {
             var team = await context
                .Teams
+               .InOrganization(request.OrganizationId)
                .Include(x => x.Memberships)
                .ThenInclude(x => x.User)
                .ThenInclude(x => x.Organization)

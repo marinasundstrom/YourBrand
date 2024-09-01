@@ -16,6 +16,7 @@ public record GetProjectStatisticsForProjectQuery(string OrganizationId, string 
         public async Task<Data> Handle(GetProjectStatisticsForProjectQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Activities)
                 .ThenInclude(x => x.Entries)
                 .AsNoTracking()

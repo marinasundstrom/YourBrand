@@ -15,6 +15,7 @@ public record GetActivitiesQuery(string OrganizationId, int Page = 0, int PageSi
         public async Task<ItemsResult<ActivityDto>> Handle(GetActivitiesQuery request, CancellationToken cancellationToken)
         {
             var query = context.Activities
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.ActivityType)
                 .Include(x => x.Project)
                 .ThenInclude(x => x.Organization)

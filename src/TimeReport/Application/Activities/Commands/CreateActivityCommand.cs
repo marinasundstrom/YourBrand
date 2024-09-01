@@ -15,6 +15,7 @@ public record CreateActivityCommand(string OrganizationId, string ProjectId, str
         public async Task<ActivityDto> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+               .InOrganization(request.OrganizationId)
                .AsSplitQuery()
                .Include(at => at.Organization)
                .ThenInclude(at => at.CreatedBy)

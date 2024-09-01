@@ -14,6 +14,7 @@ public record RemoveTeamMemberCommand(string OrganizationId, string Id, string U
         public async Task Handle(RemoveTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Memberships)
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

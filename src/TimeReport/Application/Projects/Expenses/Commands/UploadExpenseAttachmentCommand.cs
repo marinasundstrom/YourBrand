@@ -16,6 +16,7 @@ public record UploadExpenseAttachmentCommand(string OrganizationId, string Expen
         public async Task<string?> Handle(UploadExpenseAttachmentCommand request, CancellationToken cancellationToken)
         {
             var expense = await context.Expenses
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);

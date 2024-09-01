@@ -15,6 +15,7 @@ public record GetExpenseTypesQuery(string OrganizationId, int Page = 0, int Page
         public async Task<ItemsResult<ExpenseTypeDto>> Handle(GetExpenseTypesQuery request, CancellationToken cancellationToken)
         {
             var query = context.ExpenseTypes
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

@@ -15,8 +15,8 @@ public record GetProjectMembershipQuery(string OrganizationId, string ProjectId,
         public async Task<ProjectMembershipDto> Handle(GetProjectMembershipQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Organization)
-                .Include(p => p.Memberships)
                 .Include(p => p.Memberships)
                 .ThenInclude(m => m.User)
                 .AsSplitQuery()

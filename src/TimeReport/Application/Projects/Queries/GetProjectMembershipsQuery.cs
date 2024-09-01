@@ -16,6 +16,7 @@ public record GetProjectMembershipsQuery(string OrganizationId, string ProjectId
         public async Task<ItemsResult<ProjectMembershipDto>> Handle(GetProjectMembershipsQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .OrderBy(p => p.Created)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId);

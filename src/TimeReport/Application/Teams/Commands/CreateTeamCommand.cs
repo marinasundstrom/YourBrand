@@ -12,7 +12,9 @@ public record CreateTeamCommand(string OrganizationId, string Id, string Name, s
     {
         public async Task<TeamDto> Handle(CreateTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = await context.Teams.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
+            var team = await context.Teams
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
             if (team is not null) throw new Exception();
 

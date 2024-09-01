@@ -17,6 +17,7 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
             var to = DateOnly.FromDateTime(request.To);
 
             var entries = await context.Entries
+                .InOrganization(request.OrganizationId)
                 .Include(e => e.Project)
                 .Include(e => e.Activity)
                 .AsSplitQuery()

@@ -15,6 +15,7 @@ public record DeleteProjectCommand(string OrganizationId, string ProjectId) : IR
         public async Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 

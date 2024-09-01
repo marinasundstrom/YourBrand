@@ -15,6 +15,7 @@ public record GetActivityStatisticsSummaryQuery(string OrganizationId, string Ac
         public async Task<StatisticsSummary> Handle(GetActivityStatisticsSummaryQuery request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities
+               .InOrganization(request.OrganizationId)
                .Include(x => x.Entries)
                .ThenInclude(x => x.User)
                .AsSplitQuery()

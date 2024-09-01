@@ -23,6 +23,7 @@ public record CreateActivityTypeCommand(string OrganizationId, string Name, stri
             if (request.ProjectId is not null)
             {
                 project = await context.Projects
+                        .InOrganization(request.OrganizationId)
                         .AsSplitQuery()
                         .FirstAsync(x => x.Organization.Id == request.OrganizationId && x.Id == request.ProjectId, cancellationToken);
             }

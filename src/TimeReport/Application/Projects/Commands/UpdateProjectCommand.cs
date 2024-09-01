@@ -15,6 +15,7 @@ public record UpdateProjectCommand(string OrganizationId, string ProjectId, stri
         public async Task<ProjectDto> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 

@@ -14,6 +14,7 @@ public record UpdateProjectGroupCommand(string OrganizationId, string ExpenseId,
         public async Task<ProjectGroupDto> Handle(UpdateProjectGroupCommand request, CancellationToken cancellationToken)
         {
             var projectGroup = await context.ProjectGroups
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);

@@ -14,6 +14,7 @@ public record GetActivityTypeQuery(string OrganizationId, string ActivityId) : I
         public async Task<ActivityTypeDto> Handle(GetActivityTypeQuery request, CancellationToken cancellationToken)
         {
             var activityType = await context.ActivityTypes
+                .InOrganization(request.OrganizationId)
                .Include(x => x.Project)
                .AsNoTracking()
                .AsSplitQuery()

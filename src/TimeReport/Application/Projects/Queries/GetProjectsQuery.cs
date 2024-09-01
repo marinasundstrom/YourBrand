@@ -15,6 +15,7 @@ public record GetProjectsQuery(string OrganizationId, int Page = 0, int PageSize
         public async Task<ItemsResult<ProjectDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
         {
             var query = context.Projects
+                .InOrganization(request.OrganizationId)
                 .AsNoTracking()
                 .AsSplitQuery();
 

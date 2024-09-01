@@ -15,6 +15,7 @@ public record GetProjectGroupQuery(string OrganizationId, string ExpenseId) : IR
         public async Task<ProjectGroupDto> Handle(GetProjectGroupQuery request, CancellationToken cancellationToken)
         {
             var projectGroup = await context.ProjectGroups
+                .InOrganization(request.OrganizationId)
                .Include(x => x.Project)
                .AsNoTracking()
                .AsSplitQuery()

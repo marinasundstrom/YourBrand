@@ -20,6 +20,7 @@ public record GetTeamsQuery(string OrganizationId, int Page = 0, int PageSize = 
         {
             IQueryable<Team> result = context
                     .Teams
+                    .InOrganization(request.OrganizationId)
                     .OrderBy(o => o.Created)
                     .AsNoTracking()
                     .AsQueryable();

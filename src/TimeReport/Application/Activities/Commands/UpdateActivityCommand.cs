@@ -14,6 +14,7 @@ public record UpdateActivityCommand(string OrganizationId, string ActivityId, st
         public async Task<ActivityDto> Handle(UpdateActivityCommand request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
@@ -31,6 +32,7 @@ public record UpdateActivityCommand(string OrganizationId, string ActivityId, st
             await context.SaveChangesAsync(cancellationToken);
 
             activity = await context.Activities
+               .InOrganization(request.OrganizationId)
                .Include(x => x.ActivityType)
                .Include(x => x.Project)
                .ThenInclude(x => x.Organization)

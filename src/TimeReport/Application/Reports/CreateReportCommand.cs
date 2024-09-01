@@ -21,6 +21,7 @@ public record CreateReportCommand(string OrganizationId, string[] ProjectIds, st
             DateOnly endDate2 = DateOnly.FromDateTime(request.EndDate);
 
             var query = context.Entries
+                .InOrganization(request.OrganizationId)
                 .Include(p => p.TimeSheet)
                 .ThenInclude(p => p.User)
                 .Include(p => p.Project)

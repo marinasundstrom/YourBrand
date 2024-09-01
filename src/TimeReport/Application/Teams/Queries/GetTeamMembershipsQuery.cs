@@ -20,6 +20,7 @@ public record GetTeamMembershipsQuery(string OrganizationId, string Id, int Page
         {
             IQueryable<TeamMembership> result = context
                     .TeamMemberships
+                    .InOrganization(request.OrganizationId)
                     .OrderBy(o => o.Created)
                     .Where(t => t.TeamId == request.Id)
                     .AsNoTracking()

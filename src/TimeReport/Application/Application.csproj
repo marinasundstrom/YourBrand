@@ -21,6 +21,8 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
     <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\Common\Organization.Abstractions\Organization.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

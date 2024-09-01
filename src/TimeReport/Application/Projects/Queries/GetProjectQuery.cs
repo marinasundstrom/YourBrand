@@ -14,6 +14,7 @@ public record GetProjectQuery(string OrganizationId, string ProjectId) : IReques
         public async Task<ProjectDto?> Handle(GetProjectQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+               .InOrganization(request.OrganizationId)
                .Include(p => p.Organization)
                .AsNoTracking()
                .AsSplitQuery()

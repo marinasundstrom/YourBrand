@@ -14,6 +14,7 @@ public record GetExpenseQuery(string OrganizationId, string ExpenseId) : IReques
         public async Task<ExpenseDto> Handle(GetExpenseQuery request, CancellationToken cancellationToken)
         {
             var expense = await context.Expenses
+               .InOrganization(request.OrganizationId)
                .Include(x => x.Project)
                .Include(x => x.ExpenseType)
                .AsNoTracking()

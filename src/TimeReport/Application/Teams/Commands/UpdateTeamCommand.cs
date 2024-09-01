@@ -12,7 +12,9 @@ public record UpdateTeamCommand(string OrganizationId, string Id, string Name, s
     {
         public async Task<TeamDto> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = await context.Teams.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var team = await context.Teams
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (team is null) throw new Exception();
 

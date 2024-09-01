@@ -15,6 +15,7 @@ public record GetActivityTypesQuery(string OrganizationId, int Page = 0, int Pag
         public async Task<ItemsResult<ActivityTypeDto>> Handle(GetActivityTypesQuery request, CancellationToken cancellationToken)
         {
             var query = context.ActivityTypes
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .OrderBy(p => p.Created)
                 .AsNoTracking()

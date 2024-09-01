@@ -14,6 +14,7 @@ public record UpdateExpenseCommand(string OrganizationId, string ExpenseId, Date
         public async Task<ExpenseDto> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
             var expense = await context.Expenses
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);

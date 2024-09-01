@@ -16,6 +16,7 @@ public record CreateProjectMembershipCommand(string OrganizationId, string Proje
         public async Task<ProjectMembershipDto> Handle(CreateProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
+                        .InOrganization(request.OrganizationId)
                         .Include(p => p.Organization)
                         .Include(p => p.Memberships)
                         .ThenInclude(m => m.User)

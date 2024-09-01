@@ -14,6 +14,7 @@ public record AddTeamMemberCommand(string OrganizationId, string Id, string User
         public async Task Handle(AddTeamMemberCommand request, CancellationToken cancellationToken)
         {
             var team = await context.Teams
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Memberships)
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
