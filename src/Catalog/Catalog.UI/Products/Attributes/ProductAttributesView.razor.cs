@@ -6,7 +6,7 @@ namespace YourBrand.Catalog.Products.Attributes;
 
 sealed partial class ProductAttributesView : ComponentBase
 {
-    readonly MudTable<ProductAttribute> productAttributesTable = default!;
+    MudTable<ProductAttribute> productAttributesTable = default!;
     readonly TableGroupDefinition<ProductAttribute> tableGroupDefinition = new TableGroupDefinition<ProductAttribute>()
     {
         GroupName = "Group",
@@ -15,7 +15,7 @@ sealed partial class ProductAttributesView : ComponentBase
         Selector = (e) => e.Attribute.Group?.Name
     };
 
-    readonly ProductAttribute? selectedProductAttribute;
+    ProductAttribute? selectedProductAttribute;
     ProductAttribute? productAttributeBeforeEdit;
 
     string? searchString;
