@@ -41,9 +41,10 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
 
     public IReadOnlyCollection<LedgerEntry> Entries => _entries;
 
-    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(x => {
+    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(x =>
+    {
         x.OrganizationId = OrganizationId;
-        _entries.Add(x); 
+        _entries.Add(x);
     });
 
     public LedgerEntry AddDebitEntry(Account account, decimal debit, string? description = null)

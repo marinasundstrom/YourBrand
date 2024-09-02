@@ -1,4 +1,5 @@
 using MediatR;
+
 using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Accounts.Commands;

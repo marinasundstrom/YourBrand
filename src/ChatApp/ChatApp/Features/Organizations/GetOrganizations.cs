@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ChatApp;
 using YourBrand.ChatApp.Domain.Repositories;
-using YourBrand.Extensions;
 using YourBrand.ChatApp.Models;
+using YourBrand.Extensions;
 
 namespace YourBrand.ChatApp.Features.Organizations;
 

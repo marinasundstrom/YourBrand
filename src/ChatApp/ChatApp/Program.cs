@@ -13,11 +13,11 @@ using Serilog;
 
 using YourBrand.ChatApp;
 using YourBrand.ChatApp.Domain.ValueObjects;
-using YourBrand.Extensions;
 using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.ChatApp.Web;
 using YourBrand.ChatApp.Web.Extensions;
 using YourBrand.ChatApp.Web.Middleware;
+using YourBrand.Extensions;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Integration;
@@ -30,26 +30,27 @@ string ServiceVersion = "1.0";
 
 var configuration = builder.Configuration;
 
-builder.Host.UseSerilog((ctx, cfg) => { 
-        cfg.ReadFrom.Configuration(builder.Configuration)
-        .WriteTo.OpenTelemetry(options =>
+builder.Host.UseSerilog((ctx, cfg) =>
+{
+    cfg.ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.OpenTelemetry(options =>
+    {
+        options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+        var headers = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]?.Split(',') ?? [];
+        foreach (var header in headers)
         {
-            options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-            var headers = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]?.Split(',') ?? [];
-            foreach (var header in headers)
+            var (key, value) = header.Split('=') switch
             {
-                var (key, value) = header.Split('=') switch
-                {
                 [string k, string v] => (k, v),
-                    var v => throw new Exception($"Invalid header format {v}")
-                };
+                var v => throw new Exception($"Invalid header format {v}")
+            };
 
-                options.Headers.Add(key, value);
-            }
-            options.ResourceAttributes.Add("service.name", ServiceName);
-        })
-        .Enrich.WithProperty("Application", ServiceName)
-        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
+            options.Headers.Add(key, value);
+        }
+        options.ResourceAttributes.Add("service.name", ServiceName);
+    })
+    .Enrich.WithProperty("Application", ServiceName)
+    .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
 
@@ -91,7 +92,7 @@ builder.Services
         {
             Type = JsonObjectType.String
         }));
-        
+
         settings
             .AddApiKeySecurity()
             .AddJwtSecurity();

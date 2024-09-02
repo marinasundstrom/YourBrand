@@ -21,7 +21,7 @@ public class AuthenticationDelegatingHandler(
 
         logger.LogInformation("Access token passed: {AccessToken}", accessToken);
 
-        if(!string.IsNullOrEmpty(accessToken))
+        if (!string.IsNullOrEmpty(accessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             return await base.SendAsync(request, cancellationToken);

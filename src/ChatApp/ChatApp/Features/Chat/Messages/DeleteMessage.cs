@@ -43,21 +43,21 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
             }
 
             var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
-            
+
             var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
 
             message.RemoveAllReactions();
 
             message.MarkAsDeleted();
 
-            if (shouldSoftDelete) 
+            if (shouldSoftDelete)
             {
                 var participant = channel.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
                 message.Deleted = DateTimeOffset.UtcNow;
                 message.DeletedById = participant.Id;
             }
-            else 
+            else
             {
                 messageRepository.Remove(message);
             }

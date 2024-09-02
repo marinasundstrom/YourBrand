@@ -16,8 +16,8 @@ public record ChannelId(Guid Value)
 
     public static implicit operator Guid(ChannelId id) => id.Value;
 
-    public static bool TryParse(string? value, out ChannelId? channelId) 
-    { 
+    public static bool TryParse(string? value, out ChannelId? channelId)
+    {
         return TryParse(value, CultureInfo.CurrentCulture, out channelId);
     }
 

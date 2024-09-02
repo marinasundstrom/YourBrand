@@ -11,7 +11,7 @@ public static class CachingExtensions
     {
         services.AddMemoryCache();
 
-        try 
+        try
         {
             IConnectionMultiplexer? connection = null;
 
@@ -39,7 +39,7 @@ public static class CachingExtensions
                 };
             });
         }
-        catch {}
+        catch { }
 
         return services;
     }

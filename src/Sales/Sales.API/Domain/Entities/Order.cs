@@ -53,7 +53,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
         return false;
     }
-    
+
     public Order? Parent { get; set; }
 
     public User? Assignee { get; private set; }

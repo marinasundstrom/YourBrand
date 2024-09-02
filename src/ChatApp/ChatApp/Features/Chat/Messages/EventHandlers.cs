@@ -108,7 +108,7 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
 
         var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
 
-        if (shouldSoftDelete) 
+        if (shouldSoftDelete)
         {
             var message = await messagesRepository.FindByIdAsync(notification.MessageId);
             var user = await userRepository.FindByIdAsync(message!.DeletedBy!.UserId);
@@ -116,7 +116,7 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
             await chatNotificationService.NotifyMessageDeleted(
                 notification.ChannelId, new MessageDeletedData(notification.MessageId, false, message!.Deleted.GetValueOrDefault(), new ParticipantData(message.DeletedById.ToString()!, user.Name, user.Id)), cancellationToken);
         }
-        else 
+        else
         {
             await chatNotificationService.NotifyMessageDeleted(
                 notification.ChannelId, new MessageDeletedData(notification.MessageId, true, null, null), cancellationToken);
@@ -138,7 +138,7 @@ public sealed class UserReactedToMessageEventHandler(
         var reaction = message!.Reactions.Last();
 
         var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
-        
+
         var participant = channel.Participants.FirstOrDefault(x => x.Id == notification.ParticipantId);
 
         var user = await userRepository.FindByIdAsync(participant!.UserId, cancellationToken);

@@ -50,7 +50,7 @@ public class OrderViewModel
 
     public decimal Vat => Math.Round(Items.Select(i => VatIncluded ? i.Total.GetVatFromTotal(i.VatRate.GetValueOrDefault()) : i.Total.AddVat(i.VatRate.GetValueOrDefault())).Sum(), 2, MidpointRounding.AwayFromZero);
 
-    public double? VatRate { get; set;}
+    public double? VatRate { get; set; }
 
     public decimal Total
     {

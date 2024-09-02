@@ -308,7 +308,7 @@ public partial class ChannelPage : IChatHubClient
             Id = Guid.Empty,
             Posted = DateTimeOffset.UtcNow,
             PostedById = Guid.NewGuid(), // Todo fix
-            PostedByUserId =currentUserId,
+            PostedByUserId = currentUserId,
             PostedByName = userInfo.Name,
             PostedByInitials = GetInitials(userInfo.Name), // TODO: Fix with my name,
             ReplyTo = replyToMessage,
@@ -505,12 +505,12 @@ public partial class ChannelPage : IChatHubClient
 
         if (messageVm is not null)
         {
-            if(data.HardDelete) 
+            if (data.HardDelete)
             {
                 loadedMessages.Remove(messageVm);
                 messagesCache.Remove(messageVm);
             }
-            else 
+            else
             {
                 messageVm.Content = string.Empty;
                 messageVm.Deleted = data.Deleted;

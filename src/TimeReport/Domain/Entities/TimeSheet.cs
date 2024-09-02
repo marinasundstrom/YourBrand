@@ -74,7 +74,7 @@ public class TimeSheet : AuditableEntity, IHasTenant, IHasOrganization, ISoftDel
     {
         var tsActivity = new TimeSheetActivity(this, activity.Project, activity);
         tsActivity.OrganizationId = OrganizationId;
-        
+
         _activities.Add(tsActivity);
         return tsActivity;
     }

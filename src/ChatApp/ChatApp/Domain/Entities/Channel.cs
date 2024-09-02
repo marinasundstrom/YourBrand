@@ -81,7 +81,7 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
     public DateTimeOffset? LastModified { get; set; }
 }
 
-public class ChannelSettings 
+public class ChannelSettings
 {
     public bool? IsReadOnly { get; set; }
 

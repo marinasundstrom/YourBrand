@@ -31,7 +31,7 @@ public static class Mappings
             Content = message.Content,
             Posted = message.Posted,
             PostedBy = message.PostedBy.Map(),
-            Deleted =  message.Deleted,
+            Deleted = message.Deleted,
             DeletedBy = message.DeletedBy?.Map(),
         };
     }

@@ -273,13 +273,13 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
             }
         });
 
-        if(VatAmounts.Count == 1) 
+        if (VatAmounts.Count == 1)
         {
             var vatAmount = VatAmounts.First();
 
             VatRate = vatAmount.VatRate;
         }
-        else 
+        else
         {
             VatRate = null;
         }

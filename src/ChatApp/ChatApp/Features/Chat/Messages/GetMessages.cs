@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain.ValueObjects;
-using YourBrand.Extensions;
 using YourBrand.ChatApp.Features.Users;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 

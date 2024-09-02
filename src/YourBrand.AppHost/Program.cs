@@ -120,7 +120,7 @@ var inventory = builder.AddProject<Inventory>("inventory")
     .WithReference(blobStorage)
     .WaitFor(inventoryDb)
     .WaitFor(messaging);
-    
+
 var timereportDb = sqlServer.AddDatabase("timereportDb", "TimeReport");
 var timereport = builder.AddProject<TimeReport>("timereport")
     .WithReference(timereportDb)

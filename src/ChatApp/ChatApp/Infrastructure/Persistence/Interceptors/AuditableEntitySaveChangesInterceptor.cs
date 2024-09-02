@@ -63,7 +63,7 @@ public sealed class AuditableEntitySaveChangesInterceptor(
             }
         }
 
-         foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
+        foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
         {
             if (entry.State == EntityState.Added)
             {

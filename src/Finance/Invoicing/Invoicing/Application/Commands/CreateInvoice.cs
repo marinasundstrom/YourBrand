@@ -27,7 +27,7 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
                 invoice.InvoiceNo = 1;
             }
 
-            if(request.Status is not null) 
+            if (request.Status is not null)
             {
                 invoice.UpdateStatus(request.Status.GetValueOrDefault());
             }

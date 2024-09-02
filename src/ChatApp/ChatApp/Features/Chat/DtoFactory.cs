@@ -49,9 +49,9 @@ public sealed class DtoFactory : IDtoFactory
     public ParticipantDto CreateParticipantDto(ChannelParticipant participant, Dictionary<ChannelParticipantId, User> users)
     {
         return new ParticipantDto(
-            participant!.Id, 
+            participant!.Id,
             participant.ChannelId,
-            participant.DisplayName ?? users[participant.Id].Name, 
+            participant.DisplayName ?? users[participant.Id].Name,
             participant.UserId);
     }
 

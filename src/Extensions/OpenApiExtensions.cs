@@ -115,7 +115,7 @@ public static class OpenApiExtensions
         app.UseSwaggerUi(options =>
         {
             options.Path = "/openapi";
-            
+
             configureSwaggerUi?.Invoke(options);
 
             var descriptions = app.DescribeApiVersions();
