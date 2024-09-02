@@ -5,8 +5,6 @@ using Microsoft.IdentityModel.Logging;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.HumanResources;
@@ -20,7 +18,6 @@ using YourBrand.Integration;
 using YourBrand.Tenancy;
 
 string MyAllowSpecificOrigins = "MyPolicy";
-
 
 var builder = WebApplication.CreateBuilder(args);
 

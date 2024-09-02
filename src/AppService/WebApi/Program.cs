@@ -10,8 +10,6 @@ using Microsoft.IdentityModel.Logging;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Application;
 using YourBrand.Extensions;

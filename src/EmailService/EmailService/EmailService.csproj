@@ -10,8 +10,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Worker' " />
   <ItemGroup>
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-    <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.4" />
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

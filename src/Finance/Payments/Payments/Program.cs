@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Http.Json;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;

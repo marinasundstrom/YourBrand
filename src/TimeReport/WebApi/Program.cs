@@ -10,8 +10,6 @@ using Microsoft.Extensions.Azure;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.ApiKeys;
 using YourBrand.Extensions;

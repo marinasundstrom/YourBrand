@@ -4,8 +4,6 @@ using MassTransit;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;

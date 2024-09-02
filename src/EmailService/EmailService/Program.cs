@@ -2,8 +2,6 @@
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.EmailService;
 using YourBrand.Extensions;

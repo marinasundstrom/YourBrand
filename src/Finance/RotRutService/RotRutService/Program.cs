@@ -6,8 +6,6 @@ using MediatR;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Accounting.Client;
 using YourBrand.Extensions;

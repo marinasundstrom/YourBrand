@@ -12,8 +12,6 @@ using Microsoft.Extensions.Azure;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Documents;
 using YourBrand.Documents.Application;

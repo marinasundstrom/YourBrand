@@ -7,8 +7,6 @@ using Microsoft.Data.SqlClient;
 
 using Serilog;
 
-using Steeltoe.Discovery.Client;
-
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;

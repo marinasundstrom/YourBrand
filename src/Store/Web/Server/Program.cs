@@ -7,7 +7,6 @@ using BlazorApp;
 using BlazorApp.Brands;
 using BlazorApp.Cart;
 using BlazorApp.Data;
-using BlazorApp.Extensions;
 using BlazorApp.ProductCategories;
 using BlazorApp.Products;
 
@@ -28,8 +27,6 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.EntityFrameworkCore;
 
 using Serilog;
-
-using Steeltoe.Discovery.Client;
 
 using YourBrand;
 using YourBrand.Extensions;
