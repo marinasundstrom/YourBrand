@@ -258,8 +258,6 @@ else
         if(Organization is null)
             return new TableData<ProductCategory>() { TotalItems = 0, Items = [] };
 
-        store = StoreProvider.CurrentStore;
-
         var result = await ProductCategoriesClient.GetProductCategoriesAsync(Organization.Id, store.Id, productCategory?.Id, true, true,
         state.Page + 1, state.PageSize, null, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
         YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);

@@ -30,7 +30,7 @@
         }
 
         <MudPaper Elevation="25" Class="mt-4 pa-4">
-            <YourBrand.Catalog.Brands.BrandSelector Label="Brand" Class="mb-6" Variant="Variant.Outlined"
+            <YourBrand.Catalog.Brands.BrandSelector OrganizationId="@(Organization.Id)" Label="Brand" Class="mb-6" Variant="Variant.Outlined"
                 @bind-Value="Brand" For="() => Brand" />
         </MudPaper>
     </MudItem>
@@ -84,13 +84,7 @@
 
     private async void OnCurrentStoreChanged(object? sender, EventArgs e)
     {
-        if(Organization is null)
-            return;
-
         store = StoreProvider.CurrentStore;
-
-        if(store is null)
-            return;
 
         StoreId = store.Id;
         GroupId = null;
