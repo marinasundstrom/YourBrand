@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Catalog.Domain.Entities;
+using YourBrand.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Persistence.Configurations;
 
@@ -19,6 +21,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .Property(x => x.Handle)
             .HasMaxLength(150);
 
+        builder.HasIndex(p => p.OrganizationId);
+
         builder.HasIndex(p => p.Handle);
 
         builder
@@ -26,7 +30,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithMany()
             .HasForeignKey(x => x.ImageId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull); ;
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder
             .HasMany(p => p.Images)

@@ -49,9 +49,20 @@ public sealed class CatalogContext(
                 }
             }
 
+            var entityTypeBuilder = modelBuilder.Entity(clrType);
+
+            if (clrType.IsAssignableTo(typeof(IHasTenant)))
+            {
+                entityTypeBuilder.HasIndex(nameof(IHasTenant.TenantId));
+            }
+
+            if (clrType.IsAssignableTo(typeof(IHasOrganization)))
+            {
+                entityTypeBuilder.HasIndex(nameof(IHasOrganization.OrganizationId));
+            }
+
             try
             {
-                var entityTypeBuilder = modelBuilder.Entity(clrType);
 
                 var parameter = Expression.Parameter(clrType, "entity");
 
