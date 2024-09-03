@@ -17,6 +17,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 
+        builder.HasIndex(p => p.Type);
         builder
             .Property(x => x.Handle)
             .HasMaxLength(150);

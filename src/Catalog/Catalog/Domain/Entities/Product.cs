@@ -60,6 +60,8 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
 
     public string Name { get; set; } = default!;
 
+    public ProductType? Type { get; set; } = ProductType.Physical;
+
     public ProductCategory? Category { get; internal set; }
 
     public long? CategoryId { get; private set; }
