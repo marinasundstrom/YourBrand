@@ -69,11 +69,14 @@ siko,skruv-120pack,Skruv 120-pack,skruv-120pack,Fina skruvar för gipsskrivor,,1
 
     public bool CanUpload => (archiveFile is not null);
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     private async void Upload()
     {
         try 
         {
-            var result = await ProductsClient.ImportProductsAsync(new FileParameter(archiveFile.OpenReadStream(3 *
+            var result = await ProductsClient.ImportProductsAsync(Organization.Id, new FileParameter(archiveFile.OpenReadStream(3 *
                 1000000), archiveFile.Name));
 
             diagnostics = result.Diagnostics;

@@ -7,7 +7,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Catalog.Features.Stores.Queries;
 
-public sealed record GetStoreQuery(string IdOrHandle) : IRequest<StoreDto?>
+public sealed record GetStoreQuery(string OrganizationId, string IdOrHandle) : IRequest<StoreDto?>
 {
     sealed class GetStoreQueryHandler(
         CatalogContext context) : IRequestHandler<GetStoreQuery, StoreDto?>
@@ -16,6 +16,7 @@ public sealed record GetStoreQuery(string IdOrHandle) : IRequest<StoreDto?>
         {
             var store = await context
                .Stores
+               .InOrganization(request.OrganizationId)
                .Include(x => x.Currency)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.IdOrHandle || c.Handle == request.IdOrHandle);

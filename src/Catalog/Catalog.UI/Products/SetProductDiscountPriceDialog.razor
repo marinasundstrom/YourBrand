@@ -38,6 +38,9 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter]
     public decimal RegularPrice { get; set; } = default!;
 
@@ -75,7 +78,7 @@
 
     async Task OnSubmit()
     {
-        await ProductsClient.SetProductDiscountPriceAsync(ProductId.ToString(), new
+        await ProductsClient.SetProductDiscountPriceAsync(Organization.Id, ProductId.ToString(), new
         SetProductDiscountPriceRequest()
             {
                 DiscountPrice = DiscountPrice

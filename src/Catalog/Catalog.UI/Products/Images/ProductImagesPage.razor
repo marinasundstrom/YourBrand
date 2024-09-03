@@ -59,9 +59,12 @@ else
     [Parameter]
     public string ProductId { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        product = await ProductsClient.GetProductByIdAsync(ProductId.ToString());
+        product = await ProductsClient.GetProductByIdAsync(Organization.Id, ProductId.ToString());
         productImages = product.Images.ToList(); //(await ProductOptionsClient.GetProductImagesAsync(ProductId.GetValueOrDefault())).ToList();
     }
 
@@ -69,7 +72,7 @@ else
     {
         try
         {
-            var productImage = await ProductsClient.UploadProductImageAsync(ProductId.ToString(), false, new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
+            var productImage = await ProductsClient.UploadProductImageAsync(Organization.Id, ProductId.ToString(), false, new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
 
             productImages.Add(productImage);
 
@@ -109,7 +112,7 @@ else
             return;
         }
 
-        await ProductsClient.DeleteProductImageAsync(ProductId.ToString(), productImage.Id);
+        await ProductsClient.DeleteProductImageAsync(Organization.Id, ProductId.ToString(), productImage.Id);
 
         productImages.Remove(productImage);
     }

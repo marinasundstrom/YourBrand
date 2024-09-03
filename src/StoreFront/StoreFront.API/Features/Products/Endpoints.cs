@@ -44,49 +44,49 @@ public static class Endpoints
         return app;
     }
 
-    private static async Task<Results<Ok<PagedResult<Product>>, NotFound>> GetProducts(string? brandIdOrHandle, int? page = 1, int? pageSize = 10, string? searchTerm = null, string? categoryPath = null, IProductsClient productsClient = default!, IStoresClient storesClient = default!, CancellationToken cancellationToken = default)
+    private static async Task<Results<Ok<PagedResult<Product>>, NotFound>> GetProducts(string? brandIdOrHandle, int? page = 1, int? pageSize = 10, string? searchTerm = null, string? categoryPath = null, IConfiguration configuration = null, IProductsClient productsClient = default!, IStoresClient storesClient = default!, CancellationToken cancellationToken = default)
     {
         if (storeId is null)
         {
-            var store = await storesClient.GetStoreByIdAsync("my-store");
+            var store = await storesClient.GetStoreByIdAsync(configuration["OrganizationId"]!, "my-store");
             storeId = store.Id;
         }
 
-        var results = await productsClient.GetProductsAsync(storeId, brandIdOrHandle, false, true, searchTerm, categoryPath, page, pageSize, null, null, cancellationToken);
+        var results = await productsClient.GetProductsAsync(configuration["OrganizationId"]!, storeId, brandIdOrHandle, false, true, searchTerm, categoryPath, page, pageSize, null, null, cancellationToken);
         return results is not null ? TypedResults.Ok(
                 new PagedResult<Product>(results.Items.Select(x => x.Map()), results.Total)
         ) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<Product>, NotFound>> GetProductById(string productIdOrHandle, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
+    private static async Task<Results<Ok<Product>, NotFound>> GetProductById(string productIdOrHandle, IConfiguration configuration, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
     {
-        var product = await productsClient.GetProductByIdAsync(productIdOrHandle, cancellationToken);
+        var product = await productsClient.GetProductByIdAsync(configuration["OrganizationId"]!, productIdOrHandle, cancellationToken);
         return product is not null ? TypedResults.Ok(product.Map()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<Product>, NotFound>> FindProductVariantByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
+    private static async Task<Results<Ok<Product>, NotFound>> FindProductVariantByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, IConfiguration configuration, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
     {
-        var product = await productsClient.FindVariantByAttributeValuesAsync(productIdOrHandle, selectedAttributeValues, cancellationToken);
+        var product = await productsClient.FindVariantByAttributeValuesAsync(configuration["OrganizationId"]!, productIdOrHandle, selectedAttributeValues, cancellationToken);
         return product is not null ? TypedResults.Ok(product.Map()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<IEnumerable<Product>>, NotFound>> FindProductVariantsByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
+    private static async Task<Results<Ok<IEnumerable<Product>>, NotFound>> FindProductVariantsByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, IConfiguration configuration, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
     {
-        var products = await productsClient.FindsVariantsByAttributeValuesAsync(productIdOrHandle, selectedAttributeValues, cancellationToken);
+        var products = await productsClient.FindsVariantsByAttributeValuesAsync(configuration["OrganizationId"]!, productIdOrHandle, selectedAttributeValues, cancellationToken);
         return products is not null ? TypedResults.Ok(products.Select(x => x.Map())) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<PagedResult<Product>>, NotFound>> GetProductVariants(string productIdOrHandle, int page = 10, int pageSize = 10, string? searchTerm = null, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
+    private static async Task<Results<Ok<PagedResult<Product>>, NotFound>> GetProductVariants(string productIdOrHandle, int page = 10, int pageSize = 10, string? searchTerm = null, IConfiguration configuration = null, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
     {
-        var results = await productsClient.GetVariantsAsync(productIdOrHandle, page, pageSize, searchTerm, null, null, cancellationToken);
+        var results = await productsClient.GetVariantsAsync(configuration["OrganizationId"]!, productIdOrHandle, page, pageSize, searchTerm, null, null, cancellationToken);
         return results is not null ? TypedResults.Ok(
                 new PagedResult<Product>(results.Items.Select(x => x.Map()), results.Total)
         ) : TypedResults.NotFound();
     }
 
-    public static async Task<Results<Ok<IEnumerable<AttributeValue>>, BadRequest>> GetAvailableVariantAttributeValues(string productIdOrHandle, string attributeId, Dictionary<string, string?> selectedAttributeValues, IProductsClient productsClient = default!, CancellationToken cancellationToken = default!)
+    public static async Task<Results<Ok<IEnumerable<AttributeValue>>, BadRequest>> GetAvailableVariantAttributeValues(string productIdOrHandle, string attributeId, Dictionary<string, string?> selectedAttributeValues, IConfiguration configuration, IProductsClient productsClient = default!, CancellationToken cancellationToken = default!)
     {
-        var results = await productsClient.GetAvailableVariantAttributeValuesAsync(productIdOrHandle, attributeId, selectedAttributeValues, cancellationToken);
+        var results = await productsClient.GetAvailableVariantAttributeValuesAsync(configuration["OrganizationId"]!, productIdOrHandle, attributeId, selectedAttributeValues, cancellationToken);
         return results is not null ? TypedResults.Ok(results.Select(x => x.Map())) : TypedResults.BadRequest();
 
     }

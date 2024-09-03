@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Values;
 
-public record GetAttributeValues(string Id) : IRequest<IEnumerable<AttributeValueDto>>
+public record GetAttributeValues(string OrganizationId, string Id) : IRequest<IEnumerable<AttributeValueDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetAttributeValues, IEnumerable<AttributeValueDto>>
     {
         public async Task<IEnumerable<AttributeValueDto>> Handle(GetAttributeValues request, CancellationToken cancellationToken)
         {
             var options = await context.AttributeValues
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Attribute)

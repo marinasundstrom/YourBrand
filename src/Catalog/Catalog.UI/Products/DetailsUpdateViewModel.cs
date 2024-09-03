@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 using MudBlazor;
 
+using YourBrand.AppService.Client;
+
 namespace YourBrand.Catalog.Products;
 
 public class DetailsUpdateViewModel(IProductsClient productsClient, ISnackbar snackbar)
@@ -10,6 +12,7 @@ public class DetailsUpdateViewModel(IProductsClient productsClient, ISnackbar sn
     {
         return new(productsClient, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Name = product.Name,
             ShadowName = product.Name,
@@ -17,6 +20,8 @@ public class DetailsUpdateViewModel(IProductsClient productsClient, ISnackbar sn
             CanInheritProperties = product.Parent is not null
         };
     }
+
+    public string OrganizationId { get; set; }
 
     public long ProductId { get; init; }
 
@@ -38,7 +43,7 @@ public class DetailsUpdateViewModel(IProductsClient productsClient, ISnackbar sn
     {
         try
         {
-            await productsClient.UpdateProductDetailsAsync(ProductId.ToString(), new UpdateProductDetailsRequest()
+            await productsClient.UpdateProductDetailsAsync(OrganizationId, ProductId.ToString(), new UpdateProductDetailsRequest()
             {
                 Name = ShadowName,
                 Description = Description,

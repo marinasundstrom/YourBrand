@@ -111,160 +111,160 @@ public static partial class Endpoints
         return app;
     }
 
-    private static async Task<Ok<PagedResult<ProductDto>>> GetProducts(string? storeId = null, string? brandIdOrHandle = null, bool includeUnlisted = false, bool groupProducts = true, string? searchTerm = null, string? categoryPathOrId = null,
+    private static async Task<Ok<PagedResult<ProductDto>>> GetProducts(string organizationId, string? storeId = null, string? brandIdOrHandle = null, bool includeUnlisted = false, bool groupProducts = true, string? searchTerm = null, string? categoryPathOrId = null,
         int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        var pagedResult = await mediator.Send(new GetProducts(storeId, brandIdOrHandle, includeUnlisted, groupProducts, categoryPathOrId, searchTerm, page, pageSize, sortBy, sortDirection), cancellationToken);
+        var pagedResult = await mediator.Send(new GetProducts(organizationId, storeId, brandIdOrHandle, includeUnlisted, groupProducts, categoryPathOrId, searchTerm, page, pageSize, sortBy, sortDirection), cancellationToken);
         return TypedResults.Ok(pagedResult);
     }
 
-    private static async Task<Ok<IEnumerable<ProductDto>>> GetProductsByIds(long[] ids, string? storeId = null, string? brandIdOrHandle = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    private static async Task<Ok<IEnumerable<ProductDto>>> GetProductsByIds(string organizationId, long[] ids, string? storeId = null, string? brandIdOrHandle = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        var pagedResult = await mediator.Send(new GetProductsByIds(ids, storeId, brandIdOrHandle), cancellationToken);
+        var pagedResult = await mediator.Send(new GetProductsByIds(organizationId, ids, storeId, brandIdOrHandle), cancellationToken);
         return TypedResults.Ok(pagedResult);
     }
 
-    private static async Task<Results<Ok<ProductDto>, NotFound>> GetProductById(string idOrHandle,
+    private static async Task<Results<Ok<ProductDto>, NotFound>> GetProductById(string organizationId, string idOrHandle,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetProductById(idOrHandle), cancellationToken);
+        var result = await mediator.Send(new GetProductById(organizationId, idOrHandle), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<ProductDto>, BadRequest, ProblemHttpResult>> CreateProduct(CreateProductRequest request,
+    private static async Task<Results<Ok<ProductDto>, BadRequest, ProblemHttpResult>> CreateProduct(string organizationId, CreateProductRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateProduct(request.Name, request.StoreId, request.Description, request.CategoryId, request.IsGroupedProduct, request.Price, request.VatRateId, request.Handle), cancellationToken);
+        var result = await mediator.Send(new CreateProduct(organizationId, request.Name, request.StoreId, request.Description, request.CategoryId, request.IsGroupedProduct, request.Price, request.VatRateId, request.Handle), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.BadRequest();
     }
 
-    private static async Task<Results<Ok, NotFound>> UpdateProductDetails(string idOrHandle, UpdateProductDetailsRequest request,
+    private static async Task<Results<Ok, NotFound>> UpdateProductDetails(string organizationId, string idOrHandle, UpdateProductDetailsRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductDetails(idOrHandle, request.Name, request.Description), cancellationToken);
+        var result = await mediator.Send(new UpdateProductDetails(organizationId, idOrHandle, request.Name, request.Description), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound>> UpdateProductPrice(string idOrHandle, UpdateProductPriceRequest request,
+    private static async Task<Results<Ok, NotFound>> UpdateProductPrice(string organizationId, string idOrHandle, UpdateProductPriceRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductPrice(idOrHandle, request.Price), cancellationToken);
+        var result = await mediator.Send(new UpdateProductPrice(organizationId, idOrHandle, request.Price), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound>> UpdateProductVatRate(string idOrHandle, UpdateProductVatRateRequest request,
+    private static async Task<Results<Ok, NotFound>> UpdateProductVatRate(string organizationId, string idOrHandle, UpdateProductVatRateRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductVatRate(idOrHandle, request.VatRateId), cancellationToken);
+        var result = await mediator.Send(new UpdateProductVatRate(organizationId, idOrHandle, request.VatRateId), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound>> SetProductDiscountPrice(string idOrHandle, SetProductDiscountPriceRequest request,
+    private static async Task<Results<Ok, NotFound>> SetProductDiscountPrice(string organizationId, string idOrHandle, SetProductDiscountPriceRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new SetProductDiscountPrice(idOrHandle, request.DiscountPrice), cancellationToken);
+        var result = await mediator.Send(new SetProductDiscountPrice(organizationId, idOrHandle, request.DiscountPrice), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound>> RestoreProductRegularPrice(string idOrHandle, RestoreProductRegularPriceReguest request,
+    private static async Task<Results<Ok, NotFound>> RestoreProductRegularPrice(string organizationId, string idOrHandle, RestoreProductRegularPriceReguest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RestoreProductRegularPrice(idOrHandle), cancellationToken);
+        var result = await mediator.Send(new RestoreProductRegularPrice(organizationId, idOrHandle), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<ProductImageDto>, NotFound>> UploadProductImage(string idOrHandle, bool setMainImage = false, IFormFile file = default!,
+    private static async Task<Results<Ok<ProductImageDto>, NotFound>> UploadProductImage(string organizationId, string idOrHandle, bool setMainImage = false, IFormFile file = default!,
         IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        var result = await mediator.Send(new UploadProductImage(idOrHandle, file.OpenReadStream(), file.FileName, file.ContentType, setMainImage), cancellationToken);
+        var result = await mediator.Send(new UploadProductImage(organizationId, idOrHandle, file.OpenReadStream(), file.FileName, file.ContentType, setMainImage), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<ProductImageDto>, NotFound>> UpdateProductImage(string idOrHandle, string productImageId, UpdateProductImageData data,
+    private static async Task<Results<Ok<ProductImageDto>, NotFound>> UpdateProductImage(string organizationId, string idOrHandle, string productImageId, UpdateProductImageData data,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductImage(idOrHandle, productImageId, data.Title, data.Text), cancellationToken);
+        var result = await mediator.Send(new UpdateProductImage(organizationId, idOrHandle, productImageId, data.Title, data.Text), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<ProductImageDto>, NotFound>> SetMainProductImage(string idOrHandle, string productImageId, SetMainProductImageData data,
+    private static async Task<Results<Ok<ProductImageDto>, NotFound>> SetMainProductImage(string organizationId, string idOrHandle, string productImageId, SetMainProductImageData data,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new SetMainProductImage(idOrHandle, productImageId), cancellationToken);
+        var result = await mediator.Send(new SetMainProductImage(organizationId, idOrHandle, productImageId), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<ProductImageDto>, NotFound>> DeleteProductImage(string idOrHandle, string productImageId,
+    private static async Task<Results<Ok<ProductImageDto>, NotFound>> DeleteProductImage(string organizationId, string idOrHandle, string productImageId,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new DeleteProductImage(idOrHandle, productImageId), cancellationToken);
+        var result = await mediator.Send(new DeleteProductImage(organizationId, idOrHandle, productImageId), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductHandle(string idOrHandle, UpdateProductHandleRequest request,
+    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductHandle(string organizationId, string idOrHandle, UpdateProductHandleRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductHandle(idOrHandle, request.Handle), cancellationToken);
+        var result = await mediator.Send(new UpdateProductHandle(organizationId, idOrHandle, request.Handle), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductSku(string idOrHandle, UpdateProductSkuRequest request,
+    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductSku(string organizationId, string idOrHandle, UpdateProductSkuRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductSku(idOrHandle, request.Sku), cancellationToken);
+        var result = await mediator.Send(new UpdateProductSku(organizationId, idOrHandle, request.Sku), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductListingState(string idOrHandle, UpdateProductListingStateRequest request,
+    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductListingState(string organizationId, string idOrHandle, UpdateProductListingStateRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductListingState(idOrHandle, request.ListingState), cancellationToken);
+        var result = await mediator.Send(new UpdateProductListingState(organizationId, idOrHandle, request.ListingState), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
 
-    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductCategory(string idOrHandle, UpdateProductCategoryRequest request,
+    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductCategory(string organizationId, string idOrHandle, UpdateProductCategoryRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductCategory(idOrHandle, request.ProductCategoryId), cancellationToken);
+        var result = await mediator.Send(new UpdateProductCategory(organizationId, idOrHandle, request.ProductCategoryId), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductBrand(string idOrHandle, UpdateProductBrandRequest request,
+    private static async Task<Results<Ok, NotFound, ProblemHttpResult>> UpdateProductBrand(string organizationId, string idOrHandle, UpdateProductBrandRequest request,
         IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateProductBrand(idOrHandle, request.BrandId), cancellationToken);
+        var result = await mediator.Send(new UpdateProductBrand(organizationId, idOrHandle, request.BrandId), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok, NotFound>> DeleteProduct(string idOrHandle,
+    private static async Task<Results<Ok, NotFound>> DeleteProduct(string organizationId, string idOrHandle,
     IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new DeleteProduct(idOrHandle), cancellationToken);
+        var result = await mediator.Send(new DeleteProduct(organizationId, idOrHandle), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok() : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<ProductImportResult>, NotFound>> ImportProducts(IFormFile file,
+    private static async Task<Results<Ok<ProductImportResult>, NotFound>> ImportProducts(string organizationId, IFormFile file,
    IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new ImportProducts(file.OpenReadStream()), cancellationToken);
+        var result = await mediator.Send(new ImportProducts(organizationId, file.OpenReadStream()), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
     }
@@ -334,6 +334,7 @@ public sealed record UpdateProductBrandRequest(long BrandId);
 
 public sealed record ProductDto(
     long Id,
+    string OrganizationId,
     string Name,
     StoreDto? Store,
     BrandDto? Brand,

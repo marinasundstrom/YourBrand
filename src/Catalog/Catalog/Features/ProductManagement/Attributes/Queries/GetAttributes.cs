@@ -7,13 +7,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
-public record GetAttributes(string[]? Ids = null, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<AttributeDto>>
+public record GetAttributes(string OrganizationId, string[]? Ids = null, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<AttributeDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetAttributes, PagedResult<AttributeDto>>
     {
         public async Task<PagedResult<AttributeDto>> Handle(GetAttributes request, CancellationToken cancellationToken)
         {
             var query = context.Attributes
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(o => o.Group)
@@ -43,6 +44,7 @@ public record GetAttributes(string[]? Ids = null, int Page = 1, int PageSize = 1
             var totalCount = await query.CountAsync();
 
             var items = await query
+                            .InOrganization(request.OrganizationId)
                             .OrderBy(x => x.Name)
                             .Include(x => x.Values)
                             .Skip(request.PageSize * (request.Page - 1))

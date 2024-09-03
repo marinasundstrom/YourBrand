@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record GetProductVariant(string ProductIdOrHandle, string ProductVariantIdOrHandle) : IRequest<ProductDto?>
+public record GetProductVariant(string OrganizationId, string ProductIdOrHandle, string ProductVariantIdOrHandle) : IRequest<ProductDto?>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetProductVariant, ProductDto?>
     {
@@ -16,6 +16,7 @@ public record GetProductVariant(string ProductIdOrHandle, string ProductVariantI
             bool isProductVariantId = long.TryParse(request.ProductVariantIdOrHandle, out var productVariantId);
 
             var query = context.Products
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .IncludeAll()

@@ -7,18 +7,20 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
-public record UpdateAttributeCommand(string Id, string Name, string? Description, string? GroupId, IEnumerable<UpdateProductAttributeValueData> Values) : IRequest
+public record UpdateAttributeCommand(string OrganizationId, string Id, string Name, string? Description, string? GroupId, IEnumerable<UpdateProductAttributeValueData> Values) : IRequest
 {
     public class UpdateAttributeCommandHandler(CatalogContext context) : IRequestHandler<UpdateAttributeCommand>
     {
         public async Task Handle(UpdateAttributeCommand request, CancellationToken cancellationToken)
         {
             var attribute = await context.Attributes
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Values)
                 .Include(x => x.Group)
                 .FirstAsync(x => x.Id == request.Id);
 
             var group = await context.AttributeGroups
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.GroupId);
 
             attribute.Name = request.Name;
@@ -34,7 +36,7 @@ public record UpdateAttributeCommand(string Id, string Name, string? Description
                         Name = v.Name
                     };
 
-                    attribute.Values.Add(value);
+                    attribute.AddValue(value);
                     context.AttributeValues.Add(value);
                 }
                 else
@@ -54,7 +56,7 @@ public record UpdateAttributeCommand(string Id, string Name, string? Description
 
                 if (value is null)
                 {
-                    attribute.Values.Remove(v);
+                    attribute.RemoveValue(v);
                 }
             }
 

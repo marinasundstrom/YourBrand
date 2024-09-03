@@ -33,6 +33,9 @@
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter] public long ProductId { get; set; }
 
     [Required]
@@ -53,7 +56,7 @@
                 Min = Min,
                 Max = Max
             };
-        var result = await ProductOptionsClient.CreateProductOptionGroupAsync(ProductId, data);
+        var result = await ProductOptionsClient.CreateProductOptionGroupAsync(Organization.Id, ProductId, data);
         Modal.Close(DialogResult.Ok(result));
     }
 

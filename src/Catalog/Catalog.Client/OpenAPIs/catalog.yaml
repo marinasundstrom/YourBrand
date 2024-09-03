@@ -13,38 +13,44 @@ paths:
       - Brands
       operationId: Brands_GetBrands
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: productCategoryId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 1
+        x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 2
+        x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 3
+        x-position: 4
       - name: searchString
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       - name: sortDirection
         in: query
         schema:
@@ -52,7 +58,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
+        x-position: 7
       responses:
         200:
           description: ''
@@ -60,11 +66,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedResultOfBrand'
+      security:
+      - JWT: []
     post:
       tags:
       - Brands
       - Brands
       operationId: Brands_CreateBrand
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: dto
         content:
@@ -72,7 +87,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateBrand'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -80,6 +95,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Brand'
+      security:
+      - JWT: []
   /v1/brands/{id}:
     get:
       tags:
@@ -87,13 +104,19 @@ paths:
       - Brands
       operationId: Brands_GetBrandById
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -101,19 +124,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Brand'
+      security:
+      - JWT: []
     put:
       tags:
       - Brands
       - Brands
       operationId: Brands_UpdateBrand
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: dto
         content:
@@ -121,26 +152,36 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateBrand'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
     delete:
       tags:
       - Brands
       - Brands
       operationId: Brands_DeleteBrand
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/currencies:
     get:
       tags:
@@ -189,6 +230,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedResultOfCurrency'
+      security:
+      - JWT: []
   /v1/vatRates:
     get:
       tags:
@@ -237,6 +280,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedResultOfVatRate'
+      security:
+      - JWT: []
   /v1/products/{idOrHandle}/variants:
     get:
       tags:
@@ -244,38 +289,44 @@ paths:
       - Products
       operationId: Products_GetVariants
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrHandle
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 2
+        x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 3
+        x-position: 4
       - name: searchString
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       - name: sortDirection
         in: query
         schema:
@@ -283,7 +334,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
+        x-position: 7
       responses:
         200:
           description: ''
@@ -293,6 +344,8 @@ paths:
                 $ref: '#/components/schemas/PagedResultOfProduct'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{idOrHandle}/variants/{variantIdOrHandle}:
     get:
       tags:
@@ -300,18 +353,24 @@ paths:
       - Products
       operationId: Products_GetVariant
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrHandle
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: variantIdOrHandle
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -321,6 +380,8 @@ paths:
                 $ref: '#/components/schemas/Product'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/variants{variantId}:
     delete:
       tags:
@@ -328,25 +389,33 @@ paths:
       - Products
       operationId: Products_DeleteVariant
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: variantId
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{idOrHandle}/variants/findVariant:
     post:
       tags:
@@ -354,12 +423,18 @@ paths:
       - Products
       operationId: Products_FindVariantByAttributeValues
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrHandle
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: selectedAttributeValues
         content:
@@ -370,7 +445,7 @@ paths:
                 type: string
                 nullable: true
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -380,6 +455,8 @@ paths:
                 $ref: '#/components/schemas/Product'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{idOrHandle}/variants/find2:
     post:
       tags:
@@ -387,12 +464,18 @@ paths:
       - Products
       operationId: Products_FindsVariantsByAttributeValues
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrHandle
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: selectedAttributeValues
         content:
@@ -403,7 +486,7 @@ paths:
                 type: string
                 nullable: true
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -415,6 +498,8 @@ paths:
                   $ref: '#/components/schemas/Product'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{idOrHandle}/attributes/{attributeId}/availableValuesForVariant:
     post:
       tags:
@@ -422,18 +507,24 @@ paths:
       - Products
       operationId: Products_GetAvailableVariantAttributeValues
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrHandle
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: attributeId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: selectedAttributeValues
         content:
@@ -444,7 +535,7 @@ paths:
                 type: string
                 nullable: true
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -456,6 +547,8 @@ paths:
                   $ref: '#/components/schemas/AttributeValue'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/variants:
     post:
       tags:
@@ -463,61 +556,25 @@ paths:
       - Products
       operationId: Products_CreateVariant
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: data
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateProductVariantData'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        400:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-  /v1/products/{id}/variants/{variantId}:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateVariant
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-        x-position: 1
-      - name: variantId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-        x-position: 2
-      requestBody:
-        x-name: data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductVariantData'
         required: true
         x-position: 3
       responses:
@@ -533,6 +590,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/products/{id}/variants/{variantId}:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateVariant
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        x-position: 2
+      - name: variantId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        x-position: 3
+      requestBody:
+        x-name: data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductVariantData'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/products/{id}/variants/{variantId}/uploadImage:
     post:
       tags:
@@ -540,20 +649,26 @@ paths:
       - Products
       operationId: Products_UploadVariantImage
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: variantId
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 2
+        x-position: 3
       requestBody:
         content:
           multipart/form-data:
@@ -572,6 +687,8 @@ paths:
                 type: string
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{productId}/attributes:
     get:
       tags:
@@ -579,13 +696,19 @@ paths:
       - Products
       operationId: Products_GetProductAttributes
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: productId
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -595,60 +718,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductAttribute'
+      security:
+      - JWT: []
     post:
       tags:
       - Products
       - Products
       operationId: Products_AddProductAttribute
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: productId
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: data
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AddProductAttribute'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductAttribute'
-  /v1/products/{productId}/attributes/{attributeId}:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductAttribute
-      parameters:
-      - name: productId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-        x-position: 1
-      - name: attributeId
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductAttribute'
         required: true
         x-position: 3
       responses:
@@ -658,28 +754,81 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductAttribute'
-    delete:
+      security:
+      - JWT: []
+  /v1/products/{productId}/attributes/{attributeId}:
+    put:
       tags:
       - Products
       - Products
-      operationId: Products_DeleteProductAttribute
+      operationId: Products_UpdateProductAttribute
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: productId
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: attributeId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
+      requestBody:
+        x-name: data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductAttribute'
+        required: true
+        x-position: 4
       responses:
         200:
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductAttribute'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Products
+      - Products
+      operationId: Products_DeleteProductAttribute
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        x-position: 2
+      - name: attributeId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/options:
     get:
       tags:
@@ -687,19 +836,25 @@ paths:
       - Products
       operationId: ProductOptions_GetProductOptions
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: variantId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -711,19 +866,27 @@ paths:
                   $ref: '#/components/schemas/ProductOption'
         400:
           description: ''
+      security:
+      - JWT: []
     post:
       tags:
       - Products
       - Products
       operationId: ProductOptions_CreateProductOption
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: data
         content:
@@ -731,7 +894,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProductOptionData'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -741,6 +904,8 @@ paths:
                 $ref: '#/components/schemas/Option'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/options/{optionId}:
     put:
       tags:
@@ -748,19 +913,25 @@ paths:
       - Products
       operationId: ProductOptions_UpdateProductOption
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: optionId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: data
         content:
@@ -768,7 +939,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateProductOptionData'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -778,30 +949,40 @@ paths:
                 $ref: '#/components/schemas/Option'
         400:
           description: ''
+      security:
+      - JWT: []
     delete:
       tags:
       - Products
       - Products
       operationId: ProductOptions_DeleteProductOption
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: optionId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/options/{optionId}/values:
     post:
       tags:
@@ -809,19 +990,25 @@ paths:
       - Products
       operationId: ProductOptions_CreateProductOptionValue
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: optionId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: data
         content:
@@ -829,7 +1016,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProductOptionValueData'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -839,6 +1026,8 @@ paths:
                 $ref: '#/components/schemas/OptionValue'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/options/{optionId}/values/{valueId}:
     delete:
       tags:
@@ -846,30 +1035,38 @@ paths:
       - Products
       operationId: ProductOptions_DeleteProductOptionValue
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: optionId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       - name: valueId
         in: path
         required: true
         schema:
           type: string
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/options/groups:
     get:
       tags:
@@ -877,13 +1074,19 @@ paths:
       - Products
       operationId: ProductOptions_GetProductOptionGroups
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -895,19 +1098,27 @@ paths:
                   $ref: '#/components/schemas/OptionGroup'
         400:
           description: ''
+      security:
+      - JWT: []
     post:
       tags:
       - Products
       - Products
       operationId: ProductOptions_CreateProductOptionGroup
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: data
         content:
@@ -915,7 +1126,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProductOptionGroupData'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -925,6 +1136,8 @@ paths:
                 $ref: '#/components/schemas/OptionGroup'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/products/{id}/options/groups/{optionGroupId}:
     put:
       tags:
@@ -932,19 +1145,25 @@ paths:
       - Products
       operationId: ProductOptions_UpdateProductOptionGroup
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: optionGroupId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       requestBody:
         x-name: data
         content:
@@ -952,7 +1171,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateProductOptionGroupData'
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -962,20 +1181,218 @@ paths:
                 $ref: '#/components/schemas/OptionGroup'
         400:
           description: ''
+      security:
+      - JWT: []
     delete:
       tags:
       - Products
       - Products
       operationId: ProductOptions_DeleteProductOptionGroup
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int64
-        x-position: 1
+        x-position: 2
       - name: optionGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        400:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products:
+    get:
+      tags:
+      - Products
+      - Products
+      operationId: Products_GetProducts
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: storeId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      - name: brandIdOrHandle
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: includeUnlisted
+        in: query
+        schema:
+          type: boolean
+          default: false
+        x-position: 4
+      - name: groupProducts
+        in: query
+        schema:
+          type: boolean
+          default: true
+        x-position: 5
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: categoryPathOrId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 8
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 9
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 10
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 11
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfProduct'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Products
+      - Products
+      operationId: Products_CreateProduct
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductRequest'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        400:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/ByIds:
+    get:
+      tags:
+      - Products
+      - Products
+      operationId: Products_GetProductsByIds
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: ids
+        in: query
+        style: form
+        explode: true
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+        x-position: 2
+      - name: storeId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: brandIdOrHandle
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}:
+    get:
+      tags:
+      - Products
+      - Products
+      operationId: Products_GetProductById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
         in: path
         required: true
         schema:
@@ -984,64 +1401,636 @@ paths:
       responses:
         200:
           description: ''
-        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
           description: ''
-  /v1/products:
-    get:
+      security:
+      - JWT: []
+    put:
       tags:
       - Products
       - Products
-      operationId: Products_GetProducts
+      operationId: Products_UpdateProductDetails
       parameters:
-      - name: storeId
+      - name: organizationId
         in: query
+        required: true
         schema:
           type: string
-          nullable: true
         x-position: 1
-      - name: brandIdOrHandle
-        in: query
+      - name: idOrHandle
+        in: path
+        required: true
         schema:
           type: string
-          nullable: true
         x-position: 2
-      - name: includeUnlisted
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductDetailsRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Products
+      - Products
+      operationId: Products_DeleteProduct
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/price:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductPrice
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductPriceRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/vatRate:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductVatRate
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductVatRateRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/price/discount:
+    post:
+      tags:
+      - Products
+      - Products
+      operationId: Products_SetProductDiscountPrice
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetProductDiscountPriceRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/price/restore:
+    post:
+      tags:
+      - Products
+      - Products
+      operationId: Products_RestoreProductRegularPrice
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreProductRegularPriceReguest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/images:
+    post:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UploadProductImage
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: setMainImage
         in: query
         schema:
           type: boolean
           default: false
         x-position: 3
-      - name: groupProducts
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/images/{productImageId}:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductImage
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: productImageId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductImageData'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        404:
+          description: ''
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Products
+      - Products
+      operationId: Products_DeleteProductImage
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: productImageId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/images/{productImageId}/setMainImage:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_SetMainProductImage
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: productImageId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetMainProductImageData'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/handle:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductHandle
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductHandleRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/sku:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductSku
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductSkuRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/listingState:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductListingState
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductListingStateRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/category:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductCategory
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductCategoryRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/brand:
+    put:
+      tags:
+      - Products
+      - Products
+      operationId: Products_UpdateProductBrand
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductBrandRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/import:
+    post:
+      tags:
+      - Products
+      - Products
+      operationId: Products_ImportProducts
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImportResult'
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/productCategories:
+    get:
+      tags:
+      - ProductCategories
+      - ProductCategories
+      operationId: ProductCategories_GetProductCategories
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: storeId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      - name: parentGroupId
+        in: query
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+        x-position: 3
+      - name: includeWithUnlistedProducts
         in: query
         schema:
           type: boolean
-          default: true
+          default: false
         x-position: 4
-      - name: searchTerm
+      - name: includeHidden
         in: query
         schema:
-          type: string
-          nullable: true
+          type: boolean
+          default: false
         x-position: 5
-      - name: categoryPathOrId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 6
       - name: page
         in: query
         schema:
           type: integer
           format: int32
-          default: 1
-        x-position: 7
+          default: 0
+        x-position: 6
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
+        x-position: 7
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
         x-position: 8
       - name: sortBy
         in: query
@@ -1063,604 +2052,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedResultOfProduct'
-    post:
-      tags:
-      - Products
-      - Products
-      operationId: Products_CreateProduct
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateProductRequest'
-        required: true
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        400:
-          description: ''
-  /v1/products/ByIds:
-    get:
-      tags:
-      - Products
-      - Products
-      operationId: Products_GetProductsByIds
-      parameters:
-      - name: ids
-        in: query
-        style: form
-        explode: true
-        required: true
-        schema:
-          type: array
-          items:
-            type: integer
-            format: int64
-        x-position: 1
-      - name: storeId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 2
-      - name: brandIdOrHandle
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-  /v1/products/{idOrHandle}:
-    get:
-      tags:
-      - Products
-      - Products
-      operationId: Products_GetProductById
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        404:
-          description: ''
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductDetails
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductDetailsRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-    delete:
-      tags:
-      - Products
-      - Products
-      operationId: Products_DeleteProduct
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/price:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductPrice
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductPriceRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/vatRate:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductVatRate
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductVatRateRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/price/discount:
-    post:
-      tags:
-      - Products
-      - Products
-      operationId: Products_SetProductDiscountPrice
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetProductDiscountPriceRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/price/restore:
-    post:
-      tags:
-      - Products
-      - Products
-      operationId: Products_RestoreProductRegularPrice
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RestoreProductRegularPriceReguest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/images:
-    post:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UploadProductImage
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      - name: setMainImage
-        in: query
-        schema:
-          type: boolean
-          default: false
-        x-position: 2
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductImage'
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/images/{productImageId}:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductImage
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      - name: productImageId
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductImageData'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductImage'
-        404:
-          description: ''
-    delete:
-      tags:
-      - Products
-      - Products
-      operationId: Products_DeleteProductImage
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      - name: productImageId
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductImage'
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/images/{productImageId}/setMainImage:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_SetMainProductImage
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      - name: productImageId
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SetMainProductImageData'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductImage'
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/handle:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductHandle
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductHandleRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/sku:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductSku
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductSkuRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/listingState:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductListingState
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductListingStateRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/category:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductCategory
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductCategoryRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/{idOrHandle}/brand:
-    put:
-      tags:
-      - Products
-      - Products
-      operationId: Products_UpdateProductBrand
-      parameters:
-      - name: idOrHandle
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductBrandRequest'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-  /v1/products/import:
-    post:
-      tags:
-      - Products
-      - Products
-      operationId: Products_ImportProducts
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductImportResult'
-        404:
-          description: ''
-  /v1/productCategories:
-    get:
-      tags:
-      - ProductCategories
-      - ProductCategories
-      operationId: ProductCategories_GetProductCategories
-      parameters:
-      - name: storeId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 1
-      - name: parentGroupId
-        in: query
-        schema:
-          type: integer
-          format: int64
-          nullable: true
-        x-position: 2
-      - name: includeWithUnlistedProducts
-        in: query
-        schema:
-          type: boolean
-          default: false
-        x-position: 3
-      - name: includeHidden
-        in: query
-        schema:
-          type: boolean
-          default: false
-        x-position: 4
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 5
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 6
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 7
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 8
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 9
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
                 $ref: '#/components/schemas/PagedResultOfProductCategory'
+      security:
+      - JWT: []
     post:
       tags:
       - ProductCategories
       - ProductCategories
       operationId: ProductCategories_CreateProductCategory
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: request
         content:
@@ -1668,7 +2074,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProductCategoryRequest'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1678,18 +2084,26 @@ paths:
                 $ref: '#/components/schemas/ProductCategory'
         400:
           description: ''
+      security:
+      - JWT: []
     put:
       tags:
       - ProductCategories
       - ProductCategories
       operationId: ProductCategories_UpdateProductCategoryDetails
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrPath
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: request
         content:
@@ -1697,7 +2111,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateProductCategoryDetailsRequest'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1707,23 +2121,33 @@ paths:
                 $ref: '#/components/schemas/ProductCategory'
         404:
           description: ''
+      security:
+      - JWT: []
     delete:
       tags:
       - ProductCategories
       - ProductCategories
       operationId: ProductCategories_DeleteProductCategory
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: idOrPath
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
         404:
           description: ''
+      security:
+      - JWT: []
   /v1/productCategories/tree:
     get:
       tags:
@@ -1731,18 +2155,24 @@ paths:
       - ProductCategories
       operationId: ProductCategories_GetProductCategoryTree
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: storeId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 1
+        x-position: 2
       - name: rootNodeIdOrPath
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1752,6 +2182,8 @@ paths:
                 $ref: '#/components/schemas/ProductCategoryTreeRoot'
         400:
           description: ''
+      security:
+      - JWT: []
   /v1/attributes:
     get:
       tags:
@@ -1759,6 +2191,12 @@ paths:
       - Attributes
       operationId: Attributes_GetAttributes
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: ids
         in: query
         style: form
@@ -1768,33 +2206,33 @@ paths:
           nullable: true
           items:
             type: string
-        x-position: 1
+        x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 2
+        x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 3
+        x-position: 4
       - name: searchString
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       - name: sortDirection
         in: query
         schema:
@@ -1802,7 +2240,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
+        x-position: 7
       responses:
         200:
           description: ''
@@ -1817,6 +2255,13 @@ paths:
       - Attributes
       - Attributes
       operationId: Attributes_CreateAttribute
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: dto
         content:
@@ -1824,7 +2269,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateAttribute'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1841,12 +2286,18 @@ paths:
       - Attributes
       operationId: Attributes_GetAttributeById
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1860,12 +2311,18 @@ paths:
       - Attributes
       operationId: Attributes_UpdateAttribute
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: dto
         content:
@@ -1873,7 +2330,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateAttribute'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1883,12 +2340,18 @@ paths:
       - Attributes
       operationId: Attributes_DeleteAttribute
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1899,12 +2362,18 @@ paths:
       - Attributes
       operationId: Attributes_CreateAttributeValue
       parameters:
-      - name: id
+      - name: organizationId
         in: query
         required: true
         schema:
           type: string
         x-position: 1
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
       requestBody:
         x-name: data
         content:
@@ -1912,7 +2381,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProductAttributeValueData'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1929,18 +2398,24 @@ paths:
       - Attributes
       operationId: Attributes_DeleteAttributeValue
       parameters:
-      - name: id
+      - name: organizationId
         in: query
         required: true
         schema:
           type: string
         x-position: 1
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
       - name: valueId
         in: path
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -1952,6 +2427,13 @@ paths:
       - Attributes
       - Attributes
       operationId: Attributes_GetAttributeGroups
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
           description: ''
@@ -1968,6 +2450,13 @@ paths:
       - Attributes
       - Attributes
       operationId: Attributes_CreateAttributeGroup
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: data
         content:
@@ -1975,7 +2464,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProductAttributeGroupData'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -1992,12 +2481,18 @@ paths:
       - Attributes
       operationId: Attributes_UpdateAttributeGroup
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: data
         content:
@@ -2005,7 +2500,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateProductAttributeGroupData'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -2021,12 +2516,18 @@ paths:
       - Attributes
       operationId: Attributes_DeleteAttributeGroup
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2039,12 +2540,18 @@ paths:
       - Options
       operationId: Options_GetOptions
       parameters:
-      - name: id
+      - name: organizationId
         in: query
         required: true
         schema:
           type: string
         x-position: 1
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2063,12 +2570,18 @@ paths:
       - Options
       operationId: Options_GetOptionValues
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2087,32 +2600,38 @@ paths:
       - Stores
       operationId: Stores_GetStores
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 1
+        x-position: 2
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 2
+        x-position: 3
       - name: searchString
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 3
+        x-position: 4
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: sortDirection
         in: query
         schema:
@@ -2120,7 +2639,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 5
+        x-position: 6
       responses:
         200:
           description: ''
@@ -2128,11 +2647,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedResultOfStore'
+      security:
+      - JWT: []
     post:
       tags:
       - Stores
       - Stores
       operationId: Stores_CreateStore
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: dto
         content:
@@ -2140,7 +2668,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateStore'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2148,6 +2676,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Store'
+      security:
+      - JWT: []
   /v1/stores/{IdOrHandle}:
     get:
       tags:
@@ -2155,12 +2685,19 @@ paths:
       - Stores
       operationId: Stores_GetStoreById
       parameters:
-      - name: IdOrHandle
-        in: path
+      - name: organizationId
+        in: query
         required: true
         schema:
           type: string
         x-position: 1
+      - name: IdOrHandle
+        x-originalName: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
       responses:
         200:
           description: ''
@@ -2168,6 +2705,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Store'
+      security:
+      - JWT: []
   /v1/stores/{id}:
     put:
       tags:
@@ -2175,12 +2714,18 @@ paths:
       - Stores
       operationId: Stores_UpdateStore
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: dto
         content:
@@ -2188,37 +2733,52 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateStore'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
     delete:
       tags:
       - Stores
       - Stores
       operationId: Stores_DeleteStore
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
+      security:
+      - JWT: []
   /v1/productCategories/{idOrPath}:
     get:
       tags:
       - ProductCategories
       operationId: ProductCategories_GetProductCategoryById
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: idOrPath
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       responses:
         default:
           description: ''
@@ -2349,6 +2909,8 @@ components:
         id:
           type: integer
           format: int64
+        organizationId:
+          type: string
         name:
           type: string
         store:
@@ -3321,3 +3883,9 @@ components:
           type: string
         currency:
           type: string
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

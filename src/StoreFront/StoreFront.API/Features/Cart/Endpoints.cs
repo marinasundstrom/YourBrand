@@ -62,14 +62,14 @@ public static class Endpoints
         return cart is not null ? TypedResults.Ok(cart) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<CartItem>, NotFound>> AddCartItem(AddCartItemRequest request, MassTransitCartsClient cartsClient, IProductsClient productsClient, IUserContext userContext, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<CartItem>, NotFound>> AddCartItem(AddCartItemRequest request, MassTransitCartsClient cartsClient, IConfiguration configuration, IProductsClient productsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
         var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
 
         string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
 
-        var product = await productsClient.GetProductByIdAsync(request.ProductId.ToString()!, cancellationToken);
+        var product = await productsClient.GetProductByIdAsync(configuration["OrganizationId"]!, request.ProductId.ToString()!, cancellationToken);
 
         string? data = request.Data;
 
@@ -124,7 +124,7 @@ public static class Endpoints
         return cartItem is not null ? TypedResults.Ok(cartItem) : TypedResults.NotFound();
     }
 
-    private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemData(string cartItemId, UpdateCartItemDataRequest request, MassTransitCartsClient cartsClient, IProductsClient productsClient, IUserContext userContext, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemData(string cartItemId, UpdateCartItemDataRequest request, MassTransitCartsClient cartsClient, IConfiguration configuration, IProductsClient productsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
         var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
@@ -134,7 +134,7 @@ public static class Endpoints
         var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
         var cartItem = cart.Items.First(x => x.Id == cartItemId);
 
-        var product = await productsClient.GetProductByIdAsync(cartItem.ProductId.ToString()!, cancellationToken);
+        var product = await productsClient.GetProductByIdAsync(configuration["OrganizationId"]!, cartItem.ProductId.ToString()!, cancellationToken);
 
         PriceCalculator priceCalculator = new PriceCalculator();
         var (price, regularPrice) = priceCalculator.CalculatePrice(product, request.Data!);

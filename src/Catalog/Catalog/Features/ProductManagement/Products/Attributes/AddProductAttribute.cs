@@ -7,19 +7,21 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record AddProductAttribute(long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
+public record AddProductAttribute(string OrganizationId, long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<AddProductAttribute, ProductAttributeDto>
     {
         public async Task<ProductAttributeDto> Handle(AddProductAttribute request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Parent)
                 .ThenInclude(x => x!.ProductAttributes)
                 .ThenInclude(x => x.Attribute)
                 .FirstAsync(product => product.Id == request.ProductId, cancellationToken);
 
             var attribute = await context.Attributes
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Values)
                 .FirstOrDefaultAsync(attribute => attribute.Id == request.AttributeId, cancellationToken);
 
@@ -34,6 +36,7 @@ public record AddProductAttribute(long ProductId, string AttributeId, string Val
 
             Domain.Entities.ProductAttribute productAttribute = new()
             {
+                OrganizationId = request.OrganizationId,
                 ProductId = product.Id,
                 AttributeId = attribute.Id,
                 Value = value!,

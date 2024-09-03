@@ -1,7 +1,10 @@
+using System.Text.Json;
+
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Persistence;
 
@@ -14,11 +17,17 @@ public static class Seed2
     private static ProductCategory? clothes;
 
     private static ProductImage? PlaceholderImage;
+    private static Currency? currency;
+    private static Brand? brand;
+    private static Store? store;
 
-    public static async Task SeedData(CatalogContext context, IConfiguration configuration)
+    public static async Task SeedData(IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
     {
-        //await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
+        using CatalogContext context = serviceProvider.GetRequiredService<CatalogContext>();
+        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        var tenantContext = serviceProvider.GetRequiredService<ITenantContext>();
+
+        var productFactory = new ProductFactory(context, tenantContext);
 
         var connectionString = context.Database.GetConnectionString()!;
 
@@ -27,10 +36,11 @@ public static class Seed2
             : "https://yourbrandstorage.blob.core.windows.net/images/{0}";
 
         PlaceholderImage = new ProductImage("Placeholder", string.Empty, string.Format(cdnBaseUrl, "placeholder.jpeg"));
+        PlaceholderImage.OrganizationId = TenantConstants.OrganizationId;
 
         context.ProductImages.Add(PlaceholderImage);
 
-        var currency = await context.Currencies.FirstOrDefaultAsync(x => x.Code == "SEK");
+        currency = await context.Currencies.FirstOrDefaultAsync(x => x.Code == "SEK");
 
         if (currency is null)
         {
@@ -39,13 +49,14 @@ public static class Seed2
 
         await context.SaveChangesAsync();
 
-        var store = await context.Stores.FirstOrDefaultAsync(x => x.Handle == "my-store");
+        store = await context.Stores.FirstOrDefaultAsync(x => x.Handle == "my-store");
 
         if (store is null)
         {
             var currency2 = await context.Currencies.FirstAsync(x => x.Code == "SEK");
 
             var myStore = new Store("My store", "my-store", currency2);
+            myStore.OrganizationId = TenantConstants.OrganizationId;
             myStore.CurrencyDisplayOptions = new CurrencyDisplayOptions
             {
                 IncludeVatInSalesPrice = true
@@ -54,12 +65,14 @@ public static class Seed2
             context.Stores.Add(store ??= myStore);
         }
 
-        var brand = await context.Brands.FirstOrDefaultAsync(x => x.Handle == "my-brand");
+        brand = await context.Brands.FirstOrDefaultAsync(x => x.Handle == "my-brand");
 
         if (brand is null)
         {
             context.Brands.Add(brand ??= new Brand("My brand", "my-brand"));
         }
+        
+        brand.OrganizationId = TenantConstants.OrganizationId;
 
         context.Set<VatRate>().AddRange(
             new VatRate("25%", 0.25, 1.25, 0.8),
@@ -74,10 +87,11 @@ public static class Seed2
         {
             context.ProductCategories.Add(clothes ??= new ProductCategory("Clothes")
             {
+                OrganizationId = TenantConstants.OrganizationId,
                 Handle = "clothes",
                 Path = "clothes",
                 Description = null,
-                Store = await context.Stores.FirstAsync(x => x.Handle == "my-store")
+                StoreId = store.Id,
             });
         }
 
@@ -87,11 +101,12 @@ public static class Seed2
         {
             context.ProductCategories.Add(tshirts ??= new ProductCategory("T-shirts")
             {
+                OrganizationId = TenantConstants.OrganizationId,
                 Handle = "t-shirts",
                 Path = "t-shirts",
                 Description = null,
                 CanAddProducts = true,
-                Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
+                StoreId = store.Id,
             });
 
             clothes.AddSubCategory(tshirts);
@@ -103,11 +118,12 @@ public static class Seed2
         {
             context.ProductCategories.Add(food ??= new ProductCategory("Food")
             {
+                OrganizationId = TenantConstants.OrganizationId,
                 Handle = "food",
                 Path = "food",
                 Description = null,
                 CanAddProducts = true,
-                Store = await context.Stores.FirstAsync(x => x.Handle == "my-store")
+                StoreId = store.Id,
             });
         }
 
@@ -117,68 +133,74 @@ public static class Seed2
         {
             context.ProductCategories.Add(food ??= new ProductCategory("Drinks")
             {
+                OrganizationId = TenantConstants.OrganizationId,
                 Handle = "drinks",
                 Path = "drinks",
                 Description = null,
                 CanAddProducts = true,
-                Store = await context.Stores.FirstAsync(x => x.Handle == "my-store")
+                StoreId = store.Id,
             });
         }
 
         await context.SaveChangesAsync();
 
-        await CreateTShirt(context);
+        //await CreateTShirt(context, productFactory, cancellationToken);
 
-        await CreateKebabPlate(context);
+        await CreateKebabPlate(context, productFactory, cancellationToken);
 
-        await CreateHerrgardsStek(context);
+        await CreateHerrgardsStek(context, productFactory, cancellationToken);
 
-        await CreateKorg(context);
+        await CreateKorg(context, productFactory, cancellationToken);
 
-        await CreatePizza(context);
+        await CreatePizza(context, productFactory, cancellationToken);
 
-        await CreateSalad(context);
+        await CreateSalad(context, productFactory, cancellationToken);
     }
 
-    public static async Task CreateTShirt(CatalogContext context)
+    public static async Task CreateTShirt(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
         var sizeAttribute = new Domain.Entities.Attribute("Size");
+        sizeAttribute.OrganizationId = TenantConstants.OrganizationId;
 
         context.Attributes.Add(sizeAttribute);
         var valueSmall = new AttributeValue("Small");
 
-        sizeAttribute.Values.Add(valueSmall);
+        sizeAttribute.AddValue(valueSmall);
         var valueMedium = new AttributeValue("Medium");
 
-        sizeAttribute.Values.Add(valueMedium);
+        sizeAttribute.AddValue(valueMedium);
         var valueLarge = new AttributeValue("Large");
 
-        sizeAttribute.Values.Add(valueLarge);
+        sizeAttribute.AddValue(valueLarge);
         context.Attributes.Add(sizeAttribute);
 
         var colorAttribute = new Domain.Entities.Attribute("Color");
+        colorAttribute.OrganizationId = TenantConstants.OrganizationId;
+
         context.Attributes.Add(colorAttribute);
 
         var valueBlue = new AttributeValue("Blue");
-        colorAttribute.Values.Add(valueBlue);
+        colorAttribute.AddValue(valueBlue);
 
         var valueRed = new AttributeValue("Red");
-        colorAttribute.Values.Add(valueRed);
+        colorAttribute.AddValue(valueRed);
 
-        var product = new Product("Färgad t-shirt", "fargad-tshirt")
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "T-shirt i färg",
+            Handle = "tshirt-fargad",
             Description = "",
             Headline = "T-shirt i olika färger",
             HasVariants = true,
             ListingState = ProductListingState.Listed,
-            Brand = await context.Brands.FirstAsync(x => x.Handle == "my-brand"),
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage
-        };
+            BrandId = brand.Id,
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id
+        }, cancellationToken);
 
         tshirts.AddProduct(product);
 
-        context.Products.Add(product);
+        
 
         product.AddProductAttribute(new ProductAttribute
         {
@@ -198,16 +220,17 @@ public static class Seed2
 
         await context.SaveChangesAsync();
 
-        var variantBlueSmall = new Product("Blue S", "tshirt-blue-small")
+        var variantBlueSmall = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "Blue S",
+            Handle = "tshirt-blue-small",
             Description = "",
             Gtin = "4345547457457",
             Price = 120,
             VatRate = 0.25,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         variantBlueSmall.AddProductAttribute(new ProductAttribute
         {
@@ -228,16 +251,17 @@ public static class Seed2
 
         //*/
 
-        var variantBlueMedium = new Product("Blue M", "tshirt-blue-medium")
+        var variantBlueMedium = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "Blue M",
+            Handle = "tshirt-blue-medium",
             Description = "",
             Gtin = "543453454567",
             Price = 120,
             VatRate = 0.25,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         variantBlueMedium.AddProductAttribute(new ProductAttribute
         {
@@ -256,16 +280,17 @@ public static class Seed2
 
         product.AddVariant(variantBlueMedium);
 
-        var variantBlueLarge = new Product("Blue L", "tshirt-blue-large")
+        var variantBlueLarge = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "Blue L",
+            Handle = "tshirt-blue-large",
             Description = "",
             Gtin = "6876345345345",
             Price = 60,
             VatRate = 0.25,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         variantBlueLarge.AddProductAttribute(new ProductAttribute
         {
@@ -285,17 +310,18 @@ public static class Seed2
         product.AddVariant(variantBlueLarge);
 
         /////
-
-        var variantRedSmall = new Product("Red S", "tshirt-red-small")
+        
+        var variantRedSmall = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "Red S",
+            Handle = "tshirt-red-small",
             Description = "",
             Gtin = "4345547457457",
             Price = 120,
             VatRate = 0.25,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         variantRedSmall.AddProductAttribute(new ProductAttribute
         {
@@ -314,16 +340,17 @@ public static class Seed2
 
         product.AddVariant(variantRedSmall);
 
-        var variantRedMedium = new Product("Red M", "tshirt-red-medium")
+        var variantRedMedium = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "Red M",
+            Handle = "tshirt-red-medium",
             Description = "",
             Gtin = "543453454567",
             Price = 120,
             VatRate = 0.25,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         variantRedMedium.AddProductAttribute(new ProductAttribute
         {
@@ -342,16 +369,17 @@ public static class Seed2
 
         product.AddVariant(variantRedMedium);
 
-        var variantRedLarge = new Product("Red L", "tshirt-red-large")
+        var variantRedLarge = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
+            Name = "Red L",
+            Handle = "tshirt-red-large",
             Description = "",
             Gtin = "6876345345345",
             Price = 120,
             VatRate = 0.25,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.25))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         variantRedLarge.AddProductAttribute(new ProductAttribute
         {
@@ -377,63 +405,67 @@ public static class Seed2
         await context.SaveChangesAsync();
     }
 
-    public static async Task CreateKebabPlate(CatalogContext context)
+    public static async Task CreateKebabPlate(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
-        var product = new Product("Kebabtallrik", "kebabtallrik")
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
-            Description = "",
+            Name = "Kebabtallrik",
+            Handle = "kebabtallrik",
             Headline = "Dönnerkebab, nyfriterad pommes frites, sallad, och sås",
+            Description = "",
             Price = 89,
             VatRate = 0.12,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         food.AddProduct(product);
 
-        context.Products.Add(product);
+        
 
         await context.SaveChangesAsync();
 
         var option = new ChoiceOption("Sås");
         product.AddOption(option);
 
+        Console.WriteLine($"test: {JsonSerializer.Serialize(option)}");
+
         await context.SaveChangesAsync();
 
         var valueSmall = new OptionValue("Mild sås");
 
-        option.Values.Add(valueSmall);
+        option.AddValue(valueSmall);
 
         var valueMedium = new OptionValue("Stark sås");
 
-        option.Values.Add(valueMedium);
+        option.AddValue(valueMedium);
 
         var valueLarge = new OptionValue("Blandad sås");
 
         option.DefaultValue = valueSmall;
 
-        option.Values.Add(valueLarge);
+        option.AddValue(valueLarge);
 
         await context.SaveChangesAsync();
     }
 
-    public static async Task CreateHerrgardsStek(CatalogContext context)
+    public static async Task CreateHerrgardsStek(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
-        var product = new Product("Herrgårdsstek", "herrgardsstek")
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
-            Description = "",
+            Name = "Herrgårdsstek",
+            Handle = "herrgardsstek",
             Headline = "Vår fina stek med pommes och vår hemlagade bearnaise sås",
+            Description = "",
             Price = 179,
             VatRate = 0.12,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         food.AddProduct(product);
 
-        context.Products.Add(product);
+        
 
         await context.SaveChangesAsync();
 
@@ -443,7 +475,7 @@ public static class Seed2
 
         await context.SaveChangesAsync();
 
-        optionDoneness.Values.Add(new OptionValue("Rare")
+        optionDoneness.AddValue(new OptionValue("Rare")
         {
             Seq = 1
         });
@@ -453,9 +485,9 @@ public static class Seed2
             Seq = 2
         };
 
-        optionDoneness.Values.Add(optionMediumRare);
+        optionDoneness.AddValue(optionMediumRare);
 
-        optionDoneness.Values.Add(new OptionValue("Well Done")
+        optionDoneness.AddValue(new OptionValue("Well Done")
         {
             Seq = 3
         });
@@ -472,22 +504,23 @@ public static class Seed2
         await context.SaveChangesAsync();
     }
 
-    public static async Task CreateKorg(CatalogContext context)
+    public static async Task CreateKorg(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
-        var product = new Product("Korg", "korg")
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
-            Description = "",
+            Name = "Korg",
+            Handle = "korg",
             Headline = "En korg med smårätter",
+            Description = "",
             Price = 179,
             VatRate = 0.12,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         food.AddProduct(product);
 
-        context.Products.Add(product);
+        
 
         await context.SaveChangesAsync();
 
@@ -535,12 +568,12 @@ public static class Seed2
 
         product.AddOption(optionSauce);
 
-        optionSauce.Values.Add(new OptionValue("Favoritsås")
+        optionSauce.AddValue(new OptionValue("Favoritsås")
         {
             Price = 10
         });
 
-        optionSauce.Values.Add(new OptionValue("Barbecuesås")
+        optionSauce.AddValue(new OptionValue("Barbecuesås")
         {
             Price = 10
         });
@@ -548,22 +581,23 @@ public static class Seed2
         await context.SaveChangesAsync();
     }
 
-    public static async Task CreatePizza(CatalogContext context)
+    public static async Task CreatePizza(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
-        var product = new Product("Pizza", "pizza")
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
-            Description = "",
+            Name = "Pizza",
+            Handle = "pizza",
             Headline = "Custom pizza",
+            Description = "",
             Price = 40,
             VatRate = 0.12,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
 
         food.AddProduct(product);
 
-        context.Products.Add(product);
+        
 
         await context.SaveChangesAsync();
 
@@ -613,13 +647,13 @@ public static class Seed2
 
         var valueItalian = new OptionValue("Italian");
 
-        optionStyle.Values.Add(valueItalian);
+        optionStyle.AddValue(valueItalian);
 
         var valueAmerican = new OptionValue("American");
 
         optionStyle.DefaultValue = valueAmerican;
 
-        optionStyle.Values.Add(valueAmerican);
+        optionStyle.AddValue(valueAmerican);
 
         var optionHam = new SelectableOption("Ham")
         {
@@ -665,25 +699,26 @@ public static class Seed2
         await context.SaveChangesAsync();
     }
 
-    public static async Task CreateSalad(CatalogContext context)
+    public static async Task CreateSalad(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
-        var product = new Product("Sallad", "sallad")
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
-            Description = "",
+            Name = "Sallad",
+            Handle = "sallad",
             Headline = "Din egna sallad",
+            Description = "",
             Price = 52,
             VatRate = 0.12,
-            VatRateId = (await context.VatRates.FirstOrDefaultAsync(x => x.Rate == 0.12))?.Id,
-            ListingState = ProductListingState.Listed,
-            Store = await context.Stores.FirstAsync(x => x.Handle == "my-store"),
-            Image = PlaceholderImage,
-        };
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+            ListingState = ProductListingState.Listed
+        }, cancellationToken);
 
         product.SetPrice(52);
 
         food.AddProduct(product);
 
-        context.Products.Add(product);
+        
 
         var baseGroup = new OptionGroup("Bas")
         {
@@ -729,21 +764,21 @@ public static class Seed2
 
         var valueSallad = new OptionValue("Sallad");
 
-        optionBase.Values.Add(valueSallad);
+        optionBase.AddValue(valueSallad);
 
         var valueSalladPasta = new OptionValue("Sallad med pasta");
 
         optionBase.DefaultValue = valueSalladPasta;
 
-        optionBase.Values.Add(valueSalladPasta);
+        optionBase.AddValue(valueSalladPasta);
 
         var valueSalladQuinoa = new OptionValue("Sallad med quinoa");
 
-        optionBase.Values.Add(valueSalladQuinoa);
+        optionBase.AddValue(valueSalladQuinoa);
 
         var valueSalladNudlar = new OptionValue("Sallad med glasnudlar");
 
-        optionBase.Values.Add(valueSalladNudlar);
+        optionBase.AddValue(valueSalladNudlar);
 
         var optionChicken = new SelectableOption("Kycklingfilé")
         {

@@ -7,13 +7,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
-public record UpdateProductOptionGroup(long ProductId, string OptionGroupId, UpdateProductOptionGroupData Data) : IRequest<OptionGroupDto>
+public record UpdateProductOptionGroup(string OrganizationId, long ProductId, string OptionGroupId, UpdateProductOptionGroupData Data) : IRequest<OptionGroupDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UpdateProductOptionGroup, OptionGroupDto>
     {
         public async Task<OptionGroupDto> Handle(UpdateProductOptionGroup request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+            .InOrganization(request.OrganizationId)
             .Include(x => x.OptionGroups)
             .FirstAsync(x => x.Id == request.ProductId);
 

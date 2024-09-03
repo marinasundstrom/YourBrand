@@ -12,6 +12,7 @@ public class CategoryUpdateViewModel(IProductsClient productsClient, IProductCat
     {
         return new(productsClient, productCategoriesClient, snackbar, storeProvider)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Category = new ProductCategory(product.Category.Id!, product.Category.Name, true)
         };
@@ -20,13 +21,15 @@ public class CategoryUpdateViewModel(IProductsClient productsClient, IProductCat
     [Required]
     public ProductCategory Category { get; set; }
 
+    public string OrganizationId { get; private set; }
+
     public long ProductId { get; private set; }
 
     public async Task<IEnumerable<ProductCategory>> Search(string value)
     {
         var store = storeProvider.CurrentStore;
 
-        var result = await productCategoriesClient.GetProductCategoriesAsync(store.Id, null, true, true, 1, 20, value, null, null);
+        var result = await productCategoriesClient.GetProductCategoriesAsync(OrganizationId, store.Id, null, true, true, 1, 20, value, null, null);
 
         return result.Items
             .Where(x => x.CanAddProducts)
@@ -37,7 +40,7 @@ public class CategoryUpdateViewModel(IProductsClient productsClient, IProductCat
     {
         try
         {
-            await productsClient.UpdateProductCategoryAsync(ProductId.ToString(), new UpdateProductCategoryRequest()
+            await productsClient.UpdateProductCategoryAsync(OrganizationId, ProductId.ToString(), new UpdateProductCategoryRequest()
             {
                 ProductCategoryId = Category.Id
             });

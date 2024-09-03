@@ -2,9 +2,10 @@
 
 using System.ComponentModel.DataAnnotations.Schema;
 
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
-public class OptionValue : Entity<string>, IHasTenant
+public class OptionValue : Entity<string>, IHasTenant, IHasOrganization
 {
     protected OptionValue() { }
 
@@ -15,6 +16,8 @@ public class OptionValue : Entity<string>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public int? Seq { get; set; }
 

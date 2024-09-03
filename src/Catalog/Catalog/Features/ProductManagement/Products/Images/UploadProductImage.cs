@@ -8,7 +8,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Images;
 
-public sealed record UploadProductImage(string IdOrHandle, Stream Stream, string FileName, string ContentType, bool SetMainImage) : IRequest<Result<ProductImageDto>>
+public sealed record UploadProductImage(string OrganizationId, string IdOrHandle, Stream Stream, string FileName, string ContentType, bool SetMainImage) : IRequest<Result<ProductImageDto>>
 {
     public sealed class Handler(IProductImageUploader productImageUploader, IPublishEndpoint publishEndpoint, CatalogContext catalogContext = default!) : IRequestHandler<UploadProductImage, Result<ProductImageDto>>
     {
@@ -17,8 +17,14 @@ public sealed record UploadProductImage(string IdOrHandle, Stream Stream, string
             var isId = int.TryParse(request.IdOrHandle, out var id);
 
             var product = isId ?
-                await catalogContext.Products.IncludeImages().FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
-                : await catalogContext.Products.IncludeImages().FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
+                await catalogContext.Products
+                        .InOrganization(request.OrganizationId)
+                        .IncludeImages()
+                        .FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
+                : await catalogContext.Products
+                        .InOrganization(request.OrganizationId)
+                        .IncludeImages()
+                        .FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
 
             if (product is null)
             {
@@ -28,6 +34,7 @@ public sealed record UploadProductImage(string IdOrHandle, Stream Stream, string
             var imageUrl = await productImageUploader.UploadProductImage(product.Id, request.FileName, request.Stream, request.ContentType);
 
             var image = new Domain.Entities.ProductImage(request.FileName, string.Empty, imageUrl);
+            image.OrganizationId = request.OrganizationId;
 
             product.AddImage(image);
 

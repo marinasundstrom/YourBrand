@@ -8,7 +8,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record UpdateProductHandle(string IdOrHandle, string Handle) : IRequest<Result>
+public sealed record UpdateProductHandle(string OrganizationId, string IdOrHandle, string Handle) : IRequest<Result>
 {
     public sealed class Handler(IPublishEndpoint publishEndpoint, CatalogContext catalogContext = default!) : IRequestHandler<UpdateProductHandle, Result>
     {
@@ -17,8 +17,12 @@ public sealed record UpdateProductHandle(string IdOrHandle, string Handle) : IRe
             var isId = int.TryParse(request.IdOrHandle, out var id);
 
             var product = isId ?
-                await catalogContext.Products.FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
-                : await catalogContext.Products.FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
+                await catalogContext.Products
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
+                : await catalogContext.Products
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
 
             if (product is null)
             {

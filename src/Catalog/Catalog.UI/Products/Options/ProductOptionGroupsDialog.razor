@@ -47,6 +47,9 @@
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     Product? item;
     List<OptionGroup>? optionGroups;
 
@@ -55,8 +58,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        item = await ProductsClient.GetProductByIdAsync(ProductId.ToString());
-        optionGroups = (await ProductOptionsClient.GetProductOptionGroupsAsync(ProductId.GetValueOrDefault())).ToList();
+        item = await ProductsClient.GetProductByIdAsync(Organization.Id, ProductId.ToString());
+        optionGroups = (await ProductOptionsClient.GetProductOptionGroupsAsync(Organization.Id, ProductId.GetValueOrDefault())).ToList();
     }
 
     async Task CreateGroup()
@@ -99,7 +102,7 @@
             return;
         }
 
-        await ProductOptionsClient.DeleteProductOptionGroupAsync(ProductId.GetValueOrDefault(), optionGroup.Id);
+        await ProductOptionsClient.DeleteProductOptionGroupAsync(Organization.Id, ProductId.GetValueOrDefault(), optionGroup.Id);
 
         optionGroups.Remove(optionGroup);
     }

@@ -36,29 +36,29 @@ public static class Endpoints
         return app;
     }
 
-    public static async Task<PagedResult<StoreDto>> GetStores(int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
+    public static async Task<PagedResult<StoreDto>> GetStores(string organizationId, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
     {
-        return await mediator.Send(new GetStoresQuery(page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetStoresQuery(organizationId, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 
-    public static async Task<StoreDto?> GetStoreById(string IdOrHandle, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<StoreDto?> GetStoreById(string organizationId, string idOrHandle, IMediator mediator, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new GetStoreQuery(IdOrHandle), cancellationToken);
+        return await mediator.Send(new GetStoreQuery(organizationId, idOrHandle), cancellationToken);
     }
 
-    public static async Task<StoreDto> CreateStore(CreateStoreDto dto, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<StoreDto> CreateStore(string organizationId, CreateStoreDto dto, IMediator mediator, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new CreateStoreCommand(dto.Name, dto.Handle, dto.Currency), cancellationToken);
+        return await mediator.Send(new CreateStoreCommand(organizationId, dto.Name, dto.Handle, dto.Currency), cancellationToken);
     }
 
-    public static async Task UpdateStore(string id, UpdateStoreDto dto, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task UpdateStore(string organizationId, string id, UpdateStoreDto dto, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new UpdateStoreCommand(id, dto.Name, dto.Handle, dto.Currency), cancellationToken);
+        await mediator.Send(new UpdateStoreCommand(organizationId, id, dto.Name, dto.Handle, dto.Currency), cancellationToken);
     }
 
-    public static async Task DeleteStore(string id, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task DeleteStore(string organizationId, string id, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteStoreCommand(id), cancellationToken);
+        await mediator.Send(new DeleteStoreCommand(organizationId, id), cancellationToken);
     }
 }
 

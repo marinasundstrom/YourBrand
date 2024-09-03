@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record DeleteProductAttribute(long ProductId, string AttributeId) : IRequest
+public record DeleteProductAttribute(string OrganizationId, long ProductId, string AttributeId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductAttribute>
     {
         public async Task Handle(DeleteProductAttribute request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.ProductAttributes)
                 .FirstAsync(x => x.Id == request.ProductId);
 

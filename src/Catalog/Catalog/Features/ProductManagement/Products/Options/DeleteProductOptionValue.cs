@@ -7,13 +7,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record DeleteProductOptionValue(long ProductId, string OptionId, string ValueId) : IRequest
+public record DeleteProductOptionValue(string OrganizationId, long ProductId, string OptionId, string ValueId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductOptionValue>
     {
         public async Task Handle(DeleteProductOptionValue request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+             .InOrganization(request.OrganizationId)
              .AsSplitQuery()
              .Include(pv => pv.Options)
              .ThenInclude(pv => (pv as ChoiceOption)!.Values)
@@ -23,7 +24,7 @@ public record DeleteProductOptionValue(long ProductId, string OptionId, string V
 
             var value = (option as ChoiceOption)!.Values.First(o => o.Id == request.ValueId);
 
-            (option as ChoiceOption)!.Values.Remove(value);
+            (option as ChoiceOption)!.RemoveValue(value);
             context.OptionValues.Remove(value);
 
             await context.SaveChangesAsync();

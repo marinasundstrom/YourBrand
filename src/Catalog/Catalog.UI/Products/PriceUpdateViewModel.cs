@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 using MudBlazor;
 
+using YourBrand.AppService.Client;
+
 namespace YourBrand.Catalog.Products;
 
 public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService dialogService, ISnackbar snackbar)
@@ -10,12 +12,15 @@ public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService
     {
         return new(productsClient, dialogService, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Price = product.Price,
             RegularPrice = product.RegularPrice,
             DiscountRate = product.DiscountRate
         };
     }
+
+    public string OrganizationId { get; set; }
 
     [Range(0, 100000)]
     public decimal Price { get; set; }
@@ -30,7 +35,7 @@ public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService
     {
         try
         {
-            await productsClient.UpdateProductPriceAsync(ProductId.ToString(), new UpdateProductPriceRequest()
+            await productsClient.UpdateProductPriceAsync(OrganizationId, ProductId.ToString(), new UpdateProductPriceRequest()
             {
                 Price = Price
             });
@@ -68,7 +73,7 @@ public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService
 
     public async Task RestoreRegularPrice()
     {
-        await productsClient.RestoreProductRegularPriceAsync(ProductId.ToString(), new RestoreProductRegularPriceReguest());
+        await productsClient.RestoreProductRegularPriceAsync(OrganizationId, ProductId.ToString(), new RestoreProductRegularPriceReguest());
 
         Price = RegularPrice.GetValueOrDefault();
         RegularPrice = null;

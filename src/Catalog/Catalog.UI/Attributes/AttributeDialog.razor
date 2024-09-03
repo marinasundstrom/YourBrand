@@ -36,6 +36,9 @@
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = null!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter]
     public string? AttributeId { get; set; } = null!;
 
@@ -48,7 +51,7 @@
 
         if (AttributeId is not null) 
         {
-            var attribute = await AttributesClient.GetAttributeByIdAsync(AttributeId);
+            var attribute = await AttributesClient.GetAttributeByIdAsync(Organization.Id, AttributeId);
             Name = attribute.Name;
         }
     }
@@ -57,7 +60,7 @@
     {
         if(AttributeId is null) 
         {
-            await AttributesClient.CreateAttributeAsync(new CreateAttribute {
+            await AttributesClient.CreateAttributeAsync(Organization.Id, new CreateAttribute {
                 Name = Name
             });
 
@@ -67,7 +70,7 @@
         {
             if (context.IsModified())
             {
-                await AttributesClient.UpdateAttributeAsync(AttributeId, new UpdateAttribute
+                await AttributesClient.UpdateAttributeAsync(Organization.Id, AttributeId, new UpdateAttribute
                 {
                     Name = Name
                 });

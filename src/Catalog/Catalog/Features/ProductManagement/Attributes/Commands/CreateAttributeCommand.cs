@@ -7,17 +7,19 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes;
 
-public record CreateAttributeCommand(string Name, string? Description, string? GroupId, IEnumerable<CreateProductAttributeValueData> Values) : IRequest<AttributeDto>
+public record CreateAttributeCommand(string OrganizationId, string Name, string? Description, string? GroupId, IEnumerable<CreateProductAttributeValueData> Values) : IRequest<AttributeDto>
 {
     public class CreateAttributeCommandHandler(CatalogContext context) : IRequestHandler<CreateAttributeCommand, AttributeDto>
     {
         public async Task<AttributeDto> Handle(CreateAttributeCommand request, CancellationToken cancellationToken)
         {
             var group = await context.AttributeGroups
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(attribute => attribute.Id == request.GroupId);
 
             Domain.Entities.Attribute attribute = new(Guid.NewGuid().ToString())
             {
+                OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,
                 Group = group,
@@ -30,7 +32,7 @@ public record CreateAttributeCommand(string Name, string? Description, string? G
                     Name = v.Name
                 };
 
-                attribute.Values.Add(value);
+                attribute.AddValue(value);
             }
 
             await context.SaveChangesAsync(cancellationToken);

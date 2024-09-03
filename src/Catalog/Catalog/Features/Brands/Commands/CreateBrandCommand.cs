@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.Brands.Commands;
 
-public sealed record CreateBrandCommand(string Name, string Handle) : IRequest<BrandDto>
+public sealed record CreateBrandCommand(string OrganizationId, string Name, string Handle) : IRequest<BrandDto>
 {
     public sealed class CreateBrandCommandHandler(CatalogContext context) : IRequestHandler<CreateBrandCommand, BrandDto>
     {
         public async Task<BrandDto> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
-            var brand = await context.Brands.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
+            var brand = await context.Brands
+               .InOrganization(request.OrganizationId)
+               .FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
             if (brand is not null) throw new Exception();
 
@@ -26,6 +28,7 @@ public sealed record CreateBrandCommand(string Name, string Handle) : IRequest<B
             }
 
             brand = new Domain.Entities.Brand(request.Name, request.Handle);
+            brand.OrganizationId = request.OrganizationId;
 
             context.Brands.Add(brand);
 
@@ -33,6 +36,7 @@ public sealed record CreateBrandCommand(string Name, string Handle) : IRequest<B
 
             brand = await context
                .Brands
+               .InOrganization(request.OrganizationId)
                .AsNoTracking()
                .FirstAsync(c => c.Id == brand.Id);
 

@@ -76,7 +76,7 @@ public sealed record Checkout(
                 .Select(x => x.ProductId.GetValueOrDefault())
                 .Distinct();
 
-            var products = await productsClient2.GetProductsByIdsAsync(productIds, null, null, cancellationToken);
+            var products = await productsClient2.GetProductsByIdsAsync(configuration["OrganizationId"]!, productIds, null, null, cancellationToken);
 
             foreach (var item in cart.Items)
             {
@@ -105,7 +105,7 @@ public sealed record Checkout(
                 .Select(x => x.ProductId.GetValueOrDefault())
                 .Distinct();
 
-            var products = await productsClient2.GetProductsByIdsAsync(productIds, null, null, cancellationToken);
+            var products = await productsClient2.GetProductsByIdsAsync(configuration["OrganizationId"]!, productIds, null, null, cancellationToken);
 
             foreach (var cartItem in cart.Items)
             {

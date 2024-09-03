@@ -246,7 +246,15 @@ using (var scope = app.Services.CreateScope())
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
-        await SeedData(context, configuration, logger);
+        try
+        {
+            await Seed2.SeedData(scope.ServiceProvider);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred seeding the " +
+                "database. Error: {Message}", ex.Message);
+        }
         return;
     }
 }
@@ -255,13 +263,5 @@ app.Run();
 
 static async Task SeedData(CatalogContext context, IConfiguration configuration, ILogger<Program> logger)
 {
-    try
-    {
-        await Seed2.SeedData(context, configuration);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred seeding the " +
-            "database. Error: {Message}", ex.Message);
-    }
+    
 }

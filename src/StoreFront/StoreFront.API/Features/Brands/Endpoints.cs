@@ -25,15 +25,15 @@ public static class Endpoints
         return app;
     }
 
-    private static async Task<Results<Ok<PagedResult<Brand>>, NotFound>> GetBrands(string? productCategoryId = null, int? page = 1, int? pageSize = 10, string? searchTerm = null, IBrandsClient brandsClient = default!, IStoresClient storesClient = default!, CancellationToken cancellationToken = default)
+    private static async Task<Results<Ok<PagedResult<Brand>>, NotFound>> GetBrands(string? productCategoryId = null, int? page = 1, int? pageSize = 10, string? searchTerm = null, IConfiguration configuration = default!, IBrandsClient brandsClient = default!, IStoresClient storesClient = default!, CancellationToken cancellationToken = default)
     {
         if (storeId is null)
         {
-            var store = await storesClient.GetStoreByIdAsync("my-store");
+            var store = await storesClient.GetStoreByIdAsync(configuration["OrganizationId"]!, "my-store");
             storeId = store.Id;
         }
 
-        var results = await brandsClient.GetBrandsAsync(productCategoryId, page, pageSize, searchTerm, null, null, cancellationToken);
+        var results = await brandsClient.GetBrandsAsync(configuration["OrganizationId"]!, productCategoryId, page, pageSize, searchTerm, null, null, cancellationToken);
         return results is not null ? TypedResults.Ok(
                 new PagedResult<Brand>(results.Items.Select(x => x.Map()), results.Total)
         ) : TypedResults.NotFound();

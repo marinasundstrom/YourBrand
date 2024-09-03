@@ -29,6 +29,9 @@
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter] public ProductCategory ProductCategory { get; set; }
 
     [Required]
@@ -54,7 +57,7 @@
                 //Handle = Handle,
                 Description = Description
             };
-        var result = await ProductCategoriesClient.UpdateProductCategoryDetailsAsync(ProductCategory.Id.ToString(), data);
+        var result = await ProductCategoriesClient.UpdateProductCategoryDetailsAsync(Organization.Id, ProductCategory.Id.ToString(), data);
         Modal.Close(DialogResult.Ok(result));
     }
 

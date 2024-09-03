@@ -8,7 +8,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record UpdateProductVatRate(string IdOrHandle, int? VatRateId) : IRequest<Result>
+public sealed record UpdateProductVatRate(string OrganizationId, string IdOrHandle, int? VatRateId) : IRequest<Result>
 {
     public sealed class Handler(IPublishEndpoint publishEndpoint, CatalogContext catalogContext = default!) : IRequestHandler<UpdateProductVatRate, Result>
     {
@@ -17,8 +17,12 @@ public sealed record UpdateProductVatRate(string IdOrHandle, int? VatRateId) : I
             var isId = int.TryParse(request.IdOrHandle, out var id);
 
             var product = isId ?
-                await catalogContext.Products.FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
-                : await catalogContext.Products.FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
+                await catalogContext.Products
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
+                : await catalogContext.Products
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
 
             if (product is null)
             {

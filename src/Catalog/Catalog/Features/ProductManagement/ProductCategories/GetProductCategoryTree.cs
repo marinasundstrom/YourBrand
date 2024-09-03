@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
-public sealed record GetProductCategoryTree(string? StoreId, string? RootNodeIdOrPath) : IRequest<Result<ProductCategoryTreeRootDto>>
+public sealed record GetProductCategoryTree(string OrganizationId, string? StoreId, string? RootNodeIdOrPath) : IRequest<Result<ProductCategoryTreeRootDto>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<GetProductCategoryTree, Result<ProductCategoryTreeRootDto>>
     {
         public async Task<Result<ProductCategoryTreeRootDto>> Handle(GetProductCategoryTree request, CancellationToken cancellationToken)
         {
             var query = catalogContext.ProductCategories
+            .InOrganization(request.OrganizationId)
             .Include(x => x.Parent)
             .ThenInclude(x => x!.Parent)
             .Include(x => x.SubCategories.OrderBy(x => x.Name))

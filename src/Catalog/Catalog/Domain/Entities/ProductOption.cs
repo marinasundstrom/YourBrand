@@ -1,10 +1,13 @@
-﻿using YourBrand.Tenancy;
+﻿using YourBrand.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductOption : Entity<int>, IHasTenant
+public class ProductOption : Entity<int>, IHasTenant, IHasOrganization
 {
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public long ProductId { get; set; }
 

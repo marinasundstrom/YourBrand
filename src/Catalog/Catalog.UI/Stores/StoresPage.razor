@@ -56,11 +56,14 @@
 
     public Store Store { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     private async Task<TableData<Store>> LoadData(TableState state)
     {
         try
         {
-            var results = await StoresClient.GetStoresAsync(state.Page, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
+            var results = await StoresClient.GetStoresAsync(Organization.Id, state.Page, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
             return new TableData<Store> { Items = results.Items, TotalItems = results.Total };
         }
         /*catch (ApiException exc)
@@ -133,7 +136,7 @@
             return;
         }
 
-        await StoresClient.DeleteStoreAsync(store.Id);
+        await StoresClient.DeleteStoreAsync(Organization.Id, store.Id);
 
         await table.ReloadServerData();
     }

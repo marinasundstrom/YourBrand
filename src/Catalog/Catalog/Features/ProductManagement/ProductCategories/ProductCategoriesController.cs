@@ -16,9 +16,9 @@ public sealed class ProductCategoriesController : Controller
     [HttpGet("{*idOrPath}")]
     [ProducesDefaultResponseType]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductCategory>> GetProductCategoryById(string idOrPath, IMediator mediator, CatalogContext catalogContext, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductCategory>> GetProductCategoryById(string organizationId, string idOrPath, IMediator mediator, CatalogContext catalogContext, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetProductCategoryById(idOrPath), cancellationToken);
+        var result = await mediator.Send(new GetProductCategoryById(organizationId, idOrPath), cancellationToken);
 
         return result.IsSuccess ? Ok(result.GetValue()) : NotFound();
     }

@@ -26,6 +26,7 @@ public static class Mappings
     {
         return new ProductDto(
             product.Id,
+            product.OrganizationId,
             product.Name,
             product.Store?.ToDto(),
             product.Brand?.ToDto(),
@@ -46,6 +47,33 @@ public static class Mappings
             product.ProductAttributes.Select(x => x.ToDto()),
             product.ProductOptions.Select(x => x.ToDto()));
     }
+
+    /*
+    public static OrganizationDto ToDto(this Domain.Entities.Organization organization)
+    {
+        return new OrganizationDto(
+            product.Id,
+            product.Name,
+            product.Store?.ToDto(),
+            product.Brand?.ToDto(),
+            product.Category?.ToProductCategory2(),
+            product.Parent?.ToParentProductDto(),
+            product.Description,
+            product.Price,
+            product.VatRate,
+            product.VatRateId,
+            product.RegularPrice,
+            product.DiscountRate,
+            product.Image?.ToDto(),
+            product.Images.Select(x => x.ToDto()),
+            product.Handle,
+            product.Sku,
+            product.HasVariants,
+            (ProductListingState)product.ListingState,
+            product.ProductAttributes.Select(x => x.ToDto()),
+            product.ProductOptions.Select(x => x.ToDto()));
+    }
+    */
 
     public static ParentProductDto ToParentProductDto(this Domain.Entities.Product item)
     {

@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
-public sealed record UpdateProductCategoryDetails(string IdOrPath, string Name, string Description) : IRequest<Result<ProductCategory>>
+public sealed record UpdateProductCategoryDetails(string OrganizationId, string IdOrPath, string Name, string Description) : IRequest<Result<ProductCategory>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<UpdateProductCategoryDetails, Result<ProductCategory>>
     {
@@ -15,8 +15,12 @@ public sealed record UpdateProductCategoryDetails(string IdOrPath, string Name, 
             var isId = int.TryParse(request.IdOrPath, out var id);
 
             var productCategory = isId ?
-                await catalogContext.ProductCategories.FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
-                : await catalogContext.ProductCategories.FirstOrDefaultAsync(product => product.Path == request.IdOrPath, cancellationToken);
+                await catalogContext.ProductCategories
+                        .InOrganization(request.OrganizationId)
+                        .FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
+                : await catalogContext.ProductCategories
+                        .InOrganization(request.OrganizationId)
+                        .FirstOrDefaultAsync(product => product.Path == request.IdOrPath, cancellationToken);
 
             if (productCategory is null)
             {
@@ -29,6 +33,7 @@ public sealed record UpdateProductCategoryDetails(string IdOrPath, string Name, 
             await catalogContext.SaveChangesAsync(cancellationToken);
 
             productCategory = await catalogContext.ProductCategories
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Parent)
                 .AsNoTracking()
                 .FirstAsync(x => x.Id == productCategory.Id, cancellationToken);

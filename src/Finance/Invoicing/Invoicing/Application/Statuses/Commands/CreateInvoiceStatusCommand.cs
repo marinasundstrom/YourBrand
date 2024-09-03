@@ -16,7 +16,9 @@ public record CreateInvoiceStatusCommand(string OrganizationId, string Name, str
 
         public async Task<InvoiceStatusDto> Handle(CreateInvoiceStatusCommand request, CancellationToken cancellationToken)
         {
-            var invoiceStatus = await context.InvoiceStatuses.FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
+            var invoiceStatus = await context.InvoiceStatuses
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(i => i.Name == request.Name, cancellationToken);
 
             if (invoiceStatus is not null) throw new Exception();
 
@@ -25,6 +27,7 @@ public record CreateInvoiceStatusCommand(string OrganizationId, string Name, str
             try
             {
                 invoiceStatusNo = await context.InvoiceStatuses
+                    .InOrganization(request.OrganizationId)
                     .Where(x => x.OrganizationId == request.OrganizationId)
                     .MaxAsync(x => x.Id, cancellationToken) + 1;
             }

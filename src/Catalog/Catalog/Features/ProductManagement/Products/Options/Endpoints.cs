@@ -59,62 +59,62 @@ public static class Endpoints
         return app;
     }
 
-    public static async Task<Results<Ok<IEnumerable<ProductOptionDto>>, BadRequest>> GetProductOptions(long id, string? variantId, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<IEnumerable<ProductOptionDto>>, BadRequest>> GetProductOptions(string organizationId, long id, string? variantId, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new GetProductOptions(id, variantId), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new GetProductOptions(organizationId, id, variantId), cancellationToken));
     }
 
-    public static async Task<Results<Ok<OptionDto>, BadRequest>> CreateProductOption(long id, CreateProductOptionData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<OptionDto>, BadRequest>> CreateProductOption(string organizationId, long id, CreateProductOptionData data, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new CreateProductOption(id, data), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new CreateProductOption(organizationId, id, data), cancellationToken));
     }
 
-    public static async Task<Results<Ok<OptionDto>, BadRequest>> UpdateProductOption(long id, string optionId, UpdateProductOptionData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<OptionDto>, BadRequest>> UpdateProductOption(string organizationId, long id, string optionId, UpdateProductOptionData data, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new UpdateProductOption(id, optionId, data), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new UpdateProductOption(organizationId, id, optionId, data), cancellationToken));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteProductOption(long id, string optionId, IMediator mediator)
+    public static async Task<Results<Ok, BadRequest>> DeleteProductOption(string organizationId, long id, string optionId, IMediator mediator)
     {
-        await mediator.Send(new DeleteProductOption(id, optionId));
+        await mediator.Send(new DeleteProductOption(organizationId, id, optionId));
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<Ok<OptionValueDto>, BadRequest>> CreateProductOptionValue(long id, string optionId, CreateProductOptionValueData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<OptionValueDto>, BadRequest>> CreateProductOptionValue(string organizationId, long id, string optionId, CreateProductOptionValueData data, IMediator mediator, CancellationToken cancellationToken)
     {
 
-        return TypedResults.Ok(await mediator.Send(new CreateProductOptionValue(id, optionId, data), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new CreateProductOptionValue(organizationId, id, optionId, data), cancellationToken));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteProductOptionValue(long id, string optionId, string valueId, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok, BadRequest>> DeleteProductOptionValue(string organizationId, long id, string optionId, string valueId, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteProductOptionValue(id, optionId, valueId), cancellationToken);
+        await mediator.Send(new DeleteProductOptionValue(organizationId, id, optionId, valueId), cancellationToken);
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<Ok<IEnumerable<OptionValueDto>>, BadRequest>> GetProductOptionValues(long id, string optionId, IMediator mediator)
+    public static async Task<Results<Ok<IEnumerable<OptionValueDto>>, BadRequest>> GetProductOptionValues(string organizationId, long id, string optionId, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new GetOptionValues(optionId)));
+        return TypedResults.Ok(await mediator.Send(new GetOptionValues(organizationId, optionId)));
     }
 
-    public static async Task<Results<Ok<IEnumerable<OptionGroupDto>>, BadRequest>> GetProductOptionGroups(long id, IMediator mediator)
+    public static async Task<Results<Ok<IEnumerable<OptionGroupDto>>, BadRequest>> GetProductOptionGroups(string organizationId, long id, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new GetProductOptionGroups(id)));
+        return TypedResults.Ok(await mediator.Send(new GetProductOptionGroups(organizationId, id)));
     }
 
-    public static async Task<Results<Ok<OptionGroupDto>, BadRequest>> CreateProductOptionGroup(long id, CreateProductOptionGroupData data, IMediator mediator)
+    public static async Task<Results<Ok<OptionGroupDto>, BadRequest>> CreateProductOptionGroup(string organizationId, long id, CreateProductOptionGroupData data, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new CreateProductOptionGroup(id, data)));
+        return TypedResults.Ok(await mediator.Send(new CreateProductOptionGroup(organizationId, id, data)));
     }
 
-    public static async Task<Results<Ok<OptionGroupDto>, BadRequest>> UpdateProductOptionGroup(long id, string optionGroupId, UpdateProductOptionGroupData data, IMediator mediator)
+    public static async Task<Results<Ok<OptionGroupDto>, BadRequest>> UpdateProductOptionGroup(string organizationId, long id, string optionGroupId, UpdateProductOptionGroupData data, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new UpdateProductOptionGroup(id, optionGroupId, data)));
+        return TypedResults.Ok(await mediator.Send(new UpdateProductOptionGroup(organizationId, id, optionGroupId, data)));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteProductOptionGroup(long id, string optionGroupId, IMediator mediator)
+    public static async Task<Results<Ok, BadRequest>> DeleteProductOptionGroup(string organizationId, long id, string optionGroupId, IMediator mediator)
     {
-        await mediator.Send(new DeleteProductOptionGroup(id, optionGroupId));
+        await mediator.Send(new DeleteProductOptionGroup(organizationId, id, optionGroupId));
         return TypedResults.Ok();
     }
 }

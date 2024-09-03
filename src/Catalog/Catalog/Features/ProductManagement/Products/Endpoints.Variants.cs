@@ -57,42 +57,42 @@ public static partial class Endpoints
         return app;
     }
 
-    public static async Task<Results<Ok<PagedResult<ProductDto>>, BadRequest>> GetVariants(string idOrHandle, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
+    public static async Task<Results<Ok<PagedResult<ProductDto>>, BadRequest>> GetVariants(string organizationId, string idOrHandle, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
     {
-        return TypedResults.Ok(await mediator.Send(new GetProductVariants(idOrHandle, page, pageSize, searchString, sortBy, sortDirection)));
+        return TypedResults.Ok(await mediator.Send(new GetProductVariants(organizationId, idOrHandle, page, pageSize, searchString, sortBy, sortDirection)));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteVariant(long id, long variantId, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok, BadRequest>> DeleteVariant(string organizationId, long id, long variantId, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteProductVariant(id, variantId), cancellationToken);
+        await mediator.Send(new DeleteProductVariant(organizationId, id, variantId), cancellationToken);
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<Ok<ProductDto>, BadRequest>> GetVariant(string idOrHandle, string variantIdOrHandle, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<ProductDto>, BadRequest>> GetVariant(string organizationId, string idOrHandle, string variantIdOrHandle, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new GetProductVariant(idOrHandle, variantIdOrHandle), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new GetProductVariant(organizationId, idOrHandle, variantIdOrHandle), cancellationToken));
     }
 
-    public static async Task<Results<Ok<ProductDto?>, BadRequest>> FindVariantByAttributeValues(string idOrHandle, Dictionary<string, string?> selectedAttributeValues, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<ProductDto?>, BadRequest>> FindVariantByAttributeValues(string organizationId, string idOrHandle, Dictionary<string, string?> selectedAttributeValues, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new FindProductVariant(idOrHandle, selectedAttributeValues), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new FindProductVariant(organizationId, idOrHandle, selectedAttributeValues), cancellationToken));
     }
 
-    public static async Task<Results<Ok<IEnumerable<ProductDto>>, BadRequest>> FindsVariantsByAttributeValues(string idOrHandle, Dictionary<string, string?> selectedAttributeValues, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<IEnumerable<ProductDto>>, BadRequest>> FindsVariantsByAttributeValues(string organizationId, string idOrHandle, Dictionary<string, string?> selectedAttributeValues, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new FindProductVariants(idOrHandle, selectedAttributeValues), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new FindProductVariants(organizationId, idOrHandle, selectedAttributeValues), cancellationToken));
     }
 
-    public static async Task<Results<Ok<IEnumerable<AttributeValueDto>>, BadRequest>> GetAvailableVariantAttributeValues(string idOrHandle, string attributeId, Dictionary<string, string?> selectedAttributeValues, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<IEnumerable<AttributeValueDto>>, BadRequest>> GetAvailableVariantAttributeValues(string organizationId, string idOrHandle, string attributeId, Dictionary<string, string?> selectedAttributeValues, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new GetAvailableAttributeValues(idOrHandle, attributeId, selectedAttributeValues), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new GetAvailableAttributeValues(organizationId, idOrHandle, attributeId, selectedAttributeValues), cancellationToken));
     }
 
-    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> CreateVariant(long id, CreateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> CreateVariant(string organizationId, long id, CreateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
     {
         try
         {
-            return TypedResults.Ok(await mediator.Send(new CreateProductVariant(id, data), cancellationToken));
+            return TypedResults.Ok(await mediator.Send(new CreateProductVariant(organizationId, id, data), cancellationToken));
         }
         catch (VariantAlreadyExistsException e)
         {
@@ -104,11 +104,11 @@ public static partial class Endpoints
         }
     }
 
-    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> UpdateVariant(long id, long variantId, UpdateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> UpdateVariant(string organizationId, long id, long variantId, UpdateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
     {
         try
         {
-            return TypedResults.Ok(await mediator.Send(new UpdateProductVariant(id, variantId, data), cancellationToken));
+            return TypedResults.Ok(await mediator.Send(new UpdateProductVariant(organizationId, id, variantId, data), cancellationToken));
         }
         catch (VariantAlreadyExistsException e)
         {
@@ -120,9 +120,9 @@ public static partial class Endpoints
         }
     }
 
-    public static async Task<Results<Ok<string>, BadRequest>> UploadVariantImage(long id, long variantId, IFormFile file, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<string>, BadRequest>> UploadVariantImage(string organizationId, long id, long variantId, IFormFile file, IMediator mediator, CancellationToken cancellationToken)
     {
-        var url = await mediator.Send(new UploadProductVariantImage(id, variantId, file.Name, file.OpenReadStream()), cancellationToken);
+        var url = await mediator.Send(new UploadProductVariantImage(organizationId, id, variantId, file.Name, file.OpenReadStream()), cancellationToken);
         return TypedResults.Ok(url);
     }
 }

@@ -7,7 +7,8 @@
 @using YourBrand.Portal.Services
 @using YourBrand.Catalog
 
-
+@if(store is not null) 
+{
             <MudTable T="Product" ServerData="@(new Func<TableState, Task<TableData<Product>>>(ServerReload))"
             Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" Elevation="25">
                 @*<ToolBarContent>
@@ -90,11 +91,15 @@
                         <MudTablePager />
                     </PagerContent>
                 </MudTable>
+}
 
 @code
 {
     MudTable<Product> table;
     Store store = default!;
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
 
     [Parameter]
     public string? Path { get; set; }
@@ -122,7 +127,10 @@
     {
         store = StoreProvider.CurrentStore;
 
-        var result = await ProductsClient.GetProductsAsync(StoreId, BrandId, true, true, null, Path, state.Page + 1,
+        if(Organization is null)
+            return new TableData<Product>() { TotalItems = 0, Items = [] };
+
+        var result = await ProductsClient.GetProductsAsync(Organization?.Id, StoreId, BrandId, true, true, null, Path, state.Page + 1,
         state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
         YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);
 

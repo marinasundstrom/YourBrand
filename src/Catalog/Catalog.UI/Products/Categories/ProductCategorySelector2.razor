@@ -16,6 +16,10 @@
 
 @code
 {
+    [Parameter] 
+    [EditorRequired]
+    public string? OrganizationId { get; set; }
+
     [Parameter] public string? Label { get; set; }
 
     [Parameter] public ProductCategory? Category { get; set; }
@@ -33,7 +37,7 @@
 
         var data = (ProductCategoryTreeNode)r.Data;
 
-        Category = await ProductCategoriesClient.GetProductCategoryByIdAsync(data.Id.ToString());
+        Category = await ProductCategoriesClient.GetProductCategoryByIdAsync(OrganizationId,data.Id.ToString());
 
         await CategoryChanged.InvokeAsync(Category);
     }

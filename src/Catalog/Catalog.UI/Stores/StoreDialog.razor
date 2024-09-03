@@ -44,6 +44,9 @@
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = default!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter]
     public string StoreId { get; set; } = default!;
 
@@ -65,7 +68,7 @@
 
         if (StoreId is not null)
         {
-            var store = await StoresClient.GetStoreByIdAsync(StoreId);
+            var store = await StoresClient.GetStoreByIdAsync(Organization.Id, StoreId);
             Name = store.Name;
             Handle = store.Handle;
             Currency = store.Currency;
@@ -76,7 +79,7 @@
     {
         if (StoreId is null)
         {
-            var store = await StoresClient.CreateStoreAsync(new CreateStore
+            var store = await StoresClient.CreateStoreAsync(Organization.Id, new CreateStore
                 {
                     Name = Name,
                     Handle = Handle,
@@ -89,7 +92,7 @@
         {
             if (context.IsModified())
             {
-                await StoresClient.UpdateStoreAsync(StoreId, new UpdateStore
+                await StoresClient.UpdateStoreAsync(Organization.Id, StoreId, new UpdateStore
                     {
                         Name = Name,
                         Handle = Handle,

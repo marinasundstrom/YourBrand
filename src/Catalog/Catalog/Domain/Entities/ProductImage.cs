@@ -1,8 +1,9 @@
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductImage : Entity<string>, IHasTenant
+public class ProductImage : Entity<string>, IHasTenant, IHasOrganization
 {
     public ProductImage() { }
 
@@ -15,6 +16,8 @@ public class ProductImage : Entity<string>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public Store? Store { get; set; }
 

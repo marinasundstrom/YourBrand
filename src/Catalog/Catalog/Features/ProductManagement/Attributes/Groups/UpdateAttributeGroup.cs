@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Groups;
 
-public record UpdateAttributeGroup(string Id, UpdateProductAttributeGroupData Data) : IRequest<AttributeGroupDto>
+public record UpdateAttributeGroup(string OrganizationId, string Id, UpdateProductAttributeGroupData Data) : IRequest<AttributeGroupDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UpdateAttributeGroup, AttributeGroupDto>
     {
         public async Task<AttributeGroupDto> Handle(UpdateAttributeGroup request, CancellationToken cancellationToken)
         {
             var attributeGroup = await context.AttributeGroups
+                .InOrganization(request.OrganizationId)
                 .FirstAsync(x => x.Id == request.Id, cancellationToken);
 
             attributeGroup.Name = request.Data.Name;

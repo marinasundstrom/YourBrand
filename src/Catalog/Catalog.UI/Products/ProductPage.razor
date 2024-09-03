@@ -144,6 +144,9 @@
 
     [Parameter] public string Id { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         NavigationManager.LocationChanged += OnLocationChanged;
@@ -165,7 +168,7 @@
 
     async Task LoadAsync()
     {
-        product = await ProductsClient.GetProductByIdAsync(Id);
+        product = await ProductsClient.GetProductByIdAsync(Organization.Id, Id);
 
         _items.Clear();
 
@@ -243,7 +246,7 @@
         var r = await DialogService.ShowMessageBox("Delete product", "Are you sure?", "Yes", "No");
         if (r.GetValueOrDefault())
         {
-            await ProductsClient.DeleteProductAsync(Id.ToString());
+            await ProductsClient.DeleteProductAsync(Organization.Id, Id.ToString());
 
             NavigationManager.NavigateTo("/products");
         }

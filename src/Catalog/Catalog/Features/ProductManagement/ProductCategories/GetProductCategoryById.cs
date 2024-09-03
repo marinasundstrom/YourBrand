@@ -8,7 +8,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
-public sealed record GetProductCategoryById(string IdOrPath) : IRequest<Result<ProductCategory>>
+public sealed record GetProductCategoryById(string OrganizationId, string IdOrPath) : IRequest<Result<ProductCategory>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<GetProductCategoryById, Result<ProductCategory>>
     {
@@ -22,6 +22,7 @@ public sealed record GetProductCategoryById(string IdOrPath) : IRequest<Result<P
             if (isId)
             {
                 productCategory = await catalogContext.ProductCategories
+                    .InOrganization(request.OrganizationId)
                     .Include(x => x!.Parent)
                     .FirstOrDefaultAsync(productCategory => productCategory.Id == id, cancellationToken);
             }
@@ -30,6 +31,7 @@ public sealed record GetProductCategoryById(string IdOrPath) : IRequest<Result<P
                 idOrPath = WebUtility.UrlDecode(idOrPath);
 
                 productCategory = await catalogContext.ProductCategories
+                     .InOrganization(request.OrganizationId)
                      .Include(x => x!.Parent)
                      .FirstOrDefaultAsync(productCategory => productCategory.Path == idOrPath, cancellationToken);
             }

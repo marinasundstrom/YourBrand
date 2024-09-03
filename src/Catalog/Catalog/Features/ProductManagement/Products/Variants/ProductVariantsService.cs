@@ -7,11 +7,12 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
 public class ProductVariantsService(CatalogContext context)
 {
-    public async Task<IEnumerable<Product>> FindVariants(string productIdOrHandle, string? productVariantIdOrHandle, IDictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Product>> FindVariants(string organizationId, string productIdOrHandle, string? productVariantIdOrHandle, IDictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken)
     {
         bool isProductId = long.TryParse(productIdOrHandle, out var productId);
 
         var query = context.Products
+            .InOrganization(organizationId)
             .AsSplitQuery()
             .AsNoTracking()
             .IncludeAll()
@@ -45,11 +46,12 @@ public class ProductVariantsService(CatalogContext context)
         return variants;
     }
 
-    public async Task<IEnumerable<AttributeValue>> GetAvailableAttributeValues(string productIdOrHandle, string attributeId, IDictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AttributeValue>> GetAvailableAttributeValues(string organizationId, string productIdOrHandle, string attributeId, IDictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken)
     {
         bool isProductId = long.TryParse(productIdOrHandle, out var productId);
 
         var query = context.Products
+            .InOrganization(organizationId)
             .AsSplitQuery()
             .AsNoTracking()
             .Include(pv => pv.ProductAttributes)

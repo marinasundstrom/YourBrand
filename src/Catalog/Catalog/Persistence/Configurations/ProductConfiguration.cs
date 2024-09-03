@@ -13,6 +13,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
         builder
             .Property(x => x.Handle)
             .HasMaxLength(150);
@@ -51,7 +53,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder
             .HasOne(x => x.Parent)
             .WithMany(x => x.Variants)
-            .HasForeignKey(x => x.ParentId)
+            .HasForeignKey(x => new { x.OrganizationId, x.ParentId })
             .OnDelete(DeleteBehavior.NoAction);
 
         builder

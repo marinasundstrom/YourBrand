@@ -36,29 +36,29 @@ public static class Endpoints
         return app;
     }
 
-    public static async Task<PagedResult<BrandDto>> GetBrands(string? productCategoryId = null, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
+    public static async Task<PagedResult<BrandDto>> GetBrands(string organizationId, string? productCategoryId = null, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
     {
-        return await mediator.Send(new GetBrandsQuery(productCategoryId, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetBrandsQuery(organizationId, productCategoryId, page, pageSize, searchString, sortBy, sortDirection), cancellationToken);
     }
 
-    public static async Task<BrandDto?> GetBrandById(int id, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<BrandDto?> GetBrandById(string organizationId, int id, IMediator mediator, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new GetBrandQuery(id), cancellationToken);
+        return await mediator.Send(new GetBrandQuery(organizationId, id), cancellationToken);
     }
 
-    public static async Task<BrandDto> CreateBrand(CreateBrandDto dto, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<BrandDto> CreateBrand(string organizationId, CreateBrandDto dto, IMediator mediator, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new CreateBrandCommand(dto.Name, dto.Handle), cancellationToken);
+        return await mediator.Send(new CreateBrandCommand(organizationId, dto.Name, dto.Handle), cancellationToken);
     }
 
-    public static async Task UpdateBrand(int id, UpdateBrandDto dto, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task UpdateBrand(string organizationId, int id, UpdateBrandDto dto, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new UpdateBrandCommand(id, dto.Name, dto.Handle), cancellationToken);
+        await mediator.Send(new UpdateBrandCommand(organizationId, id, dto.Name, dto.Handle), cancellationToken);
     }
 
-    public static async Task DeleteBrand(int id, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task DeleteBrand(string organizationId, int id, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteBrandCommand(id), cancellationToken);
+        await mediator.Send(new DeleteBrandCommand(organizationId, id), cancellationToken);
     }
 }
 

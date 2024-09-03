@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 using MudBlazor;
 
+using YourBrand.AppService.Client;
+
 namespace YourBrand.Catalog.Products;
 
 public class SkuUpdateViewModel(IProductsClient productsClient, ISnackbar snackbar)
@@ -10,10 +12,13 @@ public class SkuUpdateViewModel(IProductsClient productsClient, ISnackbar snackb
     {
         return new(productsClient, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Sku = product.Sku
         };
     }
+
+    public string OrganizationId { get; set; }
 
     [Required]
     public string Sku { get; set; }
@@ -24,7 +29,7 @@ public class SkuUpdateViewModel(IProductsClient productsClient, ISnackbar snackb
     {
         try
         {
-            await productsClient.UpdateProductSkuAsync(ProductId.ToString(), new UpdateProductSkuRequest()
+            await productsClient.UpdateProductSkuAsync(OrganizationId, ProductId.ToString(), new UpdateProductSkuRequest()
             {
                 Sku = Sku
             });

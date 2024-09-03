@@ -4,13 +4,15 @@ using YourBrand.Portal.Services;
 
 namespace YourBrand.Catalog;
 
-public sealed class StoreProvider(IStoresClient storesClient, ILocalStorageService localStorageService) : IStoreProvider
+public sealed class StoreProvider(IStoresClient storesClient, IOrganizationProvider organizationProvider, ILocalStorageService localStorageService) : IStoreProvider
 {
     IEnumerable<Portal.Services.Store> _stores;
 
     public async Task<IEnumerable<Portal.Services.Store>> GetAvailableStoresAsync()
     {
-        var items = _stores = (await storesClient.GetStoresAsync(0, null, null, null, null)).Items
+        var organization = await organizationProvider.GetCurrentOrganizationAsync();
+
+        var items = _stores = (await storesClient.GetStoresAsync(organization.Id, 0, null, null, null, null)).Items
             .Select(x => new Portal.Services.Store(x.Id, x.Name, x.Handle, new Portal.Services.Currency(x.Currency.Code, x.Currency.Name, x.Currency.Symbol)));
 
         if (CurrentStore is null)

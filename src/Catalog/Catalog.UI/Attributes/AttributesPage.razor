@@ -45,11 +45,14 @@
     MudTable<YourBrand.Catalog.Attribute> table; 
     string? searchString;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     private async Task<TableData<YourBrand.Catalog.Attribute>> LoadData(TableState state)
     {
         try
         {
-            var results = await AttributesClient.GetAttributesAsync(null, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
+            var results = await AttributesClient.GetAttributesAsync(Organization.Id, null, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
             return new TableData<YourBrand.Catalog.Attribute> { Items = results.Items, TotalItems = results.Total };
         }
         /*catch (ApiException exc)

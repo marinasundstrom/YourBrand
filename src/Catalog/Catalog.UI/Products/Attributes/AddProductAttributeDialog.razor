@@ -41,6 +41,9 @@
 @code {
     IEnumerable<ProductAttribute> productAttributes = Enumerable.Empty<ProductAttribute>();
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [CascadingParameter] MudDialogInstance Modal { get; set; } = default!;
 
     [Parameter] public long ProductId { get; set; } = default!;
@@ -57,7 +60,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        productAttributes = await ProductsClient.GetProductAttributesAsync(ProductId);
+        productAttributes = await ProductsClient.GetProductAttributesAsync(Organization.Id, ProductId);
     }
 
     async Task OnSubmit()
@@ -72,7 +75,7 @@
 
         try
         {
-            var result = await ProductsClient.AddProductAttributeAsync(ProductId, data);
+            var result = await ProductsClient.AddProductAttributeAsync(Organization.Id, ProductId, data);
             Modal.Close(DialogResult.Ok(result));
         }
         catch { Snackbar.Add("Error", Severity.Error); }
@@ -87,14 +90,14 @@
     private async Task<IEnumerable<YourBrand.Catalog.Attribute>> SearchAttribute(string value,
     CancellationToken cancellationToken)
     {
-        var r = await AttributesClient.GetAttributesAsync(null, 1, 10, value, null, null, cancellationToken);
+        var r = await AttributesClient.GetAttributesAsync(Organization.Id, null, 1, 10, value, null, null, cancellationToken);
         return r.Items;
     }
 
     private async Task<IEnumerable<AttributeValue>> SearchAttributeValue(string attributeId, string value,
     CancellationToken cancellationToken)
     {
-        var attribute = await AttributesClient.GetAttributeByIdAsync(attributeId, cancellationToken);
+        var attribute = await AttributesClient.GetAttributeByIdAsync(Organization.Id, attributeId, cancellationToken);
 
         if (value is null)
             return attribute.Values;

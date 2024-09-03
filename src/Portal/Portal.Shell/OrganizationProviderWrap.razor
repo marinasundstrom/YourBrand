@@ -1,0 +1,39 @@
+@using YourBrand.Portal.Services
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<CascadingValue Name="Organization" Value="organization">
+
+    @if (organization is not null) 
+    {
+        @ChildContent
+    }
+    
+</CascadingValue>
+
+@code 
+{
+    Organization? organization;
+
+    protected override async Task OnInitializedAsync()
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    async void OnCurrentOrganizationChanged(object? sender, EventArgs eventArgs)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        StateHasChanged();
+    }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public void Dispose()
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

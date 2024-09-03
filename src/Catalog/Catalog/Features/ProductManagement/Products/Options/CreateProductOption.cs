@@ -8,16 +8,18 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record CreateProductOption(long ProductId, CreateProductOptionData Data) : IRequest<OptionDto>
+public record CreateProductOption(string OrganizationId, long ProductId, CreateProductOptionData Data) : IRequest<OptionDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<CreateProductOption, OptionDto>
     {
         public async Task<OptionDto> Handle(CreateProductOption request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .FirstAsync(x => x.Id == request.ProductId);
 
             var group = await context.OptionGroups
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.Data.GroupId);
 
             Option option = default!;
@@ -64,7 +66,7 @@ public record CreateProductOption(long ProductId, CreateProductOptionData Data) 
                         Price = v.Price
                     };
 
-                    choiceOption!.Values.Add(value);
+                    choiceOption!.AddValue(value);
                 }
 
                 choiceOption!.DefaultValueId = choiceOption!.Values.FirstOrDefault(x => x.Id == request.Data.DefaultOptionValueId)?.Id;
@@ -72,6 +74,7 @@ public record CreateProductOption(long ProductId, CreateProductOptionData Data) 
                 option = choiceOption;
             }
 
+            option.OrganizationId = request.OrganizationId;
             option.Description = request.Data.Description;
             option.Group = group;
 
@@ -80,6 +83,7 @@ public record CreateProductOption(long ProductId, CreateProductOptionData Data) 
             if (product.HasVariants)
             {
                 var variants = await context.Products
+                    .InOrganization(request.OrganizationId)
                     .Where(x => x.ParentId == product.Id)
                     .Include(x => x.Options)
                     .ToArrayAsync(cancellationToken);

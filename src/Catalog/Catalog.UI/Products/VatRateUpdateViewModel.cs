@@ -8,6 +8,7 @@ public class VatRateUpdateViewModel(IProductsClient productsClient, IVatRatesCli
     {
         return new(productsClient, vatRatesClient, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             VatRateId = product.VatRateId
         };
@@ -21,6 +22,8 @@ public class VatRateUpdateViewModel(IProductsClient productsClient, IVatRatesCli
         VatRate = VatRates.FirstOrDefault(x => x.Id == VatRateId);
     }
 
+    public string OrganizationId { get; set; }
+
     public int? VatRateId { get; set; }
 
     public VatRate? VatRate { get; set; }
@@ -33,7 +36,7 @@ public class VatRateUpdateViewModel(IProductsClient productsClient, IVatRatesCli
     {
         try
         {
-            await productsClient.UpdateProductVatRateAsync(ProductId.ToString(), new UpdateProductVatRateRequest()
+            await productsClient.UpdateProductVatRateAsync(OrganizationId, ProductId.ToString(), new UpdateProductVatRateRequest()
             {
                 VatRateId = VatRate?.Id
             });

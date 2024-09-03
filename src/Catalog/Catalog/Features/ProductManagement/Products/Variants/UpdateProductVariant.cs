@@ -6,13 +6,13 @@ using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record UpdateProductVariant(long ProductId, long ProductVariantId, UpdateProductVariantData Data) : IRequest<ProductDto>
+public record UpdateProductVariant(string OrganizationId, long ProductId, long ProductVariantId, UpdateProductVariantData Data) : IRequest<ProductDto>
 {
     public class Handler(CatalogContext context, ProductVariantsService productVariantsService) : IRequestHandler<UpdateProductVariant, ProductDto>
     {
         public async Task<ProductDto> Handle(UpdateProductVariant request, CancellationToken cancellationToken)
         {
-            var match = (await productVariantsService.FindVariants(request.ProductId.ToString(), request.ProductVariantId.ToString(), request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)!, cancellationToken))
+            var match = (await productVariantsService.FindVariants(request.OrganizationId, request.ProductId.ToString(), request.ProductVariantId.ToString(), request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)!, cancellationToken))
                 .SingleOrDefault();
 
             if (match is not null)
@@ -21,6 +21,7 @@ public record UpdateProductVariant(long ProductId, long ProductVariantId, Update
             }
 
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .Include(pv => pv.Parent)
                     .ThenInclude(pv => pv!.Category)

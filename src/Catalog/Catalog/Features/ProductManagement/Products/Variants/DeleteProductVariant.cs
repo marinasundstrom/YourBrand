@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record DeleteProductVariant(long ProductId, long ProductVariantId) : IRequest
+public record DeleteProductVariant(string OrganizationId, long ProductId, long ProductVariantId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductVariant>
     {
         public async Task Handle(DeleteProductVariant request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .Include(pv => pv.Variants)
                 .FirstAsync(x => x.Id == request.ProductVariantId);

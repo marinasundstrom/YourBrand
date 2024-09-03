@@ -40,6 +40,9 @@
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = null!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter]
     public int? BrandId { get; set; } = null!;
 
@@ -58,7 +61,7 @@
 
         if (BrandId is not null)
         {
-            var brand = await BrandsClient.GetBrandByIdAsync(BrandId.GetValueOrDefault());
+            var brand = await BrandsClient.GetBrandByIdAsync(Organization.Id, BrandId.GetValueOrDefault());
             //Area = brand.Area;
             Name = brand.Name;
             Handle = brand.Handle;
@@ -69,7 +72,7 @@
     {
         if (BrandId is null)
         {
-            var brand = await BrandsClient.CreateBrandAsync(new CreateBrand
+            var brand = await BrandsClient.CreateBrandAsync(Organization.Id, new CreateBrand
                 {
                     //BrandId = Area.Id,
                     Name = Name,
@@ -82,7 +85,7 @@
         {
             if (context.IsModified())
             {
-                await BrandsClient.UpdateBrandAsync(BrandId.GetValueOrDefault(), new UpdateBrand
+                await BrandsClient.UpdateBrandAsync(Organization.Id, BrandId.GetValueOrDefault(), new UpdateBrand
                     {
                         //BrandId = Area.Id,
                         Name = Name,

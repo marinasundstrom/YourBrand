@@ -28,6 +28,9 @@ sealed partial class ProductOptionsView : ComponentBase
     [EditorRequired]
     public IReadOnlyCollection<ProductOption> ProductOptions { get; set; } = default!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     private bool FilterOptionsFunc(ProductOption productOption)
     {
         if (string.IsNullOrWhiteSpace(searchString))
@@ -70,7 +73,7 @@ sealed partial class ProductOptionsView : ComponentBase
 
         if (dialogResult.Canceled) return;
 
-        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(ProductId, null)).ToList();
+        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(Organization.Id, ProductId, null)).ToList();
     }
 
     async Task ShowEditOptionDialog(ProductOption option)
@@ -85,7 +88,7 @@ sealed partial class ProductOptionsView : ComponentBase
 
         if (dialogResult.Canceled) return;
 
-        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(ProductId, null)).ToList();
+        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(Organization.Id, ProductId, null)).ToList();
     }
 
     async Task ShowOptionGroupsDialog()
@@ -97,7 +100,7 @@ sealed partial class ProductOptionsView : ComponentBase
 
         var dialogResult = await dialogRef.Result;
 
-        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(ProductId, null)).ToList();
+        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(Organization.Id, ProductId, null)).ToList();
     }
 
     async Task ShowEditOptionGroupDialog(OptionGroup optionGroup)
@@ -112,7 +115,7 @@ sealed partial class ProductOptionsView : ComponentBase
 
         if (dialogResult.Canceled) return;
 
-        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(ProductId, null)).ToList();
+        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(Organization.Id, ProductId, null)).ToList();
     }
 
     async Task DeleteOption(string optionId)
@@ -121,8 +124,8 @@ sealed partial class ProductOptionsView : ComponentBase
 
         if (!result.GetValueOrDefault()) return;
 
-        await ProductOptionsClient.DeleteProductOptionAsync(ProductId, optionId);
+        await ProductOptionsClient.DeleteProductOptionAsync(Organization.Id, ProductId, optionId);
 
-        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(ProductId, null)).ToList();
+        ProductOptions = (await ProductOptionsClient.GetProductOptionsAsync(Organization.Id, ProductId, null)).ToList();
     }
 }

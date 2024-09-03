@@ -1,9 +1,14 @@
-﻿using YourBrand.Tenancy;
+﻿using System.Collections.ObjectModel;
+
+using YourBrand.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class Attribute : Entity<string>, IHasTenant
+public class Attribute : Entity<string>, IHasTenant, IHasOrganization
 {
+    HashSet<AttributeValue> _values = new HashSet<AttributeValue>();
+
     protected Attribute() { }
 
     public Attribute(string name)
@@ -13,6 +18,8 @@ public class Attribute : Entity<string>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -26,5 +33,16 @@ public class Attribute : Entity<string>, IHasTenant
 
     public List<ProductAttribute> ProductAttributes { get; } = new List<ProductAttribute>();
 
-    public List<AttributeValue> Values { get; } = new List<AttributeValue>();
+    public IReadOnlyCollection<AttributeValue> Values => _values;
+
+    public void AddValue(AttributeValue attributeValue) 
+    {
+        _values.Add(attributeValue);
+        attributeValue.OrganizationId = OrganizationId;
+    }
+
+    public void RemoveValue(AttributeValue attributeValue)
+    {
+        _values.Remove(attributeValue);
+    }
 }

@@ -178,9 +178,12 @@
     public int? TextValueMaxLength { get; set; }
     public string? DefaultTextValue { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        Groups = (await ProductOptionsClient.GetProductOptionGroupsAsync(ProductId)).Prepend(new OptionGroup
+        Groups = (await ProductOptionsClient.GetProductOptionGroupsAsync(Organization.Id, ProductId)).Prepend(new OptionGroup
             {
                 Id = null,
                 Name = "None"
@@ -233,7 +236,7 @@
 
         if (vm.Id is not null)
         {
-            await ProductOptionsClient.DeleteProductOptionValueAsync(ProductId, Option.Id, vm.Id);
+            await ProductOptionsClient.DeleteProductOptionValueAsync(Organization.Id, ProductId, Option.Id, vm.Id);
         }
 
         Values.Remove(vm);
@@ -267,7 +270,7 @@
                 DefaultTextValue = DefaultTextValue
             };
 
-        var result = await ProductOptionsClient.UpdateProductOptionAsync(ProductId, Option.Id, data);
+        var result = await ProductOptionsClient.UpdateProductOptionAsync(Organization.Id, ProductId, Option.Id, data);
         Modal.Close(DialogResult.Ok(result));
     }
 

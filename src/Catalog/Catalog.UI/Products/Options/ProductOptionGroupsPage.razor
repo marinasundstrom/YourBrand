@@ -51,10 +51,13 @@ else
     [Parameter]
     public long? ProductId { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        product = await ProductsClient.GetProductByIdAsync(ProductId.ToString());
-        optionGroups = (await ProductOptionsClient.GetProductOptionGroupsAsync(ProductId.GetValueOrDefault())).ToList();
+        product = await ProductsClient.GetProductByIdAsync(Organization.Id, ProductId.ToString());
+        optionGroups = (await ProductOptionsClient.GetProductOptionGroupsAsync(Organization.Id, ProductId.GetValueOrDefault())).ToList();
     }
 
     async Task CreateGroup()
@@ -97,7 +100,7 @@ else
             return;
         }
 
-        await ProductOptionsClient.DeleteProductOptionGroupAsync(ProductId.GetValueOrDefault(), optionGroup.Id);
+        await ProductOptionsClient.DeleteProductOptionGroupAsync(Organization.Id, ProductId.GetValueOrDefault(), optionGroup.Id);
 
         optionGroups.Remove(optionGroup);
     }

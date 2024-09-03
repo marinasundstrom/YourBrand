@@ -36,6 +36,10 @@
 
     [CascadingParameter] MudDialogInstance Modal { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
+
     [Required]
     public string Name { get; set; } = default!;
 
@@ -58,7 +62,7 @@
                 StoreId = store.Id,
                 ParentCategoryId = parentCategory?.Id ?? ParentCategoryId
             };
-        var result = await ProductCategoriesClient.CreateProductCategoryAsync(data);
+        var result = await ProductCategoriesClient.CreateProductCategoryAsync(Organization.Id, data);
         Modal.Close(DialogResult.Ok(result));
     }
 
@@ -71,6 +75,6 @@
 
         var data = (ProductCategoryTreeNode)r.Data;
 
-        parentCategory = await ProductCategoriesClient.GetProductCategoryByIdAsync(data.Id.ToString());
+        parentCategory = await ProductCategoriesClient.GetProductCategoryByIdAsync(Organization.Id, data.Id.ToString());
     }
 }

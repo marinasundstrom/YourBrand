@@ -1,8 +1,9 @@
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class ProductCategory : Entity<long>, IHasTenant
+public sealed class ProductCategory : Entity<long>, IHasTenant, IHasOrganization
 {
     private readonly HashSet<Product> _products = new HashSet<Product>();
     private readonly HashSet<ProductCategory> _subCategories = new HashSet<ProductCategory>();
@@ -15,6 +16,8 @@ public sealed class ProductCategory : Entity<long>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public Store? Store { get; set; }
 
@@ -41,6 +44,7 @@ public sealed class ProductCategory : Entity<long>, IHasTenant
             throw new InvalidOperationException("Can not add products.");
         }
 
+        product.OrganizationId = OrganizationId;
         product.Store = Store;
         product.Category = this;
         _products.Add(product);

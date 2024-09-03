@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
-public sealed record DeleteProductCategory(string IdOrPath) : IRequest<Result>
+public sealed record DeleteProductCategory(string OrganizationId, string IdOrPath) : IRequest<Result>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<DeleteProductCategory, Result>
     {
@@ -15,8 +15,12 @@ public sealed record DeleteProductCategory(string IdOrPath) : IRequest<Result>
             var isId = int.TryParse(request.IdOrPath, out var id);
 
             var product = isId ?
-                await catalogContext.ProductCategories.FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
-                : await catalogContext.ProductCategories.FirstOrDefaultAsync(product => product.Path == request.IdOrPath, cancellationToken);
+                await catalogContext.ProductCategories
+                        .InOrganization(request.OrganizationId)
+                        .FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
+                : await catalogContext.ProductCategories
+                        .InOrganization(request.OrganizationId)
+                        .FirstOrDefaultAsync(product => product.Path == request.IdOrPath, cancellationToken);
 
             if (product is null)
             {

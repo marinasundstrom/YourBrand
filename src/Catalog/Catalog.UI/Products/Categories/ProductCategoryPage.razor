@@ -121,6 +121,9 @@ else
     [Parameter]
     public long? ProductId { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         StoreProvider.CurrentStoreChanged += OnCurrentStoreChanged;
@@ -155,8 +158,8 @@ else
     }
 
     async Task LoadData()
-    {
-        var tree = await ProductCategoriesClient.GetProductCategoryTreeAsync(store?.Id, null);
+    {        
+        var tree = await ProductCategoriesClient.GetProductCategoryTreeAsync(Organization.Id, store?.Id, null);
         productCategoryTreeNodes = tree.Categories;
         productCategoryTreeNode = null;
 
@@ -166,7 +169,7 @@ else
         }
         else
         {
-            productCategory = await ProductCategoriesClient.GetProductCategoryByIdAsync(Path);
+            productCategory = await ProductCategoriesClient.GetProductCategoryByIdAsync(Organization.Id, Path);
 
             await table.ReloadServerData();
         }
@@ -228,7 +231,7 @@ else
             return;
         }
 
-        await ProductCategoriesClient.DeleteProductCategoryAsync(productCategory.Id.ToString());
+        await ProductCategoriesClient.DeleteProductCategoryAsync(Organization.Id, productCategory.Id.ToString());
 
         productCategories.Remove(productCategory);
     }
@@ -250,11 +253,18 @@ else
 
     private async Task<TableData<ProductCategory>> ServerReload(TableState state)
     {
+        loading = true;
+
+        if(Organization is null)
+            return new TableData<ProductCategory>() { TotalItems = 0, Items = [] };
+
         store = StoreProvider.CurrentStore;
 
-        var result = await ProductCategoriesClient.GetProductCategoriesAsync(store.Id, productCategory?.Id, true, true,
+        var result = await ProductCategoriesClient.GetProductCategoriesAsync(Organization.Id, store.Id, productCategory?.Id, true, true,
         state.Page + 1, state.PageSize, null, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
         YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);
+
+        loading = false;
 
         return new TableData<ProductCategory>() { TotalItems = result.Total, Items = result.Items };
     }

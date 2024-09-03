@@ -8,22 +8,25 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record UpdateProductOption(long ProductId, string OptionId, UpdateProductOptionData Data) : IRequest<OptionDto>
+public record UpdateProductOption(string OrganizationId, long ProductId, string OptionId, UpdateProductOptionData Data) : IRequest<OptionDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UpdateProductOption, OptionDto>
     {
         public async Task<OptionDto> Handle(UpdateProductOption request, CancellationToken cancellationToken)
         {
             var product = await context.Products
-            .AsNoTracking()
-            .FirstAsync(x => x.Id == request.ProductId);
+                .InOrganization(request.OrganizationId)
+                .AsNoTracking()
+                .FirstAsync(x => x.Id == request.ProductId);
 
             var option = await context.Options
+                .InOrganization(request.OrganizationId)
                 .Include(x => (x as ChoiceOption)!.Values)
                 .Include(x => x.Group)
                 .FirstAsync(x => x.Id == request.OptionId);
 
             var group = await context.OptionGroups
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(x => x.Id == request.Data.GroupId);
 
             option.Name = request.Data.Name;
@@ -72,7 +75,7 @@ public record UpdateProductOption(long ProductId, string OptionId, UpdateProduct
                                 Price = v.Price
                             };
 
-                            choiceOption.Values.Add(value);
+                            choiceOption.AddValue(value);
                             context.OptionValues.Add(value);
                         }
                         else
@@ -96,7 +99,7 @@ public record UpdateProductOption(long ProductId, string OptionId, UpdateProduct
 
                         if (value is null)
                         {
-                            choiceOption!.Values.Remove(v);
+                            choiceOption!.RemoveValue(v);
                         }
                     }
                 }

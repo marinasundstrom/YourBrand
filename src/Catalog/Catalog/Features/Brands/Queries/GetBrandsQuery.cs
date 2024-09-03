@@ -9,7 +9,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Catalog.Features.Brands.Queries;
 
-public sealed record GetBrandsQuery(string? ProductCategoryIdOrPath, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<BrandDto>>
+public sealed record GetBrandsQuery(string OrganizationId, string? ProductCategoryIdOrPath, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<BrandDto>>
 {
     sealed class GetBrandsQueryHandler(
         CatalogContext context,
@@ -19,6 +19,7 @@ public sealed record GetBrandsQuery(string? ProductCategoryIdOrPath, int Page = 
         {
             IQueryable<Brand> result = context
                     .Brands
+                .InOrganization(request.OrganizationId)
                      //.OrderBy(o => o.Created)
                      .AsNoTracking()
                      .AsQueryable();
@@ -49,6 +50,7 @@ public sealed record GetBrandsQuery(string? ProductCategoryIdOrPath, int Page = 
             }
 
             var items = await result
+                .InOrganization(request.OrganizationId)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);

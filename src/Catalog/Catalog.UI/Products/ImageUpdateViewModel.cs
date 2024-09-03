@@ -10,10 +10,13 @@ public class ImageUpdateViewModel(IProductsClient productsClient, ISnackbar snac
     {
         return new(productsClient, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Image = product.Image.Url
         };
     }
+
+    public string OrganizationId { get; set;}
 
     public string Image { get; set; }
 
@@ -23,7 +26,7 @@ public class ImageUpdateViewModel(IProductsClient productsClient, ISnackbar snac
     {
         try
         {
-            var productImage = await productsClient.UploadProductImageAsync(ProductId.ToString(), true, new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
+            var productImage = await productsClient.UploadProductImageAsync(OrganizationId, ProductId.ToString(), true, new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
 
             Image = productImage.Url;
 

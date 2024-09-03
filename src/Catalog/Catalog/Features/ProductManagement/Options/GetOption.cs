@@ -7,13 +7,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Options;
 
-public record GetOption(string OptionId) : IRequest<OptionDto>
+public record GetOption(string OrganizationId, string OptionId) : IRequest<OptionDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetOption, OptionDto>
     {
         public async Task<OptionDto> Handle(GetOption request, CancellationToken cancellationToken)
         {
             var option = await context.Options
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Group)

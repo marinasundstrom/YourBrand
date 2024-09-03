@@ -52,11 +52,14 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     async Task<IEnumerable<Store>> SearchStores(string text)
     {
         //try
         //{
-        var results = await StoresClient.GetStoresAsync(0, 10, text, null, null);
+        var results = await StoresClient.GetStoresAsync(Organization.Id, 0, 10, text, null, null);
         return results.Items;
         /*}
         catch (AccessTokenNotAvailableException exception)

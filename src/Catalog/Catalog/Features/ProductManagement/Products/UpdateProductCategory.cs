@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record UpdateProductCategory(string IdOrHandle, long ProductCategoryId) : IRequest<Result>
+public sealed record UpdateProductCategory(string OrganizationId, string IdOrHandle, long ProductCategoryId) : IRequest<Result>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<UpdateProductCategory, Result>
     {
@@ -15,6 +15,7 @@ public sealed record UpdateProductCategory(string IdOrHandle, long ProductCatego
             var isId = int.TryParse(request.IdOrHandle, out var id);
 
             var query = catalogContext.Products
+                .InOrganization(request.OrganizationId)
                 .Include(product => product.Category)
                 .ThenInclude(category => category!.Parent);
 

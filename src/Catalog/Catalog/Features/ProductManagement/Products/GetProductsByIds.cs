@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record GetProductsByIds(long[] ProductIds, string? StoreId = null, string? BrandIdOrHandle = null) : IRequest<IEnumerable<ProductDto>>
+public sealed record GetProductsByIds(string OrganizationId, long[] ProductIds, string? StoreId = null, string? BrandIdOrHandle = null) : IRequest<IEnumerable<ProductDto>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<GetProductsByIds, IEnumerable<ProductDto>>
     {
@@ -15,6 +15,7 @@ public sealed record GetProductsByIds(long[] ProductIds, string? StoreId = null,
             var productIds = request.ProductIds.Distinct();
 
             var query = catalogContext.Products
+                        .InOrganization(request.OrganizationId)
                         .Where(x => productIds.Any(id => id == x.Id))
                         .IncludeAll()
                         .AsSplitQuery()

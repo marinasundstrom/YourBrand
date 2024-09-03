@@ -7,9 +7,8 @@
 @implements IDisposable
 @inject IThemeManager ThemeManager
 @inject ILocalStorageService LocalStorage
-@inject IOrganizationProvider OrganizationProvider
 
-<CascadingValue Name="Organization" Value="organization">
+<OrganizationProviderWrap>
 
     <MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
     <MudDialogProvider />
@@ -30,7 +29,7 @@
         </MudMainContent>
     </MudLayout>
     
-</CascadingValue>
+</OrganizationProviderWrap>
 
 <MudScrollToTop>
     <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
@@ -46,17 +45,6 @@
         //ThemeManager.SetTheme(Themes.AppTheme);
 
         _drawerOpen = await LocalStorage.GetItemAsync<bool?>("drawerOpen") ?? true;
-
-        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
-
-        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
-    }
-
-    async void OnCurrentOrganizationChanged(object? sender, EventArgs eventArgs) 
-    {
-        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
-
-        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -101,7 +89,5 @@
     {
         ThemeManager.ThemeChanged -= OnThemeChanged;
         ThemeManager.ColorSchemeChanged -= OnColorSchemeChanged;
-
-        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 }

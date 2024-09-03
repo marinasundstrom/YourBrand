@@ -33,6 +33,9 @@
 @code {
     [CascadingParameter] MudDialogInstance Modal { get; set; } = default!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
     [Parameter] public string ProductId { get; set; } = default!;
 
     [Parameter] public ProductImage ProductImage { get; set; } = default!;
@@ -52,7 +55,7 @@
 
     async Task OnSubmit()
     {
-        var image = await ProductsClient.UpdateProductImageAsync(ProductId.ToString(), ProductImage.Id,
+        var image = await ProductsClient.UpdateProductImageAsync(Organization.Id, ProductId.ToString(), ProductImage.Id,
         new UpdateProductImageData()
             {
                 Title = Title,

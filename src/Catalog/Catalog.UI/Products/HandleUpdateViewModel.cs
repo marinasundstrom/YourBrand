@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 using MudBlazor;
 
+using YourBrand.AppService.Client;
+
 namespace YourBrand.Catalog.Products;
 
 public class HandleUpdateViewModel(IProductsClient productsClient, ISnackbar snackbar)
@@ -10,10 +12,13 @@ public class HandleUpdateViewModel(IProductsClient productsClient, ISnackbar sna
     {
         return new(productsClient, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Handle = product.Handle
         };
     }
+
+    public string OrganizationId { get; set; }
 
     [Required]
     public string Handle { get; set; }
@@ -24,7 +29,7 @@ public class HandleUpdateViewModel(IProductsClient productsClient, ISnackbar sna
     {
         try
         {
-            await productsClient.UpdateProductHandleAsync(ProductId.ToString(), new UpdateProductHandleRequest()
+            await productsClient.UpdateProductHandleAsync(OrganizationId, ProductId.ToString(), new UpdateProductHandleRequest()
             {
                 Handle = Handle
             });

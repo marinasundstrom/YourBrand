@@ -7,13 +7,13 @@ using YourBrand.Catalog.Features.ProductManagement.Products.Images;
 using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record CreateProductVariant(long ProductId, CreateProductVariantData Data) : IRequest<ProductDto>
+public record CreateProductVariant(string OrganizationId, long ProductId, CreateProductVariantData Data) : IRequest<ProductDto>
 {
     public class Handler(CatalogContext context, ProductVariantsService productVariantsService, IProductImageUploader productImageUploader, IConfiguration configuration) : IRequestHandler<CreateProductVariant, ProductDto>
     {
         public async Task<ProductDto> Handle(CreateProductVariant request, CancellationToken cancellationToken)
         {
-            Product? match = (await productVariantsService.FindVariants(request.ProductId.ToString(), null, request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)!, cancellationToken))
+            Product? match = (await productVariantsService.FindVariants(request.OrganizationId, request.ProductId.ToString(), null, request.Data.Attributes.ToDictionary(x => x.AttributeId, x => x.ValueId)!, cancellationToken))
                 .SingleOrDefault();
 
             if (match is not null)
@@ -21,7 +21,9 @@ public record CreateProductVariant(long ProductId, CreateProductVariantData Data
                 throw new VariantAlreadyExistsException("Variant with the same options already exists.");
             }
 
-            var handleInUse = await context.Products.AnyAsync(product => product.Handle == request.Data.Handle, cancellationToken);
+            var handleInUse = await context.Products
+                .InOrganization(request.OrganizationId)
+                .AnyAsync(product => product.Handle == request.Data.Handle, cancellationToken);
 
             if (handleInUse)
             {
@@ -29,6 +31,7 @@ public record CreateProductVariant(long ProductId, CreateProductVariantData Data
             }
 
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .IncludeAll()
                 // .Include(pv => pv.Parent)
@@ -47,12 +50,24 @@ public record CreateProductVariant(long ProductId, CreateProductVariantData Data
                 ? configuration["CdnBaseUrl"]!
                 : "https://yourbrandstorage.blob.core.windows.net";
 
+            int productId = 1;
+
+            try
+            {
+                productId = await context.ProductAttributes
+                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .MaxAsync(x => x.Id, cancellationToken) + 1;
+            }
+            catch { }
+
             var variant = new Domain.Entities.Product()
             {
+                OrganizationId = request.OrganizationId,
                 Name = request.Data.Name,
                 Handle = request.Data.Handle,
                 Description = request.Data.Description ?? string.Empty
             };
+            variant.SetId(productId);
 
             product.AddVariant(variant);
 
@@ -64,6 +79,7 @@ public record CreateProductVariant(long ProductId, CreateProductVariantData Data
             foreach (var value in request.Data.Attributes)
             {
                 var attribute = context.Attributes
+                    .InOrganization(request.OrganizationId)
                     .Include(x => x.Values)
                     .First(x => x.Id == value.AttributeId);
 
@@ -71,6 +87,7 @@ public record CreateProductVariant(long ProductId, CreateProductVariantData Data
 
                 variant.AddProductAttribute(new ProductAttribute()
                 {
+                    OrganizationId = request.OrganizationId,
                     Attribute = attribute,
                     Value = value2
                 });

@@ -9,7 +9,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Catalog.Features.Stores.Queries;
 
-public sealed record GetStoresQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<StoreDto>>
+public sealed record GetStoresQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<StoreDto>>
 {
     sealed class GetStoresQueryHandler(
         CatalogContext context) : IRequestHandler<GetStoresQuery, PagedResult<StoreDto>>
@@ -17,6 +17,7 @@ public sealed record GetStoresQuery(int Page = 0, int PageSize = 10, string? Sea
         public async Task<PagedResult<StoreDto>> Handle(GetStoresQuery request, CancellationToken cancellationToken)
         {
             var query = context.Stores
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Currency)
                 .AsSplitQuery()
                 .AsNoTracking()
@@ -39,6 +40,7 @@ public sealed record GetStoresQuery(int Page = 0, int PageSize = 10, string? Sea
             }
 
             var items = await query
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Currency)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize).AsQueryable()

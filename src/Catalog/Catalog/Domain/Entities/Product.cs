@@ -1,11 +1,12 @@
 using Core;
 
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class Product : Entity<long>, IHasTenant
+public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
 {
     readonly HashSet<ProductAttribute> _productAttributes = new HashSet<ProductAttribute>();
 
@@ -22,6 +23,9 @@ public sealed class Product : Entity<long>, IHasTenant
     readonly HashSet<ProductVariantOption> _productVariantOptions = new HashSet<ProductVariantOption>();
 
     readonly HashSet<ProductImage> _images = new HashSet<ProductImage>();
+
+    readonly HashSet<SubscriptionPlan> _subscriptionPlans = new HashSet<SubscriptionPlan>();
+
     private decimal _price;
     private decimal? _regularPrice;
 
@@ -33,11 +37,22 @@ public sealed class Product : Entity<long>, IHasTenant
         Handle = handle;
     }
 
+    public Product(OrganizationId organizationId, long id, string name)
+    {
+        OrganizationId = organizationId;
+        Id = id;
+        Name = name;
+    }
+
+    public void SetId(long id) => Id = id;
+  
     public TenantId TenantId { get; set; }
 
-    public Store? Store { get; internal set; }
+    public OrganizationId OrganizationId { get; set; }
 
-    public string? StoreId { get; private set; }
+    public Store? Store { get; set; }
+
+    public string? StoreId { get; set; }
 
     public Brand? Brand { get; set; }
 
@@ -134,57 +149,76 @@ public sealed class Product : Entity<long>, IHasTenant
 
     public IReadOnlyCollection<ProductVariantOption> ProductVariantOptions => _productVariantOptions;
 
-    public void AddVariant(Product variant)
+    public bool AddVariant(Product variant)
     {
-        _variants.Add(variant);
-        variant.Store = this.Store;
-        variant.Category = this.Category;
-        variant.Parent = this;
+        var x = _variants.Add(variant);
+        if(x) 
+        {
+            variant.OrganizationId = OrganizationId;
+            variant.Store = this.Store;
+            variant.Category = this.Category;
+            variant.Parent = this;
+        }
+        return x;
     }
 
-    public void RemoveVariant(Product variant)
+    public bool RemoveVariant(Product variant)
     {
-        _variants.Add(variant);
+        return _variants.Add(variant);
     }
 
-    public void AddProductOption(ProductOption productOption)
+    public bool AddProductOption(ProductOption productOption)
     {
-        _productOptions.Add(productOption);
+        productOption.OrganizationId = OrganizationId;
+        return _productOptions.Add(productOption);
     }
 
-    public void RemoveProductOption(ProductOption option)
+    public bool RemoveProductOption(ProductOption option)
     {
-        _productOptions.Remove(option);
+        return _productOptions.Remove(option);
     }
 
-    public void AddProductAttribute(ProductAttribute productAttribute)
+    public bool AddProductAttribute(ProductAttribute productAttribute)
     {
-        _productAttributes.Add(productAttribute);
+        productAttribute.OrganizationId = OrganizationId;
+        return _productAttributes.Add(productAttribute);
     }
 
-    public void RemoveProductAttribute(ProductAttribute productAttribute)
+    public bool RemoveProductAttribute(ProductAttribute productAttribute)
     {
-        _productAttributes.Remove(productAttribute);
+        return _productAttributes.Remove(productAttribute);
     }
 
-    public void AddOptionGroup(OptionGroup group)
+    public bool AddOptionGroup(OptionGroup group)
     {
-        _optionGroups.Add(group);
+        group.OrganizationId = OrganizationId;
+        return _optionGroups.Add(group);
     }
 
-    public void RemoveOptionGroup(OptionGroup group)
+    public bool RemoveOptionGroup(OptionGroup group)
     {
-        _optionGroups.Remove(group);
+        return _optionGroups.Remove(group);
     }
 
-    public void AddOption(Option option)
+    public bool AddOption(Option option)
     {
-        _options.Add(option);
+        option.OrganizationId = OrganizationId;
+
+        var productOption = new ProductOption 
+        {
+            OrganizationId = OrganizationId,
+            Product = this,
+            Option = option
+        };
+        return _productOptions.Add(productOption);
+
+        //option.OrganizationId = OrganizationId;
+        //return _options.Add(option);
     }
 
-    public void RemoveOption(Option option)
+    public bool RemoveOption(Option option)
     {
-        _options.Remove(option);
+        return _options.Remove(option);
     }
 
     public (decimal price, decimal? regularPrice) GetTotalOptionsPrice()
@@ -258,4 +292,27 @@ public sealed class Product : Entity<long>, IHasTenant
         DiscountRate = null;
         Discount = null;
     }
+
+    public IReadOnlyCollection<SubscriptionPlan> SubscriptionPlans => _subscriptionPlans;
+
+    public bool AddSubscriptionPlan(SubscriptionPlan subscriptionPlan)
+    {
+        return _subscriptionPlans.Add(subscriptionPlan);
+    }
+
+    public void RemoveSubscriptionPlan(SubscriptionPlan subscriptionPlan)
+    {
+        _subscriptionPlans.Remove(subscriptionPlan);
+    }
+}
+
+public class SubscriptionPlan : Entity<string>, IHasTenant
+{
+    public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
+
+    public long ProductId { get; set; }
+
+    public string Name { get; set; }
 }

@@ -69,6 +69,9 @@ else
     [Parameter]
     public string? BrandId { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         //await OnPageChanged(1);
@@ -85,7 +88,7 @@ else
     {
         store = StoreProvider.CurrentStore;
 
-        var result = await ProductsClient.GetProductsAsync(StoreId, BrandId, true, true, null, Path, page,
+        var result = await ProductsClient.GetProductsAsync(Organization.Id, StoreId, BrandId, true, true, null, Path, page,
         pageSize, null, null);
         items = result.Items;
 

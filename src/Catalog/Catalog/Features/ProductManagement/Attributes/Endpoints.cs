@@ -63,66 +63,66 @@ public static class Endpoints
         return app;
     }
 
-    public static async Task<Results<Ok<PagedResult<AttributeDto>>, BadRequest>> GetAttributes(
+    public static async Task<Results<Ok<PagedResult<AttributeDto>>, BadRequest>> GetAttributes(string organizationId,
          [FromQuery] string[]? ids = null, int page = 1, int pageSize = 10, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default, CancellationToken cancellationToken = default)
     {
-        return TypedResults.Ok(await mediator.Send(new GetAttributes(ids, page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new GetAttributes(organizationId, ids, page, pageSize, searchString, sortBy, sortDirection), cancellationToken));
     }
 
-    public static async Task<AttributeDto> GetAttributeById(string id, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<AttributeDto> GetAttributeById(string organizationId, string id, IMediator mediator, CancellationToken cancellationToken)
     {
-        return await mediator.Send(new GetAttribute(id));
+        return await mediator.Send(new GetAttribute(organizationId, id));
     }
 
-    public static async Task<Results<Ok<IEnumerable<AttributeValueDto>>, BadRequest>> GetAttributesValues(string id, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<IEnumerable<AttributeValueDto>>, BadRequest>> GetAttributesValues(string organizationId, string id, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new GetAttributeValues(id), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new GetAttributeValues(organizationId, id), cancellationToken));
     }
 
-    public static async Task<Results<Ok<AttributeDto?>, BadRequest>> CreateAttribute(CreateAttributeDto dto, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<AttributeDto?>, BadRequest>> CreateAttribute(string organizationId, CreateAttributeDto dto, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new CreateAttributeCommand(dto.Name, dto.Description, dto.GroupId, dto.Values), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new CreateAttributeCommand(organizationId, dto.Name, dto.Description, dto.GroupId, dto.Values), cancellationToken));
     }
 
-    public static async Task UpdateAttribute(string id, UpdateAttributeDto dto, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task UpdateAttribute(string organizationId, string id, UpdateAttributeDto dto, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new UpdateAttributeCommand(id, dto.Name, dto.Description, dto.GroupId, dto.Values), cancellationToken);
+        await mediator.Send(new UpdateAttributeCommand(organizationId, id, dto.Name, dto.Description, dto.GroupId, dto.Values), cancellationToken);
     }
 
-    public static async Task DeleteAttribute(string id, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task DeleteAttribute(string organizationId, string id, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteAttributeCommand(id), cancellationToken);
+        await mediator.Send(new DeleteAttributeCommand(organizationId, id), cancellationToken);
     }
 
-    public static async Task<Results<Ok<AttributeValueDto>, BadRequest>> CreateAttributeValue(string id, CreateProductAttributeValueData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<AttributeValueDto>, BadRequest>> CreateAttributeValue(string organizationId, string id, CreateProductAttributeValueData data, IMediator mediator, CancellationToken cancellationToken)
     {
-        return TypedResults.Ok(await mediator.Send(new CreateProductAttributeValue(id, data), cancellationToken));
+        return TypedResults.Ok(await mediator.Send(new CreateProductAttributeValue(organizationId, id, data), cancellationToken));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteAttributeValue(string id, string valueId, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok, BadRequest>> DeleteAttributeValue(string organizationId, string id, string valueId, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteProductAttributeValue(id, valueId), cancellationToken);
+        await mediator.Send(new DeleteProductAttributeValue(organizationId, id, valueId), cancellationToken);
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<Ok<IEnumerable<AttributeGroupDto>>, BadRequest>> GetAttributeGroups(IMediator mediator)
+    public static async Task<Results<Ok<IEnumerable<AttributeGroupDto>>, BadRequest>> GetAttributeGroups(string organizationId, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new GetAttributeGroups()));
+        return TypedResults.Ok(await mediator.Send(new GetAttributeGroups(organizationId)));
     }
 
-    public static async Task<Results<Ok<AttributeGroupDto>, BadRequest>> CreateAttributeGroup(CreateProductAttributeGroupData data, IMediator mediator)
+    public static async Task<Results<Ok<AttributeGroupDto>, BadRequest>> CreateAttributeGroup(string organizationId, CreateProductAttributeGroupData data, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new CreateAttributeGroup(data)));
+        return TypedResults.Ok(await mediator.Send(new CreateAttributeGroup(organizationId, data)));
     }
 
-    public static async Task<Results<Ok<AttributeGroupDto>, BadRequest>> UpdateAttributeGroup(string id, UpdateProductAttributeGroupData data, IMediator mediator)
+    public static async Task<Results<Ok<AttributeGroupDto>, BadRequest>> UpdateAttributeGroup(string organizationId, string id, UpdateProductAttributeGroupData data, IMediator mediator)
     {
-        return TypedResults.Ok(await mediator.Send(new UpdateAttributeGroup(id, data)));
+        return TypedResults.Ok(await mediator.Send(new UpdateAttributeGroup(organizationId, id, data)));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteAttributeGroup(string id, IMediator mediator)
+    public static async Task<Results<Ok, BadRequest>> DeleteAttributeGroup(string organizationId, string id, IMediator mediator)
     {
-        await mediator.Send(new DeleteAttributeGroup(id));
+        await mediator.Send(new DeleteAttributeGroup(organizationId, id));
         return TypedResults.Ok();
     }
 }

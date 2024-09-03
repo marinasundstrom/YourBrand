@@ -7,7 +7,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Catalog.Features.Brands.Queries;
 
-public sealed record GetBrandQuery(int Id) : IRequest<BrandDto?>
+public sealed record GetBrandQuery(string OrganizationId, int Id) : IRequest<BrandDto?>
 {
     sealed class GetBrandQueryHandler(
         CatalogContext context,
@@ -17,6 +17,7 @@ public sealed record GetBrandQuery(int Id) : IRequest<BrandDto?>
         {
             var brand = await context
                .Brands
+               .InOrganization(request.OrganizationId)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

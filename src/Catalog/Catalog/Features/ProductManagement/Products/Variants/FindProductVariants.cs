@@ -3,13 +3,13 @@ using MediatR;
 using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record FindProductVariants(string ProductIdOrHandle, Dictionary<string, string?> SelectedOptions) : IRequest<IEnumerable<ProductDto>>
+public record FindProductVariants(string OrganizationId, string ProductIdOrHandle, Dictionary<string, string?> SelectedOptions) : IRequest<IEnumerable<ProductDto>>
 {
-    public class Handler(CatalogContext context, ProductVariantsService productVariantsService) : IRequestHandler<FindProductVariants, IEnumerable<ProductDto>>
+    public class Handler(ProductVariantsService productVariantsService) : IRequestHandler<FindProductVariants, IEnumerable<ProductDto>>
     {
         public async Task<IEnumerable<ProductDto>> Handle(FindProductVariants request, CancellationToken cancellationToken)
         {
-            var variants = await productVariantsService.FindVariants(request.ProductIdOrHandle, null, request.SelectedOptions, cancellationToken);
+            var variants = await productVariantsService.FindVariants(request.OrganizationId, request.ProductIdOrHandle, null, request.SelectedOptions, cancellationToken);
 
             return variants
                 .OrderBy(x => x.Id)

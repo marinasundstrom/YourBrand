@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record GetProductById(string IdOrHandle) : IRequest<Result<ProductDto>>
+public sealed record GetProductById(string OrganizationId, string IdOrHandle) : IRequest<Result<ProductDto>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<GetProductById, Result<ProductDto>>
     {
@@ -15,6 +15,7 @@ public sealed record GetProductById(string IdOrHandle) : IRequest<Result<Product
             var isId = int.TryParse(request.IdOrHandle, out var id);
 
             var query = catalogContext.Products
+                .InOrganization(request.OrganizationId)
                 .IncludeAll()
                 .AsSplitQuery()
                 .AsQueryable();

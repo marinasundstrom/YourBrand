@@ -3,9 +3,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 
-public abstract class Option : Entity<string>, IHasTenant
+public abstract class Option : Entity<string>, IHasTenant, IHasOrganization
 {
     protected Option() { }
 
@@ -16,6 +17,8 @@ public abstract class Option : Entity<string>, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -56,6 +59,8 @@ public sealed class SelectableOption : Option
 
 public sealed class ChoiceOption : Option
 {
+    readonly List<OptionValue> _values = new List<OptionValue>();
+
     private ChoiceOption() { }
 
     public ChoiceOption(string name)
@@ -64,7 +69,18 @@ public sealed class ChoiceOption : Option
         OptionType = OptionType.Choice;
     }
 
-    public List<OptionValue> Values { get; } = new List<OptionValue>();
+    public IReadOnlyCollection<OptionValue> Values => _values;
+
+    public void AddValue(OptionValue optionValue)
+    {
+        _values.Add(optionValue);
+        optionValue.OrganizationId = OrganizationId;
+    }
+
+    public void RemoveValue(OptionValue optionValue)
+    {
+        _values.Remove(optionValue);
+    }
 
     [ForeignKey(nameof(DefaultValue))]
     public string? DefaultValueId { get; set; }

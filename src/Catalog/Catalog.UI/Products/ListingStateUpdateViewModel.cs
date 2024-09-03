@@ -10,6 +10,7 @@ public class ListingStateUpdateViewModel(IProductsClient productsClient, ISnackb
     {
         return new(productsClient, snackbar)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             ListingState = product.ListingState
         };
@@ -18,13 +19,15 @@ public class ListingStateUpdateViewModel(IProductsClient productsClient, ISnackb
     [Required]
     public ProductListingState ListingState { get; set; }
 
+    public string OrganizationId { get; private set; }
+
     public long ProductId { get; private set; }
 
     public async Task UpdateListingState()
     {
         try
         {
-            await productsClient.UpdateProductListingStateAsync(ProductId.ToString(), new UpdateProductListingStateRequest()
+            await productsClient.UpdateProductListingStateAsync(OrganizationId, ProductId.ToString(), new UpdateProductListingStateRequest()
             {
                 ListingState = ListingState
             });

@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.Stores.Commands;
 
-public sealed record DeleteStoreCommand(string Id) : IRequest
+public sealed record DeleteStoreCommand(string OrganizationId, string Id) : IRequest
 {
     public sealed class DeleteStoreCommandHandler(CatalogContext context) : IRequestHandler<DeleteStoreCommand>
     {
         public async Task Handle(DeleteStoreCommand request, CancellationToken cancellationToken)
         {
             var store = await context.Stores
+                .InOrganization(request.OrganizationId)
                 .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (store is null) throw new Exception();

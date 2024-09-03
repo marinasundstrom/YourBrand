@@ -21,6 +21,10 @@
     IEnumerable<ProductCategoryTreeNode> tree;
 
     [Parameter]
+    [EditorRequired]
+    public string OrganizationId { get; set; }
+
+    [Parameter]
     public long? CategoryId { get; set; }
 
     [Parameter]
@@ -37,7 +41,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var treeRoot = await ProductCategoriesClient.GetProductCategoryTreeAsync(StoreId, null);
+        var treeRoot = await ProductCategoriesClient.GetProductCategoryTreeAsync(OrganizationId, StoreId, null);
         tree = treeRoot.Categories;
 
         if (CategoryId is not null)

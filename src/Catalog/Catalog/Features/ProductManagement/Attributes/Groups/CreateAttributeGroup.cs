@@ -5,7 +5,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Attributes.Groups;
 
-public record CreateAttributeGroup(CreateProductAttributeGroupData Data) : IRequest<AttributeGroupDto>
+public record CreateAttributeGroup(string OrganizationId, CreateProductAttributeGroupData Data) : IRequest<AttributeGroupDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<CreateAttributeGroup, AttributeGroupDto>
     {
@@ -13,6 +13,7 @@ public record CreateAttributeGroup(CreateProductAttributeGroupData Data) : IRequ
         {
             var group = new AttributeGroup(Guid.NewGuid().ToString())
             {
+                OrganizationId = request.OrganizationId,
                 Name = request.Data.Name,
                 Description = request.Data.Description
             };

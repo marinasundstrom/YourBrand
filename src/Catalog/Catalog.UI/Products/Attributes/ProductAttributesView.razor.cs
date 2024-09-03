@@ -20,6 +20,10 @@ sealed partial class ProductAttributesView : ComponentBase
 
     string? searchString;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
+
     [Parameter]
     [EditorRequired]
     public long ProductId { get; set; } = default!;
@@ -37,7 +41,7 @@ sealed partial class ProductAttributesView : ComponentBase
     /// </summary>
     private async Task<TableData<ProductAttribute>> ServerReload(TableState state)
     {
-        var result = await ProductsClient.GetProductAttributesAsync(ProductId); /*, state.Page + 1, state.PageSize,
+        var result = await ProductsClient.GetProductAttributesAsync(Organization.Id, ProductId); /*, state.Page + 1, state.PageSize,
         searchString,
         state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection ==
         MudBlazor.SortDirection.Descending ? YourBrand.Catalog.SortDirection.Desc : YourBrand.Catalog.SortDirection.Asc)); */
@@ -55,7 +59,7 @@ sealed partial class ProductAttributesView : ComponentBase
     {
         //NavigationManager.NavigateTo($"/products/{args.Item.Id}");
 
-        await ProductsClient.DeleteProductAttributeAsync(ProductId, args.Attribute.Id);
+        await ProductsClient.DeleteProductAttributeAsync(Organization.Id, ProductId, args.Attribute.Id);
 
         await productAttributesTable.ReloadServerData();
     }
@@ -75,7 +79,7 @@ sealed partial class ProductAttributesView : ComponentBase
     {
         if (productAttribute is ProductAttribute pa)
         {
-            await ProductsClient.UpdateProductAttributeAsync(ProductId, pa.Attribute.Id, new UpdateProductAttribute
+            await ProductsClient.UpdateProductAttributeAsync(Organization.Id, ProductId, pa.Attribute.Id, new UpdateProductAttribute
             {
                 ValueId = pa.Value.Id,
                 ForVariant = pa.ForVariant,
@@ -105,7 +109,7 @@ sealed partial class ProductAttributesView : ComponentBase
 
     private async Task<IEnumerable<AttributeValue>> SearchAttributeValue(string value, CancellationToken cancellationToken)
     {
-        var attribute = await AttributesClient.GetAttributeByIdAsync(selectedProductAttribute!.Attribute.Id, cancellationToken);
+        var attribute = await AttributesClient.GetAttributeByIdAsync(Organization.Id, selectedProductAttribute!.Attribute.Id, cancellationToken);
 
         if (value is null)
             return attribute.Values;

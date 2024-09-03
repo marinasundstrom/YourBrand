@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record GetProductVariantAttributes(long ProductId, long ProductVariantId) : IRequest<IEnumerable<ProductVariantAttributeDto>>
+public record GetProductVariantAttributes(string OrganizationId, long ProductId, long ProductVariantId) : IRequest<IEnumerable<ProductVariantAttributeDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetProductVariantAttributes, IEnumerable<ProductVariantAttributeDto>>
     {
         public async Task<IEnumerable<ProductVariantAttributeDto>> Handle(GetProductVariantAttributes request, CancellationToken cancellationToken)
         {
             var variantOptionValues = await context.ProductAttributes
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(pv => pv.Value)

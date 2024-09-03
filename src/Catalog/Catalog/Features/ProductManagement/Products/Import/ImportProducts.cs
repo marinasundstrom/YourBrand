@@ -17,7 +17,7 @@ namespace YourBrand.Catalog.Features.ProductManagement.Import;
 
 public record ProductImportResult(IEnumerable<string> Diagnostics);
 
-public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImportResult>>
+public sealed record ImportProducts(string OrganizationId, Stream Stream) : IRequest<Result<ProductImportResult>>
 {
     public sealed class Handler(CatalogContext context, IProductImageUploader productImageUploader) : IRequestHandler<ImportProducts, Result<ProductImportResult>>
     {
@@ -46,7 +46,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
                 foreach (var record in records)
                 {
-                    Store store = await GetStore(record.StoreIdOrHandle, cancellationToken);
+                    Store store = await GetStore(request.OrganizationId, record.StoreIdOrHandle, cancellationToken);
 
                     string productHandle = GetHandle(record);
 
@@ -60,11 +60,11 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
                         continue;
                     }
 
-                    Brand? brand = string.IsNullOrEmpty(record.Brand) ? null : await GetBrand(record.Brand, cancellationToken);
+                    Brand? brand = string.IsNullOrEmpty(record.Brand) ? null : await GetBrand(request.OrganizationId, record.Brand, cancellationToken);
 
-                    ProductCategory category = await GetCategory(store, record.CategoryId.GetValueOrDefault(), cancellationToken);
+                    ProductCategory category = await GetCategory(request.OrganizationId, store, record.CategoryId.GetValueOrDefault(), cancellationToken);
 
-                    var parentProduct = string.IsNullOrEmpty(record.ParentSku) ? null : await GetProduct(store, record.ParentSku, cancellationToken);
+                    var parentProduct = string.IsNullOrEmpty(record.ParentSku) ? null : await GetProduct(request.OrganizationId, store, record.ParentSku, cancellationToken);
 
                     var product = new Product(record.Name, productHandle)
                     {
@@ -136,6 +136,7 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
                     }
 
                     var image2 = new ProductImage("Image", string.Empty, path);
+                    image2.OrganizationId = request.OrganizationId;
                     product.AddImage(image2);
                     product.Image = image2;
 
@@ -163,11 +164,13 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
         readonly Dictionary<long, ProductCategory> categories = new Dictionary<long, ProductCategory>();
 
-        private async Task<ProductCategory> GetCategory(Store store, long categoryId, CancellationToken cancellationToken)
+        private async Task<ProductCategory> GetCategory(string organizationId, Store store, long categoryId, CancellationToken cancellationToken)
         {
             if (!categories.TryGetValue(categoryId, out var category))
             {
-                category = await context.ProductCategories
+                category = await context
+                    .ProductCategories
+                    .InOrganization(organizationId)
                     .Where(x => x.Store == store)
                     .Include(x => x.Parent)
                     .FirstAsync(x => x.Id == categoryId, cancellationToken);
@@ -179,11 +182,13 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
         readonly Dictionary<string, Brand> brands = new Dictionary<string, Brand>();
 
-        private async Task<Brand> GetBrand(string handle, CancellationToken cancellationToken)
+        private async Task<Brand> GetBrand(string organizationId, string handle, CancellationToken cancellationToken)
         {
             if (!brands.TryGetValue(handle, out var brand))
             {
-                brand = await context.Brands.FirstAsync(x => x.Handle == handle, cancellationToken);
+                brand = await context.Brands
+                        .InOrganization(organizationId)
+                        .FirstAsync(x => x.Handle == handle, cancellationToken);
                 brands.Add(handle, brand);
             }
             return brand;
@@ -191,11 +196,13 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
         readonly Dictionary<string, Store> stores = new Dictionary<string, Store>();
 
-        private async Task<Store> GetStore(string handle, CancellationToken cancellationToken)
+        private async Task<Store> GetStore(string organizationId, string handle, CancellationToken cancellationToken)
         {
             if (!stores.TryGetValue(handle, out var store))
             {
-                store = await context.Stores.FirstAsync(x => x.Handle == handle, cancellationToken);
+                store = await context.Stores
+                        .InOrganization(organizationId)
+                        .FirstAsync(x => x.Handle == handle, cancellationToken);
                 stores.Add(handle, store);
             }
             return store;
@@ -203,11 +210,12 @@ public sealed record ImportProducts(Stream Stream) : IRequest<Result<ProductImpo
 
         readonly Dictionary<string, Product> products = new Dictionary<string, Product>();
 
-        private async Task<Product> GetProduct(Store store, string sku, CancellationToken cancellationToken)
+        private async Task<Product> GetProduct(string organizationId, Store store, string sku, CancellationToken cancellationToken)
         {
             if (!products.TryGetValue(sku, out var product))
             {
                 product = await context.Products
+                    .InOrganization(organizationId)
                     .Where(x => x.Sku == sku)
                     .FirstAsync(x => x.Sku == sku, cancellationToken);
 

@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
-public sealed record CreateProductCategory(string Name, string Description, long? ParentCategoryId, string Handle, string? StoreId) : IRequest<Result<ProductCategory>>
+public sealed record CreateProductCategory(string OrganizationId, string Name, string Description, long? ParentCategoryId, string Handle, string? StoreId) : IRequest<Result<ProductCategory>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<CreateProductCategory, Result<ProductCategory>>
     {
@@ -17,11 +17,13 @@ public sealed record CreateProductCategory(string Name, string Description, long
             if (request.ParentCategoryId is not null)
             {
                 parentCategory = await catalogContext.ProductCategories
-                .FirstAsync(p => p.Id == request.ParentCategoryId, cancellationToken);
+                    .InOrganization(request.OrganizationId)
+                    .FirstAsync(p => p.Id == request.ParentCategoryId, cancellationToken);
             }
 
             var product = new Domain.Entities.ProductCategory()
             {
+                OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,
                 Parent = parentCategory,

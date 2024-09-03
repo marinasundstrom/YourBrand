@@ -44,6 +44,10 @@
     public string Class { get; set; }
 
     [Parameter]
+    [EditorRequired]
+    public string OrganizationId { get; set; }
+
+    [Parameter]
     public Variant Variant { get; set; }
 
     [Parameter]
@@ -58,7 +62,7 @@
         try
         {
         */
-        var results = await BrandsClient.GetBrandsAsync(null, 1, 10, text, null, null);
+        var results = await BrandsClient.GetBrandsAsync(OrganizationId, null, 1, 10, text, null, null);
         return results.Items;
 
         /*

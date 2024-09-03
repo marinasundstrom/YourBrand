@@ -7,7 +7,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record GetProductVariants(string ProductIdOrHandle, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<Catalog.Features.ProductManagement.Products.ProductDto>>
+public record GetProductVariants(string OrganizationId, string ProductIdOrHandle, int Page = 1, int PageSize = 10, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<Catalog.Features.ProductManagement.Products.ProductDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetProductVariants, PagedResult<Catalog.Features.ProductManagement.Products.ProductDto>>
     {
@@ -15,7 +15,9 @@ public record GetProductVariants(string ProductIdOrHandle, int Page = 1, int Pag
         {
             bool isProductId = long.TryParse(request.ProductIdOrHandle, out var productId);
 
-            var query = context.Products.AsQueryable();
+            var query = context.Products
+                .InOrganization(request.OrganizationId)
+                .AsQueryable();
 
             query = isProductId ?
                 query.Where(pv => pv.Parent!.Id == productId)

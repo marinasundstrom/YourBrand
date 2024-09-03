@@ -8,28 +8,44 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record CreateProduct(string Name, string StoreId, string Description, long CategoryId, bool IsGroupedProduct, decimal Price, int? VatRateId, string Handle) : IRequest<Result<ProductDto>>
+public sealed record CreateProduct(string OrganizationId, string Name, string StoreId, string Description, long CategoryId, bool IsGroupedProduct, decimal Price, int? VatRateId, string Handle) : IRequest<Result<ProductDto>>
 {
     public sealed class Handler(CatalogContext catalogContext, IProductImageUploader productImageUploader) : IRequestHandler<CreateProduct, Result<ProductDto>>
     {
         public async Task<Result<ProductDto>> Handle(CreateProduct request, CancellationToken cancellationToken)
         {
-            var handleInUse = await catalogContext.Products.AnyAsync(product => product.Handle == request.Handle, cancellationToken);
+            var handleInUse = await catalogContext.Products
+                .InOrganization(request.OrganizationId)
+                .AnyAsync(product => product.Handle == request.Handle, cancellationToken);
 
             if (handleInUse)
             {
                 return Result.Failure<ProductDto>(Errors.HandleAlreadyTaken);
             }
 
-            var store = await catalogContext.Stores.FirstAsync(x => x.Id == request.StoreId);
+            var store = await catalogContext.Stores
+                .InOrganization(request.OrganizationId)
+                .FirstAsync(x => x.Id == request.StoreId);
+
+            int productId = 1;
+
+            try
+            {
+                productId = await catalogContext.ProductAttributes
+                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .MaxAsync(x => x.Id, cancellationToken) + 1;
+            }
+            catch { }
 
             var product = new Domain.Entities.Product()
             {
+                OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,
                 HasVariants = request.IsGroupedProduct,
                 Handle = request.Handle
             };
+            product.SetId(productId);
 
             if (request.VatRateId is not null)
             {
@@ -51,6 +67,7 @@ public sealed record CreateProduct(string Name, string StoreId, string Descripti
             product.AddImage(image);
 
             var category = await catalogContext.ProductCategories
+                .InOrganization(request.OrganizationId)
                 .Include(x => x.Parent)
                 .Include(x => x.Store)
                 .ThenInclude(x => x.Currency)

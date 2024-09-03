@@ -53,6 +53,9 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Required]
     public string Name { get; set; }
 
@@ -84,7 +87,7 @@
     {
         var store = StoreProvider.CurrentStore;
 
-        var product = await ProductsClient.CreateProductAsync(new CreateProductRequest()
+        var product = await ProductsClient.CreateProductAsync(Organization.Id, new CreateProductRequest()
             {
                 Name = Name,
                 StoreId = store.Id,
@@ -105,7 +108,7 @@
     {
         var store = StoreProvider.CurrentStore;
 
-        var result = await ProductCategoriesClient.GetProductCategoriesAsync(store.Id, null, true, true, 1, 20, value, null,
+        var result = await ProductCategoriesClient.GetProductCategoriesAsync(Organization.Id, store.Id, null, true, true, 1, 20, value, null,
         null);
         return result.Items
         .Where(x => x.CanAddProducts)

@@ -7,13 +7,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Options;
 
-public record GetOptions(bool IncludeChoices) : IRequest<IEnumerable<OptionDto>>
+public record GetOptions(string OrganizationId, bool IncludeChoices) : IRequest<IEnumerable<OptionDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetOptions, IEnumerable<OptionDto>>
     {
         public async Task<IEnumerable<OptionDto>> Handle(GetOptions request, CancellationToken cancellationToken)
         {
             var query = context.Options
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Include(o => o.Group)

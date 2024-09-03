@@ -26,21 +26,21 @@ public static class Endpoints
         return app;
     }
 
-    public static async Task<Results<Ok<IEnumerable<OptionDto>>, BadRequest>> GetOptions(bool includeChoices = false, IMediator mediator = default)
+    public static async Task<Results<Ok<IEnumerable<OptionDto>>, BadRequest>> GetOptions(string organizationId, bool includeChoices = false, IMediator mediator = default)
     {
-        return TypedResults.Ok(await mediator.Send(new GetOptions(includeChoices)));
+        return TypedResults.Ok(await mediator.Send(new GetOptions(organizationId, includeChoices)));
     }
 
     /*
     [HttpGet("{optionId}")]
-    public async Task<IResult<OptionDto>> GetProductOptionValues(string optionId, IMediator mediator = default)
+    public async Task<IResult<OptionDto>> GetProductOptionValues(string organizationId, string optionId, IMediator mediator = default)
     {
         return TypedResults.Ok(await _mediator.Send(new GetOption(optionId)));
     }
     */
 
-    public static async Task<Results<Ok<IEnumerable<OptionValueDto>>, BadRequest>> GetOptionValues(string id, IMediator mediator = default)
+    public static async Task<Results<Ok<IEnumerable<OptionValueDto>>, BadRequest>> GetOptionValues(string organizationId, string id, IMediator mediator = default)
     {
-        return TypedResults.Ok(await mediator.Send(new GetOptionValues(id)));
+        return TypedResults.Ok(await mediator.Send(new GetOptionValues(organizationId, id)));
     }
 }

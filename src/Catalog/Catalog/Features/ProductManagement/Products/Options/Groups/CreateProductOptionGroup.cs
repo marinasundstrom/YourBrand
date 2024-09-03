@@ -8,13 +8,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
-public record CreateProductOptionGroup(long ProductId, CreateProductOptionGroupData Data) : IRequest<OptionGroupDto>
+public record CreateProductOptionGroup(string OrganizationId, long ProductId, CreateProductOptionGroupData Data) : IRequest<OptionGroupDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<CreateProductOptionGroup, OptionGroupDto>
     {
         public async Task<OptionGroupDto> Handle(CreateProductOptionGroup request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+                .InOrganization(request.OrganizationId)
                 .FirstAsync(x => x.Id == request.ProductId);
 
             var group = new OptionGroup(Guid.NewGuid().ToString())

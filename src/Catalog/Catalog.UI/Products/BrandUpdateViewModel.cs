@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+using Microsoft.AspNetCore.Components;
+
 using MudBlazor;
 
 using YourBrand.Portal.Services;
@@ -12,6 +14,7 @@ public class BrandUpdateViewModel(IProductsClient productsClient, IBrandsClient 
     {
         return new(productsClient, brandsClient, snackbar, storeProvider)
         {
+            OrganizationId = product.OrganizationId,
             ProductId = product.Id,
             Brand = product.Brand
         };
@@ -20,13 +23,15 @@ public class BrandUpdateViewModel(IProductsClient productsClient, IBrandsClient 
     [Required]
     public Brand? Brand { get; set; }
 
+    public string OrganizationId { get; private set; }
+
     public long ProductId { get; private set; }
 
     public async Task<IEnumerable<Brand>> Search(string value)
     {
         var store = storeProvider.CurrentStore;
 
-        var result = await brandsClient.GetBrandsAsync(null, 1, 20, value, null, null);
+        var result = await brandsClient.GetBrandsAsync(OrganizationId, null, 1, 20, value, null, null);
 
         return result.Items;
     }
@@ -35,7 +40,7 @@ public class BrandUpdateViewModel(IProductsClient productsClient, IBrandsClient 
     {
         try
         {
-            await productsClient.UpdateProductBrandAsync(ProductId.ToString(), new UpdateProductBrandRequest()
+            await productsClient.UpdateProductBrandAsync(OrganizationId, ProductId.ToString(), new UpdateProductBrandRequest()
             {
                 BrandId = Brand.Id
             });

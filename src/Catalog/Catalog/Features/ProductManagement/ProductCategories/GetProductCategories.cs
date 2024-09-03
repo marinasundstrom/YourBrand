@@ -7,14 +7,16 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 
-public sealed record GetProductCategories(string? StoreId, long? ParentGroupId, bool IncludeWithUnlistedProducts, bool IncludeHidden,
+public sealed record GetProductCategories(string OrganizationId, string? StoreId, long? ParentGroupId, bool IncludeWithUnlistedProducts, bool IncludeHidden,
     int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<ProductCategory>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<GetProductCategories, PagedResult<ProductCategory>>
     {
         public async Task<PagedResult<ProductCategory>> Handle(GetProductCategories request, CancellationToken cancellationToken)
         {
-            var query = catalogContext.ProductCategories.AsNoTracking().AsQueryable();
+            var query = catalogContext.ProductCategories
+                        .InOrganization(request.OrganizationId)
+                        .AsNoTracking().AsQueryable();
 
             if (request.StoreId is not null)
             {
@@ -48,7 +50,9 @@ public sealed record GetProductCategories(string? StoreId, long? ParentGroupId, 
 
             var total = await query.CountAsync(cancellationToken);
 
-            var productCategories = await query.OrderBy(x => x.Name)
+            var productCategories = await query
+                .InOrganization(request.OrganizationId)
+                .OrderBy(x => x.Name)
                 .Skip(request.PageSize * (request.Page - 1))
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

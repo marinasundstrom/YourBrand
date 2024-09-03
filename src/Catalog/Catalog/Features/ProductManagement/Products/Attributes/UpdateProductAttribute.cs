@@ -6,13 +6,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record UpdateProductAttribute(long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
+public record UpdateProductAttribute(string OrganizationId, long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UpdateProductAttribute, ProductAttributeDto>
     {
         public async Task<ProductAttributeDto> Handle(UpdateProductAttribute request, CancellationToken cancellationToken)
         {
             var product = await context.Products
+                            .InOrganization(request.OrganizationId)
                             .AsSplitQuery()
                             .Include(x => x.ProductAttributes)
                             .ThenInclude(x => x.Attribute)

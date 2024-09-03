@@ -7,13 +7,14 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record GetProducts(string? StoreId = null, string? BrandIdOrHandle = null, bool IncludeUnlisted = false, bool GroupProducts = true, string? ProductCategoryIdOrPath = null, string? SearchTerm = null, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<ProductDto>>
+public sealed record GetProducts(string OrganizationId, string? StoreId = null, string? BrandIdOrHandle = null, bool IncludeUnlisted = false, bool GroupProducts = true, string? ProductCategoryIdOrPath = null, string? SearchTerm = null, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<ProductDto>>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<GetProducts, PagedResult<ProductDto>>
     {
         public async Task<PagedResult<ProductDto>> Handle(GetProducts request, CancellationToken cancellationToken)
         {
             var query = catalogContext.Products
+                        .InOrganization(request.OrganizationId)
                         .Where(x => x.Category != null)
                         .IncludeAll()
                         .AsSplitQuery()
