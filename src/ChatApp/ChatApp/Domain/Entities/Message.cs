@@ -104,7 +104,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
     public DateTimeOffset? Deleted { get; set; }
 }
 
-public class MessageReaction : IEntity
+public class MessageReaction
 {
     public MessageReaction(ChannelParticipantId addedById, string reaction, DateTimeOffset date)
     {
