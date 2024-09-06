@@ -3,13 +3,21 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductOption : Entity<int>, IHasTenant, IHasOrganization
+public class ProductOption : Entity<string>, IHasTenant, IHasOrganization
 {
+    public ProductOption(string id) : base(id)
+    {
+    }
+
+    public ProductOption() : base(Guid.NewGuid().ToString())
+    {
+    }
+
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    public long ProductId { get; set; }
+    public int ProductId { get; set; }
 
     public Product Product { get; set; } = null!;
 

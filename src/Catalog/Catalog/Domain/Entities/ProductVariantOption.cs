@@ -9,11 +9,11 @@ public class ProductVariantOption : Entity<int>, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
-    public long ProductId { get; set; }
+    public int ProductId { get; set; }
 
     public Product Product { get; set; } = null!;
 
-    public string ProductVariantId { get; set; } = null!;
+    public int ProductVariantId { get; set; }
 
     public Product ProductVariant { get; set; } = null!;
 

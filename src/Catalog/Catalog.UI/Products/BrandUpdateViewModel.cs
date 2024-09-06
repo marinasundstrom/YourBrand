@@ -25,7 +25,7 @@ public class BrandUpdateViewModel(IProductsClient productsClient, IBrandsClient 
 
     public string OrganizationId { get; private set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task<IEnumerable<Brand>> Search(string value)
     {
@@ -53,5 +53,5 @@ public class BrandUpdateViewModel(IProductsClient productsClient, IBrandsClient 
         }
     }
 
-    public record ProductBrand(long Id, string Name, bool CanAddProducts);
+    public record ProductBrand(int Id, string Name, bool CanAddProducts);
 }

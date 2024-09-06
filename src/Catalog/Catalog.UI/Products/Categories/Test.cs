@@ -2,7 +2,7 @@ namespace YourBrand.Catalog.Products;
 
 public static class Test
 {
-    public static ProductCategoryTreeNode? FindNode(this IEnumerable<ProductCategoryTreeNode> nodes, long categoryId)
+    public static ProductCategoryTreeNode? FindNode(this IEnumerable<ProductCategoryTreeNode> nodes, int categoryId)
     {
         ProductCategoryTreeNode? productCategoryTreeNode = null;
 
@@ -32,7 +32,7 @@ public static class Test
         return productCategoryTreeNode;
     }
 
-    public static ProductCategoryTreeNode? FindNode(this ProductCategoryTreeNode productCategoryTreeNode, long categoryId)
+    public static ProductCategoryTreeNode? FindNode(this ProductCategoryTreeNode productCategoryTreeNode, int categoryId)
     {
         if (productCategoryTreeNode.Id == categoryId)
         {

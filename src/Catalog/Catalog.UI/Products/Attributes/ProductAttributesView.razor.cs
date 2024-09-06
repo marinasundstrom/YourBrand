@@ -26,7 +26,7 @@ sealed partial class ProductAttributesView : ComponentBase
 
     [Parameter]
     [EditorRequired]
-    public long ProductId { get; set; } = default!;
+    public int ProductId { get; set; } = default!;
 
     [Parameter]
     public bool HasVariants { get; set; } = false!;

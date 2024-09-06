@@ -11,6 +11,14 @@ public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAtt
     {
         builder.ToTable("ProductAttributes");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+        builder.HasOne(o => o.Product).WithMany(x => x.ProductAttributes)
+            .HasForeignKey(o => new { o.OrganizationId, o.ProductId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
+        builder.HasOne(o => o.Attribute).WithMany(x => x.ProductAttributes)
+            .HasForeignKey(o => new { o.OrganizationId, o.AttributeId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

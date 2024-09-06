@@ -8,7 +8,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record CreateProductOptionValue(string OrganizationId, long ProductId, string OptionId, CreateProductOptionValueData Data) : IRequest<OptionValueDto>
+public record CreateProductOptionValue(string OrganizationId, int ProductId, string OptionId, CreateProductOptionValueData Data) : IRequest<OptionValueDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<CreateProductOptionValue, OptionValueDto>
     {

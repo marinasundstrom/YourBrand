@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record UpdateProductAttribute(string OrganizationId, long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
+public record UpdateProductAttribute(string OrganizationId, int ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UpdateProductAttribute, ProductAttributeDto>
     {

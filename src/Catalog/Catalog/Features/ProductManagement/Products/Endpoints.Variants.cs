@@ -62,7 +62,7 @@ public static partial class Endpoints
         return TypedResults.Ok(await mediator.Send(new GetProductVariants(organizationId, idOrHandle, page, pageSize, searchString, sortBy, sortDirection)));
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteVariant(string organizationId, long id, long variantId, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok, BadRequest>> DeleteVariant(string organizationId, int id, int variantId, IMediator mediator, CancellationToken cancellationToken)
     {
         await mediator.Send(new DeleteProductVariant(organizationId, id, variantId), cancellationToken);
         return TypedResults.Ok();
@@ -88,7 +88,7 @@ public static partial class Endpoints
         return TypedResults.Ok(await mediator.Send(new GetAvailableAttributeValues(organizationId, idOrHandle, attributeId, selectedAttributeValues), cancellationToken));
     }
 
-    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> CreateVariant(string organizationId, long id, CreateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> CreateVariant(string organizationId, int id, CreateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
     {
         try
         {
@@ -104,7 +104,7 @@ public static partial class Endpoints
         }
     }
 
-    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> UpdateVariant(string organizationId, long id, long variantId, UpdateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<ProductDto>, ProblemHttpResult>> UpdateVariant(string organizationId, int id, int variantId, UpdateProductVariantData data, IMediator mediator, CancellationToken cancellationToken)
     {
         try
         {
@@ -120,7 +120,7 @@ public static partial class Endpoints
         }
     }
 
-    public static async Task<Results<Ok<string>, BadRequest>> UploadVariantImage(string organizationId, long id, long variantId, IFormFile file, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<Results<Ok<string>, BadRequest>> UploadVariantImage(string organizationId, int id, int variantId, IFormFile file, IMediator mediator, CancellationToken cancellationToken)
     {
         var url = await mediator.Send(new UploadProductVariantImage(organizationId, id, variantId, file.Name, file.OpenReadStream()), cancellationToken);
         return TypedResults.Ok(url);

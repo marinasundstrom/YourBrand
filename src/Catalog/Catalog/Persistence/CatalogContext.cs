@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Domain;
-using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 

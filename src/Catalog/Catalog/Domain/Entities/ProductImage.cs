@@ -3,7 +3,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class ProductImage : Entity<string>, IHasTenant, IHasOrganization
+public class ProductImage : Entity<string>, IHasTenant, IHasOrganization, IHasStore
 {
     public ProductImage() { }
 
@@ -25,7 +25,7 @@ public class ProductImage : Entity<string>, IHasTenant, IHasOrganization
 
     public Product? Product { get; set; } = default!;
 
-    public long? ProductId { get; set; }
+    public int? ProductId { get; set; }
 
     public string Title { get; set; }
 

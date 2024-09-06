@@ -13,11 +13,22 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("Products");
 
-        builder.HasIndex(x => x.TenantId);
-
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 
         builder.HasIndex(p => p.Type);
+
+        builder.HasOne(o => o.Store).WithMany(x => x.Products)
+           .HasForeignKey(o => new { o.OrganizationId, o.StoreId });
+
+        builder.HasOne(o => o.Brand).WithMany()
+            .HasForeignKey(o => new { o.OrganizationId, o.BrandId });
+
+        builder
+            .HasOne(p => p.Image)
+            .WithMany()
+            .HasForeignKey(o => new { o.OrganizationId, o.ImageId })
+            .IsRequired(false);
+
         builder
             .Property(x => x.Handle)
             .HasMaxLength(150);
@@ -25,13 +36,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasIndex(p => p.OrganizationId);
 
         builder.HasIndex(p => p.Handle);
-
-        builder
-            .HasOne(p => p.Image)
-            .WithMany()
-            .HasForeignKey(x => x.ImageId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
 
         builder
             .HasMany(p => p.Images)
@@ -56,18 +60,28 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         */
 
         builder
-            .HasOne(x => x.Parent)
-            .WithMany(x => x.Variants)
+            .HasMany(x => x.Variants)
+            .WithOne(x => x.Parent)
             .HasForeignKey(x => new { x.OrganizationId, x.ParentId })
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasMany(x => x.ProductOptions)
             .WithOne(x => x.Product)
+            .HasForeignKey(x => new { x.OrganizationId, x.ProductId })
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
+            .HasMany(x => x.ProductVariantOptions)
+            .WithOne(x => x.ProductVariant)
+            .HasForeignKey(x => new { x.OrganizationId, x.ProductVariantId })
+            .OnDelete(DeleteBehavior.Cascade); 
+
+        builder
             .HasOne(p => p.Category)
-            .WithMany(p => p.Products);
+            .WithMany(p => p.Products)
+            .HasForeignKey(x => new { x.OrganizationId, x.CategoryId })
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

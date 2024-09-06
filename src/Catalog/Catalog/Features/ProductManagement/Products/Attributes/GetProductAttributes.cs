@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record GetProductAttributes(string OrganizationId, long ProductId) : IRequest<IEnumerable<ProductAttributeDto>>
+public record GetProductAttributes(string OrganizationId, int ProductId) : IRequest<IEnumerable<ProductAttributeDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetProductAttributes, IEnumerable<ProductAttributeDto>>
     {

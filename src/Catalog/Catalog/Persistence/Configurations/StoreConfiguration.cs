@@ -11,7 +11,7 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
     {
         builder.ToTable("Stores");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
 
         builder.HasOne(x => x.Currency)
                 .WithMany()
@@ -20,5 +20,13 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
         builder.OwnsOne(x => x.CurrencyDisplayOptions);
 
         builder.OwnsOne(x => x.PricingOptions, x => x.OwnsMany(z => z.CategoryPricingOptions));
+
+        builder.HasMany(x => x.Products).WithOne(x => x.Store).OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.Categories).WithOne(x => x.Store).OnDelete(DeleteBehavior.Cascade);
+
+        //builder.HasMany(x => x.Attributes).WithOne(x => x.Store).OnDelete(DeleteBehavior.Cascade);
+
+        //builder.HasMany(x => x.Images).WithOne(x => x.Store).OnDelete(DeleteBehavior.Cascade);
     }
 }

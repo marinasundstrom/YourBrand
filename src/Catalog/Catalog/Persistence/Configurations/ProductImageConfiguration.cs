@@ -11,6 +11,12 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {
         builder.ToTable("ProductImages");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+        builder
+           .HasOne(x => x.Product)
+           .WithMany(x => x.Images)
+           .HasForeignKey(x => new { x.OrganizationId, x.ProductId })
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }

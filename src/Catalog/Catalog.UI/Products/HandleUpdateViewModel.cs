@@ -23,7 +23,7 @@ public class HandleUpdateViewModel(IProductsClient productsClient, ISnackbar sna
     [Required]
     public string Handle { get; set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task UpdateHandle()
     {

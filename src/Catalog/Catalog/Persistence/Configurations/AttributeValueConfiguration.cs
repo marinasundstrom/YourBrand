@@ -11,6 +11,9 @@ public class AttributeValueConfiguration : IEntityTypeConfiguration<AttributeVal
     {
         builder.ToTable("AttributeValues");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+        builder.HasOne(o => o.Attribute).WithMany(x => x.Values)
+            .HasForeignKey(o => new { o.OrganizationId, o.AttributeId });
     }
 }

@@ -6,6 +6,7 @@ namespace YourBrand.Catalog.Domain.Entities;
 public class Store : Entity<string>, IHasTenant, IHasOrganization
 {
     readonly HashSet<Product> _products = new HashSet<Product>();
+    readonly HashSet<ProductCategory> _categories = new HashSet<ProductCategory>();
 
     protected Store() { }
 
@@ -33,6 +34,10 @@ public class Store : Entity<string>, IHasTenant, IHasOrganization
     public IReadOnlyCollection<Product> Products => _products;
 
     public void AddProduct(Product product) => _products.Add(product);
+
+    public IReadOnlyCollection<ProductCategory> Categories => _categories;
+
+    public void AddCategory(ProductCategory category) => _categories.Add(category);
 }
 
 public class CurrencyDisplayOptions

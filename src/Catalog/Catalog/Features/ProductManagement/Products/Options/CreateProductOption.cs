@@ -8,7 +8,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record CreateProductOption(string OrganizationId, long ProductId, CreateProductOptionData Data) : IRequest<OptionDto>
+public record CreateProductOption(string OrganizationId, int ProductId, CreateProductOptionData Data) : IRequest<OptionDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<CreateProductOption, OptionDto>
     {
@@ -90,11 +90,7 @@ public record CreateProductOption(string OrganizationId, long ProductId, CreateP
 
                 foreach (var variant in product.Variants)
                 {
-                    variant.AddProductOption(new ProductOption()
-                    {
-                        Option = option,
-                        IsInherited = true
-                    });
+                    variant.AddOption(option, true);
                 }
             }
 

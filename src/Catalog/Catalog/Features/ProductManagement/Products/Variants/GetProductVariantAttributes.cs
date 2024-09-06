@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record GetProductVariantAttributes(string OrganizationId, long ProductId, long ProductVariantId) : IRequest<IEnumerable<ProductVariantAttributeDto>>
+public record GetProductVariantAttributes(string OrganizationId, int ProductId, int ProductVariantId) : IRequest<IEnumerable<ProductVariantAttributeDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetProductVariantAttributes, IEnumerable<ProductVariantAttributeDto>>
     {

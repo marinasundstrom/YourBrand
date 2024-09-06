@@ -20,7 +20,7 @@ public class ImageUpdateViewModel(IProductsClient productsClient, ISnackbar snac
 
     public string Image { get; set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task UploadProductImage(IBrowserFile file)
     {

@@ -31,8 +31,9 @@ public sealed record CreateProduct(string OrganizationId, string Name, string St
 
             try
             {
-                productId = await catalogContext.ProductAttributes
-                    .Where(x => x.OrganizationId == request.OrganizationId)
+                productId = await catalogContext.Products
+                    .InOrganization(request.OrganizationId)
+                    .Where(x => x.StoreId == request.StoreId)
                     .MaxAsync(x => x.Id, cancellationToken) + 1;
             }
             catch { }
@@ -43,7 +44,8 @@ public sealed record CreateProduct(string OrganizationId, string Name, string St
                 Name = request.Name,
                 Description = request.Description,
                 HasVariants = request.IsGroupedProduct,
-                Handle = request.Handle
+                Handle = request.Handle,
+                Store = store
             };
             product.SetId(productId);
 

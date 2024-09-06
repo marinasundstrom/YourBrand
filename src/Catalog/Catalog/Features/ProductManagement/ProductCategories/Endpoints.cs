@@ -131,7 +131,7 @@ public static class Mapping
 }
 
 public sealed record ProductCategory(
-    long Id,
+    int Id,
     string Name,
     string? Description,
     ParentProductCategory? Parent,
@@ -143,7 +143,7 @@ public sealed record ProductCategory(
 
 
 public sealed record ParentProductCategory(
-    long Id,
+    int Id,
     string Name,
     string? Description,
     string Handle,
@@ -153,7 +153,7 @@ public sealed record ParentProductCategory(
 );
 
 public sealed record ProductCategory2(
-    long Id,
+    int Id,
     string Name,
     string? Description,
     string Handle,
@@ -167,7 +167,7 @@ public record class ProductCategoryTreeRootDto(
     long ProductsCount);
 
 public record class ProductCategoryTreeNodeDto(
-    long Id,
+    int Id,
     string Name,
     string Handle,
     string Path,
@@ -178,7 +178,7 @@ public record class ProductCategoryTreeNodeDto(
     bool CanAddProducts);
 
 public record class ParentProductCategoryTreeNodeDto(
-    long Id,
+    int Id,
     string Name,
     string Handle,
     string Path,

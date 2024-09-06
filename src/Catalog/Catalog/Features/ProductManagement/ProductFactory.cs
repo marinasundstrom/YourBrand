@@ -1,21 +1,25 @@
+using Azure.Core;
+
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Catalog.Persistence;
 using YourBrand.Tenancy;
 
-namespace YourBrand.Catalog.Persistence;
+namespace YourBrand.Catalog.Features.ProductManagement;
 
 public class ProductFactory(CatalogContext catalogContext, ITenantContext tenantContext)
 {
     public async Task<Product> CreateProductAsync(string organizationId, ProductOptions options, CancellationToken cancellationToken = default)
     {
-        long productId = 1;
+        int productId = 1;
 
         try
         {
             productId = await catalogContext.Products
                 .Where(x => x.OrganizationId == organizationId)
+                .Where(x => x.StoreId == options.StoreId)
                 .MaxAsync(x => x.Id, cancellationToken) + 1;
         }
         catch { }
@@ -59,12 +63,13 @@ public class ProductFactory(CatalogContext catalogContext, ITenantContext tenant
     }
 }
 
-public class ProductOptions 
+
+public class ProductOptions
 {
-    public string Name { get; set;}
+    public string Name { get; set; }
 
     public string Handle { get; set; }
-    
+
     public string? Headline { get; set; }
 
     public string? Description { get; set; }
@@ -79,7 +84,7 @@ public class ProductOptions
 
     public bool HasVariants { get; set; }
 
-    public ProductListingState ListingState { get; set; }
+    public Domain.Enums.ProductListingState ListingState { get; set; }
 
     public string? ImageId { get; set; }
 

@@ -23,6 +23,8 @@ public class OptionValue : Entity<string>, IHasTenant, IHasOrganization
 
     public ChoiceOption Option { get; set; } = null!;
 
+    public string OptionId { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     [Column("InventoryProductId")]

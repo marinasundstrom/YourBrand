@@ -9,7 +9,7 @@ public class ProductCategoryAttribute : Entity<Guid>, IHasTenant, IHasOrganizati
 
     public OrganizationId OrganizationId { get; set; }
 
-    public long ProductCategoryId { get; set; }
+    public int ProductCategoryId { get; set; }
 
     public ProductCategory ProductCategory { get; set; } = null!;
 

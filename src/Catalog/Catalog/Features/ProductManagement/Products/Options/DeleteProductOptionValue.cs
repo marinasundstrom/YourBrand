@@ -7,7 +7,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record DeleteProductOptionValue(string OrganizationId, long ProductId, string OptionId, string ValueId) : IRequest
+public record DeleteProductOptionValue(string OrganizationId, int ProductId, string OptionId, string ValueId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductOptionValue>
     {

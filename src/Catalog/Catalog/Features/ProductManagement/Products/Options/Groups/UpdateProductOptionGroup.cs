@@ -7,7 +7,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
-public record UpdateProductOptionGroup(string OrganizationId, long ProductId, string OptionGroupId, UpdateProductOptionGroupData Data) : IRequest<OptionGroupDto>
+public record UpdateProductOptionGroup(string OrganizationId, int ProductId, string OptionGroupId, UpdateProductOptionGroupData Data) : IRequest<OptionGroupDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UpdateProductOptionGroup, OptionGroupDto>
     {

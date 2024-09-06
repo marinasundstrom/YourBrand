@@ -26,7 +26,11 @@ public abstract class Option : Entity<string>, IHasTenant, IHasOrganization
 
     public OptionGroup? Group { get; set; }
 
+    public string? GroupId { get; set; }
+
     public ProductCategory? ProductCategory { get; set; }
+
+    public int? ProductCategoryId { get; set; }
 
     public OptionType OptionType { get; protected set; }
 

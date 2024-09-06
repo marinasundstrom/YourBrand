@@ -23,7 +23,7 @@ public class DetailsUpdateViewModel(IProductsClient productsClient, ISnackbar sn
 
     public string OrganizationId { get; set; }
 
-    public long ProductId { get; init; }
+    public int ProductId { get; init; }
 
     public string Name { get; set; }
 

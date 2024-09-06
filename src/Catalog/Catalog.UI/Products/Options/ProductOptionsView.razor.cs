@@ -22,7 +22,7 @@ sealed partial class ProductOptionsView : ComponentBase
 
     [Parameter]
     [EditorRequired]
-    public long ProductId { get; set; } = default!;
+    public int ProductId { get; set; } = default!;
 
     [Parameter]
     [EditorRequired]

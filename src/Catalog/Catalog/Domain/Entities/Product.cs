@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
+public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasStore, IHasBrand
 {
     readonly HashSet<ProductAttribute> _productAttributes = new HashSet<ProductAttribute>();
 
@@ -37,22 +37,22 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
         Handle = handle;
     }
 
-    public Product(OrganizationId organizationId, long id, string name)
+    public Product(OrganizationId organizationId, int id, string name)
     {
         OrganizationId = organizationId;
         Id = id;
         Name = name;
     }
 
-    public void SetId(long id) => Id = id;
+    public void SetId(int id) => Id = id;
   
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    public Store? Store { get; set; }
+    public Store Store { get; set; }
 
-    public string? StoreId { get; set; }
+    public string StoreId { get; set; }
 
     public Brand? Brand { get; set; }
 
@@ -64,8 +64,7 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
 
     public ProductCategory? Category { get; internal set; }
 
-    public long? CategoryId { get; private set; }
-
+    public int? CategoryId { get; private set; }
 
     public string Description { get; set; } = default!;
 
@@ -133,7 +132,7 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
 
     public Product? Parent { get; internal set; }
 
-    public long? ParentId { get; internal set; }
+    public int? ParentId { get; internal set; }
 
     public IReadOnlyCollection<ProductAttribute> ProductAttributes => _productAttributes;
 
@@ -169,17 +168,6 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
         return _variants.Add(variant);
     }
 
-    public bool AddProductOption(ProductOption productOption)
-    {
-        productOption.OrganizationId = OrganizationId;
-        return _productOptions.Add(productOption);
-    }
-
-    public bool RemoveProductOption(ProductOption option)
-    {
-        return _productOptions.Remove(option);
-    }
-
     public bool AddProductAttribute(ProductAttribute productAttribute)
     {
         productAttribute.OrganizationId = OrganizationId;
@@ -202,15 +190,16 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
         return _optionGroups.Remove(group);
     }
 
-    public bool AddOption(Option option)
+    public bool AddOption(Option option, bool isInherited = false)
     {
         option.OrganizationId = OrganizationId;
 
-        var productOption = new ProductOption 
+        var productOption = new ProductOption()
         {
             OrganizationId = OrganizationId,
             Product = this,
-            Option = option
+            Option = option,
+            IsInherited = isInherited
         };
         return _productOptions.Add(productOption);
 
@@ -221,6 +210,11 @@ public sealed class Product : Entity<long>, IHasTenant, IHasOrganization
     public bool RemoveOption(Option option)
     {
         return _options.Remove(option);
+    }
+
+    public bool RemoveOption(ProductOption option)
+    {
+        return _productOptions.Remove(option);
     }
 
     public (decimal price, decimal? regularPrice) GetTotalOptionsPrice()
@@ -314,7 +308,7 @@ public class SubscriptionPlan : Entity<string>, IHasTenant
 
     public OrganizationId OrganizationId { get; set; }
 
-    public long ProductId { get; set; }
+    public int ProductId { get; set; }
 
     public string Name { get; set; }
 }

@@ -21,6 +21,8 @@ public class AttributeValue : Entity<string>, IHasTenant, IHasOrganization
 
     public Attribute Attribute { get; set; } = null!;
 
+    public string AttributeId { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     public List<ProductAttribute> ProductAttributes { get; } = new List<ProductAttribute>();

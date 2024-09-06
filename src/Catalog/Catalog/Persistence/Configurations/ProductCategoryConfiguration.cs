@@ -12,6 +12,14 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
         builder.ToTable("ProductCategories");
         //builder.HasQueryFilter(i => i.Deleted == null);
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+        builder.HasOne(o => o.Store).WithMany(x => x.Categories)
+         .HasForeignKey(o => new { o.OrganizationId, o.StoreId });
+
+        builder.HasOne(o => o.Parent).WithMany(x => x.SubCategories)
+      .     HasForeignKey(o => new { o.OrganizationId, o.ParentId });
+
         builder.HasIndex(x => x.TenantId);
 
         builder

@@ -25,6 +25,8 @@ public class OptionGroup : AggregateRoot<string>, IHasTenant, IHasOrganization
 
     public Product? Product { get; set; }
 
+    public int? ProductId { get; set; }
+
     public List<Option> Options { get; } = new List<Option>();
 
     public int? Min { get; set; }

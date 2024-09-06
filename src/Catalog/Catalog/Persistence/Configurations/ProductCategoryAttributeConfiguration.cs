@@ -11,6 +11,14 @@ public class ProductGroupAttributeConfiguration : IEntityTypeConfiguration<Produ
     {
         builder.ToTable("ProductCategoryAttributes");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+        builder.HasOne(o => o.ProductCategory).WithMany()
+            .HasForeignKey(o => new { o.OrganizationId, o.ProductCategoryId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
+        builder.HasOne(o => o.Attribute).WithMany()
+            .HasForeignKey(o => new { o.OrganizationId, o.AttributeId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

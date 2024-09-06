@@ -7,7 +7,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record AddProductAttribute(string OrganizationId, long ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
+public record AddProductAttribute(string OrganizationId, int ProductId, string AttributeId, string ValueId, bool ForVariant, bool IsMainAttribute) : IRequest<ProductAttributeDto>
 {
     public class Handler(CatalogContext context) : IRequestHandler<AddProductAttribute, ProductAttributeDto>
     {

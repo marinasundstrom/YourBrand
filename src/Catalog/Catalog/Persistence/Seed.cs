@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Catalog.Domain.Entities;
+using YourBrand.Catalog.Features.ProductManagement;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Persistence;
@@ -14,6 +15,7 @@ public static class Seed
         var tenantContext = serviceProvider.GetRequiredService<ITenantContext>();
 
         var productFactory = new ProductFactory(context, tenantContext);
+        var productCategoryFactory = new ProductCategoryFactory(context, tenantContext);
 
         var connectionString = context.Database.GetConnectionString()!;
 

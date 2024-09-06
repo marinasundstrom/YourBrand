@@ -6,7 +6,7 @@ using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record UpdateProductVariant(string OrganizationId, long ProductId, long ProductVariantId, UpdateProductVariantData Data) : IRequest<ProductDto>
+public record UpdateProductVariant(string OrganizationId, int ProductId, int ProductVariantId, UpdateProductVariantData Data) : IRequest<ProductDto>
 {
     public class Handler(CatalogContext context, ProductVariantsService productVariantsService) : IRequestHandler<UpdateProductVariant, ProductDto>
     {

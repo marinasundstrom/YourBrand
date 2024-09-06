@@ -21,7 +21,7 @@ public class ListingStateUpdateViewModel(IProductsClient productsClient, ISnackb
 
     public string OrganizationId { get; private set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task UpdateListingState()
     {

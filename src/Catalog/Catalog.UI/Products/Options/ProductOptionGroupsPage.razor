@@ -49,7 +49,7 @@ else
     List<OptionGroup>? optionGroups;
 
     [Parameter]
-    public long? ProductId { get; set; }
+    public int? ProductId { get; set; }
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }

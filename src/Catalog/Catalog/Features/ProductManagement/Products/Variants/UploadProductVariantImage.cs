@@ -4,7 +4,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record UploadProductVariantImage(string OrganizationId, long ProductId, long VariantId, string FileName, Stream Stream) : IRequest<string?>
+public record UploadProductVariantImage(string OrganizationId, int ProductId, long VariantId, string FileName, Stream Stream) : IRequest<string?>
 {
     public class Handler(CatalogContext context) : IRequestHandler<UploadProductVariantImage, string?>
     {

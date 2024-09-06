@@ -29,7 +29,7 @@ public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService
 
     public double? DiscountRate { get; set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task UpdatePrice()
     {

@@ -8,8 +8,8 @@ namespace YourBrand.Catalog.Features.ProductManagement.Products.Images;
 public interface IProductImageUploader
 {
     Task<string> GetPlaceholderImageUrl();
-    Task<bool> TryDeleteProductImage(long productId, string fileName);
-    Task<string> UploadProductImage(long productId, string fileName, Stream stream, string contentType);
+    Task<bool> TryDeleteProductImage(int productId, string fileName);
+    Task<string> UploadProductImage(int productId, string fileName, Stream stream, string contentType);
 }
 
 public class ProductImageUploader(BlobServiceClient blobServiceClient, CatalogContext context, IConfiguration configuration)
@@ -33,7 +33,7 @@ public class ProductImageUploader(BlobServiceClient blobServiceClient, CatalogCo
         return Task.FromResult(placeholderImageFileName);
     }
 
-    public async Task<bool> TryDeleteProductImage(long productId, string fileName)
+    public async Task<bool> TryDeleteProductImage(int productId, string fileName)
     {
         var blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
         await blobContainerClient.CreateIfNotExistsAsync();
@@ -43,7 +43,7 @@ public class ProductImageUploader(BlobServiceClient blobServiceClient, CatalogCo
         return await blobClient.DeleteIfExistsAsync();
     }
 
-    public async Task<string> UploadProductImage(long productId, string fileName, Stream stream, string contentType)
+    public async Task<string> UploadProductImage(int productId, string fileName, Stream stream, string contentType)
     {
         var blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
         await blobContainerClient.CreateIfNotExistsAsync();

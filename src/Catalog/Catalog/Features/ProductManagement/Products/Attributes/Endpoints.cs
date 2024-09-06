@@ -29,22 +29,22 @@ public static class Endpoints
         return app;
     }
 
-    public static async Task<IEnumerable<ProductAttributeDto>> GetProductAttributes(string organizationId, long productId, IMediator mediator)
+    public static async Task<IEnumerable<ProductAttributeDto>> GetProductAttributes(string organizationId, int productId, IMediator mediator)
     {
         return await mediator.Send(new GetProductAttributes(organizationId, productId));
     }
 
-    public static async Task<ProductAttributeDto> AddProductAttribute(string organizationId, long productId, AddProductAttributeDto data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<ProductAttributeDto> AddProductAttribute(string organizationId, int productId, AddProductAttributeDto data, IMediator mediator, CancellationToken cancellationToken)
     {
         return await mediator.Send(new AddProductAttribute(organizationId, productId, data.AttributeId, data.ValueId, data.ForVariant, data.IsMainAttribute), cancellationToken);
     }
 
-    public static async Task<ProductAttributeDto> UpdateProductAttribute(string organizationId, long productId, string attributeId, UpdateProductAttributeDto data, IMediator mediator, CancellationToken cancellationToken)
+    public static async Task<ProductAttributeDto> UpdateProductAttribute(string organizationId, int productId, string attributeId, UpdateProductAttributeDto data, IMediator mediator, CancellationToken cancellationToken)
     {
         return await mediator.Send(new UpdateProductAttribute(organizationId, productId, attributeId, data.ValueId, data.ForVariant, data.IsMainAttribute), cancellationToken);
     }
 
-    public static async Task DeleteProductAttribute(string organizationId, long productId, string attributeId, IMediator mediator)
+    public static async Task DeleteProductAttribute(string organizationId, int productId, string attributeId, IMediator mediator)
     {
         await mediator.Send(new DeleteProductAttribute(organizationId, productId, attributeId));
     }

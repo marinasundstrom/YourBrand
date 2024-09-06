@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record UpdateProductCategory(string OrganizationId, string IdOrHandle, long ProductCategoryId) : IRequest<Result>
+public sealed record UpdateProductCategory(string OrganizationId, string IdOrHandle, int ProductCategoryId) : IRequest<Result>
 {
     public sealed class Handler(CatalogContext catalogContext = default!) : IRequestHandler<UpdateProductCategory, Result>
     {

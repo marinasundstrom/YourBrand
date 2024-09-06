@@ -11,6 +11,9 @@ public class AttributeGroupConfiguration : IEntityTypeConfiguration<AttributeGro
     {
         builder.ToTable("AttributeGroups");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+        builder.HasOne(o => o.Product).WithMany(x => x.AttributeGroups)
+            .HasForeignKey(o => new { o.OrganizationId, o.ProductId });
     }
 }

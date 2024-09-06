@@ -23,7 +23,7 @@ public class SkuUpdateViewModel(IProductsClient productsClient, ISnackbar snackb
     [Required]
     public string Sku { get; set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task UpdateSku()
     {

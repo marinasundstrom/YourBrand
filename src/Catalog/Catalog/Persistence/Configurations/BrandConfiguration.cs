@@ -11,9 +11,12 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {
         builder.ToTable("Brands");
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
         builder.HasIndex(x => x.Handle);
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasOne(o => o.Parent).WithMany(x => x.SubBrands)
+            .HasForeignKey(o => new { o.OrganizationId, o.ParentId });
     }
 }
 

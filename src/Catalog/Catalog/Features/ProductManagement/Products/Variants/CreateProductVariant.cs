@@ -7,7 +7,7 @@ using YourBrand.Catalog.Features.ProductManagement.Products.Images;
 using YourBrand.Catalog.Persistence;
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record CreateProductVariant(string OrganizationId, long ProductId, CreateProductVariantData Data) : IRequest<ProductDto>
+public record CreateProductVariant(string OrganizationId, int ProductId, CreateProductVariantData Data) : IRequest<ProductDto>
 {
     public class Handler(CatalogContext context, ProductVariantsService productVariantsService, IProductImageUploader productImageUploader, IConfiguration configuration) : IRequestHandler<CreateProductVariant, ProductDto>
     {
@@ -54,7 +54,7 @@ public record CreateProductVariant(string OrganizationId, long ProductId, Create
 
             try
             {
-                productId = await context.ProductAttributes
+                productId = await context.Products
                     .Where(x => x.OrganizationId == request.OrganizationId)
                     .MaxAsync(x => x.Id, cancellationToken) + 1;
             }

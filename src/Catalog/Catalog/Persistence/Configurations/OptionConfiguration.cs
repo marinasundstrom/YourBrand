@@ -11,13 +11,21 @@ public class OptionConfiguration : IEntityTypeConfiguration<Option>
     {
         builder.ToTable("Options");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
 
         builder.HasDiscriminator(x => x.OptionType)
             .HasValue(typeof(SelectableOption), Domain.Enums.OptionType.YesOrNo)
             .HasValue(typeof(ChoiceOption), Domain.Enums.OptionType.Choice)
             .HasValue(typeof(NumericalValueOption), Domain.Enums.OptionType.NumericalValue)
             .HasValue(typeof(TextValueOption), Domain.Enums.OptionType.TextValue);
+
+        builder.HasOne(o => o.ProductCategory).WithMany(x => x.Options)
+            .HasForeignKey(o => new { o.OrganizationId, o.ProductCategoryId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
+
+        builder.HasOne(o => o.Group).WithMany(x => x.Options)
+            .HasForeignKey(o => new { o.OrganizationId, o.GroupId })
+            .OnDelete(DeleteBehavior.ClientNoAction); 
     }
 }
 
@@ -30,7 +38,13 @@ public class ChoiceOptionConfiguration : IEntityTypeConfiguration<ChoiceOption>
             .HasMany(p => p.Values)
             .WithOne(p => p.Option);
 
-        builder.HasOne(p => p.DefaultValue);
+        builder.HasOne(p => p.DefaultValue)
+            .WithMany()
+            .HasForeignKey(x => new { x.OrganizationId, x.DefaultValueId });
+
+        builder.HasMany(p => p.Values)
+            .WithOne(x => x.Option)
+            .HasForeignKey(x => new { x.OrganizationId, x.OptionId });
     }
 }
 

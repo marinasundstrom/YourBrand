@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 
-public record DeleteProductAttribute(string OrganizationId, long ProductId, string AttributeId) : IRequest
+public record DeleteProductAttribute(string OrganizationId, int ProductId, string AttributeId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductAttribute>
     {

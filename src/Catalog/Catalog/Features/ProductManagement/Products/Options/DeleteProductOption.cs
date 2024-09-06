@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options;
 
-public record DeleteProductOption(string OrganizationId, long ProductId, string OptionId) : IRequest
+public record DeleteProductOption(string OrganizationId, int ProductId, string OptionId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductOption>
     {
@@ -37,7 +37,7 @@ public record DeleteProductOption(string OrganizationId, long ProductId, string 
                     var option1 = variant.ProductOptions.FirstOrDefault(x => x.OptionId == option.Id);
                     if (option1 is not null)
                     {
-                        variant.RemoveProductOption(option1);
+                        variant.RemoveOption(option1);
                     }
                 }
             }

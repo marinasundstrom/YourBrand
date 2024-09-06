@@ -7,7 +7,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Options.Groups;
 
-public record GetProductOptionGroups(string OrganizationId, long ProductId) : IRequest<IEnumerable<OptionGroupDto>>
+public record GetProductOptionGroups(string OrganizationId, int ProductId) : IRequest<IEnumerable<OptionGroupDto>>
 {
     public class Handler(CatalogContext context) : IRequestHandler<GetProductOptionGroups, IEnumerable<OptionGroupDto>>
     {

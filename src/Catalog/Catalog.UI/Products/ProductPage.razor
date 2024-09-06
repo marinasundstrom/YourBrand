@@ -101,17 +101,17 @@
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12">
-                <ProductAttributesView @key="product.Id" ProductId="product.Id" HasVariants="product.HasVariants" />
+                <ProductAttributesView @key="product.Id" ProductId="@product.Id" HasVariants="product.HasVariants" />
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12">
-                <ProductOptionsView @key="product.Id" ProductId="product.Id" ProductOptions="product.Options.ToList()" />
+                <ProductOptionsView @key="product.Id" ProductId="@product.Id" ProductOptions="product.Options.ToList()" />
             </MudItem>
 
         @if (product.Parent is null)
         {
                     <MudItem xs="12" sm="12" md="12">
-                        <VariantView @key="product.Id" ProductId="product.Id" Product="product" />
+                        <VariantView @key="product.Id" ProductId="@product.Id" Product="product" />
                     </MudItem>
         }
 

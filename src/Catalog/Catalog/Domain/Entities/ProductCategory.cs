@@ -3,12 +3,17 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public sealed class ProductCategory : Entity<long>, IHasTenant, IHasOrganization
+public sealed class ProductCategory : Entity<int>, IHasTenant, IHasOrganization, IHasStore
 {
     private readonly HashSet<Product> _products = new HashSet<Product>();
     private readonly HashSet<ProductCategory> _subCategories = new HashSet<ProductCategory>();
 
     public ProductCategory() { }
+
+    public ProductCategory(int id)
+    {
+        Id = id;
+    }
 
     public ProductCategory(string name)
     {
@@ -19,9 +24,9 @@ public sealed class ProductCategory : Entity<long>, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
-    public Store? Store { get; set; }
+    public Store Store { get; set; }
 
-    public string? StoreId { get; set; }
+    public string StoreId { get; set; }
 
     public string Name { get; set; } = default!;
 
@@ -29,7 +34,7 @@ public sealed class ProductCategory : Entity<long>, IHasTenant, IHasOrganization
 
     public ProductCategory? Parent { get; set; }
 
-    public long? ParentId { get; set; }
+    public int? ParentId { get; set; }
 
     public bool CanAddProducts { get; set; }
 

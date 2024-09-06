@@ -319,7 +319,7 @@ public sealed record UpdateProductHandleRequest(string Handle)
 
 public sealed record UpdateProductListingStateRequest(ProductListingState ListingState);
 
-public sealed record UpdateProductCategoryRequest(long ProductCategoryId)
+public sealed record UpdateProductCategoryRequest(int ProductCategoryId)
 {
     public class UpdateProductCategoryRequestValidator : AbstractValidator<UpdateProductCategoryRequest>
     {
@@ -333,7 +333,7 @@ public sealed record UpdateProductCategoryRequest(long ProductCategoryId)
 public sealed record UpdateProductBrandRequest(long BrandId);
 
 public sealed record ProductDto(
-    long Id,
+    int Id,
     string OrganizationId,
     string Name,
     StoreDto? Store,
@@ -357,7 +357,7 @@ public sealed record ProductDto(
 );
 
 public record class ParentProductDto(
-    long Id,
+    int Id,
     string Name,
     ProductCategory? Category,
     string Description,

@@ -6,7 +6,7 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 
-public record DeleteProductVariant(string OrganizationId, long ProductId, long ProductVariantId) : IRequest
+public record DeleteProductVariant(string OrganizationId, int ProductId, int ProductVariantId) : IRequest
 {
     public class Handler(CatalogContext context) : IRequestHandler<DeleteProductVariant>
     {

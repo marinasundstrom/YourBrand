@@ -26,56 +26,56 @@ public partial class ProductsController(IMediator mediator) : Controller
     }
 
     [HttpPut("{productId}")]
-    public async Task<ActionResult> UpdateProductDetails(long productId, ApiUpdateProductDetails details, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductDetails(int productId, ApiUpdateProductDetails details, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductDetails(productId, details), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpDelete("{productId}")]
-    public async Task<ActionResult> DeleteProduct(long productId, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteProduct(int productId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new DeleteProduct(productId), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Name")]
-    public async Task<ActionResult> UpdateProductName(long productId, [FromBody] string name, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductName(int productId, [FromBody] string name, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductName(productId, name), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Headline")]
-    public async Task<ActionResult> UpdateProductHeadline(long productId, [FromBody] string headline, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductHeadline(int productId, [FromBody] string headline, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductHeadline(productId, headline), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Sku")]
-    public async Task<ActionResult> UpdateProductSku(long productId, [FromBody] string sku, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductSku(int productId, [FromBody] string sku, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductSku(productId, sku), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/ShortDescription")]
-    public async Task<ActionResult> UpdateProductShortDescription(long productId, [FromBody] string description, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductShortDescription(int productId, [FromBody] string description, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductShortDescription(productId, description), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Description")]
-    public async Task<ActionResult> UpdateProductDescription(long productId, [FromBody] string description, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductDescription(int productId, [FromBody] string description, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductDescription(productId, description), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Brand")]
-    public async Task<ActionResult> UpdateProductBrand(long productId, [FromBody] int brandId, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductBrand(int productId, [FromBody] int brandId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductBrand(productId, brandId), cancellationToken);
         return this.HandleResult(result);
@@ -83,14 +83,14 @@ public partial class ProductsController(IMediator mediator) : Controller
 
     [HttpPost("{productId}/UploadImage")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    public async Task<ActionResult> UploadProductImage([FromRoute] long productId, IFormFile file, CancellationToken cancellationToken)
+    public async Task<ActionResult> UploadProductImage([FromRoute] int productId, IFormFile file, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UploadProductImage(productId, file.FileName, file.OpenReadStream()), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Visibility")]
-    public async Task<ActionResult> UpdateProductVisibility(long productId, [FromBody]  ProductVisibility visibility, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductVisibility(int productId, [FromBody]  ProductVisibility visibility, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductVisibility(productId, visibility), cancellationToken);
         return this.HandleResult(result);
@@ -98,14 +98,14 @@ public partial class ProductsController(IMediator mediator) : Controller
 
     [HttpPut("{productId}/Group")]
     [ProducesResponseType(typeof(ProductGroupDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductGroupDto>> UpdateProductGroup(long productId, long groupId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductGroupDto>> UpdateProductGroup(int productId, long groupId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductGroup(productId, groupId), cancellationToken);
         return this.HandleResult(result);
     }
 
     [HttpPut("{productId}/Price")]
-    public async Task<ActionResult> UpdateProductPrice(long productId, UpdateProductPriceRequest dto, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateProductPrice(int productId, UpdateProductPriceRequest dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new UpdateProductPrice(productId, dto.Price), cancellationToken);
         return this.HandleResult(result);

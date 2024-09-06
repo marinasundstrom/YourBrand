@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Catalog.Domain.Entities;
 using YourBrand.Catalog.Domain.Enums;
+using YourBrand.Catalog.Features.ProductManagement;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Persistence;
@@ -28,6 +29,7 @@ public static class Seed2
         var tenantContext = serviceProvider.GetRequiredService<ITenantContext>();
 
         var productFactory = new ProductFactory(context, tenantContext);
+        var productCategoryFactory = new ProductCategoryFactory(context, tenantContext);
 
         var connectionString = context.Database.GetConnectionString()!;
 
@@ -85,29 +87,31 @@ public static class Seed2
 
         if (clothes is null)
         {
-            context.ProductCategories.Add(clothes ??= new ProductCategory("Clothes")
+            clothes ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new ()
             {
+                Name = "Clothes",
                 OrganizationId = TenantConstants.OrganizationId,
                 Handle = "clothes",
                 Path = "clothes",
                 Description = null,
                 StoreId = store.Id,
-            });
+            }, cancellationToken);
         }
 
         tshirts = await context.ProductCategories.FirstOrDefaultAsync(x => x.Handle == "t-shirts");
 
         if (tshirts is null)
         {
-            context.ProductCategories.Add(tshirts ??= new ProductCategory("T-shirts")
+            tshirts ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
             {
+                Name = "T-shirts",
                 OrganizationId = TenantConstants.OrganizationId,
                 Handle = "t-shirts",
                 Path = "t-shirts",
                 Description = null,
                 CanAddProducts = true,
-                StoreId = store.Id,
-            });
+                StoreId = store.Id
+            }, cancellationToken);
 
             clothes.AddSubCategory(tshirts);
         }
@@ -116,30 +120,32 @@ public static class Seed2
 
         if (food is null)
         {
-            context.ProductCategories.Add(food ??= new ProductCategory("Food")
+            food ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
             {
+                Name = "Food",
                 OrganizationId = TenantConstants.OrganizationId,
                 Handle = "food",
                 Path = "food",
                 Description = null,
                 CanAddProducts = true,
                 StoreId = store.Id,
-            });
+            }, cancellationToken);
         }
 
         drinks = await context.ProductCategories.FirstOrDefaultAsync(x => x.Handle == "drinks");
 
         if (drinks is null)
         {
-            context.ProductCategories.Add(food ??= new ProductCategory("Drinks")
+            food ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
             {
+                Name = "Drinks",
                 OrganizationId = TenantConstants.OrganizationId,
                 Handle = "drinks",
                 Path = "drinks",
                 Description = null,
                 CanAddProducts = true,
                 StoreId = store.Id,
-            });
+            }, cancellationToken);
         }
 
         await context.SaveChangesAsync();
@@ -192,7 +198,7 @@ public static class Seed2
             Description = "",
             Headline = "T-shirt i olika färger",
             HasVariants = true,
-            ListingState = ProductListingState.Listed,
+            ListingState = Domain.Enums.ProductListingState.Listed,
             BrandId = brand.Id,
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id
@@ -711,7 +717,7 @@ public static class Seed2
             VatRate = 0.12,
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
-            ListingState = ProductListingState.Listed
+            ListingState = Domain.Enums.ProductListingState.Listed
         }, cancellationToken);
 
         product.SetPrice(52);

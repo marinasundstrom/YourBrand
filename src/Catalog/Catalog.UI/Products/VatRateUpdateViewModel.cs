@@ -30,7 +30,7 @@ public class VatRateUpdateViewModel(IProductsClient productsClient, IVatRatesCli
 
     public IEnumerable<VatRate> VatRates { get; set; }
 
-    public long ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public async Task UpdateVatRate()
     {

@@ -57,7 +57,7 @@
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
     [Parameter]
-    public long? GroupId { get; set; }
+    public int? GroupId { get; set; }
 
     [Parameter]
     public string? StoreId { get; set; }
@@ -123,7 +123,7 @@
 
         this.productGroupTreeNode = productGroupTreeNode;
 
-        GroupId = productGroupTreeNode.Id;
+        GroupId = (int)productGroupTreeNode.Id;
 
         NavigationManager.NavigateTo($"/products?groupId={GroupId}", replace: true);
     }

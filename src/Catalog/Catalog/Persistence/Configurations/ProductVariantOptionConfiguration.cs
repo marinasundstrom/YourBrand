@@ -11,21 +11,19 @@ public class ProductVariantOptionConfiguration : IEntityTypeConfiguration<Produc
     {
         builder.ToTable("ProductVariantOption");
 
-        builder.HasIndex(x => x.TenantId);
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
 
-        builder
-            .HasOne(x => x.Product)
-            .WithMany(x => x.ProductVariantOptions)
-            .OnDelete(DeleteBehavior.NoAction);
+        /*
+             builder.HasOne(o => o.Product).WithMany(x => x.ProductVariantOptions)
+                 .HasForeignKey(o => new { o.OrganizationId, o.ProductId })
+                 .OnDelete(DeleteBehavior.ClientNoAction); */
 
-        builder
-            .HasOne(x => x.Product)
-            .WithMany(x => x.ProductVariantOptions)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(o => o.ProductVariant).WithMany(x => x.ProductVariantOptions)
+            .HasForeignKey(o => new { o.OrganizationId, o.ProductVariantId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
 
-        builder
-            .HasOne(x => x.Option)
-            .WithMany(x => x.ProductVariantOptions)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(o => o.Option).WithMany(x => x.ProductVariantOptions)
+            .HasForeignKey(o => new { o.OrganizationId, o.OptionId })
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }

@@ -27,7 +27,11 @@ public class Attribute : Entity<string>, IHasTenant, IHasOrganization
 
     public AttributeGroup? Group { get; set; }
 
+    public string? GroupId { get; set; }
+
     public ProductCategory? ProductCategory { get; set; }
+
+    public int? ProductCategoryId { get; set; }
 
     //public List<Product> Products { get; } = new List<Product>();
 

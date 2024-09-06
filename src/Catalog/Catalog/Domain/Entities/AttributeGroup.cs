@@ -25,5 +25,7 @@ public class AttributeGroup : Entity<string>, IHasTenant, IHasOrganization
 
     public Product? Product { get; set; }
 
+    public int ProductId { get; set; }
+
     public List<Entities.Attribute> Attributes { get; } = new List<Entities.Attribute>();
 }
