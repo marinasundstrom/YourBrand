@@ -16,7 +16,7 @@ public record GetAccountQuery(string OrganizationId, int AccountNo) : IRequest<A
         {
             var account = await context.Accounts
                 .InOrganization(request.OrganizationId)
-                .Include(a => a.Entries)
+                //.Include(a => a.Entries)
                 .AsNoTracking()
                 .AsQueryable()
                 .FirstAsync(a => a.AccountNo == request.AccountNo, cancellationToken);

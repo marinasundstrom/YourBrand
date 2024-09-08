@@ -45,8 +45,8 @@ public static class Mappings
             Id = v.Id,
             Date = v.Date,
             Description = v.Description,
-            Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
-            Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
+            Debit = v.Debit,
+            Credit = v.Credit,
             InvoiceNo = v.InvoiceNo,
             Entries = v.Entries.Select(e => e.ToDto()),
             Verifications = v.Verifications.Select(e => e.ToDto())

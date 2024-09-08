@@ -16,9 +16,7 @@ public static class Mappings
             },
             Name = account.Name,
             Description = account.Description,
-            Balance =
-                account.Entries.Sum(e => e.Debit.GetValueOrDefault())
-                - account.Entries.Sum(e => e.Credit.GetValueOrDefault())
+            Balance = account.Debit - account.Credit
         };
     }
 }
