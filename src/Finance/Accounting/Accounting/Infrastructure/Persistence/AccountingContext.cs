@@ -21,6 +21,8 @@ namespace YourBrand.Accounting.Infrastructure.Persistence;
 public class AccountingContext(DbContextOptions<AccountingContext> options,
     ITenantContext tenantContext) : DbContext(options), IAccountingContext
 {
+    public async Task<Account?> GetAccount(int number, CancellationToken cancellationToken = default) => await Accounts.FirstOrDefaultAsync(x => x.AccountNo == number, cancellationToken);
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -41,19 +41,17 @@ builder.Host.UseSerilog((ctx, cfg) =>
     .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
+builder.AddServiceDefaults();
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
-
 builder.Services.AddProblemDetails();
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -80,9 +78,26 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.UseSerilogRequestLogging();
 
-app.MapObservability();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseOpenApiAndSwaggerUi();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!");
 

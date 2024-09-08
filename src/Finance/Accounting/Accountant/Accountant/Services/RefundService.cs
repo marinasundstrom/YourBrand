@@ -8,13 +8,15 @@ public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient
 {
     public async Task CheckForRefund()
     {
+        string organizationId = "";
+
         logger.LogInformation("Querying for invoices");
 
-        var results = await invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.Overpaid }, null);
+        var results = await invoicesClient.GetInvoicesAsync(organizationId, 0, 100, null, new[] { (int)InvoiceStatuses.Overpaid }, null);
 
         foreach (var invoice in results.Items)
         {
-            if (invoice.Status == InvoiceStatus.Overpaid)
+            if (invoice.Status.Id == (int)InvoiceStatuses.Overpaid)
             {
                 logger.LogDebug($"Handling overpaid invoice {invoice.Id}");
 
@@ -24,10 +26,10 @@ public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient
                 var subTotal = amountToRefund / (1m + 0.25m);
                 var vat = amountToRefund - subTotal;
 
-                var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
+                var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(organizationId, new CreateJournalEntry
                 {
                     Description = $"Betalade tillbaka för överbetalad faktura #{invoice.InvoiceNo}",
-                    InvoiceNo = int.Parse(invoice.InvoiceNo),
+                    InvoiceNo = invoice.InvoiceNo,
                     Entries = new[]
                     {
                         new CreateEntry
@@ -51,7 +53,7 @@ public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient
                     }
                 });
 
-                await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyRepaid);
+                await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.PartiallyRepaid);
             }
         }
     }

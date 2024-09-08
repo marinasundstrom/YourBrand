@@ -26,6 +26,8 @@ public class TimeSheetsTest : TestBase
     {
         // Arrange
 
+        string organizationId = "test";
+
         User user = CreateTestUser();
 
         fakeUserContext.UserId.Returns(x => new UserId(user.Id));
@@ -60,7 +62,7 @@ public class TimeSheetsTest : TestBase
 
         // Act
 
-        var getTimeSheetForWeekQuery = new GetTimeSheetForWeekQuery(2020, 31, null);
+        var getTimeSheetForWeekQuery = new GetTimeSheetForWeekQuery(organizationId, 2020, 31, null);
 
         TimeSheetDto? item = await commandHandler.Handle(getTimeSheetForWeekQuery, default);
 

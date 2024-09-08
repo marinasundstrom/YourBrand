@@ -13,7 +13,6 @@ using YourBrand.Accountant.Consumers;
 using YourBrand.Accountant.Domain;
 using YourBrand.Accountant.Services;
 using YourBrand.Accounting.Client;
-using YourBrand.Authentication;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Integration;

@@ -41,17 +41,28 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
 
     public IReadOnlyCollection<LedgerEntry> Entries => _entries;
 
-    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(x =>
+    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(entry =>
     {
-        x.OrganizationId = OrganizationId;
-        _entries.Add(x);
+        entry.OrganizationId = OrganizationId;
+        entry.Account.AddEntry(entry);
+        if(entry.Debit > 0)
+        {
+            Debit += entry.Debit.GetValueOrDefault();
+        }
+        else
+        {
+            Credit += entry.Credit.GetValueOrDefault();
+        }
+        _entries.Add(entry);
     });
 
     public LedgerEntry AddDebitEntry(Account account, decimal debit, string? description = null)
     {
         var entry = new LedgerEntry(Date, account, debit, null, description);
         entry.OrganizationId = OrganizationId;
+        account.AddEntry(entry);
         _entries.Add(entry);
+        Debit += debit;
         return entry;
     }
 
@@ -59,7 +70,9 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
     {
         var entry = new LedgerEntry(Date, account, null, credit, description);
         entry.OrganizationId = OrganizationId;
+        account.AddEntry(entry);
         _entries.Add(entry);
+        Credit += credit;
         return entry;
     }
 
@@ -70,6 +83,10 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
         verification.OrganizationId = OrganizationId;
         _verifications.Add(verification);
     }
+
+    public decimal Debit { get; set; }
+
+    public decimal Credit { get; set; }
 
     public decimal Sum => _entries.Sum(x => x.Debit.GetValueOrDefault() - x.Credit.GetValueOrDefault());
 

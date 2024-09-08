@@ -13,9 +13,11 @@ public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClie
 {
     public async Task IssueReminders()
     {
+        string organizationId = "";
+
         logger.LogInformation("Querying for invoices");
 
-        var results = await invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent }, null);
+        var results = await invoicesClient.GetInvoicesAsync(organizationId, 0, 100, null, [(int)InvoiceStatuses.PartiallyPaid, (int)InvoiceStatuses.Sent], null);
 
         using (var scope = serviceScopeFactory.CreateScope())
         {
@@ -23,7 +25,7 @@ public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClie
             {
                 var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
 
-                if (invoice.Status == InvoiceStatus.PartiallyPaid)
+                if (invoice.Status.Id == (int)InvoiceStatuses.PartiallyPaid)
                 {
                     logger.LogDebug($"Notify customer about partially paid invoice {invoice.Id}");
 
@@ -42,7 +44,7 @@ public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClie
 
                     await emailService.SendEmail("test1@foo.com", "You have partially paid", text);
                 }
-                else if (invoice.Status == InvoiceStatus.Sent || invoice.Status == InvoiceStatus.Reminder)
+                else if (invoice.Status.Id == (int)InvoiceStatuses.Sent || invoice.Status.Id == (int)InvoiceStatuses.Reminder)
                 {
                     if (DateTime.Now > invoice.DueDate)
                     {
@@ -59,7 +61,7 @@ public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClie
 
                         string templateId = "reminder";
 
-                        await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Reminder);
+                        await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.Reminder);
 
                         string text = await GenerateDocument(model, templateId);
 

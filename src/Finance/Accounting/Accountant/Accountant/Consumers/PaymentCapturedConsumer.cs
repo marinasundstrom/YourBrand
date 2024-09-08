@@ -11,6 +11,8 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
 {
     public async Task Consume(ConsumeContext<PaymentCaptured> context)
     {
+        string organizationId = "";
+        
         CancellationToken cancellationToken = context.CancellationToken;
 
         var capture = context.Message;
@@ -25,53 +27,53 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
 
         // Create verification
 
-        var invoice = await invoicesClient.GetInvoiceAsync(payment.InvoiceId, cancellationToken);
+        var invoice = await invoicesClient.GetInvoiceAsync(organizationId, payment.InvoiceId, cancellationToken);
 
         var capturedAmount = capture.Amount;
 
-        switch (invoice.Status)
+        switch (invoice.Status.Id)
         {
-            case InvoiceStatus.Draft:
+            case (int)InvoiceStatuses.Draft:
                 // Do nothing
                 return;
 
-            case InvoiceStatus.Sent:
-            case InvoiceStatus.Reminder:
+            case (int)InvoiceStatuses.Sent:
+            case (int)InvoiceStatuses.Reminder:
                 if (capturedAmount < invoice.Total)
                 {
-                    await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyPaid, cancellationToken);
+                    await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.PartiallyPaid, cancellationToken);
                 }
                 else if (capturedAmount == invoice.Total)
                 {
-                    await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Paid, cancellationToken);
+                    await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.Paid, cancellationToken);
                 }
                 else if (capturedAmount > invoice.Total)
                 {
-                    await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Overpaid, cancellationToken);
+                    await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.Overpaid, cancellationToken);
                 }
-                await invoicesClient.SetPaidAmountAsync(invoice.Id, invoice.Paid.GetValueOrDefault() + capturedAmount);
+                await invoicesClient.SetPaidAmountAsync(organizationId, invoice.Id, invoice.Paid.GetValueOrDefault() + capturedAmount);
                 break;
 
-            case InvoiceStatus.Paid:
-            case InvoiceStatus.PartiallyPaid:
-            case InvoiceStatus.Overpaid:
+            case (int)InvoiceStatuses.Paid:
+            case (int)InvoiceStatuses.PartiallyPaid:
+            case (int)InvoiceStatuses.Overpaid:
                 var paidAmount = invoice.Paid.GetValueOrDefault() + capturedAmount;
                 if (paidAmount < invoice.Total)
                 {
-                    await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyPaid, cancellationToken);
+                    await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.PartiallyPaid, cancellationToken);
                 }
                 else if (paidAmount == invoice.Total)
                 {
-                    await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Paid, cancellationToken);
+                    await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.Paid, cancellationToken);
                 }
                 else if (paidAmount > invoice.Total)
                 {
-                    await invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Overpaid, cancellationToken);
+                    await invoicesClient.SetInvoiceStatusAsync(organizationId, invoice.Id, (int)InvoiceStatuses.Overpaid, cancellationToken);
                 }
-                await invoicesClient.SetPaidAmountAsync(invoice.Id, paidAmount);
+                await invoicesClient.SetPaidAmountAsync(organizationId, invoice.Id, paidAmount);
                 break;
 
-            case InvoiceStatus.Void:
+            case (int)InvoiceStatuses.Void:
                 // Mark transaktion for re-pay
                 //await _transactionsClient.SetTransactionStatusAsync(payment.Id, YourBrand.Transactions.Client.TransactionStatus.Payback);
 
@@ -99,10 +101,10 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
                     }
                 };
 
-        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
+        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(organizationId, new CreateJournalEntry
         {
             Description = $"Betalade faktura #{invoice.InvoiceNo}",
-            InvoiceNo = int.Parse(invoice.InvoiceNo),
+            InvoiceNo = invoice.InvoiceNo,
             Entries = entries
         }, cancellationToken);
 

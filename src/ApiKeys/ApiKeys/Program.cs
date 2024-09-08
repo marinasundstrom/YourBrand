@@ -42,10 +42,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
     .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
+builder.AddServiceDefaults();
 
 builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All, settings =>
@@ -56,7 +53,9 @@ builder.Services
     })
     .AddApiVersioningServices();
 
-builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddProblemDetails();
 
@@ -95,9 +94,9 @@ builder.Services.AddMassTransit(x =>
 
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
+app.MapDefaultEndpoints();
 
-app.MapObservability();
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {

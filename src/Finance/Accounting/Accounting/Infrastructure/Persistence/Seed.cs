@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
+using Polly;
+
 using YourBrand.Accounting.Domain.Entities;
 using YourBrand.Tenancy;
 
@@ -9,9 +11,9 @@ public static class Seed
 {
     public static bool Run { get; set; } = true;
 
-    public static bool RecreateDatabase { get; set; } = false;
+    public static bool RecreateDatabase { get; set; } = true;
 
-    public static bool SeedAccounts { get; set; } = false;
+    public static bool SeedAccounts { get; set; } = true;
 
     public static bool SeedVerifications { get; set; } = true;
 
@@ -44,32 +46,34 @@ public static class Seed
 
         if (SeedVerifications)
         {
-            DoSeedVerifications(context, TenantConstants.OrganizationId);
+            await DoSeedVerifications(context, TenantConstants.OrganizationId);
         }
 
         await context.SaveChangesAsync();
     }
 
-    private static void DoSeedAccounts(AccountingContext context, string organizationId)
+    private static async void DoSeedAccounts(AccountingContext context, string organizationId)
     {
         context.Accounts.AddRange(Accounts.GetAll(organizationId));
+
+        await context.SaveChangesAsync();
     }
 
-    private static void DoSeedVerifications(AccountingContext context, string organizationId)
+    private static async Task DoSeedVerifications(AccountingContext context, string organizationId)
     {
-        InsertMoney(context, organizationId);
+        await InsertMoney(context, organizationId);
 
-        YouSendAnInvoiceToCustomer(context, organizationId);
-        TheCustomerPaysTheInvoice(context, organizationId);
-        YouReceiveAInvoice(context, organizationId);
-        YouTransferFromPlusGiroToCorporateAccount(context, organizationId);
-        YouPayForTheInvoice(context, organizationId);
-        YouWithdrawMoneyAsSalary(context, organizationId);
+        await YouSendAnInvoiceToCustomer(context, organizationId);
+        await TheCustomerPaysTheInvoice(context, organizationId);
+        await YouReceiveAInvoice(context, organizationId);
+        await YouTransferFromPlusGiroToCorporateAccount(context, organizationId);
+        await YouPayForTheInvoice(context, organizationId);
+        await YouWithdrawMoneyAsSalary(context, organizationId);
 
         //YouTransferFromTaxAccountToCorporateAccount(context, organizationId);
     }
 
-    private static void InsertMoney(AccountingContext context, string organizationId)
+    private static async Task InsertMoney(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(
             DateTime.Now.Subtract(TimeSpan.FromDays(19)),
@@ -78,194 +82,89 @@ public static class Seed
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-             new LedgerEntry
-             {
-                 AccountNo = 2018,
-                 Description = string.Empty,
-                 Credit = 30000m
-             },
-            new LedgerEntry
-            {
-                AccountNo = 1930,
-                Description = string.Empty,
-                Debit = 30000m
-            }
-        });
+        verification.AddCreditEntry(await context.GetAccount(2018), 30000m);
+        verification.AddDebitEntry(await context.GetAccount(1930), 30000m);
 
         context.SaveChanges();
     }
 
-    private static void YouSendAnInvoiceToCustomer(AccountingContext context, string organizationId)
+    private static async Task YouSendAnInvoiceToCustomer(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du skickar en faktura");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 1510,
-                Description = string.Empty,
-                Debit = 10000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 2610,
-                Description = string.Empty,
-                Credit = 2000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 3001,
-                Description = string.Empty,
-                Credit = 8000m
-            }
-        });
+        verification.AddDebitEntry(await context.GetAccount(1510), 10000m);
+        verification.AddCreditEntry(await context.GetAccount(2610), 2000m);
+        verification.AddCreditEntry(await context.GetAccount(3001), 8000m);
     }
 
-    private static async void TheCustomerPaysTheInvoice(AccountingContext context, string organizationId)
+    private static async Task TheCustomerPaysTheInvoice(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Kunden betalar fakturan");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 1920,
-                Description = string.Empty,
-                Debit = 10000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 1510,
-                Description = string.Empty,
-                Credit = 10000m
-            }
-        });
+        verification.AddDebitEntry(await context.GetAccount(1920), 10000m);
+        verification.AddCreditEntry(await context.GetAccount(1510), 10000m);
     }
 
-    private static void YouReceiveAInvoice(AccountingContext context, string organizationId)
+    private static async Task YouReceiveAInvoice(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar emot fakturan");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 4000,
-                JournalEntryId = verificationId,
-                Description = string.Empty,
-                Debit = 4000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 2640,
-                Description = string.Empty,
-                Debit = 1000m
-            }, new LedgerEntry
-            {
-                AccountNo = 2440,
-                Description = string.Empty,
-                Credit = 5000m
-            }
-        });
+        verification.AddDebitEntry(await context.GetAccount(4000), 4000m);
+        verification.AddDebitEntry(await context.GetAccount(2640), 1000m);
+        verification.AddCreditEntry(await context.GetAccount(2440), 5000m);
     }
 
-    private static void YouPayForTheInvoice(AccountingContext context, string organizationId)
+    private static async Task YouPayForTheInvoice(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du betalar fakturan");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 2440,
-                Description = string.Empty,
-                Debit = 5000m
-            }, new LedgerEntry
-            {
-                AccountNo = 1930,
-                Description = string.Empty,
-                Credit = 5000m
-            }
-        });
+        verification.AddDebitEntry(await context.GetAccount(2440), 5000m);
+        verification.AddCreditEntry(await context.GetAccount(1930), 5000m);
     }
 
 
-    private static void YouWithdrawMoneyAsSalary(AccountingContext context, string organizationId)
+    private static async Task YouWithdrawMoneyAsSalary(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du tar ut egen lön");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 2013,
-                Description = string.Empty,
-                Debit = 30000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 1930,
-                Description = string.Empty,
-                Credit = 30000m
-            }
-        });
+        verification.AddDebitEntry(await context.GetAccount(2013), 30000m);
+        verification.AddCreditEntry(await context.GetAccount(1930), 30000m);
     }
 
-    private static void YouTransferFromPlusGiroToCorporateAccount(AccountingContext context, string organizationId)
+    private static async Task YouTransferFromPlusGiroToCorporateAccount(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från PlusGiro till företagskonto");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 1920,
-                Description = string.Empty,
-                Credit = 10000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 1930,
-                Description = string.Empty,
-                Debit = 10000m
-            }
-        });
+        verification.AddCreditEntry(await context.GetAccount(1920), 10000m);
+        verification.AddDebitEntry(await context.GetAccount(1930), 10000m);
     }
 
-    private static void YouTransferFromTaxAccountToCorporateAccount(AccountingContext context, string organizationId)
+    private static async Task YouTransferFromTaxAccountToCorporateAccount(AccountingContext context, string organizationId)
     {
         var verification = new JournalEntry(DateTime.Now.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från skattekonto till företagskonto");
         verification.OrganizationId = organizationId;
 
         context.JournalEntries.Add(verification);
 
-        verification.AddEntries(new[] {
-            new LedgerEntry
-            {
-                AccountNo = 1630,
-                Description = string.Empty,
-                Credit = 4000m
-            },
-            new LedgerEntry
-            {
-                AccountNo = 1930,
-                Description = string.Empty,
-                Debit = 4000m
-            }
-        });
+        verification.AddCreditEntry(await context.GetAccount(1630), 4000m);
+        verification.AddDebitEntry(await context.GetAccount(1930), 4000m);
     }
 }

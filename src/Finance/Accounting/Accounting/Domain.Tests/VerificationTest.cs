@@ -6,6 +6,7 @@ using Shouldly;
 using Xunit;
 
 using YourBrand.Accounting.Domain.Entities;
+using YourBrand.Domain;
 
 namespace YourBrand.Accounting.Domain.Tests;
 
@@ -14,7 +15,9 @@ public class VerificationTest
     [Fact(DisplayName = "Verification is created")]
     public void VerificationIsCreated()
     {
-        var accounts = Accounts.GetAll();
+        OrganizationId organizationId = "test";
+
+        var accounts = Accounts.GetAll(organizationId);
 
         var account1510 = accounts.First(a => a.AccountNo == 1510);
         var account2610 = accounts.First(a => a.AccountNo == 2610);

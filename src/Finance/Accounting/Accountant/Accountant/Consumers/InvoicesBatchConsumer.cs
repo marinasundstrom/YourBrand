@@ -26,12 +26,13 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
 
     private async Task HandleInvoice(YourBrand.Invoicing.Contracts.Invoice i, CancellationToken cancellationToken)
     {
+        string organizationId = "";
         // Get invoice
         // Register entries
 
-        var invoice = await invoicesClient.GetInvoiceAsync(i.Id, cancellationToken);
+        var invoice = await invoicesClient.GetInvoiceAsync(organizationId, i.Id, cancellationToken);
 
-        if (invoice.Status != InvoiceStatus.Sent)
+        if (invoice.Status.Id != (int)InvoiceStatuses.Sent)
         {
             return;
         }
@@ -41,12 +42,14 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
 
     private async Task CreateVerificationFromInvoice(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
     {
+        string organizationId = "";
+        
         var entries = entriesFactory.CreateEntriesFromInvoice(invoice);
 
-        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(new CreateJournalEntry
+        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(organizationId, new CreateJournalEntry
         {
             Description = $"Skickade ut faktura #{invoice.InvoiceNo}",
-            InvoiceNo = int.Parse(invoice.InvoiceNo),
+            InvoiceNo = invoice.InvoiceNo,
             Entries = entries.ToList(),
         }, cancellationToken);
 
@@ -62,9 +65,11 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
 
     private async Task UploadDocuments(YourBrand.Invoicing.Client.Invoice invoice, int journalEntryId)
     {
+        string organizationId = "";
+
         MemoryStream stream, stream2;
 
-        var file = await invoicesClient.GetInvoiceFileAsync(invoice.Id);
+        var file = await invoicesClient.GetInvoiceFileAsync(organizationId, invoice.Id);
 
         string filename = GetFileName(file);
 
@@ -81,7 +86,7 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
         stream2.Seek(0, SeekOrigin.Begin);
         stream.Seek(0, SeekOrigin.Begin);
 
-        await journalEntriesClient.AddFileToJournalEntryAsVerificationAsync(
+        await journalEntriesClient.AddFileToJournalEntryAsVerificationAsync(organizationId,
             journalEntryId, null, int.Parse(invoice.Id),
             new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 
