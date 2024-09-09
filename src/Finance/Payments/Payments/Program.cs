@@ -96,6 +96,10 @@ builder.Services
     .AddUserContext()
     .AddTenantContext();
 
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
 {
@@ -146,6 +150,10 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!");
 
