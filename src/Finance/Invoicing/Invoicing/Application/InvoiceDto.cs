@@ -5,6 +5,7 @@ namespace YourBrand.Invoicing.Application;
 
 public record InvoiceDto(
     string Id,
+    string OrganizationId,
     int? InvoiceNo,
     DateTime? IssueDate,
     Domain.Enums.InvoiceType Type,
@@ -29,6 +30,7 @@ public record InvoiceDto(
 
 public record InvoiceStatusDto(
     int Id,
+    string OrganizationId,
     string? Name);
 
 public record CustomerDto(

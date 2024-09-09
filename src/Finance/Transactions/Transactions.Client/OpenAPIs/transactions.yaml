@@ -12,6 +12,13 @@ paths:
       - Transactions
       - Transactions
       operationId: Transactions_PostTransactions
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: transactions
         content:
@@ -19,9 +26,9 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/PostTransaction'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -32,18 +39,24 @@ paths:
       - Transactions
       operationId: Transactions_SetTransactionStatus
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: transactionId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: status
         in: query
         required: true
         schema:
           $ref: '#/components/schemas/TransactionStatus'
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -54,18 +67,24 @@ paths:
       - Transactions
       operationId: Transactions_SetTransactionReference
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
       - name: transactionId
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       - name: reference
         in: query
         required: true
         schema:
           type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -75,18 +94,23 @@ paths:
       - Transactions
       operationId: Transactions_GetTransactions
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: page
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 2
+        x-position: 3
       - name: status
         in: query
         style: form
@@ -96,7 +120,7 @@ paths:
           nullable: true
           items:
             $ref: '#/components/schemas/TransactionStatus'
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -106,7 +130,7 @@ paths:
                 $ref: '#/components/schemas/ItemsResultOfTransaction'
 components:
   schemas:
-    Transaction:
+    PostTransaction:
       type: object
       additionalProperties: false
       properties:
@@ -151,6 +175,29 @@ components:
         totalItems:
           type: integer
           format: int32
+    Transaction:
+      type: object
+      additionalProperties: false
+      properties:
+        organizationId:
+          type: string
+        id:
+          type: string
+        date:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        from:
+          type: string
+        reference:
+          type: string
+        currency:
+          type: string
+        amount:
+          type: number
+          format: decimal
   securitySchemes:
     JWT:
       type: apiKey

@@ -426,13 +426,13 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;   
     }
 
-    PaymentDto? payment;
+    Payment? payment;
 
     public async Task Foo()
     {
         try 
         {
-            var paymentsResults = await PaymentsClient.GetPaymentsAsync(0, 10, null, invoice.Id);
+            var paymentsResults = await PaymentsClient.GetPaymentsAsync(organization.Id, 0, 10, null, invoice.Id);
             payment = paymentsResults.Items.FirstOrDefault();
 
             if (payment is null)

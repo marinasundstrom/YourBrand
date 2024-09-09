@@ -893,6 +893,8 @@ components:
       properties:
         id:
           type: string
+        organizationId:
+          type: string
         invoiceNo:
           type: integer
           format: int32
@@ -984,6 +986,8 @@ components:
         id:
           type: integer
           format: int32
+        organizationId:
+          type: string
         name:
           type: string
           nullable: true

@@ -33,6 +33,9 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
+    [EditorRequired]
+    [Parameter] public string OrganizationId { get; set; }
+
     [Required]
     [Parameter] public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", string.Empty);
 
@@ -56,7 +59,7 @@
 
     async Task Submit()
     {
-        await TransactionsClient.PostTransactionsAsync(new Transaction[] {
+        await TransactionsClient.PostTransactionsAsync(OrganizationId, new PostTransaction[] {
             new ()
             {
                 Id = Id,

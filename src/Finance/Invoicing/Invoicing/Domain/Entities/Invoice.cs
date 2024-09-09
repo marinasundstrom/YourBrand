@@ -72,7 +72,7 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
             StatusDate = DateTimeOffset.UtcNow;
 
             //AddDomainEvent(new OrderUpdated(Id));
-            //AddDomainEvent(new OrderStatusUpdated(Id, status, oldStatus));
+            AddDomainEvent(new InvoiceStatusUpdated(OrganizationId, Id, status, oldStatus));
 
             return true;
         }

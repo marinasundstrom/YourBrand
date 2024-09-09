@@ -16,9 +16,9 @@ namespace YourBrand.Invoicing.Controllers;
 public class TransactionsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<ItemsResult<TransactionDto>>> GetTransactionsAsync(int page, int pageSize, [FromQuery] TransactionStatus[]? status, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<TransactionDto>>> GetTransactionsAsync(string organizationId, int page, int pageSize, [FromQuery] TransactionStatus[]? status, CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetTransactions(page, pageSize, status), cancellationToken);
+        var result = await mediator.Send(new GetTransactions(organizationId, page, pageSize, status), cancellationToken);
         return Ok(result);
     }
 }

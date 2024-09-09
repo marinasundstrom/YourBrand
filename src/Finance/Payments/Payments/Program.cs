@@ -157,33 +157,41 @@ app.MapGet("/payments", async (int page, int pageSize, IMediator mediator) => aw
     .Produces<ItemsResult<PaymentDto>>(StatusCodes.Status200OK);
 */
 
-app.MapPost("/Payments", async (CreatePayment payment, IMediator mediator, CancellationToken cancellationToken)
+var versionedApi = app.NewVersionedApi("Payments");
+
+var paymentsGroup = versionedApi.MapGroup("/v{version:apiVersion}/Payments")
+    .WithTags("Payments")
+    .HasApiVersion(ApiVersions.V1)
+    .RequireAuthorization()
+    .WithOpenApi();
+
+paymentsGroup.MapPost("/", async ([AsParameters] CreatePayment payment, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(payment, cancellationToken))
     .WithName("Payments_CreatePayment")
     .WithTags("Payments")
     //.RequireAuthorization()
     .Produces(StatusCodes.Status200OK);
 
-app.MapGet("/Payments/{paymentId}", async (string paymentId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetPaymentById(paymentId), cancellationToken))
+paymentsGroup.MapGet("/{paymentId}", async (string organizationId, string paymentId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetPaymentById(organizationId, paymentId), cancellationToken))
     .WithName("Payments_GetPaymentById")
     .WithTags("Payments")
     .Produces<PaymentDto>(StatusCodes.Status200OK);
 
-app.MapGet("/Payments/GetPaymentByReference/{reference}", async (string reference, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new GetPaymentByReference(reference), cancellationToken))
+paymentsGroup.MapGet("/GetPaymentByReference/{reference}", async (string organizationId, string reference, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetPaymentByReference(organizationId, reference), cancellationToken))
     .WithName("Payments_GetPaymentByReference")
     .WithTags("Payments")
     .Produces<PaymentDto>(StatusCodes.Status200OK);
 
-app.MapDelete("/Payments/{paymentId}", async (string paymentId, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new CancelPayment(paymentId), cancellationToken))
+paymentsGroup.MapDelete("/{paymentId}", async (string organizationId, string paymentId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new CancelPayment(organizationId, paymentId), cancellationToken))
     .WithName("Payments_CancelPayment")
     .WithTags("Payments")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Payments/{paymentId}/Status", async (string paymentId, PaymentStatus status, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetPaymentStatus(paymentId, status), cancellationToken))
+paymentsGroup.MapPut("/{paymentId}/Status", async (string organizationId, string paymentId, PaymentStatus status, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetPaymentStatus(organizationId, paymentId, status), cancellationToken))
     .WithName("Payments_SetPaymentStatus")
     .WithTags("Payments")
     .Produces(StatusCodes.Status200OK);

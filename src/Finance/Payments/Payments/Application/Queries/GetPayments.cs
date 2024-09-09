@@ -7,7 +7,7 @@ using YourBrand.Payments.Domain.Enums;
 
 namespace YourBrand.Payments.Application.Queries;
 
-public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null, string? InvoiceId = null) : IRequest<ItemsResult<PaymentDto>>
+public record GetPayments(string OrganizationId, int Page, int PageSize, PaymentStatus[]? Status = null, string? InvoiceId = null) : IRequest<ItemsResult<PaymentDto>>
 {
     public class Handler(IPaymentsContext context) : IRequestHandler<GetPayments, ItemsResult<PaymentDto>>
     {
@@ -24,6 +24,7 @@ public record GetPayments(int Page, int PageSize, PaymentStatus[]? Status = null
             }
 
             var query = context.Payments
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Created)

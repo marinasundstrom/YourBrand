@@ -9,7 +9,7 @@ using YourBrand.Transactions.Domain.Enums;
 
 namespace YourBrand.Transactions.Application.Queries;
 
-public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Status = null) : IRequest<ItemsResult<TransactionDto>>
+public record GetTransactions(string OrganizationId, int Page, int PageSize, TransactionStatus[]? Status = null) : IRequest<ItemsResult<TransactionDto>>
 {
     public class Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint) : IRequestHandler<GetTransactions, ItemsResult<TransactionDto>>
     {
@@ -26,6 +26,7 @@ public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Statu
             }
 
             var query = context.Transactions
+                .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .OrderByDescending(x => x.Date)
@@ -46,7 +47,7 @@ public record GetTransactions(int Page, int PageSize, TransactionStatus[]? Statu
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<TransactionDto>(
-                items.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)),
+                items.Select(t => new TransactionDto(t.OrganizationId, t.Id,  t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)),
                 totalItems);
         }
     }

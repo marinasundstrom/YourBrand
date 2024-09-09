@@ -9,13 +9,15 @@ using YourBrand.Payments.Domain.Enums;
 
 namespace YourBrand.Payments.Application.Commands;
 
-public record CancelPayment(string PaymentId) : IRequest
+public record CancelPayment(string OrganizationId, string PaymentId) : IRequest
 {
     public class Handler(IPaymentsContext context, IPublishEndpoint publishEndpoint) : IRequestHandler<CancelPayment>
     {
         public async Task Handle(CancelPayment request, CancellationToken cancellationToken)
         {
-            var payment = await context.Payments.FirstOrDefaultAsync(p => p.Id == request.PaymentId);
+            var payment = await context.Payments
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(p => p.Id == request.PaymentId);
 
             if (payment is null)
             {

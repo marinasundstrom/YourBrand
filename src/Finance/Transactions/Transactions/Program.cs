@@ -158,19 +158,19 @@ var group = versionedApi.MapGroup("/v{version:apiVersion}/transactions")
     .HasApiVersion(ApiVersions.V1)
     .WithOpenApi();
 
-group.MapPost("/", async (TransactionDto[] transactions, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new PostTransactions(transactions), cancellationToken))
+group.MapPost("/", async (string organizationId, PostTransactionDto[] transactions, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new PostTransactions(organizationId, transactions), cancellationToken))
     .WithName("Transactions_PostTransactions")
     //.RequireAuthorization()
     .Produces(StatusCodes.Status200OK); ;
 
-group.MapPut("/{transactionId}/status", async (string transactionId, TransactionStatus status, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new SetTransactionStatus(transactionId, status), cancellationToken))
+group.MapPut("/{transactionId}/status", async (string organizationId, string transactionId, TransactionStatus status, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetTransactionStatus(organizationId, transactionId, status), cancellationToken))
     .WithName("Transactions_SetTransactionStatus")
     .Produces(StatusCodes.Status200OK);
 
-group.MapPut("/{transactionId}/reference", async (string transactionId, string reference, IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new UpdateTransactionReference(transactionId, reference), cancellationToken))
+group.MapPut("/{transactionId}/reference", async (string organizationId, string transactionId, string reference, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new UpdateTransactionReference(transactionId, organizationId, reference), cancellationToken))
     .WithName("Transactions_SetTransactionReference")
     .Produces(StatusCodes.Status200OK);
 

@@ -1,11 +1,12 @@
-﻿using YourBrand.Payments.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Domain.Enums;
 using YourBrand.Payments.Domain.Events;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Payments.Domain.Entities;
 
-public class Payment : AuditableEntity
+public class Payment : AuditableEntity, IHasTenant, IHasOrganization
 {
     readonly HashSet<Capture> _captures = new HashSet<Capture>();
 
@@ -14,7 +15,7 @@ public class Payment : AuditableEntity
 
     }
 
-    public Payment(string invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
+    public Payment(string organizationId, string invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
     {
         if (amount <= 0)
         {
@@ -22,6 +23,7 @@ public class Payment : AuditableEntity
         }
 
         Id = Guid.NewGuid().ToUrlFriendlyString();
+        OrganizationId = organizationId;
         InvoiceId = invoiceId;
         Status = status;
         DueDate = dueDate;
@@ -47,6 +49,8 @@ public class Payment : AuditableEntity
     public string Id { get; private set; } = null!;
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string InvoiceId { get; private set; }
 

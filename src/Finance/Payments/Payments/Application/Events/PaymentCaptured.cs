@@ -24,7 +24,7 @@ public class PaymentCapturedHandler(IPaymentsContext context, IPaymentsHubClient
 
             if (capture is not null)
             {
-                await publishEndpoint.Publish(new Contracts.PaymentCaptured(capture.PaymentId, capture.Id, capture.Date, payment.Currency, capture.Amount));
+                await publishEndpoint.Publish(new Contracts.PaymentCaptured(capture.OrganizationId, capture.PaymentId, capture.Id, capture.Date, payment.Currency, capture.Amount));
             }
         }
     }

@@ -23,7 +23,7 @@ public class IncomingTransactionBatchConsumer(IPaymentsContext context, YourBran
     {
         if (transaction.Reference == "Skatteverket")
         {
-            await transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
+            await transactionsClient.SetTransactionStatusAsync(transaction.OrganizationId, transaction.Id, Transactions.Client.TransactionStatus.Verified);
             return;
         }
 
@@ -33,7 +33,7 @@ public class IncomingTransactionBatchConsumer(IPaymentsContext context, YourBran
 
         if (payment is null)
         {
-            await transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Unknown);
+            await transactionsClient.SetTransactionStatusAsync(transaction.OrganizationId, transaction.Id, Transactions.Client.TransactionStatus.Unknown);
         }
         else
         {
@@ -56,7 +56,7 @@ public class IncomingTransactionBatchConsumer(IPaymentsContext context, YourBran
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
+            await transactionsClient.SetTransactionStatusAsync(transaction.OrganizationId, transaction.Id, Transactions.Client.TransactionStatus.Verified);
         }
     }
 }

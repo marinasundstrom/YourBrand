@@ -14,12 +14,13 @@ public class TransactionReferenceUpdatedHandler(ITransactionsContext context, IP
     {
         var t = await context
             .Transactions
+            .InOrganization(notification.OrganizationId)
             .FirstOrDefaultAsync(i => i.Id == notification.TransactionId);
 
         if (t is not null)
         {
             await publishEndpoint.Publish(
-                new Contracts.IncomingTransactionBatch(new[] { new Contracts.Transaction(t.Id, t.Date, (Contracts.TransactionStatus)t.Status, t.From!, t.Reference!, t.Currency, t.Amount) }));
+                new Contracts.IncomingTransactionBatch(new[] { new Contracts.Transaction(t.Id, t.OrganizationId, t.Date, (Contracts.TransactionStatus)t.Status, t.From!, t.Reference!, t.Currency, t.Amount) }));
         }
     }
 }

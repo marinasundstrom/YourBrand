@@ -19,7 +19,7 @@ public class PaymentStatusChangedHandler(IPaymentsContext context, IPaymentsHubC
 
         if (payment is not null)
         {
-            await publishEndpoint.Publish(new Contracts.PaymentStatusChanged(payment.Id, (Contracts.PaymentStatus)payment.Status));
+            await publishEndpoint.Publish(new Contracts.PaymentStatusChanged(payment.OrganizationId, payment.Id, (Contracts.PaymentStatus)payment.Status));
             await paymentsHubClient.PaymentStatusUpdated(payment.Id, payment.Status);
         }
     }

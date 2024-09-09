@@ -1,0 +1,303 @@
+﻿x-generator: NSwag v14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+openapi: 3.0.0
+info:
+  title: Payments
+  version: v1
+servers:
+- url: https://localhost:5095
+paths:
+  /v1/Payments:
+    post:
+      tags:
+      - Payments
+      - Payments
+      - Payments
+      operationId: Payments_CreatePayment
+      parameters:
+      - name: OrganizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: InvoiceId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: Currency
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      - name: Amount
+        in: query
+        required: true
+        schema:
+          type: number
+          format: decimal
+        x-position: 4
+      - name: DueDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        x-position: 5
+      - name: PaymentMethod
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/PaymentMethod'
+        x-position: 6
+      - name: Reference
+        in: query
+        schema:
+          type: string
+        x-position: 7
+      - name: Message
+        in: query
+        schema:
+          type: string
+        x-position: 8
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+    get:
+      tags:
+      - Payments
+      operationId: Payments_GetPayments
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+        x-position: 3
+      - name: status
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/PaymentStatus'
+        x-position: 4
+      - name: invoiceId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfPayment'
+      security:
+      - JWT: []
+  /v1/Payments/{paymentId}:
+    get:
+      tags:
+      - Payments
+      - Payments
+      - Payments
+      operationId: Payments_GetPaymentById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: paymentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Payments
+      - Payments
+      - Payments
+      operationId: Payments_CancelPayment
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: paymentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/Payments/GetPaymentByReference/{reference}:
+    get:
+      tags:
+      - Payments
+      - Payments
+      - Payments
+      operationId: Payments_GetPaymentByReference
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: reference
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+      security:
+      - JWT: []
+  /v1/Payments/{paymentId}/Status:
+    put:
+      tags:
+      - Payments
+      - Payments
+      - Payments
+      operationId: Payments_SetPaymentStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: paymentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: status
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/PaymentStatus'
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+components:
+  schemas:
+    PaymentMethod:
+      type: string
+      description: ''
+      x-enumNames:
+      - PlusGiro
+      enum:
+      - PlusGiro
+    Payment:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          nullable: true
+        invoiceId:
+          type: string
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        currency:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        dueDate:
+          type: string
+          format: date-time
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        reference:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        amountCaptured:
+          type: number
+          format: decimal
+          nullable: true
+    PaymentStatus:
+      type: string
+      description: ''
+      x-enumNames:
+      - Created
+      - Captured
+      - PartiallyCaptured
+      - Refunded
+      - PartiallyRefunded
+      - Cancelled
+      enum:
+      - Created
+      - Captured
+      - PartiallyCaptured
+      - Refunded
+      - PartiallyRefunded
+      - Cancelled
+    ItemsResultOfPayment:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        totalItems:
+          type: integer
+          format: int32
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

@@ -60,13 +60,16 @@
     TransactionStatus? Status;
     IEnumerable<TransactionStatus?> selectedStatuses = new List<TransactionStatus?>();
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     private async Task<TableData<Transaction>> ServerReload(TableState state)
     {
         loading = true;
 
         try
         {
-            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!));
+            var result = await TransactionsClient.GetTransactionsAsync(Organization.Id, state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!));
 
             return new TableData<Transaction>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -78,7 +81,10 @@
 
     public async Task NewTransaction()
     {
-        var dialogRef = DialogService.Show<NewTransactionDialog>("New transaction");
+        DialogParameters dialogParameters = new();
+        dialogParameters.Add(nameof(NewTransactionDialog.OrganizationId), Organization.Id);
+
+        var dialogRef = DialogService.Show<NewTransactionDialog>("New transaction", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -89,7 +95,8 @@
 
     public async Task UpdateTransactionReference(Transaction transaction)
     {
-        DialogParameters dialogParameters = new ();
+        DialogParameters dialogParameters = new();
+        dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.OrganizationId),transaction.OrganizationId);
         dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.TransactionId), transaction.Id);
         dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.Reference), transaction.Reference);
 

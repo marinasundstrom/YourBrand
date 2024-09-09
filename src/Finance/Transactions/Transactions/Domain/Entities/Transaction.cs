@@ -1,17 +1,19 @@
-﻿using YourBrand.Transactions.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Tenancy;
+using YourBrand.Transactions.Domain.Common;
 using YourBrand.Transactions.Domain.Enums;
 using YourBrand.Transactions.Domain.Events;
 
 namespace YourBrand.Transactions.Domain.Entities;
 
-public class Transaction : Entity
+public class Transaction : Entity, IHasTenant, IHasOrganization
 {
     private Transaction()
     {
 
     }
 
-    public Transaction(string? id, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
+    public Transaction(string? id, OrganizationId organizationId, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
     {
         if (amount <= 0)
         {
@@ -19,6 +21,7 @@ public class Transaction : Entity
         }
 
         Id = id ?? Guid.NewGuid().ToUrlFriendlyString();
+        OrganizationId = organizationId;
         Date = date;
         Status = status;
         From = from;
@@ -31,6 +34,10 @@ public class Transaction : Entity
 
     public string Id { get; set; } = null!;
 
+    public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
+
     public DateTime Date { get; set; }
 
     public TransactionStatus Status { get; private set; } = TransactionStatus.Unverified;
@@ -40,7 +47,7 @@ public class Transaction : Entity
         if (Reference != reference)
         {
             Reference = reference;
-            AddDomainEvent(new TransactionReferenceUpdated(Id, reference));
+            AddDomainEvent(new TransactionReferenceUpdated(OrganizationId, Id, reference));
         }
     }
 

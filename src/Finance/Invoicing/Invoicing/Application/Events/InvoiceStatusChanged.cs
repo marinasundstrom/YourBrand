@@ -11,13 +11,13 @@ using YourBrand.Payments.Client;
 
 namespace YourBrand.Invoicing.Application.Events;
 
-public class InvoiceStatusChangedHandler(IInvoicingContext context, IPaymentsClient paymentsClient, IPublishEndpoint publishEndpoint) : IDomainEventHandler<InvoiceStatusChanged>
+public class InvoiceStatusChangedHandler(IInvoicingContext context, IPaymentsClient paymentsClient, IPublishEndpoint publishEndpoint) : IDomainEventHandler<InvoiceStatusUpdated>
 {
-    public async Task Handle(InvoiceStatusChanged notification, CancellationToken cancellationToken)
+    public async Task Handle(InvoiceStatusUpdated notification, CancellationToken cancellationToken)
     {
         if (notification.Status == (int)InvoiceStatus.Paid)
         {
-            await publishEndpoint.Publish(new InvoicePaid(notification.InvoiceId));
+            await publishEndpoint.Publish(new InvoicePaid(notification.OrganizationId, notification.InvoiceId));
             return;
         }
 
@@ -29,16 +29,17 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, IPaymentsCli
         {
             if (invoice.Status.Id == (int)Domain.Enums.InvoiceStatus.Sent)
             {
-                await publishEndpoint.Publish(new InvoicesBatch(new[]
+                await publishEndpoint.Publish(new InvoicesBatch(invoice.OrganizationId, new[]
                 {
-                    new Contracts.Invoice(invoice.Id)
+                    new Contracts.Invoice(invoice.OrganizationId, invoice.Id)
                 }));
 
                 var dueDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddDays(30), TimeZoneInfo.Local);
 
                 invoice.Update();
 
-                await paymentsClient.CreatePaymentAsync(new CreatePayment()
+                /*
+                await paymentsClient.CreatePaymentAsync(invoice.OrganizationId, ()
                 {
                     InvoiceId = invoice.Id,
                     Currency = "SEK",
@@ -47,7 +48,7 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, IPaymentsCli
                     DueDate = dueDate,
                     Reference = Guid.NewGuid().ToUrlFriendlyString(),
                     Message = $"Betala faktura #{invoice.Id}",
-                });
+                }); */
             }
         }
     }
