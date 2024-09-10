@@ -13,9 +13,12 @@
 @code {
     List<ChatApp.Channel> channels = new List<ChatApp.Channel>();
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        channels = (await ChannelsClient.GetChannelsAsync(1, 100, null, null)).Items.ToList();
+        channels = (await ChannelsClient.GetChannelsAsync(Organization.Id, 1, 100, null, null)).Items.ToList();
     }
 
     async Task CreateChannel()

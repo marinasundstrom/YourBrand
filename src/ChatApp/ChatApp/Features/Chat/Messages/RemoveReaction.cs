@@ -4,15 +4,17 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.ChatApp.Domain;
+using YourBrand.Domain;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.Identity;
 
 using static YourBrand.ChatApp.Domain.Errors.Messages;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
-public sealed record RemoveReaction(Guid MessageId, string Reaction) : IRequest<Result>
+public sealed record RemoveReaction(OrganizationId OrganizationId, ChannelId ChannelId, MessageId MessageId, string Reaction) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<RemoveReaction>
     {
@@ -24,11 +26,15 @@ public sealed record RemoveReaction(Guid MessageId, string Reaction) : IRequest<
         }
     }
 
-    public sealed class Handler(ApplicationDbContext applicationDbContext, IChannelRepository channelRepository, IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<RemoveReaction, Result>
+    public sealed class Handler(ApplicationDbContext applicationDbContext, IUserContext userContext) : IRequestHandler<RemoveReaction, Result>
     {
         public async Task<Result> Handle(RemoveReaction request, CancellationToken cancellationToken)
         {
-            var message = await messageRepository.FindByIdAsync(request.MessageId, cancellationToken);
+            var message = await applicationDbContext
+                .Messages
+                .InOrganization(request.OrganizationId)
+                .InChannel(request.ChannelId)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId,cancellationToken);
 
             if (message is null)
             {
@@ -43,7 +49,7 @@ public sealed record RemoveReaction(Guid MessageId, string Reaction) : IRequest<
 
             message.RemoveReaction(participant.Id, request.Reaction);
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return Result.Success;
         }

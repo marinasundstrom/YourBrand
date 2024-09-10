@@ -17,7 +17,7 @@ public partial class ChannelPage : IChatHubClient
     bool isDarkMode = false;
     string currentUserId = "BS";
     bool isInAdminRole = false;
-    Guid? editingMessageId = null;
+    string? editingMessageId = null;
     MessageViewModel? replyToMessage = null;
 
     readonly List<MessageViewModel> messagesCache = new List<MessageViewModel>();
@@ -71,7 +71,7 @@ public partial class ChannelPage : IChatHubClient
                 await hubConnection.DisposeAsync();
             }
 
-            hubConnection = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/messenger/hubs/chat?channelId={Id}", options =>
+            hubConnection = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/messenger/hubs/chat?organizationId={Organization.Id}&channelId={Id}", options =>
             {
                 options.AccessTokenProvider = async () =>
                 {
@@ -137,7 +137,7 @@ public partial class ChannelPage : IChatHubClient
 
     private async Task LoadMessages()
     {
-        var result = await MessagesClient.GetMessagesAsync(Id, 1, 10, null, null);
+        var result = await MessagesClient.GetMessagesAsync(Organization.Id, Id, 1, 10, null, null);
 
         loadedMessages.Clear();
 
@@ -305,9 +305,9 @@ public partial class ChannelPage : IChatHubClient
 
         var message = new MessageViewModel()
         {
-            Id = Guid.Empty,
+            Id = string.Empty,
             Posted = DateTimeOffset.UtcNow,
-            PostedById = Guid.NewGuid(), // Todo fix
+            PostedById = "", // Todo fix
             PostedByUserId = currentUserId,
             PostedByName = userInfo.Name,
             PostedByInitials = GetInitials(userInfo.Name), // TODO: Fix with my name,
@@ -319,7 +319,7 @@ public partial class ChannelPage : IChatHubClient
         loadedMessages.Add(message);
         messagesCache.Add(message);
 
-        message.Id = await hubConnection.InvokeAsync<Guid>("PostMessage", Id, replyToMessage?.Id, Text);
+        message.Id = await hubConnection.InvokeAsync<string>("PostMessage", Id, replyToMessage?.Id, Text);
 
         Text = string.Empty;
         replyToMessage = null;
@@ -335,7 +335,7 @@ public partial class ChannelPage : IChatHubClient
         {
             messageVm.Content = Text;
 
-            await MessagesClient.EditMessageAsync(Id, editingMessageId.GetValueOrDefault(), Text);
+            await MessagesClient.EditMessageAsync(Organization.Id, Id, editingMessageId, Text);
 
             Text = string.Empty;
             editingMessageId = null;
@@ -344,7 +344,7 @@ public partial class ChannelPage : IChatHubClient
 
     async Task DeleteMessage(MessageViewModel messageVm)
     {
-        await MessagesClient.DeleteMessageAsync(Id, messageVm.Id);
+        await MessagesClient.DeleteMessageAsync(Organization.Id, Id, messageVm.Id);
 
         if (messageVm is not null)
         {
@@ -396,7 +396,7 @@ public partial class ChannelPage : IChatHubClient
 
     async Task React(MessageViewModel messageVm, string reaction)
     {
-        await MessagesClient.ReactAsync(Id, messageVm.Id, reaction);
+        await MessagesClient.ReactAsync(Organization.Id, Id, messageVm.Id, reaction);
 
         await InvokeAsync(StateHasChanged);
     }
@@ -476,7 +476,7 @@ public partial class ChannelPage : IChatHubClient
         await NotifyParticipants(message1);
     }
 
-    public async Task OnMessagePostedConfirmed(Guid messageId)
+    public async Task OnMessagePostedConfirmed(string messageId)
     {
         var messageVm = loadedMessages.First(x => x.Id == messageId);
         messageVm.Confirmed = true;
@@ -484,7 +484,7 @@ public partial class ChannelPage : IChatHubClient
         await InvokeAsync(StateHasChanged);
     }
 
-    public async Task OnMessageEdited(Guid channelId, MessageEditedData data)
+    public async Task OnMessageEdited(string channelId, MessageEditedData data)
     {
         var messageVm = messagesCache.FirstOrDefault(x => x.Id == data.Id);
 
@@ -492,14 +492,14 @@ public partial class ChannelPage : IChatHubClient
         {
             messageVm.Content = data.Content;
             messageVm.LastEdited = data.LastEdited;
-            messageVm.LastEditedById = Guid.Parse(data.LastEditedBy.Id);
+            messageVm.LastEditedById = data.LastEditedBy.Id;
             messageVm.LastEditedByName = data.LastEditedBy.Name;
 
             await InvokeAsync(StateHasChanged);
         }
     }
 
-    public Task OnMessageDeleted(Guid channelId, MessageDeletedData data)
+    public Task OnMessageDeleted(string channelId, MessageDeletedData data)
     {
         var messageVm = messagesCache.FirstOrDefault(x => x.Id == data.Id);
 
@@ -514,7 +514,7 @@ public partial class ChannelPage : IChatHubClient
             {
                 messageVm.Content = string.Empty;
                 messageVm.Deleted = data.Deleted;
-                messageVm.DeletedById = Guid.Parse(data.DeletedBy.Id);
+                messageVm.DeletedById = data.DeletedBy.Id;
                 messageVm.DeletedByName = data.DeletedBy.Name;
             }
 
@@ -524,7 +524,7 @@ public partial class ChannelPage : IChatHubClient
         return Task.CompletedTask;
     }
 
-    public async Task OnMessageReaction(Guid channelId, Guid messageId, MessageReactionData reaction)
+    public async Task OnMessageReaction(string channelId, string messageId, MessageReactionData reaction)
     {
         var messageVm = loadedMessages.FirstOrDefault(x => x.Id == messageId);
 
@@ -536,7 +536,7 @@ public partial class ChannelPage : IChatHubClient
             Date = reaction.Date,
             AddedBy = new Participant
             {
-                Id = Guid.Parse(reaction.AddedBy.Id),
+                Id = reaction.AddedBy.Id,
                 Name = reaction.AddedBy.Name,
                 UserId = reaction.AddedBy.UserId
             }
@@ -545,14 +545,14 @@ public partial class ChannelPage : IChatHubClient
         StateHasChanged();
     }
 
-    public async Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string participantId)
+    public async Task OnMessageReactionRemoved(string channelId, string messageId, string reaction, string participantId)
     {
         var messageVm = loadedMessages.FirstOrDefault(x => x.Id == messageId);
 
         if (messageVm is null) return;
 
         // TODO: Pass the person removing the reaction
-        var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.AddedBy.Id == Guid.Parse(participantId));
+        var reaction2 = messageVm.Reactions.FirstOrDefault(x => x.Content == reaction && x.AddedBy.Id == participantId);
 
         if (reaction2 is null) return;
 

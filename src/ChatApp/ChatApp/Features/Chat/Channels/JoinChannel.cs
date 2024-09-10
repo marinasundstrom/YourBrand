@@ -7,12 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.Domain;
 
 using Errors = YourBrand.ChatApp.Domain.Errors.Channels;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 
-public sealed record JoinChannel(ChannelId ChannelId) : IRequest<Result>
+public sealed record JoinChannel(OrganizationId OrganizationId, ChannelId ChannelId) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<JoinChannel>
     {
@@ -26,7 +27,11 @@ public sealed record JoinChannel(ChannelId ChannelId) : IRequest<Result>
     {
         public async Task<Result> Handle(JoinChannel request, CancellationToken cancellationToken)
         {
-            var channel = await channelRepository.FindByIdAsync(request.ChannelId, cancellationToken);
+            var channel = await applicationDbContext
+                .Channels
+                .Include(x => x.Participants)
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(x => x.Id == request.ChannelId, cancellationToken);
 
             if (channel is null)
             {
@@ -34,10 +39,6 @@ public sealed record JoinChannel(ChannelId ChannelId) : IRequest<Result>
             }
 
             var userId = userContext.UserId.GetValueOrDefault();
-
-            channel = await applicationDbContext
-                .Channels.Include(x => x.Participants)
-                .FirstOrDefaultAsync(x => x.Id == request.ChannelId, cancellationToken);
 
             channel.AddParticipant(userId);
 

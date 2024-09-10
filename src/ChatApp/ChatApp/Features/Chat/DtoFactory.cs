@@ -20,7 +20,7 @@ public sealed class DtoFactory : IDtoFactory
     public ReplyMessageDto CreateReplyMessageDto(Message replyMessage, ChannelParticipant replyMessagePostedBy, ChannelParticipant? replyMessageLastEditedBy, ChannelParticipant? replyMessageDeletedBy, Dictionary<ChannelParticipantId, User> users)
     {
         return new ReplyMessageDto(
-            (Guid)replyMessage.Id,
+            replyMessage.Id,
             replyMessage.ChannelId,
             replyMessage.Content,
             replyMessage.Posted, CreateParticipantDto(replyMessagePostedBy, users),

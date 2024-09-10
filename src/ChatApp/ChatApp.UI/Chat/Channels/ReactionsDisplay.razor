@@ -43,16 +43,19 @@
     [EditorRequired]
     public string CurrentUserId { get; set;} = default!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     public async Task OnReactionClicked(IGrouping<string, Reaction> reactions) 
     {
         if(!reactions.Any(x => x.AddedBy.UserId == CurrentUserId)) 
         {
-            await MessagesClient.ReactAsync(Message.ChannelId.ToString(), Message.Id, reactions.Key);
+            await MessagesClient.ReactAsync(Organization.Id, Message.ChannelId.ToString(), Message.Id, reactions.Key);
 
              return;
         };
 
-        await MessagesClient.RemoveReactionAsync(Message.ChannelId.ToString(), Message.Id, reactions.Key);
+        await MessagesClient.RemoveReactionAsync(Organization.Id, Message.ChannelId.ToString(), Message.Id, reactions.Key);
     }
 
     private bool IsInReactions(IEnumerable<Reaction> reactions) 

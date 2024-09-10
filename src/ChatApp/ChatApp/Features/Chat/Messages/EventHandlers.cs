@@ -3,30 +3,21 @@ using Microsoft.Extensions.Caching.Distributed;
 
 using YourBrand.ChatApp.Common;
 using YourBrand.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages.EventHandlers;
 
-public sealed class MessagePostedEventHandler : IDomainEventHandler<MessagePosted>
+public sealed class MessagePostedEventHandler(
+    ISettableTenantContext tenantContext,
+    IMessageRepository messagesRepository,
+    IUserRepository userRepository,
+    IChatNotificationService chatNotificationService,
+    IDtoComposer dtoComposer) : IDomainEventHandler<MessagePosted>
 {
-    private readonly IMessageRepository messagesRepository;
-    private readonly IUserRepository userRepository;
-    private readonly IChatNotificationService chatNotificationService;
-    private readonly IDtoComposer dtoComposer;
-
-    public MessagePostedEventHandler(
-        IMessageRepository messagesRepository,
-        IUserRepository userRepository,
-        IChatNotificationService chatNotificationService,
-        IDtoComposer dtoComposer)
-    {
-        this.messagesRepository = messagesRepository;
-        this.userRepository = userRepository;
-        this.chatNotificationService = chatNotificationService;
-        this.dtoComposer = dtoComposer;
-    }
-
     public async Task Handle(MessagePosted notification, CancellationToken cancellationToken)
     {
+        tenantContext.SetTenantId(notification.TenantId);
+
         var message = await messagesRepository.FindByIdAsync(notification.MessageId, cancellationToken);
 
         if (message is null)
@@ -57,24 +48,16 @@ public sealed class MessagePostedEventHandler : IDomainEventHandler<MessagePoste
     }
 }
 
-public sealed class MessageEditedEventHandler : IDomainEventHandler<MessageEdited>
+public sealed class MessageEditedEventHandler(
+    ISettableTenantContext tenantContext,
+    IMessageRepository messagesRepository,
+    IUserRepository userRepository,
+    IChatNotificationService chatNotificationService) : IDomainEventHandler<MessageEdited>
 {
-    private readonly IMessageRepository messagesRepository;
-    private readonly IUserRepository userRepository;
-    private readonly IChatNotificationService chatNotificationService;
-
-    public MessageEditedEventHandler(
-        IMessageRepository messagesRepository,
-        IUserRepository userRepository,
-        IChatNotificationService chatNotificationService)
-    {
-        this.messagesRepository = messagesRepository;
-        this.userRepository = userRepository;
-        this.chatNotificationService = chatNotificationService;
-    }
-
     public async Task Handle(MessageEdited notification, CancellationToken cancellationToken)
     {
+        tenantContext.SetTenantId(notification.TenantId);
+
         var message = await messagesRepository.FindByIdAsync(notification.MessageId);
         var user = await userRepository.FindByIdAsync(message!.LastEditedBy!.UserId);
 
@@ -83,27 +66,17 @@ public sealed class MessageEditedEventHandler : IDomainEventHandler<MessageEdite
     }
 }
 
-public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDeleted>
+public sealed class MessageDeletedEventHandler(
+    ISettableTenantContext tenantContext,
+    IChannelRepository channelRepository,
+    IMessageRepository messagesRepository,
+    IUserRepository userRepository,
+    IChatNotificationService chatNotificationService) : IDomainEventHandler<MessageDeleted>
 {
-    private readonly IChannelRepository channelRepository;
-    private readonly IMessageRepository messagesRepository;
-    private readonly IUserRepository userRepository;
-    private readonly IChatNotificationService chatNotificationService;
-
-    public MessageDeletedEventHandler(
-        IChannelRepository channelRepository,
-        IMessageRepository messagesRepository,
-        IUserRepository userRepository,
-        IChatNotificationService chatNotificationService)
-    {
-        this.channelRepository = channelRepository;
-        this.messagesRepository = messagesRepository;
-        this.userRepository = userRepository;
-        this.chatNotificationService = chatNotificationService;
-    }
-
     public async Task Handle(MessageDeleted notification, CancellationToken cancellationToken)
     {
+        tenantContext.SetTenantId(notification.TenantId);
+
         var channel = await channelRepository.FindByIdAsync(notification.ChannelId, cancellationToken);
 
         var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
@@ -125,6 +98,7 @@ public sealed class MessageDeletedEventHandler : IDomainEventHandler<MessageDele
 }
 
 public sealed class UserReactedToMessageEventHandler(
+    ISettableTenantContext tenantContext,
     IChannelRepository channelRepository,
     IMessageRepository messagesRepository,
     IUserRepository userRepository,
@@ -133,6 +107,8 @@ public sealed class UserReactedToMessageEventHandler(
 {
     public async Task Handle(UserReactedToMessage notification, CancellationToken cancellationToken)
     {
+        tenantContext.SetTenantId(notification.TenantId);
+
         var message = await messagesRepository.FindByIdAsync(notification.MessageId, cancellationToken);
 
         var reaction = message!.Reactions.Last();
@@ -150,18 +126,14 @@ public sealed class UserReactedToMessageEventHandler(
     }
 }
 
-public sealed class UserRemovedReactionFromMessageEventHandler : IDomainEventHandler<UserRemovedReactionFromMessage>
+public sealed class UserRemovedReactionFromMessageEventHandler(
+    ISettableTenantContext tenantContext,
+    IChatNotificationService chatNotificationService) : IDomainEventHandler<UserRemovedReactionFromMessage>
 {
-    private readonly IChatNotificationService chatNotificationService;
-
-    public UserRemovedReactionFromMessageEventHandler(
-        IChatNotificationService chatNotificationService)
-    {
-        this.chatNotificationService = chatNotificationService;
-    }
-
     public async Task Handle(UserRemovedReactionFromMessage notification, CancellationToken cancellationToken)
     {
+        tenantContext.SetTenantId(notification.TenantId);
+
         var reaction2 = notification.Reaction;
 
         await chatNotificationService.NotifyReactionRemoved(

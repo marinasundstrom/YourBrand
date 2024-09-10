@@ -9,6 +9,8 @@ public sealed class ChannelConfiguration : IEntityTypeConfiguration<Channel>
     {
         builder.ToTable("Channels");
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
         builder.OwnsOne(x => x.Settings);
 
         builder.Navigation(x => x.Participants).AutoInclude();
@@ -20,5 +22,8 @@ public sealed class ChannelParticipantConfiguration : IEntityTypeConfiguration<C
     public void Configure(EntityTypeBuilder<ChannelParticipant> builder)
     {
         builder.ToTable("ChannelParticipants");
+
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
     }
 }

@@ -4,6 +4,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.Domain;
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
@@ -69,45 +70,45 @@ public static class Endpoints
             .ProducesProblem(StatusCodes.Status404NotFound);
     }
 
-    public static async Task<ItemsResult<MessageDto>> GetMessages(ChannelId channelId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
-        => await mediator.Send(new GetMessages(channelId, page, pageSize, sortBy, sortDirection), cancellationToken);
+    public static async Task<ItemsResult<MessageDto>> GetMessages(OrganizationId organizationId, ChannelId channelId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
+        => await mediator.Send(new GetMessages(organizationId, channelId, page, pageSize, sortBy, sortDirection), cancellationToken);
 
 
-    public static async Task<IResult> GetMessageById(ChannelId channelId, Guid id, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> GetMessageById(OrganizationId organizationId, ChannelId channelId, MessageId id, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new GetMessageById(id), cancellationToken);
+        var result = await mediator.Send(new GetMessageById(organizationId, channelId, id), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> PostMessage(ChannelId channelId, PostMessageRequest request, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> PostMessage(OrganizationId organizationId, ChannelId channelId, PostMessageRequest request, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new PostMessage(request.ChannelId, request.ReplyToId, request.Content), cancellationToken);
+        var result = await mediator.Send(new PostMessage(organizationId, request.ChannelId, request.ReplyToId, request.Content), cancellationToken);
         return result.Handle(
-            onSuccess: data => Results.CreatedAtRoute(nameof(GetMessageById), new { id = data.Value }, data.Value),
+            onSuccess: data => Results.CreatedAtRoute(nameof(GetMessageById), new { id = data }, data),
             onError: error => Results.Problem(detail: error.Detail, title: error.Title, type: error.Id));
     }
 
-    public static async Task<IResult> DeleteMessage(ChannelId channelId, Guid id, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> DeleteMessage(OrganizationId organizationId, ChannelId channelId, MessageId id, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new DeleteMessage(id), cancellationToken);
+        var result = await mediator.Send(new DeleteMessage(organizationId, channelId, id), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> EditMessage(ChannelId channelId, Guid id, [FromBody] string content, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> EditMessage(OrganizationId organizationId, ChannelId channelId, MessageId id, [FromBody] string content, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new EditMessage(id, content), cancellationToken);
+        var result = await mediator.Send(new EditMessage(organizationId, channelId, id, content), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> React(ChannelId channelId, Guid id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> React(OrganizationId organizationId, ChannelId channelId, MessageId id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new React(id, reaction), cancellationToken);
+        var result = await mediator.Send(new React(organizationId, channelId, id, reaction), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> RemoveReaction(ChannelId channelId, Guid id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> RemoveReaction(OrganizationId organizationId, ChannelId channelId, MessageId id, [FromBody] string reaction, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new RemoveReaction(id, reaction), cancellationToken);
+        var result = await mediator.Send(new RemoveReaction(organizationId, channelId, id, reaction), cancellationToken);
         return HandleResult(result);
     }
 

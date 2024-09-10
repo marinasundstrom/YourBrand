@@ -9,6 +9,9 @@ public sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
     {
         builder.ToTable("Messages");
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
+
         builder.OwnsMany(x => x.Reactions, x => x.ToJson());
 
         builder.Navigation(x => x.PostedBy).AutoInclude();

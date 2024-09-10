@@ -1,14 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace YourBrand.ChatApp.Domain.ValueObjects;
 
 public struct ChannelParticipantId
 {
-    public ChannelParticipantId(Guid value) => Value = value;
+    public ChannelParticipantId(string value) => Value = value;
 
-    public ChannelParticipantId() => Value = Guid.NewGuid();
+    public ChannelParticipantId() => Value = Guid.NewGuid().ToString();
 
-    public Guid Value { get; set; }
+    public string Value { get; set; }
 
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
@@ -17,21 +18,38 @@ public struct ChannelParticipantId
 
     public override int GetHashCode()
     {
-        return Value.GetHashCode();
+        return (Value ?? string.Empty).GetHashCode();
     }
 
     public override string ToString()
     {
-        return Value.ToString();
+        return (Value ?? string.Empty).ToString();
     }
 
     public static bool operator ==(ChannelParticipantId lhs, ChannelParticipantId rhs) => lhs.Value == rhs.Value;
 
     public static bool operator !=(ChannelParticipantId lhs, ChannelParticipantId rhs) => lhs.Value != rhs.Value;
 
-    public static implicit operator ChannelParticipantId(Guid id) => new ChannelParticipantId(id);
+    public static implicit operator ChannelParticipantId(string id) => new ChannelParticipantId(id);
 
-    public static implicit operator ChannelParticipantId?(Guid? id) => id is null ? (ChannelParticipantId?)null : new ChannelParticipantId(id.GetValueOrDefault());
+    public static implicit operator ChannelParticipantId?(string? id) => id is null ? (ChannelParticipantId?)null : new ChannelParticipantId(id);
 
-    public static implicit operator Guid(ChannelParticipantId id) => id.Value;
+    public static implicit operator string(ChannelParticipantId id) => id.Value;
+
+    public static bool TryParse(string? value, out ChannelParticipantId channelParticipantId)
+    {
+        return TryParse(value, CultureInfo.CurrentCulture, out channelParticipantId);
+    }
+
+    public static bool TryParse(string? value, IFormatProvider? provider, out ChannelParticipantId channelParticipantId)
+    {
+        if (value is null)
+        {
+            channelParticipantId = default;
+            return false;
+        }
+
+        channelParticipantId = value;
+        return true;
+    }
 }

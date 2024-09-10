@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace YourBrand.Domain;
 
@@ -30,4 +31,21 @@ public struct OrganizationId(string value)
     public static implicit operator OrganizationId?(string? id) => id is null ? (OrganizationId?)null : new OrganizationId(id);
 
     public static implicit operator string(OrganizationId id) => id.Value;
+
+    public static bool TryParse(string? value, out OrganizationId organizationId)
+    {
+        return TryParse(value, CultureInfo.CurrentCulture, out organizationId);
+    }
+
+    public static bool TryParse(string? value, IFormatProvider? provider, out OrganizationId organizationId)
+    {
+        if (value is null)
+        {
+            organizationId = default;
+            return false;
+        }
+
+        organizationId = value;
+        return true;
+    }
 }

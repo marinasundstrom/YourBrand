@@ -12,142 +12,11 @@ paths:
       - Channels
       operationId: Channels_GetChannels
       parameters:
-      - name: page
+      - name: organizationId
         in: query
-        schema:
-          type: integer
-          format: int32
-          default: 1
-        x-position: 1
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 2
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 3
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 4
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfChannel'
-        429:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfChannel'
-      security:
-      - ApiKey: []
-      - JWT: []
-    post:
-      tags:
-      - Channels
-      operationId: Channels_CreateChannel
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateChannelRequest'
-        required: true
-        x-position: 1
-      responses:
-        201:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Channel'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - ApiKey: []
-      - JWT: []
-  /v1/Channels/{id}:
-    get:
-      tags:
-      - Channels
-      operationId: Channels_GetChannelById
-      parameters:
-      - name: id
-        in: path
         required: true
         schema:
-          type: string
-          format: guid
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Channel'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - ApiKey: []
-      - JWT: []
-  /v1/Channels/{id}/join:
-    post:
-      tags:
-      - Channels
-      operationId: Channels_JoinChannel
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/ChannelId'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - ApiKey: []
-      - JWT: []
-  /v1/Channels/{channelId}/Messages:
-    get:
-      tags:
-      - Messages
-      operationId: Messages_GetMessages
-      parameters:
-      - name: channelId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/ChannelId'
+          $ref: '#/components/schemas/OrganizationId'
         x-position: 1
       - name: page
         in: query
@@ -183,6 +52,167 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/ItemsResultOfChannel'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfChannel'
+      security:
+      - ApiKey: []
+      - JWT: []
+    post:
+      tags:
+      - Channels
+      operationId: Channels_CreateChannel
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChannelRequest'
+        required: true
+        x-position: 2
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - ApiKey: []
+      - JWT: []
+  /v1/Channels/{id}:
+    get:
+      tags:
+      - Channels
+      operationId: Channels_GetChannelById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - ApiKey: []
+      - JWT: []
+  /v1/Channels/{id}/join:
+    post:
+      tags:
+      - Channels
+      operationId: Channels_JoinChannel
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - ApiKey: []
+      - JWT: []
+  /v1/Channels/{channelId}/Messages:
+    get:
+      tags:
+      - Messages
+      operationId: Messages_GetMessages
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
+      - name: channelId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChannelId'
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/ItemsResultOfMessage'
         429:
           description: ''
@@ -198,12 +228,18 @@ paths:
       - Messages
       operationId: Messages_PostMessage
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
       - name: channelId
         in: path
         required: true
         schema:
           $ref: '#/components/schemas/ChannelId'
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: request
         content:
@@ -211,7 +247,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PostMessageRequest'
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         201:
           description: ''
@@ -235,19 +271,24 @@ paths:
       - Messages
       operationId: Messages_GetMessageById
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
       - name: channelId
         in: path
         required: true
         schema:
           $ref: '#/components/schemas/ChannelId'
-        x-position: 1
+        x-position: 2
       - name: id
         in: path
         required: true
         schema:
-          type: string
-          format: guid
-        x-position: 2
+          $ref: '#/components/schemas/MessageId'
+        x-position: 3
       responses:
         200:
           description: ''
@@ -269,19 +310,24 @@ paths:
       - Messages
       operationId: Messages_DeleteMessage
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
       - name: channelId
         in: path
         required: true
         schema:
           $ref: '#/components/schemas/ChannelId'
-        x-position: 1
+        x-position: 2
       - name: id
         in: path
         required: true
         schema:
-          type: string
-          format: guid
-        x-position: 2
+          $ref: '#/components/schemas/MessageId'
+        x-position: 3
       responses:
         200:
           description: ''
@@ -299,19 +345,24 @@ paths:
       - Messages
       operationId: Messages_EditMessage
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
       - name: channelId
         in: path
         required: true
         schema:
           $ref: '#/components/schemas/ChannelId'
-        x-position: 1
+        x-position: 2
       - name: id
         in: path
         required: true
         schema:
-          type: string
-          format: guid
-        x-position: 2
+          $ref: '#/components/schemas/MessageId'
+        x-position: 3
       requestBody:
         x-name: content
         content:
@@ -319,7 +370,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -338,19 +389,24 @@ paths:
       - Messages
       operationId: Messages_React
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
       - name: channelId
         in: path
         required: true
         schema:
           $ref: '#/components/schemas/ChannelId'
-        x-position: 1
+        x-position: 2
       - name: id
         in: path
         required: true
         schema:
-          type: string
-          format: guid
-        x-position: 2
+          $ref: '#/components/schemas/MessageId'
+        x-position: 3
       requestBody:
         x-name: reaction
         content:
@@ -358,7 +414,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -376,19 +432,24 @@ paths:
       - Messages
       operationId: Messages_RemoveReaction
       parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        x-position: 1
       - name: channelId
         in: path
         required: true
         schema:
           $ref: '#/components/schemas/ChannelId'
-        x-position: 1
+        x-position: 2
       - name: id
         in: path
         required: true
         schema:
-          type: string
-          format: guid
-        x-position: 2
+          $ref: '#/components/schemas/MessageId'
+        x-position: 3
       requestBody:
         x-name: reaction
         content:
@@ -396,7 +457,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 3
+        x-position: 4
       responses:
         200:
           description: ''
@@ -638,9 +699,10 @@ components:
       properties:
         id:
           type: string
-          format: guid
         name:
           type: string
+    OrganizationId:
+      type: string
     SortDirection:
       type: string
       description: ''
@@ -671,14 +733,14 @@ components:
         instance:
           type: string
           nullable: true
+    ChannelId:
+      type: string
     CreateChannelRequest:
       type: object
       additionalProperties: false
       properties:
         name:
           type: string
-    ChannelId:
-      type: string
     ItemsResultOfMessage:
       type: object
       additionalProperties: false
@@ -696,10 +758,8 @@ components:
       properties:
         id:
           type: string
-          format: guid
         channelId:
           type: string
-          format: guid
         replyTo:
           nullable: true
           oneOf:
@@ -737,10 +797,8 @@ components:
       properties:
         id:
           type: string
-          format: guid
         channelId:
           type: string
-          format: guid
         content:
           type: string
         posted:
@@ -770,10 +828,8 @@ components:
       properties:
         id:
           type: string
-          format: guid
         channelId:
           type: string
-          format: guid
         name:
           type: string
         userId:
@@ -790,16 +846,16 @@ components:
           format: date-time
         addedBy:
           $ref: '#/components/schemas/Participant'
+    MessageId:
+      type: string
     PostMessageRequest:
       type: object
       additionalProperties: false
       properties:
         channelId:
           type: string
-          format: guid
         replyToId:
           type: string
-          format: guid
           nullable: true
         content:
           type: string

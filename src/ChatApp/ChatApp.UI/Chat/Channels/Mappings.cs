@@ -49,7 +49,7 @@ public static class Mappings
     {
         return new Participant
         {
-            Id = Guid.Parse(participant.Id),
+            Id = participant.Id,
             Name = participant.Name,
             UserId = participant.UserId
         };

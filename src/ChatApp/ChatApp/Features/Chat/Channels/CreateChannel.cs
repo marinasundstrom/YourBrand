@@ -5,14 +5,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
+using YourBrand.Domain;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
 
 using Errors = YourBrand.ChatApp.Domain.Errors.Channels;
+using YourBrand.ChatApp.Infrastructure.Persistence;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 
-public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
+public sealed record CreateChannel(OrganizationId OrganizationId, string Name) : IRequest<Result<ChannelDto>>
 {
     public sealed class Validator : AbstractValidator<CreateChannel>
     {
@@ -24,27 +26,15 @@ public sealed record CreateChannel(string Name) : IRequest<Result<ChannelDto>>
         }
     }
 
-    public sealed class Handler(
-        IChannelRepository channelRepository,
-        IUnitOfWork unitOfWork,
-        IUserContext userContext) : IRequestHandler<CreateChannel, Result<ChannelDto>>
+    public sealed class Handler(ApplicationDbContext applicationDbContext, IUnitOfWork unitOfWork) : IRequestHandler<CreateChannel, Result<ChannelDto>>
     {
         public async Task<Result<ChannelDto>> Handle(CreateChannel request, CancellationToken cancellationToken)
         {
-            var hasChannel = await channelRepository
-                .GetAll(new ChannelWithName(request.Name))
-                .AnyAsync(cancellationToken);
+            var channel = new Channel(request.OrganizationId, request.Name);
 
-            if (hasChannel)
-            {
-                return Errors.ChannelWithNameAlreadyExists;
-            }
+            applicationDbContext.Channels.Add(channel);
 
-            var channel = new Channel(request.Name);
-
-            channelRepository.Add(channel);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return channel.ToDto();
         }

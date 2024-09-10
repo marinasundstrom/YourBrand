@@ -6,15 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 
+using YourBrand.Domain;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Domain.Specifications;
 using YourBrand.ChatApp.Infrastructure.Persistence;
 
 using static YourBrand.ChatApp.Domain.Errors.Channels;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
-public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content) : IRequest<Result<MessageId>>
+public sealed record PostMessage(OrganizationId OrganizationId, ChannelId ChannelId, MessageId? ReplyToId, string Content) : IRequest<Result<string>>
 {
     public sealed class Validator : AbstractValidator<PostMessage>
     {
@@ -29,21 +31,18 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
     public sealed class Handler(
         IUserContext userContext,
         ApplicationDbContext applicationDbContext,
-        IChannelRepository channelRepository,
-        IMessageRepository messageRepository,
-        IUnitOfWork unitOfWork,
-        IAdminCommandProcessor adminCommandProcessor) : IRequestHandler<PostMessage, Result<MessageId>>
+        IAdminCommandProcessor adminCommandProcessor) : IRequestHandler<PostMessage, Result<string>>
     {
-        public async Task<Result<MessageId>> Handle(PostMessage request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(PostMessage request, CancellationToken cancellationToken)
         {
             var notification = request;
 
-            var hasChannel = await channelRepository
-                .GetAll(new ChannelWithId(request.ChannelId))
-                .AnyAsync(cancellationToken);
+            var channel = await applicationDbContext.Channels
+                .InOrganization(request.OrganizationId)
+                .FirstOrDefaultAsync(x => x.Id == request.ChannelId, cancellationToken);
 
-            if (!hasChannel)
-            {
+            if (channel is null)
+            { 
                 return ChannelNotFound;
             }
 
@@ -56,28 +55,26 @@ public sealed record PostMessage(Guid ChannelId, Guid? ReplyToId, string Content
 
             if (request.ReplyToId is not null)
             {
-                message = new Message(request.ChannelId, request.ReplyToId.GetValueOrDefault(), request.Content);
+                message = new Message(request.OrganizationId, request.ChannelId, request.ReplyToId.GetValueOrDefault(), request.Content);
             }
             else
             {
-                message = new Message(request.ChannelId, request.Content);
+                message = new Message(request.OrganizationId, request.ChannelId, request.Content);
             }
 
             message.PostedBy = await applicationDbContext.ChannelParticipants
                 .FirstOrDefaultAsync(x => x.UserId == userContext.UserId, cancellationToken);
 
-            messageRepository.Add(message);
-
-            var channel = await channelRepository.FindByIdAsync(request.ChannelId, cancellationToken);
+            applicationDbContext.Messages.Add(message);
 
             var participant = channel.Participants.First(x => x.UserId == userContext.UserId);
 
             message.Posted = DateTimeOffset.UtcNow;
             message.PostedById = participant.Id;
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await applicationDbContext.SaveChangesAsync(cancellationToken);
 
-            return message.Id;
+            return (string)message.Id;
         }
 
         private bool IsAdminCommand(string message, out string[] args)

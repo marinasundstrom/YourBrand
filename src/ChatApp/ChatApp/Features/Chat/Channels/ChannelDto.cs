@@ -1,7 +1,8 @@
 using YourBrand.ChatApp.Features.Users;
+using YourBrand.ChatApp.Domain.ValueObjects;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 
-public sealed record ChannelDto(Guid Id, string Name);
+public sealed record ChannelDto(string Id, string Name);
 
-public sealed record ParticipantDto(Guid Id, Guid ChannelId, string Name, string? UserId);
+public sealed record ParticipantDto(string Id, string ChannelId, string Name, string? UserId);

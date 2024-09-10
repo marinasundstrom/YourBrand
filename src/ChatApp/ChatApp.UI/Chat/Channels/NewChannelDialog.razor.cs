@@ -21,9 +21,12 @@ public partial class NewChannelDialog
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; } = default!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     async Task OnValidSubmit()
     {
-        var channel = await ChannelsClient.CreateChannelAsync(new CreateChannelRequest() { Name = model.Name });
+        var channel = await ChannelsClient.CreateChannelAsync(Organization.Id, new CreateChannelRequest() { Name = model.Name });
         MudDialog.Close(DialogResult.Ok(channel));
     }
 }

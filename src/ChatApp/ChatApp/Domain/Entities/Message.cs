@@ -1,9 +1,10 @@
 ﻿using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, ISoftDelete
+public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage, IHasTenant, IHasOrganization, IHasChannel //, ISoftDelete
 {
     private readonly HashSet<MessageReaction> _reactions = new HashSet<MessageReaction>();
 
@@ -11,25 +12,31 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
     {
     }
 
-    public Message(ChannelId channelId, string content)
+    public Message(OrganizationId organizationId, ChannelId channelId, string content)
         : base(new MessageId())
     {
+        OrganizationId = organizationId;
         ChannelId = channelId;
         Content = content;
 
-        AddDomainEvent(new MessagePosted(ChannelId, Id, null));
+        AddDomainEvent(new MessagePosted(TenantId, ChannelId, Id, null));
     }
 
-    public Message(ChannelId channelId, MessageId replyToId, string content)
+    public Message(OrganizationId organizationId, ChannelId channelId, MessageId replyToId, string content)
         : base(new MessageId())
     {
+        OrganizationId = organizationId;
         ChannelId = channelId;
         Content = content;
 
         ReplyToId = replyToId;
 
-        AddDomainEvent(new MessagePosted(ChannelId, Id, ReplyToId));
+        AddDomainEvent(new MessagePosted(TenantId, ChannelId, Id, ReplyToId));
     }
+
+    public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public MessageId? ReplyToId { get; set; }
 
@@ -42,7 +49,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
 
         Content = newContent;
 
-        AddDomainEvent(new MessageEdited(ChannelId, Id, Content));
+        AddDomainEvent(new MessageEdited(TenantId, ChannelId, Id, Content));
 
         return true;
     }
@@ -58,7 +65,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
 
         _reactions.Add(new MessageReaction(participantId, reaction, DateTimeOffset.UtcNow));
 
-        AddDomainEvent(new UserReactedToMessage(ChannelId, Id, participantId, reaction));
+        AddDomainEvent(new UserReactedToMessage(TenantId, ChannelId, Id, participantId, reaction));
 
         return true;
     }
@@ -72,7 +79,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
 
         _reactions.Remove(r);
 
-        AddDomainEvent(new UserRemovedReactionFromMessage(ChannelId, Id, participantId, r.Reaction));
+        AddDomainEvent(new UserRemovedReactionFromMessage(TenantId, ChannelId, Id, participantId, r.Reaction));
 
         return true;
     }
@@ -86,7 +93,7 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage //, IS
     {
         UpdateContent(string.Empty);
 
-        AddDomainEvent(new MessageDeleted(ChannelId, Id));
+        AddDomainEvent(new MessageDeleted(TenantId, ChannelId, Id));
     }
 
     public ChannelId ChannelId { get; private set; }

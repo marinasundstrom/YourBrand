@@ -4,14 +4,17 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Infrastructure.Persistence;
 
 using static YourBrand.ChatApp.Domain.Errors.Messages;
 
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
-public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
+public sealed record DeleteMessage(OrganizationId OrganizationId, ChannelId ChannelId, MessageId MessageId) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<DeleteMessage>
     {
@@ -21,18 +24,26 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
         }
     }
 
-    public sealed class Handler(
-        IChannelRepository channelRepository,
-        IMessageRepository messageRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<DeleteMessage, Result>
+    public sealed class Handler(ApplicationDbContext applicationDbContext, IUserContext userContext) : IRequestHandler<DeleteMessage, Result>
     {
         public async Task<Result> Handle(DeleteMessage request, CancellationToken cancellationToken)
         {
-            var message = await messageRepository.FindByIdAsync(request.MessageId, cancellationToken);
+            var message = await applicationDbContext
+                .Messages
+                .InOrganization(request.OrganizationId)
+                .InChannel(request.ChannelId)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
 
             if (message is null)
             {
                 return MessageNotFound;
             }
+
+            var channel = await applicationDbContext
+                .Channels
+                .InOrganization(request.OrganizationId)
+                .Include(x => x.Participants)
+                .FirstOrDefaultAsync(x => x.Id == request.ChannelId, cancellationToken);
 
             var userId = userContext.UserId;
             var isAdmin = userContext.IsInRole("admin");
@@ -41,8 +52,6 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
             {
                 return NotAllowedToDelete;
             }
-
-            var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
 
             var shouldSoftDelete = channel.Settings.SoftDeleteMessages.GetValueOrDefault();
 
@@ -59,10 +68,10 @@ public sealed record DeleteMessage(Guid MessageId) : IRequest<Result>
             }
             else
             {
-                messageRepository.Remove(message);
+                applicationDbContext.Messages.Remove(message);
             }
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return Result.Success;
 

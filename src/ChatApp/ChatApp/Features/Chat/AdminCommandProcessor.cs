@@ -8,7 +8,7 @@ namespace YourBrand.ChatApp.Features.Chat;
 
 public interface IAdminCommandProcessor
 {
-    Task<Result<MessageId>> ProcessAdminCommand(string channelId, string[] args, CancellationToken cancellationToken);
+    Task<Result<string>> ProcessAdminCommand(string channelId, string[] args, CancellationToken cancellationToken);
 }
 
 public sealed class AdminCommandProcessor : IAdminCommandProcessor
@@ -24,7 +24,7 @@ public sealed class AdminCommandProcessor : IAdminCommandProcessor
         this.chatNotificationService = chatNotificationService;
     }
 
-    public async Task<Result<MessageId>> ProcessAdminCommand(string channelId, string[] args, CancellationToken cancellationToken)
+    public async Task<Result<string>> ProcessAdminCommand(string channelId, string[] args, CancellationToken cancellationToken)
     {
         if (args.Length >= 2 && args[1].Equals("getNumberPosts"))
         {
@@ -32,7 +32,7 @@ public sealed class AdminCommandProcessor : IAdminCommandProcessor
 
             if (args.Length == 3 && args[2].Equals("/channel"))
             {
-                var numberOfPosts = await messageRepository.GetAll(new MessagesInChannel(Guid.Parse(channelId))).CountAsync(cancellationToken);
+                var numberOfPosts = await messageRepository.GetAll(new MessagesInChannel(channelId)).CountAsync(cancellationToken);
 
                 content = $"Number of posts in channel: {numberOfPosts}";
             }
@@ -64,12 +64,12 @@ public sealed class AdminCommandProcessor : IAdminCommandProcessor
             await SendMessage(messageDto, cancellationToken);
         }
 
-        return Result.SuccessWith(new MessageId());
+        return Result.SuccessWith(string.Empty);
     }
 
     private static MessageDto CreateMessage(string channelId, string content)
     {
-        return new MessageDto(Guid.NewGuid(), Guid.Parse(channelId), null, content, DateTimeOffset.UtcNow, new ParticipantDto(Guid.NewGuid(), Guid.Parse(channelId), "System", null), null, null, null, null, Enumerable.Empty<ReactionDto>());
+        return new MessageDto("", channelId, null, content, DateTimeOffset.UtcNow, new ParticipantDto("", channelId, "System", null), null, null, null, null, Enumerable.Empty<ReactionDto>());
     }
 
     private async Task SendMessage(MessageDto messageDto, CancellationToken cancellationToken)

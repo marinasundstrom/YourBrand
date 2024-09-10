@@ -4,6 +4,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
+using YourBrand.Domain;
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
@@ -53,26 +54,26 @@ public static class Endpoints
         .ProducesProblem(StatusCodes.Status404NotFound);
     }
 
-    public static async Task<ItemsResult<ChannelDto>> GetChannels(int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
-        => await mediator.Send(new GetChannels(page, pageSize, sortBy, sortDirection), cancellationToken);
+    public static async Task<ItemsResult<ChannelDto>> GetChannels(OrganizationId organizationId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default, IMediator mediator = default!)
+        => await mediator.Send(new GetChannels(organizationId, page, pageSize, sortBy, sortDirection), cancellationToken);
 
-    public static async Task<IResult> GetChannelById(Guid id, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> GetChannelById(OrganizationId organizationId, ChannelId id, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new GetChannelById(id), cancellationToken);
+        var result = await mediator.Send(new GetChannelById(organizationId, id), cancellationToken);
         return HandleResult(result);
     }
 
-    public static async Task<IResult> CreateChannel(CreateChannelRequest request, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> CreateChannel(OrganizationId organizationId, CreateChannelRequest request, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new CreateChannel(request.Name), cancellationToken);
+        var result = await mediator.Send(new CreateChannel(organizationId, request.Name), cancellationToken);
         return result.Handle(
             onSuccess: data => Results.CreatedAtRoute($"Channels_{nameof(GetChannelById)}", new { id = data.Id }, data),
             onError: error => Results.Problem(detail: error.Detail, title: error.Title, type: error.Id));
     }
 
-    public static async Task<IResult> JoinChannel(ChannelId id, CancellationToken cancellationToken, IMediator mediator)
+    public static async Task<IResult> JoinChannel(OrganizationId organizationId, ChannelId id, CancellationToken cancellationToken, IMediator mediator)
     {
-        var result = await mediator.Send(new JoinChannel(id), cancellationToken);
+        var result = await mediator.Send(new JoinChannel(organizationId, id), cancellationToken);
         return result.Handle(
             onSuccess: () => Results.Ok(),
             onError: error => Results.Problem(detail: error.Detail, title: error.Title, type: error.Id));

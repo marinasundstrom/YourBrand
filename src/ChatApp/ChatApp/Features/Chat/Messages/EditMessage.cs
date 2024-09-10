@@ -2,13 +2,18 @@ using FluentValidation;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Domain;
+using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.ChatApp.Domain;
+using YourBrand.ChatApp.Domain.ValueObjects;
 
 using static YourBrand.ChatApp.Domain.Errors.Messages;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
-public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Result>
+public sealed record EditMessage(OrganizationId OrganizationId, ChannelId ChannelId, MessageId MessageId, string Content) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<EditMessage>
     {
@@ -20,12 +25,15 @@ public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Resu
         }
     }
 
-    public sealed class Handler(IChannelRepository channelRepository,
-        IMessageRepository messageRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<EditMessage, Result>
+    public sealed class Handler(ApplicationDbContext applicationDbContext, IUserContext userContext) : IRequestHandler<EditMessage, Result>
     {
         public async Task<Result> Handle(EditMessage request, CancellationToken cancellationToken)
         {
-            var message = await messageRepository.FindByIdAsync(request.MessageId, cancellationToken);
+            var message = await applicationDbContext
+                .Messages
+                .InOrganization(request.OrganizationId)
+                .InChannel(request.ChannelId)
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId,cancellationToken);
 
             if (message is null)
             {
@@ -41,14 +49,18 @@ public sealed record EditMessage(Guid MessageId, string Content) : IRequest<Resu
 
             message.UpdateContent(request.Content);
 
-            var channel = await channelRepository.FindByIdAsync(message.ChannelId, cancellationToken);
-
+            var channel = await applicationDbContext
+                .Channels
+                .InOrganization(request.OrganizationId)
+                .Include(x => x.Participants)
+                .FirstOrDefaultAsync(x => x.Id == request.ChannelId, cancellationToken);
+                
             var participant = channel.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
             message.LastEdited = DateTimeOffset.UtcNow;
             message.LastEditedById = participant.Id;
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return Result.Success;
         }

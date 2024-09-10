@@ -24,7 +24,7 @@
     }
 </style>
 
-<MudButton OnClick="async () => await ChannelsClient.JoinChannelAsync(Id)">Join channel</MudButton>
+<MudButton OnClick="async () => await ChannelsClient.JoinChannelAsync(Organization.Id, Id)">Join channel</MudButton>
 
 <div class="@(isDarkMode ? "dark" : null)">
 
@@ -258,6 +258,9 @@
 
 @code 
 {
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     async Task InsertEmoticon() 
     {
         var dialogRef = await DialogService.ShowAsync<MudEmojiInput>("Emoji Picker");

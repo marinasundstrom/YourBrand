@@ -4,6 +4,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Features.Users;
@@ -12,13 +13,14 @@ using YourBrand.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;
 
-public record GetMessages(Guid? ChannelId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<MessageDto>>
+public record GetMessages(OrganizationId OrganizationId, ChannelId? ChannelId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<MessageDto>>
 {
-    public class Handler(IMessageRepository messageRepository, ApplicationDbContext context, IDtoComposer dtoComposer) : IRequestHandler<GetMessages, ItemsResult<MessageDto>>
+    public class Handler(ApplicationDbContext context, IDtoComposer dtoComposer) : IRequestHandler<GetMessages, ItemsResult<MessageDto>>
     {
         public async Task<ItemsResult<MessageDto>> Handle(GetMessages request, CancellationToken cancellationToken)
         {
             var query = context.Messages
+                .InOrganization(request.OrganizationId)
                 .IgnoreQueryFilters()
                 .AsQueryable();
 
@@ -26,8 +28,7 @@ public record GetMessages(Guid? ChannelId, int Page = 1, int PageSize = 10, stri
 
             if (request.ChannelId is not null)
             {
-                var cid = new ChannelId(request.ChannelId.GetValueOrDefault());
-                query = query.Where(x => x.ChannelId == cid);
+                query = query.Where(x => x.ChannelId == request.ChannelId);
             }
 
             if (request.SortBy is not null)

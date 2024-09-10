@@ -15,6 +15,7 @@ using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.ChatApp.Web.Extensions;
 using YourBrand.ChatApp.Web.Middleware;
 using YourBrand.Extensions;
+using YourBrand.Domain;
 using YourBrand.Integration;
 using YourBrand.Tenancy;
 
@@ -48,6 +49,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
     .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
+builder.AddServiceDefaults();
 
 builder.Services.AddProblemDetails();
 
@@ -84,6 +86,21 @@ builder.Services
     .AddOpenApi(ServiceName, ApiVersions.All, settings =>
     {
         settings.SchemaSettings.TypeMappers.Add(new ObjectTypeMapper(typeof(ChannelId), new NJsonSchema.JsonSchema
+        {
+            Type = JsonObjectType.String
+        }));
+
+        settings.SchemaSettings.TypeMappers.Add(new ObjectTypeMapper(typeof(ChannelParticipantId), new NJsonSchema.JsonSchema
+        {
+            Type = JsonObjectType.String
+        }));
+
+        settings.SchemaSettings.TypeMappers.Add(new ObjectTypeMapper(typeof(MessageId), new NJsonSchema.JsonSchema
+        {
+            Type = JsonObjectType.String
+        }));
+
+        settings.SchemaSettings.TypeMappers.Add(new ObjectTypeMapper(typeof(OrganizationId), new NJsonSchema.JsonSchema
         {
             Type = JsonObjectType.String
         }));
@@ -165,7 +182,6 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     if (dbProviderName!.Contains("SqlServer"))
     {
-        //await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
         try
@@ -181,6 +197,9 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     if (args.Contains("--seed"))
     {
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
         try
         {
             await Seed.SeedData(context);

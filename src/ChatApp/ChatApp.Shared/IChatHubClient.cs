@@ -4,26 +4,26 @@ public interface IChatHubClient
 {
     Task OnMessagePosted(MessageData message);
 
-    Task OnMessagePostedConfirmed(Guid messageId);
+    Task OnMessagePostedConfirmed(string messageId);
 
-    Task OnMessageEdited(Guid channelId, MessageEditedData data);
+    Task OnMessageEdited(string channelId, MessageEditedData data);
 
-    Task OnMessageDeleted(Guid channelId, MessageDeletedData data);
+    Task OnMessageDeleted(string channelId, MessageDeletedData data);
 
-    Task OnMessageReaction(Guid channelId, Guid messageId, MessageReactionData reaction);
+    Task OnMessageReaction(string channelId, string messageId, MessageReactionData reaction);
 
-    Task OnMessageReactionRemoved(Guid channelId, Guid messageId, string reaction, string participantId);
+    Task OnMessageReactionRemoved(string channelId, string messageId, string reaction, string participantId);
 }
 
-public sealed record MessageData(Guid Id, Guid ChannelId, ReplyMessageData? ReplyTo, string Content, DateTimeOffset Posted, ParticipantData PostedBy, DateTimeOffset? LastEdited, ParticipantData? LastEditedBy, DateTimeOffset? Deleted, ParticipantData? DeletedBy, IEnumerable<MessageReactionData> Reactions);
+public sealed record MessageData(string Id, string ChannelId, ReplyMessageData? ReplyTo, string Content, DateTimeOffset Posted, ParticipantData PostedBy, DateTimeOffset? LastEdited, ParticipantData? LastEditedBy, DateTimeOffset? Deleted, ParticipantData? DeletedBy, IEnumerable<MessageReactionData> Reactions);
 
-public sealed record ReplyMessageData(Guid Id, Guid ChannelId, string Content, DateTimeOffset Posted, ParticipantData PostedBy, DateTimeOffset? LastEdited, ParticipantData? LastEditedBy, DateTimeOffset? Deleted, ParticipantData? DeletedBy);
+public sealed record ReplyMessageData(string Id, string ChannelId, string Content, DateTimeOffset Posted, ParticipantData PostedBy, DateTimeOffset? LastEdited, ParticipantData? LastEditedBy, DateTimeOffset? Deleted, ParticipantData? DeletedBy);
 
 public sealed record ReactionDto(string Content, DateTimeOffset Date, ParticipantData User);
 
-public sealed record MessageEditedData(Guid Id, DateTimeOffset LastEdited, ParticipantData LastEditedBy, string Content);
+public sealed record MessageEditedData(string Id, DateTimeOffset LastEdited, ParticipantData LastEditedBy, string Content);
 
-public sealed record MessageDeletedData(Guid Id, bool HardDelete, DateTimeOffset? Deleted, ParticipantData? DeletedBy);
+public sealed record MessageDeletedData(string Id, bool HardDelete, DateTimeOffset? Deleted, ParticipantData? DeletedBy);
 
 public sealed record MessageReactionData(string Content, DateTimeOffset Date, ParticipantData AddedBy);
 

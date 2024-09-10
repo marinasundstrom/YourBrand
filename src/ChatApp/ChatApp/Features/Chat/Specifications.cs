@@ -1,7 +1,17 @@
 ﻿using YourBrand.ChatApp.Domain.Specifications;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.Domain;
 
 namespace YourBrand.ChatApp.Features.Chat;
+
+public class InOrganization<T> : BaseSpecification<T>
+    where T : IHasOrganization
+{
+    public InOrganization(OrganizationId organizationId)
+    {
+        Criteria = x => x.OrganizationId == organizationId;
+    }
+}
 
 public class ChannelWithId : BaseSpecification<Channel>
 {

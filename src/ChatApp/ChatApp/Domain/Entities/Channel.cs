@@ -1,16 +1,19 @@
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.Domain;
+using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
+public sealed class Channel : AggregateRoot<ChannelId>, IAuditable, IHasTenant, IHasOrganization
 {
-    private Channel() : base(new ChannelId(Guid.NewGuid()))
+    private Channel() : base(new ChannelId(Guid.NewGuid().ToString()))
     {
     }
 
-    public Channel(string title)
-        : base(new ChannelId(Guid.NewGuid()))
+    public Channel(OrganizationId organizationId, string title)
+        : base(new ChannelId(Guid.NewGuid().ToString()))
     {
+        OrganizationId = organizationId;
         Title = title;
 
         // Todo: Emit Domain Event
@@ -21,6 +24,10 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
     {
         Title = title;
     }
+
+    public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string Title { get; private set; } = null!;
 
@@ -35,7 +42,7 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
 
         // Todo: Emit Domain Event
 
-        AddDomainEvent(new ChannelRenamed(Id, newTitle, oldTitle));
+        AddDomainEvent(new ChannelRenamed(TenantId, Id, newTitle, oldTitle));
         return true;
     }
 
@@ -51,11 +58,11 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
 
         if (participant is not null) return Result.Failure(Errors.Channels.NotParticipantInChannel);
 
-        participant = new ChannelParticipant(userId, DateTimeOffset.UtcNow);
+        participant = new ChannelParticipant(OrganizationId, userId, DateTimeOffset.UtcNow);
 
         _participants.Add(participant);
 
-        AddDomainEvent(new ParticipantAddedToChannel(Id, participant.Id));
+        AddDomainEvent(new ParticipantAddedToChannel(TenantId, Id, participant.Id));
 
         return Result.Success;
     }
@@ -69,7 +76,7 @@ public sealed class Channel : AggregateRoot<ChannelId>, IAuditable
         participant.Left = DateTimeOffset.UtcNow;
         _participants.Remove(participant);
 
-        AddDomainEvent(new ParticipantRemovedFromChannel(Id, participant.Id));
+        AddDomainEvent(new ParticipantRemovedFromChannel(TenantId, Id, participant.Id));
 
         return true;
     }
@@ -90,19 +97,24 @@ public class ChannelSettings
     public bool? SoftDeleteMessages { get; set; }
 }
 
-public sealed class ChannelParticipant : Entity<ChannelParticipantId>
+public sealed class ChannelParticipant : Entity<ChannelParticipantId>, IHasTenant, IHasOrganization
 {
     private ChannelParticipant() : base(new ChannelParticipantId())
     {
     }
 
-    public ChannelParticipant(UserId userId, DateTimeOffset joined)
+    public ChannelParticipant(OrganizationId organizationId, UserId userId, DateTimeOffset joined)
         : base(new ChannelParticipantId())
     {
-
+        OrganizationId = organizationId;
         UserId = userId;
         Joined = joined;
     }
+
+
+    public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public ChannelId ChannelId { get; private set; }
 
