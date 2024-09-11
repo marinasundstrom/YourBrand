@@ -1,10 +1,11 @@
 using MediatR;
+using Asp.Versioning;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Ticketing.Application.Common;
+using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Features.Tickets.Commands;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 using YourBrand.Ticketing.Application.Features.Tickets.Queries;
@@ -19,10 +20,10 @@ namespace YourBrand.Ticketing.Application.Features.Tickets;
 public sealed class TicketsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ItemsResult<TicketDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<TicketDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     [ProducesDefaultResponseType]
-    public async Task<ItemsResult<TicketDto>> GetTickets([FromQuery] int[]? status, string? assigneeId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<TicketDto>> GetTickets([FromQuery] int[]? status, string? assigneeId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
         => await mediator.Send(new GetTickets(status, assigneeId, page, pageSize, sortBy, sortDirection), cancellationToken);
 
     [HttpGet("{id}")]

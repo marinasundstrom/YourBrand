@@ -22,16 +22,23 @@
     <PackageReference Include="FluentValidation" Version="11.2.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
     <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+    <PackageReference Include="Asp.Versioning.Http" Version="7.1.0" />
+
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Ticketing.Domain\Ticketing.Domain.csproj" />
     <ProjectReference Include="..\Ticketing.Contracts\Ticketing.Contracts.csproj" />
+    <ProjectReference
+      Include="..\..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

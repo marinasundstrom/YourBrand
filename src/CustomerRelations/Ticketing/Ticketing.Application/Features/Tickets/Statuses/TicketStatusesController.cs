@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Asp.Versioning;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Ticketing.Application.Common;
+using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
@@ -16,10 +17,10 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 public sealed class TicketStatusesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ItemsResult<TicketStatusDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<TicketStatusDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     [ProducesDefaultResponseType]
-    public async Task<ItemsResult<TicketStatusDto>> GetStatuses(string? searchTerm, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<TicketStatusDto>> GetStatuses(string? searchTerm, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
         => await mediator.Send(new GetTicketStatuses(searchTerm, page, pageSize, sortBy, sortDirection), cancellationToken);
 
 }

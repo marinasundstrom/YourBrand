@@ -1,24 +1,22 @@
 using YourBrand.Ticketing.Domain.ValueObjects;
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditable, IHasTenant
 {
-    public User(UserId id, string name, string email)
+    public Organization(OrganizationId id, string name)
         : base(id)
     {
         Id = id;
         Name = name;
-        Email = email;
     }
-
-    public string Name { get; set; }
 
     public TenantId TenantId { get; set; }
 
-    public string Email { get; set; }
+    public string Name { get; set; }
 
     public User? CreatedBy { get; set; }
 
@@ -32,7 +30,12 @@ public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
 
     public DateTimeOffset? LastModified { get; set; }
 
-    public List<Organization> Organizations { get; set; }
+    public List<User> Users { get; set; }
 
     public List<OrganizationUser> OrganizationUsers { get; set; }
+
+    public bool HasUser(UserId userId)
+    {
+        return Users.Any(x => x.Id == userId);
+    }
 }

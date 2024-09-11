@@ -1,5 +1,6 @@
 ﻿using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 using YourBrand.Ticketing.Application.Features.Users;
+using YourBrand.Ticketing.Application.Features.Organizations;
 using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application;
@@ -44,4 +45,8 @@ public static partial class Mappings
     public static UserDto ToDto(this User user) => new(user.Id, user.Name);
 
     public static UserInfoDto ToDto2(this User user) => new(user.Id, user.Name);
+
+    public static OrganizationDto ToDto(this Organization user) => new(user.Id, user.Name);
+
+    public static OrganizationDto ToDto2(this Organization user) => new(user.Id, user.Name);
 }

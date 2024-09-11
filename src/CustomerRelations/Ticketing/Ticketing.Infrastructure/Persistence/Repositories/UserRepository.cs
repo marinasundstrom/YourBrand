@@ -1,18 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Identity;
 using YourBrand.Ticketing.Domain.Specifications;
+using YourBrand.Ticketing.Domain.Repositories;
+using YourBrand.Ticketing.Domain.ValueObjects;
+using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories;
 
-public sealed class UserRepository(ApplicationDbContext context) : IUserRepository
+public sealed class UserRepository : IUserRepository
 {
-    readonly DbSet<User> dbSet = context.Set<User>();
+    readonly ApplicationDbContext context;
+    readonly DbSet<User> dbSet;
+
+    public UserRepository(ApplicationDbContext context)
+    {
+        this.context = context;
+        this.dbSet = context.Set<User>();
+    }
 
     public IQueryable<User> GetAll()
     {
-        //return dbSet.Where(new UsersWithStatus(UserStatus.Completed).Or(new UsersWithStatus(UserStatus.OnHold))).AsQueryable();
-
         return dbSet.AsQueryable();
     }
 

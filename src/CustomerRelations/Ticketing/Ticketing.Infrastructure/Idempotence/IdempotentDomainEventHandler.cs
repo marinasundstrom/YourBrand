@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Common;
 using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Infrastructure.Persistence.Outbox;

@@ -122,5 +122,9 @@ public sealed class ApplicationDbContext(
 
     public DbSet<User> Users { get; set; }
 
+    public DbSet<Organization> Organizations { get; set; }
+
+    public DbSet<OrganizationUser> OrganizationUsers { get; set; }
+
 #nullable restore
 }

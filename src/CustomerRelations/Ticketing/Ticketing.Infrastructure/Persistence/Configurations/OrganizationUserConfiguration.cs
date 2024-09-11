@@ -3,16 +3,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Ticketing.Domain.Entities;
 
-
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Configurations;
 
-public sealed class UserConfiguration : IEntityTypeConfiguration<User>
+public class OrganizationUserConfiguration : IEntityTypeConfiguration<OrganizationUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<OrganizationUser> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable(name: "OrganizationUsers");
 
-        builder.HasIndex(x => x.TenantId);
+        //builder.HasIndex(x => x.TenantId);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

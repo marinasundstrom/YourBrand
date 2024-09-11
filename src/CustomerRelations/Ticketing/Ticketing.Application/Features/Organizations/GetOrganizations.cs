@@ -3,17 +3,18 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Ticketing;
+using YourBrand.Ticketing.Domain.Repositories;
 using YourBrand.Ticketing.Models;
 
-namespace YourBrand.Ticketing.Application.Features.Users;
+namespace YourBrand.Ticketing.Application.Features.Organizations;
 
-public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<UserDto>>
+public record GetOrganizations(int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<OrganizationDto>>
 {
-    public class Handler(IUserRepository userRepository) : IRequestHandler<GetUsers, PagedResult<UserDto>>
+    public class Handler(IOrganizationRepository organizationRepository) : IRequestHandler<GetOrganizations, PagedResult<OrganizationDto>>
     {
-        public async Task<PagedResult<UserDto>> Handle(GetUsers request, CancellationToken cancellationToken)
+        public async Task<PagedResult<OrganizationDto>> Handle(GetOrganizations request, CancellationToken cancellationToken)
         {
-            var query = userRepository.GetAll();
+            var query = organizationRepository.GetAll();
 
             var totalCount = await query.CountAsync(cancellationToken);
 
@@ -40,7 +41,7 @@ public record GetUsers(int Page = 1, int PageSize = 10, string? SearchTerm = nul
                 .Take(request.PageSize).AsQueryable()
                 .ToArrayAsync(cancellationToken);
 
-            return new PagedResult<UserDto>(users.Select(x => x.ToDto()), totalCount);
+            return new PagedResult<OrganizationDto>(users.Select(x => x.ToDto()), totalCount);
         }
     }
 }

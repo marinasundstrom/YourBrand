@@ -6,19 +6,23 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>YourBrand.Ticketing.Domain</RootNamespace>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<WarningsAsErrors>nullable</WarningsAsErrors>
-		<NoWarn>1701;1702;CS1591</NoWarn>
+		<!-- <WarningsAsErrors>nullable</WarningsAsErrors>
+		<NoWarn>1701;1702;CS1591</NoWarn> -->
 	</PropertyGroup>
 
 
 	<ItemGroup>
 		<PackageReference Include="LinqKit" Version="1.2.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
 		<PackageReference Include="MediatR.Contracts" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-        <ProjectReference Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+        <ProjectReference
+            Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+        <ProjectReference
+            Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+
 	</ItemGroup>
 </Project>

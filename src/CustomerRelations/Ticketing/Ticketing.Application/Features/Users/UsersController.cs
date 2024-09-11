@@ -1,24 +1,25 @@
+using Asp.Versioning;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Ticketing.Application.Common;
+using YourBrand.Ticketing.Models;
 
 namespace YourBrand.Ticketing.Application.Features.Users;
 
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-[Authorize]
 public sealed class UsersController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ItemsResult<UserDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<UserDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     [ProducesDefaultResponseType]
-    public async Task<ItemsResult<UserDto>> GetUsers(int page = 1, int pageSize = 10, string? searchTerm = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<UserDto>> GetUsers(int page = 1, int pageSize = 10, string? searchTerm = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
         => await mediator.Send(new GetUsers(page, pageSize, searchTerm, sortBy, sortDirection), cancellationToken);
 
     [HttpGet("UserInfo")]
@@ -28,7 +29,7 @@ public sealed class UsersController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<UserInfoDto>> GetUserInfo(CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetUserInfo(), cancellationToken);
-        return this.HandleResult(result);
+        return result.GetValue();
     }
 
     [HttpPost]
@@ -38,8 +39,8 @@ public sealed class UsersController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<UserInfoDto>> CreateUser(CreateUserDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateUser(request.Name, request.Email), cancellationToken);
-        return this.HandleResult(result);
+        var result = await mediator.Send(new CreateUser(request.Name, request.Email, null), cancellationToken);
+        return result.GetValue();
     }
 }
 

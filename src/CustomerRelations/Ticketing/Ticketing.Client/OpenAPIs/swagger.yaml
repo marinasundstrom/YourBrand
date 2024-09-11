@@ -52,7 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemsResultOfUser'
+                $ref: '#/components/schemas/PagedResultOfUser'
         429:
           description: ''
           content:
@@ -206,7 +206,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemsResultOfTicket'
+                $ref: '#/components/schemas/PagedResultOfTicket'
         429:
           description: ''
           content:
@@ -522,7 +522,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemsResultOfTicketStatus'
+                $ref: '#/components/schemas/PagedResultOfTicketStatus'
         429:
           description: ''
           content:
@@ -537,7 +537,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
 components:
   schemas:
-    ItemsResultOfUser:
+    PagedResultOfUser:
       type: object
       additionalProperties: false
       properties:
@@ -602,7 +602,7 @@ components:
           type: string
         email:
           type: string
-    ItemsResultOfTicket:
+    PagedResultOfTicket:
       type: object
       additionalProperties: false
       properties:
@@ -775,7 +775,7 @@ components:
           type: number
           format: double
           nullable: true
-    ItemsResultOfTicketStatus:
+    PagedResultOfTicketStatus:
       type: object
       additionalProperties: false
       properties:

@@ -25,7 +25,7 @@ public static class ServiceExtensions
         {
             x.SetKebabCaseEndpointNameFormatter();
 
-            //x.AddConsumers(typeof(Program).Assembly);
+            x.AddConsumers(typeof(Program).Assembly);
 
             x.AddConsumersForApp();
 

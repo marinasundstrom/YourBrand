@@ -2,16 +2,16 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Ticketing.Application.Common;
+using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 
-public record GetTickets(int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<TicketDto>>
+public record GetTickets(int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<TicketDto>>
 {
-    public class Handler(ITicketRepository ticketRepository) : IRequestHandler<GetTickets, ItemsResult<TicketDto>>
+    public class Handler(ITicketRepository ticketRepository) : IRequestHandler<GetTickets, PagedResult<TicketDto>>
     {
-        public async Task<ItemsResult<TicketDto>> Handle(GetTickets request, CancellationToken cancellationToken)
+        public async Task<PagedResult<TicketDto>> Handle(GetTickets request, CancellationToken cancellationToken)
         {
             var query = ticketRepository.GetAll();
 
@@ -53,7 +53,7 @@ public record GetTickets(int[]? Status, string? AssigneeId, int Page = 1, int Pa
                 .Take(request.PageSize).AsQueryable()
                 .ToArrayAsync(cancellationToken);
 
-            return new ItemsResult<TicketDto>(tickets.Select(x => x.ToDto()), totalCount);
+            return new PagedResult<TicketDto>(tickets.Select(x => x.ToDto()), totalCount);
         }
     }
 }

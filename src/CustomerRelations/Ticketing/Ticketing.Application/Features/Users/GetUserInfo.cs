@@ -2,7 +2,11 @@
 
 using MediatR;
 
+using YourBrand.Ticketing.Domain;
+using YourBrand.Ticketing.Domain.Repositories;
 using YourBrand.Identity;
+
+using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Ticketing.Application.Features.Users;
 
@@ -15,10 +19,12 @@ public record GetUserInfo() : IRequest<Result<UserInfoDto>>
         }
     }
 
-    public sealed class Handler(IUserRepository userRepository, IUserContext userContext) : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
+    public class Handler(IUserRepository userRepository, IUserContext userContext, ILogger<Handler> logger) : IRequestHandler<GetUserInfo, Result<UserInfoDto>>
     {
         public async Task<Result<UserInfoDto>> Handle(GetUserInfo request, CancellationToken cancellationToken)
         {
+            logger.LogError(userContext.UserId);
+
             var user = await userRepository.FindByIdAsync(userContext.UserId.GetValueOrDefault(), cancellationToken);
 
             if (user is null)
