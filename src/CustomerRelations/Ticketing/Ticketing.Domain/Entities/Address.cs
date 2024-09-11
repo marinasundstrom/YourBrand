@@ -1,9 +1,10 @@
 using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Address : Entity<string>, IAuditable, IHasTenant
+public class Address : Entity<string>, IAuditable, IHasTenant, IHasOrganization
 {
     public Address()
     {
@@ -11,6 +12,8 @@ public class Address : Entity<string>, IAuditable, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     // Street
     public string Thoroughfare { get; set; } = null!;

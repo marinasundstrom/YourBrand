@@ -23,6 +23,5 @@
         <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
         <ProjectReference
             Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
-
 	</ItemGroup>
 </Project>

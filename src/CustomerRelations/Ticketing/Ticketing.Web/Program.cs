@@ -199,17 +199,9 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 
     if (args.Contains("--seed"))
     {
-        var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
-        tenantContext.SetTenantId(TenantConstants.TenantId);
-
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-
         try
         {
-            await Seed.SeedData(context);
+            await Seed.SeedData(scope.ServiceProvider);
         }
         catch (Exception ex)
         {

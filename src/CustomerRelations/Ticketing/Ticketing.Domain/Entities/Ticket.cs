@@ -1,11 +1,12 @@
 ﻿using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 using YourBrand.Ticketing.Domain.Enums;
 using YourBrand.Ticketing.Domain.Events;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant
+public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganization
 {
     protected Ticket()
     {
@@ -19,6 +20,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant
     }
 
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string Requester { get; set; } = "Test";
     public string Description { get; } = null!;

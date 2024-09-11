@@ -19,13 +19,14 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
 		<PackageReference Include="Polly" Version="7.2.3" />
 		<PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.1" />
 		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
 		<PackageReference Include="Scrutor" Version="4.2.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
+            Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,6 +36,7 @@
         <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
+        <ProjectReference Include="..\..\..\Common\SampleTenant\SampleTenant.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

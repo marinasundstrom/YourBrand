@@ -1,11 +1,14 @@
 using YourBrand.Identity;
 using YourBrand.Tenancy;
+using YourBrand.Domain;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketComment : Entity<int>, IAuditable, IHasTenant
+public class TicketComment : Entity<int>, IAuditable, IHasTenant, IHasOrganization
 {
     public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
 
     public string Text { get; set; } = null!;
 
