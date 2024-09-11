@@ -51,7 +51,6 @@ public sealed class MessagePostedEventHandler(
 public sealed class MessageEditedEventHandler(
     ISettableTenantContext tenantContext,
     IMessageRepository messagesRepository,
-    IUserRepository userRepository,
     IChatNotificationService chatNotificationService) : IDomainEventHandler<MessageEdited>
 {
     public async Task Handle(MessageEdited notification, CancellationToken cancellationToken)
@@ -59,7 +58,7 @@ public sealed class MessageEditedEventHandler(
         tenantContext.SetTenantId(notification.TenantId);
 
         var message = await messagesRepository.FindByIdAsync(notification.MessageId);
-        var user = await userRepository.FindByIdAsync(message!.LastEditedBy!.UserId);
+
 
         await chatNotificationService.NotifyMessageEdited(
             notification.ChannelId, new MessageEditedData(notification.MessageId, message.LastEdited.GetValueOrDefault(), new ParticipantData(message!.LastEditedBy!.Id.ToString(), message!.LastEditedBy.DisplayName, message!.LastEditedBy.UserId), notification.Content), cancellationToken);

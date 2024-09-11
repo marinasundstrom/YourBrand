@@ -26,6 +26,9 @@ public sealed class MessageRepository : IMessageRepository
     public async Task<Message?> FindByIdAsync(MessageId id, CancellationToken cancellationToken = default)
     {
         return await dbSet
+            .Include(x => x.PostedBy)
+            .Include(x => x.LastEditedBy)
+            .Include(x => x.DeletedBy)
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }
