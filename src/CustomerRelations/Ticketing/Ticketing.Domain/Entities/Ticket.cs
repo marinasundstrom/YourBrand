@@ -12,8 +12,9 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
     {
     }
 
-    public Ticket(string subject, string requester, string description)
+    public Ticket(int id, string subject, string requester, string description)
     {
+        Id = id;
         Subject = subject;
         Requester = requester;
         Description = description;
@@ -34,8 +35,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         {
             Subject = title;
 
-            AddDomainEvent(new TicketUpdated(Id));
-            AddDomainEvent(new TicketSubjectUpdated(Id, Subject));
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketSubjectUpdated(TenantId, OrganizationId, Id, Subject));
 
             return true;
         }
@@ -54,8 +55,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         {
             Status = status;
 
-            AddDomainEvent(new TicketUpdated(Id));
-            AddDomainEvent(new TicketStatusUpdated(Id, status, oldStatus));
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketStatusUpdated(TenantId, OrganizationId, Id, status, oldStatus));
 
             return true;
         }
@@ -73,7 +74,7 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         if (userId != oldAssigneeId)
         {
             AssigneeId = userId;
-            AddDomainEvent(new TicketAssignedUserUpdated(Id, userId, oldAssigneeId));
+            AddDomainEvent(new TicketAssignedUserUpdated(TenantId, OrganizationId, Id, userId, oldAssigneeId));
 
             return true;
         }
@@ -92,8 +93,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         {
             Text = title;
 
-            AddDomainEvent(new TicketUpdated(Id));
-            AddDomainEvent(new TicketTextUpdated(Id, Text));
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketTextUpdated(TenantId, OrganizationId, Id, Text));
 
             return true;
         }
@@ -121,8 +122,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         {
             EstimatedHours = hours;
 
-            AddDomainEvent(new TicketUpdated(Id));
-            AddDomainEvent(new TicketEstimatedHoursUpdated(Id, hours, oldHours));
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketEstimatedHoursUpdated(TenantId, OrganizationId, Id, hours, oldHours));
 
             return true;
         }
@@ -139,8 +140,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         {
             RemainingHours = hours;
 
-            AddDomainEvent(new TicketUpdated(Id));
-            AddDomainEvent(new TicketRemainingHoursUpdated(Id, hours, oldHours));
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketRemainingHoursUpdated(TenantId, OrganizationId, Id, hours, oldHours));
 
             return true;
         }
@@ -148,8 +149,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         return false;
     }
 
-    public HashSet<Tag> Tags { get; } = new HashSet<Tag>();
-
+    public HashSet<TicketTag> Tags { get; } = new HashSet<TicketTag>();
+    
     public HashSet<Attachment> Attachments { get; } = new HashSet<Attachment>();
 
     public HashSet<TicketComment> Comments { get; } = new HashSet<TicketComment>();

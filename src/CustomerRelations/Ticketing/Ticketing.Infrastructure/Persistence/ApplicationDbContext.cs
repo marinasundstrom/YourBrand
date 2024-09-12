@@ -116,6 +116,8 @@ public sealed class ApplicationDbContext(
 
 #nullable disable
 
+    public DbSet<Ticket> Tickets { get; set; }
+
     public DbSet<TicketStatus> TicketStatuses { get; set; }
 
     public DbSet<TicketType> TicketTypes { get; set; }

@@ -18,31 +18,36 @@ public static class Seed
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
-        context.TicketStatuses.Add(new TicketStatus()
+        context.TicketTypes.Add(new TicketType(1, "Ticket")
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+        });
+
+        context.TicketStatuses.Add(new TicketStatus(1)
         {
             OrganizationId = TenantConstants.OrganizationId,
             Name = "New"
         });
 
-        context.TicketStatuses.Add(new TicketStatus()
+        context.TicketStatuses.Add(new TicketStatus(2)
         {
             OrganizationId = TenantConstants.OrganizationId,
             Name = "In progress"
         });
 
-        context.TicketStatuses.Add(new TicketStatus()
+        context.TicketStatuses.Add(new TicketStatus(3)
         {
             OrganizationId = TenantConstants.OrganizationId,
             Name = "On hold"
         });
 
-        context.TicketStatuses.Add(new TicketStatus()
+        context.TicketStatuses.Add(new TicketStatus(4)
         {
             OrganizationId = TenantConstants.OrganizationId,
             Name = "Resolved"
         });
 
-        context.TicketStatuses.Add(new TicketStatus()
+        context.TicketStatuses.Add(new TicketStatus(5)
         {
             OrganizationId = TenantConstants.OrganizationId,
             Name = "Closed"

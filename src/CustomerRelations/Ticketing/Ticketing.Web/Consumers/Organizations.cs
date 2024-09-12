@@ -8,7 +8,7 @@ using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.Ticketing.Consumers;
 
-public class SalesOrganizationCreatedConsumer(IMediator mediator, IRequestClient<GetOrganization> requestClient, ILogger<SalesOrganizationCreatedConsumer> logger) : IConsumer<OrganizationCreated>
+public class TicketingOrganizationCreatedConsumer(IMediator mediator, IRequestClient<GetOrganization> requestClient, ILogger<TicketingOrganizationCreatedConsumer> logger) : IConsumer<OrganizationCreated>
 {
     public async Task Consume(ConsumeContext<OrganizationCreated> context)
     {
@@ -25,7 +25,7 @@ public class SalesOrganizationCreatedConsumer(IMediator mediator, IRequestClient
     }
 }
 
-public class SalesOrganizationDeletedConsumer(IMediator mediator) : IConsumer<OrganizationDeleted>
+public class TicketingOrganizationDeletedConsumer(IMediator mediator) : IConsumer<OrganizationDeleted>
 {
     public async Task Consume(ConsumeContext<OrganizationDeleted> context)
     {
@@ -36,7 +36,7 @@ public class SalesOrganizationDeletedConsumer(IMediator mediator) : IConsumer<Or
 }
 
 
-public class SalesOrganizationUpdatedConsumer(IMediator mediator, IRequestClient<GetOrganization> requestClient) : IConsumer<OrganizationUpdated>
+public class TicketingOrganizationUpdatedConsumer(IMediator mediator, IRequestClient<GetOrganization> requestClient) : IConsumer<OrganizationUpdated>
 {
     public async Task Consume(ConsumeContext<OrganizationUpdated> context)
     {
@@ -49,7 +49,7 @@ public class SalesOrganizationUpdatedConsumer(IMediator mediator, IRequestClient
     }
 }
 
-public class SalesOrganizationUserAddedConsumer(IMediator mediator) : IConsumer<OrganizationUserAdded>
+public class TicketingOrganizationUserAddedConsumer(IMediator mediator) : IConsumer<OrganizationUserAdded>
 {
     public async Task Consume(ConsumeContext<OrganizationUserAdded> context)
     {

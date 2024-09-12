@@ -4,7 +4,7 @@ using MediatR;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record DeleteTicket(int Id) : IRequest<Result>
+public sealed record DeleteTicket(string OrganizationId, int Id) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<DeleteTicket>
     {
@@ -27,7 +27,7 @@ public sealed record DeleteTicket(int Id) : IRequest<Result>
 
             ticketRepository.Remove(ticket);
 
-            ticket.AddDomainEvent(new TicketDeleted(ticket.Id, ticket.Subject));
+            ticket.AddDomainEvent(new TicketDeleted(ticket.TenantId, ticket.OrganizationId, ticket.Id, ticket.Subject));
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -117,6 +117,9 @@ else
 
     [CascadingParameter] public MudDialogInstance Instance { get; set; } = null!;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter] public int? Id { get; set; }
 
     [Required]
@@ -151,39 +154,39 @@ else
 
             if (editContext.IsModified(() => Title))
             {
-                await TicketsClient.UpdateTitleAsync(Id.GetValueOrDefault(), Title, cts.Token);
+                await TicketsClient.UpdateTitleAsync(Organization.Id, Id.GetValueOrDefault(), Title, cts.Token);
             }
 
             if (editContext.IsModified(() => Description!))
             {
-                //await TicketsClient.UpdateDescriptionAsync(Id.GetValueOrDefault(), Description, cts.Token);
+                //await TicketsClient.UpdateDescriptionAsync(Organization.Id, Id.GetValueOrDefault(), Description, cts.Token);
             }
 
             if (editContext.IsModified(() => Status))
             {
-                await TicketsClient.UpdateStatusAsync(Id.GetValueOrDefault(), Status.Id, cts.Token);
+                await TicketsClient.UpdateStatusAsync(Organization.Id, Id.GetValueOrDefault(), Status.Id, cts.Token);
             }
 
             if (editContext.IsModified(() => Assignee!))
             {
-                //await TicketsClient.UpdateAssignedUserAsync(Id.GetValueOrDefault(), Assignee?.Id, cts.Token);
+                await TicketsClient.UpdateAssigneeAsync(Organization.Id, Id.GetValueOrDefault(), Assignee?.Id, cts.Token);
             }
 
             if (editContext.IsModified(() => EstimatedHours!))
             {
-                await TicketsClient.UpdateEstimatedHoursAsync(Id.GetValueOrDefault(), EstimatedHours, cts.Token);
+                await TicketsClient.UpdateEstimatedHoursAsync(Organization.Id, Id.GetValueOrDefault(), EstimatedHours, cts.Token);
             }
 
             if (editContext.IsModified(() => RemainingHours!))
             {
-                await TicketsClient.UpdateRemainingHoursAsync(Id.GetValueOrDefault(), RemainingHours, cts.Token);
+                await TicketsClient.UpdateRemainingHoursAsync(Organization.Id, Id.GetValueOrDefault(), RemainingHours, cts.Token);
             }
 
             editContext.MarkAsUnmodified();
 
             ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
 
-            ticket = await TicketsClient.GetTicketByIdAsync(Id.GetValueOrDefault(), cts.Token);
+            ticket = await TicketsClient.GetTicketByIdAsync(Organization.Id, Id.GetValueOrDefault(), cts.Token);
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -233,12 +236,12 @@ else
 
     async Task CreateTicket()
     {
-        ticket = await TicketsClient.CreateTicketAsync(new CreateTicketRequest
+        ticket = await TicketsClient.CreateTicketAsync(Organization.Id, new CreateTicketRequest
         {
             Title = Title,
             Text = Description,
             Status = Status.Id,
-            //Assignee = Assignee?.Id,
+            AssigneeId = Assignee?.Id,
             EstimatedHours = EstimatedHours,
             RemainingHours = RemainingHours
         }, cts.Token);
@@ -255,7 +258,7 @@ else
     {
         try
         {
-            this.ticket = await TicketsClient.GetTicketByIdAsync(id, cts.Token);
+            this.ticket = await TicketsClient.GetTicketByIdAsync(Organization.Id, id, cts.Token);
 
             Instance.SetTitle($"{ticket.Id} - {ticket.Subject}");
 

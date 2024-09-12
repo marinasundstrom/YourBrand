@@ -10,6 +10,8 @@ public class TicketComment : Entity<int>, IAuditable, IHasTenant, IHasOrganizati
 
     public OrganizationId OrganizationId { get; set; }
 
+    public int TicketId { get; set; }
+
     public string Text { get; set; } = null!;
 
     public HashSet<Attachment> Attachments { get; } = new HashSet<Attachment>();

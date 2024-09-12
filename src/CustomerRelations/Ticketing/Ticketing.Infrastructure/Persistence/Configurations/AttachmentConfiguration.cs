@@ -10,5 +10,7 @@ public sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachmen
         builder.ToTable("Attachments");
 
         builder.HasIndex(x => x.TenantId);
+
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
     }
 }

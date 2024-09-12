@@ -99,11 +99,15 @@
     List<TicketStatus> ticketStatuses = new();
     bool loaded = false;
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            tickets.AddRange((await TicketsClient.GetTicketsAsync(null, null, 1, 100, null, null, cts.Token)).Items);
+            tickets.AddRange((await TicketsClient.GetTicketsAsync(Organization.Id, null, null, 1, 100, null, null,
+            cts.Token)).Items);
             ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
 
             loaded = true;
@@ -187,7 +191,7 @@
 
             if (result.GetValueOrDefault())
             {
-                await TicketsClient.DeleteTicketAsync(item.Id, cts.Token);
+                await TicketsClient.DeleteTicketAsync(Organization.Id, item.Id, cts.Token);
             }
 
             dropContainer.Refresh();
@@ -214,7 +218,7 @@
 
         try
         {
-            await TicketsClient.UpdateStatusAsync(dropItem.Item.Id, newStatus.Id, cts.Token);
+            await TicketsClient.UpdateStatusAsync(Organization.Id, dropItem.Item.Id, newStatus.Id, cts.Token);
         }
         catch (ApiException<ProblemDetails> exc)
         {
@@ -234,7 +238,7 @@
 
     async Task OnCreated(int ticketId, string title)
     {
-        var item = await TicketsClient.GetTicketByIdAsync(ticketId, cts.Token);
+        var item = await TicketsClient.GetTicketByIdAsync(Organization.Id, ticketId, cts.Token);
         tickets.Add(item);
         dropContainer.Refresh();
         StateHasChanged();

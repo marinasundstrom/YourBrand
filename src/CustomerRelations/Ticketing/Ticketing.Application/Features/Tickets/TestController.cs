@@ -16,7 +16,7 @@ public sealed class Test(IPublishEndpoint publishEndpoint) : ControllerBase
     [HttpPut("{id}/status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]
-    public async Task UpdateStatus(string id, [FromBody] OrderStatus status, CancellationToken cancellationToken)
+    public async Task UpdateStatus(string organizationId, string id, [FromBody] OrderStatus status, CancellationToken cancellationToken)
     {
         await publishEndpoint.Publish(new UpdateStatus(id, status), cancellationToken);
     }

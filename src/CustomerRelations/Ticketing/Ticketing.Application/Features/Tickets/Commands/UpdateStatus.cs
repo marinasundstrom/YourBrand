@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace YourBrand.Ticketing.Application.Tickets.Commands;
 
-public sealed record UpdateStatus(int Id, int Status) : IRequest<Result>
+public sealed record UpdateStatus(string OrganizationId, int Id, int Status) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<UpdateStatus>
     {

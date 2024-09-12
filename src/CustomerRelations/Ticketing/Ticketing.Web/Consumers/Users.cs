@@ -7,7 +7,7 @@ using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.Ticketing.Consumers;
 
-public class ChatAppUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ILogger<ChatAppUserCreatedConsumer> logger) : IConsumer<UserCreated>
+public class TicketingUserCreatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient, ILogger<TicketingUserCreatedConsumer> logger) : IConsumer<UserCreated>
 {
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
@@ -27,7 +27,7 @@ public class ChatAppUserCreatedConsumer(IMediator mediator, IRequestClient<GetUs
     }
 }
 
-public class ChatAppUserDeletedConsumer(IMediator mediator) : IConsumer<UserDeleted>
+public class TicketingUserDeletedConsumer(IMediator mediator) : IConsumer<UserDeleted>
 {
     public async Task Consume(ConsumeContext<UserDeleted> context)
     {
@@ -38,7 +38,7 @@ public class ChatAppUserDeletedConsumer(IMediator mediator) : IConsumer<UserDele
 }
 
 
-public class ChatAppUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient) : IConsumer<UserUpdated>
+public class TicketingUserUpdatedConsumer(IMediator mediator, IRequestClient<GetUser> requestClient) : IConsumer<UserUpdated>
 {
     public async Task Consume(ConsumeContext<UserUpdated> context)
     {

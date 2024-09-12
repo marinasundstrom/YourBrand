@@ -131,6 +131,9 @@
     List<TicketStatus> ticketStatuses = new();
     HashSet<TicketStatus> selectedStatuses = new HashSet<TicketStatus>();
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     private async Task OnSelectedStatusesChanged(IEnumerable<TicketStatus> ticketStatuses) 
     {
         selectedStatuses = ticketStatuses.ToHashSet();
@@ -247,11 +250,12 @@
     {        
         try
         {
-            var result = await TicketsClient.GetTicketsAsync(selectedStatuses is null ? null : selectedStatuses.Select(x => x.Id), Assignee?.Id, state.Page + 1, state.PageSize,
-                state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+            var result = await TicketsClient.GetTicketsAsync(Organization.Id, selectedStatuses is null ? null :
+            selectedStatuses.Select(x => x.Id), Assignee?.Id, state.Page + 1, state.PageSize,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);
 
-            return new TableData<Ticket>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Ticket>() { TotalItems = result.Total, Items = result.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -267,7 +271,7 @@
 
     async Task<Ticket> FetchTicket(int id)
     {
-        return await TicketsClient.GetTicketByIdAsync(id, cts.Token);
+        return await TicketsClient.GetTicketByIdAsync(Organization.Id, id, cts.Token);
     }
 
     private async Task DeleteTicket(Ticket item)
@@ -295,7 +299,7 @@
 
     private async Task DeleteTicketCore(Ticket item)
     {
-        await TicketsClient.DeleteTicketAsync(item.Id, cts.Token);
+        await TicketsClient.DeleteTicketAsync(Organization.Id, item.Id, cts.Token);
 
         selectedItems.Remove(item);
     }

@@ -141,6 +141,8 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
+app.UseSerilogRequestLogging();
+
 app.UseRouting();
 
 // Configure the HTTP request pipeline.

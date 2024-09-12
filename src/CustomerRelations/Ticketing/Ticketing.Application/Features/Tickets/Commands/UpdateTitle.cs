@@ -4,7 +4,7 @@ using MediatR;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record UpdateSubject(int Id, string Subject) : IRequest<Result>
+public sealed record UpdateSubject(string OrganizationId, int Id, string Subject) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<UpdateSubject>
     {

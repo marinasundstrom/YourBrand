@@ -25,9 +25,7 @@ public static class ServiceExtensions
                 sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
 #if DEBUG
-            options
-                .LogTo(Console.WriteLine)
-                .EnableSensitiveDataLogging();
+            options.EnableSensitiveDataLogging();
 #endif
         });
 

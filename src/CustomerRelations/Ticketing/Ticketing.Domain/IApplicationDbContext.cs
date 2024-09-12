@@ -6,6 +6,8 @@ namespace YourBrand.Ticketing.Domain;
 
 public interface IApplicationDbContext
 {
+    DbSet<Ticket> Tickets { get; }
+
     DbSet<TicketStatus> TicketStatuses { get; }
 
     DbSet<User> Users { get; }

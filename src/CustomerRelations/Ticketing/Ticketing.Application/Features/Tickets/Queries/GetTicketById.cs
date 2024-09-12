@@ -6,7 +6,7 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 
-public record GetTicketById(int Id) : IRequest<Result<TicketDto>>
+public record GetTicketById(string OrganizationId, int Id) : IRequest<Result<TicketDto>>
 {
     public class Validator : AbstractValidator<GetTicketById>
     {

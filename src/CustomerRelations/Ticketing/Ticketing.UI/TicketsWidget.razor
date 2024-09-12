@@ -88,6 +88,9 @@
     private HashSet<Ticket> selectedItems = new HashSet<Ticket>();
     List<TicketStatus> ticketStatuses = new();
 
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
     [Parameter] public int? Id { get; set; }
 
     public TicketStatus? Status { get; set; }
@@ -197,11 +200,12 @@
     {
         try
         {
-            var result = await TicketsClient.GetTicketsAsync(Status is null ? null : new int[] { Status.Id }, Assignee?.Id, state.Page + 1, state.PageSize,
+            var result = await TicketsClient.GetTicketsAsync(Organization.Id, Status is null ? null : new int[] { Status.Id },
+            Assignee?.Id, state.Page + 1, state.PageSize,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);
 
-            return new TableData<Ticket>() { TotalItems = result.TotalItems, Items = result.Items };
+            return new TableData<Ticket>() { TotalItems = result.Total, Items = result.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -217,7 +221,7 @@
 
     async Task<Ticket> FetchTicket(int id)
     {
-        return await TicketsClient.GetTicketByIdAsync(id, cts.Token);
+        return await TicketsClient.GetTicketByIdAsync(Organization.Id, id, cts.Token);
     }
 
     private async Task DeleteTicket(Ticket item)
@@ -245,7 +249,7 @@
 
     private async Task DeleteTicketCore(Ticket item)
     {
-        await TicketsClient.DeleteTicketAsync(item.Id, cts.Token);
+        await TicketsClient.DeleteTicketAsync(Organization.Id, item.Id, cts.Token);
 
         selectedItems.Remove(item);
     }

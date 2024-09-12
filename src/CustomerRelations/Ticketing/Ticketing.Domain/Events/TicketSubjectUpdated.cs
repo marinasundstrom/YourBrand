@@ -1,3 +1,3 @@
 namespace YourBrand.Ticketing.Domain.Events;
 
-public sealed record TicketSubjectUpdated(int TicketId, string Title) : DomainEvent;
+public sealed record TicketSubjectUpdated(string TenantId, string OrganizationId, int TicketId, string Title) : DomainEvent;

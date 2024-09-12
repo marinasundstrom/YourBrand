@@ -9,6 +9,8 @@ public sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
     {
         builder.ToTable("Tags");
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
         builder.HasIndex(x => x.TenantId);
     }
 }

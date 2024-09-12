@@ -96,6 +96,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Users/UserInfo:
     get:
       tags:
@@ -126,12 +128,17 @@ paths:
       - Test
       operationId: Test_UpdateStatus
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: string
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: status
         content:
@@ -139,7 +146,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -155,6 +162,11 @@ paths:
       - Tickets
       operationId: Tickets_GetTickets
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: status
         in: query
         style: form
@@ -165,33 +177,33 @@ paths:
           items:
             type: integer
             format: int32
-        x-position: 1
+        x-position: 2
       - name: assigneeId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 2
+        x-position: 3
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 3
+        x-position: 4
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 4
+        x-position: 5
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       - name: sortDirection
         in: query
         schema:
@@ -199,7 +211,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
+        x-position: 7
       responses:
         200:
           description: ''
@@ -219,10 +231,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
     post:
       tags:
       - Tickets
       operationId: Tickets_CreateTicket
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       requestBody:
         x-name: request
         content:
@@ -230,7 +250,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateTicketRequest'
         required: true
-        x-position: 1
+        x-position: 2
       responses:
         201:
           description: ''
@@ -244,19 +264,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}:
     get:
       tags:
       - Tickets
       operationId: Tickets_GetTicketById
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -276,18 +303,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
     delete:
       tags:
       - Tickets
       operationId: Tickets_DeleteTicket
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       responses:
         200:
           description: ''
@@ -297,19 +331,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/subject:
     put:
       tags:
       - Tickets
       operationId: Tickets_UpdateTitle
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: title
         content:
@@ -317,7 +358,7 @@ paths:
             schema:
               type: string
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -327,26 +368,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/text:
     put:
       tags:
       - Tickets
       operationId: Tickets_UpdateText
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: text
         content:
           application/json:
             schema:
               type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -356,19 +404,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/status:
     put:
       tags:
       - Tickets
       operationId: Tickets_UpdateStatus
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: status
         content:
@@ -377,7 +432,7 @@ paths:
               type: integer
               format: int32
         required: true
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -387,26 +442,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/assignee:
     put:
       tags:
       - Tickets
       operationId: Tickets_UpdateAssignee
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: userId
         content:
           application/json:
             schema:
               type: string
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -416,19 +478,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/estimatedHours:
     put:
       tags:
       - Tickets
       operationId: Tickets_UpdateEstimatedHours
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: hours
         content:
@@ -436,7 +505,7 @@ paths:
             schema:
               type: number
               format: double
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -446,19 +515,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/remainingHours:
     put:
       tags:
       - Tickets
       operationId: Tickets_UpdateRemainingHours
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: id
         in: path
         required: true
         schema:
           type: integer
           format: int32
-        x-position: 1
+        x-position: 2
       requestBody:
         x-name: hours
         content:
@@ -466,7 +542,7 @@ paths:
             schema:
               type: number
               format: double
-        x-position: 2
+        x-position: 3
       responses:
         200:
           description: ''
@@ -476,6 +552,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/TicketStatuses:
     get:
       tags:
@@ -535,6 +613,100 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Organizations:
+    get:
+      tags:
+      - Organizations
+      operationId: Organizations_GetOrganizations
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfOrganization'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    post:
+      tags:
+      - Organizations
+      operationId: Organizations_CreateOrganization
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganization'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
 components:
   schemas:
     PagedResultOfUser:
@@ -545,7 +717,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
-        totalItems:
+        total:
           type: integer
           format: int32
     User:
@@ -610,7 +782,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Ticket'
-        totalItems:
+        total:
           type: integer
           format: int32
     Ticket:
@@ -783,6 +955,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TicketStatus'
-        totalItems:
+        total:
           type: integer
           format: int32
+    PagedResultOfOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        total:
+          type: integer
+          format: int32
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CreateOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

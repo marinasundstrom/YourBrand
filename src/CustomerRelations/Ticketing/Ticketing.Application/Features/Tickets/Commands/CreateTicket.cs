@@ -4,11 +4,13 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Tenancy;
+
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record CreateTicket(string Title, string? Description, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours) : IRequest<Result<TicketDto>>
+public sealed record CreateTicket(string OrganizationId, string Title, string? Description, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours) : IRequest<Result<TicketDto>>
 {
     public sealed class Validator : AbstractValidator<CreateTicket>
     {
@@ -20,11 +22,23 @@ public sealed record CreateTicket(string Title, string? Description, int Status,
         }
     }
 
-    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateTicket, Result<TicketDto>>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IDomainEventDispatcher domainEventDispatcher, ITenantContext tenantContext) : IRequestHandler<CreateTicket, Result<TicketDto>>
     {
         public async Task<Result<TicketDto>> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
-            var ticket = new Ticket(request.Title, "", request.Description!);
+            int ticketId = 1;
+
+            try
+            {
+                ticketId = await context.Tickets
+                    .InOrganization(request.OrganizationId)
+                    .MaxAsync(x => x.Id, cancellationToken) + 1;
+            }
+            catch { }
+
+            var ticket = new Ticket(ticketId, request.Title, "", request.Description!);
+            ticket.OrganizationId = request.OrganizationId;
+            ticket.TypeId = 1;
 
             ticket.Status = await context.TicketStatuses.FirstAsync(s => s.Id == request.Status, cancellationToken);
 
@@ -44,7 +58,7 @@ public sealed record CreateTicket(string Title, string? Description, int Status,
                 ticket.ClearDomainEvents();
             }
 
-            await domainEventDispatcher.Dispatch(new TicketCreated(ticket.Id), cancellationToken);
+            await domainEventDispatcher.Dispatch(new TicketCreated(tenantContext.TenantId!, request.OrganizationId, ticket.Id), cancellationToken);
 
             ticket = await ticketRepository.GetAll()
                 .OrderBy(i => i.Id)

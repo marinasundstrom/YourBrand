@@ -4,7 +4,7 @@ using MediatR;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record UpdateEstimatedHours(int Id, double? Hours) : IRequest<Result>
+public sealed record UpdateEstimatedHours(string OrganizationId, int Id, double? Hours) : IRequest<Result>
 {
     public sealed class Validator : AbstractValidator<UpdateEstimatedHours>
     {

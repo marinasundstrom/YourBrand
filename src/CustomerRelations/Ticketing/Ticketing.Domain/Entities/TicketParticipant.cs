@@ -1,9 +1,10 @@
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.Domain;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Attachment : Entity<int>, IHasTenant, IHasOrganization
+public class TicketParticipant : Entity<int>, IAuditable, IHasTenant, IHasOrganization
 {
     public TenantId TenantId { get; set; }
 
@@ -11,5 +12,9 @@ public class Attachment : Entity<int>, IHasTenant, IHasOrganization
 
     public int TicketId { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; }
+
+    public UserId? User { get; set; }
+
+    public string? Email { get; set; }
 }

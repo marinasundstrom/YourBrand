@@ -7,7 +7,7 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 
-public record GetTickets(int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<TicketDto>>
+public record GetTickets(string OrganizationId, int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<TicketDto>>
 {
     public class Handler(ITicketRepository ticketRepository) : IRequestHandler<GetTickets, PagedResult<TicketDto>>
     {

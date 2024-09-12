@@ -22,7 +22,7 @@ public static partial class Mappings
         ticket.Impact.ToDto(),
         ticket.EstimatedHours,
         ticket.RemainingHours,
-        ticket.Tags.Select(x => x.ToDto()),
+        ticket.Tags.Select(x => x.Tag).Select(x => x.ToDto()),
         ticket.Attachments.Select(x => x.ToDto()),
         ticket.Created, ticket.CreatedBy?.ToDto(), ticket.LastModified, ticket.LastModifiedBy?.ToDto());
 

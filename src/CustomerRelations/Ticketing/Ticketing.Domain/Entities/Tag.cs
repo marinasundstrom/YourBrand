@@ -10,4 +10,6 @@ public class Tag : Entity<int>, IHasTenant, IHasOrganization
     public OrganizationId OrganizationId { get; set; }
 
     public string Name { get; set; } = null!;
+
+    public HashSet<TicketTag> TicketTags { get; } = new HashSet<TicketTag>();
 }

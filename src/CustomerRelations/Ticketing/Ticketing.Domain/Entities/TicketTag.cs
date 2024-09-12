@@ -1,0 +1,47 @@
+using YourBrand.Domain;
+using YourBrand.Identity;
+using YourBrand.Tenancy;
+
+
+namespace YourBrand.Ticketing.Domain.Entities;
+
+public class TicketTag : AggregateRoot<string>, IAuditable
+{
+    public TicketTag()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
+
+    public TicketTag(string id)
+        : base(id)
+    {
+        Id = id;
+    }
+
+    public TenantId TenantId { get; set; }
+
+    public OrganizationId OrganizationId { get; set; }
+
+    public Organization Organization { get; set; }
+
+    public int TicketId  { get; set; }
+
+    public Ticket Ticket { get; set; }
+
+    public int TagId { get; set; }
+
+    public Tag Tag { get; set; }
+
+    public User? CreatedBy { get; set; }
+
+    public UserId? CreatedById { get; set; }
+
+    public DateTimeOffset Created { get; set; }
+
+    public User? LastModifiedBy { get; set; }
+
+    public UserId? LastModifiedById { get; set; }
+
+    public DateTimeOffset? LastModified { get; set; }
+}
