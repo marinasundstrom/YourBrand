@@ -816,8 +816,8 @@ components:
           $ref: '#/components/schemas/TicketType'
         priority:
           $ref: '#/components/schemas/TicketPriority'
-        severity:
-          $ref: '#/components/schemas/TicketSeverity'
+        urgency:
+          $ref: '#/components/schemas/TicketUrgency'
         impact:
           $ref: '#/components/schemas/TicketImpact'
         estimatedHours:
@@ -884,7 +884,7 @@ components:
       - 3
       - 4
       - 5
-    TicketSeverity:
+    TicketUrgency:
       type: integer
       description: ''
       x-enumNames:

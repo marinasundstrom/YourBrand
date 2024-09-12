@@ -23,6 +23,11 @@ public static class Seed
             OrganizationId = TenantConstants.OrganizationId,
         });
 
+        context.TicketCategories.Add(new TicketCategory(1, "General")
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+        });
+
         context.TicketStatuses.Add(new TicketStatus(1)
         {
             OrganizationId = TenantConstants.OrganizationId,

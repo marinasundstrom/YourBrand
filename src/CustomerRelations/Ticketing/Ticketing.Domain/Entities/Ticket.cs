@@ -3,20 +3,20 @@ using YourBrand.Tenancy;
 using YourBrand.Domain;
 using YourBrand.Ticketing.Domain.Enums;
 using YourBrand.Ticketing.Domain.Events;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganization
+public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
 {
     protected Ticket()
     {
     }
 
-    public Ticket(int id, string subject, string requester, string description)
+    public Ticket(int id, string subject, string? description)
     {
         Id = id;
         Subject = subject;
-        Requester = requester;
         Description = description;
     }
 
@@ -24,16 +24,20 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
 
     public OrganizationId OrganizationId { get; set; }
 
-    public string Requester { get; set; } = "Test";
-    public string Description { get; } = null!;
-    public string Subject { get; set; } = ""; // null!;
+    public string Subject { get; set; } = default!;
 
-    public bool UpdateSubject(string title)
+    public string? Description { get; }
+
+    public TicketParticipant? ReportedBy { get; set; }
+
+    public TicketParticipantId? ReportedById { get; set; }
+
+    public bool UpdateSubject(string subject)
     {
-        var oldTitle = Subject;
-        if (title != oldTitle)
+        var oldSubject = Subject;
+        if (subject != oldSubject)
         {
-            Subject = title;
+            Subject = subject;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
             AddDomainEvent(new TicketSubjectUpdated(TenantId, OrganizationId, Id, Subject));
@@ -64,9 +68,9 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         return false;
     }
 
-    public User? Assignee { get; set; } = null!;
+    public TicketParticipant? Assignee { get; set; } = null!;
 
-    public UserId? AssigneeId { get; set; }
+    public TicketParticipantId? AssigneeId { get; set; }
 
     public bool UpdateAssigneeId(string? userId)
     {
@@ -74,7 +78,7 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         if (userId != oldAssigneeId)
         {
             AssigneeId = userId;
-            AddDomainEvent(new TicketAssignedUserUpdated(TenantId, OrganizationId, Id, userId, oldAssigneeId));
+            //AddDomainEvent(new TicketAssigneeUpdated(TenantId, OrganizationId, Id, userId, oldAssigneeId));
 
             return true;
         }
@@ -86,12 +90,12 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
 
     public string? Text { get; set; } = null!;
 
-    public bool UpdateText(string title)
+    public bool UpdateText(string subject)
     {
         var oldText = Text;
-        if (title != oldText)
+        if (subject != oldText)
         {
-            Text = title;
+            Text = subject;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
             AddDomainEvent(new TicketTextUpdated(TenantId, OrganizationId, Id, Text));
@@ -107,9 +111,13 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
 
     public int TypeId { get; set; } = 1;
 
+    public TicketCategory Category { get; set; } = null!;
+
+    public int CategoryId { get; set; } = 1;
+
     public TicketPriority Priority { get; set; }
 
-    public TicketSeverity Severity { get; set; }
+    public TicketUrgency Urgency { get; set; }
 
     public TicketImpact Impact { get; set; }
 
@@ -149,6 +157,8 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
         return false;
     }
 
+    public HashSet<TicketParticipant> Participants { get; } = new HashSet<TicketParticipant>();
+
     public HashSet<TicketTag> Tags { get; } = new HashSet<TicketTag>();
     
     public HashSet<Attachment> Attachments { get; } = new HashSet<Attachment>();
@@ -157,15 +167,15 @@ public class Ticket : AggregateRoot<int>, IAuditable, IHasTenant, IHasOrganizati
 
     // ...
 
-    public User? CreatedBy { get; set; } = null!;
+    public TicketParticipant? CreatedBy { get; set; } = null!;
 
-    public UserId? CreatedById { get; set; } = null!;
+    public TicketParticipantId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public User? LastModifiedBy { get; set; }
+    public TicketParticipant? LastModifiedBy { get; set; }
 
-    public UserId? LastModifiedById { get; set; }
+    public TicketParticipantId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

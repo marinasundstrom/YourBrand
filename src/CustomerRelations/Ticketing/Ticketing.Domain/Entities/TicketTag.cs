@@ -1,7 +1,7 @@
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
@@ -25,7 +25,7 @@ public class TicketTag : AggregateRoot<string>, IAuditable
 
     public Organization Organization { get; set; }
 
-    public int TicketId  { get; set; }
+    public TicketId TicketId  { get; set; }
 
     public Ticket Ticket { get; set; }
 

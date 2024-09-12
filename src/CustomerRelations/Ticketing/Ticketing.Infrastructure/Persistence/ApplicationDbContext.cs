@@ -8,6 +8,9 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
+using YourBrand.Ticketing.Infrastructure.Persistence.ValueConverters;
+using YourBrand.Ticketing.Domain.ValueObjects;
+
 namespace YourBrand.Ticketing.Infrastructure.Persistence;
 
 public sealed class ApplicationDbContext(
@@ -109,6 +112,9 @@ public sealed class ApplicationDbContext(
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
+        configurationBuilder.Properties<TicketId>().HaveConversion<TicketIdConverter>();
+        configurationBuilder.Properties<TicketParticipantId>().HaveConversion<TicketParticipantIdConverter>();
+
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
         configurationBuilder.AddUserIdConverter();
@@ -118,9 +124,13 @@ public sealed class ApplicationDbContext(
 
     public DbSet<Ticket> Tickets { get; set; }
 
+    public DbSet<TicketParticipant> TicketParticipants { get; set; }
+
     public DbSet<TicketStatus> TicketStatuses { get; set; }
 
     public DbSet<TicketType> TicketTypes { get; set; }
+
+    public DbSet<TicketCategory> TicketCategories { get; set; }
 
     public DbSet<User> Users { get; set; }
 

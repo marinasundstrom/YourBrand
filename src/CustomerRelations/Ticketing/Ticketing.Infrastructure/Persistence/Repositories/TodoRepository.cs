@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Ticketing.Domain.Specifications;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories;
 
@@ -15,7 +16,7 @@ public sealed class TicketRepository(ApplicationDbContext context) : ITicketRepo
         return dbSet.AsQueryable();
     }
 
-    public async Task<Ticket?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Ticket?> FindByIdAsync(TicketId id, CancellationToken cancellationToken = default)
     {
         return await dbSet
             .Include(i => i.Status)

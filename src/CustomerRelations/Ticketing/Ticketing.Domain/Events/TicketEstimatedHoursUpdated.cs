@@ -1,3 +1,6 @@
-﻿namespace YourBrand.Ticketing.Domain.Events;
+﻿using YourBrand.Tenancy;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
-public sealed record TicketEstimatedHoursUpdated(string TenantId, string OrganizationId, int TicketId, double? Hours, double? OldHours) : DomainEvent;
+namespace YourBrand.Ticketing.Domain.Events;
+
+public sealed record TicketEstimatedHoursUpdated(TenantId TenantId, string OrganizationId, TicketId TicketId, double? Hours, double? OldHours) : DomainEvent;

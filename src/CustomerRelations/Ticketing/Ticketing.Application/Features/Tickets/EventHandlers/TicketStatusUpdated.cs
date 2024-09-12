@@ -17,9 +17,11 @@ public sealed class TicketStatusUpdatedEventHandler(ITicketRepository ticketRepo
 
         if (ticket.AssigneeId is not null && ticket.LastModifiedById != ticket.AssigneeId)
         {
+            /*
             await emailService.SendEmail(ticket.Assignee!.Email,
                 $"Status of \"{ticket.Subject}\" [{ticket.Id}] changed to {notification.NewStatus}.",
                 $"{ticket.LastModifiedBy!.Name} changed status of \"{ticket.Subject}\" [{ticket.Id}] from {notification.OldStatus} to {notification.NewStatus}.");
+            */
         }
     }
 }

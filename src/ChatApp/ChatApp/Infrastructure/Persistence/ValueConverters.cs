@@ -27,11 +27,3 @@ internal sealed class MessageIdConverter : ValueConverter<MessageId, string>
     {
     }
 }
-
-internal sealed class UserIdConverter : ValueConverter<UserId, string>
-{
-    public UserIdConverter()
-        : base(v => v.Value, v => new(v))
-    {
-    }
-}

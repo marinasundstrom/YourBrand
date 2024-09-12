@@ -1,5 +1,6 @@
 using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
@@ -9,7 +10,7 @@ public class Attachment : Entity<int>, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
-    public int TicketId { get; set; }
+    public TicketId TicketId { get; set; }
 
     public string Name { get; set; } = null!;
 }

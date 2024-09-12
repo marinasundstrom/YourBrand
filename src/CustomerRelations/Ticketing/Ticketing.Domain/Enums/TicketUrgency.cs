@@ -1,6 +1,6 @@
 namespace YourBrand.Ticketing.Domain.Enums;
 
-public enum TicketSeverity // Urgency
+public enum TicketUrgency
 {
     High,
     Medium,

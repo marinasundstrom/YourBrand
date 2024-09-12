@@ -9,7 +9,6 @@ public static partial class Mappings
 {
     public static TicketDto ToDto(this Ticket ticket) => new(
         ticket.Id,
-        ticket.Requester,
         ticket.Subject,
         ticket.Text,
         ticket.Status.ToDto()!,
@@ -18,7 +17,7 @@ public static partial class Mappings
         ticket.Text,
         ticket.Type!.ToDto(),
         ticket.Priority.ToDto(),
-        ticket.Severity.ToDto(),
+        ticket.Urgency.ToDto(),
         ticket.Impact.ToDto(),
         ticket.EstimatedHours,
         ticket.RemainingHours,
@@ -32,7 +31,7 @@ public static partial class Mappings
 
     public static TicketPriorityDto ToDto(this TicketPriority priority) => (TicketPriorityDto)priority;
 
-    public static TicketSeverityDto ToDto(this TicketSeverity severity) => (TicketSeverityDto)severity;
+    public static TicketUrgencyDto ToDto(this TicketUrgency urgency) => (TicketUrgencyDto)urgency;
 
     public static TicketImpactDto ToDto(this TicketImpact impact) => (TicketImpactDto)impact;
 
@@ -49,4 +48,7 @@ public static partial class Mappings
     public static OrganizationDto ToDto(this Organization user) => new(user.Id, user.Name);
 
     public static OrganizationDto ToDto2(this Organization user) => new(user.Id, user.Name);
+
+    public static TicketParticipantDto ToDto(this TicketParticipant participant) => new(participant.Id, participant.Name!, null);
+
 }

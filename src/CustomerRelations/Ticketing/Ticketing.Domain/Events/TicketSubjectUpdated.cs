@@ -1,3 +1,6 @@
+using YourBrand.Tenancy;
+using YourBrand.Ticketing.Domain.ValueObjects;
+
 namespace YourBrand.Ticketing.Domain.Events;
 
-public sealed record TicketSubjectUpdated(string TenantId, string OrganizationId, int TicketId, string Title) : DomainEvent;
+public sealed record TicketSubjectUpdated(TenantId TenantId, string OrganizationId, TicketId TicketId, string Title) : DomainEvent;

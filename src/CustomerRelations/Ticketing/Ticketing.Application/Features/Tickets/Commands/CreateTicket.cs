@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Tenancy;
+using YourBrand.Identity;
 
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
@@ -22,7 +23,7 @@ public sealed record CreateTicket(string OrganizationId, string Title, string? D
         }
     }
 
-    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IDomainEventDispatcher domainEventDispatcher, ITenantContext tenantContext) : IRequestHandler<CreateTicket, Result<TicketDto>>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IUserContext userContext, IDomainEventDispatcher domainEventDispatcher, ITenantContext tenantContext) : IRequestHandler<CreateTicket, Result<TicketDto>>
     {
         public async Task<Result<TicketDto>> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
@@ -36,14 +37,22 @@ public sealed record CreateTicket(string OrganizationId, string Title, string? D
             }
             catch { }
 
-            var ticket = new Ticket(ticketId, request.Title, "", request.Description!);
+            var ticket = new Ticket(ticketId, request.Title, request.Description!);
             ticket.OrganizationId = request.OrganizationId;
             ticket.TypeId = 1;
+            ticket.CategoryId = 1;
 
             ticket.Status = await context.TicketStatuses.FirstAsync(s => s.Id == request.Status, cancellationToken);
 
             ticket.UpdateEstimatedHours(request.EstimatedHours);
             ticket.UpdateRemainingHours(request.RemainingHours);
+
+            var creatorParticipant = new TicketParticipant 
+            {
+                OrganizationId = request.OrganizationId,
+                Name = null,
+                UserId = userContext.UserId
+            };
 
             ticketRepository.Add(ticket);
 
@@ -58,7 +67,17 @@ public sealed record CreateTicket(string OrganizationId, string Title, string? D
                 ticket.ClearDomainEvents();
             }
 
-            await domainEventDispatcher.Dispatch(new TicketCreated(tenantContext.TenantId!, request.OrganizationId, ticket.Id), cancellationToken);
+
+            ticket.Participants.Add(creatorParticipant);
+
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+
+            ticket.CreatedBy = creatorParticipant;
+            ticket.Created = DateTimeOffset.UtcNow;
+
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+
+            await domainEventDispatcher.Dispatch(new TicketCreated(tenantContext.TenantId.GetValueOrDefault(), request.OrganizationId, ticket.Id), cancellationToken);
 
             ticket = await ticketRepository.GetAll()
                 .OrderBy(i => i.Id)

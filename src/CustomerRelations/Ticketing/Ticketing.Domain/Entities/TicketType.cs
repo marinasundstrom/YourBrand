@@ -1,5 +1,6 @@
 using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
@@ -21,4 +22,6 @@ public sealed class TicketType : Entity<int>, IHasTenant, IHasOrganization
     public OrganizationId OrganizationId { get; set; }
 
     public string Name { get; set; } = null!;
+
+    public string? Description { get; set; }
 }
