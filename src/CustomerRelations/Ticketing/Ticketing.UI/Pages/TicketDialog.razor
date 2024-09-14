@@ -36,13 +36,23 @@ else
         <EditForm EditContext="editContext" OnValidSubmit="Submit">
 
             <MudDialog DisableSidePadding="true">
+                <TitleContent>
+                    <div class="d-flex">
+                        @if(Id is not null) 
+                        {
+                            <MudText Typo="@Typo.body1" Class="mt-6 me-4">#@Id</MudText>
+                        }
+                        <MudTextField Label="@T["Title"]" Variant="Variant.Text" @bind-Value="Title" For="() => Title"
+                            Immediate="true" Class="pe-8" />
+                    </div>
+                </TitleContent>
+                    
                 <DialogContent>
+<MudTabs Elevation="0" Rounded="false" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="Genereal">
                     <MudContainer Style="max-height: 600px; overflow-y: scroll">
 
                         <DataAnnotationsValidator />
-
-                        <MudTextField Label="@T["Title"]" Variant="Variant.Outlined" @bind-Value="Title" For="() => Title"
-                                      Immediate="true" Class="mb-4" />
 
                         <MudGrid>
                             <MudItem xs="12" md="6">
@@ -78,6 +88,12 @@ else
                         </MudGrid>
 
                     </MudContainer>
+                        </MudTabPanel>
+    <MudTabPanel Text="History">
+        <MudText>Content Two</MudText>
+    </MudTabPanel>
+</MudTabs>
+
                 </DialogContent>
                 <DialogActions>
                     @if (editContext.IsModified())
