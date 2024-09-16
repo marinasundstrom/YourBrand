@@ -18,7 +18,7 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
         var capture = context.Message;
 
         // TODO: Add Reference to PaymentCapture
-        PaymentDto payment = await paymentsClient.GetPaymentByIdAsync(capture.PaymentId);
+        YourBrand.Payments.Client.Payment payment = await paymentsClient.GetPaymentByIdAsync(organizationId, capture.PaymentId);
 
         // Find invoice
         // Check invoice status

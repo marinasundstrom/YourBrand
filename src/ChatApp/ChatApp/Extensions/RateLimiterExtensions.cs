@@ -6,7 +6,7 @@ namespace YourBrand.ChatApp.Web.Extensions;
 
 public static class RateLimiterExtensions
 {
-    public static IServiceCollection AddRateLimiter(this IServiceCollection services)
+    public static IServiceCollection AddRateLimiter2(this IServiceCollection services)
     {
         services.AddRateLimiter(options =>
         {

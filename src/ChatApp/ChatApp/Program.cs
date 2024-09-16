@@ -61,7 +61,7 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddUniverse(configuration)
-    .AddRateLimiter()
+    .AddRateLimiter2()
     .AddCaching(configuration)
     //.AddFeatureManagement()
     .AddSignalR();
