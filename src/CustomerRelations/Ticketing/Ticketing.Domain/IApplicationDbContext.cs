@@ -8,6 +8,8 @@ public interface IApplicationDbContext
 {
     DbSet<Ticket> Tickets { get; }
 
+     DbSet<TicketEvent> TicketEvents { get; }
+
     DbSet<TicketParticipant> TicketParticipants { get; }
 
     DbSet<TicketCategory> TicketCategories { get; }

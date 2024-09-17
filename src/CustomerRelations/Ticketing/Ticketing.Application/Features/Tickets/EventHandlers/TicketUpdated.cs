@@ -1,12 +1,15 @@
+using YourBrand.Tenancy;
 using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
-public sealed class TicketUpdatedEventHandler(ITicketRepository ticketRepository, ITicketNotificationService ticketNotificationService) : IDomainEventHandler<TicketUpdated>
+public sealed class TicketUpdatedEventHandler(ITicketRepository ticketRepository, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketUpdated>
 {
     public async Task Handle(TicketUpdated notification, CancellationToken cancellationToken)
     {
+        tenantContext.SetTenantId(notification.TenantId);
+
         var ticket = await ticketRepository.FindByIdAsync(notification.TicketId, cancellationToken);
 
         if (ticket is null)

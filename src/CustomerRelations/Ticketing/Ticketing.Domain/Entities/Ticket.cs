@@ -98,7 +98,7 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
             Text = subject;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketTextUpdated(TenantId, OrganizationId, Id, Text));
+            AddDomainEvent(new TicketDescriptionUpdated(TenantId, OrganizationId, Id, Text));
 
             return true;
         }
@@ -164,6 +164,8 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
     public HashSet<Attachment> Attachments { get; } = new HashSet<Attachment>();
 
     public HashSet<TicketComment> Comments { get; } = new HashSet<TicketComment>();
+
+    public HashSet<TicketEvent> Events { get; } = new HashSet<TicketEvent>();
 
     // ...
 

@@ -5,9 +5,9 @@ using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
-public sealed class TicketStatusUpdatedEventHandler(IApplicationDbContext context, ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketStatusUpdated>
+public sealed class TicketSubjectUpdatedEventHandler(IApplicationDbContext context, ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketSubjectUpdated>
 {
-    public async Task Handle(TicketStatusUpdated notification, CancellationToken cancellationToken)
+    public async Task Handle(TicketSubjectUpdated notification, CancellationToken cancellationToken)
     {
         tenantContext.SetTenantId(notification.TenantId);
 
@@ -28,14 +28,5 @@ public sealed class TicketStatusUpdatedEventHandler(IApplicationDbContext contex
         context.TicketEvents.Add(ev);
 
         await context.SaveChangesAsync(cancellationToken);
-
-        if (ticket.AssigneeId is not null && ticket.LastModifiedById != ticket.AssigneeId)
-        {
-            /*
-            await emailService.SendEmail(ticket.Assignee!.Email,
-                $"Status of \"{ticket.Subject}\" [{ticket.Id}] changed to {notification.NewStatus}.",
-                $"{ticket.LastModifiedBy!.Name} changed status of \"{ticket.Subject}\" [{ticket.Id}] from {notification.OldStatus} to {notification.NewStatus}.");
-            */
-        }
     }
 }

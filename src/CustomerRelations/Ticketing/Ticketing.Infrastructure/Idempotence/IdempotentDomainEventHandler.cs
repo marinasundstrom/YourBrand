@@ -26,6 +26,8 @@ public sealed class IdempotentDomainEventHandler<TDomainEvent>(
             return;
         }
 
+        Console.WriteLine($"CONSUMER: {consumer}");
+
         await decorated.Handle(notification, cancellationToken);
 
         dbContext.Set<OutboxMessageConsumer>()

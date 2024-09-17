@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
@@ -49,6 +50,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
     }
 
     [NotMapped]
+    [JsonIgnore]
     public IReadOnlyCollection<DomainEvent> DomainEvents => domainEvents;
 
     public void AddDomainEvent(DomainEvent domainEvent) => domainEvents.Add(domainEvent);

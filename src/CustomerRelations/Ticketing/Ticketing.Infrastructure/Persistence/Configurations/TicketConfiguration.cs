@@ -66,6 +66,12 @@ public sealed class TicketConfiguration : IEntityTypeConfiguration<Ticket>
             .HasForeignKey(x => new { x.OrganizationId, x.TicketId })
             .OnDelete(DeleteBehavior.ClientCascade);
 
+        builder
+            .HasMany(x => x.Events)
+            .WithOne()
+            .HasForeignKey(x => new { x.OrganizationId, x.TicketId })
+            .OnDelete(DeleteBehavior.ClientCascade);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .HasForeignKey(x => new { x.OrganizationId, x.Id, x.CreatedById })

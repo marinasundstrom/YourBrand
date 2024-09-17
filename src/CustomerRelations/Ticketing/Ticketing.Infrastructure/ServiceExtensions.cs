@@ -23,16 +23,7 @@ public static class ServiceExtensions
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IEmailService, EmailService>();
 
-        RemoveFaultyDomainEventHandlerRegistrations(services);
-
-        try
-        {
-            services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
-        }
-        catch (DecorationException exc) when (exc.Message.Contains("Could not find any registered services for type"))
-        {
-            Console.WriteLine(exc);
-        }
+        DecorateDomainEventHandlers(services);
         
         services.AddQuartz(configure =>
         {
@@ -49,6 +40,17 @@ public static class ServiceExtensions
         services.AddQuartzHostedService();
 
         return services;
+    }
+
+    private static void DecorateDomainEventHandlers(IServiceCollection services)
+    {
+        RemoveFaultyDomainEventHandlerRegistrations(services);
+
+        try
+        {
+            services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
+        }
+        catch { }
     }
 
     private static void RemoveFaultyDomainEventHandlerRegistrations(IServiceCollection services)

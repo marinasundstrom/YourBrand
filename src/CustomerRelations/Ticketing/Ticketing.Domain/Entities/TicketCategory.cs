@@ -1,4 +1,5 @@
 using YourBrand.Domain;
+using OrganizationId = YourBrand.Domain.OrganizationId;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;

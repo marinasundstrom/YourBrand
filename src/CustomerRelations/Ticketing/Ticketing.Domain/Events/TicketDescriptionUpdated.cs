@@ -1,6 +1,7 @@
 using YourBrand.Tenancy;
+using OrganizationId = YourBrand.Domain.OrganizationId;
 using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Events;
 
-public sealed record TicketTextUpdated(TenantId TenantId, string OrganizationId, TicketId TicketId, string? Description) : DomainEvent;
+public sealed record TicketDescriptionUpdated(TenantId TenantId, OrganizationId OrganizationId, TicketId TicketId, string? Description) : TicketDomainEvent(OrganizationId, TicketId);
