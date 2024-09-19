@@ -102,10 +102,10 @@ else
                                             <MudTableSortLabel SortLabel="OccurredAt" T="TicketEvent">@T["OccurredAt"]</MudTableSortLabel>
                                         </MudTh>
                                         <MudTh>
-                                            <MudTableSortLabel SortLabel="Type" T="TicketEvent">@T["Type"]</MudTableSortLabel>
+                                            @T["Type"]
                                         </MudTh>
                                         <MudTh>
-                                            <MudTableSortLabel SortLabel="ParticipantId" T="TicketEvent">@T["ParticipantId"]</MudTableSortLabel>
+                                            @T["ParticipantId"]
                                         </MudTh>
                                     </HeaderContent>
 
@@ -214,7 +214,7 @@ else
 
             if (editContext.IsModified(() => Description!))
             {
-                //await TicketsClient.UpdateDescriptionAsync(Organization.Id, Id.GetValueOrDefault(), Description, cts.Token);
+                await TicketsClient.UpdateTextAsync(Organization.Id, Id.GetValueOrDefault(), Description, cts.Token);
             }
 
             if (editContext.IsModified(() => Status))
