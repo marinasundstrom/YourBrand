@@ -40,7 +40,7 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
             Subject = subject;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketSubjectUpdated(TenantId, OrganizationId, Id, Subject));
+            AddDomainEvent(new TicketSubjectUpdated(TenantId, OrganizationId, Id, Subject, oldSubject));
 
             return true;
         }
@@ -98,7 +98,7 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
             Text = subject;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketDescriptionUpdated(TenantId, OrganizationId, Id, Text));
+            AddDomainEvent(new TicketDescriptionUpdated(TenantId, OrganizationId, Id, Text, oldText));
 
             return true;
         }

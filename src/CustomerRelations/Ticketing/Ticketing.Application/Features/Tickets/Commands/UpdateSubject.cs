@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using MediatR;
+using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
@@ -16,7 +17,7 @@ public sealed record UpdateSubject(string OrganizationId, int Id, string Subject
         }
     }
 
-    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateSubject, Result>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<UpdateSubject, Result>
     {
         public async Task<Result> Handle(UpdateSubject request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,12 @@ public sealed record UpdateSubject(string OrganizationId, int Id, string Subject
             }
 
             ticket.UpdateSubject(request.Subject);
+
+            var participant = ticket.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+
+            ticket.LastModifiedBy = participant;
+            ticket.LastModified = DateTimeOffset.UtcNow;
+
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

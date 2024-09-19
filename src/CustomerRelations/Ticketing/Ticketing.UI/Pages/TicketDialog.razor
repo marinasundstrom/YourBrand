@@ -34,6 +34,7 @@ else
         }
 
         <EditForm EditContext="editContext" OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
 
             <MudDialog DisableSidePadding="true">
                 <TitleContent>
@@ -42,7 +43,7 @@ else
                         {
                             <MudText Typo="@Typo.body1" Class="mt-6 me-4">#@Id</MudText>
                         }
-                        <MudTextField Label="@T["Title"]" Variant="Variant.Text" @bind-Value="Title" For="() => Title"
+                        <MudTextField T="string" Label="@T["Title"]" Variant="Variant.Text" Value="@Title" ValueChanged="(x) => { Title = x; editContext.NotifyFieldChanged(FieldIdentifier.Create<string>(() => Title)); }" For="() => Title"
                             Immediate="true" Class="pe-8" />
                     </div>
                 </TitleContent>
@@ -52,7 +53,6 @@ else
     <MudTabPanel Text="Genereal">
                     <MudContainer Style="max-height: 600px; overflow-y: scroll">
 
-                        <DataAnnotationsValidator />
 
                         <MudGrid>
                             <MudItem xs="12" md="6">
@@ -89,10 +89,49 @@ else
 
                     </MudContainer>
                         </MudTabPanel>
-    <MudTabPanel Text="History">
-        <MudText>Content Two</MudText>
-    </MudTabPanel>
-</MudTabs>
+
+                        @if(Id is not null) 
+                        {
+
+                        <MudTabPanel Text="History">
+                            <MudText>
+                                <MudTable T="TicketEvent" Context="c" ServerData="@(new Func<TableState, Task<TableData<TicketEvent>>>(ServerReload))" Elevation="205"
+                                    Dense="false" Hover="true" SortLabel="@T["SortBy"]">
+                                  <HeaderContent>
+                                        <MudTh>
+                                            <MudTableSortLabel SortLabel="OccurredAt" T="TicketEvent">@T["OccurredAt"]</MudTableSortLabel>
+                                        </MudTh>
+                                        <MudTh>
+                                            <MudTableSortLabel SortLabel="Type" T="TicketEvent">@T["Type"]</MudTableSortLabel>
+                                        </MudTh>
+                                        <MudTh>
+                                            <MudTableSortLabel SortLabel="ParticipantId" T="TicketEvent">@T["ParticipantId"]</MudTableSortLabel>
+                                        </MudTh>
+                                    </HeaderContent>
+
+                                    <RowTemplate>
+                                        <MudTd DataLabel="@T["OccurredAt"]">@c.OccurredAt.ToString("g")</MudTd>
+                                        <MudTd DataLabel="@T["Type"]">@c.GetType().Name</MudTd>
+                                        <MudTd DataLabel="@T["ParticipantId"]">@c.ParticipantId</MudTd>
+                                    </RowTemplate>
+
+                                    <NoRecordsContent>
+                                        <MudText>@T["NoMatchesFound"]</MudText>
+                                    </NoRecordsContent>
+
+                                    <LoadingContent>
+                                        <MudText>@T["Loading"]</MudText>
+                                    </LoadingContent>
+
+                                    <PagerContent>
+                                        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+                                    </PagerContent>                     
+                                </MudTable>
+                            </MudText>
+                        </MudTabPanel>
+
+                        }
+                    </MudTabs>
 
                 </DialogContent>
                 <DialogActions>
@@ -281,7 +320,7 @@ else
             Title = ticket.Subject;
             Description = ticket.Description;
             Status = ticket.Status;
-            Assignee = ticket.Assignee?.ToUser();
+            Assignee = null; //ticket.Assignee?.ToUser();
             EstimatedHours = ticket.EstimatedHours;
             RemainingHours = ticket.RemainingHours;
         }
@@ -294,5 +333,27 @@ else
     public void Dispose()
     {
         cts.Cancel();
+    }
+
+    private async Task<TableData<TicketEvent>> ServerReload(TableState state)
+    {      
+        try
+        {
+            var result = await TicketsClient.GetTicketEventsAsync(Organization.Id, Id.GetValueOrDefault(), state.Page + 1, state.PageSize,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+                state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);
+
+            return new TableData<TicketEvent>() { TotalItems = result.Total, Items = result.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        /*catch (Exception)
+        {
+            Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
+        }*/
+
+        return new TableData<TicketEvent>() { Items = Enumerable.Empty<TicketEvent>(), TotalItems = 0 };
     }
 }

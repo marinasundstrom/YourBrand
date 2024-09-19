@@ -22,6 +22,8 @@ public sealed class TicketEvent : Entity<string>, IHasTenant, YourBrand.Domain.I
 
     public string Event { get; set; }
 
+    public TicketParticipantId ParticipantId { get; set; }
+
     public DateTimeOffset OccurredAt { get; set; } = DateTimeOffset.UtcNow;
 
     public string Data { get; set; }

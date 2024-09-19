@@ -22,6 +22,7 @@ public sealed class TicketAssigneeUpdatedEventHandler(IApplicationDbContext cont
         ev.OrganizationId = notification.OrganizationId;
         ev.TicketId = notification.TicketId;
         ev.Event = notification.GetType().Name.Replace("Ticket", string.Empty);
+        ev.ParticipantId = ticket.LastModifiedById.GetValueOrDefault();
         ev.OccurredAt = notification.Timestamp;
         ev.Data = System.Text.Json.JsonSerializer.Serialize<TicketDomainEvent>(notification);
 

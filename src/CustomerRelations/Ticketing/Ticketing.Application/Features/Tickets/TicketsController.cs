@@ -26,6 +26,13 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     public async Task<PagedResult<TicketDto>> GetTickets(string organizationId, [FromQuery] int[]? status, string? assigneeId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
         => await mediator.Send(new GetTickets(organizationId, status, assigneeId, page, pageSize, sortBy, sortDirection), cancellationToken);
 
+    [HttpGet("{id}/events")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<TicketEventDto>))]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    [ProducesDefaultResponseType]
+    public async Task<PagedResult<TicketEventDto>> GetTicketEvents(string organizationId, int id, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+        => await mediator.Send(new GetTicketEvents(organizationId, id, page, pageSize, sortBy, sortDirection), cancellationToken);
+
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TicketDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
@@ -70,7 +77,7 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> UpdateText(string organizationId, int id, [FromBody] string? text, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateText(organizationId, id, text!), cancellationToken);
+        var result = await mediator.Send(new UpdateDescription(organizationId, id, text!), cancellationToken);
         return this.HandleResult(result);
     }
 

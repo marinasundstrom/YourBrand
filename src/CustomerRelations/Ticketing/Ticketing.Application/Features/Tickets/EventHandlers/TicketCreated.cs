@@ -21,6 +21,7 @@ public sealed class TicketCreatedEventHandler(IApplicationDbContext context, ITi
         ev.OrganizationId = notification.OrganizationId;
         ev.TicketId = notification.TicketId;
         ev.Event = notification.GetType().Name.Replace("Ticket", string.Empty);
+        ev.ParticipantId = ticket.CreatedById.GetValueOrDefault();
         ev.OccurredAt = notification.Timestamp;
         ev.Data = System.Text.Json.JsonSerializer.Serialize<TicketDomainEvent>(notification);
 

@@ -1,4 +1,4 @@
-x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
   title: Ticketing
@@ -258,6 +258,73 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ticket'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Tickets/{id}/events:
+    get:
+      tags:
+      - Tickets
+      operationId: Tickets_GetTicketEvents
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfTicketEvent'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         default:
           description: ''
           content:
@@ -792,8 +859,6 @@ components:
         id:
           type: integer
           format: int32
-        requester:
-          type: string
         subject:
           type: string
         description:
@@ -804,7 +869,7 @@ components:
         assignee:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/TicketParticipant'
         lastMessage:
           type: string
           format: date-time
@@ -842,7 +907,7 @@ components:
         createdBy:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/TicketParticipant'
         lastModified:
           type: string
           format: date-time
@@ -850,7 +915,7 @@ components:
         lastModifiedBy:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/TicketParticipant'
     TicketStatus:
       type: object
       additionalProperties: false
@@ -860,6 +925,17 @@ components:
           format: int32
         name:
           type: string
+    TicketParticipant:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        userId:
+          type: string
+          nullable: true
     TicketType:
       type: object
       additionalProperties: false
@@ -924,6 +1000,150 @@ components:
           format: int32
         name:
           type: string
+    PagedResultOfTicketEvent:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketEvent'
+        total:
+          type: integer
+          format: int32
+    TicketEvent:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          TicketCreatedDto: '#/components/schemas/TicketCreated'
+          TicketAssigneeUpdatedDto: '#/components/schemas/TicketAssigneeUpdated'
+          TicketDescriptionUpdatedDto: '#/components/schemas/TicketDescriptionUpdated'
+          TicketEstimatedHoursUpdatedDto: '#/components/schemas/TicketEstimatedHoursUpdated'
+          TicketRemainingHoursUpdatedDto: '#/components/schemas/TicketRemainingHoursUpdated'
+          TicketStatusUpdatedDto: '#/components/schemas/TicketStatusUpdated'
+          TicketSubjectUpdatedDto: '#/components/schemas/TicketSubjectUpdated'
+      x-abstract: true
+      additionalProperties: false
+      required:
+      - type
+      properties:
+        occurredAt:
+          type: string
+          format: date-time
+        tenantId:
+          type: string
+        organizationId:
+          type: string
+        participantId:
+          type: string
+        type:
+          type: string
+    TicketCreated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+    TicketAssigneeUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          assignedParticipantId:
+            type: string
+            nullable: true
+          oldAssignedParticipantId:
+            type: string
+            nullable: true
+    TicketDescriptionUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newDescription:
+            type: string
+            nullable: true
+          oldDescription:
+            type: string
+            nullable: true
+    TicketEstimatedHoursUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newHours:
+            type: number
+            format: double
+            nullable: true
+          oldHours:
+            type: number
+            format: double
+            nullable: true
+    TicketRemainingHoursUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newHours:
+            type: number
+            format: double
+            nullable: true
+          oldHours:
+            type: number
+            format: double
+            nullable: true
+    TicketStatusUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newStatus:
+            type: integer
+            format: int32
+            nullable: true
+          oldStatus:
+            type: integer
+            format: int32
+            nullable: true
+    TicketSubjectUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newSubject:
+            type: string
+            nullable: true
+          oldSubject:
+            type: string
+            nullable: true
     CreateTicketRequest:
       type: object
       additionalProperties: false

@@ -12,6 +12,10 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Ticketing.Client" />
+  </ItemGroup>
+
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Portal' ">
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>

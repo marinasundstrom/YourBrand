@@ -24,6 +24,7 @@ public sealed class TicketRepository(ApplicationDbContext context) : ITicketRepo
             .Include(i => i.Assignee)
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)
+            .Include(i => i.Participants)
             .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }
 
@@ -35,6 +36,7 @@ public sealed class TicketRepository(ApplicationDbContext context) : ITicketRepo
             .Include(i => i.Assignee)
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)
+            .Include(i => i.Participants)
             .Where(specification.Criteria);
     }
 
