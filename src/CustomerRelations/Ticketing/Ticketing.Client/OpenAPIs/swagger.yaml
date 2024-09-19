@@ -1014,19 +1014,19 @@ components:
     TicketEvent:
       type: object
       discriminator:
-        propertyName: type
+        propertyName: event
         mapping:
-          TicketCreatedDto: '#/components/schemas/TicketCreated'
-          TicketAssigneeUpdatedDto: '#/components/schemas/TicketAssigneeUpdated'
-          TicketDescriptionUpdatedDto: '#/components/schemas/TicketDescriptionUpdated'
-          TicketEstimatedHoursUpdatedDto: '#/components/schemas/TicketEstimatedHoursUpdated'
-          TicketRemainingHoursUpdatedDto: '#/components/schemas/TicketRemainingHoursUpdated'
-          TicketStatusUpdatedDto: '#/components/schemas/TicketStatusUpdated'
-          TicketSubjectUpdatedDto: '#/components/schemas/TicketSubjectUpdated'
+          Created: '#/components/schemas/TicketCreated'
+          AssigneeUpdated: '#/components/schemas/TicketAssigneeUpdated'
+          DescriptionUpdated: '#/components/schemas/TicketDescriptionUpdated'
+          EstimatedHoursUpdated: '#/components/schemas/TicketEstimatedHoursUpdated'
+          RemainingHoursUpdated: '#/components/schemas/TicketRemainingHoursUpdated'
+          StatusUpdated: '#/components/schemas/TicketStatusUpdated'
+          SubjectUpdated: '#/components/schemas/TicketSubjectUpdated'
       x-abstract: true
       additionalProperties: false
       required:
-      - type
+      - event
       properties:
         occurredAt:
           type: string
@@ -1037,7 +1037,7 @@ components:
           type: string
         participantId:
           type: string
-        type:
+        event:
           type: string
     TicketCreated:
       allOf:

@@ -1,24 +1,21 @@
 using YourBrand.Ticketing.Domain.Entities;
 using YourBrand.Ticketing.Domain.Events;
 
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-
-using NJsonSchema.Converters;
+using System.Text.Json.Serialization;
 
 namespace YourBrand.Ticketing.Application;
 
-[JsonConverter(typeof(JsonInheritanceConverter<TicketEventDto>), "type")]
-[KnownType(typeof(TicketCreatedDto))]
-[KnownType(typeof(TicketAssigneeUpdatedDto))]
-[KnownType(typeof(TicketDescriptionUpdatedDto))]
-[KnownType(typeof(TicketEstimatedHoursUpdatedDto))]
-[KnownType(typeof(TicketRemainingHoursUpdatedDto))]
-[KnownType(typeof(TicketStatusUpdatedDto))]
-[KnownType(typeof(TicketSubjectUpdatedDto))]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "event")]
+[JsonDerivedType(typeof(TicketCreatedDto), "Created")]
+[JsonDerivedType(typeof(TicketAssigneeUpdatedDto), "AssigneeUpdated")]
+[JsonDerivedType(typeof(TicketDescriptionUpdatedDto), "DescriptionUpdated")]
+[JsonDerivedType(typeof(TicketEstimatedHoursUpdatedDto), "EstimatedHoursUpdated")]
+[JsonDerivedType(typeof(TicketRemainingHoursUpdatedDto), "RemainingHoursUpdated")]
+[JsonDerivedType(typeof(TicketStatusUpdatedDto), "StatusUpdated")]
+[JsonDerivedType(typeof(TicketSubjectUpdatedDto), "SubjectUpdated")]
 public abstract record TicketEventDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, string ParticipantId) 
 {
-    public string Type => GetType().Name;
+    public string Event => GetType().Name.Replace("Ticket", string.Empty).Replace("Dto", string.Empty);
 }
 
 public sealed record TicketCreatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, string ParticipantId) : TicketEventDto(OccurredAt, TenantId, OrganizationId, ParticipantId);
