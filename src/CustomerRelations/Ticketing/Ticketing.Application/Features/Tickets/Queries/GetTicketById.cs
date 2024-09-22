@@ -16,7 +16,7 @@ public record GetTicketById(string OrganizationId, int Id) : IRequest<Result<Tic
         }
     }
 
-    public class Handler(ITicketRepository ticketRepository) : IRequestHandler<GetTicketById, Result<TicketDto>>
+    public class Handler(ITicketRepository ticketRepository, IDtoComposer dtoComposer) : IRequestHandler<GetTicketById, Result<TicketDto>>
     {
         public async Task<Result<TicketDto>> Handle(GetTicketById request, CancellationToken cancellationToken)
         {
@@ -27,7 +27,7 @@ public record GetTicketById(string OrganizationId, int Id) : IRequest<Result<Tic
                 return Result.Failure<TicketDto>(Errors.Tickets.TicketNotFound);
             }
 
-            return Result.Success(ticket.ToDto());
+            return Result.Success(await dtoComposer.ComposeTicketDto(ticket, cancellationToken));
         }
     }
 }

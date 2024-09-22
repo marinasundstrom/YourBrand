@@ -104,58 +104,58 @@ else
                                         <MudTh>
                                             @T["Type"]
                                         </MudTh>
-                                        <MudTh>
-                                            @T["ParticipantId"]
-                                        </MudTh>
                                     </HeaderContent>
 
                                     <RowTemplate>
                                         <MudTd DataLabel="@T["OccurredAt"]">@c.OccurredAt.ToString("g")</MudTd>
                                         <MudTd DataLabel="@T["Type"]">
-                                            @if(c is TicketSubjectUpdated ev) 
+                                            @if(c is TicketCreated ev0) 
                                             {
-                                                <text>Subject was changed to "@ev.NewSubject" from "@ev.OldSubject".</text>
+                                                <text>Ticket was created, by @ev0.Participant.Name.</text>
+                                            }
+                                            else if(c is TicketSubjectUpdated ev) 
+                                            {
+                                                <text>Subject was changed to "@ev.NewSubject" from "@ev.OldSubject", by @ev.Participant.Name.</text>
                                             }
                                             else if(c is TicketDescriptionUpdated ev1) 
                                             {
-                                                <text>Description was updated.</text>
+                                                <text>Description was updated, by @ev1.Participant.Name.</text>
                                             }
                                             else if(c is TicketStatusUpdated ev2) 
                                             {
-                                                <text>Status changed to @ev2.NewStatus from @ev2.OldStatus.</text>
+                                                <text>Status changed to @ev2.NewStatus from @ev2.OldStatus, by @ev2.Participant.Name.</text>
                                             }
                                             else if(c is TicketRemainingHoursUpdated ev3) 
                                             {
                                                 if(ev3.OldHours is null) 
                                                 {
-                                                    <text>Remaining hours was set to @ev3.NewHours</text>
+                                                    <text>Remaining hours was set to @ev3.NewHours, by @ev3.Participant.Name.</text>
                                                 }
                                                 else if(ev3.NewHours is null) 
                                                 {
-                                                    <text>Remaining hours was cleared.</text>
+                                                    <text>Remaining hours was cleared, by @ev3.Participant.Name.</text>
                                                 }
                                                 else 
                                                 {
-                                                    <text>Remaining hours changed to @ev3.NewHours from @ev3.OldHours.</text>
+                                                    <text>Remaining hours changed to @ev3.NewHours from @ev3.OldHours, by @ev3.Participant.Name.</text>
                                                 }
                                             }
                                             else if(c is TicketEstimatedHoursUpdated ev4) 
                                             {
                                                 if(ev4.OldHours is null) 
                                                 {
-                                                    <text>Estimated hours was set to @ev4.NewHours</text>
+                                                    <text>Estimated hours was set to @ev4.NewHours, by @ev4.Participant.Name</text>
                                                 }
                                                 else if(ev4.NewHours is null) 
                                                 {
-                                                    <text>Estimated hours was cleared.</text>
+                                                    <text>Estimated hours was cleared, by @ev4.Participant.Name.</text>
                                                 }
                                                 else 
                                                 {
-                                                    <text>Estimated hours changed to @ev4.NewHours from @ev4.OldHours.</text>
+                                                    <text>Estimated hours changed to @ev4.NewHours from @ev4.OldHours, by @ev4.Participant.Name.</text>
                                                 }
                                             }
                                         </MudTd>
-                                        <MudTd DataLabel="@T["ParticipantId"]">@c.ParticipantId</MudTd>
                                     </RowTemplate>
 
                                     <NoRecordsContent>

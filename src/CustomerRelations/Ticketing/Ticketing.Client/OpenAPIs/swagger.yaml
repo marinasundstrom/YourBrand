@@ -1035,8 +1035,8 @@ components:
           type: string
         organizationId:
           type: string
-        participantId:
-          type: string
+        participant:
+          $ref: '#/components/schemas/TicketParticipant'
         event:
           type: string
     TicketCreated:
@@ -1057,12 +1057,14 @@ components:
           ticketId:
             type: integer
             format: int32
-          assignedParticipantId:
-            type: string
+          assignedParticipant:
             nullable: true
-          oldAssignedParticipantId:
-            type: string
+            oneOf:
+            - $ref: '#/components/schemas/TicketParticipant'
+          oldAssignedParticipant:
             nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketParticipant'
     TicketDescriptionUpdated:
       allOf:
       - $ref: '#/components/schemas/TicketEvent'
