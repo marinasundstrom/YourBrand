@@ -60,7 +60,9 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
             Status = status;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketStatusUpdated(TenantId, OrganizationId, Id, status, oldStatus));
+            AddDomainEvent(new TicketStatusUpdated(TenantId, OrganizationId, Id, 
+                new Domain.Events.TicketStatus2(Status.Id, Status.Name),
+                new Domain.Events.TicketStatus2(oldStatus.Id, oldStatus.Name)));
 
             return true;
         }

@@ -123,7 +123,7 @@ else
                                             }
                                             else if(c is TicketStatusUpdated ev2) 
                                             {
-                                                <text>Status changed to @ev2.NewStatus from @ev2.OldStatus, by @ev2.Participant.Name.</text>
+                                                <text>Status changed to "@ev2.NewStatus.Name" from "@ev2.OldStatus.Name", by @ev2.Participant.Name.</text>
                                             }
                                             else if(c is TicketRemainingHoursUpdated ev3) 
                                             {
@@ -257,7 +257,7 @@ else
 
             if (editContext.IsModified(() => Description!))
             {
-                await TicketsClient.UpdateTextAsync(Organization.Id, Id.GetValueOrDefault(), Description, cts.Token);
+                await TicketsClient.UpdateTextAsync(Organization.Id, Id.GetValueOrDefault(), Description ?? string.Empty, cts.Token);
             }
 
             if (editContext.IsModified(() => Status))

@@ -1124,13 +1124,13 @@ components:
             type: integer
             format: int32
           newStatus:
-            type: integer
-            format: int32
             nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketStatus'
           oldStatus:
-            type: integer
-            format: int32
             nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketStatus'
     TicketSubjectUpdated:
       allOf:
       - $ref: '#/components/schemas/TicketEvent'
