@@ -33,24 +33,26 @@ else
             <AppPageTitle>@ticket?.Id - @ticket?.Subject</AppPageTitle>
         }
 
-        <EditForm EditContext="editContext" OnValidSubmit="Submit">
-            <DataAnnotationsValidator />
-
             <MudDialog DisableSidePadding="true">
                 <TitleContent>
-                    <div class="d-flex">
-                        @if(Id is not null) 
-                        {
-                            <MudText Typo="@Typo.body1" Class="mt-6 me-4">#@Id</MudText>
-                        }
-                        <MudTextField T="string" Label="@T["Title"]" Variant="Variant.Text" Value="@Title" ValueChanged="(x) => { Title = x; editContext.NotifyFieldChanged(FieldIdentifier.Create<string>(() => Title)); }" For="() => Title"
-                            Immediate="true" Class="pe-8" />
-                    </div>
+                     <EditForm EditContext="editContext" OnValidSubmit="Submit">
+                        <DataAnnotationsValidator />
+                        <div class="d-flex">
+                            @if(Id is not null) 
+                            {
+                                <MudText Typo="@Typo.body1" Class="mt-6 me-4">#@Id</MudText>
+                            }
+                            <MudTextField T="string" Label="@T["Title"]" Variant="Variant.Text" Value="@Title" ValueChanged="(x) => { Title = x; editContext.NotifyFieldChanged(FieldIdentifier.Create<string>(() => Title)); }" For="() => Title"
+                                Immediate="true" Class="pe-8" />
+                        </div>
+                    </EditForm>
                 </TitleContent>
                     
                 <DialogContent>
 <MudTabs Elevation="0" Rounded="false" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="Genereal">
+         <EditForm EditContext="editContext" OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
                     <MudContainer Style="max-height: 600px; overflow-y: scroll">
 
 
@@ -88,6 +90,8 @@ else
                         </MudGrid>
 
                     </MudContainer>
+
+        </EditForm>
                         </MudTabPanel>
 
                         @if(Id is not null) 
@@ -178,6 +182,8 @@ else
 
                 </DialogContent>
                 <DialogActions>
+                     <EditForm EditContext="editContext" OnValidSubmit="Submit">
+                        <DataAnnotationsValidator />
                     @if (editContext.IsModified())
                     {
                         <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">
@@ -191,10 +197,9 @@ else
                             }
                         </MudButton>
                     }
+                    </EditForm>
                 </DialogActions>
             </MudDialog>
-
-        </EditForm>
     }
     else
     {
