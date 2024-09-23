@@ -11,7 +11,7 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record CreateTicket(string OrganizationId, string Title, string? Description, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours) : IRequest<Result<TicketDto>>
+public sealed record CreateTicket(string OrganizationId, string Title, string? Description, int Status, string? AssigneeUserId, double? EstimatedHours, double? RemainingHours) : IRequest<Result<TicketDto>>
 {
     public sealed class Validator : AbstractValidator<CreateTicket>
     {
@@ -58,15 +58,28 @@ public sealed record CreateTicket(string OrganizationId, string Title, string? D
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            if (request.AssigneeId is not null)
+            if (request.AssigneeUserId is not null)
             {
-                //ticket.UpdateAssigneeId(request.AssigneeId);
+                var participant = ticket.Participants.FirstOrDefault(x => x.UserId == request.AssigneeUserId);
+
+                if (participant is null)
+                {
+                    participant = new TicketParticipant
+                    {
+                        OrganizationId = request.OrganizationId,
+                        Name = null,
+                        UserId = request.AssigneeUserId
+                    };
+                }
+
+                ticket.Participants.Add(creatorParticipant);
 
                 await unitOfWork.SaveChangesAsync(cancellationToken);
 
+                ticket.UpdateAssignee(participant.Id);
+
                 ticket.ClearDomainEvents();
             }
-
 
             ticket.Participants.Add(creatorParticipant);
 

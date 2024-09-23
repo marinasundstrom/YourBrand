@@ -74,13 +74,13 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
 
     public TicketParticipantId? AssigneeId { get; set; }
 
-    public bool UpdateAssigneeId(string? userId)
+    public bool UpdateAssignee(string? participantId)
     {
         var oldAssigneeId = AssigneeId;
-        if (userId != oldAssigneeId)
+        if (participantId != oldAssigneeId)
         {
-            AssigneeId = userId;
-            //AddDomainEvent(new TicketAssigneeUpdated(TenantId, OrganizationId, Id, userId, oldAssigneeId));
+            AssigneeId = participantId;
+            AddDomainEvent(new TicketAssigneeUpdated(TenantId, OrganizationId, Id, participantId, oldAssigneeId));
 
             return true;
         }

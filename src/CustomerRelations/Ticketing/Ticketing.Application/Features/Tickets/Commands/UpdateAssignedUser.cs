@@ -36,11 +36,27 @@ public sealed record UpdateAssignee(string OrganizationId, int Id, string? UserI
                 }
             }
 
-            ticket.UpdateAssigneeId(request.UserId);
+            var participant = ticket.Participants.FirstOrDefault(x => x.UserId == request.UserId);
 
-            var participant = ticket.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+            if(participant is null) 
+            {
+                participant = new TicketParticipant
+                {
+                    OrganizationId = request.OrganizationId,
+                    Name = null,
+                    UserId = request.UserId
+                };
 
-            ticket.LastModifiedBy = participant;
+                ticket.Participants.Add(participant);
+
+                await unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+
+            ticket.UpdateAssignee(participant.Id);
+
+            var participant2 = ticket.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+
+            ticket.LastModifiedBy = participant2;
             ticket.LastModified = DateTimeOffset.UtcNow;
 
             await unitOfWork.SaveChangesAsync(cancellationToken);

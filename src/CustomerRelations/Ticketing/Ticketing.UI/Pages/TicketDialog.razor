@@ -129,6 +129,10 @@ else
                                             {
                                                 <text>Status changed to "@ev2.NewStatus.Name" from "@ev2.OldStatus.Name", by @ev2.Participant.Name.</text>
                                             }
+                                             else if(c is TicketAssigneeUpdated ev5) 
+                                            {
+                                                <text>User "@ev5.AssignedParticipant.Name" was assigned, by @ev5.Participant.Name.</text>
+                                            }
                                             else if(c is TicketRemainingHoursUpdated ev3) 
                                             {
                                                 if(ev3.OldHours is null) 
@@ -368,7 +372,7 @@ else
             Title = ticket.Subject;
             Description = ticket.Description;
             Status = ticket.Status;
-            Assignee = null; //ticket.Assignee?.ToUser();
+            Assignee = ticket.Assignee?.ToUser();
             EstimatedHours = ticket.EstimatedHours;
             RemainingHours = ticket.RemainingHours;
         }

@@ -73,12 +73,10 @@ public sealed class DtoComposer : IDtoComposer
             participantIds.Add(ticket.LastModifiedById.GetValueOrDefault());
         }
 
-        /*
-        if (ticket.DeletedById is not null)
+        if (ticket.AssigneeId is not null)
         {
-            participantIds.Add(ticket.DeletedById.GetValueOrDefault());
+            participantIds.Add(ticket.AssigneeId.GetValueOrDefault());
         }
-        */
     }
 
     public async Task<IEnumerable<TicketDto>> ComposeTicketDtos(Ticket[] tickets, CancellationToken cancellationToken = default)
@@ -134,6 +132,28 @@ public sealed class DtoComposer : IDtoComposer
 
         ExtractTicketParticipantIds(ticket, participantIds);
 
+        foreach(var ev in ticketEvents) 
+        {
+            participantIds.Add(ev.ParticipantId);
+
+            var @event = System.Text.Json.JsonSerializer.Deserialize<TicketDomainEvent>(ev.Data);
+
+            if (@event is TicketAssigneeUpdated e2)
+            {
+                Console.WriteLine("Foo: " + e2);
+
+                if(e2.OldAssignedParticipantId is not null) 
+                {
+                    participantIds.Add(e2.OldAssignedParticipantId.GetValueOrDefault());
+                }
+
+                if (e2.NewAssignedParticipantId is not null)
+                {
+                    participantIds.Add(e2.NewAssignedParticipantId.GetValueOrDefault());
+                }
+            }
+        }
+
         var participants = await context.TicketParticipants
             .Where(x => x.TicketId == ticket.Id)
             .Where(x => participantIds.Any(z => x.Id == z))
@@ -159,7 +179,7 @@ public sealed class DtoComposer : IDtoComposer
     {
         var @event = System.Text.Json.JsonSerializer.Deserialize<TicketDomainEvent>(ev.Data);
 
-        participants.TryGetValue(ev.ParticipantId, out var assignee);
+        participants.TryGetValue(ev.ParticipantId, out var participant);
 
         if(@event is TicketAssigneeUpdated e2) 
         {
@@ -167,17 +187,17 @@ public sealed class DtoComposer : IDtoComposer
 
             participants.TryGetValue(e2.OldAssignedParticipantId.GetValueOrDefault(), out var oldAssignedParticipant);
 
-            return new TicketAssigneeUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e2.TicketId, dtoFactory.CreateParticipantDto(newAssignedParticipant!, users), dtoFactory.CreateParticipantDto(oldAssignedParticipant!, users), dtoFactory.CreateParticipantDto(assignee!, users));
+            return new TicketAssigneeUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e2.TicketId, newAssignedParticipant is null ? null : dtoFactory.CreateParticipantDto(newAssignedParticipant!, users), oldAssignedParticipant is null ? null : dtoFactory.CreateParticipantDto(oldAssignedParticipant!, users), dtoFactory.CreateParticipantDto(participant!, users));
         }
 
         return @event switch
         {
-            TicketCreated e => new TicketCreatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, dtoFactory.CreateParticipantDto(assignee!, users)),
-            TicketDescriptionUpdated e => new TicketDescriptionUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewDescription, e.OldDescription, dtoFactory.CreateParticipantDto(assignee!, users)),
-            TicketEstimatedHoursUpdated e => new TicketEstimatedHoursUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewHours, e.OldHours, dtoFactory.CreateParticipantDto(assignee!, users)),
-            TicketRemainingHoursUpdated e => new TicketRemainingHoursUpdatedDto(ev.OccurredAt, ev.TenantId, e.OrganizationId, e.TicketId, e.NewHours, e.OldHours, dtoFactory.CreateParticipantDto(assignee!, users)),
-            TicketStatusUpdated e => new TicketStatusUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, new TicketStatusDto(e.NewStatus.Id, e.NewStatus.Name), new TicketStatusDto(e.OldStatus.Id, e.OldStatus.Name), dtoFactory.CreateParticipantDto(assignee!, users)),
-            TicketSubjectUpdated e => new TicketSubjectUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewSubject, e.OldSubject, dtoFactory.CreateParticipantDto(assignee!, users)),
+            TicketCreated e => new TicketCreatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketDescriptionUpdated e => new TicketDescriptionUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewDescription, e.OldDescription, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketEstimatedHoursUpdated e => new TicketEstimatedHoursUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewHours, e.OldHours, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketRemainingHoursUpdated e => new TicketRemainingHoursUpdatedDto(ev.OccurredAt, ev.TenantId, e.OrganizationId, e.TicketId, e.NewHours, e.OldHours, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketStatusUpdated e => new TicketStatusUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, new TicketStatusDto(e.NewStatus.Id, e.NewStatus.Name), new TicketStatusDto(e.OldStatus.Id, e.OldStatus.Name), dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketSubjectUpdated e => new TicketSubjectUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewSubject, e.OldSubject, dtoFactory.CreateParticipantDto(participant!, users)),
             _ => throw new Exception()
         };
     }

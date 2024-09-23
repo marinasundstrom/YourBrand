@@ -74,6 +74,9 @@ public static class UserMappings
         Id = user.Id,
         Name = user.Name
     };
+
+
+    public static Portal.User ToUser(this TicketParticipant participant) => new(participant.Id, participant.Name);
 }
 
 /*
