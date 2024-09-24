@@ -400,6 +400,117 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Tickets/{id}/priority:
+    put:
+      tags:
+      - Tickets
+      operationId: Tickets_UpdatePriority
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePriorityRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Tickets/{id}/urgency:
+    put:
+      tags:
+      - Tickets
+      operationId: Tickets_UpdateUrgency
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUrgencyRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Tickets/{id}/impact:
+    put:
+      tags:
+      - Tickets
+      operationId: Tickets_UpdateImpact
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateImpactRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/subject:
     put:
       tags:
@@ -880,11 +991,17 @@ components:
         type:
           $ref: '#/components/schemas/TicketType'
         priority:
-          $ref: '#/components/schemas/TicketPriority'
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TicketPriority'
         urgency:
-          $ref: '#/components/schemas/TicketUrgency'
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TicketUrgency'
         impact:
-          $ref: '#/components/schemas/TicketImpact'
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TicketImpact'
         estimatedHours:
           type: number
           format: double
@@ -949,24 +1066,22 @@ components:
       type: integer
       description: ''
       x-enumNames:
-      - Critical
-      - High
-      - Medium
       - Low
-      - VeryLow
+      - Medium
+      - High
+      - Critical
       enum:
+      - 0
       - 1
       - 2
       - 3
-      - 4
-      - 5
     TicketUrgency:
       type: integer
       description: ''
       x-enumNames:
-      - High
-      - Medium
       - Low
+      - Medium
+      - High
       enum:
       - 0
       - 1
@@ -975,9 +1090,9 @@ components:
       type: integer
       description: ''
       x-enumNames:
-      - High
-      - Medium
       - Low
+      - Medium
+      - High
       enum:
       - 0
       - 1
@@ -1023,6 +1138,9 @@ components:
           RemainingHoursUpdated: '#/components/schemas/TicketRemainingHoursUpdated'
           StatusUpdated: '#/components/schemas/TicketStatusUpdated'
           SubjectUpdated: '#/components/schemas/TicketSubjectUpdated'
+          PriorityUpdated: '#/components/schemas/TicketPriorityUpdated'
+          UrgencyUpdated: '#/components/schemas/TicketUrgencyUpdated'
+          ImpactUpdated: '#/components/schemas/TicketImpactUpdated'
       x-abstract: true
       additionalProperties: false
       required:
@@ -1146,6 +1264,57 @@ components:
           oldSubject:
             type: string
             nullable: true
+    TicketPriorityUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newPriority:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketPriority'
+          oldPriority:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketPriority'
+    TicketUrgencyUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newUrgency:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketUrgency'
+          oldUrgency:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketUrgency'
+    TicketImpactUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          newImpact:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketImpact'
+          oldImpact:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/TicketImpact'
     CreateTicketRequest:
       type: object
       additionalProperties: false
@@ -1169,6 +1338,24 @@ components:
           type: number
           format: double
           nullable: true
+    UpdatePriorityRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        priority:
+          $ref: '#/components/schemas/TicketPriority'
+    UpdateUrgencyRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        urgency:
+          $ref: '#/components/schemas/TicketUrgency'
+    UpdateImpactRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        impact:
+          $ref: '#/components/schemas/TicketImpact'
     PagedResultOfTicketStatus:
       type: object
       additionalProperties: false

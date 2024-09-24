@@ -2,7 +2,7 @@ namespace YourBrand.Ticketing.Domain.Enums;
 
 public enum TicketUrgency
 {
-    High,
-    Medium,
-    Low
+    Low = 0,
+    Medium = 1,
+    High = 2
 }

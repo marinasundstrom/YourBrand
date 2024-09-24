@@ -198,6 +198,10 @@ public sealed class DtoComposer : IDtoComposer
             TicketRemainingHoursUpdated e => new TicketRemainingHoursUpdatedDto(ev.OccurredAt, ev.TenantId, e.OrganizationId, e.TicketId, e.NewHours, e.OldHours, dtoFactory.CreateParticipantDto(participant!, users)),
             TicketStatusUpdated e => new TicketStatusUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, new TicketStatusDto(e.NewStatus.Id, e.NewStatus.Name), new TicketStatusDto(e.OldStatus.Id, e.OldStatus.Name), dtoFactory.CreateParticipantDto(participant!, users)),
             TicketSubjectUpdated e => new TicketSubjectUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.NewSubject, e.OldSubject, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketPriorityUpdated e => new TicketPriorityUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, (TicketPriorityDto?)e.NewPriority, (TicketPriorityDto?)e.OldPriority, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketImpactUpdated e => new TicketImpactUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, (TicketImpactDto?)e.NewImpact, (TicketImpactDto?)e.OldImpact, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketUrgencyUpdated e => new TicketUrgencyUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, (TicketUrgencyDto?)e.NewUrgency, (TicketUrgencyDto?)e.OldUrgency, dtoFactory.CreateParticipantDto(participant!, users)),
+
             _ => throw new Exception()
         };
     }

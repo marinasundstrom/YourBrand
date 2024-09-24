@@ -2,7 +2,7 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 public enum TicketImpactDto
 {
-    High,
-    Medium,
-    Low
+    Low = 0,
+    Medium = 1,
+    High = 2
 }

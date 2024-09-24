@@ -10,6 +10,7 @@ using YourBrand.Ticketing.Application.Features.Tickets.Commands;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 using YourBrand.Ticketing.Application.Features.Tickets.Queries;
 using YourBrand.Ticketing.Application.Tickets.Commands;
+using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 
@@ -52,6 +53,33 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
         return result.Handle(
             onSuccess: data => CreatedAtAction(nameof(GetTicketById), new { id = data.Id }, data),
             onError: error => Problem(detail: error.Detail, title: error.Title, type: error.Id));
+    }
+
+    [HttpPut("{id}/priority")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdatePriority(string organizationId, int id, UpdatePriorityRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new UpdatePriority(organizationId, id, (TicketPriority)request.Priority), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/urgency")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdateUrgency(string organizationId, int id, UpdateUrgencyRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new UpdateUrgency(organizationId, id, (TicketUrgency)request.Urgency), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/impact")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdateImpact(string organizationId, int id, UpdateImpactRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new UpdateImpact(organizationId, id, (TicketImpact)request.Impact), cancellationToken);
+        return this.HandleResult(result);
     }
 
     [HttpDelete("{id}")]
@@ -119,3 +147,9 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
 }
 
 public sealed record CreateTicketRequest(string Title, string? Text, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours);
+
+public sealed record UpdatePriorityRequest(TicketPriorityDto Priority);
+
+public sealed record UpdateUrgencyRequest(TicketUrgencyDto Urgency);
+
+public sealed record UpdateImpactRequest(TicketImpactDto Impact);

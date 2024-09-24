@@ -87,6 +87,33 @@ else
                                 <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Label="@T["Assignee"]" Variant="Variant.Outlined" @bind-Value="Assignee"
                                               For="() => Assignee" Class="mb-4" />
                             </MudItem>
+
+
+                            <MudItem xs="12" md="6">
+                                <MudSelect Label="Impact" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Impact" Immediate="true"
+                                    For="() => Impact">
+                                    @foreach (var optionType in Enum.GetValues<TicketImpact>())
+                                    {
+                                        <MudSelectItem T="TicketImpact?" Value="@optionType">@Enum.GetName(typeof(TicketImpact), optionType)</MudSelectItem>
+                                    }
+                                </MudSelect>
+
+                                <MudSelect Label="Urgency" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Urgency" Immediate="true"
+                                    For="() => Urgency">
+                                    @foreach (var optionType in Enum.GetValues<TicketUrgency>())
+                                    {
+                                        <MudSelectItem T="TicketUrgency?" Value="@optionType">@Enum.GetName(typeof(TicketUrgency), optionType)</MudSelectItem>
+                                    }
+                                </MudSelect>
+
+                                <MudSelect Label="Priority" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Priority" Immediate="true"
+                                    For="() => Priority">
+                                    @foreach (var optionType in Enum.GetValues<TicketPriority>())
+                                    {
+                                        <MudSelectItem T="TicketPriority?" Value="@optionType">@Enum.GetName(typeof(TicketPriority), optionType)</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
                         </MudGrid>
 
                     </MudContainer>
@@ -162,6 +189,18 @@ else
                                                 {
                                                     <text>Estimated hours changed to @ev4.NewHours from @ev4.OldHours, by @ev4.Participant.Name.</text>
                                                 }
+                                            }
+                                            else if(c is TicketPriorityUpdated ev6) 
+                                            {
+                                                <text>Priority changed to @ev6.NewPriority from @ev6.OldPriority, by @ev6.Participant.Name.</text>
+                                            }
+                                            else if(c is TicketImpactUpdated ev7) 
+                                            {
+                                                <text>Impact changed to @ev7.NewImpact from @ev7.OldImpact, by @ev7.Participant.Name.</text>
+                                            }
+                                            else if(c is TicketUrgencyUpdated ev8) 
+                                            {
+                                                <text>Urgency changed to @ev8.NewUrgency from @ev8.OldUrgency by @ev8.Participant.Name.</text>
                                             }
                                         </MudTd>
                                     </RowTemplate>
@@ -244,6 +283,12 @@ else
 
     public double? RemainingHours { get; set; }
 
+    public TicketPriority? Priority { get; set; }
+
+    public TicketImpact? Impact { get; set; }
+
+    public TicketUrgency? Urgency { get; set; }
+
     async Task Submit()
     {
         try
@@ -287,6 +332,21 @@ else
             if (editContext.IsModified(() => RemainingHours!))
             {
                 await TicketsClient.UpdateRemainingHoursAsync(Organization.Id, Id.GetValueOrDefault(), RemainingHours, cts.Token);
+            }
+
+             if (editContext.IsModified(() => Priority!))
+            {
+                await TicketsClient.UpdatePriorityAsync(Organization.Id, Id.GetValueOrDefault(), new UpdatePriorityRequest() {  Priority = Priority.GetValueOrDefault() }, cts.Token);
+            }
+
+             if (editContext.IsModified(() => Urgency!))
+            {
+                await TicketsClient.UpdateUrgencyAsync(Organization.Id, Id.GetValueOrDefault(), new UpdateUrgencyRequest() {  Urgency = Urgency.GetValueOrDefault() }, cts.Token);
+            }
+
+             if (editContext.IsModified(() => Impact!))
+            {
+                await TicketsClient.UpdateImpactAsync(Organization.Id, Id.GetValueOrDefault(), new UpdateImpactRequest() {  Impact = Impact.GetValueOrDefault() }, cts.Token);
             }
 
             editContext.MarkAsUnmodified();
@@ -375,6 +435,9 @@ else
             Assignee = ticket.Assignee?.ToUser();
             EstimatedHours = ticket.EstimatedHours;
             RemainingHours = ticket.RemainingHours;
+            Priority = ticket.Priority;
+            Impact = ticket.Impact;
+            Urgency = ticket.Urgency;
         }
         catch (AccessTokenNotAvailableException exception)
         {

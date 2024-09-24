@@ -3,6 +3,7 @@
 using YourBrand.Integration;
 using YourBrand.Ticketing.Application;
 using YourBrand.Ticketing.Consumers;
+using YourBrand.Ticketing.Domain;
 using YourBrand.Ticketing.Infrastructure;
 
 namespace YourBrand.Ticketing.Web;
@@ -15,6 +16,8 @@ public static class ServiceExtensions
             .AddPresentation()
             .AddApplication()
             .AddInfrastructure(configuration);
+
+        services.AddScoped<TicketPriorityCalculator>();
 
         return services;
     }

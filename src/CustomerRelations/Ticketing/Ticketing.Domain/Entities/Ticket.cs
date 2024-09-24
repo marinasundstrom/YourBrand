@@ -117,11 +117,59 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
 
     public int CategoryId { get; set; } = 1;
 
-    public TicketPriority Priority { get; set; }
+    public TicketPriority? Priority { get; set; }
 
-    public TicketUrgency Urgency { get; set; }
+    public bool UpdatePriority(TicketPriority? priority)
+    {
+        var oldPriority = Priority;
+        if (priority != oldPriority)
+        {
+            Priority = priority;
 
-    public TicketImpact Impact { get; set; }
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketPriorityUpdated(TenantId, OrganizationId, Id, priority, oldPriority));
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public TicketUrgency? Urgency { get; set; }
+
+    public bool UpdateUrgency(TicketUrgency? urgency)
+    {
+        var oldUrgency = Urgency;
+        if (urgency != oldUrgency)
+        {
+            Urgency = urgency;
+
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketUrgencyUpdated(TenantId, OrganizationId, Id, urgency, oldUrgency));
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public TicketImpact? Impact { get; set; }
+
+    public bool UpdateImpact(TicketImpact? impact)
+    {
+        var oldImpact = Impact;
+        if (impact != oldImpact)
+        {
+            Impact = impact;
+
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketImpactUpdated(TenantId, OrganizationId, Id, impact, oldImpact));
+
+            return true;
+        }
+
+        return false;
+    }
 
     public double? EstimatedHours { get; private set; }
 
