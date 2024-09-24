@@ -22,8 +22,20 @@ public sealed class OutboxSaveChangesInterceptor : SaveChangesInterceptor
                         .Where(e => e.Entity.DomainEvents.Any())
                         .Select(e => e.Entity);
 
+        if (!entities.Any())
+        {
+            return await base.SavingChangesAsync(eventData, result, cancellationToken);
+        }
+
         var domainEvents = entities
-            .SelectMany(e => e.DomainEvents)
+            .SelectMany(entity =>
+            {
+                var domainEvents = entity.DomainEvents.ToList();
+
+                entity.ClearDomainEvents();
+
+                return domainEvents;
+            })
             .OrderBy(e => e.Timestamp)
             .ToList();
 

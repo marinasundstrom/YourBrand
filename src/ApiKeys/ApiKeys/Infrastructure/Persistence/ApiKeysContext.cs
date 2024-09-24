@@ -54,8 +54,20 @@ public class ApiKeysContext(
                         .Where(e => e.Entity.DomainEvents.Any())
                         .Select(e => e.Entity);
 
+        if (!entities.Any())
+        {
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
         var domainEvents = entities
-            .SelectMany(e => e.DomainEvents)
+            .SelectMany(entity =>
+            {
+                var domainEvents = entity.DomainEvents.ToList();
+
+                entity.ClearDomainEvents();
+
+                return domainEvents;
+            })
             .OrderBy(e => e.Timestamp)
             .ToList();
 
