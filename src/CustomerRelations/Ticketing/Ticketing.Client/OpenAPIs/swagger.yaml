@@ -248,7 +248,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTicketRequest'
+              $ref: '#/components/schemas/CreateTicketData'
         required: true
         x-position: 2
       responses:
@@ -1315,13 +1315,13 @@ components:
             nullable: true
             oneOf:
             - $ref: '#/components/schemas/TicketImpact'
-    CreateTicketRequest:
+    CreateTicketData:
       type: object
       additionalProperties: false
       properties:
         title:
           type: string
-        text:
+        description:
           type: string
           nullable: true
         status:
@@ -1338,6 +1338,18 @@ components:
           type: number
           format: double
           nullable: true
+        priority:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TicketPriority'
+        impact:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TicketImpact'
+        urgency:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TicketUrgency'
     UpdatePriorityRequest:
       type: object
       additionalProperties: false

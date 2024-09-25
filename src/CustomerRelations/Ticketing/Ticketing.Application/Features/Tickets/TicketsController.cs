@@ -14,6 +14,14 @@ using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 
+public record CreateTicketData(
+    string Title,
+    string? Description,
+    int Status,
+    string? AssigneeId,
+    double? EstimatedHours, double? RemainingHours,
+    TicketPriorityDto? Priority, TicketImpactDto? Impact, TicketUrgencyDto? Urgency);
+
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -47,9 +55,9 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TicketDto))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<TicketDto>> CreateTicket(string organizationId, CreateTicketRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<TicketDto>> CreateTicket(string organizationId, CreateTicketData request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateTicket(organizationId, request.Title, request.Text, request.Status, request.AssigneeId, request.EstimatedHours, request.RemainingHours), cancellationToken);
+        var result = await mediator.Send(new CreateTicket(organizationId, request.Title, request.Description, request.Status, request.AssigneeId, request.EstimatedHours, request.RemainingHours, request.Priority, request.Impact, request.Urgency), cancellationToken);
         return result.Handle(
             onSuccess: data => CreatedAtAction(nameof(GetTicketById), new { id = data.Id }, data),
             onError: error => Problem(detail: error.Detail, title: error.Title, type: error.Id));

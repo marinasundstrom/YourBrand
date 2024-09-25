@@ -13,7 +13,7 @@ public sealed record UpdateDescription(string OrganizationId, int Id, string Tex
         {
             RuleFor(x => x.Id).NotEmpty();
 
-            RuleFor(x => x.Text).NotEmpty().MaximumLength(60);
+            RuleFor(x => x.Text).MaximumLength(60);
         }
     }
 
