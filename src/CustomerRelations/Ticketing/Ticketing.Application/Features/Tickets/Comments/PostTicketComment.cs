@@ -40,6 +40,7 @@ public sealed record PostTicketComment(string OrganizationId, int Id, string Tex
             {
                 ticketCommentId = await context.TicketComments
                     .InOrganization(request.OrganizationId)
+                    .Where(x => x.TicketId == ticket.Id)
                     .MaxAsync(x => x.Id, cancellationToken) + 1;
             }
             catch { }
