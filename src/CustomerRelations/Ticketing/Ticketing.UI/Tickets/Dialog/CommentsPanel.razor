@@ -8,43 +8,45 @@
 @inject Portal.Services.IAccessTokenProvider AccessTokenProvider
 @inject IStringLocalizer<TicketDialog> T
 
-<EditForm Model="@this" OnValidSubmit="Submit">
-    <DataAnnotationsValidator />
-    <MudTextField Label="@T["Text"]" Lines="5" Variant="Variant.Outlined" @bind-Value="Text"
-        For="() => Text" Immediate="true" Class="mb-4" MaxLines="3" />
-    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Post</MudButton>
-</EditForm>
+<MudContainer Style="max-height: 600px; overflow-y: scroll">
+    <EditForm Model="@this" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <MudTextField Label="@T["Text"]" Lines="5" Variant="Variant.Outlined" @bind-Value="Text"
+            For="() => Text" Immediate="true" Class="mb-4" MaxLines="3" />
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Post</MudButton>
+    </EditForm>
 
-<MudTable @ref="table" T="TicketComment" Context="c"
-    ServerData="@(new Func<TableState, Task<TableData<TicketComment>>>(ServerReload))"    Elevation="205" Dense="false" Hover="true" SortLabel="@T["SortBy"]">
-    <HeaderContent>
-        <MudTh>
-            <MudTableSortLabel SortLabel="OccurredAt" T="TicketComment">@T["PostedAt"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            @T["Text"]
-        </MudTh>
-    </HeaderContent>
+    <MudTable @ref="table" T="TicketComment" Context="c"
+        ServerData="@(new Func<TableState, Task<TableData<TicketComment>>>(ServerReload))" Elevation="205" Dense="false" Hover="true" SortLabel="@T["SortBy"]">
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortLabel="OccurredAt" T="TicketComment">@T["PostedAt"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                @T["Text"]
+            </MudTh>
+        </HeaderContent>
 
-    <RowTemplate>
-        <MudTd DataLabel="@T["PostedAt"]">@c.Created.ToString("g")</MudTd>
-        <MudTd DataLabel="@T["Text"]">
-            @c.Text
-        </MudTd>
-    </RowTemplate>
+        <RowTemplate>
+            <MudTd DataLabel="@T["PostedAt"]">@c.Created.ToString("g")</MudTd>
+            <MudTd DataLabel="@T["Text"]">
+                @c.Text
+            </MudTd>
+        </RowTemplate>
 
-    <NoRecordsContent>
-        <MudText>@T["NoMatchesFound"]</MudText>
-    </NoRecordsContent>
+        <NoRecordsContent>
+            <MudText>@T["NoMatchesFound"]</MudText>
+        </NoRecordsContent>
 
-    <LoadingContent>
-        <MudText>@T["Loading"]</MudText>
-    </LoadingContent>
+        <LoadingContent>
+            <MudText>@T["Loading"]</MudText>
+        </LoadingContent>
 
-    <PagerContent>
-        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
-    </PagerContent>
-</MudTable>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+        </PagerContent>
+    </MudTable>
+</MudContainer>
 
 @code {
     CancellationTokenSource cts = new();

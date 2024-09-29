@@ -7,6 +7,14 @@ namespace YourBrand.Ticketing.Domain.Entities;
 
 public class TicketComment : Entity<int>, IHasTenant, IHasOrganization
 {
+    public TicketComment()
+    {
+    }
+
+    public TicketComment(int id) : base(id)
+    {
+    }
+
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }

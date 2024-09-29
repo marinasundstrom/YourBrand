@@ -1,6 +1,9 @@
 using FluentValidation;
 
 using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Identity;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
@@ -29,7 +32,17 @@ public sealed record PostTicketComment(string OrganizationId, int Id, string Tex
                 return Result.Failure<TicketCommentDto>(Errors.Tickets.TicketNotFound);
             }
 
-            var ticketComment = new TicketComment
+            int ticketCommentId = 1;
+
+            try
+            {
+                ticketCommentId = await context.TicketComments
+                    .InOrganization(request.OrganizationId)
+                    .MaxAsync(x => x.Id, cancellationToken) + 1;
+            }
+            catch { }
+
+            var ticketComment = new TicketComment(ticketCommentId)
             {
                 OrganizationId = request.OrganizationId,
                 TicketId = ticket.Id,
