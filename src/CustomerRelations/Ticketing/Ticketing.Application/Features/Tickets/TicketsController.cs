@@ -152,6 +152,34 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new UpdateRemainingHours(organizationId, id, hours), cancellationToken);
         return this.HandleResult(result);
     }
+
+
+    [HttpGet("{id}/comments")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<TicketCommentDto>))]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    [ProducesDefaultResponseType]
+    public async Task<PagedResult<TicketCommentDto>> GetTicketComments(string organizationId, int id, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    => await mediator.Send(new GetTicketComments(organizationId, id, page, pageSize, sortBy, sortDirection), cancellationToken);
+
+    [HttpGet("{id}/comments/{commentId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TicketCommentDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<TicketCommentDto>> GetTicketCommentById(string organizationId, int id, int commentId, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetTicketCommentById(organizationId, id, commentId), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/comments")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TicketCommentDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<TicketCommentDto>> PostTicketComment(string organizationId, int id, PostTicketCommentRequestDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new PostTicketComment(organizationId, id, request.Text), cancellationToken);
+        return this.HandleResult(result);
+    }
 }
 
 public sealed record CreateTicketRequest(string Title, string? Text, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours);
@@ -161,3 +189,5 @@ public sealed record UpdatePriorityRequest(TicketPriorityDto Priority);
 public sealed record UpdateUrgencyRequest(TicketUrgencyDto Urgency);
 
 public sealed record UpdateImpactRequest(TicketImpactDto Impact);
+
+public sealed record PostTicketCommentRequestDto(string Text);

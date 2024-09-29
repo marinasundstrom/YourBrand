@@ -124,6 +124,8 @@ public sealed class ApplicationDbContext(
 
     public DbSet<Ticket> Tickets { get; set; }
 
+    public DbSet<TicketComment> TicketComments { get; set; }
+
     public DbSet<TicketEvent> TicketEvents { get; set; }
 
     public DbSet<TicketParticipant> TicketParticipants { get; set; }

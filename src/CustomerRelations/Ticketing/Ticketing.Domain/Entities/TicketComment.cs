@@ -5,7 +5,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketComment : Entity<int>, IAuditable, IHasTenant, IHasOrganization
+public class TicketComment : Entity<int>, IHasTenant, IHasOrganization
 {
     public TenantId TenantId { get; set; }
 
@@ -19,15 +19,11 @@ public class TicketComment : Entity<int>, IAuditable, IHasTenant, IHasOrganizati
 
     // ...
 
-    public User? CreatedBy { get; set; } = null!;
-
-    public UserId? CreatedById { get; set; } = null!;
+    public TicketParticipantId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset Created { get; set; }
 
-    public User? LastModifiedBy { get; set; }
-
-    public UserId? LastModifiedById { get; set; }
+    public TicketParticipantId? LastModifiedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 }

@@ -8,7 +8,9 @@ public interface IApplicationDbContext
 {
     DbSet<Ticket> Tickets { get; }
 
-     DbSet<TicketEvent> TicketEvents { get; }
+    DbSet<TicketComment> TicketComments { get; }
+
+    DbSet<TicketEvent> TicketEvents { get; }
 
     DbSet<TicketParticipant> TicketParticipants { get; }
 

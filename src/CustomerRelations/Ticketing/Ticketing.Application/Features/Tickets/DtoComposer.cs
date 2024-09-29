@@ -9,6 +9,10 @@ public interface IDtoComposer
 {
     Task<TicketDto> ComposeTicketDto(Ticket ticket, CancellationToken cancellationToken = default);
     Task<IEnumerable<TicketDto>> ComposeTicketDtos(Ticket[] tickets, CancellationToken cancellationToken = default);
+
+    Task<TicketCommentDto> ComposeTicketCommentDto(Ticket ticket, TicketComment ticketComment, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TicketCommentDto>> ComposeTicketCommentDtos(Ticket ticket, TicketComment[] ticketComments, CancellationToken cancellationToken = default);
+
     Task<IEnumerable<TicketEventDto>> ComposeTicketEventDtos(Ticket ticket, TicketEvent[] ticketEvents, CancellationToken cancellationToken = default);
 }
 
@@ -204,5 +208,93 @@ public sealed class DtoComposer : IDtoComposer
 
             _ => throw new Exception()
         };
+    }
+
+    public async Task<TicketCommentDto> ComposeTicketCommentDto(Ticket ticket, TicketComment ticketComment, CancellationToken cancellationToken = default)
+    {
+        HashSet<TicketParticipantId> participantIds = new();
+        HashSet<TicketId> ticketIds = new();
+
+        ExtractTicketParticipantIds(ticket, participantIds);
+
+        participantIds.Add(ticketComment.CreatedById.GetValueOrDefault());
+
+        if (ticketComment.LastModifiedById is not null)
+        {
+            participantIds.Add(ticketComment.LastModifiedById.GetValueOrDefault());
+        }
+
+        var participants = await context.TicketParticipants
+            .Where(x => x.TicketId == ticket.Id)
+            .Where(x => participantIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        var userIds = participants.Select(x => x.Value.UserId).ToList();
+
+        var users = await context.Users
+            .Where(x => userIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        var participantIdUsers = participants
+            .Select(x => (participantId: x.Key, user: users.FirstOrDefault(x2 => x2.Key == x.Value.UserId).Value))
+            .ToDictionary(x => x.participantId, x => x.user);
+
+        return ComposeTicketCommentDtoInternal(ticket, ticketComment, participants, participantIdUsers);
+    }
+
+    public async Task<IEnumerable<TicketCommentDto>> ComposeTicketCommentDtos(Ticket ticket, TicketComment[] ticketComments, CancellationToken cancellationToken = default)
+    {
+        HashSet<TicketParticipantId> participantIds = new();
+        HashSet<TicketId> ticketIds = new();
+
+        ExtractTicketParticipantIds(ticket, participantIds);
+
+        foreach (var comment in ticketComments)
+        {
+            participantIds.Add(comment.CreatedById.GetValueOrDefault());
+
+            if (comment.LastModifiedById is not null)
+            {
+                participantIds.Add(comment.LastModifiedById.GetValueOrDefault());
+            }
+
+            /*
+            if (comment.NewAssignedParticipantId is not null)
+            {
+                participantIds.Add(e2.NewAssignedParticipantId.GetValueOrDefault());
+            }
+            */
+        }
+
+        var participants = await context.TicketParticipants
+            .Where(x => x.TicketId == ticket.Id)
+            .Where(x => participantIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        var userIds = participants.Select(x => x.Value.UserId).ToList();
+
+        var users = await context.Users
+            .Where(x => userIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        var participantIdUsers = participants
+            .Select(x => (participantId: x.Key, user: users.FirstOrDefault(x2 => x2.Key == x.Value.UserId).Value))
+            .ToDictionary(x => x.participantId, x => x.user);
+
+        return ticketComments.Select(ticketComment =>
+        {
+            return ComposeTicketCommentDtoInternal(ticket, ticketComment, participants, participantIdUsers);
+        });
+    }
+
+    private TicketCommentDto ComposeTicketCommentDtoInternal(Ticket ticket, TicketComment ticketComment, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users)
+    {
+        participants.TryGetValue(ticketComment.CreatedById.GetValueOrDefault(), out var createdBy);
+
+        participants.TryGetValue(ticketComment.LastModifiedById.GetValueOrDefault(), out var editedBy);
+
+        //participants.TryGetValue(ticket.DeletedById.GetValueOrDefault(), out var deletedBy);
+
+        return dtoFactory.CreateTicketCommentDto(ticketComment, createdBy!, editedBy!, null!, users);
     }
 }

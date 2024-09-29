@@ -1,0 +1,116 @@
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject ITicketsClient TicketsClient
+@inject ITicketStatusesClient TicketStatusesClient
+@inject IDialogService DialogService
+@inject Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IStringLocalizer<TicketDialog> T
+
+<MudContainer Style="max-height: 600px; overflow-y: scroll">
+    <EditForm EditContext="EditContext" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudTextField Label="@T["Description"]" Lines="5" Variant="Variant.Outlined"
+                    @bind-Value="Form.Description" For="() => Form.Description" Immediate="true" Class="mb-4" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect Label="@T["Status"]" @bind-Value="Form.Status" For="() => Form.Status" Immediate="true"
+                    Variant="Variant.Outlined" Class="mb-4" ToStringFunc="(s) => s.Name">
+                    @foreach (var status in ticketStatuses)
+                    {
+                        <MudSelectItem Value="@status">@T[status.Name]</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField Label="@T["EstimatedTime"]" Variant="Variant.Outlined"
+                            @bind-Value="Form.EstimatedHours" For="() => Form.EstimatedHours" Immediate="true"
+                            Class="mb-4" />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudNumericField Label="@T["RemainingTime"]" Variant="Variant.Outlined"
+                            @bind-Value="Form.RemainingHours" For="() => Form.RemainingHours" Immediate="true"
+                            Class="mb-4" />
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Label="@T["Assignee"]"
+                    Variant="Variant.Outlined" @bind-Value="Form.Assignee" For="() => Form.Assignee" Class="mb-4" />
+            </MudItem>
+
+
+            <MudItem xs="12" md="6">
+                <MudSelect Label="Impact" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Impact"
+                    Immediate="true" For="() => Form.Impact">
+                    @foreach (var optionType in Enum.GetValues<TicketImpact>())
+                    {
+                        <MudSelectItem T="TicketImpact?" Value="@optionType">@Enum.GetName(typeof(TicketImpact), optionType)
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Urgency" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Urgency"
+                    Immediate="true" For="() => Form.Urgency">
+                    @foreach (var optionType in Enum.GetValues<TicketUrgency>())
+                    {
+                        <MudSelectItem T="TicketUrgency?" Value="@optionType">@Enum.GetName(typeof(TicketUrgency),
+                        optionType)</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Priority" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Priority"
+                    Immediate="true" For="() => Form.Priority">
+                    @foreach (var optionType in Enum.GetValues<TicketPriority>())
+                    {
+                        <MudSelectItem T="TicketPriority?" Value="@optionType">@Enum.GetName(typeof(TicketPriority),
+                        optionType)</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</MudContainer>
+
+@code {
+    CancellationTokenSource cts = new();
+    List<TicketStatus> ticketStatuses = new();
+    bool notFound = false;
+    bool error = false;
+
+    [CascadingParameter] public MudDialogInstance Instance { get; set; } = null!;
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
+    [Parameter] public int? Id { get; set; }
+
+    [Parameter] public TicketDetailsForm Form { get; set; }
+
+    [Parameter] public EditContext EditContext { get; set; }
+
+    [Parameter] public EventCallback Submit { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        notFound = false;
+        error = false;
+
+        ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
+
+        if (Id is null)
+        {
+            Form.Status = ticketStatuses.First();
+
+            Form.Impact = 0;
+            Form.Urgency = 0;
+            Form.Priority = 0;
+        }
+    }
+}

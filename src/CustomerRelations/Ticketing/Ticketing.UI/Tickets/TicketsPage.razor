@@ -215,8 +215,8 @@
     {
         var uri = NavigationManager.Uri;
 
-        DialogOptions dialogOptions = new DialogOptions() { FullScreen = false, MaxWidth = MaxWidth.Large, CloseButton = true };
-        var dialogRef = DialogService.Show<TicketDialog>(string.Empty, dialogOptions);
+        DialogOptions dialogOptions = new DialogOptions() { FullWidth = true, MaxWidth = MaxWidth.Large, CloseButton = true };
+        var dialogRef = DialogService.Show<Dialog.TicketDialog>(string.Empty, dialogOptions);
         var result = await dialogRef.Result;
 
         //Temp
@@ -231,10 +231,10 @@
             return;
 
         DialogParameters dialogParameters = new();
-        dialogParameters.Add(nameof(TicketDialog.Id), id);
+        dialogParameters.Add(nameof(Dialog.TicketDialog.Id), id);
 
-        DialogOptions dialogOptions = new DialogOptions() { FullScreen = false, MaxWidth = MaxWidth.Large, CloseButton = true };
-        var dialogRef = DialogService.Show<TicketDialog>(string.Empty, dialogParameters, dialogOptions);
+        DialogOptions dialogOptions = new DialogOptions() { FullWidth = true, MaxWidth = MaxWidth.Large, CloseButton = true };
+        var dialogRef = DialogService.Show<Dialog.TicketDialog>(string.Empty, dialogParameters, dialogOptions);
         var result = await dialogRef.Result;
     }
 

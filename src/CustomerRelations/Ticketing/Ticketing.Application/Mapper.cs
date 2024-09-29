@@ -25,7 +25,7 @@ public static partial class Mappings
         ticket.Attachments.Select(x => x.ToDto()),
         ticket.Created, ticket.CreatedBy?.ToDto(), ticket.LastModified, ticket.LastModifiedBy?.ToDto());
 
-    public static TicketCommentDto ToDto(this TicketComment ticketComment) => new TicketCommentDto(ticketComment.Id, ticketComment.Text, ticketComment.Created, ticketComment.CreatedBy?.ToDto(), ticketComment.LastModified, ticketComment.LastModifiedBy?.ToDto());
+    //public static TicketCommentDto ToDto(this TicketComment ticketComment) => new TicketCommentDto(ticketComment.Id, ticketComment.Text, ticketComment.Created, ticketComment.CreatedBy?.ToDto(), ticketComment.LastModified, ticketComment.LastModifiedBy?.ToDto());
 
     public static TicketTypeDto ToDto(this TicketType ticketType) => new TicketTypeDto(ticketType.Id, ticketType.Name);
 

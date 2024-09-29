@@ -1,0 +1,103 @@
+@using System.ComponentModel.DataAnnotations
+@implements IDisposable
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject ITicketsClient TicketsClient
+@inject ITicketStatusesClient TicketStatusesClient
+@inject IDialogService DialogService
+@inject Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IStringLocalizer<TicketDialog> T
+
+<EditForm Model="@this" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <MudTextField Label="@T["Text"]" Lines="5" Variant="Variant.Outlined" @bind-Value="Text"
+        For="() => Text" Immediate="true" Class="mb-4" MaxLines="3" />
+    <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">Post</MudButton>
+</EditForm>
+
+<MudTable @ref="table" T="TicketComment" Context="c"
+    ServerData="@(new Func<TableState, Task<TableData<TicketComment>>>(ServerReload))"    Elevation="205" Dense="false" Hover="true" SortLabel="@T["SortBy"]">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortLabel="OccurredAt" T="TicketComment">@T["PostedAt"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            @T["Text"]
+        </MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="@T["PostedAt"]">@c.Created.ToString("g")</MudTd>
+        <MudTd DataLabel="@T["Text"]">
+            @c.Text
+        </MudTd>
+    </RowTemplate>
+
+    <NoRecordsContent>
+        <MudText>@T["NoMatchesFound"]</MudText>
+    </NoRecordsContent>
+
+    <LoadingContent>
+        <MudText>@T["Loading"]</MudText>
+    </LoadingContent>
+
+    <PagerContent>
+        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    CancellationTokenSource cts = new();
+    MudTable<TicketComment> table;
+
+    [CascadingParameter] public MudDialogInstance Instance { get; set; } = null!;
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
+    [Parameter] public int? Id { get; set; }
+
+    [Required] public string? Text { get; set; }
+
+    private async Task<TableData<TicketComment>> ServerReload(TableState state)
+    {
+        try
+        {
+            var result = await TicketsClient.GetTicketCommentsAsync(Organization.Id, Id.GetValueOrDefault(), state.Page + 1,
+            state.PageSize,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
+            Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);
+
+            return new TableData<TicketComment>() { TotalItems = result.Total, Items = result.Items };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        /*catch (Exception)
+        {
+        Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
+        }*/
+
+        return new TableData<TicketComment>() { Items = Enumerable.Empty<TicketComment>(), TotalItems = 0 };
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            var result = await TicketsClient.PostTicketCommentAsync(Organization.Id, Id.GetValueOrDefault(), new PostTicketCommentRequest {
+                Text = Text
+            });
+
+            await table.ReloadServerData();
+        }
+        catch {}
+    }
+
+    public void Dispose()
+    {
+        cts.Cancel();
+    }
+}

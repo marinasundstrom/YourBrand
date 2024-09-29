@@ -7,6 +7,7 @@ using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Widgets;
 using YourBrand.Ticketing.Client;
+using YourBrand.Ticketing.Tickets;
 
 namespace YourBrand.Ticketing;
 

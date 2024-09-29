@@ -11,6 +11,7 @@ public interface IDtoFactory
     TicketDto CreateTicketDto(Ticket ticket, TicketParticipant? assignee, TicketParticipant createdBy, TicketParticipant? editedBy, TicketParticipant? deletedBy, Dictionary<TicketParticipantId, User> users);
     TicketParticipantDto CreateParticipantDto(TicketParticipant participant, Dictionary<TicketParticipantId, User> users);
     UserDto CreateUserDto(User user);
+    TicketCommentDto CreateTicketCommentDto(TicketComment ticketComment, TicketParticipant addedBy, TicketParticipant editedBy, object value, Dictionary<TicketParticipantId, User> users);
 }
 
 public sealed class DtoFactory : IDtoFactory
@@ -50,5 +51,16 @@ public sealed class DtoFactory : IDtoFactory
             participant!.Id,
             /* participant.DisplayName ?? */ users[participant.Id].Name,
             participant.UserId);
+    }
+
+    public TicketCommentDto CreateTicketCommentDto(TicketComment ticketComment, TicketParticipant addedBy, TicketParticipant editedBy, object value, Dictionary<TicketParticipantId, User> users)
+    {
+       return new TicketCommentDto(
+        ticketComment.Id, 
+       ticketComment.Text, 
+       ticketComment.Created,
+        ticketComment.CreatedById is null ? null : CreateParticipantDto(addedBy!, users), 
+        ticketComment.LastModified, 
+       ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
     }
 }
