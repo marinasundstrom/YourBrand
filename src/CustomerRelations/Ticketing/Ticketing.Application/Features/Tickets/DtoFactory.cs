@@ -57,10 +57,10 @@ public sealed class DtoFactory : IDtoFactory
     {
        return new TicketCommentDto(
         ticketComment.Id, 
-       ticketComment.Text, 
-       ticketComment.Created,
+        ticketComment.Text, 
+        ticketComment.Created,
         ticketComment.CreatedById is null ? null : CreateParticipantDto(addedBy!, users), 
         ticketComment.LastModified, 
-       ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
+        ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
     }
 }

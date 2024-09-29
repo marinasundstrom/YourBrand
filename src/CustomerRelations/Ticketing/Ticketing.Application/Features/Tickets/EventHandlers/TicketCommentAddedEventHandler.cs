@@ -1,13 +1,11 @@
-using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
-public sealed class TicketSubjectUpdatedEventHandler(IApplicationDbContext context, ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketSubjectUpdated>
+public sealed class TicketCommentAddedEventHandler(IApplicationDbContext context, ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketCommentAdded>
 {
-    public async Task Handle(TicketSubjectUpdated notification, CancellationToken cancellationToken)
+    public async Task Handle(TicketCommentAdded notification, CancellationToken cancellationToken)
     {
         tenantContext.SetTenantId(notification.TenantId);
 

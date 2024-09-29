@@ -1300,6 +1300,7 @@ components:
           PriorityUpdated: '#/components/schemas/TicketPriorityUpdated'
           UrgencyUpdated: '#/components/schemas/TicketUrgencyUpdated'
           ImpactUpdated: '#/components/schemas/TicketImpactUpdated'
+          CommentAdded: '#/components/schemas/TicketCommentAdded'
       x-abstract: true
       additionalProperties: false
       required:
@@ -1474,6 +1475,18 @@ components:
             nullable: true
             oneOf:
             - $ref: '#/components/schemas/TicketImpact'
+    TicketCommentAdded:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          commentId:
+            type: integer
+            format: int32
     CreateTicketData:
       type: object
       additionalProperties: false

@@ -205,6 +205,7 @@ public sealed class DtoComposer : IDtoComposer
             TicketPriorityUpdated e => new TicketPriorityUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, (TicketPriorityDto?)e.NewPriority, (TicketPriorityDto?)e.OldPriority, dtoFactory.CreateParticipantDto(participant!, users)),
             TicketImpactUpdated e => new TicketImpactUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, (TicketImpactDto?)e.NewImpact, (TicketImpactDto?)e.OldImpact, dtoFactory.CreateParticipantDto(participant!, users)),
             TicketUrgencyUpdated e => new TicketUrgencyUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, (TicketUrgencyDto?)e.NewUrgency, (TicketUrgencyDto?)e.OldUrgency, dtoFactory.CreateParticipantDto(participant!, users)),
+            TicketCommentAdded e => new TicketCommentAddedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e.TicketId, e.CommentId, dtoFactory.CreateParticipantDto(participant!, users)),
 
             _ => throw new Exception()
         };

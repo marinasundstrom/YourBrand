@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Tenancy;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
@@ -21,7 +22,8 @@ public sealed record PostTicketComment(string OrganizationId, int Id, string Tex
         }
     }
 
-    public sealed class Handler(IDtoComposer dtoComposer, IApplicationDbContext context, ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<PostTicketComment, Result<TicketCommentDto>>
+    public sealed class Handler(IDtoComposer dtoComposer, IApplicationDbContext context, ITicketRepository ticketRepository, IUnitOfWork unitOfWork, 
+        ITenantContext tenantContext, IUserContext userContext) : IRequestHandler<PostTicketComment, Result<TicketCommentDto>>
     {
         public async Task<Result<TicketCommentDto>> Handle(PostTicketComment request, CancellationToken cancellationToken)
         {
@@ -50,6 +52,8 @@ public sealed record PostTicketComment(string OrganizationId, int Id, string Tex
             };
 
             context.TicketComments.Add(ticketComment);
+
+            ticketComment.AddDomainEvent(new TicketCommentAdded(tenantContext.TenantId.GetValueOrDefault(), request.OrganizationId, ticket.Id, ticketCommentId));
 
             var participant = ticket.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 

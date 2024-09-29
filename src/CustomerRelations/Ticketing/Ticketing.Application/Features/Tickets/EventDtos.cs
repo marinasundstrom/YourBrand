@@ -17,6 +17,7 @@ namespace YourBrand.Ticketing.Application;
 [JsonDerivedType(typeof(TicketPriorityUpdatedDto), "PriorityUpdated")]
 [JsonDerivedType(typeof(TicketUrgencyUpdatedDto), "UrgencyUpdated")]
 [JsonDerivedType(typeof(TicketImpactUpdatedDto), "ImpactUpdated")]
+[JsonDerivedType(typeof(TicketCommentAddedDto), "CommentAdded")]
 public abstract record TicketEventDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, TicketParticipantDto Participant) 
 {
     public string Event => GetType().Name.Replace("Ticket", string.Empty).Replace("Dto", string.Empty);
@@ -41,6 +42,8 @@ public sealed record TicketPriorityUpdatedDto(DateTimeOffset OccurredAt, string 
 public sealed record TicketUrgencyUpdatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, TicketUrgencyDto? NewUrgency, TicketUrgencyDto? OldUrgency, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);
 
 public sealed record TicketImpactUpdatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, TicketImpactDto? NewImpact, TicketImpactDto? OldImpact, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);
+
+public sealed record TicketCommentAddedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, int CommentId, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);
 
 
 public static partial class Mappings

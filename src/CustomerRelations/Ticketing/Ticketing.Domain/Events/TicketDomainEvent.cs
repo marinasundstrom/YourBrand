@@ -16,6 +16,7 @@ namespace YourBrand.Ticketing.Domain.Events;
 [JsonDerivedType(typeof(TicketPriorityUpdated), typeDiscriminator: nameof(TicketPriorityUpdated))]
 [JsonDerivedType(typeof(TicketUrgencyUpdated), typeDiscriminator: nameof(TicketUrgencyUpdated))]
 [JsonDerivedType(typeof(TicketImpactUpdated), typeDiscriminator: nameof(TicketImpactUpdated))]
+[JsonDerivedType(typeof(TicketCommentAdded), typeDiscriminator: nameof(TicketCommentAdded))]
 public record TicketDomainEvent(OrganizationId OrganizationId, TicketId TicketId) : DomainEvent, IHasOrganization2, IHasTicket;
 
 public interface IHasTicket
