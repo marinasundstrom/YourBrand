@@ -1936,6 +1936,8 @@ components:
         id:
           type: integer
           format: int32
+        project:
+          $ref: '#/components/schemas/Project'
         subject:
           type: string
         description:
@@ -1999,6 +2001,54 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/TicketParticipant'
+    Project:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organization:
+          $ref: '#/components/schemas/Organization'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Team:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+    TeamMember:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
     TicketStatus:
       type: object
       additionalProperties: false
@@ -2413,28 +2463,6 @@ components:
         totalItems:
           type: integer
           format: int32
-    Team:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/TeamMember'
-    TeamMember:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
     CreateTeam:
       type: object
       additionalProperties: false
@@ -2489,32 +2517,6 @@ components:
         totalItems:
           type: integer
           format: int32
-    Project:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        organization:
-          $ref: '#/components/schemas/Organization'
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/Team'
-    Organization:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
     CreateProject:
       type: object
       additionalProperties: false

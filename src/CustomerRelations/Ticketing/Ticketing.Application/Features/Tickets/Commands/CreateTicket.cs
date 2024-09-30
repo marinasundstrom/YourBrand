@@ -31,7 +31,8 @@ public sealed record CreateTicket(
         }
     }
 
-    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IApplicationDbContext context, IUserContext userContext, IDomainEventDispatcher domainEventDispatcher, ITenantContext tenantContext) : IRequestHandler<CreateTicket, Result<TicketDto>>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IDtoComposer dtoComposer,
+         IApplicationDbContext context, IUserContext userContext, IDomainEventDispatcher domainEventDispatcher, ITenantContext tenantContext) : IRequestHandler<CreateTicket, Result<TicketDto>>
     {
         public async Task<Result<TicketDto>> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
@@ -115,7 +116,7 @@ public sealed record CreateTicket(
                 .Include(i => i.LastModifiedBy)
                 .LastAsync(cancellationToken);
 
-            return Result.SuccessWith(ticket!.ToDto());
+            return await dtoComposer.ComposeTicketDto(ticket, cancellationToken);
         }
     }
 }

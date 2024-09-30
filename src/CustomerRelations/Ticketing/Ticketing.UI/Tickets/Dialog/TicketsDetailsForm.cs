@@ -32,6 +32,7 @@ public class TicketDetailsForm
 
     public void Populate(Ticket ticket) 
     {
+        Project = ticket.Project;
         Title = ticket.Subject;
         Description = ticket.Description;
         Status = ticket.Status;

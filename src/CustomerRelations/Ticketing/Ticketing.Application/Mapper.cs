@@ -12,6 +12,7 @@ public static partial class Mappings
 {
     public static TicketDto ToDto(this Ticket ticket) => new(
         ticket.Id,
+        null!,
         ticket.Subject,
         ticket.Text,
         ticket.Status.ToDto()!,

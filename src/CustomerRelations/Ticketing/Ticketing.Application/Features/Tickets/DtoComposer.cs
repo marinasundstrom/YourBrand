@@ -31,14 +31,24 @@ public sealed class DtoComposer : IDtoComposer
     {
         HashSet<TicketParticipantId> participantIds = new();
         HashSet<TicketId> ticketIds = new();
+        HashSet<ProjectId> projectIds = new();
+
+        projectIds.Add(ticket.ProjectId);
 
         ExtractTicketParticipantIds(ticket, participantIds);
 
         var replyTickets = await context.Tickets
+            .InOrganization(ticket.OrganizationId)
             .IgnoreQueryFilters()
             .Where(x => ticketIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
+        var projects = await context.Projects
+            .InOrganization(ticket.OrganizationId)
+            .Where(x => projectIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
+        /*
         if (replyTickets.Any())
         {
             foreach (var replyTicket in replyTickets.Select(x => x.Value))
@@ -46,8 +56,10 @@ public sealed class DtoComposer : IDtoComposer
                 ExtractTicketParticipantIds(replyTicket, participantIds);
             }
         }
+        */
 
         var participants = await context.TicketParticipants
+            .InOrganization(ticket.OrganizationId)
             .Where(x => x.TicketId == ticket.Id)
             .Where(x => participantIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
@@ -62,7 +74,7 @@ public sealed class DtoComposer : IDtoComposer
             .Select(x => (participantId: x.Key, user: users.FirstOrDefault(x2 => x2.Key == x.Value.UserId).Value))
             .ToDictionary(x => x.participantId, x => x.user);
 
-        return ComposeTicketDtoInternal(ticket, participants, participantIdUsers);
+        return ComposeTicketDtoInternal(ticket, projects, participants, participantIdUsers);
     }
 
     private static void ExtractTicketParticipantIds(Ticket ticket, HashSet<TicketParticipantId> participantIds)
@@ -87,14 +99,22 @@ public sealed class DtoComposer : IDtoComposer
     {
         HashSet<TicketParticipantId> participantIds = new();
         HashSet<TicketId> ticketIds = new();
+        HashSet<ProjectId> projectIds = new();
 
         foreach (var ticket in tickets)
         {
+            projectIds.Add(ticket.ProjectId);
+            
             ExtractTicketParticipantIds(ticket, participantIds);
         }
 
+        var projects = await context.Projects
+              .InOrganization(tickets.First().OrganizationId)
+              .Where(x => projectIds.Any(z => x.Id == z))
+              .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
+
         var participants = await context.TicketParticipants
-            //.Where(x => x.ChannelId == ticket.ChannelId)
+            .InOrganization(tickets.First().OrganizationId)
             .Where(x => participantIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
@@ -110,12 +130,14 @@ public sealed class DtoComposer : IDtoComposer
 
         return tickets.Select(ticket =>
         {
-            return ComposeTicketDtoInternal(ticket, participants, participantIdUsers);
+            return ComposeTicketDtoInternal(ticket, projects, participants, participantIdUsers);
         });
     }
 
-    private TicketDto ComposeTicketDtoInternal(Ticket ticket, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users)
+    private TicketDto ComposeTicketDtoInternal(Ticket ticket, Dictionary<ProjectId, Project> projects, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users)
     {
+        projects.TryGetValue(ticket.ProjectId, out var project);
+
         participants.TryGetValue(ticket.AssigneeId.GetValueOrDefault(), out var assignee);
 
         participants.TryGetValue(ticket.CreatedById.GetValueOrDefault(), out var createdBy);
@@ -126,7 +148,7 @@ public sealed class DtoComposer : IDtoComposer
 
         //var reactions = ticket.Reactions.Select(x => dtoFactory.CreateReactionDto(x, participants[x.AddedById], users));
 
-        return dtoFactory.CreateTicketDto(ticket, assignee, createdBy!, editedBy, null!, users);
+        return dtoFactory.CreateTicketDto(ticket, project!, assignee, createdBy!, editedBy, null!, users);
     }
 
     public async Task<IEnumerable<TicketEventDto>> ComposeTicketEventDtos(Ticket ticket, TicketEvent[] ticketEvents, CancellationToken cancellationToken = default)

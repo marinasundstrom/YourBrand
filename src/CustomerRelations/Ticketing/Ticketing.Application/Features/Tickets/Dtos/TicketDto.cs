@@ -1,6 +1,9 @@
-﻿namespace YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+﻿using YourBrand.Ticketing.Application.Features.Projects;
+
+namespace YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 public sealed record TicketDto(
     int Id,
+    ProjectDto Project,
     string Subject,
     string? Description,
     TicketStatusDto Status,

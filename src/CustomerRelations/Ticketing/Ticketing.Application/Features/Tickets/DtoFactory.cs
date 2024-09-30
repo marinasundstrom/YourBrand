@@ -10,7 +10,7 @@ namespace YourBrand.Ticketing.Application;
 
 public interface IDtoFactory
 {
-    TicketDto CreateTicketDto(Ticket ticket, TicketParticipant? assignee, TicketParticipant createdBy, TicketParticipant? editedBy, TicketParticipant? deletedBy, Dictionary<TicketParticipantId, User> users);
+    TicketDto CreateTicketDto(Ticket ticket, Project project, TicketParticipant? assignee, TicketParticipant createdBy, TicketParticipant? editedBy, TicketParticipant? deletedBy, Dictionary<TicketParticipantId, User> users);
     TicketParticipantDto CreateParticipantDto(TicketParticipant participant, Dictionary<TicketParticipantId, User> users);
     UserDto CreateUserDto(User user);
     TicketCommentDto CreateTicketCommentDto(TicketComment ticketComment, TicketParticipant addedBy, TicketParticipant editedBy, object value, Dictionary<TicketParticipantId, User> users);
@@ -18,10 +18,11 @@ public interface IDtoFactory
 
 public sealed class DtoFactory : IDtoFactory
 {
-    public TicketDto CreateTicketDto(Ticket ticket, TicketParticipant? assignee, TicketParticipant createdBy, TicketParticipant? editedBy, TicketParticipant? deletedBy, Dictionary<TicketParticipantId, User> users)
+    public TicketDto CreateTicketDto(Ticket ticket, Project project, TicketParticipant? assignee, TicketParticipant createdBy, TicketParticipant? editedBy, TicketParticipant? deletedBy, Dictionary<TicketParticipantId, User> users)
     {
         return new TicketDto(
             ticket.Id,
+            project.ToDto(),
             ticket.Subject,
             ticket.Text,
             ticket.Status.ToDto()!,
