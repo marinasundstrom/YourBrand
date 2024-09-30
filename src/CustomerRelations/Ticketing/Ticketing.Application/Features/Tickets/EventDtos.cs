@@ -1,5 +1,3 @@
-using YourBrand.Ticketing.Domain.Entities;
-using YourBrand.Ticketing.Domain.Events;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 using System.Text.Json.Serialization;

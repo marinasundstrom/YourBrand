@@ -114,6 +114,7 @@ public sealed class ApplicationDbContext(
     {
         configurationBuilder.Properties<TicketId>().HaveConversion<TicketIdConverter>();
         configurationBuilder.Properties<TicketParticipantId>().HaveConversion<TicketParticipantIdConverter>();
+        configurationBuilder.Properties<ProjectId>().HaveConversion<ProjectIdConverter>();
 
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
@@ -135,6 +136,16 @@ public sealed class ApplicationDbContext(
     public DbSet<TicketType> TicketTypes { get; set; }
 
     public DbSet<TicketCategory> TicketCategories { get; set; }
+
+    public DbSet<Project> Projects { get; set; }
+
+    public DbSet<ProjectGroup> ProjectGroups { get; set; }
+
+    public DbSet<ProjectMembership> ProjectMemberships { get; set; }
+
+    public DbSet<Team> Teams { get; set; }
+
+    public DbSet<TeamMembership> TeamMemberships { get; set; }
 
     public DbSet<User> Users { get; set; }
 

@@ -37,7 +37,7 @@ public record GetTicketCommentById(string OrganizationId, int TicketId, int Id) 
                 return Result.Failure<TicketCommentDto>(Errors.Tickets.TicketCommentNotFound);
             }
 
-            return Result.Success(await dtoComposer.ComposeTicketCommentDto(ticket, ticketComment, cancellationToken));
+            return Result.SuccessWith(await dtoComposer.ComposeTicketCommentDto(ticket, ticketComment, cancellationToken));
         }
     }
 }

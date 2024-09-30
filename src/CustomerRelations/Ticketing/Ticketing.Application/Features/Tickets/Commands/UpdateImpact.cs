@@ -36,7 +36,7 @@ public sealed record UpdateImpact(string OrganizationId, int Id, TicketImpact Im
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

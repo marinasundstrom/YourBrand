@@ -1,0 +1,101 @@
+@using System.Linq.Expressions
+@inject IProjectsClient ProjectsClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="Project" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchProjects" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                @*<MudText Typo="Typo.body2">@context2.Ca</MudText> *@
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProject" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Project";
+
+    [Parameter]
+    public Project Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Project> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<Project>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string? OrganizationId { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async Task<IEnumerable<Project>> SearchProjects(string text)
+    {
+        try
+        {
+            var results = await ProjectsClient.GetProjectsAsync(OrganizationId, 0, 10, UserId, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task AddProject() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Showroom.UI")
+                .GetType("YourBrand.Showroom.Projects.ProjectDialog");
+
+            var dialogReference = DialogService.Show(type, "New Project", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (Project)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

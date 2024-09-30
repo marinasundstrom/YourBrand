@@ -1,7 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-
-using YourBrand.Ticketing.Domain.Entities;
-using YourBrand.Ticketing.Domain.Repositories;
 using YourBrand.Ticketing.Domain.Specifications;
 using YourBrand.Domain;
 

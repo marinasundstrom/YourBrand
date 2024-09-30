@@ -1,7 +1,4 @@
 ﻿namespace YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-
-using YourBrand.Ticketing.Application.Features.Users;
-
 public sealed record TicketDto(
     int Id,
     string Subject,

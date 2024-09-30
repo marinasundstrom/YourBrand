@@ -2,8 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Ticketing;
-using YourBrand.Ticketing.Domain.Repositories;
 using YourBrand.Ticketing.Models;
 
 namespace YourBrand.Ticketing.Application.Features.Organizations;

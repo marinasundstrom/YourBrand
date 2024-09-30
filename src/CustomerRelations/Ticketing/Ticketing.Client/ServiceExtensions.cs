@@ -9,6 +9,9 @@ public static class ServiceExtensions
         services
             .AddTicketsClient(configureClient, builder)
             .AddTicketStatusesClient(configureClient, builder)
+            .AddProjectsClient(configureClient, builder)
+            .AddProjectGroupsClient(configureClient, builder)
+            .AddTeamsClient(configureClient, builder)
             .AddUsersClient(configureClient, builder);
 
         return services;
@@ -29,6 +32,39 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(TicketStatusesClient) + "TS", configureClient)
             .AddTypedClient<ITicketStatusesClient>((http, sp) => new TicketStatusesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddProjectsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ProjectsClient) + "TS", configureClient)
+            .AddTypedClient<IProjectsClient>((http, sp) => new ProjectsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddProjectGroupsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ProjectGroupsClient) + "TS", configureClient)
+            .AddTypedClient<IProjectGroupsClient>((http, sp) => new ProjectGroupsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddTeamsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(TeamsClient) + "TS", configureClient)
+            .AddTypedClient<ITeamsClient>((http, sp) => new TeamsClient(http));
 
         builder?.Invoke(b);
 

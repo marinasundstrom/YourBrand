@@ -13,6 +13,9 @@ public class TicketDetailsForm
     [MaxLength(340)]
     public string? Description { get; set; }
 
+    [Required]
+    public YourBrand.Ticketing.Project? Project { get; set; }
+
     public YourBrand.Portal.User? Assignee { get; set; }
 
     public TicketStatus Status { get; set; }

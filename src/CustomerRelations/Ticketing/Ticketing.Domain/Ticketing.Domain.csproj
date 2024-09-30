@@ -23,5 +23,6 @@
         <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
         <ProjectReference
             Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\Common\SoftDelete.Abstractions\SoftDelete.Abstractions.csproj" />
 	</ItemGroup>
 </Project>

@@ -24,6 +24,8 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
+    public ProjectId ProjectId { get; set; }
+
     public string Subject { get; set; } = default!;
 
     public string? Description { get; }

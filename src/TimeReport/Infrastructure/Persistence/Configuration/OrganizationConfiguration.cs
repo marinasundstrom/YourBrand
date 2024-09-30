@@ -16,7 +16,7 @@ sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
         builder.Ignore(x => x.DomainEvents);
 
         builder.HasMany(p => p.Users)
-            .WithMany(p => p.Organization)
+            .WithMany(p => p.Organizations)
             .UsingEntity<OrganizationUser>(
                 j => j
                     .HasOne(pt => pt.User)

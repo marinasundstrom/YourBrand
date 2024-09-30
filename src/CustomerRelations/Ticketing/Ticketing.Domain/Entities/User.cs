@@ -6,6 +6,11 @@ namespace YourBrand.Ticketing.Domain.Entities;
 
 public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
 {
+    readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
+    readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
+    readonly HashSet<Organization> _organizations = new HashSet<Organization>();
+    readonly HashSet<Team> _teams = new HashSet<Team>();
+
     public User(UserId id, string name, string email)
         : base(id)
     {
@@ -32,7 +37,11 @@ public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
 
     public DateTimeOffset? LastModified { get; set; }
 
-    public List<Organization> Organizations { get; set; }
+    public IReadOnlyCollection<Organization> Organizations => _organizations;
 
-    public List<OrganizationUser> OrganizationUsers { get; set; }
+    public IReadOnlyCollection<Team> Teams => _teams;
+
+    public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
+
+    public IReadOnlyCollection<TeamMembership> TeamMemberships => _teamMemberships;
 }

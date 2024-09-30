@@ -61,7 +61,7 @@ public sealed record UpdateAssignee(string OrganizationId, int Id, string? UserI
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

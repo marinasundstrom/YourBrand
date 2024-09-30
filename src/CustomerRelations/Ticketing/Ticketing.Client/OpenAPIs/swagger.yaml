@@ -952,6 +952,813 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Teams:
+    get:
+      tags:
+      - Teams
+      operationId: Teams_GetTeams
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfTeam'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Teams
+      operationId: Teams_CreateTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeam'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+      security:
+      - JWT: []
+  /v1/Teams/{id}:
+    get:
+      tags:
+      - Teams
+      operationId: Teams_GetTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Teams
+      operationId: Teams_UpdateTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Teams
+      operationId: Teams_DeleteTeam
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/Teams/{id}/Members:
+    post:
+      tags:
+      - Teams
+      operationId: Teams_AddMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMember'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/Teams/{id}/Members/{userId}:
+    delete:
+      tags:
+      - Teams
+      operationId: Teams_RemoveMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/Teams/{id}/Memberships:
+    get:
+      tags:
+      - Teams
+      operationId: Teams_GetMemberships
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfTeamMembership'
+      security:
+      - JWT: []
+  /v1/Projects:
+    get:
+      tags:
+      - Projects
+      operationId: Projects_GetProjects
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: userId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfProject'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Projects
+      operationId: Projects_CreateProject
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: createProjectDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+      security:
+      - JWT: []
+  /v1/Projects/{id}:
+    get:
+      tags:
+      - Projects
+      operationId: Projects_GetProject
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Projects
+      operationId: Projects_UpdateProject
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: updateProjectDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProject'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Projects
+      operationId: Projects_DeleteProject
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/Projects/{id}/Memberships:
+    get:
+      tags:
+      - Projects
+      operationId: Projects_GetProjectMemberships
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfProjectMembership'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Projects
+      operationId: Projects_CreateProjectMembership
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: createProjectMembershipDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectMembership'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMembership'
+      security:
+      - JWT: []
+  /v1/Projects/{id}/Memberships/{membershipId}:
+    get:
+      tags:
+      - Projects
+      operationId: Projects_GetProjectMembership
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: membershipId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMembership'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Projects
+      operationId: Projects_UpdateProjectMembership
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: membershipId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: updateProjectMembershipDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectMembership'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMembership'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Projects
+      operationId: Projects_DeleteProjectMembership
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: membershipId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/ProjectGroups:
+    get:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_GetProjectGroups
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfProjectGroup'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_CreateProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: createProjectGroupDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectGroup'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroup'
+      security:
+      - JWT: []
+  /v1/ProjectGroups/{id}:
+    get:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_GetProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroup'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_UpdateProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateProjectGroupDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectGroup'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectGroup'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - ProjectGroups
+      operationId: ProjectGroups_DeleteProjectGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
   /v1/Organizations:
     get:
       tags:
@@ -1491,6 +2298,9 @@ components:
       type: object
       additionalProperties: false
       properties:
+        projectId:
+          type: integer
+          format: int32
         title:
           type: string
         description:
@@ -1592,6 +2402,242 @@ components:
         total:
           type: integer
           format: int32
+    ItemsResultOfTeam:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+        totalItems:
+          type: integer
+          format: int32
+    Team:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+    TeamMember:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    CreateTeam:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateTeam:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+    AddMember:
+      type: object
+      additionalProperties: false
+      properties:
+        userId:
+          type: string
+    ItemsResultOfTeamMembership:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMembership'
+        totalItems:
+          type: integer
+          format: int32
+    TeamMembership:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+    ItemsResultOfProject:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        totalItems:
+          type: integer
+          format: int32
+    Project:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organization:
+          $ref: '#/components/schemas/Organization'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+    Organization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    CreateProject:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organizationId:
+          type: string
+          nullable: true
+    UpdateProject:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organizationId:
+          type: string
+          nullable: true
+    ItemsResultOfProjectMembership:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectMembership'
+        totalItems:
+          type: integer
+          format: int32
+    ProjectMembership:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        project:
+          $ref: '#/components/schemas/Project'
+        user:
+          $ref: '#/components/schemas/User'
+        from:
+          type: string
+          format: date-time
+          nullable: true
+        thru:
+          type: string
+          format: date-time
+          nullable: true
+    CreateProjectMembership:
+      type: object
+      additionalProperties: false
+      properties:
+        userId:
+          type: string
+        from:
+          type: string
+          format: date-time
+          nullable: true
+        thru:
+          type: string
+          format: date-time
+          nullable: true
+    UpdateProjectMembership:
+      type: object
+      additionalProperties: false
+      properties:
+        from:
+          type: string
+          format: date-time
+          nullable: true
+        thru:
+          type: string
+          format: date-time
+          nullable: true
+    ItemsResultOfProjectGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectGroup'
+        totalItems:
+          type: integer
+          format: int32
+    ProjectGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        project:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Project'
+    CreateProjectGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateProjectGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
     PagedResultOfOrganization:
       type: object
       additionalProperties: false
@@ -1603,14 +2649,6 @@ components:
         total:
           type: integer
           format: int32
-    Organization:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
     CreateOrganization:
       type: object
       additionalProperties: false

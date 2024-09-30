@@ -36,7 +36,7 @@ public sealed record UpdateUrgency(string OrganizationId, int Id, TicketUrgency 
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

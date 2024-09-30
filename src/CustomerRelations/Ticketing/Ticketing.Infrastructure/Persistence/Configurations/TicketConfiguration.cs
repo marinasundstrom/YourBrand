@@ -29,7 +29,7 @@ public sealed class TicketConfiguration : IEntityTypeConfiguration<Ticket>
            .HasOne(x => x.Status)
            .WithMany()
            .HasForeignKey(x => new { x.OrganizationId, x.StatusId })
-            .OnDelete(DeleteBehavior.NoAction);
+           .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.ReportedBy)
             .WithMany()

@@ -31,7 +31,7 @@ public sealed record DeleteTicket(string OrganizationId, int Id) : IRequest<Resu
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

@@ -1,8 +1,10 @@
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-
 using YourBrand.Ticketing.Domain.ValueObjects;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 using YourBrand.Ticketing.Application.Features.Users;
+using YourBrand.Ticketing.Application.Features.Projects;
+using YourBrand.Ticketing.Application.Features.Projects.ProjectGroups;
+using YourBrand.Ticketing.Application.Features.Teams;
+using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application;
 
@@ -63,4 +65,41 @@ public sealed class DtoFactory : IDtoFactory
         ticketComment.LastModified, 
         ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
     }
+
+
+    /*
+
+    public ProjectDto ToDto(this Domain.Entities.Project project, Dictionary<UserId, User> users)
+    {
+        return new(project.Id, project.Name, project.Description, project.Organization.ToDto(), project.Teams.Select(t => t.ToDto()));
+    }
+
+    public ProjectGroupDto ToDto(this Domain.Entities.ProjectGroup projectGroup)
+    {
+        return new(projectGroup.Id, projectGroup.Name, projectGroup.Description, projectGroup.Project?.ToDto());
+    }
+
+    public ProjectMembershipDto ToDto(this Domain.Entities.ProjectMembership projectMembership)
+    {
+        return new ProjectMembershipDto(projectMembership.Id, projectMembership.Project.ToDto(),
+                projectMembership.User.ToDto(),
+                projectMembership.From, projectMembership.To);
+    }
+
+    public TeamDto ToDto(this Domain.Entities.Team team)
+    {
+        return new(team.Id, team.Name, team.Memberships.Select(x => x.ToDto()));
+    }
+
+    public TeamMemberDto ToDto(this Domain.Entities.TeamMembership teamMember, Dictionary<UserId, User> users)
+    {
+        return new(teamMember.User.Id, teamMember.User.FirstName, teamMember.User.LastName);
+    }
+
+    public TeamMembershipDto ToDto2(this Domain.Entities.TeamMembership teamMembership)
+    {
+        return new(teamMembership.Id, teamMembership.User.ToDto());
+    }
+
+    */
 }

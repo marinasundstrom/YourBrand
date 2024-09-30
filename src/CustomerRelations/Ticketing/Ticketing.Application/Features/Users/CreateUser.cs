@@ -2,8 +2,6 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Ticketing.Domain;
-using YourBrand.Ticketing.Domain.Entities;
 using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Features.Users;
@@ -28,7 +26,7 @@ public record CreateUser(string Name, string Email, string? TenantId, string? Us
 
             if (user is not null)
             {
-                return Result.Success(user.ToDto2());
+                return Result.SuccessWith(user.ToDto2());
             }
 
             string userId = request.UserId ?? userContext.UserId!;
@@ -44,7 +42,7 @@ public record CreateUser(string Name, string Email, string? TenantId, string? Us
                 return Result.Failure<UserInfoDto>(Errors.Users.UserNotFound);
             }
 
-            return Result.Success(user.ToDto2());
+            return Result.SuccessWith(user.ToDto2());
         }
     }
 }

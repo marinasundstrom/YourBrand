@@ -19,3 +19,11 @@ internal sealed class TicketParticipantIdConverter : ValueConverter<TicketPartic
     {
     }
 }
+
+internal sealed class ProjectIdConverter : ValueConverter<ProjectId, int>
+{
+    public ProjectIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}

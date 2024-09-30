@@ -2,7 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Ticketing;
 using YourBrand.Ticketing.Models;
 
 namespace YourBrand.Ticketing.Application.Features.Users;

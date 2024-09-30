@@ -21,7 +21,7 @@ public record GetTeamQuery(string OrganizationId, string Id) : IRequest<TeamDto?
                .InOrganization(request.OrganizationId)
                .Include(x => x.Memberships)
                .ThenInclude(x => x.User)
-               .ThenInclude(x => x.Organization)
+               .ThenInclude(x => x.Organizations)
                .AsNoTracking()
                .FirstAsync(c => c.Id == request.Id);
 

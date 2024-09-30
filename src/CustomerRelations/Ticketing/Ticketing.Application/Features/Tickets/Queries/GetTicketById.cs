@@ -27,7 +27,7 @@ public record GetTicketById(string OrganizationId, int Id) : IRequest<Result<Tic
                 return Result.Failure<TicketDto>(Errors.Tickets.TicketNotFound);
             }
 
-            return Result.Success(await dtoComposer.ComposeTicketDto(ticket, cancellationToken));
+            return Result.SuccessWith(await dtoComposer.ComposeTicketDto(ticket, cancellationToken));
         }
     }
 }

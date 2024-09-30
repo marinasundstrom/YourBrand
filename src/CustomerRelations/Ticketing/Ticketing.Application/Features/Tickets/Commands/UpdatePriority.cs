@@ -36,7 +36,7 @@ public sealed record UpdatePriority(string OrganizationId, int Id, TicketPriorit
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

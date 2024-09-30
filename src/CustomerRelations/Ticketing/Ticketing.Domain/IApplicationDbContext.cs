@@ -18,6 +18,16 @@ public interface IApplicationDbContext
 
     DbSet<TicketStatus> TicketStatuses { get; }
 
+    DbSet<Project> Projects { get; }
+
+    DbSet<ProjectGroup> ProjectGroups { get; }
+
+    DbSet<ProjectMembership> ProjectMemberships { get; }
+
+    DbSet<Team> Teams { get; }
+
+    DbSet<TeamMembership> TeamMemberships { get; }
+
     DbSet<User> Users { get; }
 
     DbSet<Organization> Organizations { get; }

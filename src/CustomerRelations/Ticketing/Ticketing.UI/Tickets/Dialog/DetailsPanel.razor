@@ -1,4 +1,5 @@
 @using System.ComponentModel.DataAnnotations
+@using YourBrand.CustomerService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject ITicketsClient TicketsClient
@@ -17,6 +18,10 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
+                
+                <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)"
+                    Variant="Variant.Outlined" @bind-Value="Form.Project" For="() => Form.Project" Class="mb-4" />
+
                 <MudSelect Label="@T["Status"]" @bind-Value="Form.Status" For="() => Form.Status" Immediate="true"
                     Variant="Variant.Outlined" Class="mb-4" ToStringFunc="(s) => s.Name">
                     @foreach (var status in ticketStatuses)

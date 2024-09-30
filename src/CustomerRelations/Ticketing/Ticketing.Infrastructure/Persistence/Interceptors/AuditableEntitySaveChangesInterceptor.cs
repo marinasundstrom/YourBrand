@@ -8,7 +8,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Interceptors;
 
-public sealed class AuditableEntitySaveChangesInterceptor(
+public sealed class IAuditableSaveChangesInterceptor(
     ITenantContext tenantContext,
     IUserContext userContext,
     IDateTime dateTime) : SaveChangesInterceptor

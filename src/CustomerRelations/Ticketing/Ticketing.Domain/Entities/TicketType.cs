@@ -21,6 +21,8 @@ public sealed class TicketType : Entity<int>, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
+    public ProjectId ProjectId { get; set; }
+
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }

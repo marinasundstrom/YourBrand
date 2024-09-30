@@ -2,10 +2,6 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Ticketing.Domain;
-using YourBrand.Ticketing.Domain.Entities;
-using YourBrand.Ticketing.Domain.Repositories;
-
 namespace YourBrand.Ticketing.Application.Features.Organizations;
 
 public record CreateOrganization(string Id, string Name, string TenantId) : IRequest<Result<OrganizationDto>>
@@ -33,10 +29,10 @@ public record CreateOrganization(string Id, string Name, string TenantId) : IReq
 
             if (organization is null)
             {
-                return Result.Failure<OrganizationDto>(Errors.Organizations.OrganizationNotFound);
+                return Errors.Organizations.OrganizationNotFound;
             }
 
-            return Result.Success(organization.ToDto2());
+            return organization.ToDto2();
         }
     }
 }

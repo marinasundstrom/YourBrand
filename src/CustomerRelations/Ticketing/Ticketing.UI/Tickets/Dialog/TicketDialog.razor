@@ -197,6 +197,13 @@ else
                 await TicketsClient.UpdateTitleAsync(Organization.Id, Id.GetValueOrDefault(), Form.Title, cts.Token);
             }
 
+            /*
+            if (editContext.IsModified(() => Form.Project))
+            {
+                await TicketsClient.UpdateProject(Project.Id, Id.GetValueOrDefault(), Form.Title, cts.Token);
+            }
+            */
+
             if (editContext.IsModified(() => Form.Description!))
             {
                 await TicketsClient.UpdateTextAsync(Organization.Id, Id.GetValueOrDefault(), Form.Description ?? string.Empty, cts.Token);
@@ -253,6 +260,7 @@ else
     {
         ticket = await TicketsClient.CreateTicketAsync(Organization.Id, new CreateTicketData
         {
+            ProjectId = Form.Project.Id,
             Title = Form.Title,
             Description = Form.Description,
             Status = Form.Status.Id,

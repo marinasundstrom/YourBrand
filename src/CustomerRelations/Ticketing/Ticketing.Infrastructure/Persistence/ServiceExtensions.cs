@@ -22,7 +22,7 @@ public static class ServiceExtensions
 
             options.AddInterceptors(
                 sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
-                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+                sp.GetRequiredService<IAuditableSaveChangesInterceptor>());
 
 #if DEBUG
             options.EnableSensitiveDataLogging();
@@ -31,7 +31,7 @@ public static class ServiceExtensions
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+        services.AddScoped<IAuditableSaveChangesInterceptor>();
         services.AddScoped<OutboxSaveChangesInterceptor>();
 
         RegisterRepositories(services);

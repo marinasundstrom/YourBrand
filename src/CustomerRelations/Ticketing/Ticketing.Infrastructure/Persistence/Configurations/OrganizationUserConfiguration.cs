@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using YourBrand.Ticketing.Domain.Entities;
-
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Configurations;
 
 public class OrganizationUserConfiguration : IEntityTypeConfiguration<OrganizationUser>

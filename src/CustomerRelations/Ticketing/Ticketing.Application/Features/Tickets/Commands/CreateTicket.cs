@@ -11,7 +11,9 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record CreateTicket(string OrganizationId, 
+public sealed record CreateTicket(
+    string OrganizationId, 
+    int ProjectId,
     string Title, 
     string? Description, 
     int Status, 
@@ -47,6 +49,8 @@ public sealed record CreateTicket(string OrganizationId,
             ticket.OrganizationId = request.OrganizationId;
             ticket.TypeId = 1;
             ticket.CategoryId = 1;
+            
+            ticket.ProjectId = request.ProjectId;
 
             ticket.Status = await context.TicketStatuses.FirstAsync(s => s.Id == request.Status, cancellationToken);
 
@@ -111,7 +115,7 @@ public sealed record CreateTicket(string OrganizationId,
                 .Include(i => i.LastModifiedBy)
                 .LastAsync(cancellationToken);
 
-            return Result.Success(ticket!.ToDto());
+            return Result.SuccessWith(ticket!.ToDto());
         }
     }
 }

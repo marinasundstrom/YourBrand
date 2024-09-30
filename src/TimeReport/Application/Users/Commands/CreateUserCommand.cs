@@ -16,7 +16,7 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
         {
             var user = await context.Users
                 .Include(x => x.Teams)
-                .Include(x => x.Organization)
+                .Include(x => x.Organizations)
                 .FirstOrDefaultAsync(u => u.Id == request.Id);
 
             if (user is not null)

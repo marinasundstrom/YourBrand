@@ -38,7 +38,7 @@ public sealed record UpdateStatus(string OrganizationId, int Id, int Status) : I
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

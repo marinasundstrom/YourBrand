@@ -7,9 +7,11 @@ public static partial class Errors
         public static readonly Error IssueNotFound = new Error(nameof(IssueNotFound), "Issue not found", string.Empty);
     }
 
-    public static class Orders
+    public static class Projects
     {
-        public static readonly Error OrderNotFound = new Error(nameof(OrderNotFound), "Order not found", string.Empty);
+        public static readonly Error ProjectNotFound = new Error(nameof(ProjectNotFound), "Project not found", string.Empty);
+
+        public static readonly Error ProjectMemberNotFound = new Error(nameof(ProjectMemberNotFound), "Project member not found", string.Empty);
     }
 
     public static class Users

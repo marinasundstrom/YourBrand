@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Ticketing.Domain.Specifications;
-using YourBrand.Ticketing.Domain.Repositories;
-using YourBrand.Ticketing.Domain.ValueObjects;
 using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories;

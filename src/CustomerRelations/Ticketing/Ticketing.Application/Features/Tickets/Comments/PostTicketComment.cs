@@ -66,7 +66,7 @@ public sealed record PostTicketComment(string OrganizationId, int Id, string Tex
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(await dtoComposer.ComposeTicketCommentDto(ticket, ticketComment, cancellationToken));
+            return Result.SuccessWith(await dtoComposer.ComposeTicketCommentDto(ticket, ticketComment, cancellationToken));
         }
     }
 }

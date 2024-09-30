@@ -1,5 +1,4 @@
 ﻿using YourBrand.Tenancy;
-using YourBrand.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;
@@ -18,44 +17,61 @@ public static class Seed
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
+        var project = new Project(1)
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Name = "Test Project"
+        };
+
+        context.Projects.Add(project);
+
+        await context.SaveChangesAsync();
+
         context.TicketTypes.Add(new TicketType(1, "Ticket")
         {
             OrganizationId = TenantConstants.OrganizationId,
+            ProjectId = project.Id
         });
 
         context.TicketCategories.Add(new TicketCategory(1, "General")
         {
             OrganizationId = TenantConstants.OrganizationId,
+            ProjectId = project.Id
         });
 
         context.TicketStatuses.Add(new TicketStatus(1)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "New"
+            Name = "New",
+            ProjectId = project.Id
         });
 
         context.TicketStatuses.Add(new TicketStatus(2)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "In progress"
+            Name = "In progress",
+            ProjectId = project.Id
         });
 
         context.TicketStatuses.Add(new TicketStatus(3)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "On hold"
+            Name = "On hold",
+            ProjectId = project.Id
         });
 
         context.TicketStatuses.Add(new TicketStatus(4)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "Resolved"
+            Name = "Resolved",
+            ProjectId = project.Id
         });
 
         context.TicketStatuses.Add(new TicketStatus(5)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "Closed"
+            Name = "Closed",
+            ProjectId = project.Id
         });
 
         //context.TicketTypes.Add(new TicketType("Ticket"));

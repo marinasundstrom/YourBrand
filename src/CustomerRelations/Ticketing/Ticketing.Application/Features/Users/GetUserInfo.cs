@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
 
 using MediatR;
-
-using YourBrand.Ticketing.Domain;
-using YourBrand.Ticketing.Domain.Repositories;
 using YourBrand.Identity;
 
 using Microsoft.Extensions.Logging;
@@ -32,7 +29,7 @@ public record GetUserInfo() : IRequest<Result<UserInfoDto>>
                 return Result.Failure<UserInfoDto>(Errors.Users.UserNotFound);
             }
 
-            return Result.Success(user.ToDto2());
+            return Result.SuccessWith(user.ToDto2());
         }
     }
 }

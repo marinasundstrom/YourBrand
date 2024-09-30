@@ -42,7 +42,7 @@ public record GetTeamMembershipsQuery(string OrganizationId, string Id, int Page
 
             var items = await result
                 .Include(x => x.User)
-                .ThenInclude(t => t.Organization)
+                .ThenInclude(t => t.Organizations)
                 .Skip((request.Page) * request.PageSize)
                 .Take(request.PageSize)
                 .ToArrayAsync(cancellationToken);

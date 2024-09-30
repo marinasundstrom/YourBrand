@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Quartz;
-using Scrutor;
 
 using YourBrand.Ticketing.Infrastructure.BackgroundJobs;
 using YourBrand.Ticketing.Infrastructure.Idempotence;

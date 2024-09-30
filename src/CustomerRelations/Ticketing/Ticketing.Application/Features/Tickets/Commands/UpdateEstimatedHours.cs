@@ -35,7 +35,7 @@ public sealed record UpdateEstimatedHours(string OrganizationId, int Id, double?
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

@@ -2,8 +2,6 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Ticketing.Domain;
-
 namespace YourBrand.Ticketing.Application.Features.Users;
 
 public record UpdateUser(string UserId, string Name, string Email) : IRequest<Result<UserInfoDto>>
@@ -23,7 +21,7 @@ public record UpdateUser(string UserId, string Name, string Email) : IRequest<Re
 
             if (user is null)
             {
-                return Result.Failure<UserInfoDto>(Errors.Users.UserNotFound);
+                return Errors.Users.UserNotFound;
             }
 
             user.Name = request.Name;
@@ -31,7 +29,7 @@ public record UpdateUser(string UserId, string Name, string Email) : IRequest<Re
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(user.ToDto2());
+            return user.ToDto2();
         }
     }
 }

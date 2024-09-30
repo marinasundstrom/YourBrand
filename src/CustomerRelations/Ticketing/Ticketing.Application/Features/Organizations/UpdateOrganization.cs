@@ -2,9 +2,6 @@ using FluentValidation;
 
 using MediatR;
 
-using YourBrand.Ticketing.Domain;
-using YourBrand.Ticketing.Domain.Repositories;
-
 namespace YourBrand.Ticketing.Application.Features.Organizations;
 
 public record UpdateOrganization(string OrganizationId, string Name) : IRequest<Result<OrganizationDto>>
@@ -32,7 +29,7 @@ public record UpdateOrganization(string OrganizationId, string Name) : IRequest<
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(user.ToDto());
+            return Result.SuccessWith(user.ToDto());
         }
     }
 }

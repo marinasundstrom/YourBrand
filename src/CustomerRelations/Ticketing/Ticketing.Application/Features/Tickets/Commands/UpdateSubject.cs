@@ -37,7 +37,7 @@ public sealed record UpdateSubject(string OrganizationId, int Id, string Subject
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

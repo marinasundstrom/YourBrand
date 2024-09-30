@@ -15,6 +15,7 @@ using YourBrand.Ticketing.Domain.Enums;
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 
 public record CreateTicketData(
+    int ProjectId,
     string Title,
     string? Description,
     int Status,
@@ -57,7 +58,7 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<TicketDto>> CreateTicket(string organizationId, CreateTicketData request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateTicket(organizationId, request.Title, request.Description, request.Status, request.AssigneeId, request.EstimatedHours, request.RemainingHours, request.Priority, request.Impact, request.Urgency), cancellationToken);
+        var result = await mediator.Send(new CreateTicket(organizationId, request.ProjectId, request.Title, request.Description, request.Status, request.AssigneeId, request.EstimatedHours, request.RemainingHours, request.Priority, request.Impact, request.Urgency), cancellationToken);
         return result.Handle(
             onSuccess: data => CreatedAtAction(nameof(GetTicketById), new { id = data.Id }, data),
             onError: error => Problem(detail: error.Detail, title: error.Title, type: error.Id));
