@@ -23,15 +23,22 @@
                 <MudTableSortLabel SortLabel="OccurredAt" T="TicketComment">@T["PostedAt"]</MudTableSortLabel>
             </MudTh>
             <MudTh>
+                @T["By"]
+            </MudTh>
+            <MudTh>
                 @T["Text"]
             </MudTh>
         </HeaderContent>
 
         <RowTemplate>
             <MudTd DataLabel="@T["PostedAt"]">@c.Created.ToString("g")</MudTd>
+            <MudTd DataLabel="@T["By"]">
+                @c.CreatedBy.Name
+            </MudTd>
             <MudTd DataLabel="@T["Text"]">
                 @c.Text
             </MudTd>
+
         </RowTemplate>
 
         <NoRecordsContent>
