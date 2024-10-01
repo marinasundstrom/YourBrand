@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public class User : AuditableEntity, ISoftDelete, IHasTenant
+public class User : AuditableEntity, ISoftDeletable, IHasTenant
 {
     public UserId Id { get; set; } = null!;
 

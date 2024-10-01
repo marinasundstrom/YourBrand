@@ -101,7 +101,7 @@ public class AppServiceContext(
                     var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
 
                     queryFilters.Add(
-                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(Domain.ISoftDelete))));
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(Domain.ISoftDeletable))));
                 }
 
                 Expression? queryFilter = null;

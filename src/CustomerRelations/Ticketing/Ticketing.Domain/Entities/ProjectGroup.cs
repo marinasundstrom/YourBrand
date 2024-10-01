@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class ProjectGroup : Entity<string>, IAuditable, IHasTenant, IHasOrganization, ISoftDelete
+public class ProjectGroup : Entity<string>, IAuditable, IHasTenant, IHasOrganization, ISoftDeletable
 {
     public ProjectGroup()
     {

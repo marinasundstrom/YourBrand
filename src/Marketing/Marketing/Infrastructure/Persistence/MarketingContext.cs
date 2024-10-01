@@ -73,7 +73,7 @@ public class MarketingContext(
                     var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
 
                     queryFilters.Add(
-                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(YourBrand.Domain.ISoftDelete))));
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(YourBrand.Domain.ISoftDeletable))));
                 }
 
                 Expression? queryFilter = null;

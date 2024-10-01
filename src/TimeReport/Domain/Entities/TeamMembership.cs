@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TeamMembership : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelete
+public class TeamMembership : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
 {
     protected TeamMembership()
     {

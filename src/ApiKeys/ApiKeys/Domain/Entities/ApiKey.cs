@@ -6,7 +6,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class ApiKey : AuditableEntity, ISoftDelete
+public class ApiKey : AuditableEntity, ISoftDeletable
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 

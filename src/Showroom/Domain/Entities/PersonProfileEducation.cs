@@ -5,7 +5,7 @@ using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
 
-public class PersonProfileEducation : AuditableEntity, IHasTenant, ISoftDelete
+public class PersonProfileEducation : AuditableEntity, IHasTenant, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

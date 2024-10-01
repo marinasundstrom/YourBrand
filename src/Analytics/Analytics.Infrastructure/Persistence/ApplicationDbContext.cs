@@ -23,17 +23,17 @@ public sealed class ApplicationDbContext(
     private static void ApplySoftDeleteQueryFilter(ModelBuilder modelBuilder)
     {
         // INFO: This code adds a query filter to any object deriving from Entity
-        //       and that is implementing the ISoftDelete interface.
+        //       and that is implementing the ISoftDeletable interface.
         //       The generated expressions correspond to: (e) => e.Deleted == null.
         //       Causing the entity not to be included in the result if Deleted is not null.
         //       There are other better ways to approach non-destructive "deletion".
 
-        var softDeleteInterface = typeof(ISoftDelete);
-        var deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDelete.Deleted));
+        var softDeleteInterface = typeof(ISoftDeletable);
+        var deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDeletable.Deleted));
 
         foreach (var entityType in softDeleteInterface.Assembly
             .GetTypes()
-            .Where(candidateEntityType => candidateEntityType != typeof(ISoftDelete))
+            .Where(candidateEntityType => candidateEntityType != typeof(ISoftDeletable))
             .Where(candidateEntityType => softDeleteInterface.IsAssignableFrom(candidateEntityType)))
         {
             var param = Expression.Parameter(entityType, "entity");

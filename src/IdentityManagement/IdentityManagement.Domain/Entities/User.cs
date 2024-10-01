@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationUser class
-public class User : IdentityUser, IAuditableEntity, ISoftDelete, IHasTenant
+public class User : IdentityUser, IAuditableEntity, ISoftDeletable, IHasTenant
 {
     readonly HashSet<Role> _roles = new HashSet<Role>();
     readonly HashSet<UserRole> _userRoles = new HashSet<UserRole>();

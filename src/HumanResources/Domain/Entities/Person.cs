@@ -5,7 +5,7 @@ using YourBrand.HumanResources.Domain.Events;
 namespace YourBrand.HumanResources.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationPerson class
-public class Person : AuditableEntity, ISoftDelete
+public class Person : AuditableEntity, ISoftDeletable
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();

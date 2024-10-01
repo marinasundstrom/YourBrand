@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ExpenseType : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelete
+public class ExpenseType : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

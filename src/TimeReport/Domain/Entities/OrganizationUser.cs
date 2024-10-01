@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class OrganizationUser : AuditableEntity, IHasTenant, ISoftDelete
+public class OrganizationUser : AuditableEntity, IHasTenant, ISoftDeletable
 {
     public string Id { get; private set; } = Guid.NewGuid().ToString();
 

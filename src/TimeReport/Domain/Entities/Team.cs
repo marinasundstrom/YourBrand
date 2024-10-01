@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Team : AuditableEntity, ISoftDelete, IHasTenant, IHasOrganization
+public class Team : AuditableEntity, ISoftDeletable, IHasTenant, IHasOrganization
 {
     readonly HashSet<User> _members = new HashSet<User>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();

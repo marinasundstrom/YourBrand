@@ -5,7 +5,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDelete, ISubscriptionParameters, IHasTenant
+public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionParameters, IHasTenant
 {
     public SubscriptionPlan() : base(Guid.NewGuid())
     {

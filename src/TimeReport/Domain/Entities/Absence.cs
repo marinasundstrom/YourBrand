@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Enums;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Absence : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelete
+public class Absence : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Case : AuditableEntity, IHasTenant, ISoftDelete
+public class Case : AuditableEntity, IHasTenant, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 
@@ -27,7 +27,7 @@ public class Case : AuditableEntity, IHasTenant, ISoftDelete
     public User? DeletedBy { get; set; }
 }
 
-public class Location : AuditableEntity, ISoftDelete
+public class Location : AuditableEntity, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

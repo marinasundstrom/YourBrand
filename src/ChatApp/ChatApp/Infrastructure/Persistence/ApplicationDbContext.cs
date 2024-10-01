@@ -83,7 +83,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
                     var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
 
                     queryFilters.Add(
-                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDelete))));
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDeletable))));
                 }
 
                 Expression? queryFilter = null;

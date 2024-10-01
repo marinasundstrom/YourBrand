@@ -52,7 +52,7 @@ public class AuditableEntitySaveChangesInterceptor(
             }
             else if (entry.State == EntityState.Deleted)
             {
-                if (entry.Entity is ISoftDelete softDelete)
+                if (entry.Entity is ISoftDeletable softDelete)
                 {
                     softDelete.DeletedBy = currentPersonService.UserId;
                     softDelete.Deleted = dateTime.Now;

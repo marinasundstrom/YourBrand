@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class CompetenceArea : AuditableEntity, IHasTenant, ISoftDelete
+public class CompetenceArea : AuditableEntity, IHasTenant, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

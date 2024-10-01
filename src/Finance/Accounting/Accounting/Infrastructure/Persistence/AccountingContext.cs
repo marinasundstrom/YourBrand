@@ -74,7 +74,7 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
                     var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
 
                     queryFilters.Add(
-                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDelete))));
+                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDeletable))));
                 }
 
                 Expression? queryFilter = null;

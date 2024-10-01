@@ -4,7 +4,7 @@ using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class SkillArea : AuditableEntity, ISoftDelete
+public class SkillArea : AuditableEntity, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

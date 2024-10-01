@@ -3,7 +3,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Domain.Common.Interfaces;
 
-public interface ISoftDelete
+public interface ISoftDeletable
 {
     DateTime? Deleted { get; set; }
 

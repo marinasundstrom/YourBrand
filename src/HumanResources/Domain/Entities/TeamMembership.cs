@@ -3,7 +3,7 @@ using YourBrand.HumanResources.Domain.Common.Interfaces;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
-public class TeamMembership : AuditableEntity, ISoftDelete
+public class TeamMembership : AuditableEntity, ISoftDeletable
 {
     private TeamMembership()
     {

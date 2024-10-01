@@ -5,7 +5,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class User : AuditableEntity, ISoftDelete
+public class User : AuditableEntity, ISoftDeletable
 {
     public UserId Id { get; set; } = null!;
 

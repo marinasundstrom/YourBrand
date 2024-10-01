@@ -7,7 +7,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class PersonProfileSkill : AuditableEntity, IHasTenant, ISoftDelete
+public class PersonProfileSkill : AuditableEntity, IHasTenant, ISoftDeletable
 {
     public string Id { get; set; } = null!;
 

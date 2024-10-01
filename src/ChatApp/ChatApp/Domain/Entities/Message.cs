@@ -4,7 +4,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage, IHasTenant, IHasOrganization, IHasChannel //, ISoftDelete
+public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage, IHasTenant, IHasOrganization, IHasChannel //, ISoftDeletable
 {
     private readonly HashSet<MessageReaction> _reactions = new HashSet<MessageReaction>();
 

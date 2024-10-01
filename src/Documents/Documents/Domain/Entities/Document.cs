@@ -4,7 +4,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Document : AuditableEntity, ISoftDelete, IDeletable, IItem
+public class Document : AuditableEntity, ISoftDeletable, IDeletable, IItem
 {
     private Document()
     {

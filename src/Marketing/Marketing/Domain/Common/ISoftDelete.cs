@@ -2,7 +2,7 @@
 
 namespace YourBrand.Marketing.Domain.Common;
 
-public interface ISoftDelete
+public interface ISoftDeletable
 {
     DateTime? Deleted { get; set; }
 

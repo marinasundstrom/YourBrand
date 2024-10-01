@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.HumanResources.Domain.Common.Interfaces;
 
-public interface ISoftDelete
+public interface ISoftDeletable
 {
     DateTime? Deleted { get; set; }
 
