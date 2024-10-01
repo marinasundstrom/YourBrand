@@ -5,6 +5,7 @@ using YourBrand.Ticketing.Application.Features.Projects;
 using YourBrand.Ticketing.Application.Features.Projects.ProjectGroups;
 using YourBrand.Ticketing.Application.Features.Teams;
 using YourBrand.Identity;
+using YourBrand.Ticketing.Application.Features.Organizations;
 
 namespace YourBrand.Ticketing.Application;
 
@@ -14,6 +15,7 @@ public interface IDtoFactory
     TicketParticipantDto CreateParticipantDto(TicketParticipant participant, Dictionary<TicketParticipantId, User> users);
     UserDto CreateUserDto(User user);
     TicketCommentDto CreateTicketCommentDto(TicketComment ticketComment, TicketParticipant addedBy, TicketParticipant editedBy, object value, Dictionary<TicketParticipantId, User> users);
+    ProjectDto CreateProjectDto(Project project);
 }
 
 public sealed class DtoFactory : IDtoFactory
@@ -67,40 +69,39 @@ public sealed class DtoFactory : IDtoFactory
         ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
     }
 
+    public ProjectDto CreateProjectDto(Project project)
+    {
+        return new(project.Id, project.Name, project.Description, new OrganizationDto("", ""), []);
+    }
 
     /*
 
-    public ProjectDto ToDto(this Domain.Entities.Project project, Dictionary<UserId, User> users)
-    {
-        return new(project.Id, project.Name, project.Description, project.Organization.ToDto(), project.Teams.Select(t => t.ToDto()));
-    }
+public ProjectGroupDto ToDto(this Domain.Entities.ProjectGroup projectGroup)
+{
+    return new(projectGroup.Id, projectGroup.Name, projectGroup.Description, projectGroup.Project?.ToDto());
+}
 
-    public ProjectGroupDto ToDto(this Domain.Entities.ProjectGroup projectGroup)
-    {
-        return new(projectGroup.Id, projectGroup.Name, projectGroup.Description, projectGroup.Project?.ToDto());
-    }
+public ProjectMembershipDto ToDto(this Domain.Entities.ProjectMembership projectMembership)
+{
+    return new ProjectMembershipDto(projectMembership.Id, projectMembership.Project.ToDto(),
+            projectMembership.User.ToDto(),
+            projectMembership.From, projectMembership.To);
+}
 
-    public ProjectMembershipDto ToDto(this Domain.Entities.ProjectMembership projectMembership)
-    {
-        return new ProjectMembershipDto(projectMembership.Id, projectMembership.Project.ToDto(),
-                projectMembership.User.ToDto(),
-                projectMembership.From, projectMembership.To);
-    }
+public TeamDto ToDto(this Domain.Entities.Team team)
+{
+    return new(team.Id, team.Name, team.Memberships.Select(x => x.ToDto()));
+}
 
-    public TeamDto ToDto(this Domain.Entities.Team team)
-    {
-        return new(team.Id, team.Name, team.Memberships.Select(x => x.ToDto()));
-    }
+public TeamMemberDto ToDto(this Domain.Entities.TeamMembership teamMember, Dictionary<UserId, User> users)
+{
+    return new(teamMember.User.Id, teamMember.User.FirstName, teamMember.User.LastName);
+}
 
-    public TeamMemberDto ToDto(this Domain.Entities.TeamMembership teamMember, Dictionary<UserId, User> users)
-    {
-        return new(teamMember.User.Id, teamMember.User.FirstName, teamMember.User.LastName);
-    }
+public TeamMembershipDto ToDto2(this Domain.Entities.TeamMembership teamMembership)
+{
+    return new(teamMembership.Id, teamMembership.User.ToDto());
+}
 
-    public TeamMembershipDto ToDto2(this Domain.Entities.TeamMembership teamMembership)
-    {
-        return new(teamMembership.Id, teamMembership.User.ToDto());
-    }
-
-    */
+*/
 }

@@ -5,9 +5,10 @@ using OrganizationId = YourBrand.Domain.OrganizationId;
 
 namespace YourBrand.Ticketing.Domain.Events;
 
-[JsonDerivedType(typeof(TicketAssigneeUpdated), typeDiscriminator: nameof(TicketAssigneeUpdated))]
 [JsonDerivedType(typeof(TicketCreated), typeDiscriminator: nameof(TicketCreated))]
 [JsonDerivedType(typeof(TicketDeleted), typeDiscriminator: nameof(TicketDeleted))]
+[JsonDerivedType(typeof(TicketProjectUpdated), typeDiscriminator: nameof(TicketProjectUpdated))]
+[JsonDerivedType(typeof(TicketAssigneeUpdated), typeDiscriminator: nameof(TicketAssigneeUpdated))]
 [JsonDerivedType(typeof(TicketDescriptionUpdated), typeDiscriminator: nameof(TicketDescriptionUpdated))]
 [JsonDerivedType(typeof(TicketEstimatedHoursUpdated), typeDiscriminator: nameof(TicketEstimatedHoursUpdated))]
 [JsonDerivedType(typeof(TicketRemainingHoursUpdated), typeDiscriminator: nameof(TicketRemainingHoursUpdated))]

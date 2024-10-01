@@ -26,6 +26,22 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
 
     public ProjectId ProjectId { get; set; }
 
+    public bool UpdateProject(ProjectId projectId)
+    {
+        var oldProject = ProjectId;
+        if (projectId != oldProject)
+        {
+            ProjectId = projectId;
+
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketProjectUpdated(TenantId, OrganizationId, Id, ProjectId, oldProject));
+
+            return true;
+        }
+
+        return false;
+    }
+
     public string Subject { get; set; } = default!;
 
     public string? Description { get; }

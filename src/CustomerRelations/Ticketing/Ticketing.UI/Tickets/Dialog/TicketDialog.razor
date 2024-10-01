@@ -197,12 +197,10 @@ else
                 await TicketsClient.UpdateTitleAsync(Organization.Id, Id.GetValueOrDefault(), Form.Title, cts.Token);
             }
 
-            /*
             if (editContext.IsModified(() => Form.Project))
             {
-                await TicketsClient.UpdateProject(Project.Id, Id.GetValueOrDefault(), Form.Title, cts.Token);
+                await TicketsClient.UpdateProjectAsync(Organization.Id, Id.GetValueOrDefault(), new UpdateProjectRequest() {  ProjectId =  Form.Project.Id }, cts.Token);
             }
-            */
 
             if (editContext.IsModified(() => Form.Description!))
             {

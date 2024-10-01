@@ -14,15 +14,6 @@ using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 
-public record CreateTicketData(
-    int ProjectId,
-    string Title,
-    string? Description,
-    int Status,
-    string? AssigneeId,
-    double? EstimatedHours, double? RemainingHours,
-    TicketPriorityDto? Priority, TicketImpactDto? Impact, TicketUrgencyDto? Urgency);
-
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -62,6 +53,15 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
         return result.Handle(
             onSuccess: data => CreatedAtAction(nameof(GetTicketById), new { id = data.Id }, data),
             onError: error => Problem(detail: error.Detail, title: error.Title, type: error.Id));
+    }
+
+    [HttpPut("{id}/project")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdateProject(string organizationId, int id, UpdateProjectRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new UpdateProject(organizationId, id, request.ProjectId), cancellationToken);
+        return this.HandleResult(result);
     }
 
     [HttpPut("{id}/priority")]
@@ -184,6 +184,8 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
 }
 
 public sealed record CreateTicketRequest(string Title, string? Text, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours);
+
+public sealed record UpdateProjectRequest(int ProjectId);
 
 public sealed record UpdatePriorityRequest(TicketPriorityDto Priority);
 

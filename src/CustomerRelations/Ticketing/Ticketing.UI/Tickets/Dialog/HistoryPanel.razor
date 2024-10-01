@@ -26,6 +26,10 @@
             {
                 <text>Ticket was created, by @ev0.Participant.Name.</text>
             }
+            else if (c is TicketProjectUpdated ev10)
+            {
+                <text>Project was changed to "@ev10.Project.Name" from "@ev10.OldProject.Name", by @ev10.Participant.Name.</text>
+            }
             else if (c is TicketSubjectUpdated ev)
             {
                 <text>Subject was changed to "@ev.NewSubject" from "@ev.OldSubject", by @ev.Participant.Name.</text>

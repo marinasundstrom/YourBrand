@@ -155,6 +155,8 @@ public sealed class DtoComposer : IDtoComposer
     {
         HashSet<TicketParticipantId> participantIds = new();
         HashSet<TicketId> ticketIds = new();
+        HashSet<ProjectId> projectIds = new();
+
 
         ExtractTicketParticipantIds(ticket, participantIds);
 
@@ -178,14 +180,35 @@ public sealed class DtoComposer : IDtoComposer
                     participantIds.Add(e2.NewAssignedParticipantId.GetValueOrDefault());
                 }
             }
+
+            if (@event is TicketProjectUpdated e3)
+            {
+                Console.WriteLine("Foo: " + e3);
+
+                if (e3.OldProjectId is not null)
+                {
+                    projectIds.Add(e3.OldProjectId);
+                }
+
+                if (e3.NewProjectId is not null)
+                {
+                    projectIds.Add(e3.NewProjectId);
+                }
+            }
         }
 
         var participants = await context.TicketParticipants
+            .InOrganization(ticket.OrganizationId)
             .Where(x => x.TicketId == ticket.Id)
             .Where(x => participantIds.Any(z => x.Id == z))
             .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
         var userIds = participants.Select(x => x.Value.UserId).ToList();
+
+        var projects = await context.Projects
+            .InOrganization(ticket.OrganizationId)
+            .Where(x => projectIds.Any(z => x.Id == z))
+            .ToDictionaryAsync(x => x.Id, x => x, cancellationToken);
 
         var users = await context.Users
             .Where(x => userIds.Any(z => x.Id == z))
@@ -197,11 +220,11 @@ public sealed class DtoComposer : IDtoComposer
 
         return ticketEvents.Select(ticketEvent =>
         {
-            return ComposeTicketEventDtoInternal(ticket, ticketEvent, participants, participantIdUsers);
+            return ComposeTicketEventDtoInternal(ticket, ticketEvent, projects, participants, participantIdUsers);
         });
     }
 
-    private TicketEventDto ComposeTicketEventDtoInternal(Ticket ticket, TicketEvent ev, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users) 
+    private TicketEventDto ComposeTicketEventDtoInternal(Ticket ticket, TicketEvent ev, Dictionary<ProjectId, Project> projects, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users) 
     {
         var @event = System.Text.Json.JsonSerializer.Deserialize<TicketDomainEvent>(ev.Data);
 
@@ -214,6 +237,15 @@ public sealed class DtoComposer : IDtoComposer
             participants.TryGetValue(e2.OldAssignedParticipantId.GetValueOrDefault(), out var oldAssignedParticipant);
 
             return new TicketAssigneeUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e2.TicketId, newAssignedParticipant is null ? null : dtoFactory.CreateParticipantDto(newAssignedParticipant!, users), oldAssignedParticipant is null ? null : dtoFactory.CreateParticipantDto(oldAssignedParticipant!, users), dtoFactory.CreateParticipantDto(participant!, users));
+        }
+
+        if (@event is TicketProjectUpdated e4)
+        {
+            projects.TryGetValue(e4.NewProjectId, out var newProject);
+
+            projects.TryGetValue(e4.OldProjectId, out var oldProject);
+
+            return new TicketProjectUpdatedDto(ev.OccurredAt, ev.TenantId, ev.OrganizationId, e4.TicketId, newProject is null ? null : dtoFactory.CreateProjectDto(newProject!), oldProject is null ? null : dtoFactory.CreateProjectDto(oldProject!), dtoFactory.CreateParticipantDto(participant!, users));
         }
 
         return @event switch

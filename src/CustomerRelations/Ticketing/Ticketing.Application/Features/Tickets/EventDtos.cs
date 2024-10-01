@@ -1,11 +1,13 @@
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 using System.Text.Json.Serialization;
+using YourBrand.Ticketing.Application.Features.Projects;
 
 namespace YourBrand.Ticketing.Application;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "event")]
 [JsonDerivedType(typeof(TicketCreatedDto), "Created")]
+[JsonDerivedType(typeof(TicketProjectUpdatedDto), "ProjectUpdated")]
 [JsonDerivedType(typeof(TicketAssigneeUpdatedDto), "AssigneeUpdated")]
 [JsonDerivedType(typeof(TicketDescriptionUpdatedDto), "DescriptionUpdated")]
 [JsonDerivedType(typeof(TicketEstimatedHoursUpdatedDto), "EstimatedHoursUpdated")]
@@ -22,6 +24,8 @@ public abstract record TicketEventDto(DateTimeOffset OccurredAt, string TenantId
 }
 
 public sealed record TicketCreatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);
+
+public sealed record TicketProjectUpdatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, ProjectDto? Project, ProjectDto? OldProject, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);
 
 public sealed record TicketAssigneeUpdatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, TicketParticipantDto? AssignedParticipant, TicketParticipantDto? OldAssignedParticipant, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);
 

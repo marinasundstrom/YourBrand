@@ -400,6 +400,43 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Tickets/{id}/project:
+    put:
+      tags:
+      - Tickets
+      operationId: Tickets_UpdateProject
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Tickets/{id}/priority:
     put:
       tags:
@@ -2148,6 +2185,7 @@ components:
         propertyName: event
         mapping:
           Created: '#/components/schemas/TicketCreated'
+          ProjectUpdated: '#/components/schemas/TicketProjectUpdated'
           AssigneeUpdated: '#/components/schemas/TicketAssigneeUpdated'
           DescriptionUpdated: '#/components/schemas/TicketDescriptionUpdated'
           EstimatedHoursUpdated: '#/components/schemas/TicketEstimatedHoursUpdated'
@@ -2183,6 +2221,23 @@ components:
           ticketId:
             type: integer
             format: int32
+    TicketProjectUpdated:
+      allOf:
+      - $ref: '#/components/schemas/TicketEvent'
+      - type: object
+        additionalProperties: false
+        properties:
+          ticketId:
+            type: integer
+            format: int32
+          project:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Project'
+          oldProject:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Project'
     TicketAssigneeUpdated:
       allOf:
       - $ref: '#/components/schemas/TicketEvent'
@@ -2382,6 +2437,13 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/TicketUrgency'
+    UpdateProjectRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        projectId:
+          type: integer
+          format: int32
     UpdatePriorityRequest:
       type: object
       additionalProperties: false
