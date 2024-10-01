@@ -25,6 +25,14 @@ public static class Seed
 
         context.Projects.Add(project);
 
+        var project2 = new Project(2)
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Name = "Project 2"
+        };
+
+        context.Projects.Add(project2);
+
         await context.SaveChangesAsync();
 
         context.TicketTypes.Add(new TicketType(1, "Ticket")
