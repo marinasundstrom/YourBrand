@@ -1,5 +1,6 @@
 ﻿@page "/tickets/board"
 @attribute [Authorize]
+@layout MainLayout3
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.SignalR.Client
 @using YourBrand.CustomerService
@@ -20,7 +21,7 @@
 
 @if (loaded)
 {
-    <MudPaper Elevation="25" Style="overflow-x: scroll;">
+    <MudPaper Elevation="25">
         <MudToolBar DisableGutters="true" Class="mt-2">
             <MudSpacer />
             <MudSpacer />
@@ -28,75 +29,78 @@
                 Value="Project" ValueChanged="OnSelectedProjectChanged" For="() => Project" Class="ma-4" />
         </MudToolBar>
 
-        <MudDropContainer @ref="dropContainer" T="Ticket" Items="tickets" Context="context"
-                          ItemsSelector="@((item, dropzone) => item.Status.Id.ToString() == dropzone)"
-                          ItemDropped="ItemUpdated" Class="d-flex flex-row">
-            <ChildContent>
-                @foreach (var status in ticketStatuses)
-                {
-                    <MudPaper Elevation="0" Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg"
-                        Style="min-width: 250px; min-height: 300px;">
-                        <MudToolBar DisableGutters="true" Dense="true">
-                            <MudText Typo="Typo.h6" Class="mb-4"><b>@T[status.Name]</b></MudText>
-                            <MudSpacer />
+        <div style="overflow-x: scroll;">
+
+            <MudDropContainer @ref="dropContainer" T="Ticket" Items="tickets" Context="context"
+                            ItemsSelector="@((item, dropzone) => item.Status.Id.ToString() == dropzone)"
+                            ItemDropped="ItemUpdated" Class="d-flex flex-row">
+                <ChildContent>
+                    @foreach (var status in ticketStatuses)
+                    {
+                        <MudPaper Elevation="0" Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg"
+                            Style="min-width: 250px; min-height: 300px;">
+                            <MudToolBar DisableGutters="true" Dense="true">
+                                <MudText Typo="Typo.h6" Class="mb-4"><b>@T[status.Name]</b></MudText>
+                                <MudSpacer />
+                                @*
+                                    <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight"
+                                    TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column"
+                                    PopoverClass="mud-elevation-25">
+                                    <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Outlined.Delete" OnClick="@( ()
+                                    => { })">Delete Section</MudButton>
+                                    <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Rounded.Edit">Rename
+                                    Section</MudButton>
+                                    </MudMenu>
+                                *@
+                            </MudToolBar>
+                            <MudDropZone T="Ticket" Identifier="@($"{status.Id}")" Class="mud-height-full" />
                             @*
-                                <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight"
-                                TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column"
-                                PopoverClass="mud-elevation-25">
-                                <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Outlined.Delete" OnClick="@( ()
-                                => { })">Delete Section</MudButton>
-                                <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Rounded.Edit">Rename
-                                Section</MudButton>
-                                </MudMenu>
+                                <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Filled.Add" FullWidth="true"
+                                Class="py-2" Style="background-color: inherit;">Add Task</MudButton>
                             *@
-                        </MudToolBar>
-                        <MudDropZone T="Ticket" Identifier="@($"{status.Id}")" Class="mud-height-full" />
-                        @*
-                            <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Filled.Add" FullWidth="true"
-                            Class="py-2" Style="background-color: inherit;">Add Task</MudButton>
-                        *@
-                    </MudPaper>
-                }
-            </ChildContent>
-            <ItemRenderer>
-                <div>
-                    <MudCard Class="rounded-lg mb-4" Elevation="25" Style="width: 215.344px">
-                        <MudCardHeader>
-                            <CardHeaderAvatar>
-                                <MudIcon Icon="@Icons.Material.Filled.Task"></MudIcon>
-                            </CardHeaderAvatar>
-                            <CardHeaderContent>
-                                <MudText Typo="Typo.body1">@context.Id - @context.Subject</MudText>
-                                @if (context.Assignee is not null)
+                        </MudPaper>
+                    }
+                </ChildContent>
+                <ItemRenderer>
+                    <div>
+                        <MudCard Class="rounded-lg mb-4" Elevation="25" Style="width: 215.344px">
+                            <MudCardHeader>
+                                <CardHeaderAvatar>
+                                    <MudIcon Icon="@Icons.Material.Filled.Task"></MudIcon>
+                                </CardHeaderAvatar>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.body1">@context.Id - @context.Subject</MudText>
+                                    @if (context.Assignee is not null)
+                                    {
+                                        <MudText Typo="Typo.body2">@context.Assignee?.Name</MudText>
+                                    }
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                @if (context.EstimatedHours is not null)
                                 {
-                                    <MudText Typo="Typo.body2">@context.Assignee?.Name</MudText>
+                                    <MudText Typo="Typo.caption" Class="mt-2">
+                                        @T["EstimatedTime", TimeSpan.FromHours(context.EstimatedHours.GetValueOrDefault()).ToString("hh\\:mm")]
+                                    </MudText> <br />
                                 }
-                            </CardHeaderContent>
-                        </MudCardHeader>
-                        <MudCardContent>
-                            @if (context.EstimatedHours is not null)
-                            {
-                                <MudText Typo="Typo.caption" Class="mt-2">
-                                    @T["EstimatedTime", TimeSpan.FromHours(context.EstimatedHours.GetValueOrDefault()).ToString("hh\\:mm")]
-                                </MudText> <br />
-                            }
-                            @if (context.RemainingHours is not null)
-                            {
-                                <MudText Typo="Typo.caption" Class="mt-2">
-                                    @T["RemainingTime", TimeSpan.FromHours(context.RemainingHours.GetValueOrDefault()).ToString("hh\\:mm")]
-                                </MudText>
-                            }
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Default"
-                                           OnClick="async (e) => await ShowTicket(context.Id)" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                           OnClick="async (e) => await DeleteTicket(context)" Color="Color.Default" />
-                        </MudCardActions>
-                    </MudCard>
-                </div>
-            </ItemRenderer>
-        </MudDropContainer>
+                                @if (context.RemainingHours is not null)
+                                {
+                                    <MudText Typo="Typo.caption" Class="mt-2">
+                                        @T["RemainingTime", TimeSpan.FromHours(context.RemainingHours.GetValueOrDefault()).ToString("hh\\:mm")]
+                                    </MudText>
+                                }
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Default"
+                                            OnClick="async (e) => await ShowTicket(context.Id)" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                            OnClick="async (e) => await DeleteTicket(context)" Color="Color.Default" />
+                            </MudCardActions>
+                        </MudCard>
+                    </div>
+                </ItemRenderer>
+            </MudDropContainer>
+        </div>
     </MudPaper>
 }
 
@@ -204,7 +208,8 @@
         dialogParameters.Add(nameof(YourBrand.Ticketing.Tickets.Dialog.TicketDialog.Id), id);
 
         DialogOptions dialogOptions = new DialogOptions() { FullWidth = true, MaxWidth = MaxWidth.Large, CloseButton = true };
-        var dialogRef = DialogService.Show<YourBrand.Ticketing.Tickets.Dialog.TicketDialog>(string.Empty, dialogParameters, dialogOptions);
+        var dialogRef = DialogService.Show<YourBrand.Ticketing.Tickets.Dialog.TicketDialog>(string.Empty, dialogParameters,
+        dialogOptions);
         var result = await dialogRef.Result;
     }
 
