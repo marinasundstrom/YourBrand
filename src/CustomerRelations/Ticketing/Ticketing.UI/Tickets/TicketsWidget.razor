@@ -200,7 +200,8 @@
     {
         try
         {
-            var result = await TicketsClient.GetTicketsAsync(Organization.Id, Status is null ? null : new int[] { Status.Id },
+            var result = await TicketsClient.GetTicketsAsync(Organization.Id, null, Status is null ? null : new int[] {
+Status.Id },
             Assignee?.Id, state.Page + 1, state.PageSize,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);

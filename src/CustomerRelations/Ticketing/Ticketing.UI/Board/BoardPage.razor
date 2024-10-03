@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.SignalR.Client
+@using YourBrand.CustomerService
 @using YourBrand.Ticketing.Tickets
 @implements IAsyncDisposable
 @inject ITicketsClient TicketsClient
@@ -20,6 +21,12 @@
 @if (loaded)
 {
     <MudPaper Elevation="25" Style="overflow-x: scroll;">
+        <MudToolBar DisableGutters="true" Class="mt-2">
+            <MudSpacer />
+            <MudSpacer />
+            <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)" Variant="Variant.Outlined"
+                Value="Project" ValueChanged="OnSelectedProjectChanged" For="() => Project" Class="ma-4" />
+        </MudToolBar>
 
         <MudDropContainer @ref="dropContainer" T="Ticket" Items="tickets" Context="context"
                           ItemsSelector="@((item, dropzone) => item.Status.Id.ToString() == dropzone)"
@@ -27,7 +34,8 @@
             <ChildContent>
                 @foreach (var status in ticketStatuses)
                 {
-                    <MudPaper Elevation="0" Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg" Style="min-width: 250px;">
+                    <MudPaper Elevation="0" Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg"
+                        Style="min-width: 250px; min-height: 300px;">
                         <MudToolBar DisableGutters="true" Dense="true">
                             <MudText Typo="Typo.h6" Class="mb-4"><b>@T[status.Name]</b></MudText>
                             <MudSpacer />
@@ -103,11 +111,13 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
 
+    public YourBrand.Ticketing.Project? Project { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            tickets.AddRange((await TicketsClient.GetTicketsAsync(Organization.Id, null, null, 1, 100, null, null,
+            tickets.AddRange((await TicketsClient.GetTicketsAsync(Organization.Id, Project?.Id, null, null, 1, 100, null, null,
             cts.Token)).Items);
             ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
 
@@ -170,6 +180,20 @@
         {
             Snackbar.Add(exc.Message.ToString(), Severity.Error);
         }
+    }
+
+    async Task OnSelectedProjectChanged(Project? project)
+    {
+        Project = project;
+
+        tickets.Clear();
+
+        tickets.AddRange((await TicketsClient.GetTicketsAsync(Organization.Id, Project?.Id, null, null, 1, 100, null, null,
+        cts.Token)).Items);
+
+        dropContainer.Refresh();
+
+        StateHasChanged();
     }
 
     async Task ShowTicket(int id)

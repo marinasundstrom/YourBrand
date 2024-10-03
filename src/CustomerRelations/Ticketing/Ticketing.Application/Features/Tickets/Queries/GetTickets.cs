@@ -7,13 +7,18 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 
-public record GetTickets(string OrganizationId, int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<TicketDto>>
+public record GetTickets(string OrganizationId, int? ProjectId, int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<TicketDto>>
 {
     public class Handler(ITicketRepository ticketRepository, IDtoComposer dtoComposer) : IRequestHandler<GetTickets, PagedResult<TicketDto>>
     {
         public async Task<PagedResult<TicketDto>> Handle(GetTickets request, CancellationToken cancellationToken)
         {
             var query = ticketRepository.GetAll();
+
+            if (request.ProjectId is not null)
+            {
+                query = query.Where(x => x.ProjectId == request.ProjectId.GetValueOrDefault());
+            }
 
             if (request.Status?.Any() ?? false)
             {

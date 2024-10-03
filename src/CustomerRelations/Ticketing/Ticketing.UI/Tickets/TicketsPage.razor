@@ -4,6 +4,7 @@
 @attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.SignalR.Client
+@using YourBrand.CustomerService
 @implements IAsyncDisposable
 @inject ISnackbar Snackbar
 @inject ITicketsClient TicketsClient
@@ -33,6 +34,11 @@
 
         <MudSpacer />
 
+        <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)" Variant="Variant.Outlined"
+            Value="Project" ValueChanged="OnSelectedProjectChanged" For="() => Project" />
+
+        <MudSpacer />
+
         <MudSelect T="TicketStatus?" Label="@T["Status"]" Dense="true" MultiSelection="true" Value="Status" ValueChanged="OnStatusChanged"
             ToStringFunc="@((i) => i.Name)"
             SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged" For="() => Status" Immediate="true" Variant="Variant.Outlined">
@@ -55,6 +61,12 @@
         <MudTh>
             <MudTableSortLabel SortLabel="Title" T="Ticket">@T["Title"]</MudTableSortLabel>
         </MudTh>
+        @if(Project is null) 
+        {
+            <MudTh>
+                @T["Project"]
+            </MudTh>
+        }
         <MudTh>
             <MudTableSortLabel SortLabel="Status" T="Ticket">@T["Status"]</MudTableSortLabel>
         </MudTh>
@@ -96,6 +108,10 @@
     <RowTemplate>
         <MudTd DataLabel="@T["Id"]">@context.Id</MudTd>
         <MudTd DataLabel="@T["Title"]">@context.Subject</MudTd>
+        @if (Project is null)
+        {
+            <MudTd DataLabel="@T["Project"]">@T[context.Project.Name]</MudTd>
+        }
         <MudTd DataLabel="@T["Status"]">@T[context.Status.Name]</MudTd>
         <MudTd DataLabel="@T["Priority"]">@T[context.Priority.ToString()]</MudTd>
         <MudTd DataLabel="@T["Urgency"]">@T[context.Urgency.ToString()]</MudTd>
@@ -141,11 +157,19 @@
         await table.ReloadServerData();
     }
 
+    async Task OnSelectedProjectChanged(Project? project)
+    {
+        Project = project;
+        await table.ReloadServerData();
+    }
+
     [Parameter] public int? Id { get; set; }
 
     public TicketStatus? Status { get; set; }
 
     public Portal.User? Assignee { get; set; }
+
+    public YourBrand.Ticketing.Project? Project { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -250,7 +274,7 @@
     {        
         try
         {
-            var result = await TicketsClient.GetTicketsAsync(Organization.Id, selectedStatuses is null ? null :
+            var result = await TicketsClient.GetTicketsAsync(Organization.Id, Project?.Id, selectedStatuses is null ? null :
             selectedStatuses.Select(x => x.Id), Assignee?.Id, state.Page + 1, state.PageSize,
             state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Ticketing.SortDirection.Ascending : Ticketing.SortDirection.Descending), cts.Token);

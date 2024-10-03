@@ -101,6 +101,8 @@ public sealed class DtoComposer : IDtoComposer
         HashSet<TicketId> ticketIds = new();
         HashSet<ProjectId> projectIds = new();
 
+        if(tickets.Length == 0) return [];
+
         foreach (var ticket in tickets)
         {
             projectIds.Add(ticket.ProjectId);
