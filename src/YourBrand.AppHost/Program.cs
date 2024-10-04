@@ -201,6 +201,14 @@ var analytics = builder.AddProject<Analytics>("analytics")
     .WaitFor(analyticsDb)
     .WaitFor(messaging);
 
+var meetingsDb = sqlServer.AddDatabase("meetingsDb", "Meetings");
+var meetings = builder.AddProject<Meetings>("meetings")
+    .WithReference(meetingsDb)
+    .WithReference(messaging)
+    .WithReference(blobStorage)
+    .WaitFor(meetingsDb)
+    .WaitFor(messaging);
+
 var cartsDb = sqlServer.AddDatabase("cartsDb", "Carts");
 var carts = builder.AddProject<Carts>("carts")
     .WithReference(cartsDb)
@@ -208,7 +216,6 @@ var carts = builder.AddProject<Carts>("carts")
     .WithReference(blobStorage)
     .WaitFor(cartsDb)
     .WaitFor(messaging);
-
 
 var identityserviceDb = sqlServer.AddDatabase("identityserviceDb", "AspIdUsers");
 var identityService = builder.AddProject<IdentityService>("identityservice")

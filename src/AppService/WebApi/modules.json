@@ -119,6 +119,12 @@
         "Enabled": true
     },
     {
+        "Id": "c0c6c417-c1c6-4415-b54f-d430e2d713d8",
+        "Name": "Meetings",
+        "Assembly": "Meetings.UI",
+        "Enabled": true
+    },
+    {
         "Id": "4237e4e8-7d89-45c5-8482-688f4ba6251c",
         "Name": "Identity Management",
         "Assembly": "IdentityManagement.UI",
