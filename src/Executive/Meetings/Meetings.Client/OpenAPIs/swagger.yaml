@@ -109,6 +109,43 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}:
+    get:
+      tags:
+      - Meetings
+      operationId: Meetings_GetMeetingById
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/Users:
     get:
       tags:
@@ -339,18 +376,58 @@ components:
           format: int32
         title:
           type: string
+        state:
+          $ref: '#/components/schemas/MeetingState'
+        scheduledAt:
+          type: string
+          format: date-time
+          nullable: true
+        location:
+          type: string
+        quorum:
+          $ref: '#/components/schemas/MeetingQuorum'
         participants:
           type: array
           items:
             $ref: '#/components/schemas/MeetingParticipant'
+    MeetingState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Draft
+      - Scheduled
+      - InProgress
+      - Completed
+      - Cancelled
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    MeetingQuorum:
+      type: object
+      additionalProperties: false
+      properties:
+        requiredNumber:
+          type: integer
+          format: int32
     MeetingParticipant:
       type: object
       additionalProperties: false
       properties:
         id:
           type: string
+        name:
+          type: string
+        email:
+          type: string
+          nullable: true
         userId:
           type: string
+          nullable: true
+        hasVotingRights:
+          type: boolean
     ProblemDetails:
       type: object
       additionalProperties:
@@ -391,10 +468,21 @@ components:
           type: string
           format: date-time
           nullable: true
+        location:
+          type: string
+        quorum:
+          $ref: '#/components/schemas/CreateMeetingQuorum'
         participants:
           type: array
           items:
             $ref: '#/components/schemas/CreateMeetingParticipant'
+    CreateMeetingQuorum:
+      type: object
+      additionalProperties: false
+      properties:
+        requiredNumber:
+          type: integer
+          format: int32
     CreateMeetingParticipant:
       type: object
       additionalProperties: false

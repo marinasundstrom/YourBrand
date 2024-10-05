@@ -19,7 +19,7 @@ public class ModuleInitializer : IModuleInitializer
         services.AddMeetingsClients((sp, httpClient) =>
         {
             var navigationManager = sp.GetRequiredService<NavigationManager>();
-            httpClient.BaseAddress = new Uri($"{ServiceUrls.CustomerServiceServiceUrl}/");
+            httpClient.BaseAddress = new Uri($"{ServiceUrls.MeetingsServiceUrl}/");
         }, builder =>
         {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
@@ -42,9 +42,12 @@ public class ModuleInitializer : IModuleInitializer
 
         var group2 = group.GetGroup("meetings") ?? group.CreateGroup("meetings", () => t["Meetings"], MudBlazor.Icons.Material.Filled.MeetingRoom);
 
+        group2.CreateItem("upcoming", () => t["List"], MudBlazor.Icons.Material.Filled.List, "/Meetings");
+
+        /*
         group2.CreateItem("upcoming", () => t["Upcoming"], MudBlazor.Icons.Material.Filled.List, "/Meetings/Upcoming");
 
-        group2.CreateItem("archive", () => t["Archive"], MudBlazor.Icons.Material.Filled.Archive, "/Meetings/Archive");
+        group2.CreateItem("archive", () => t["Archive"], MudBlazor.Icons.Material.Filled.Archive, "/Meetings/Archive"); */
 
         /*
         group2.CreateItem("tickets", () => t["Tickets"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/Tickets");

@@ -1,0 +1,145 @@
+@page "/meetings/new"
+
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
+@inject IMeetingsClient MeetingsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<MudText Typo="@Typo.h2">Create meeting</MudText>
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <MudPaper Elevation="25" Class="pa-4 mb-4">
+        <MudContainer Style="max-height: 500px; overflow-y: scroll">
+            <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
+                For="@(() => Title)" />
+            <div class="d-flex gap-4">
+                    <MudDatePicker Label="Date" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Date"
+                        For="@(() => Date)" />
+                    <MudTimePicker Label="Time" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Time"
+                        For="@(() => Time)" />
+            </div>
+            <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
+                For="@(() => Location)" />
+        </MudContainer>
+    </MudPaper>
+
+    <MudText Typo="@Typo.h4" Class="mb-2">Participants</MudText>
+
+    <MudPaper Elevation="25" Class="pa-4 mb-4">
+        <MudTable T="CreateMeetingParticipant" Items="Participants" Dense="true" Hover="true" Elevation="0"
+            Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" OnRowClick="async (e) => {}">
+            <ToolBarContent>
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipant"
+                    Class="mb-2">Add participant</MudButton>
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Email</MudTh>
+                <MudTh>UserId</MudTh>
+                <MudTh>Has Voting Rights</MudTh>
+            </HeaderContent>
+            <RowTemplate Context="participant">
+                <MudTd DataLabel="Name">@participant.Name</MudTd>
+                <MudTd DataLabel="Email">@participant.Email</MudTd>
+                <MudTd DataLabel="UserId">@participant.UserId</MudTd>
+                <MudTd DataLabel="HasVotingRights">@participant.HasVotingRights</MudTd>
+            </RowTemplate>
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
+        </MudTable>
+    </MudPaper>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="() => {}">Cancel</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+        Create
+    </MudButton>
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [Parameter]
+    public string? OrganizationId { get; set; } = null!;
+
+    [Required]
+    public string Title { get; set; }
+
+    [Required]
+    public DateTime? Date { get; set; } = DateTime.Now;
+
+    [Required]
+    public TimeSpan? Time { get; set; } = DateTime.Now.TimeOfDay;
+
+    [Required]
+    public string Location { get; set; }
+
+
+    public List<CreateMeetingParticipant> Participants { get; set; } = new List<CreateMeetingParticipant>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var meeting = await MeetingsClient.CreateMeetingAsync(organization.Id, new CreateMeeting
+            {
+                Title = Title,
+                ScheduledAt = Date.GetValueOrDefault().Add(Time.GetValueOrDefault()),
+                Location = Location,
+                Quorum = new CreateMeetingQuorum {
+                    RequiredNumber = 10
+                },
+                Participants = Participants
+            });
+
+        NavigationManager.NavigateTo($"/meetings/{meeting.Id}");
+    }
+
+    async Task AddParticipant()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddParticipantDialog.OrganizationId), organization.Id);
+
+        var modalRef = DialogService.Show<AddParticipantDialog>("Add participant", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var participant = (CreateMeetingParticipant)result.Data;
+
+        Participants.Add(participant);
+    }
+
+    void RemoveParticipant(CreateMeetingParticipant participant)
+    {
+        Participants.Remove(participant);
+    }
+
+    public void Dispose()
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

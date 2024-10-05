@@ -36,9 +36,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public string Location { get; set; }
     public MeetingState State { get; set; } = MeetingState.Draft;
     public IReadOnlyCollection<MeetingParticipant> Participants => _participants;
-    public Agenda Agenda { get; set; }
+    public Agenda? Agenda { get; set; }
     public int CurrentAgendaItemIndex { get; private set; } = 0;
-    public Quorum Quorum { get; set; }
+    public Quorum Quorum { get; set; } = new Quorum();
 
     public bool IsQuorumMet()
     {

@@ -13,7 +13,7 @@ using YourBrand.Meetings.Models;
 
 namespace YourBrand.Meetings.Features;
 
-public sealed record CreateMeetingDto(string Title, DateTimeOffset? ScheduledAt, IEnumerable<CreateMeetingParticipantDto> Participants);
+public sealed record CreateMeetingDto(string Title, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants);
 
 [ApiController]
 [ApiVersion("1")]
@@ -34,7 +34,17 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<MeetingDto>> CreateMeeting(string organizationId, CreateMeetingDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.ScheduledAt, request.Participants), cancellationToken);
+        var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.ScheduledAt, request.Location, request.Quorum, request.Participants), cancellationToken);
+        return result.GetValue();
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingDto>> GetMeetingById(string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetMeetingById(organizationId, id), cancellationToken);
         return result.GetValue();
     }
 

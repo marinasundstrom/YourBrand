@@ -1,0 +1,64 @@
+@using System.ComponentModel.DataAnnotations
+@inject IMeetingsClient MeetingsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                    For="@(() => Name)" />
+                <MudTextField Label="Email" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Email"
+                    For="@(() => Email)" />
+                <MudTextField Label="UserId" Variant="Variant.Outlined" Class="mt-4" @bind-Value="UserId"
+                    For="@(() => UserId)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                Create
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? OrganizationId { get; set; } = null!;
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    public string UserId { get; set; }
+
+    public bool HasVotingRights { get; set; }
+
+    protected override void OnInitialized()
+    {
+        context = new EditContext(this);
+    }
+
+    public void OnValidSubmit()
+    {
+        Dialog.Close(new CreateMeetingParticipant {
+            Name = Name,
+            Email = Email,
+            UserId = UserId,
+            HasVotingRights = HasVotingRights
+        });
+    }
+}

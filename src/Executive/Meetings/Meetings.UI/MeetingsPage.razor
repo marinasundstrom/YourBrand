@@ -1,0 +1,120 @@
+﻿@inject IMeetingsClient MeetingsClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+@page "/meetings"
+@using YourBrand.Portal.Services
+
+<AppPageTitle>Meetings</AppPageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Meetings</MudText>
+
+<MudButton Variant="Variant.Filled" Href="/meetings/new" Class="mb-2">New meeting</MudButton>
+
+<MudTable T="Meeting" @ref="table" ServerData="ServerReload" Dense="true" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+    <ToolBarContent>
+
+    </ToolBarContent>
+    
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Title</MudTh>
+        <MudTh>Scheduled</MudTh>
+        <MudTh>Participants</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="meeting">
+        <MudTd DataLabel="Id">@meeting.Id</MudTd>
+        <MudTd DataLabel="Title">@meeting.Title</MudTd>
+        <MudTd DataLabel="ScheduledAt">@meeting.ScheduledAt.GetValueOrDefault().ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="Participants">@meeting.Participants.Count</MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code
+{
+    MudTable<Meeting> table;
+    bool loading = false;
+    MeetingState? Status;
+
+    protected override async Task OnInitializedAsync()
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    private async Task<TableData<Meeting>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await MeetingsClient.GetMeetingsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null);
+
+            return new TableData<Meeting>() { TotalItems = result.Total, Items = result.Items };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+@*
+    public async Task NewMeeting()
+    {
+        var dialogRef = DialogService.Show<NewMeetingDialog>("New meeting");
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+    *@
+
+    public async Task GoTo(Meeting meeting)
+    {
+        NavigationManager.NavigateTo($"/meetings/{meeting.Id}");
+    }
+
+    @*
+    private async Task OnSelectedValuesChanged(IEnumerable<MeetingState?> selectedValues)
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+
+    private async Task DeleteMeeting(Meeting meeting)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft meeting", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await MeetingsClient.DeleteMeetingAsync(organization.Id, meeting.Id);
+        await table.ReloadServerData();
+    }
+    *@
+
+    public void Dispose() 
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

@@ -10,7 +10,9 @@ namespace YourBrand.Meetings.Features.Command;
 
 public sealed record CreateMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
 
-public record CreateMeeting(string OrganizationId, string Title, DateTimeOffset? ScheduledAt, IEnumerable<CreateMeetingParticipantDto> Participants) : IRequest<Result<MeetingDto>>
+public sealed record CreateMeetingQuorumDto(int RequiredNumber);
+
+public record CreateMeeting(string OrganizationId, string Title, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants) : IRequest<Result<MeetingDto>>
 {
     public class Validator : AbstractValidator<CreateMeeting>
     {
@@ -38,6 +40,8 @@ public record CreateMeeting(string OrganizationId, string Title, DateTimeOffset?
 
             var meeting = new Meeting(id, request.Title);
             meeting.OrganizationId = request.OrganizationId;
+            meeting.Location = request.Location ?? string.Empty;
+            meeting.Quorum.RequiredNumber = request.Quorum.RequiredNumber;
 
             if(request.ScheduledAt is not null) 
             {

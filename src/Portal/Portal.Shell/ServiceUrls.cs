@@ -14,6 +14,8 @@ public static class ServiceUrls
 
     public const string CustomerServiceServiceUrl = $"{RootUrl}/ticketing";
 
+    public const string MeetingsServiceUrl = $"{RootUrl}/meetings";
+
     public const string DocumentsServiceUrl = $"{RootUrl}/documents";
 
     //public const string EmailServiceUrl = $"{RootUrl}/email";
