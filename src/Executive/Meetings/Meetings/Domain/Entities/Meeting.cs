@@ -89,12 +89,18 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         _participants.Add(new MeetingParticipant 
         {
             OrganizationId = OrganizationId,
+            MeetingId = Id,
             Name = name,
             UserId = userId,
             Email = email,
             Role = role,
             HasVotingRights = HasVotingRights
         });
+    }
+
+    public bool RemoveParticipant(MeetingParticipant participant)
+    {
+        return _participants.Remove(participant);
     }
 
     // ...

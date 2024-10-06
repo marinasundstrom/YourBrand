@@ -15,6 +15,12 @@ namespace YourBrand.Meetings.Features;
 
 public sealed record CreateMeetingDto(string Title, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants);
 
+public sealed record EditMeetingDto(string Title, DateTimeOffset? ScheduledAt, string Location, EditMeetingDetailsQuorumDto Quorum);
+
+public sealed record AddMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+
+public sealed record EditMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -48,28 +54,45 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
         return result.GetValue();
     }
 
-    /*
-    [HttpGet("MeetingInfo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingInfoDto))]
+    [HttpPut("{id}/details")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingInfoDto>> GetMeetingInfo(CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingDto>> EditMeetingDetails(string organizationId, int id, EditMeetingDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetMeetingInfo(), cancellationToken);
+        var result = await mediator.Send(new EditMeetingDetails(organizationId, id, request.Title, request.ScheduledAt, request.Location, request.Quorum), cancellationToken);
         return result.GetValue();
     }
 
-    [HttpPost]
-    [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingInfoDto))]
+    [HttpPost("{id}/participants")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingInfoDto>> CreateMeeting(CreateMeetingDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingDto>> AddParticipant(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateMeeting(request.Name, request.Email, null), cancellationToken);
+        var result = await mediator.Send(new AddParticipant(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
         return result.GetValue();
     }
-    */
+
+    [HttpPut("{id}/participants/{participantId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingDto>> EditParticipant(string organizationId, int id, string participantId, EditMeetingParticipantDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new EditParticipant(organizationId, id, participantId, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
+        return result.GetValue();
+    }
+
+    [HttpDelete("{id}/participants/{participantId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> RemoveParticipant(string organizationId, int id, string participantId, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new RemoveParticipant(organizationId, id, participantId), cancellationToken);
+        return Ok();
+    }
 }
 
 //public sealed record CreateMeetingDto(string Name, string Email);

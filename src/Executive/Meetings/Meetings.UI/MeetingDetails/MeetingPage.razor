@@ -1,0 +1,233 @@
+@page "/meetings/{id:int}"
+
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
+@inject IMeetingsClient MeetingsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<MudText Typo="@Typo.h2">@Title</MudText>
+
+<MudGrid>
+
+    <MudItem sm="12" md="6">
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>
+
+            <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+
+                <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
+                    For="@(() => Title)" />
+                <div class="d-flex gap-4">
+                    <MudDatePicker Label="Date" Variant="Variant.Outlined" Class="mt-4" @bind-Date="Date"
+                        For="@(() => Date)" />
+                    <MudTimePicker Label="Time" Variant="Variant.Outlined" Class="mt-4" @bind-Time="Time"
+                        For="@(() => Time)" />
+                </div>
+                <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
+                    For="@(() => Location)" />
+
+                <div class="mt-4">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                        Update
+                    </MudButton>
+                </div>
+
+            </EditForm>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem sm="12" md="6">
+
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudText Typo="@Typo.h4" GutterBottom="true">Participants</MudText>
+
+            <MudTable T="ParticipantViewModel" Items="Participants" Hover="true" Elevation="0"
+                Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+                OnRowClick="async (e) => await EditParticipant(e.Item)">
+                <ToolBarContent>
+                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipant"
+                        Class="mb-2">Add participant</MudButton>
+                </ToolBarContent>
+
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Role</MudTh>
+                    <MudTh>Email</MudTh>
+                    <MudTh>UserId</MudTh>
+                    <MudTh>Has Voting Rights</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate Context="participant">
+                    <MudTd DataLabel="Name">@participant.Name</MudTd>
+                    <MudTd DataLabel="Role">@participant.Role</MudTd>
+                    <MudTd DataLabel="Email">@participant.Email</MudTd>
+                    <MudTd DataLabel="UserId">@participant.User?.Id</MudTd>
+                    <MudTd DataLabel="HasVotingRights">@(participant.HasVotingRights ? "Yes" : "No")</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                            OnClick="() => EditParticipant(participant)">
+                        </MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                            OnClick="() => RemoveParticipant(participant)">
+                        </MudIconButton>
+                    </MudTd>
+                </RowTemplate>
+                <LoadingContent>
+                    <MudText>Loading...</MudText>
+                </LoadingContent>
+            </MudTable>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+@code
+{
+    EditContext context = null!;
+
+    [Parameter]
+    public int Id { get; set; }
+
+
+    [Required]
+    public string Title { get; set; }
+
+    [Required]
+    public DateTime? Date { get; set; } = DateTime.Now;
+
+    [Required]
+    public TimeSpan? Time { get; set; } = DateTime.Now.TimeOfDay;
+
+    [Required]
+    public string Location { get; set; }
+
+    public List<ParticipantViewModel> Participants { get; set; } = new List<ParticipantViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        var meeting = await MeetingsClient.GetMeetingByIdAsync(organization!.Id, Id);
+        Title = meeting.Title;
+        Date = meeting.ScheduledAt?.Date;
+        Time = meeting.ScheduledAt?.TimeOfDay;
+        Location = meeting.Location;
+
+        Participants.AddRange(meeting.Participants.Select(participant => new ParticipantViewModel ()
+            {
+                Id = participant.Id,
+                Role = participant.Role,
+                Name = participant.Name,
+                Email = participant.Email,
+                //User = x.User,
+                HasVotingRights = participant.HasVotingRights
+            }));
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var meeting = await MeetingsClient.EditMeetingDetailsAsync(organization.Id, Id, new EditMeeting
+        {
+            Title = Title,
+            ScheduledAt = Date.GetValueOrDefault().Add(Time.GetValueOrDefault()),
+            Location = Location,
+            Quorum = new EditMeetingDetailsQuorum {
+                RequiredNumber = 10
+            }
+        });
+
+        Snackbar.Add("Details saved");
+    }
+
+    async Task AddParticipant()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddParticipantDialog.OrganizationId), organization.Id);
+
+        var modalRef = DialogService.Show<AddParticipantDialog>("Add participant", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var participantModel = (ParticipantViewModel)result.Data;
+
+        var dto = new AddMeetingParticipant
+        {
+            Name = participantModel.Name,
+            Role = participantModel.Role,
+            Email = participantModel.Email,
+            UserId = participantModel.User?.Id,
+            HasVotingRights = participantModel.HasVotingRights
+        };
+
+        await MeetingsClient.AddParticipantAsync(organization.Id, Id, dto);
+
+        Participants.Add(participantModel);
+    }
+
+    async Task EditParticipant(ParticipantViewModel participant)
+    {
+        var originalParticipant = participant;
+
+        DialogParameters parameters = new();
+        parameters.Add(nameof(EditParticipantDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(EditParticipantDialog.Model), originalParticipant.Clone());
+
+        var modalRef = DialogService.Show<EditParticipantDialog>("Edit participant", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var editedModel = (ParticipantViewModel)result.Data;
+
+        var dto = new EditMeetingParticipant
+        {
+            Name = editedModel.Name,
+            Role = editedModel.Role,
+            Email = editedModel.Email,
+            //User = editedModel.User,
+            HasVotingRights = editedModel.HasVotingRights
+        };
+        
+        await MeetingsClient.EditParticipantAsync(organization.Id, Id, participant.Id, dto);
+
+        var index = Participants.IndexOf(originalParticipant);
+        Participants[index] = editedModel;
+    }
+
+    async Task RemoveParticipant(ParticipantViewModel participant)
+    {
+        var r = await DialogService.ShowMessageBox("Delete participant?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await MeetingsClient.RemoveParticipantAsync(organization.Id, Id, participant.Id);
+        Participants.Remove(participant);
+    }
+
+    public void Dispose()
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

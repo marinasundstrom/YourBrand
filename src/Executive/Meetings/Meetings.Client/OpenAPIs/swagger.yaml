@@ -146,6 +146,185 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/details:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_EditMeetingDetails
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMeeting'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/participants:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_AddParticipant
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMeetingParticipant'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/participants/{participantId}:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_EditParticipant
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: participantId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMeetingParticipant'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags:
+      - Meetings
+      operationId: Meetings_RemoveParticipant
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: participantId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/Users:
     get:
       tags:
@@ -420,6 +599,8 @@ components:
           type: string
         name:
           type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
         email:
           type: string
           nullable: true
@@ -428,6 +609,19 @@ components:
           nullable: true
         hasVotingRights:
           type: boolean
+    ParticipantRole:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Chairperson
+      - Secretary
+      - Participant
+      - Observer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
     ProblemDetails:
       type: object
       additionalProperties:
@@ -498,19 +692,57 @@ components:
           $ref: '#/components/schemas/ParticipantRole'
         hasVotingRights:
           type: boolean
-    ParticipantRole:
-      type: integer
-      description: ''
-      x-enumNames:
-      - Chairperson
-      - Secretary
-      - Participant
-      - Observer
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
+    EditMeeting:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        scheduledAt:
+          type: string
+          format: date-time
+          nullable: true
+        location:
+          type: string
+        quorum:
+          $ref: '#/components/schemas/EditMeetingDetailsQuorum'
+    EditMeetingDetailsQuorum:
+      type: object
+      additionalProperties: false
+      properties:
+        requiredNumber:
+          type: integer
+          format: int32
+    AddMeetingParticipant:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+          nullable: true
+        email:
+          type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
+        hasVotingRights:
+          type: boolean
+    EditMeetingParticipant:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+          nullable: true
+        email:
+          type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
+        hasVotingRights:
+          type: boolean
     PagedResultOfUser:
       type: object
       additionalProperties: false
