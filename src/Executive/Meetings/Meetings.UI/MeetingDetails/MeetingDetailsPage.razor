@@ -1,6 +1,7 @@
 @page "/meetings/{id:int}"
 
 @using System.ComponentModel.DataAnnotations
+@using YourBrand.Meetings.MeetingDetails.Agenda
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
 @inject ISnackbar Snackbar
@@ -9,11 +10,11 @@
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
 
-<MudText Typo="@Typo.h2">@Title</MudText>
+<MudText Typo="@Typo.h2" GutterBottom="true">@Title</MudText>
 
-<MudGrid>
+<MudGrid Class="mb-4">
 
-    <MudItem sm="12" md="6">
+    <MudItem xs="12" md="6">
         <MudPaper Elevation="25" Class="pa-4 mb-4">
             <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>
 
@@ -21,7 +22,7 @@
                 <DataAnnotationsValidator />
 
                 <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
-                    For="@(() => Title)" />
+                    For="@(() => Title)"  Immediate="true" />
                 <div class="d-flex gap-4">
                     <MudDatePicker Label="Date" Variant="Variant.Outlined" Class="mt-4" @bind-Date="Date"
                         For="@(() => Date)" />
@@ -29,19 +30,24 @@
                         For="@(() => Time)" />
                 </div>
                 <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
-                    For="@(() => Location)" />
+                    For="@(() => Location)" Immediate="true" />
 
-                <div class="mt-4">
+                <div class="mt-4 d-flex">
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
                         Save
                     </MudButton>
+
+                    @if(isDetailsModified) 
+                    {
+                        <MudText Typo="@Typo.body1" Class="ms-2">Modified</MudText>        
+                    }
                 </div>
 
             </EditForm>
         </MudPaper>
     </MudItem>
 
-    <MudItem sm="12" md="6">
+    <MudItem xs="12" md="6">
 
         <MudPaper Elevation="25" Class="pa-4 mb-4">
             <MudText Typo="@Typo.h4" GutterBottom="true">Participants</MudText>
@@ -50,8 +56,8 @@
                 Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
                 OnRowClick="async (e) => await EditParticipant(e.Item)">
                 <ToolBarContent>
-                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipant"
-                        Class="mb-2">Add participant</MudButton>
+                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
+                        OnClick="AddParticipant" Class="mb-2">Add participant</MudButton>
                 </ToolBarContent>
 
                 <HeaderContent>
@@ -86,13 +92,14 @@
 
 </MudGrid>
 
+<AgendaSection OrganizationId="@organization?.Id" MeetingId="@Id" />
+
 @code
 {
     EditContext context = null!;
 
     [Parameter]
     public int Id { get; set; }
-
 
     [Required]
     public string Title { get; set; }
@@ -131,6 +138,16 @@
                 //User = x.User,
                 HasVotingRights = participant.HasVotingRights
             }));
+    
+        context.OnFieldChanged += OnFieldChanged;
+        context.MarkAsUnmodified();
+    }
+
+    bool isDetailsModified = false;
+
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e) 
+    {
+        isDetailsModified = context.IsModified();
     }
 
     YourBrand.Portal.Services.Organization organization = default!;
@@ -153,6 +170,8 @@
         });
 
         Snackbar.Add("Details saved");
+
+        context.MarkAsUnmodified();
     }
 
     async Task AddParticipant()
@@ -230,6 +249,7 @@
 
     public void Dispose()
     {
+        context.OnFieldChanged -= OnFieldChanged;
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 }

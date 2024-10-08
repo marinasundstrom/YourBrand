@@ -31,7 +31,7 @@ public sealed class OrganizationsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<OrganizationDto>> CreateOrganization(CreateOrganizationDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new CreateOrganization(request.Name, request.Email, null!), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 }
 

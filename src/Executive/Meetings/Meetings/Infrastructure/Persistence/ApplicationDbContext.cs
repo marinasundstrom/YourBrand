@@ -130,7 +130,9 @@ public sealed class ApplicationDbContext(
 
     public DbSet<Meeting> Meetings { get; set; }
 
-    public DbSet<MeetingParticipant> MeetingParticipants { get; set; }
+    public DbSet<Agenda> Agendas { get; set; }
+
+    public DbSet<Motion> Motions { get; set; }
 
     public DbSet<User> Users { get; set; }
 

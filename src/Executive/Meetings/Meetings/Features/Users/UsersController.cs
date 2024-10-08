@@ -30,7 +30,7 @@ public sealed class UsersController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<UserInfoDto>> GetUserInfo(CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetUserInfo(), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 
     [HttpPost]
@@ -41,7 +41,7 @@ public sealed class UsersController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<UserInfoDto>> CreateUser(CreateUserDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new CreateUser(request.Name, request.Email, null), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 }
 

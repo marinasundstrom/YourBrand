@@ -9,6 +9,12 @@ public static partial class Errors
         public static readonly Error ParticipantNotFound = new Error(nameof(ParticipantNotFound), "Participant not found", string.Empty);
     }
 
+    public static class Agendas
+    {
+        public static readonly Error AgendaNotFound = new Error(nameof(AgendaNotFound), "Agenda not found", string.Empty);
+
+        public static readonly Error AgendaItemNotFound = new Error(nameof(AgendaItemNotFound), "Agenda item not found", string.Empty);
+    }
 
     public static class Users
     {

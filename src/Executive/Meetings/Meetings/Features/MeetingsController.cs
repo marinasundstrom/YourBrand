@@ -41,7 +41,7 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingDto>> CreateMeeting(string organizationId, CreateMeetingDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.ScheduledAt, request.Location, request.Quorum, request.Participants), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 
     [HttpGet("{id}")]
@@ -51,7 +51,7 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingDto>> GetMeetingById(string organizationId, int id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetMeetingById(organizationId, id), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 
     [HttpPut("{id}/details")]
@@ -61,7 +61,7 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingDto>> EditMeetingDetails(string organizationId, int id, EditMeetingDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditMeetingDetails(organizationId, id, request.Title, request.ScheduledAt, request.Location, request.Quorum), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 
     [HttpPost("{id}/participants")]
@@ -71,7 +71,7 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingParticipantDto>> AddParticipant(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new AddParticipant(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 
     [HttpPut("{id}/participants/{participantId}")]
@@ -81,7 +81,7 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingParticipantDto>> EditParticipant(string organizationId, int id, string participantId, EditMeetingParticipantDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditParticipant(organizationId, id, participantId, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
-        return result.GetValue();
+        return this.HandleResult(result);
     }
 
     [HttpDelete("{id}/participants/{participantId}")]
@@ -94,5 +94,3 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
         return Ok();
     }
 }
-
-//public sealed record CreateMeetingDto(string Name, string Email);

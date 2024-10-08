@@ -1,0 +1,142 @@
+@inject IAgendasClient AgendasClient
+@inject IDialogService DialogService
+
+<MudPaper Elevation="25" Class="pa-4 mb-4">
+    <MudText Typo="@Typo.h4" GutterBottom="true">Agenda</MudText>
+    @if(agenda is null) 
+    {
+        <text>No agenda.</text>
+
+        <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="CreateAgenda" Class="mb-2">Create agenda</MudButton>
+    }
+    else 
+    {
+        <MudTable T="AgendaItemViewModel" Items="Items" Dense="true" Hover="true" Elevation="0"
+            Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+            OnRowClick="async (e) => await EditItem(e.Item)">
+            <ToolBarContent>
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddItem"
+                    Class="mb-2">Add Item</MudButton>
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh>Title</MudTh>
+                <MudTh>Description</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate Context="item">
+                <MudTd DataLabel="Title">@item.Title</MudTd>
+                <MudTd DataLabel="Description">@item.Description</MudTd>
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                        OnClick="() => EditItem(item)">
+                    </MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="() => RemoveItem(item)">
+                    </MudIconButton>
+                </MudTd>
+            </RowTemplate>
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
+        </MudTable>
+    }
+</MudPaper>
+
+@code
+{
+    Agenda? agenda;
+
+    [Parameter]
+    public string? OrganizationId { get; set; } = null!;
+
+    [Parameter]
+    public int? MeetingId { get; set; } = null!;
+
+    public List<AgendaItemViewModel> Items { get; set; } = new List<AgendaItemViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var agendas = await AgendasClient.GetAgendasAsync(OrganizationId, MeetingId, null, null, null, null, null);
+
+        agenda = agendas.Items.FirstOrDefault();
+
+        Items.AddRange(agenda.Items.Select(item => new AgendaItemViewModel()
+            {
+                Id = item.Id,
+                Title = item.Title,
+                Description = item.Description
+            }));
+    }
+
+    async Task CreateAgenda() 
+    {
+        agenda = await AgendasClient.CreateAgendaAsync(OrganizationId, MeetingId, new Meetings.CreateAgenda() { Items = [] });
+    }
+
+    async Task AddItem() 
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddAgendaItemDialog.OrganizationId), OrganizationId);
+
+        var modalRef = DialogService.Show<AddAgendaItemDialog>("Add item", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var agendaItemModel = (AgendaItemViewModel)result.Data;
+
+        var dto = new AddAgendaItem
+            {
+                Title = agendaItemModel.Title,
+                Description = agendaItemModel.Description,
+            };
+
+        var model = await AgendasClient.AddAgendaItemAsync(OrganizationId, agenda!.Id, dto);
+
+        agendaItemModel.Id = model.Id;
+
+        Items.Add(agendaItemModel);
+    }
+
+    async Task RemoveItem(AgendaItemViewModel item) 
+    {
+        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await AgendasClient.RemoveAgendaItemAsync(OrganizationId, agenda!.Id, item.Id);
+        Items.Remove(item);
+    }
+
+    async Task EditItem(AgendaItemViewModel item)
+    {
+        var originalItem = item;
+
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddAgendaItemDialog.OrganizationId), OrganizationId);
+        parameters.Add(nameof(AddAgendaItemDialog.Model), originalItem.Clone());
+
+        var modalRef = DialogService.Show<AddAgendaItemDialog>("Edit item", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var editedModel = (AgendaItemViewModel)result.Data;
+
+        var dto = new EditAgendaItem
+            {
+                Title = editedModel.Title,
+                Description = editedModel.Description
+            };
+
+        await AgendasClient.EditAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, dto);
+
+        var index = Items.IndexOf(originalItem);
+        Items[index] = editedModel;
+    }
+}

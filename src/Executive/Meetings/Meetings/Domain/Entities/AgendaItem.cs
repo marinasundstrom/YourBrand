@@ -13,8 +13,15 @@ public enum AgendaItemState
     Completed
 }
 
-public class AgendaItem : AggregateRoot<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
+public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
 {
+    public AgendaItem(string title, string description)
+    : base(new AgendaItemId())
+    {
+        Title = title;
+        Description = description;
+    }
+
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
 
@@ -23,26 +30,35 @@ public class AgendaItem : AggregateRoot<AgendaItemId>, IAuditable, IHasTenant, I
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
     public int Order { get; set; }
     public AgendaId AgendaId { get; set; }
-    public MotionId MotionId { get; set; }
+    public MotionId? MotionId { get; set; }
 
     public void StartDiscussion()
     {
         if (State != AgendaItemState.Pending)
+        {
             throw new InvalidOperationException("Cannot start discussion.");
+        }
+
         State = AgendaItemState.UnderDiscussion;
     }
 
     public void StartVoting()
     {
         if (State != AgendaItemState.UnderDiscussion)
+        {
             throw new InvalidOperationException("Cannot start voting.");
+        }
+
         State = AgendaItemState.Voting;
     }
 
     public void CompleteAgendaItem()
     {
         if (State != AgendaItemState.Voting)
+        {
             throw new InvalidOperationException("Agenda item voting not completed.");
+        }
+
         State = AgendaItemState.Completed;
     }
 

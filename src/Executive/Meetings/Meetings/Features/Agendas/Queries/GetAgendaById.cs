@@ -1,0 +1,30 @@
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Meetings.Features;
+using YourBrand.Meetings.Models;
+using YourBrand.Meetings.Domain;
+ 
+namespace YourBrand.Meetings.Features.Agendas.Queries;
+
+public record GetAgendaById(string OrganizationId, int Id) : IRequest<Result<AgendaDto>>
+{
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetAgendaById, Result<AgendaDto>>
+    {
+        public async Task<Result<AgendaDto>> Handle(GetAgendaById request, CancellationToken cancellationToken)
+        {
+            var agenda = await context.Agendas
+                .InOrganization(request.OrganizationId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            if(agenda is null) 
+            {
+                return Errors.Agendas.AgendaNotFound;
+            }
+
+            return agenda.ToDto();
+        }
+    }
+}

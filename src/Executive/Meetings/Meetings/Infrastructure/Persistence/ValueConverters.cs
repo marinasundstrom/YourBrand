@@ -12,7 +12,7 @@ internal sealed class AgendaIdConverter : ValueConverter<AgendaId, int>
     }
 }
 
-internal sealed class AgendaItemIdConverter : ValueConverter<AgendaItemId, int>
+internal sealed class AgendaItemIdConverter : ValueConverter<AgendaItemId, string>
 {
     public AgendaItemIdConverter()
         : base(v => v.Value, v => new(v))

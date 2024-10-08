@@ -6,23 +6,30 @@ using YourBrand.Meetings.Features;
 using YourBrand.Meetings.Models;
 using YourBrand.Meetings.Domain;
  
-namespace YourBrand.Meetings.Features.Queries;
+namespace YourBrand.Meetings.Features.Agendas.Queries;
 
-public record GetMeetings(string OrganizationId, int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<MeetingDto>>
+public record GetAgenda(string OrganizationId, int? MeetingId = null, int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<AgendaDto>>
 {
-    public class Handler(IApplicationDbContext context) : IRequestHandler<GetMeetings, PagedResult<MeetingDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<GetAgenda, PagedResult<AgendaDto>>
     {
-        public async Task<PagedResult<MeetingDto>> Handle(GetMeetings request, CancellationToken cancellationToken)
+        public async Task<PagedResult<AgendaDto>> Handle(GetAgenda request, CancellationToken cancellationToken)
         {
-            var query = context.Meetings
+            var query = context.Agendas
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
                 .AsQueryable();
 
+            if (request.MeetingId is not null)
+            {
+                query = query.Where(x => x.MeetingId == request.MeetingId);
+            }
+
+            /*
             if (request.SearchTerm is not null)
             {
                 query = query.Where(x => x.Title.ToLower().Contains(request.SearchTerm.ToLower()));
             }
+            */
 
             if (request.SortBy is not null)
             {
@@ -44,7 +51,7 @@ public record GetMeetings(string OrganizationId, int Page = 1, int PageSize = 10
                 .Take(request.PageSize).AsQueryable()
                 .ToArrayAsync(cancellationToken);
 
-            return new PagedResult<MeetingDto>(users.Select(x => x.ToDto()), totalCount);
+            return new PagedResult<AgendaDto>(users.Select(x => x.ToDto()), totalCount);
         }
     }
 }

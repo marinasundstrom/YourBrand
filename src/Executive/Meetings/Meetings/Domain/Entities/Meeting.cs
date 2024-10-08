@@ -49,10 +49,14 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public void StartMeeting()
     {
         if (State != MeetingState.Scheduled)
+        {
             throw new InvalidOperationException("Meeting cannot be started.");
+        }
 
         if (!IsQuorumMet())
+        {
             throw new InvalidOperationException("Quorum not met.");
+        }
 
         State = MeetingState.InProgress;
     }
@@ -60,7 +64,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public void EndMeeting()
     {
         if (State != MeetingState.InProgress)
+        {
             throw new InvalidOperationException("Meeting is not in progress.");
+        }
 
         State = MeetingState.Completed;
     }
@@ -68,18 +74,22 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public void MoveToNextAgendaItem()
     {
         if (State != MeetingState.InProgress)
+        {
             throw new InvalidOperationException("Meeting is not in progress.");
+        }
 
-        var agendaItems = Agenda?.AgendaItems.OrderBy(ai => ai.Order).ToList();
+        var agendaItems = Agenda?.Items.OrderBy(ai => ai.Order).ToList();
         if (agendaItems == null || CurrentAgendaItemIndex >= agendaItems.Count - 1)
+        {
             throw new InvalidOperationException("No more agenda items.");
+        }
 
         CurrentAgendaItemIndex++;
     }
 
     public AgendaItem GetCurrentAgendaItem()
     {
-        return Agenda?.AgendaItems
+        return Agenda?.Items
             .OrderBy(ai => ai.Order)
             .ElementAtOrDefault(CurrentAgendaItemIndex);
     }

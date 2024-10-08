@@ -11,18 +11,17 @@
 
 <MudText Typo="@Typo.h2" GutterBottom="true">Create meeting</MudText>
 
-
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
     <MudGrid>
 
-        <MudItem sm="12" md="6">
+        <MudItem xs="12" md="6">
             <MudPaper Elevation="25" Class="pa-4 mb-4">
                 <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>
 
                 <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
-                    For="@(() => Title)" />
+                    For="@(() => Title)" Immediate="true" />
                 <div class="d-flex gap-4">
                     <MudDatePicker Label="Date" Variant="Variant.Outlined" Class="mt-4" @bind-Date="Date"
                         For="@(() => Date)" />
@@ -30,13 +29,13 @@
                         For="@(() => Time)" />
                 </div>
                 <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
-                    For="@(() => Location)" />
+                    For="@(() => Location)"  Immediate="true" />
             </MudPaper>
         </MudItem>
 
-        <MudItem sm="12" md="6">
+        <MudItem xs="12" md="6">
             <MudPaper Elevation="25" Class="pa-4 mb-4">
-                <MudText Typo="@Typo.h4"  GutterBottom="true">Participants</MudText>
+                <MudText Typo="@Typo.h4" GutterBottom="true">Participants</MudText>
 
                 <MudTable T="AddEditParticipantViewModel" Items="Participants" Dense="true" Hover="true" Elevation="0"
                     Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"

@@ -7,8 +7,10 @@ namespace YourBrand.Meetings.Domain;
 public interface IApplicationDbContext
 {
     DbSet<Meeting> Meetings { get; }
+    
+    DbSet<Agenda> Agendas { get; }
 
-    DbSet<MeetingParticipant> MeetingParticipants { get; }
+    DbSet<Motion> Motions { get; }
 
     DbSet<User> Users { get; }
 
