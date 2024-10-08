@@ -223,7 +223,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Meeting'
+                $ref: '#/components/schemas/MeetingParticipant'
         404:
           description: ''
           content:
@@ -274,7 +274,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Meeting'
+                $ref: '#/components/schemas/MeetingParticipant'
         404:
           description: ''
           content:

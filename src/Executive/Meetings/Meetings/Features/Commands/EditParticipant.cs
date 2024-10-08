@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public record EditParticipant(string OrganizationId, int Id, string ParticipantId, string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights) : IRequest<Result<MeetingDto>>
+public record EditParticipant(string OrganizationId, int Id, string ParticipantId, string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights) : IRequest<Result<MeetingParticipantDto>>
 {
     public class Validator : AbstractValidator<EditParticipant>
     {
@@ -18,9 +18,9 @@ public record EditParticipant(string OrganizationId, int Id, string ParticipantI
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<EditParticipant, Result<MeetingDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<EditParticipant, Result<MeetingParticipantDto>>
     {
-        public async Task<Result<MeetingDto>> Handle(EditParticipant request, CancellationToken cancellationToken)
+        public async Task<Result<MeetingParticipantDto>> Handle(EditParticipant request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -48,16 +48,7 @@ public record EditParticipant(string OrganizationId, int Id, string ParticipantI
 
             await context.SaveChangesAsync(cancellationToken);
 
-            meeting = await context.Meetings
-                .InOrganization(request.OrganizationId)
-                .FirstOrDefaultAsync(x => x.Id == meeting.Id!, cancellationToken);
-
-            if (meeting is null)
-            {
-                return Errors.Meetings.MeetingNotFound;
-            }
-
-            return meeting.ToDto();
+            return participant.ToDto();
         }
     }
 }

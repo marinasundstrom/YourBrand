@@ -33,7 +33,7 @@
 
                 <div class="mt-4">
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
-                        Update
+                        Save
                     </MudButton>
                 </div>
 
@@ -177,7 +177,9 @@
             HasVotingRights = participantModel.HasVotingRights
         };
 
-        await MeetingsClient.AddParticipantAsync(organization.Id, Id, dto);
+        var model = await MeetingsClient.AddParticipantAsync(organization.Id, Id, dto);
+
+        participantModel.Id = model.Id;
 
         Participants.Add(participantModel);
     }
@@ -203,7 +205,7 @@
             Name = editedModel.Name,
             Role = editedModel.Role,
             Email = editedModel.Email,
-            //User = editedModel.User,
+            UserId = editedModel.User?.Id,
             HasVotingRights = editedModel.HasVotingRights
         };
         

@@ -56,7 +56,7 @@
                     <RowTemplate Context="participant">
                         <MudTd DataLabel="Name">@participant.Name</MudTd>
                         <MudTd DataLabel="Email">@participant.Email</MudTd>
-                        <MudTd DataLabel="UserId">@participant.User.Id</MudTd>
+                        <MudTd DataLabel="UserId">@participant.User?.Id</MudTd>
                         <MudTd DataLabel="HasVotingRights">@(participant.HasVotingRights ? "Yes" : "No")</MudTd>
                         <MudTd>
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
@@ -134,7 +134,7 @@
                         Name = model.Name,
                         Role = model.Role,
                         Email = model.Email,
-                        UserId = model.User.Id,
+                        UserId = model.User?.Id,
                         HasVotingRights = model.HasVotingRights
                     };
                 }).ToList()

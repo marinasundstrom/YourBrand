@@ -65,20 +65,20 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost("{id}/participants")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingParticipantDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingDto>> AddParticipant(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingParticipantDto>> AddParticipant(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new AddParticipant(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
         return result.GetValue();
     }
 
     [HttpPut("{id}/participants/{participantId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingParticipantDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingDto>> EditParticipant(string organizationId, int id, string participantId, EditMeetingParticipantDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingParticipantDto>> EditParticipant(string organizationId, int id, string participantId, EditMeetingParticipantDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditParticipant(organizationId, id, participantId, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
         return result.GetValue();

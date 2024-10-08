@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public record AddParticipant(string OrganizationId, int Id, string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights) : IRequest<Result<MeetingDto>>
+public record AddParticipant(string OrganizationId, int Id, string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights) : IRequest<Result<MeetingParticipantDto>>
 {
     public class Validator : AbstractValidator<AddParticipant>
     {
@@ -18,9 +18,9 @@ public record AddParticipant(string OrganizationId, int Id, string Name, string?
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<AddParticipant, Result<MeetingDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<AddParticipant, Result<MeetingParticipantDto>>
     {
-        public async Task<Result<MeetingDto>> Handle(AddParticipant request, CancellationToken cancellationToken)
+        public async Task<Result<MeetingParticipantDto>> Handle(AddParticipant request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -31,22 +31,13 @@ public record AddParticipant(string OrganizationId, int Id, string Name, string?
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            meeting.AddParticipant(request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights);
+            var participant = meeting.AddParticipant(request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights);
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-
-            meeting = await context.Meetings
-                .InOrganization(request.OrganizationId)
-                .FirstOrDefaultAsync(x => x.Id == meeting.Id!, cancellationToken);
-
-            if (meeting is null)
-            {
-                return Errors.Meetings.MeetingNotFound;
-            }
-
-            return meeting.ToDto();
+            
+            return participant.ToDto();
         }
     }
 }

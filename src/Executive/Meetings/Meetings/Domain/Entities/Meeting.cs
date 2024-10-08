@@ -84,9 +84,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             .ElementAtOrDefault(CurrentAgendaItemIndex);
     }
 
-    public void AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights)
+    public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights)
     {
-        _participants.Add(new MeetingParticipant 
+        var participant = new MeetingParticipant
         {
             OrganizationId = OrganizationId,
             MeetingId = Id,
@@ -95,7 +95,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             Email = email,
             Role = role,
             HasVotingRights = HasVotingRights
-        });
+        };
+
+        _participants.Add(participant);
+
+        return participant;
     }
 
     public bool RemoveParticipant(MeetingParticipant participant)
