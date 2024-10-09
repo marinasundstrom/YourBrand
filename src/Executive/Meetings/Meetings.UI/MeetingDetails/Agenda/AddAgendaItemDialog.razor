@@ -9,6 +9,14 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Title"
                     For="@(() =>Model.Title)" />
+                <MudSelect T="AgendaItemType" Label="Type" Variant="Variant.Outlined" @bind-Value="Model.Type"
+                    Class="mt-4">
+                    @foreach (var type in Enum.GetValues<AgendaItemType>())
+                    {
+                        <MudSelectItem T="AgendaItemType" Value="@type">@Enum.GetName(typeof(AgendaItemType), type)
+                        </MudSelectItem>
+                    }
+                </MudSelect>
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4"
                     @bind-Value="Model.Description" For="@(() =>Model.Description)" Lines="5" />
                 <MotionSelector OrganizationId="@OrganizationId" Label="Motion" Variant="Variant.Outlined" Class="mt-4"
@@ -49,6 +57,7 @@
         Dialog.Close(new AgendaItemViewModel {
             Order = Model.Order,
             Title = Model.Title,
+            Type = Model.Type,
             Description = Model.Description,
             Motion = Model.Motion
         });

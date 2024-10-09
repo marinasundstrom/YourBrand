@@ -22,6 +22,8 @@
             <HeaderContent>
                 <MudTh>#</MudTh>
                 <MudTh>Title</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>State</MudTh>
                 <MudTh>Description</MudTh>
                 <MudTh>Motion</MudTh>
                 <MudTh></MudTh>
@@ -29,6 +31,8 @@
             <RowTemplate Context="item">
                 <MudTd DataLabel="Order">@item.Order</MudTd>
                 <MudTd DataLabel="Title">@item.Title</MudTd>
+                <MudTd DataLabel="Type">@item.Type</MudTd>
+                <MudTd DataLabel="State">@item.State</MudTd>
                 <MudTd DataLabel="Description">@item.Description</MudTd>
                 <MudTd DataLabel="Motion">@item.Motion?.Id</MudTd>
                 <MudTd>
@@ -71,6 +75,8 @@
                 Id = item.Id,
                 Order = item.Order,
                 Title = item.Title,
+                Type = item.Type,
+                State = item.State,
                 Description = item.Description
                 //Motion = item.Motion
             }));
@@ -97,6 +103,7 @@
         var dto = new AddAgendaItem
             {
                 Title = agendaItemModel.Title,
+                Type = agendaItemModel.Type,
                 Description = agendaItemModel.Description,
                 MotionId = agendaItemModel.Motion?.Id
             };
@@ -104,6 +111,7 @@
         var model = await AgendasClient.AddAgendaItemAsync(OrganizationId, agenda!.Id, dto);
 
         agendaItemModel.Id = model.Id;
+        agendaItemModel.Order = model.Order;
 
         Items.Add(agendaItemModel);
     }
@@ -140,6 +148,7 @@
         var dto = new EditAgendaItem
             {
                 Title = editedModel.Title,
+                Type = editedModel.Type,
                 Description = editedModel.Description,
                 MotionId = editedModel.Motion?.Id
             };

@@ -11,6 +11,10 @@ public class AgendaItemViewModel
     [Required]
     public string Title { get; set; }
 
+    public AgendaItemType Type { get; set; }
+
+    public AgendaItemState State { get; set; }
+
     public string Description { get; set; }
 
     public Motion Motion { get; set; }
@@ -22,6 +26,8 @@ public class AgendaItemViewModel
             Id = Id,
             Order = Order,
             Title = Title,
+            Type = Type,
+            State = State,
             Description = Description,
             Motion = Motion
         };

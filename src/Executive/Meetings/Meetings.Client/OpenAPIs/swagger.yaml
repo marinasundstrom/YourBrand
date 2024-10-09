@@ -1732,10 +1732,31 @@ components:
         id:
           type: integer
           format: int32
+        state:
+          $ref: '#/components/schemas/AgendaState'
         items:
           type: array
           items:
             $ref: '#/components/schemas/AgendaItem'
+    AgendaState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Drafting
+      - Reviewing
+      - Approved
+      - Distributed
+      - InProgress
+      - Completed
+      - FollowUp
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
     AgendaItem:
       type: object
       additionalProperties: false
@@ -1745,6 +1766,8 @@ components:
         order:
           type: integer
           format: int32
+        type:
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         state:
@@ -1755,6 +1778,43 @@ components:
           type: integer
           format: int32
           nullable: true
+    AgendaItemType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - CallToOrder
+      - RollCall
+      - ApprovalOfMinutes
+      - ApprovalOfAgenda
+      - ChairpersonRemarks
+      - PublicComment
+      - Reports
+      - SpecialPresentations
+      - OldBusiness
+      - NewBusiness
+      - Announcements
+      - Motions
+      - Discussion
+      - Voting
+      - ExecutiveSession
+      - Adjournment
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
     AgendaItemState:
       type: integer
       description: ''
@@ -1940,6 +2000,8 @@ components:
       type: object
       additionalProperties: false
       properties:
+        type:
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         description:
@@ -1951,6 +2013,8 @@ components:
       type: object
       additionalProperties: false
       properties:
+        type:
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         description:
@@ -1963,6 +2027,8 @@ components:
       type: object
       additionalProperties: false
       properties:
+        type:
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         description:

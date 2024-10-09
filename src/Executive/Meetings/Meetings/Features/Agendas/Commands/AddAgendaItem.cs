@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record AddAgendaItem(string OrganizationId, int Id, string Title, string Description, int? MotionId) : IRequest<Result<AgendaItemDto>>
+public record AddAgendaItem(string OrganizationId, int Id, AgendaItemType Type, string Title, string Description, int? MotionId) : IRequest<Result<AgendaItemDto>>
 {
     public class Validator : AbstractValidator<AddAgendaItem>
     {
@@ -31,7 +31,7 @@ public record AddAgendaItem(string OrganizationId, int Id, string Title, string 
                 return Errors.Agendas.AgendaNotFound;
             }
 
-            var agendaItem = agenda.AddItem(request.Title, request.Description);
+            var agendaItem = agenda.AddItem(request.Type, request.Title, request.Description);
 
             agendaItem.MotionId = request.MotionId;
 

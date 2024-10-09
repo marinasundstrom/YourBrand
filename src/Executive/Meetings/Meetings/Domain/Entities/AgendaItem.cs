@@ -5,6 +5,26 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
+public enum AgendaItemType
+{
+    CallToOrder,         // Opening the meeting formally
+    RollCall,            // Attendance check for quorum
+    ApprovalOfMinutes,   // Approval of previous meeting's minutes
+    ApprovalOfAgenda,    // Approval of the current meeting's agenda
+    ChairpersonRemarks,  // Opening remarks or statements by the chairperson
+    PublicComment,       // Time allocated for public comments (if applicable)
+    Reports,             // Presentation of reports (e.g., financial, committee reports)
+    SpecialPresentations,// Formal presentations by guests or special contributors
+    OldBusiness,         // Items carried over from previous meetings
+    NewBusiness,         // Introduction of new topics for discussion or decision
+    Announcements,       // Formal announcements to the assembly
+    Motions,             // Proposals requiring a decision or vote
+    Discussion,          // Structured discussion on specific agenda topics
+    Voting,              // Formal voting on motions or decisions
+    ExecutiveSession,    // Private session for confidential matters
+    Adjournment          // Formal closing of the meeting
+}
+
 public enum AgendaItemState
 {
     Pending,
@@ -15,9 +35,10 @@ public enum AgendaItemState
 
 public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
 {
-    public AgendaItem(string title, string description)
+    public AgendaItem(AgendaItemType type, string title, string description)
     : base(new AgendaItemId())
     {
+        Type = type;
         Title = title;
         Description = description;
     }
@@ -25,6 +46,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
     public AgendaId AgendaId { get; set; }
+
+    public AgendaItemType Type { get; set; }
 
     public string Title { get; set; }
     public string Description { get; set; }

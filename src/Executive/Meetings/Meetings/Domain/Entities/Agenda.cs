@@ -5,6 +5,18 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
+public enum AgendaState 
+{
+    Drafting,           // Agenda is being drafted, can still be modified.
+    Reviewing,          // Agenda is under review by participants or stakeholders.
+    Approved,           // Agenda is finalized and approved for the meeting.
+    Distributed,        // Agenda has been sent to all participants.
+    InProgress,         // The meeting is happening, and the agenda is being followed.
+    //Adjusted,           // The agenda has been adjusted during the meeting.
+    Completed,          // The meeting is finished, and all agenda items have been covered.
+    FollowUp            // Post-meeting follow-up tasks or action items are in progress.
+}
+
 public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<AgendaItem> _items = new HashSet<AgendaItem>();
@@ -22,9 +34,20 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
     public OrganizationId OrganizationId { get; set; }
     public MeetingId MeetingId { get; set; }
 
+    public AgendaState State { get; set;} = AgendaState.Drafting;
+
+    /*
+    public bool? IsApproved { get; set; }
+    public DateTimeOffset? ApprovedAt { get; set; }
+    public bool? IsAdjusted { get; set; }
+    public DateTimeOffset? AdjustedAt { get; set; }
+    public bool? IsCompleted { get; set; }
+    public DateTimeOffset? CompletedAt { get; set; }
+    */
+
     public IReadOnlyCollection<AgendaItem> Items => _items;
 
-    public AgendaItem AddItem(string title, string description) 
+    public AgendaItem AddItem(AgendaItemType type, string title, string description) 
     {
         int order = 1;
 
@@ -35,7 +58,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
         }
         catch {}
 
-        var item = new AgendaItem(title, description);
+        var item = new AgendaItem(type, title, description);
         item.Order = order;
         _items.Add(item);
         return item;

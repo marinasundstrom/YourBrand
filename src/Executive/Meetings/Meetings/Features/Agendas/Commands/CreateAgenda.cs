@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public sealed record CreateAgendaItemDto(string Title, string Description);
+public sealed record CreateAgendaItemDto(AgendaItemType Type, string Title, string Description);
 
 public record CreateAgenda(string OrganizationId, int MeetingId, IEnumerable<CreateAgendaItemDto> Items) : IRequest<Result<AgendaDto>>
 {
@@ -42,7 +42,7 @@ public record CreateAgenda(string OrganizationId, int MeetingId, IEnumerable<Cre
 
             foreach (var agendaItem in request.Items) 
             {
-                agenda.AddItem(agendaItem.Title, agendaItem.Description);
+                agenda.AddItem(agendaItem.Type, agendaItem.Title, agendaItem.Description);
             }
 
             context.Agendas.Add(agenda);

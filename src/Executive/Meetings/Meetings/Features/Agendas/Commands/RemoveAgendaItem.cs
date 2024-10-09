@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record RemoveAgendaItem(string OrganizationId, int Id, string ParticipantId) : IRequest<Result<AgendaDto>>
+public record RemoveAgendaItem(string OrganizationId, int Id, string ItemId) : IRequest<Result<AgendaDto>>
 {
     public class Validator : AbstractValidator<RemoveAgendaItem>
     {
@@ -31,7 +31,7 @@ public record RemoveAgendaItem(string OrganizationId, int Id, string Participant
                 return Errors.Agendas.AgendaNotFound;
             }
 
-            var agendaItem = agenda.Items.FirstOrDefault(x => x.Id == request.ParticipantId);
+            var agendaItem = agenda.Items.FirstOrDefault(x => x.Id == request.ItemId);
 
             if (agendaItem is null)
             {
