@@ -1,0 +1,48 @@
+@using System.ComponentModel.DataAnnotations
+@inject IMotionsClient MotionsClient
+@inject ISnackbar Snackbar
+
+<EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Text"
+                    For="@(() => Model.Text)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                Update
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? OrganizationId { get; set; } = null!;
+
+    [Parameter]
+    public AddEditMotionItemViewModel? Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(Model is null) 
+        {
+            Model = new AddEditMotionItemViewModel();
+        }
+    }
+
+    public void OnValidSubmit()
+    {
+        Dialog.Close(Model);
+    }
+}

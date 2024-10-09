@@ -61,6 +61,14 @@ internal sealed class MotionIdConverter : ValueConverter<MotionId, int>
     }
 }
 
+internal sealed class MotionItemIdConverter : ValueConverter<MotionItemId, string>
+{
+    public MotionItemIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
 internal sealed class VoteIdConverter : ValueConverter<VoteId, int>
 {
     public VoteIdConverter()

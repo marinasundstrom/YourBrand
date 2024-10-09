@@ -92,7 +92,10 @@
 
 </MudGrid>
 
-<AgendaSection OrganizationId="@organization?.Id" MeetingId="@Id" />
+@if(organization is not null) 
+{
+    <AgendaSection OrganizationId="@organization?.Id" MeetingId="@Id" />
+}
 
 @code
 {
@@ -141,6 +144,8 @@
     
         context.OnFieldChanged += OnFieldChanged;
         context.MarkAsUnmodified();
+
+        isDetailsModified = false;
     }
 
     bool isDetailsModified = false;

@@ -10,8 +10,6 @@ namespace YourBrand.Meetings.Features.Agendas.Command;
 
 public sealed record CreateAgendaItemDto(string Title, string Description);
 
-public sealed record CreateMeetingQuorumDto(int RequiredNumber);
-
 public record CreateAgenda(string OrganizationId, int MeetingId, IEnumerable<CreateAgendaItemDto> Items) : IRequest<Result<AgendaDto>>
 {
     public class Validator : AbstractValidator<CreateAgenda>

@@ -119,6 +119,7 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<DebateId>().HaveConversion<DebateIdConverter>();
         configurationBuilder.Properties<DebateEntryId>().HaveConversion<DebateEntryIdConverter>();
         configurationBuilder.Properties<MotionId>().HaveConversion<MotionIdConverter>();
+        configurationBuilder.Properties<MotionItemId>().HaveConversion<MotionItemIdConverter>();
         configurationBuilder.Properties<VoteId>().HaveConversion<VoteIdConverter>();
 
         configurationBuilder.AddTenantIdConverter();

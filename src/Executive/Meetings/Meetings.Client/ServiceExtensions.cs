@@ -9,7 +9,7 @@ public static class ServiceExtensions
         services
             .AddMeetingsClient(configureClient, builder)
             .AddAgendasClient(configureClient, builder)
-            //.AddMotionsClient(configureClient, builder)
+            .AddMotionsClient(configureClient, builder)
             .AddUsersClient(configureClient, builder);
 
         return services;
@@ -30,6 +30,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(AgendasClient) + "MS", configureClient)
             .AddTypedClient<IAgendasClient>((http, sp) => new AgendasClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddMotionsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(MotionsClient) + "MS", configureClient)
+            .AddTypedClient<IMotionsClient>((http, sp) => new MotionsClient(http));
 
         builder?.Invoke(b);
 

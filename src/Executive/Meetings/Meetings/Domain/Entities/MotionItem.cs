@@ -5,53 +5,22 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum MotionStatus { Proposed }
-
-public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrganization
+public class MotionItem : Entity<MotionItemId>, IAuditable, IHasTenant, IHasOrganization
 {
-    readonly HashSet<MotionItem> _items = new HashSet<MotionItem>();
     readonly HashSet<Vote> _votes = new HashSet<Vote>();
 
-    protected Motion()
+    public MotionItem(string text)
+    : base(new MotionItemId())
     {
-    }
-
-    public Motion(int id, string title)
-    {
-        Id = id;
-        Title = title;
+        Text = text;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
+    public MotionId MotionId { get; set; }
 
-    public string Title { get; set; }
     public string Text { get; set; }
-    public MotionStatus Status { get; set; } = MotionStatus.Proposed;
-
-    public IReadOnlyCollection<MotionItem> Items => _items;
-
-    public MotionItem AddItem(string text)
-    {
-        int order = 1;
-
-        try
-        {
-            var last = _items.OrderByDescending(x => x.Order).First();
-            order = last.Order + 1;
-        }
-        catch { }
-
-        var item = new MotionItem(text);
-        item.Order = order;
-        _items.Add(item);
-        return item;
-    }
-
-    public bool RemoveItem(MotionItem item)
-    {
-        return _items.Remove(item);
-    }
+    public int Order { get; set; }
 
     public IReadOnlyCollection<Vote> Votes => _votes;
 

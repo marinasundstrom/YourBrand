@@ -8,8 +8,6 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public sealed record EditAgendaDetailsAgendaItemDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
-
 public sealed record EditMeetingDetailsQuorumDto(int RequiredNumber);
 
 public record EditAgendaDetails(string OrganizationId, int Id) : IRequest<Result<AgendaDto>>

@@ -1,0 +1,217 @@
+@page "/meetings/motions/{id:int}"
+
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
+@inject IMotionsClient MotionsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<MudText Typo="@Typo.h2" GutterBottom="true">@Title</MudText>
+
+<MudGrid Class="mb-4">
+
+    <MudItem xs="12" md="6">
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>
+
+            <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+
+                <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
+                    For="@(() => Title)"  Immediate="true" />
+
+                <MudTextField Label="Text" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Text"
+                    For="@(() => Text)"  Immediate="true" Lines="10" />
+
+                <div class="mt-4 d-flex">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                        Save
+                    </MudButton>
+
+                    @if(isDetailsModified) 
+                    {
+                        <MudText Typo="@Typo.body1" Class="ms-2">Modified</MudText>        
+                    }
+                </div>
+
+            </EditForm>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudText Typo="@Typo.h4" GutterBottom="true">Items</MudText>
+
+            <MudTable T="MotionItemViewModel" Items="Items" Hover="true" Elevation="0"
+                Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+                OnRowClick="async (e) => await EditMotionItem(e.Item)">
+                <ToolBarContent>
+                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
+                        OnClick="AddMotionItem" Class="mb-2">Add item</MudButton>
+                </ToolBarContent>
+
+                <HeaderContent>
+                    <MudTh>Text</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate Context="item">
+                    <MudTd DataLabel="Text">@item.Text</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                            OnClick="() => EditMotionItem(item)">
+                        </MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                            OnClick="() => RemoveMotionItem(item)">
+                        </MudIconButton>
+                    </MudTd>
+                </RowTemplate>
+                <LoadingContent>
+                    <MudText>Loading...</MudText>
+                </LoadingContent>
+            </MudTable>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+@code
+{
+    EditContext context = null!;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [Required]
+    public string Title { get; set; }
+
+    [Required]
+    public string Text { get; set; }
+
+    public List<MotionItemViewModel> Items { get; set; } = new List<MotionItemViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        var motion = await MotionsClient.GetMotionByIdAsync(organization!.Id, Id);
+        Title = motion.Title;
+        Text = motion.Text;
+
+        Items.AddRange(motion.Items.Select(item => new MotionItemViewModel ()
+            {
+                Id = item.Id,
+                Text = item.Text
+            }));
+    
+        context.OnFieldChanged += OnFieldChanged;
+        context.MarkAsUnmodified();
+
+        isDetailsModified = false;
+    }
+
+    bool isDetailsModified = false;
+
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e) 
+    {
+        isDetailsModified = context.IsModified();
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var motion = await MotionsClient.EditMotionDetailsAsync(organization.Id, Id, new EditMotion
+        {
+            Title = Title,
+            Text = Text
+        });
+
+        Snackbar.Add("Details saved");
+
+        context.MarkAsUnmodified();
+    }
+
+    async Task AddMotionItem()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddMotionItemDialog.OrganizationId), organization.Id);
+
+        var modalRef = DialogService.Show<AddMotionItemDialog>("Add item", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var itemModel = (MotionItemViewModel)result.Data;
+
+        var dto = new AddMotionItem
+        {
+            Text = itemModel.Text,
+        };
+
+        var model = await MotionsClient.AddMotionItemAsync(organization.Id, Id, dto);
+
+        itemModel.Id = model.Id;
+
+        Items.Add(itemModel);
+    }
+
+    async Task EditMotionItem(MotionItemViewModel item)
+    {
+        var originalMotionItem = item;
+
+        DialogParameters parameters = new();
+        parameters.Add(nameof(EditMotionItemDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(EditMotionItemDialog.Model), originalMotionItem.Clone());
+
+        var modalRef = DialogService.Show<EditMotionItemDialog>("Edit item", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var editedModel = (MotionItemViewModel)result.Data;
+
+        var dto = new EditMotionItem
+        {
+            Text = editedModel.Text,
+        };
+        
+        await MotionsClient.EditMotionItemAsync(organization.Id, Id, item.Id, dto);
+
+        var index = Items.IndexOf(originalMotionItem);
+        Items[index] = editedModel;
+    }
+
+    async Task RemoveMotionItem(MotionItemViewModel item)
+    {
+        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await MotionsClient.RemoveMotionItemAsync(organization.Id, Id, item.Id);
+        Items.Remove(item);
+    }
+
+    public void Dispose()
+    {
+        context.OnFieldChanged -= OnFieldChanged;
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

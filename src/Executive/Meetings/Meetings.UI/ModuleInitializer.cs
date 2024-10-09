@@ -42,7 +42,11 @@ public class ModuleInitializer : IModuleInitializer
 
         var group2 = group.GetGroup("meetings") ?? group.CreateGroup("meetings", () => t["Meetings"], MudBlazor.Icons.Material.Filled.MeetingRoom);
 
-        group2.CreateItem("upcoming", () => t["List"], MudBlazor.Icons.Material.Filled.List, "/Meetings");
+        group2.CreateItem("meetings", () => t["List"], MudBlazor.Icons.Material.Filled.List, "/Meetings");
+
+        group2.CreateItem("motions", () => t["Motions"], MudBlazor.Icons.Material.Filled.FilePresent, "/Meetings/Motions");
+
+        group2.CreateItem("groups", () => t["Groups"], MudBlazor.Icons.Material.Filled.Group, "/Meetings/Groups");
 
         /*
         group2.CreateItem("upcoming", () => t["Upcoming"], MudBlazor.Icons.Material.Filled.List, "/Meetings/Upcoming");

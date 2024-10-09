@@ -16,6 +16,13 @@ public static partial class Errors
         public static readonly Error AgendaItemNotFound = new Error(nameof(AgendaItemNotFound), "Agenda item not found", string.Empty);
     }
 
+    public static class Motions
+    {
+        public static readonly Error MotionNotFound = new Error(nameof(MotionNotFound), "Motions not found", string.Empty);
+
+        public static readonly Error MotionItemNotFound = new Error(nameof(MotionItemNotFound), "Motions item not found", string.Empty);
+    }
+
     public static class Users
     {
         public static readonly Error UserNotFound = new Error(nameof(UserNotFound), "User not found", string.Empty);

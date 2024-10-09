@@ -24,12 +24,12 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
+    public AgendaId AgendaId { get; set; }
 
     public string Title { get; set; }
     public string Description { get; set; }
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
     public int Order { get; set; }
-    public AgendaId AgendaId { get; set; }
     public MotionId? MotionId { get; set; }
 
     public void StartDiscussion()

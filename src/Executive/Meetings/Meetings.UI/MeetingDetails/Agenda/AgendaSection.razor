@@ -60,6 +60,8 @@
 
         agenda = agendas.Items.FirstOrDefault();
 
+        if(agenda is null) return;
+
         Items.AddRange(agenda.Items.Select(item => new AgendaItemViewModel()
             {
                 Id = item.Id,
