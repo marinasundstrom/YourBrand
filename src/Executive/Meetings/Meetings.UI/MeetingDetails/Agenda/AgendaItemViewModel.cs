@@ -11,13 +11,16 @@ public class AgendaItemViewModel
 
     public string Description { get; set; }
 
+    public Motion Motion { get; set; }
+
     public AgendaItemViewModel Clone()
     {
         return new AgendaItemViewModel
         {
             Id = Id,
             Title = Title,
-            Description = Description
+            Description = Description,
+            Motion = Motion
         };
     }
 }

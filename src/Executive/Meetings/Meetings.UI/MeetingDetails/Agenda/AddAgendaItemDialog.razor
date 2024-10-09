@@ -11,6 +11,8 @@
                     For="@(() =>Model.Title)" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4"
                     @bind-Value="Model.Description" For="@(() =>Model.Description)" Lines="5" />
+                <MotionSelector OrganizationId="@OrganizationId" Label="Motion" Variant="Variant.Outlined" Class="mt-4"
+                    @bind-Value="Model.Motion" For="@(() => Model.Motion)" />
             </MudContainer>
         </DialogContent>
 
@@ -47,6 +49,7 @@
         Dialog.Close(new AgendaItemViewModel {
             Title = Model.Title,
             Description = Model.Description,
+            Motion = Model.Motion
         });
     }
 }

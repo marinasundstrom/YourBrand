@@ -14,6 +14,8 @@ public record MeetingId(int Value)
 
     public static implicit operator int(MeetingId id) => id.Value;
 
+    public static implicit operator int?(MeetingId id) => id?.Value;
+
     public static bool TryParse(int? value, out MeetingId? channelId)
     {
         return TryParse(value, CultureInfo.CurrentCulture, out channelId);

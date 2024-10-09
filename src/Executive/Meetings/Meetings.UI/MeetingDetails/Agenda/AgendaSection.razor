@@ -22,11 +22,13 @@
             <HeaderContent>
                 <MudTh>Title</MudTh>
                 <MudTh>Description</MudTh>
+                <MudTh>Motion</MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
                 <MudTd DataLabel="Title">@item.Title</MudTd>
                 <MudTd DataLabel="Description">@item.Description</MudTd>
+                <MudTd DataLabel="Motion">@item.Motion?.Id</MudTd>
                 <MudTd>
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
                         OnClick="() => EditItem(item)">
@@ -67,6 +69,7 @@
                 Id = item.Id,
                 Title = item.Title,
                 Description = item.Description
+                //Motion = item.Motion
             }));
     }
 
@@ -92,6 +95,7 @@
             {
                 Title = agendaItemModel.Title,
                 Description = agendaItemModel.Description,
+                MotionId = agendaItemModel.Motion?.Id
             };
 
         var model = await AgendasClient.AddAgendaItemAsync(OrganizationId, agenda!.Id, dto);
@@ -133,7 +137,8 @@
         var dto = new EditAgendaItem
             {
                 Title = editedModel.Title,
-                Description = editedModel.Description
+                Description = editedModel.Description,
+                MotionId = editedModel.Motion?.Id
             };
 
         await AgendasClient.EditAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, dto);

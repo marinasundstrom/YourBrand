@@ -15,11 +15,11 @@ namespace YourBrand.Meetings.Features.Agendas;
 
 public sealed record CreateAgendaDto(IEnumerable<CreateAgendaItemDto> Items);
 
-public sealed record EditAgendaDto();
+public sealed record EditAgendaDetailsDto();
 
-public sealed record AddAgendaItemDto(string Title, string Description);
+public sealed record AddAgendaItemDto(string Title, string Description, int? MotionId);
 
-public sealed record EditAgendaItemDto(string Title, string Description);
+public sealed record EditAgendaItemDto(string Title, string Description, int? MotionId);
 
 [ApiController]
 [ApiVersion("1")]
@@ -58,7 +58,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgendaDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<AgendaDto>> EditAgendaDetails(string organizationId, int id, EditAgendaDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<AgendaDto>> EditAgendaDetails(string organizationId, int id, EditAgendaDetailsDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditAgendaDetails(organizationId, id), cancellationToken);
         return this.HandleResult(result);
@@ -70,7 +70,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<AgendaItemDto>> AddAgendaItem(string organizationId, int id, AddAgendaItemDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddAgendaItem(organizationId, id, request.Title, request.Description), cancellationToken);
+        var result = await mediator.Send(new AddAgendaItem(organizationId, id, request.Title, request.Description, request.MotionId), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -80,7 +80,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<AgendaItemDto>> EditAgendaItem(string organizationId, int id, string itemId, EditAgendaItemDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new EditAgendaItem(organizationId, id, itemId, request.Title, request.Description), cancellationToken);
+        var result = await mediator.Send(new EditAgendaItem(organizationId, id, itemId, request.Title, request.Description, request.MotionId), cancellationToken);
         return this.HandleResult(result);
     }
 

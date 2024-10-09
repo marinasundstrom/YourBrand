@@ -1080,7 +1080,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditAgenda'
+              $ref: '#/components/schemas/EditAgendaDetails'
         required: true
         x-position: 3
       responses:
@@ -1627,6 +1627,10 @@ components:
           type: string
         description:
           type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
     CreateAgenda:
       type: object
       additionalProperties: false
@@ -1643,7 +1647,7 @@ components:
           type: string
         description:
           type: string
-    EditAgenda:
+    EditAgendaDetails:
       type: object
       additionalProperties: false
     AddAgendaItem:
@@ -1654,6 +1658,10 @@ components:
           type: string
         description:
           type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
     EditAgendaItem:
       type: object
       additionalProperties: false
@@ -1662,6 +1670,10 @@ components:
           type: string
         description:
           type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
   securitySchemes:
     JWT:
       type: apiKey

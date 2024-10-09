@@ -13,6 +13,8 @@ public record MotionId(int Value)
 
     public static implicit operator int(MotionId id) => id.Value;
 
+    public static implicit operator int?(MotionId id) => id?.Value;
+
     public static bool TryParse(int? value, out MotionId? channelId)
     {
         return TryParse(value, CultureInfo.CurrentCulture, out channelId);

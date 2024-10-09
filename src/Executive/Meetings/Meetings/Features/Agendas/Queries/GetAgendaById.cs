@@ -17,6 +17,7 @@ public record GetAgendaById(string OrganizationId, int Id) : IRequest<Result<Age
             var agenda = await context.Agendas
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
+                .Include(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if(agenda is null) 

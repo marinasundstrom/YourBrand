@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record AddAgendaItem(string OrganizationId, int Id, string Title, string Description) : IRequest<Result<AgendaItemDto>>
+public record AddAgendaItem(string OrganizationId, int Id, string Title, string Description, int? MotionId) : IRequest<Result<AgendaItemDto>>
 {
     public class Validator : AbstractValidator<AddAgendaItem>
     {
@@ -32,6 +32,8 @@ public record AddAgendaItem(string OrganizationId, int Id, string Title, string 
             }
 
             var agendaItem = agenda.AddItem(request.Title, request.Description);
+
+            agendaItem.MotionId = request.MotionId;
 
             context.Agendas.Update(agenda);
 

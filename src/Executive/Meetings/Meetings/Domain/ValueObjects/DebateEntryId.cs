@@ -13,6 +13,8 @@ public record DebateEntryId(int Value)
 
     public static implicit operator int(DebateEntryId id) => id.Value;
 
+    public static implicit operator int?(DebateEntryId id) => id?.Value;
+
     public static bool TryParse(int? value, out DebateEntryId? channelId)
     {
         return TryParse(value, CultureInfo.CurrentCulture, out channelId);
