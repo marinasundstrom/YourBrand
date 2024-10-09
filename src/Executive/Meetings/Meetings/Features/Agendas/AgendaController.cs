@@ -90,7 +90,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> RemoveAgendaItem(string organizationId, int id, string itemId, CancellationToken cancellationToken)
     {
-        await mediator.Send(new RemoveAgendaItem(organizationId, id, itemId), cancellationToken);
-        return Ok();
+        var result = await mediator.Send(new RemoveAgendaItem(organizationId, id, itemId), cancellationToken);
+        return this.HandleResult(result);
     }
 }

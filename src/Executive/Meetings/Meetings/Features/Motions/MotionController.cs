@@ -102,7 +102,7 @@ public sealed class MotionsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> RemoveMotionItem(string organizationId, int id, string itemId, CancellationToken cancellationToken)
     {
-        await mediator.Send(new RemoveMotionItem(organizationId, id, itemId), cancellationToken);
-        return Ok();
+        var result = await mediator.Send(new RemoveMotionItem(organizationId, id, itemId), cancellationToken);
+        return this.HandleResult(result);
     }
 }

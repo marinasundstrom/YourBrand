@@ -325,6 +325,282 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Start:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_StartMeeting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda:
+    get:
+      tags:
+      - Meetings
+      operationId: Meetings_GetMeetingAgenda
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agenda'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/NextItem:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_MoveToNextAgendaItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgendaItem'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/CompleteItem:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_CompleteAgendaItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/CurrentItem:
+    get:
+      tags:
+      - Meetings
+      operationId: Meetings_GetCurrentAgendaItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgendaItem'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/StartDiscussion:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_StartAgendaItemDiscussion
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/StartVoting:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_StartAgendaItemVoting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/End:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_EndMeeting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/Users:
     get:
       tags:
@@ -1272,6 +1548,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MeetingParticipant'
+        currentAgendaItemIndex:
+          type: integer
+          format: int32
     MeetingState:
       type: integer
       description: ''
@@ -1446,6 +1725,49 @@ components:
           $ref: '#/components/schemas/ParticipantRole'
         hasVotingRights:
           type: boolean
+    Agenda:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgendaItem'
+    AgendaItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        order:
+          type: integer
+          format: int32
+        title:
+          type: string
+        state:
+          $ref: '#/components/schemas/AgendaItemState'
+        description:
+          type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
+    AgendaItemState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Pending
+      - UnderDiscussion
+      - Voting
+      - Completed
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
     PagedResultOfUser:
       type: object
       additionalProperties: false
@@ -1606,31 +1928,6 @@ components:
         total:
           type: integer
           format: int32
-    Agenda:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: integer
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgendaItem'
-    AgendaItem:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        motionId:
-          type: integer
-          format: int32
-          nullable: true
     CreateAgenda:
       type: object
       additionalProperties: false

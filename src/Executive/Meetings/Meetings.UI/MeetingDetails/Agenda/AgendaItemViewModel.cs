@@ -6,6 +6,8 @@ public class AgendaItemViewModel
 {
     public string Id { get; set; }
 
+    public int Order { get; set; }
+
     [Required]
     public string Title { get; set; }
 
@@ -18,6 +20,7 @@ public class AgendaItemViewModel
         return new AgendaItemViewModel
         {
             Id = Id,
+            Order = Order,
             Title = Title,
             Description = Description,
             Motion = Motion

@@ -20,12 +20,14 @@
             </ToolBarContent>
 
             <HeaderContent>
+                <MudTh>#</MudTh>
                 <MudTh>Title</MudTh>
                 <MudTh>Description</MudTh>
                 <MudTh>Motion</MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
+                <MudTd DataLabel="Order">@item.Order</MudTd>
                 <MudTd DataLabel="Title">@item.Title</MudTd>
                 <MudTd DataLabel="Description">@item.Description</MudTd>
                 <MudTd DataLabel="Motion">@item.Motion?.Id</MudTd>
@@ -67,6 +69,7 @@
         Items.AddRange(agenda.Items.Select(item => new AgendaItemViewModel()
             {
                 Id = item.Id,
+                Order = item.Order,
                 Title = item.Title,
                 Description = item.Description
                 //Motion = item.Motion

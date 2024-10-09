@@ -47,6 +47,7 @@
     public void OnValidSubmit()
     {
         Dialog.Close(new AgendaItemViewModel {
+            Order = Model.Order,
             Title = Model.Title,
             Description = Model.Description,
             Motion = Model.Motion

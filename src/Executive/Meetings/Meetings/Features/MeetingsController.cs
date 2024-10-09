@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Meetings.Features;
+using YourBrand.Meetings.Features.Agendas;
 using YourBrand.Meetings.Features.Command;
 using YourBrand.Meetings.Features.Queries;
 using YourBrand.Meetings.Models;
@@ -90,7 +91,87 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> RemoveParticipant(string organizationId, int id, string participantId, CancellationToken cancellationToken)
     {
-        await mediator.Send(new RemoveParticipant(organizationId, id, participantId), cancellationToken);
-        return Ok();
+        var result = await mediator.Send(new RemoveParticipant(organizationId, id, participantId), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Start")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> StartMeeting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new StartMeeting(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpGet("{id}/Agenda")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgendaDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> GetMeetingAgenda([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetMeetingAgenda(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Agenda/NextItem")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgendaItemDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<AgendaItemDto>> MoveToNextAgendaItem([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new MoveToNextAgendaItem(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Agenda/CompleteItem")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> CompleteAgendaItem([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new CompleteAgendaItem(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpGet("{id}/Agenda/CurrentItem")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgendaItemDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> GetCurrentAgendaItem([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetCurrentAgendaItem(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Agenda/StartDiscussion")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> StartAgendaItemDiscussion([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new StartAgendaItemDiscussion(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Agenda/StartVoting")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> StartAgendaItemVoting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new StartAgendaItemVoting(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/End")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> EndMeeting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new EndMeeting(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
     }
 }

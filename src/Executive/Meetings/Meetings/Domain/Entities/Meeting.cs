@@ -37,7 +37,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public MeetingState State { get; set; } = MeetingState.Draft;
     public IReadOnlyCollection<MeetingParticipant> Participants => _participants;
     public Agenda? Agenda { get; set; }
-    public int CurrentAgendaItemIndex { get; private set; } = 0;
+    public int CurrentAgendaItemIndex { get; private set; } = -1;
     public Quorum Quorum { get; set; } = new Quorum();
 
     public bool IsQuorumMet()
@@ -69,6 +69,18 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         }
 
         State = MeetingState.Completed;
+    }
+
+    public void CompleteAgendaItem()
+    {
+        if (State != MeetingState.InProgress)
+        {
+            throw new InvalidOperationException("Meeting is not in progress.");
+        }
+
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+
+        agendaItems[CurrentAgendaItemIndex].State = AgendaItemState.Completed;
     }
 
     public void MoveToNextAgendaItem()

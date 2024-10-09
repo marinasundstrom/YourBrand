@@ -1,0 +1,156 @@
+@page "/meetings/{MeetingId:int}/procedure"
+@using YourBrand.Portal.Services
+@inject IMeetingsClient MeetingsClient
+@inject IAgendasClient AgendasClient
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<PageTitle>@meeting?.Title</PageTitle>
+
+@if (meeting == null)
+{
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5">@meeting.Title</MudText>
+    <MudText>Date: @meeting.ScheduledAt.GetValueOrDefault().ToString("f")</MudText>
+    <MudText>Location: @meeting.Location</MudText>
+    <MudText>State: @meeting.State</MudText>
+
+    @if (meeting.State == MeetingState.Scheduled)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartMeeting">Start Meeting</MudButton>
+        }
+        else if (meeting.State == MeetingState.InProgress)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="MoveToNextAgendaItem">Next Agenda Item
+            </MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="EndMeeting">End Meeting</MudButton>
+        }
+        else if (meeting.State == MeetingState.Completed)
+        {
+            <MudText>The meeting has concluded.</MudText>
+        }
+
+
+        <MudDivider Class="my-2" />
+
+        <MudText Typo="Typo.h6">Current Agenda Item</MudText>
+        @if (currentAgendaItem != null)
+        {
+            <MudText>Title: @currentAgendaItem.Title</MudText>
+            <MudText>Description: @currentAgendaItem.Description</MudText>
+            <MudText>State: @currentAgendaItem.State</MudText>
+
+            @if (currentAgendaItem.State == AgendaItemState.Pending)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion">Start Discussion</MudButton>
+            }
+            else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
+            {
+                <!-- Include Debate Component -->
+                <Debate MotionId="@currentMotionId.GetValueOrDefault()" />
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartVoting">Start Voting</MudButton>
+            }
+            else if (currentAgendaItem.State == AgendaItemState.Voting)
+            {
+                <!-- Include Voting Component -->
+                <VoteComponent MotionId="@currentMotionId.GetValueOrDefault()" />
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem">Complete Agenda Item</MudButton>
+            }
+            else if (currentAgendaItem.State == AgendaItemState.Completed)
+            {
+                <MudText>This agenda item has been completed.</MudText>
+            }
+        }
+        else
+        {
+            <MudText>No current agenda item.</MudText>
+        }
+    </MudPaper>
+}
+
+@code {
+    [Parameter]
+    public int MeetingId { get; set; }
+
+    private Meeting meeting;
+    private AgendaItem currentAgendaItem;
+    private int? currentMotionId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        await LoadMeetingDetails();
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    private async Task LoadMeetingDetails()
+    {
+        meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
+        var agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
+
+        currentAgendaItem = agenda!.Items
+            .OrderBy(ai => ai.Order)
+            .ElementAtOrDefault(meeting.CurrentAgendaItemIndex);
+
+        if (currentAgendaItem != null)
+        {
+            // Load the current motion associated with the agenda item
+            //currentMotionId = await MeetingsClient.GetMotionIdByAgendaItemAsync(currentAgendaItem.AgendaItemId);
+        }
+    }
+
+    private async Task StartMeeting()
+    {
+        await MeetingsClient.StartMeetingAsync(organization.Id, MeetingId);
+        await LoadMeetingDetails();
+    }
+
+    private async Task MoveToNextAgendaItem()
+    {
+        await MeetingsClient.MoveToNextAgendaItemAsync(organization.Id, MeetingId);
+        await LoadMeetingDetails();
+    }
+
+    private async Task EndMeeting()
+    {
+        await MeetingsClient.EndMeetingAsync(organization.Id, MeetingId);
+        await LoadMeetingDetails();
+    }
+
+    private async Task StartDiscussion()
+    {
+        await MeetingsClient.StartAgendaItemDiscussionAsync(organization.Id, meeting.Id);
+         await LoadMeetingDetails();
+    }
+
+    private async Task StartVoting()
+    {
+        await MeetingsClient.StartAgendaItemVotingAsync(organization.Id, meeting.Id);
+        await LoadMeetingDetails();
+    }
+
+    private async Task CompleteAgendaItem()
+    {
+        await MeetingsClient.CompleteAgendaItemAsync(organization.Id, meeting.Id);
+        await LoadMeetingDetails();
+    }
+
+    public void Dispose()
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}
