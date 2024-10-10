@@ -5,22 +5,25 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class MotionItem : Entity<MotionItemId>, IAuditable, IHasTenant, IHasOrganization
+public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditable, IHasTenant, IHasOrganization
 {
-    readonly HashSet<Vote> _votes = new HashSet<Vote>();
-
-    public MotionItem(string text)
-    : base(new MotionItemId())
+    public ElectionCandidate()
+        : base(new ElectionCandidateId())
     {
-        Text = text;
+
+    }
+
+    public ElectionCandidate(MeetingParticipantId id, string statement)
+        : base(new ElectionCandidateId())
+    {
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-    public MotionId MotionId { get; set; }
+    public AgendaItemId AgendaItemId { get; set; }
 
-    public string Text { get; set; }
-    public int Order { get; set; }
+    public MeetingParticipantId NomineeId { get; set; }
+    public string Statement { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;
@@ -29,3 +32,4 @@ public class MotionItem : Entity<MotionItemId>, IAuditable, IHasTenant, IHasOrga
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 }
+

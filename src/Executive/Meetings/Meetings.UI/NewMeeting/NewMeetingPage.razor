@@ -30,6 +30,10 @@
                 </div>
                 <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
                     For="@(() => Location)"  Immediate="true" />
+                <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
+                    For="@(() => Description)" Immediate="true" Lines="5" />
+                <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
+                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of participants" />
             </MudPaper>
         </MudItem>
 
@@ -97,6 +101,10 @@
     [Required]
     public string Location { get; set; }
 
+    public string Description { get; set; }
+
+    [Required]
+    public int QuorumRequiredNumber { get; set; }
 
     public List<AddEditParticipantViewModel> Participants { get; set; } = new List<AddEditParticipantViewModel>();
 
@@ -123,9 +131,10 @@
                 Title = Title,
                 ScheduledAt = Date.GetValueOrDefault().Add(Time.GetValueOrDefault()),
                 Location = Location,
+                Description = Description,
                 Quorum = new CreateMeetingQuorum
                 {
-                    RequiredNumber = 10
+                    RequiredNumber = QuorumRequiredNumber
                 },
                 Participants = Participants.Select(model => {
                     return new CreateMeetingParticipant

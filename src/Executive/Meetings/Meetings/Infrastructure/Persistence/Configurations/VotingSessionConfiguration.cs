@@ -3,24 +3,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Agendas.Infrastructure.Persistence.Configurations;
 
-public sealed class MotionConfiguration : IEntityTypeConfiguration<Motion>
+public sealed class VotingSessionConfiguration : IEntityTypeConfiguration<VotingSession>
 {
-    public void Configure(EntityTypeBuilder<Motion> builder)
+    public void Configure(EntityTypeBuilder<VotingSession> builder)
     {
-        builder.ToTable("Motion");
+        builder.ToTable("VotingSessions");
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 
         builder.HasIndex(x => x.TenantId);
 
-        builder.HasMany(x => x.Items)
+        builder.HasMany(x => x.Votes)
             .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.MotionId });
+            .HasForeignKey(x => new { x.OrganizationId, x.VotingSessionId });
 
-        builder.Navigation(x => x.Items).AutoInclude();
-
-        //builder.HasMany(x => x.Votes);
-        //builder.Navigation(x => x.Votes).AutoInclude();
+        builder.Navigation(x => x.Votes).AutoInclude();
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

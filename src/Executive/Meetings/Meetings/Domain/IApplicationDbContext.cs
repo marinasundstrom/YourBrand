@@ -18,7 +18,6 @@ public interface IApplicationDbContext
 
     DbSet<OrganizationUser> OrganizationUsers { get; }
 
-
     /*
     public DbSet<OutboxMessage> OutboxMessages { get; set; }
 

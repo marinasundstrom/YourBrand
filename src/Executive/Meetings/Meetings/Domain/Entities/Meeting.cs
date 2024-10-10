@@ -34,6 +34,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public string Title { get; set; }
     public DateTimeOffset ScheduledAt { get; set; }
     public string Location { get; set; }
+    public string? Description { get; set; }
     public MeetingState State { get; set; } = MeetingState.Draft;
     public IReadOnlyCollection<MeetingParticipant> Participants => _participants;
     public Agenda? Agenda { get; set; }

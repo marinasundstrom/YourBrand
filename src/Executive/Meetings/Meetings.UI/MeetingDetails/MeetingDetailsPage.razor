@@ -31,6 +31,17 @@
                 </div>
                 <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
                     For="@(() => Location)" Immediate="true" />
+                <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
+                    For="@(() => Description)" Immediate="true" Lines="5" />
+                <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
+                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of participants"  />
+                <MudSelect T="MeetingState" Label="State" Variant="Variant.Outlined" @bind-Value="State" Immediate="true"
+                    Class="mt-4">
+                    @foreach (var state in Enum.GetValues<MeetingState>())
+                    {
+                        <MudSelectItem T="MeetingState" Value="@state">@Enum.GetName(typeof(MeetingState), state)</MudSelectItem>
+                    }
+                </MudSelect>
 
                 <div class="mt-4 d-flex">
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
@@ -92,6 +103,8 @@
 
 </MudGrid>
 
+<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/procedure")" Class="mb-4">Procedure</MudButton>
+
 @if(organization is not null) 
 {
     <AgendaSection OrganizationId="@organization?.Id" MeetingId="@Id" />
@@ -116,7 +129,16 @@
     [Required]
     public string Location { get; set; }
 
+    public string Description { get; set; }
+
+    [Required]
+    public int QuorumRequiredNumber { get; set; }
+
+    public MeetingState State { get; set; }
+
     public List<ParticipantViewModel> Participants { get; set; } = new List<ParticipantViewModel>();
+
+    MeetingState oldState;
 
     protected override async Task OnInitializedAsync()
     {
@@ -131,6 +153,9 @@
         Date = meeting.ScheduledAt?.Date;
         Time = meeting.ScheduledAt?.TimeOfDay;
         Location = meeting.Location;
+        Description = meeting.Description;
+        State = meeting.State;
+        oldState = State;
 
         Participants.AddRange(meeting.Participants.Select(participant => new ParticipantViewModel ()
             {
@@ -164,17 +189,69 @@
 
     public async Task OnValidSubmit()
     {
-        var meeting = await MeetingsClient.EditMeetingDetailsAsync(organization.Id, Id, new EditMeeting
+        if(context.IsModified(() => Title)) 
         {
-            Title = Title,
-            ScheduledAt = Date.GetValueOrDefault().Add(Time.GetValueOrDefault()),
-            Location = Location,
-            Quorum = new EditMeetingDetailsQuorum {
-                RequiredNumber = 10
-            }
-        });
+            var meeting = await MeetingsClient.UpdateMeetingTitleAsync(organization.Id, Id, new UpdateMeetingTitle
+            {
+                Title = Title
+            });
 
-        Snackbar.Add("Details saved");
+            Snackbar.Add("Title updated");      
+        }
+
+        if(context.IsModified(() => Time) || context.IsModified(() => Date))
+        {
+            var meeting = await MeetingsClient.ChangeScheduledDateAsync(organization.Id, Id, new ChangeMeetingScheduledDate
+            {
+                Date = Date.GetValueOrDefault().Add(Time.GetValueOrDefault())
+            });
+
+            Snackbar.Add("Scheduled date updated"); 
+        }
+
+        if(context.IsModified(() => Location)) 
+        {
+            var meeting = await MeetingsClient.UpdateMeetingLocationAsync(organization.Id, Id, new UpdateMeetingLocation
+            {
+                Location = Location
+            });
+
+            Snackbar.Add("Location updated");  
+        }
+
+        if(context.IsModified(() => Description)) 
+        {
+            var meeting = await MeetingsClient.UpdateMeetingDescriptionAsync(organization.Id, Id, new UpdateMeetingDescription
+            {
+                Description = Description
+            });
+
+            Snackbar.Add("Description updated");  
+        }
+
+        if(context.IsModified(() => QuorumRequiredNumber)) 
+        {
+            var meeting = await MeetingsClient.ChangeMeetingQuorumAsync(organization.Id, Id, new ChangeMeetingQuorum
+            {
+                RequiredNumber = QuorumRequiredNumber
+            });
+
+            Snackbar.Add("Quorum updated");  
+        }
+
+        Console.WriteLine(State);
+
+        if(State != oldState) 
+        {
+            var meeting = await MeetingsClient.ChangeMeetingStateAsync(organization.Id, Id, new ChangeMeetingState
+            {
+                State = State
+            });
+
+            oldState = State;
+
+            Snackbar.Add("State updated");  
+        }
 
         context.MarkAsUnmodified();
     }

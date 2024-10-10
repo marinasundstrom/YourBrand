@@ -12,16 +12,27 @@ public enum VoteOption
     Abstain
 }
 
-public class Vote : AggregateRoot<VoteId>, IAuditable, IHasTenant, IHasOrganization
+public sealed class Vote : Entity<VoteId>, IAuditable, IHasTenant, IHasOrganization
 {
+    public Vote()
+        : base(new VoteId())
+    {
+
+    }
+
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-
+    public VotingSessionId VotingSessionId { get; set; }
 
     public MeetingParticipantId VoterId { get; set; }
-    public VoteOption Option { get; set; }
-    public DateTimeOffset VoteTime { get; set; }
-    public MotionId MotionId { get; set; }
+    public DateTimeOffset TimeCast { get; set; }
+
+    // For motions
+    public VoteOption? Option { get; set; }
+
+    // For elections
+    public ElectionCandidate? SelectedCandidate { get; set; }
+    public ElectionCandidateId? SelectedCandidateId { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;
@@ -30,3 +41,4 @@ public class Vote : AggregateRoot<VoteId>, IAuditable, IHasTenant, IHasOrganizat
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 }
+

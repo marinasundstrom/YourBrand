@@ -1,4 +1,5 @@
 @inject IAgendasClient AgendasClient
+@inject IMeetingsClient MeetingsClient
 @inject IDialogService DialogService
 
 <MudPaper Elevation="25" Class="pa-4 mb-4">
@@ -64,9 +65,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var agendas = await AgendasClient.GetAgendasAsync(OrganizationId, MeetingId, null, null, null, null, null);
-
-        agenda = agendas.Items.FirstOrDefault();
+        agenda = await MeetingsClient.GetMeetingAgendaAsync(OrganizationId, MeetingId.GetValueOrDefault());
 
         if(agenda is null) return;
 

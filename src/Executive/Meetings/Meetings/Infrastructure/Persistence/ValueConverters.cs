@@ -69,7 +69,23 @@ internal sealed class MotionItemIdConverter : ValueConverter<MotionItemId, strin
     }
 }
 
-internal sealed class VoteIdConverter : ValueConverter<VoteId, int>
+internal sealed class VotingSessionIdConverter : ValueConverter<VotingSessionId, string>
+{
+    public VotingSessionIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
+internal sealed class ElectionCandidateIdConverter : ValueConverter<ElectionCandidateId, string>
+{
+    public ElectionCandidateIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
+internal sealed class VoteIdConverter : ValueConverter<VoteId, string>
 {
     public VoteIdConverter()
         : base(v => v.Value, v => new(v))

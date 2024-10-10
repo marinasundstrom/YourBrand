@@ -8,13 +8,9 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public sealed record EditMeetingDetailsParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
-
-public sealed record EditMeetingDetailsQuorumDto(int RequiredNumber);
-
-public record EditMeetingDetails(string OrganizationId, int Id, string Title, DateTimeOffset? ScheduledAt, string Location, EditMeetingDetailsQuorumDto Quorum) : IRequest<Result<MeetingDto>>
+public record UpdateMeetingTitle(string OrganizationId, int Id, string Title) : IRequest<Result<MeetingDto>>
 {
-    public class Validator : AbstractValidator<EditMeetingDetails>
+    public class Validator : AbstractValidator<UpdateMeetingTitle>
     {
         public Validator()
         {
@@ -22,9 +18,9 @@ public record EditMeetingDetails(string OrganizationId, int Id, string Title, Da
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<EditMeetingDetails, Result<MeetingDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<UpdateMeetingTitle, Result<MeetingDto>>
     {
-        public async Task<Result<MeetingDto>> Handle(EditMeetingDetails request, CancellationToken cancellationToken)
+        public async Task<Result<MeetingDto>> Handle(UpdateMeetingTitle request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -36,11 +32,6 @@ public record EditMeetingDetails(string OrganizationId, int Id, string Title, Da
             }
 
             meeting.Title = request.Title;
-            meeting.ScheduledAt = request.ScheduledAt.GetValueOrDefault();
-            meeting.Location = request.Location ?? string.Empty;
-            meeting.Quorum.RequiredNumber = request.Quorum.RequiredNumber;
-
-            context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
 

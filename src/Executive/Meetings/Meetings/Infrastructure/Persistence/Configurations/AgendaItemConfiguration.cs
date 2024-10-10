@@ -13,6 +13,18 @@ public sealed class AgendaItemConfiguration : IEntityTypeConfiguration<AgendaIte
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasOne(x => x.VotingSession)
+            .WithOne()
+            .HasForeignKey<AgendaItem>(x => new { x.OrganizationId, x.VotingSessionId });
+
+        builder.Navigation(x => x.VotingSession).AutoInclude();
+
+        builder.HasMany(x => x.Candidates)
+            .WithOne()
+            .HasForeignKey(x => new { x.OrganizationId, x.AgendaItemId });
+
+        builder.Navigation(x => x.Candidates).AutoInclude();
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

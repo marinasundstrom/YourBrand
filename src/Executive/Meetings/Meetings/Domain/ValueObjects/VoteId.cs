@@ -1,34 +1,55 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace YourBrand.Meetings.Domain.ValueObjects;
 
-public record VoteId(int Value)
+public struct VoteId
 {
+    public VoteId(string value) => Value = value;
+
+    public VoteId() => Value = Guid.NewGuid().ToString();
+
+    public string Value { get; set; }
+
+    public override bool Equals([NotNullWhen(true)] object? obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return (Value ?? string.Empty).GetHashCode();
+    }
+
     public override string ToString()
     {
-        return Value.ToString();
+        return (Value ?? string.Empty).ToString();
     }
 
-    public static implicit operator VoteId(int id) => new VoteId(id);
+    public static bool operator ==(VoteId lhs, VoteId rhs) => lhs.Value == rhs.Value;
 
-    public static implicit operator int(VoteId id) => id.Value;
+    public static bool operator !=(VoteId lhs, VoteId rhs) => lhs.Value != rhs.Value;
 
-    public static implicit operator int?(VoteId id) => id?.Value;
-    
-    public static bool TryParse(int? value, out VoteId? channelId)
+    public static implicit operator VoteId(string id) => new VoteId(id);
+
+    public static implicit operator VoteId?(string? id) => id is null ? (VoteId?)null : new VoteId(id);
+
+    public static implicit operator string(VoteId id) => id.Value;
+
+    public static bool TryParse(string? value, out VoteId channelParticipantId)
     {
-        return TryParse(value, CultureInfo.CurrentCulture, out channelId);
+        return TryParse(value, CultureInfo.CurrentCulture, out channelParticipantId);
     }
 
-    public static bool TryParse(int? value, IFormatProvider? provider, out VoteId? channelId)
+    public static bool TryParse(string? value, IFormatProvider? provider, out VoteId channelParticipantId)
     {
         if (value is null)
         {
-            channelId = default;
+            channelParticipantId = default;
             return false;
         }
 
-        channelId = value;
+        channelParticipantId = value;
         return true;
     }
 }

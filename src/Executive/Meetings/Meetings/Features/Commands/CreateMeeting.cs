@@ -12,7 +12,7 @@ public sealed record CreateMeetingParticipantDto(string Name, string? UserId, st
 
 public sealed record CreateMeetingQuorumDto(int RequiredNumber);
 
-public record CreateMeeting(string OrganizationId, string Title, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants) : IRequest<Result<MeetingDto>>
+public record CreateMeeting(string OrganizationId, string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants) : IRequest<Result<MeetingDto>>
 {
     public class Validator : AbstractValidator<CreateMeeting>
     {

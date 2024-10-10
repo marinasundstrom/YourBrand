@@ -18,9 +18,10 @@ public enum AgendaItemType
     OldBusiness,         // Items carried over from previous meetings
     NewBusiness,         // Introduction of new topics for discussion or decision
     Announcements,       // Formal announcements to the assembly
-    Motions,             // Proposals requiring a decision or vote
+    Motion,              // Proposals requiring a decision or vote
     Discussion,          // Structured discussion on specific agenda topics
     Voting,              // Formal voting on motions or decisions
+    Election,            // Formal election
     ExecutiveSession,    // Private session for confidential matters
     Adjournment          // Formal closing of the meeting
 }
@@ -30,11 +31,15 @@ public enum AgendaItemState
     Pending,
     UnderDiscussion,
     Voting,
-    Completed
+    Completed,
+    Postponed,
+    Cancelled
 }
 
 public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
 {
+    readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
+
     public AgendaItem(AgendaItemType type, string title, string description)
     : base(new AgendaItemId())
     {
@@ -53,7 +58,25 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public string Description { get; set; }
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
     public int Order { get; set; }
+
+    //public SpeakerSession? SpeakerSession { get; set; }
+    public VotingSession? VotingSession { get; set; }
+    public VotingSessionId? VotingSessionId { get; set; }
+
+    // For motions
     public MotionId? MotionId { get; set; }
+
+    // For election
+    public string? Position { get; set; }
+    public IReadOnlyCollection<ElectionCandidate> Candidates => _candidates;
+
+    public void AddCandidate(MeetingParticipant candidate, string statement)
+    {
+        if (_candidates.Any(v => v.NomineeId == candidate.Id))
+            throw new InvalidOperationException("Participant is already a candidate.");
+
+        _candidates.Add(new ElectionCandidate(candidate.Id, statement));
+    }
 
     public void StartDiscussion()
     {
@@ -71,6 +94,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         {
             throw new InvalidOperationException("Cannot start voting.");
         }
+
+        VotingSession = new VotingSession();
 
         State = AgendaItemState.Voting;
     }

@@ -146,11 +146,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-  /v1/Meetings/{id}/details:
+  /v1/Meetings/{id}/title:
     put:
       tags:
       - Meetings
-      operationId: Meetings_EditMeetingDetails
+      operationId: Meetings_UpdateMeetingTitle
       parameters:
       - name: organizationId
         in: query
@@ -169,7 +169,232 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditMeeting'
+              $ref: '#/components/schemas/UpdateMeetingTitle'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/description:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_UpdateMeetingDescription
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeetingDescription'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/location:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_UpdateMeetingLocation
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeetingLocation'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/scheduledDate:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_ChangeScheduledDate
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMeetingScheduledDate'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/quorum:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_ChangeMeetingQuorum
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMeetingQuorum'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/state:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_ChangeMeetingState
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMeetingState'
         required: true
         x-position: 3
       responses:
@@ -1534,6 +1759,8 @@ components:
           format: int32
         title:
           type: string
+        description:
+          type: string
         state:
           $ref: '#/components/schemas/MeetingState'
         scheduledAt:
@@ -1640,6 +1867,8 @@ components:
       properties:
         title:
           type: string
+        description:
+          type: string
         scheduledAt:
           type: string
           format: date-time
@@ -1674,27 +1903,44 @@ components:
           $ref: '#/components/schemas/ParticipantRole'
         hasVotingRights:
           type: boolean
-    EditMeeting:
+    UpdateMeetingTitle:
       type: object
       additionalProperties: false
       properties:
         title:
           type: string
-        scheduledAt:
+    UpdateMeetingDescription:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
           type: string
-          format: date-time
-          nullable: true
+    UpdateMeetingLocation:
+      type: object
+      additionalProperties: false
+      properties:
         location:
           type: string
-        quorum:
-          $ref: '#/components/schemas/EditMeetingDetailsQuorum'
-    EditMeetingDetailsQuorum:
+    ChangeMeetingScheduledDate:
+      type: object
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date-time
+    ChangeMeetingQuorum:
       type: object
       additionalProperties: false
       properties:
         requiredNumber:
           type: integer
           format: int32
+    ChangeMeetingState:
+      type: object
+      additionalProperties: false
+      properties:
+        state:
+          $ref: '#/components/schemas/MeetingState'
     AddMeetingParticipant:
       type: object
       additionalProperties: false
@@ -1793,9 +2039,10 @@ components:
       - OldBusiness
       - NewBusiness
       - Announcements
-      - Motions
+      - Motion
       - Discussion
       - Voting
+      - Election
       - ExecutiveSession
       - Adjournment
       enum:
@@ -1815,6 +2062,7 @@ components:
       - 13
       - 14
       - 15
+      - 16
     AgendaItemState:
       type: integer
       description: ''
@@ -1823,11 +2071,15 @@ components:
       - UnderDiscussion
       - Voting
       - Completed
+      - Postponed
+      - Cancelled
       enum:
       - 0
       - 1
       - 2
       - 3
+      - 4
+      - 5
     PagedResultOfUser:
       type: object
       additionalProperties: false

@@ -10,7 +10,6 @@ public enum MotionStatus { Proposed }
 public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<MotionItem> _items = new HashSet<MotionItem>();
-    readonly HashSet<Vote> _votes = new HashSet<Vote>();
 
     protected Motion()
     {
@@ -51,30 +50,6 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
     public bool RemoveItem(MotionItem item)
     {
         return _items.Remove(item);
-    }
-
-    public IReadOnlyCollection<Vote> Votes => _votes;
-
-    public DebateId? DebateId { get; set; }
-
-    public void AddVote(Vote vote)
-    {
-        if (Votes.Any(v => v.VoterId == vote.VoterId))
-            throw new InvalidOperationException("Participant has already voted.");
-        _votes.Add(vote);
-    }
-
-    public bool IsVotingOpen { get; set; } = false;
-
-    public void OpenVoting()
-    {
-        IsVotingOpen = true;
-    }
-
-    public void CloseVoting()
-    {
-        IsVotingOpen = false;
-        // Calculate results
     }
 
     public User? CreatedBy { get; set; } = null!;
