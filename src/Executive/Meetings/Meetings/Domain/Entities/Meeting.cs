@@ -38,7 +38,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public MeetingState State { get; set; } = MeetingState.Draft;
     public IReadOnlyCollection<MeetingParticipant> Participants => _participants;
     public Agenda? Agenda { get; set; }
-    public int CurrentAgendaItemIndex { get; private set; } = -1;
+    public int? CurrentAgendaItemIndex { get; private set; } = null;
     public Quorum Quorum { get; set; } = new Quorum();
 
     public bool IsQuorumMet()
@@ -60,6 +60,12 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         }
 
         State = MeetingState.InProgress;
+
+        CurrentAgendaItemIndex = 0;
+
+        //var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+
+        //agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.UnderDiscussion;
     }
 
     public void EndMeeting()
@@ -70,6 +76,12 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         }
 
         State = MeetingState.Completed;
+
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+
+        agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.Completed;
+
+        CurrentAgendaItemIndex = null;
     }
 
     public void CompleteAgendaItem()
@@ -81,7 +93,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
 
-        agendaItems[CurrentAgendaItemIndex].State = AgendaItemState.Completed;
+        agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.Completed;
     }
 
     public void MoveToNextAgendaItem()
@@ -97,22 +109,26 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("No more agenda items.");
         }
 
-        if(CurrentAgendaItemIndex != -1) 
+        if(CurrentAgendaItemIndex is not null) 
         {
-            agendaItems.ElementAt(CurrentAgendaItemIndex).State = AgendaItemState.Completed;
+            agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault()).State = AgendaItemState.Completed;
         }
 
         CurrentAgendaItemIndex++;
 
-        agendaItems.ElementAt(CurrentAgendaItemIndex).State = AgendaItemState.UnderDiscussion;
-
+        /*
+        if (CurrentAgendaItemIndex < agendaItems.Count - 1)
+        {
+            agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault()).State = AgendaItemState.UnderDiscussion;
+        }
+        */
     }
 
     public AgendaItem GetCurrentAgendaItem()
     {
         return Agenda?.Items
             .OrderBy(ai => ai.Order)
-            .ElementAtOrDefault(CurrentAgendaItemIndex);
+            .ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());
     }
 
     public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights)
@@ -142,7 +158,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     {
         State = MeetingState.Scheduled;
 
-        CurrentAgendaItemIndex = -1;
+        CurrentAgendaItemIndex = null;
 
         foreach (var agendaItem in Agenda!.Items) 
         {

@@ -16,7 +16,7 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items)
+                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)
@@ -38,7 +38,7 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
 
             await context.SaveChangesAsync(cancellationToken);
 
-            var nextItem = meeting.Agenda!.Items.ElementAt(meeting.CurrentAgendaItemIndex);
+            var nextItem = meeting.Agenda!.Items.ElementAt(meeting.CurrentAgendaItemIndex.GetValueOrDefault());
 
             return nextItem.ToDto();
         }

@@ -1862,6 +1862,7 @@ components:
         currentAgendaItemIndex:
           type: integer
           format: int32
+          nullable: true
     MeetingState:
       type: integer
       description: ''

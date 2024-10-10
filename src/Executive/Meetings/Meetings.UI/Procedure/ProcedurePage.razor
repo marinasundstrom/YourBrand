@@ -26,8 +26,10 @@ else
         }
         else if (meeting.State == MeetingState.InProgress)
         {
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="MoveToNextAgendaItem">Next Agenda Item
-            </MudButton>
+            @if(!lastItem) 
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2" OnClick="MoveToNextAgendaItem">Next Agenda Item</MudButton>
+            }
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="EndMeeting">End Meeting</MudButton>
         }
         else if (meeting.State == MeetingState.Completed)
@@ -39,15 +41,23 @@ else
         <MudDivider Class="my-2" />
 
         <MudText Typo="Typo.h6">Current Agenda Item</MudText>
-        @if (currentAgendaItem != null)
+        @if (currentAgendaItem != null && meeting.State == MeetingState.InProgress)
         {
+            <MudText>#: @currentAgendaItem.Order</MudText>
             <MudText>Title: @currentAgendaItem.Title</MudText>
+            <MudText>Type: @currentAgendaItem.Type</MudText>
             <MudText>Description: @currentAgendaItem.Description</MudText>
             <MudText>State: @currentAgendaItem.State</MudText>
 
             @if (currentAgendaItem.State == AgendaItemState.Pending)
             {
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion">Start Discussion</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start Discussion</MudButton>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => {}" Class="me-2">Complete</MudButton>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => {}" Class="me-2">Postpone</MudButton>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => {}" Class="me-2">Cancel</MudButton>
             }
             else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
             {
@@ -59,7 +69,8 @@ else
             {
                 <!-- Include Voting Component -->
                 <VoteComponent MotionId="@currentMotionId.GetValueOrDefault()" />
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem">Complete Agenda Item</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem">Complete Agenda Item
+                </MudButton>
             }
             else if (currentAgendaItem.State == AgendaItemState.Completed)
             {
@@ -70,7 +81,7 @@ else
         {
             <MudText>No current agenda item.</MudText>
         }
-    </MudPaper>
+        </MudPaper>
 }
 
 @code {
@@ -80,6 +91,7 @@ else
     private Meeting meeting;
     private AgendaItem currentAgendaItem;
     private int? currentMotionId;
+    private bool lastItem;
 
     protected override async Task OnInitializedAsync()
     {
@@ -104,7 +116,9 @@ else
 
         currentAgendaItem = agenda!.Items
             .OrderBy(ai => ai.Order)
-            .ElementAtOrDefault(meeting.CurrentAgendaItemIndex);
+            .ElementAtOrDefault(meeting.CurrentAgendaItemIndex.GetValueOrDefault());
+
+        lastItem = agenda!.Items.OrderBy(ai => ai.Order).Last() == currentAgendaItem;
 
         if (currentAgendaItem != null)
         {
@@ -134,7 +148,7 @@ else
     private async Task StartDiscussion()
     {
         await MeetingsClient.StartAgendaItemDiscussionAsync(organization.Id, meeting.Id);
-         await LoadMeetingDetails();
+        await LoadMeetingDetails();
     }
 
     private async Task StartVoting()
