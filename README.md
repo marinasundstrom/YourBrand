@@ -12,7 +12,7 @@ Read this [document](/docs/getting-started.md).
 
 The seed of this project was planted in 2018, with ["Showroom"](https://github.com/marinasundstrom/YourBrand) - a site for presenting consultants.
 
-In the summer of 2021, I experimented with building a Point of Sale system. This was an exercise in software architecture and building distributed apps.
+In the summer of 2021, I experimented with building a ["Point of Sale" system](https://github.com/marinasundstrom/PointOfSale). This was an exercise in software architecture and building distributed apps.
 
 Later in the same year (2021), I created the projects "Accounting" (later ["Finance"](https://github.com/marinasundstrom/finance-app)) and ["Product Catalog"](https://github.com/marinasundstrom/product-catalog). Then, the ["TimeReport"](https://github.com/marinasundstrom/TimeReport) module - project management. These modules were later brought together into "YourBrand". From there they continued to evolve.
 
