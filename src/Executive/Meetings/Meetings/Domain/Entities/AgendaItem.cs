@@ -96,6 +96,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         }
 
         VotingSession = new VotingSession();
+        VotingSession.OrganizationId = OrganizationId;
 
         State = AgendaItemState.Voting;
     }
