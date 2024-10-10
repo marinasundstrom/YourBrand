@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 
-namespace YourBrand.Meetings.Features.Command;
+namespace YourBrand.Meetings.Features.Procedure.Command;
 
 public sealed record StartMeeting(string OrganizationId, int Id) : IRequest<Result>
 {

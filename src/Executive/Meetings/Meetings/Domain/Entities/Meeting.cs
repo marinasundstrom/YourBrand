@@ -138,6 +138,18 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return _participants.Remove(participant);
     }
 
+    public void ResetProcedure()
+    {
+        State = MeetingState.Scheduled;
+
+        CurrentAgendaItemIndex = -1;
+
+        foreach (var agendaItem in Agenda!.Items) 
+        {
+            agendaItem.State = AgendaItemState.Pending;
+        }
+    }
+
     // ...
 
     public User? CreatedBy { get; set; } = null!;

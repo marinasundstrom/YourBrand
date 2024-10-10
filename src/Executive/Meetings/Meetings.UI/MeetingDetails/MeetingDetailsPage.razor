@@ -107,7 +107,10 @@
 
 </MudGrid>
 
-<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/procedure")" Class="mb-4">Procedure</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/procedure")" Class="mb-4">Procedure</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ResetMeetingProcedure" Class="ms-2 mb-4">Reset procedure</MudButton>
+
 
 @if(organization is not null) 
 {
@@ -346,5 +349,12 @@
     {
         context.OnFieldChanged -= OnFieldChanged;
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+
+    async Task ResetMeetingProcedure() 
+    {
+        await MeetingsClient.ResetMeetingProcedureAsync(organization.Id, Id);
+
+        Snackbar.Add("Procedure was reset");
     }
 }

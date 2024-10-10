@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Command;
+namespace YourBrand.Meetings.Features.Procedure.Command;
 
 public sealed record StartAgendaItemVoting(string OrganizationId, int Id) : IRequest<Result>
 {
