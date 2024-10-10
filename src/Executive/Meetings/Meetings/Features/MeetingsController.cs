@@ -32,6 +32,8 @@ public sealed record AddMeetingParticipantDto(string Name, string? UserId, strin
 
 public sealed record EditMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
 
+public sealed record MarkParticipantAsPresentDto(bool IsPresent);
+
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -142,6 +144,16 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingParticipantDto>> EditParticipant(string organizationId, int id, string participantId, EditMeetingParticipantDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditParticipant(organizationId, id, participantId, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/participants/{participantId}/IsPresent")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingParticipantDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingParticipantDto>> MarkParticipantAsPresent(string organizationId, int id, string participantId, MarkParticipantAsPresentDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new MarkParticipantAsPresent(organizationId, id, participantId, request.IsPresent), cancellationToken);
         return this.HandleResult(result);
     }
 

@@ -19,6 +19,8 @@ public class ParticipantViewModel
 
     public bool HasVotingRights { get; set; }
 
+    public bool IsPresent { get; set; }
+
     public ParticipantViewModel Clone()
     {
         return new ParticipantViewModel
@@ -27,7 +29,8 @@ public class ParticipantViewModel
             Role = Role,
             Email = Email,
             User = User,
-            HasVotingRights = HasVotingRights
+            HasVotingRights = HasVotingRights,
+            IsPresent = IsPresent
         };
     }
 }
