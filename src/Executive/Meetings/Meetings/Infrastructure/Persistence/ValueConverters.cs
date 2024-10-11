@@ -92,3 +92,19 @@ internal sealed class VoteIdConverter : ValueConverter<VoteId, string>
     {
     }
 }
+
+internal sealed class SpeakerSessionIdConverter : ValueConverter<SpeakerSessionId, string>
+{
+    public SpeakerSessionIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
+internal sealed class SpeakerRequestIdConverter : ValueConverter<SpeakerRequestId, string>
+{
+    public SpeakerRequestIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}

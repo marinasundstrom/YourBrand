@@ -59,7 +59,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
     public int Order { get; set; }
 
-    //public SpeakerSession? SpeakerSession { get; set; }
+    public SpeakerSession? SpeakerSession { get; set; }
+    public SpeakerSessionId? SpeakerSessionId { get; set; }
     public VotingSession? VotingSession { get; set; }
     public VotingSessionId? VotingSessionId { get; set; }
 
@@ -84,6 +85,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         {
             throw new InvalidOperationException("Cannot start discussion.");
         }
+
+        SpeakerSession = new SpeakerSession();
+        SpeakerSession.OrganizationId = OrganizationId;
 
         State = AgendaItemState.UnderDiscussion;
     }

@@ -13,6 +13,12 @@ public sealed class AgendaItemConfiguration : IEntityTypeConfiguration<AgendaIte
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasOne(x => x.SpeakerSession)
+            .WithOne()
+            .HasForeignKey<AgendaItem>(x => new { x.OrganizationId, x.SpeakerSessionId });
+
+        builder.Navigation(x => x.SpeakerSession).AutoInclude();
+
         builder.HasOne(x => x.VotingSession)
             .WithOne()
             .HasForeignKey<AgendaItem>(x => new { x.OrganizationId, x.VotingSessionId });

@@ -3,22 +3,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Agendas.Infrastructure.Persistence.Configurations;
 
-
-public sealed class VoteConfiguration : IEntityTypeConfiguration<Vote>
+public sealed class ElectionCandidateConfiguration : IEntityTypeConfiguration<ElectionCandidate>
 {
-    public void Configure(EntityTypeBuilder<Vote> builder)
+    public void Configure(EntityTypeBuilder<ElectionCandidate> builder)
     {
-        builder.ToTable("Votes");
+        builder.ToTable("ElectionCandidates");
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 
         builder.HasIndex(x => x.TenantId);
-
-        builder.HasOne(x => x.SelectedCandidate)
-            .WithOne()
-            .HasForeignKey<Vote>(x => new { x.OrganizationId, x.SelectedCandidateId });
-            
-        builder.Navigation(x => x.SelectedCandidate).AutoInclude();
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

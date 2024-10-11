@@ -123,6 +123,8 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<VotingSessionId>().HaveConversion<VotingSessionIdConverter>();
         configurationBuilder.Properties<ElectionCandidateId>().HaveConversion<ElectionCandidateIdConverter>();
         configurationBuilder.Properties<VoteId>().HaveConversion<VoteIdConverter>();
+        configurationBuilder.Properties<SpeakerSessionId>().HaveConversion<SpeakerSessionIdConverter>();
+        configurationBuilder.Properties<SpeakerRequestId>().HaveConversion<SpeakerRequestIdConverter>();
 
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
