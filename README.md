@@ -4,6 +4,8 @@ Enterprise system for e-commerce and consulting services (Prototype).
 
 Modular solution with Portal and e-Shop apps.
 
+Watch this [video](https://www.youtube.com/watch?v=k6SftNnsILo) demoing the app.
+
 ## Getting started
 
 Read this [document](/docs/getting-started.md).
