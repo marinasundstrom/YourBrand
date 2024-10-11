@@ -6,11 +6,11 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Procedure.Command;
 
-public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IRequest<Result>
+public sealed record PostponeAgendaItem(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<CompleteAgendaItem, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<PostponeAgendaItem, Result>
     {
-        public async Task<Result> Handle(CompleteAgendaItem request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(PostponeAgendaItem request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -38,7 +38,7 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            agendaItem.Complete();
+            agendaItem.Postpone();
 
             context.Meetings.Update(meeting);
 

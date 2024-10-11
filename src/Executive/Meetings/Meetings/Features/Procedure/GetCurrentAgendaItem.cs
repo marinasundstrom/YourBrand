@@ -7,11 +7,11 @@ using YourBrand.Meetings.Features.Agendas;
 
 namespace YourBrand.Meetings.Features.Procedure.Command;
 
-public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequest<Result<AgendaItemDto>>
+public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequest<Result<AgendaItemDto?>>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetCurrentAgendaItem, Result<AgendaItemDto>>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetCurrentAgendaItem, Result<AgendaItemDto?>>
     {
-        public async Task<Result<AgendaItemDto>> Handle(GetCurrentAgendaItem request, CancellationToken cancellationToken)
+        public async Task<Result<AgendaItemDto?>> Handle(GetCurrentAgendaItem request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -26,7 +26,7 @@ public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequ
 
             var current = meeting.GetCurrentAgendaItem();
 
-            return current.ToDto();
+            return current?.ToDto();
         }
     }
 }

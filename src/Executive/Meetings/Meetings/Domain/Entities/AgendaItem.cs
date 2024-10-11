@@ -101,7 +101,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         State = AgendaItemState.Voting;
     }
 
-    public void CompleteAgendaItem()
+    public void Complete()
     {
         if (State != AgendaItemState.Voting)
         {
@@ -109,6 +109,26 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         }
 
         State = AgendaItemState.Completed;
+    }
+
+    public void Postpone()
+    {
+        if (State != AgendaItemState.Pending)
+        {
+            throw new InvalidOperationException("Agenda item can't be postponed.");
+        }
+
+        State = AgendaItemState.Postponed;
+    }
+
+    public void Cancel()
+    {
+        if (State != AgendaItemState.Pending)
+        {
+            throw new InvalidOperationException("Agenda item can't be cancelled.");
+        }
+
+        State = AgendaItemState.Cancelled;
     }
 
     public User? CreatedBy { get; set; } = null!;

@@ -97,11 +97,9 @@ else
                     {
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start
                             Discussion</MudButton>
-                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => {}" Class="me-2">Complete
+                        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="PostponeAgendaItem" Class="me-2">Postpone
                         </MudButton>
-                        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => {}" Class="me-2">Postpone
-                        </MudButton>
-                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => {}" Class="me-2">Cancel</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAgendaItem" Class="me-2">Cancel</MudButton>
                     }
                     else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
                     {
@@ -202,6 +200,18 @@ else
     private async Task CompleteAgendaItem()
     {
         await MeetingsClient.CompleteAgendaItemAsync(organization.Id, meeting.Id);
+        await LoadMeetingDetails();
+    }
+
+    private async Task CancelAgendaItem()
+    {
+        await MeetingsClient.CancelAgendaItemAsync(organization.Id, meeting.Id);
+        await LoadMeetingDetails();
+    }
+
+    private async Task PostponeAgendaItem()
+    {
+        await MeetingsClient.PostponeAgendaItemAsync(organization.Id, meeting.Id);
         await LoadMeetingDetails();
     }
 

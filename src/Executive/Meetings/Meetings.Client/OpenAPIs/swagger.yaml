@@ -708,7 +708,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-  /v1/Meetings/{id}/Agenda/CompleteItem:
+  /v1/Meetings/{id}/Agenda/Item/Complete:
     post:
       tags:
       - Meetings
@@ -741,7 +741,73 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-  /v1/Meetings/{id}/Agenda/CurrentItem:
+  /v1/Meetings/{id}/Agenda/Item/Postpone:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_PostponeAgendaItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/Item/Cancel:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_CancelAgendaItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Agenda/Item:
     get:
       tags:
       - Meetings

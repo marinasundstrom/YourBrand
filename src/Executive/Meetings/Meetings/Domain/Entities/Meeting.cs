@@ -124,8 +124,13 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         */
     }
 
-    public AgendaItem GetCurrentAgendaItem()
+    public AgendaItem? GetCurrentAgendaItem()
     {
+        if(CurrentAgendaItemIndex is null) 
+        {
+            return null;
+        }
+
         return Agenda?.Items
             .OrderBy(ai => ai.Order)
             .ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());

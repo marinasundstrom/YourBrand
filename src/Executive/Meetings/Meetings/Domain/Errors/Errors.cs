@@ -7,6 +7,8 @@ public static partial class Errors
         public static readonly Error MeetingNotFound = new Error(nameof(MeetingNotFound), "Meeting not found", string.Empty);
 
         public static readonly Error ParticipantNotFound = new Error(nameof(ParticipantNotFound), "Participant not found", string.Empty);
+
+        public static readonly Error NoActiveAgendaItem = new Error(nameof(NoActiveAgendaItem), "NoActive agenda item", string.Empty);
     }
 
     public static class Agendas
