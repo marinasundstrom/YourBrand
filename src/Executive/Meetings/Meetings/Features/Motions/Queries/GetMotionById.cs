@@ -17,7 +17,7 @@ public record GetMotionById(string OrganizationId, int Id) : IRequest<Result<Mot
             var motion = await context.Motions
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
-                .Include(x => x.Items.OrderBy(x => x.Order))
+                .Include(x => x.OperativeClauses.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if(motion is null) 

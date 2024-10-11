@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Agendas.Infrastructure.Persistence.Configurations;
 
-public sealed class MotionItemConfiguration : IEntityTypeConfiguration<MotionItem>
+public sealed class OperativeClauseConfiguration : IEntityTypeConfiguration<MotionOperativeClause>
 {
-    public void Configure(EntityTypeBuilder<MotionItem> builder)
+    public void Configure(EntityTypeBuilder<MotionOperativeClause> builder)
     {
-        builder.ToTable("MotionItems");
+        builder.ToTable("MotionOperativeClauses");
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 

@@ -22,12 +22,12 @@
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Title</MudTh>
-        <MudTh>Items</MudTh>
+        <MudTh>Operative clauses</MudTh>
     </HeaderContent>
     <RowTemplate Context="motion">
         <MudTd DataLabel="Id">@motion.Id</MudTd>
         <MudTd DataLabel="Title">@motion.Title</MudTd>
-        <MudTd DataLabel="Items">@motion.Items.Count</MudTd>
+        <MudTd DataLabel="Operative clauses">@motion.OperativeClauses.Count</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

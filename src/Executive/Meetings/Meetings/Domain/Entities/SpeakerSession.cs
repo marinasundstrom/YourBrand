@@ -18,6 +18,8 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
 
+    public AgendaItemId? AgendaItemId { get; set; }
+
     public IReadOnlyCollection<SpeakerRequest> SpeakerQueue => _speakerQueue;
     public TimeSpan? SpeakingTimeLimit { get; set; }
 

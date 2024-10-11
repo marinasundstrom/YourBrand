@@ -7,7 +7,7 @@ public sealed class SpeakerSessionConfiguration : IEntityTypeConfiguration<Speak
 {
     public void Configure(EntityTypeBuilder<SpeakerSession> builder)
     {
-        builder.ToTable(" SpeakerSessions");
+        builder.ToTable("SpeakerSessions");
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 

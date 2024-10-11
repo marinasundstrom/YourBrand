@@ -9,7 +9,7 @@ public enum MotionStatus { Proposed }
 
 public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrganization
 {
-    readonly HashSet<MotionItem> _items = new HashSet<MotionItem>();
+    readonly HashSet<MotionOperativeClause> _operativeClauses = new HashSet<MotionOperativeClause>();
 
     protected Motion()
     {
@@ -28,28 +28,28 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
     public string Text { get; set; }
     public MotionStatus Status { get; set; } = MotionStatus.Proposed;
 
-    public IReadOnlyCollection<MotionItem> Items => _items;
+    public IReadOnlyCollection<MotionOperativeClause> OperativeClauses => _operativeClauses;
 
-    public MotionItem AddItem(string text)
+    public MotionOperativeClause AddOperativeClause(OperativeAction action, string text)
     {
         int order = 1;
 
         try
         {
-            var last = _items.OrderByDescending(x => x.Order).First();
+            var last = _operativeClauses.OrderByDescending(x => x.Order).First();
             order = last.Order + 1;
         }
         catch { }
 
-        var item = new MotionItem(text);
-        item.Order = order;
-        _items.Add(item);
-        return item;
+        var clause = new MotionOperativeClause(action, text);
+        clause.Order = order;
+        _operativeClauses.Add(clause);
+        return clause;
     }
 
-    public bool RemoveItem(MotionItem item)
+    public bool RemoveOperativeClause(MotionOperativeClause item)
     {
-        return _items.Remove(item);
+        return _operativeClauses.Remove(item);
     }
 
     public User? CreatedBy { get; set; } = null!;

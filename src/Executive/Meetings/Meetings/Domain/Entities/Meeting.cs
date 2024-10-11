@@ -77,23 +77,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         State = MeetingState.Completed;
 
-        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
-
-        agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.Completed;
-
         CurrentAgendaItemIndex = null;
-    }
-
-    public void CompleteAgendaItem()
-    {
-        if (State != MeetingState.InProgress)
-        {
-            throw new InvalidOperationException("Meeting is not in progress.");
-        }
-
-        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
-
-        agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.Completed;
     }
 
     public void MoveToNextAgendaItem()

@@ -7,7 +7,15 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudTextField Label="v" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Text"
+                <MudSelect T="OperativeAction" Label="Action" Variant="Variant.Outlined" @bind-Value="Model.Action"
+                    Class="mt-4">
+                    @foreach (var type in Enum.GetValues<OperativeAction>())
+                    {
+                        <MudSelectItem T="OperativeAction" Value="@type">@Enum.GetName(typeof(OperativeAction), type)
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+                <MudTextField Label="Text" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Text"
                     For="@(() => Model.Text)" />
             </MudContainer>
         </DialogContent>
@@ -15,7 +23,7 @@
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
-                Save
+                Create
             </MudButton>
         </DialogActions>
     </MudDialog>
@@ -24,14 +32,16 @@
 
 @code
 {
+    EditContext context = null!;
+
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
     public string? OrganizationId { get; set; } = null!;
 
-    [Parameter]
-    public MotionItemViewModel? Model { get; set; }
+    [Required]
+    public OperativeClauseViewModel Model { get; set; } = new OperativeClauseViewModel();
 
     protected override void OnInitialized()
     {
@@ -40,9 +50,6 @@
 
     public void OnValidSubmit()
     {
-        Dialog.Close(new MotionItemViewModel
-            {
-                Text = Model.Text
-            });
+        Dialog.Close(Model.Clone());
     }
 }

@@ -13,15 +13,15 @@ using YourBrand.Meetings.Models;
 
 namespace YourBrand.Meetings.Features.Motions;
 
-public sealed record CreateMotionDto(string Title, string Text, IEnumerable<CreateMotionItemDto> Items);
+public sealed record CreateMotionDto(string Title, string Text, IEnumerable<CreateOperativeClauseDto> Items);
 
 public sealed record EditMotionDto(string Title, string Text);
 
 public sealed record ChangeMotionStatusDto(MotionStatus Status);
 
-public sealed record AddMotionItemDto(string Text);
+public sealed record AddOperativeClauseDto(OperativeAction Action, string Text);
 
-public sealed record EditMotionItemDto(string Text);
+public sealed record EditOperativeClauseDto(OperativeAction Action, string Text);
 
 [ApiController]
 [ApiVersion("1")]
@@ -76,33 +76,33 @@ public sealed class MotionsController(IMediator mediator) : ControllerBase
         return this.HandleResult(result);
     }
 
-    [HttpPost("{id}/items")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MotionItemDto))]
+    [HttpPost("{id}/OperativeClauses")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MotionOperativeClauseDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MotionItemDto>> AddMotionItem(string organizationId, int id, AddMotionItemDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MotionOperativeClauseDto>> AddOperativeClause(string organizationId, int id, AddOperativeClauseDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddMotionItem(organizationId, id, request.Text), cancellationToken);
+        var result = await mediator.Send(new AddOperativeClause(organizationId, id, request.Action, request.Text), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpPut("{id}/items/{itemId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MotionItemDto))]
+    [HttpPut("{id}/OperativeClauses/{clauseId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MotionOperativeClauseDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MotionItemDto>> EditMotionItem(string organizationId, int id, string itemId, EditMotionItemDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MotionOperativeClauseDto>> EditOperativeClause(string organizationId, int id, string clauseId, EditOperativeClauseDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new EditMotionItem(organizationId, id, itemId, request.Text), cancellationToken);
+        var result = await mediator.Send(new EditOperativeClause(organizationId, id, clauseId, request.Action, request.Text), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpDelete("{id}/items/{itemId}")]
+    [HttpDelete("{id}/OperativeClauses/{clauseId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> RemoveMotionItem(string organizationId, int id, string itemId, CancellationToken cancellationToken)
+    public async Task<ActionResult> RemoveOperativeClause(string organizationId, int id, string clauseId, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RemoveMotionItem(organizationId, id, itemId), cancellationToken);
+        var result = await mediator.Send(new RemoveOperativeClause(organizationId, id, clauseId), cancellationToken);
         return this.HandleResult(result);
     }
 }

@@ -60,9 +60,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public int Order { get; set; }
 
     public SpeakerSession? SpeakerSession { get; set; }
-    public SpeakerSessionId? SpeakerSessionId { get; set; }
     public VotingSession? VotingSession { get; set; }
-    public VotingSessionId? VotingSessionId { get; set; }
 
     // For motions
     public MotionId? MotionId { get; set; }
@@ -99,7 +97,12 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
             throw new InvalidOperationException("Cannot start voting.");
         }
 
-        VotingSession = new VotingSession();
+        VotingSession = new VotingSession((Type) switch 
+        {   
+            AgendaItemType.Motion => VotingType.Motion,
+            AgendaItemType.Election => VotingType.Election,
+            _ => throw new InvalidOperationException("Invalid agenda item type")
+        });
         VotingSession.OrganizationId = OrganizationId;
 
         State = AgendaItemState.Voting;

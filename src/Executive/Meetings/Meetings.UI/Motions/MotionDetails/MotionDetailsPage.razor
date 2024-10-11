@@ -21,19 +21,19 @@
                 <DataAnnotationsValidator />
 
                 <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
-                    For="@(() => Title)"  Immediate="true" />
+                    For="@(() => Title)" Immediate="true" />
 
                 <MudTextField Label="Text" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Text"
-                    For="@(() => Text)"  Immediate="true" Lines="10" />
+                    For="@(() => Text)" Immediate="true" Lines="10" />
 
                 <div class="mt-4 d-flex">
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
                         Save
                     </MudButton>
 
-                    @if(isDetailsModified) 
+                    @if (isDetailsModified)
                     {
-                        <MudText Typo="@Typo.body1" Class="ms-2">Modified</MudText>        
+                        <MudText Typo="@Typo.body1" Class="ms-2">Modified</MudText>
                     }
                 </div>
 
@@ -44,28 +44,31 @@
     <MudItem xs="12" md="6">
 
         <MudPaper Elevation="25" Class="pa-4 mb-4">
-            <MudText Typo="@Typo.h4" GutterBottom="true">Items</MudText>
+            <MudText Typo="@Typo.h4" GutterBottom="true">Operative clauses</MudText>
 
-            <MudTable T="MotionItemViewModel" Items="Items" Hover="true" Elevation="0"
-                Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-                OnRowClick="async (e) => await EditMotionItem(e.Item)">
+            <MudTable T="OperativeClauseViewModel" Items="OperativeClauses" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+                LoadingProgressColor="Color.Info" OnRowClick="async (e) => await EditOperativeClause(e.Item)">
                 <ToolBarContent>
                     <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-                        OnClick="AddMotionItem" Class="mb-2">Add item</MudButton>
+                        OnClick="AddOperativeClause" Class="mb-2">Add clause</MudButton>
                 </ToolBarContent>
 
                 <HeaderContent>
+                    <MudTh>#</MudTh>
+                    <MudTh>Action</MudTh>
                     <MudTh>Text</MudTh>
                     <MudTh></MudTh>
                 </HeaderContent>
                 <RowTemplate Context="item">
+                    <MudTd DataLabel="Order">@item.Order</MudTd>
+                    <MudTd DataLabel="Action">@item.Action</MudTd>
                     <MudTd DataLabel="Text">@item.Text</MudTd>
                     <MudTd>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                            OnClick="() => EditMotionItem(item)">
+                            OnClick="() => EditOperativeClause(item)">
                         </MudIconButton>
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                            OnClick="() => RemoveMotionItem(item)">
+                            OnClick="() => RemoveOperativeClause(item)">
                         </MudIconButton>
                     </MudTd>
                 </RowTemplate>
@@ -91,7 +94,7 @@
     [Required]
     public string Text { get; set; }
 
-    public List<MotionItemViewModel> Items { get; set; } = new List<MotionItemViewModel>();
+    public List<OperativeClauseViewModel> OperativeClauses { get; set; } = new List<OperativeClauseViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -105,12 +108,14 @@
         Title = motion.Title;
         Text = motion.Text;
 
-        Items.AddRange(motion.Items.Select(item => new MotionItemViewModel ()
+        OperativeClauses.AddRange(motion.OperativeClauses.Select(item => new OperativeClauseViewModel()
             {
                 Id = item.Id,
+                Order = item.Order,
+                Action = item.Action,
                 Text = item.Text
             }));
-    
+
         context.OnFieldChanged += OnFieldChanged;
         context.MarkAsUnmodified();
 
@@ -119,7 +124,7 @@
 
     bool isDetailsModified = false;
 
-    private void OnFieldChanged(object? sender, FieldChangedEventArgs e) 
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e)
     {
         isDetailsModified = context.IsModified();
     }
@@ -134,79 +139,87 @@
     public async Task OnValidSubmit()
     {
         var motion = await MotionsClient.EditMotionDetailsAsync(organization.Id, Id, new EditMotion
-        {
-            Title = Title,
-            Text = Text
-        });
+            {
+                Title = Title,
+                Text = Text
+            });
 
         Snackbar.Add("Details saved");
 
         context.MarkAsUnmodified();
     }
 
-    async Task AddMotionItem()
+    async Task AddOperativeClause()
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddMotionItemDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddOperativeClauseDialog.OrganizationId), organization.Id);
 
-        var modalRef = DialogService.Show<AddMotionItemDialog>("Add item", parameters);
+        var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var modalRef = DialogService.Show<AddOperativeClauseDialog>("Add operative clause", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var itemModel = (MotionItemViewModel)result.Data;
+        var itemModel = (OperativeClauseViewModel)result.Data;
 
-        var dto = new AddMotionItem
-        {
-            Text = itemModel.Text,
-        };
+        var dto = new AddOperativeClause
+            {
+                Action = itemModel.Action,
+                Text = itemModel.Text,
+            };
 
-        var model = await MotionsClient.AddMotionItemAsync(organization.Id, Id, dto);
+        var model = await MotionsClient.AddOperativeClauseAsync(organization.Id, Id, dto);
 
         itemModel.Id = model.Id;
+        itemModel.Order = model.Order;
 
-        Items.Add(itemModel);
+        OperativeClauses.Add(itemModel);
     }
 
-    async Task EditMotionItem(MotionItemViewModel item)
+    async Task EditOperativeClause(OperativeClauseViewModel item)
     {
-        var originalMotionItem = item;
+        var originalOperativeClause = item;
 
         DialogParameters parameters = new();
-        parameters.Add(nameof(EditMotionItemDialog.OrganizationId), organization.Id);
-        parameters.Add(nameof(EditMotionItemDialog.Model), originalMotionItem.Clone());
+        parameters.Add(nameof(EditOperativeClauseDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(EditOperativeClauseDialog.Model), originalOperativeClause.Clone());
 
-        var modalRef = DialogService.Show<EditMotionItemDialog>("Edit item", parameters);
+        var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var modalRef = DialogService.Show<EditOperativeClauseDialog>("Edit operative clause", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var editedModel = (MotionItemViewModel)result.Data;
+        var editedModel = (OperativeClauseViewModel)result.Data;
 
-        var dto = new EditMotionItem
-        {
-            Text = editedModel.Text,
-        };
-        
-        await MotionsClient.EditMotionItemAsync(organization.Id, Id, item.Id, dto);
+        var dto = new EditOperativeClause
+            {
+                Action = editedModel.Action,
+                Text = editedModel.Text,
+            };
 
-        var index = Items.IndexOf(originalMotionItem);
-        Items[index] = editedModel;
+        await MotionsClient.EditOperativeClauseAsync(organization.Id, Id, item.Id, dto);
+
+        var index = OperativeClauses.IndexOf(originalOperativeClause);
+        OperativeClauses[index] = editedModel;
     }
 
-    async Task RemoveMotionItem(MotionItemViewModel item)
+    async Task RemoveOperativeClause(OperativeClauseViewModel item)
     {
-        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.",
+        "Delete", "Cancel");
 
-        if(!r.GetValueOrDefault()) 
+        if (!r.GetValueOrDefault())
         {
             return;
         }
 
-        await MotionsClient.RemoveMotionItemAsync(organization.Id, Id, item.Id);
-        Items.Remove(item);
+        await MotionsClient.RemoveOperativeClauseAsync(organization.Id, Id, item.Id);
+        OperativeClauses.Remove(item);
     }
 
     public void Dispose()

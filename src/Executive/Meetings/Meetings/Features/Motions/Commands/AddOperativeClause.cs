@@ -8,9 +8,9 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Motions.Command;
 
-public record AddMotionItem(string OrganizationId, int Id, string Text) : IRequest<Result<MotionItemDto>>
+public record AddOperativeClause(string OrganizationId, int Id, OperativeAction Action, string Text) : IRequest<Result<MotionOperativeClauseDto>>
 {
-    public class Validator : AbstractValidator<AddMotionItem>
+    public class Validator : AbstractValidator<AddOperativeClause>
     {
         public Validator()
         {
@@ -18,9 +18,9 @@ public record AddMotionItem(string OrganizationId, int Id, string Text) : IReque
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<AddMotionItem, Result<MotionItemDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<AddOperativeClause, Result<MotionOperativeClauseDto>>
     {
-        public async Task<Result<MotionItemDto>> Handle(AddMotionItem request, CancellationToken cancellationToken)
+        public async Task<Result<MotionOperativeClauseDto>> Handle(AddOperativeClause request, CancellationToken cancellationToken)
         {
             var motion = await context.Motions
                 .InOrganization(request.OrganizationId)
@@ -31,7 +31,7 @@ public record AddMotionItem(string OrganizationId, int Id, string Text) : IReque
                 return Errors.Motions.MotionNotFound;
             }
 
-            var motionItem = motion.AddItem(request.Text);
+            var operativeClause = motion.AddOperativeClause(request.Action, request.Text);
 
             context.Motions.Update(motion);
 
@@ -46,7 +46,7 @@ public record AddMotionItem(string OrganizationId, int Id, string Text) : IReque
                 return Errors.Motions.MotionNotFound;
             }
 
-            return motionItem.ToDto();
+            return operativeClause.ToDto();
         }
     }
 }

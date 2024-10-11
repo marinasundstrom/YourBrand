@@ -5,18 +5,32 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
+public enum VotingType 
+{
+    Motion,
+    Election
+}
+
 public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<Vote> _votes = new HashSet<Vote>();
 
-    public VotingSession()
+    public VotingSession(VotingType type)
         : base(new VotingSessionId())
     {
-
+        Type = type;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
+
+
+    //public AgendaId? AgendaId { get; set; }
+    public AgendaItemId? AgendaItemId { get; set; }
+    //public MotionId? MotionId { get; set; }
+    public MotionOperativeClauseId? MotionOperativeClauseId { get; set; }
+
+    public VotingType Type { get; set; }
 
     public DateTimeOffset? StartTime { get; set; }
     public DateTimeOffset? EndTime { get; set; }
@@ -31,11 +45,11 @@ public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditable, 
         _votes.Add(vote);
     }
 
-    public void TallyVotes(AgendaItemType type, out Dictionary<string, int> results)
+    public void TallyVotes(out Dictionary<string, int> results)
     {
         results = new Dictionary<string, int>();
 
-        if (type == AgendaItemType.Motion)
+        if (Type == VotingType.Motion)
         {
             var voteCounts = new Dictionary<VoteOption, int>
             {
@@ -57,7 +71,7 @@ public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditable, 
                 results[item.Key.ToString()] = item.Value;
             }
         }
-        else if (type == AgendaItemType.Election)
+        else if (Type == VotingType.Election)
         {
             foreach (var vote in Votes)
             {

@@ -30,28 +30,32 @@
 
         <MudItem xs="12" md="6">
             <MudPaper Elevation="25" Class="pa-4 mb-4">
-                <MudText Typo="@Typo.h4" GutterBottom="true">Items</MudText>
+                <MudText Typo="@Typo.h4" GutterBottom="true">Operative clauses</MudText>
 
-                <MudTable T="AddEditMotionItemViewModel" Items="Items" Dense="true" Hover="true" Elevation="0"
+                <MudTable T="AddEditOperativeClauseViewModel" Items="OperativeClauses" Dense="true" Hover="true" Elevation="0"
                     Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-                    OnRowClick="async (e) => await EditMotionItem(e.Item)">
+                    OnRowClick="async (e) => await EditOperativeClause(e.Item)">
                     <ToolBarContent>
                         <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-                            OnClick="AddMotionItem" Class="mb-2">Add item</MudButton>
+                            OnClick="AddOperativeClause" Class="mb-2">Add clause</MudButton>
                     </ToolBarContent>
 
                     <HeaderContent>
+                        <MudTh>#</MudTh>
+                        <MudTh>Action</MudTh>
                         <MudTh>Text</MudTh>
                         <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate Context="item">
+                        <MudTd DataLabel="Order">@item.Order</MudTd>
+                        <MudTd DataLabel="Action">@item.Action</MudTd>
                         <MudTd DataLabel="Text">@item.Text</MudTd>
                         <MudTd>
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                                OnClick="() => EditMotionItem(item)">
+                                OnClick="() => EditOperativeClause(item)">
                             </MudIconButton>
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                                OnClick="() => RemoveMotionItem(item)">
+                                OnClick="() => RemoveOperativeClause(item)">
                             </MudIconButton>
                         </MudTd>
                     </RowTemplate>
@@ -80,7 +84,7 @@
     [Required]
     public string Text { get; set; }
 
-    public List<AddEditMotionItemViewModel> Items { get; set; } = new List<AddEditMotionItemViewModel>();
+    public List<AddEditOperativeClauseViewModel> OperativeClauses { get; set; } = new List<AddEditOperativeClauseViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -104,9 +108,10 @@
             {
                 Title = Title,
                 Text = Text,
-                Items = Items.Select(model => {
-                    return new CreateMotionItem
+                Items = OperativeClauses.Select(model => {
+                    return new CreateOperativeClause
                     {
+                        Action = model.Action,
                         Text = model.Text
                     };
                 }).ToList()
@@ -115,43 +120,47 @@
         NavigationManager.NavigateTo($"/meetings/motions/{motion.Id}");
     }
 
-    async Task AddMotionItem()
+    async Task AddOperativeClause()
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddEditMotionItemDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditOperativeClauseDialog.OrganizationId), organization.Id);
 
-        var modalRef = DialogService.Show<AddEditMotionItemDialog>("Add item", parameters);
+        var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var modalRef = DialogService.Show<AddEditOperativeClauseDialog>("Add operative clause", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var model = (AddEditMotionItemViewModel)result.Data;
+        var model = (AddEditOperativeClauseViewModel)result.Data;
 
-        Items.Add(model);
+        OperativeClauses.Add(model);
     }
 
-    async Task EditMotionItem(AddEditMotionItemViewModel item)
+    async Task EditOperativeClause(AddEditOperativeClauseViewModel item)
     {
-        var originalMotionItem = item;
+        var originalOperativeClause = item;
 
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddEditMotionItemDialog.OrganizationId), organization.Id);
-        parameters.Add(nameof(AddEditMotionItemDialog.Model), originalMotionItem.Clone());
+        parameters.Add(nameof(AddEditOperativeClauseDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditOperativeClauseDialog.Model), originalOperativeClause.Clone());
 
-        var modalRef = DialogService.Show<AddEditMotionItemDialog>("Edit item", parameters);
+        var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var modalRef = DialogService.Show<AddEditOperativeClauseDialog>("Edit operative clause", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var updatedModel = (AddEditMotionItemViewModel)result.Data;
+        var updatedModel = (AddEditOperativeClauseViewModel)result.Data;
 
-        var index = Items.IndexOf(originalMotionItem);
-        Items[index] = updatedModel;
+        var index = OperativeClauses.IndexOf(originalOperativeClause);
+        OperativeClauses[index] = updatedModel;
     }
 
-    async Task RemoveMotionItem(AddEditMotionItemViewModel item)
+    async Task RemoveOperativeClause(AddEditOperativeClauseViewModel item)
     {
         var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
 
@@ -160,7 +169,7 @@
             return;
         }
 
-        Items.Remove(item);
+        OperativeClauses.Remove(item);
     }
 
     public void Dispose()

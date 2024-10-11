@@ -5,19 +5,34 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class MotionItem : Entity<MotionItemId>, IAuditable, IHasTenant, IHasOrganization
+public enum OperativeAction
 {
-    readonly HashSet<Vote> _votes = new HashSet<Vote>();
+    Decides,
+    Requests,
+    Recommends,
+    Instructs,
+    Urges,
+    Encourages,
+    Authorizes,
+    CallsFor,
+    Acknowledges,
+    Endorses
+}
 
-    public MotionItem(string text)
-    : base(new MotionItemId())
+public class MotionOperativeClause : Entity<MotionOperativeClauseId>, IAuditable, IHasTenant, IHasOrganization
+{
+    public MotionOperativeClause(OperativeAction action, string text)
+    : base(new MotionOperativeClauseId())
     {
+        Action = action;
         Text = text;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
     public MotionId MotionId { get; set; }
+
+    public OperativeAction Action { get; set; }
 
     public string Text { get; set; }
     public int Order { get; set; }

@@ -22,7 +22,7 @@ public static partial class Errors
     {
         public static readonly Error MotionNotFound = new Error(nameof(MotionNotFound), "Motions not found", string.Empty);
 
-        public static readonly Error MotionItemNotFound = new Error(nameof(MotionItemNotFound), "Motions item not found", string.Empty);
+        public static readonly Error OperativeClauseNotFound = new Error(nameof(OperativeClauseNotFound), "Motions item not found", string.Empty);
     }
 
     public static class Users

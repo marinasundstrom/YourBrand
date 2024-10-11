@@ -8,19 +8,19 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Motions.Command;
 
-public record EditMotionItem(string OrganizationId, int Id, string ItemId, string Text) : IRequest<Result<MotionItemDto>>
+public record RemoveOperativeClause(string OrganizationId, int Id, string OperativeClauseId) : IRequest<Result<MotionDto>>
 {
-    public class Validator : AbstractValidator<EditMotionItem>
+    public class Validator : AbstractValidator<RemoveOperativeClause>
     {
         public Validator()
         {
-            RuleFor(x => x.Text).NotEmpty().MaximumLength(60);
+
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<EditMotionItem, Result<MotionItemDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<RemoveOperativeClause, Result<MotionDto>>
     {
-        public async Task<Result<MotionItemDto>> Handle(EditMotionItem request, CancellationToken cancellationToken)
+        public async Task<Result<MotionDto>> Handle(RemoveOperativeClause request, CancellationToken cancellationToken)
         {
             var motion = await context.Motions
                 .InOrganization(request.OrganizationId)
@@ -31,14 +31,14 @@ public record EditMotionItem(string OrganizationId, int Id, string ItemId, strin
                 return Errors.Motions.MotionNotFound;
             }
 
-            var motionItem = motion.Items.FirstOrDefault(x => x.Id == request.ItemId);
+            var operativeClause = motion.OperativeClauses.FirstOrDefault(x => x.Id == request.OperativeClauseId);
 
-            if(motionItem is  null) 
+            if (operativeClause is null)
             {
-                return Errors.Motions.MotionItemNotFound;
+                return Errors.Motions.OperativeClauseNotFound;
             }
-        
-            motionItem.Text = request.Text;
+
+            motion.RemoveOperativeClause(operativeClause);
 
             context.Motions.Update(motion);
 
@@ -53,7 +53,7 @@ public record EditMotionItem(string OrganizationId, int Id, string ItemId, strin
                 return Errors.Motions.MotionNotFound;
             }
 
-            return motionItem.ToDto();
+            return motion.ToDto();
         }
     }
 }

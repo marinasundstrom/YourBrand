@@ -8,9 +8,9 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Motions.Command;
 
-public sealed record CreateMotionItemDto(string Text);
+public sealed record CreateOperativeClauseDto(OperativeAction Action, string Text);
 
-public record CreateMotion(string OrganizationId, string Title, string Text, IEnumerable<CreateMotionItemDto> Items) : IRequest<Result<MotionDto>>
+public record CreateMotion(string OrganizationId, string Title, string Text, IEnumerable<CreateOperativeClauseDto> Items) : IRequest<Result<MotionDto>>
 {
     public class Validator : AbstractValidator<CreateMotion>
     {
@@ -40,9 +40,9 @@ public record CreateMotion(string OrganizationId, string Title, string Text, IEn
             motion.OrganizationId = request.OrganizationId;
             motion.Text = request.Text;
 
-            foreach (var motionItem in request.Items) 
+            foreach (var operativeClause in request.Items) 
             {
-                motion.AddItem(motionItem.Text);
+                motion.AddOperativeClause(operativeClause.Action, operativeClause.Text);
             }
 
             context.Motions.Add(motion);

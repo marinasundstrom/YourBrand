@@ -1421,11 +1421,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-  /v1/Motions/{id}/items:
+  /v1/Motions/{id}/OperativeClauses:
     post:
       tags:
       - Motions
-      operationId: Motions_AddMotionItem
+      operationId: Motions_AddOperativeClause
       parameters:
       - name: organizationId
         in: query
@@ -1444,7 +1444,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddMotionItem'
+              $ref: '#/components/schemas/AddOperativeClause'
         required: true
         x-position: 3
       responses:
@@ -1453,7 +1453,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MotionItem'
+                $ref: '#/components/schemas/MotionOperativeClause'
         404:
           description: ''
           content:
@@ -1466,11 +1466,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-  /v1/Motions/{id}/items/{itemId}:
+  /v1/Motions/{id}/OperativeClauses/{clauseId}:
     put:
       tags:
       - Motions
-      operationId: Motions_EditMotionItem
+      operationId: Motions_EditOperativeClause
       parameters:
       - name: organizationId
         in: query
@@ -1484,7 +1484,7 @@ paths:
           type: integer
           format: int32
         x-position: 2
-      - name: itemId
+      - name: clauseId
         in: path
         required: true
         schema:
@@ -1495,7 +1495,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditMotionItem'
+              $ref: '#/components/schemas/EditOperativeClause'
         required: true
         x-position: 4
       responses:
@@ -1504,7 +1504,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MotionItem'
+                $ref: '#/components/schemas/MotionOperativeClause'
         404:
           description: ''
           content:
@@ -1520,7 +1520,7 @@ paths:
     delete:
       tags:
       - Motions
-      operationId: Motions_RemoveMotionItem
+      operationId: Motions_RemoveOperativeClause
       parameters:
       - name: organizationId
         in: query
@@ -1534,7 +1534,7 @@ paths:
           type: integer
           format: int32
         x-position: 2
-      - name: itemId
+      - name: clauseId
         in: path
         required: true
         schema:
@@ -2325,10 +2325,10 @@ components:
           $ref: '#/components/schemas/MotionStatus'
         text:
           type: string
-        items:
+        operativeClauses:
           type: array
           items:
-            $ref: '#/components/schemas/MotionItem'
+            $ref: '#/components/schemas/MotionOperativeClause'
     MotionStatus:
       type: integer
       description: ''
@@ -2336,14 +2336,44 @@ components:
       - Proposed
       enum:
       - 0
-    MotionItem:
+    MotionOperativeClause:
       type: object
       additionalProperties: false
       properties:
         id:
           type: string
+        order:
+          type: integer
+          format: int32
+        action:
+          $ref: '#/components/schemas/OperativeAction'
         text:
           type: string
+    OperativeAction:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Decides
+      - Requests
+      - Recommends
+      - Instructs
+      - Urges
+      - Encourages
+      - Authorizes
+      - CallsFor
+      - Acknowledges
+      - Endorses
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
     CreateMotion:
       type: object
       additionalProperties: false
@@ -2355,11 +2385,13 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/CreateMotionItem'
-    CreateMotionItem:
+            $ref: '#/components/schemas/CreateOperativeClause'
+    CreateOperativeClause:
       type: object
       additionalProperties: false
       properties:
+        action:
+          $ref: '#/components/schemas/OperativeAction'
         text:
           type: string
     EditMotion:
@@ -2376,16 +2408,20 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/MotionStatus'
-    AddMotionItem:
+    AddOperativeClause:
       type: object
       additionalProperties: false
       properties:
+        action:
+          $ref: '#/components/schemas/OperativeAction'
         text:
           type: string
-    EditMotionItem:
+    EditOperativeClause:
       type: object
       additionalProperties: false
       properties:
+        action:
+          $ref: '#/components/schemas/OperativeAction'
         text:
           type: string
     PagedResultOfAgenda:

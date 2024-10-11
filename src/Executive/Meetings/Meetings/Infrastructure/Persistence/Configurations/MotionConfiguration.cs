@@ -13,11 +13,11 @@ public sealed class MotionConfiguration : IEntityTypeConfiguration<Motion>
 
         builder.HasIndex(x => x.TenantId);
 
-        builder.HasMany(x => x.Items)
+        builder.HasMany(x => x.OperativeClauses)
             .WithOne()
             .HasForeignKey(x => new { x.OrganizationId, x.MotionId });
 
-        builder.Navigation(x => x.Items).AutoInclude();
+        builder.Navigation(x => x.OperativeClauses).AutoInclude();
 
         //builder.HasMany(x => x.Votes);
         //builder.Navigation(x => x.Votes).AutoInclude();
