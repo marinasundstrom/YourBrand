@@ -91,32 +91,35 @@ else
             </MudCardContent>
 
             <MudCardActions>
-                @if (currentAgendaItem.State == AgendaItemState.Pending)
+                @if (currentAgendaItem is not null)
                 {
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start
-                        Discussion</MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => {}" Class="me-2">Complete
-                    </MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => {}" Class="me-2">Postpone
-                    </MudButton>
-                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => {}" Class="me-2">Cancel</MudButton>
-                }
-                else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
-                {
-                    <!-- Include Debate Component -->
-                    <Debate MotionId="@currentMotionId.GetValueOrDefault()" />
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartVoting">Start Voting</MudButton>
-                }
-                else if (currentAgendaItem.State == AgendaItemState.Voting)
-                {
-                    <!-- Include Voting Component -->
-                    <VoteComponent MotionId="@currentMotionId.GetValueOrDefault()" />
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem">Complete Agenda Item
-                    </MudButton>
-                }
-                else if (currentAgendaItem.State == AgendaItemState.Completed)
-                {
-                    <MudText Typo="Typo.subtitle1">This agenda item has been completed.</MudText>
+                    if (currentAgendaItem.State == AgendaItemState.Pending)
+                    {
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start
+                            Discussion</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => {}" Class="me-2">Complete
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => {}" Class="me-2">Postpone
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => {}" Class="me-2">Cancel</MudButton>
+                    }
+                    else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
+                    {
+                        <!-- Include Debate Component -->
+                        <Debate MotionId="@currentMotionId.GetValueOrDefault()" />
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartVoting">Start Voting</MudButton>
+                    }
+                    else if (currentAgendaItem.State == AgendaItemState.Voting)
+                    {
+                        <!-- Include Voting Component -->
+                        <VoteComponent MotionId="@currentMotionId.GetValueOrDefault()" />
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem">Complete Agenda Item
+                        </MudButton>
+                    }
+                    else if (currentAgendaItem.State == AgendaItemState.Completed)
+                    {
+                        <MudText Typo="Typo.subtitle1">This agenda item has been completed.</MudText>
+                    }
                 }
             </MudCardActions>
         </MudCard>
@@ -128,7 +131,7 @@ else
     public int MeetingId { get; set; }
 
     private Meeting meeting;
-    private AgendaItem currentAgendaItem;
+    private AgendaItem? currentAgendaItem;
     private int? currentMotionId;
     private bool lastItem;
 
@@ -153,7 +156,7 @@ else
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
         var agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
 
-        currentAgendaItem = agenda!.Items
+        currentAgendaItem = meeting.CurrentAgendaItemIndex is null ? null : agenda!.Items
         .OrderBy(ai => ai.Order)
         .ElementAtOrDefault(meeting.CurrentAgendaItemIndex.GetValueOrDefault());
 
