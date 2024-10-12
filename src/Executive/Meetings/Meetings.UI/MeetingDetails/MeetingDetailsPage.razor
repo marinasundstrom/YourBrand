@@ -107,10 +107,15 @@
 
 </MudGrid>
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/procedure")" Class="mb-4">Procedure</MudButton>
+<MudPaper Elevation="25" Class="pa-4 mb-4">
+    <MudText Typo="@Typo.h4" GutterBottom="true">Procedure</MudText>
 
-<MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ResetMeetingProcedure" Class="ms-2 mb-4">Reset procedure</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/procedure")" Class="mb-4">Display</MudButton>
 
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/control")" Class="ms-2 mb-4">Control</MudButton>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ResetMeetingProcedure" Class="ms-2 mb-4">Reset</MudButton>
+</MudPaper>
 
 @if(organization is not null) 
 {

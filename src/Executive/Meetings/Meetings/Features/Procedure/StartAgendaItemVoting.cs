@@ -1,5 +1,6 @@
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
@@ -9,7 +10,7 @@ namespace YourBrand.Meetings.Features.Procedure.Command;
 
 public sealed record StartAgendaItemVoting(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<StartAgendaItemVoting, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<StartAgendaItemVoting, Result>
     {
         public async Task<Result> Handle(StartAgendaItemVoting request, CancellationToken cancellationToken)
         {
@@ -32,13 +33,17 @@ public sealed record StartAgendaItemVoting(string OrganizationId, int Id) : IReq
             if (participant.Role != ParticipantRole.Chairperson)
                 throw new UnauthorizedAccessException("Only the Chairperson can start the meeting.");
 
-            var item = meeting.GetCurrentAgendaItem();
+            var agendaItem = meeting.GetCurrentAgendaItem();
 
-            item.StartVoting();
+            agendaItem.StartVoting();
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
+
+            await hubContext.Clients
+                .Group($"meeting-{meeting.Id}")
+                .OnAgendaItemStatusChanged(agendaItem.Id);
 
             return Result.Success;
         }

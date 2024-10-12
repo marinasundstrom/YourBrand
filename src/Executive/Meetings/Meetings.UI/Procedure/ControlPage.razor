@@ -1,4 +1,4 @@
-@page "/meetings/{MeetingId:int}/procedure"
+@page "/meetings/{MeetingId:int}/control"
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
 @inject IAgendasClient AgendasClient
@@ -90,7 +90,7 @@ else
                     <MudText Typo="Typo.subtitle1">No current agenda item.</MudText>
                 }
 
-                @if(currentMotion is not null) 
+                @if (currentMotion is not null)
                 {
                     <MotionDisplay Motion="@currentMotion" />
                 }
@@ -105,7 +105,8 @@ else
                             Discussion</MudButton>
                         <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="PostponeAgendaItem" Class="me-2">Postpone
                         </MudButton>
-                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAgendaItem" Class="me-2">Cancel</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAgendaItem" Class="me-2">Cancel
+                        </MudButton>
                     }
                     else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
                     {
@@ -171,7 +172,7 @@ else
         if (currentAgendaItem != null)
         {
             // Load the current motion associated with the agenda item
-            if(currentAgendaItem.MotionId is not null) 
+            if (currentAgendaItem.MotionId is not null)
             {
                 currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
             }

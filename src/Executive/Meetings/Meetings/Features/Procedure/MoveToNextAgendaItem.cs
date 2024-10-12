@@ -1,5 +1,6 @@
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
@@ -9,7 +10,7 @@ namespace YourBrand.Meetings.Features.Procedure.Command;
 
 public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequest<Result<AgendaItemDto>>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<MoveToNextAgendaItem, Result<AgendaItemDto>>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<MoveToNextAgendaItem, Result<AgendaItemDto>>
     {
         public async Task<Result<AgendaItemDto>> Handle(MoveToNextAgendaItem request, CancellationToken cancellationToken)
         {
@@ -32,13 +33,15 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
             if (participant.Role != ParticipantRole.Chairperson)
                 throw new UnauthorizedAccessException("Only the Chairperson can start the meeting.");
 
-            meeting.MoveToNextAgendaItem();
+            var nextItem = meeting.MoveToNextAgendaItem();
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
 
-            var nextItem = meeting.Agenda!.Items.ElementAt(meeting.CurrentAgendaItemIndex.GetValueOrDefault());
+            await hubContext.Clients
+                .Group($"meeting-{meeting.Id}")
+                .OnAgendaItemChanged((string)nextItem.Id);
 
             return nextItem.ToDto();
         }

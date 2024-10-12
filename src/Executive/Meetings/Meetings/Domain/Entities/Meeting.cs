@@ -80,7 +80,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         CurrentAgendaItemIndex = null;
     }
 
-    public void MoveToNextAgendaItem()
+    public AgendaItem MoveToNextAgendaItem()
     {
         if (State != MeetingState.InProgress)
         {
@@ -100,12 +100,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         CurrentAgendaItemIndex++;
 
-        /*
-        if (CurrentAgendaItemIndex < agendaItems.Count - 1)
-        {
-            agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault()).State = AgendaItemState.UnderDiscussion;
-        }
-        */
+        var nextItem = agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault());
+
+        return nextItem;
     }
 
     public AgendaItem? GetCurrentAgendaItem()

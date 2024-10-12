@@ -1,5 +1,6 @@
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
@@ -8,7 +9,7 @@ namespace YourBrand.Meetings.Features.Procedure.Command;
 
 public sealed record EndMeeting(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<EndMeeting, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EndMeeting, Result>
     {
         public async Task<Result> Handle(EndMeeting request, CancellationToken cancellationToken)
         {
@@ -34,6 +35,10 @@ public sealed record EndMeeting(string OrganizationId, int Id) : IRequest<Result
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
+
+            await hubContext.Clients
+                .Group($"meeting-{meeting.Id}")
+                .OnMeetingStateChanged();
 
             return Result.Success;
         }
