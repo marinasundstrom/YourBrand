@@ -1887,6 +1887,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+  /v1/Agendas/{id}/items/{itemId}/order:
+    put:
+      tags:
+      - Agendas
+      operationId: Agendas_MoveAgendaItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveAgendaItem'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgendaItem'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 components:
   schemas:
     PagedResultOfMeeting:
@@ -2470,6 +2521,10 @@ components:
           type: integer
           format: int32
           nullable: true
+        order:
+          type: integer
+          format: int32
+          nullable: true
     EditAgendaItem:
       type: object
       additionalProperties: false
@@ -2484,6 +2539,13 @@ components:
           type: integer
           format: int32
           nullable: true
+    MoveAgendaItem:
+      type: object
+      additionalProperties: false
+      properties:
+        order:
+          type: integer
+          format: int32
   securitySchemes:
     JWT:
       type: apiKey

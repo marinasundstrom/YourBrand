@@ -69,6 +69,44 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
         return _items.Remove(item);
     }
 
+    public bool MoveItem(AgendaItem agendaItem, int newOrderPosition)
+    {
+        int oldOrderPosition = agendaItem.Order;
+
+        if (oldOrderPosition == newOrderPosition)
+            return false;
+
+        // Flyttar objektet uppåt i listan
+        if (newOrderPosition < oldOrderPosition)
+        {
+            var itemsToIncrement = Items
+                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+                .ToList();
+
+            foreach (var item in itemsToIncrement)
+            {
+                item.Order += 1;
+            }
+        }
+        // Flyttar objektet nedåt i listan
+        else
+        {
+            var itemsToDecrement = Items
+                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+                .ToList();
+
+            foreach (var item in itemsToDecrement)
+            {
+                item.Order -= 1;
+            }
+        }
+
+        // Uppdatera order för objektet som flyttas
+        agendaItem.Order = newOrderPosition;
+
+        return true;
+    }
+
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;
     public DateTimeOffset Created { get; set; }

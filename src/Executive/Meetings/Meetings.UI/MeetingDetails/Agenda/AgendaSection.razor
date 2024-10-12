@@ -4,20 +4,20 @@
 
 <MudPaper Elevation="25" Class="pa-4 mb-4">
     <MudText Typo="@Typo.h4" GutterBottom="true">Agenda</MudText>
-    @if(agenda is null) 
+    @if (agenda is null)
     {
         <text>No agenda.</text>
 
-        <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="CreateAgenda" Class="mb-2">Create agenda</MudButton>
+        <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="CreateAgenda" Class="mb-2">Create
+            agenda</MudButton>
     }
-    else 
+    else
     {
-        <MudTable T="AgendaItemViewModel" Items="Items" Dense="true" Hover="true" Elevation="0"
-            Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-            OnRowClick="async (e) => await EditItem(e.Item)">
+        <MudTable T="AgendaItemViewModel" @ref="table" Items="Items" Dense="true" Hover="true" Elevation="0"
+            Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await EditItem(e.Item)">
             <ToolBarContent>
-                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddItem"
-                    Class="mb-2">Add Item</MudButton>
+                <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddItem" Class="mb-2">Add
+                    Item</MudButton>
             </ToolBarContent>
 
             <HeaderContent>
@@ -28,6 +28,8 @@
                 <MudTh>Description</MudTh>
                 <MudTh>Motion</MudTh>
                 <MudTh></MudTh>
+                <MudTh></MudTh>
+                <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate Context="item">
                 <MudTd DataLabel="Order">@item.Order</MudTd>
@@ -37,10 +39,26 @@
                 <MudTd DataLabel="Description">@item.Description</MudTd>
                 <MudTd DataLabel="Motion">@item.Motion?.Id</MudTd>
                 <MudTd>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                        OnClick="() => EditItem(item)">
+                    @if (item.Order > 1)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.MoveUp" Size="Size.Small"
+                            OnClick="async () => await MoveUp(item)">
+                        </MudIconButton>
+                    }
+                </MudTd>
+                <MudTd>
+                    @if (item.Order != Items.Last().Order)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.MoveDown" Size="Size.Small"
+                            OnClick="async () => await MoveDown(item)">
+                        </MudIconButton>
+                    }
+                </MudTd>
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="() => EditItem(item)">
                     </MudIconButton>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="() => RemoveItem(item)">
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                        OnClick="async () => await RemoveItem(item)">
                     </MudIconButton>
                 </MudTd>
             </RowTemplate>
@@ -49,10 +67,12 @@
             </LoadingContent>
         </MudTable>
     }
-</MudPaper>
+    </MudPaper>
 
-@code
-{
+    @code
+    {
+    MudTable<AgendaItemViewModel> table;
+
     Agenda? agenda;
 
     [Parameter]
@@ -67,7 +87,7 @@
     {
         agenda = await MeetingsClient.GetMeetingAgendaAsync(OrganizationId, MeetingId.GetValueOrDefault());
 
-        if(agenda is null) return;
+        if (agenda is null) return;
 
         Items.AddRange(agenda.Items.Select(item => new AgendaItemViewModel()
             {
@@ -81,12 +101,12 @@
             }));
     }
 
-    async Task CreateAgenda() 
+    async Task CreateAgenda()
     {
         agenda = await AgendasClient.CreateAgendaAsync(OrganizationId, MeetingId, new Meetings.CreateAgenda() { Items = [] });
     }
 
-    async Task AddItem() 
+    async Task AddItem()
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(AddAgendaItemDialog.OrganizationId), OrganizationId);
@@ -115,11 +135,78 @@
         Items.Add(agendaItemModel);
     }
 
-    async Task RemoveItem(AgendaItemViewModel item) 
+    async Task MoveUp(AgendaItemViewModel item)
     {
-        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+        await AgendasClient.MoveAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, new MoveAgendaItem
+            {
+                Order = item.Order - 1
+            });
 
-        if(!r.GetValueOrDefault()) 
+        MoveItem(item, item.Order - 1);
+
+        Items = Items.OrderBy(x => x.Order).ToList();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async Task MoveDown(AgendaItemViewModel item)
+    {
+        await AgendasClient.MoveAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, new MoveAgendaItem
+            {
+                Order = item.Order + 1
+            });
+
+        MoveItem(item, item.Order + 1);
+
+        Items = Items.OrderBy(x => x.Order).ToList();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public bool MoveItem(AgendaItemViewModel agendaItem, int newOrderPosition)
+    {
+        int oldOrderPosition = agendaItem.Order;
+
+        if (oldOrderPosition == newOrderPosition)
+            return false;
+
+        // Flyttar objektet uppåt i listan
+        if (newOrderPosition < oldOrderPosition)
+        {
+            var itemsToIncrement = Items
+            .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+            .ToList();
+
+            foreach (var item in itemsToIncrement)
+            {
+                item.Order += 1;
+            }
+        }
+        // Flyttar objektet nedåt i listan
+        else
+        {
+            var itemsToDecrement = Items
+            .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+            .ToList();
+
+            foreach (var item in itemsToDecrement)
+            {
+                item.Order -= 1;
+            }
+        }
+
+        // Uppdatera order för objektet som flyttas
+        agendaItem.Order = newOrderPosition;
+
+        return true;
+    }
+
+    async Task RemoveItem(AgendaItemViewModel item)
+    {
+        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.",
+        "Delete", "Cancel");
+
+        if (!r.GetValueOrDefault())
         {
             return;
         }

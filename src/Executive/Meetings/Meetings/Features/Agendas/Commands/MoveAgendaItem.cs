@@ -8,19 +8,19 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record AddAgendaItem(string OrganizationId, int Id, AgendaItemType Type, string Title, string Description, int? MotionId, int? Order) : IRequest<Result<AgendaItemDto>>
+public record MoveAgendaItem(string OrganizationId, int Id, string ItemId, int Order) : IRequest<Result<AgendaItemDto>>
 {
-    public class Validator : AbstractValidator<AddAgendaItem>
+    public class Validator : AbstractValidator<MoveAgendaItem>
     {
         public Validator()
         {
-            //RuleFor(x => x.Title).NotEmpty().MaximumLength(60);
+            // RuleFor(x => x.Title).NotEmpty().MaximumLength(60);
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<AddAgendaItem, Result<AgendaItemDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<MoveAgendaItem, Result<AgendaItemDto>>
     {
-        public async Task<Result<AgendaItemDto>> Handle(AddAgendaItem request, CancellationToken cancellationToken)
+        public async Task<Result<AgendaItemDto>> Handle(MoveAgendaItem request, CancellationToken cancellationToken)
         {
             var agenda = await context.Agendas
                 .InOrganization(request.OrganizationId)
@@ -31,14 +31,14 @@ public record AddAgendaItem(string OrganizationId, int Id, AgendaItemType Type, 
                 return Errors.Agendas.AgendaNotFound;
             }
 
-            var agendaItem = agenda.AddItem(request.Type, request.Title, request.Description);
+            var agendaItem = agenda.Items.FirstOrDefault(x => x.Id == request.ItemId);
 
-            if(request.Order is not null) 
+            if (agendaItem is null)
             {
-                agenda.MoveItem(agendaItem, request.Order.GetValueOrDefault());
+                return Errors.Agendas.AgendaItemNotFound;
             }
 
-            agendaItem.MotionId = request.MotionId;
+            agenda.MoveItem(agendaItem, request.Order);
 
             context.Agendas.Update(agenda);
 

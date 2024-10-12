@@ -17,9 +17,11 @@ public sealed record CreateAgendaDto(IEnumerable<CreateAgendaItemDto> Items);
 
 public sealed record EditAgendaDetailsDto();
 
-public sealed record AddAgendaItemDto(AgendaItemType Type, string Title, string Description, int? MotionId);
+public sealed record AddAgendaItemDto(AgendaItemType Type, string Title, string Description, int? MotionId, int? Order);
 
 public sealed record EditAgendaItemDto(AgendaItemType Type, string Title, string Description, int? MotionId);
+
+public sealed record MoveAgendaItemDto(int Order);
 
 [ApiController]
 [ApiVersion("1")]
@@ -70,7 +72,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<AgendaItemDto>> AddAgendaItem(string organizationId, int id, AddAgendaItemDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddAgendaItem(organizationId, id, request.Type, request.Title, request.Description, request.MotionId), cancellationToken);
+        var result = await mediator.Send(new AddAgendaItem(organizationId, id,request.Type, request.Title, request.Description, request.MotionId, request.Order), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -81,6 +83,16 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<AgendaItemDto>> EditAgendaItem(string organizationId, int id, string itemId, EditAgendaItemDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditAgendaItem(organizationId, id, itemId, request.Type, request.Title, request.Description, request.MotionId), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/items/{itemId}/order")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgendaItemDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<AgendaItemDto>> MoveAgendaItem(string organizationId, int id, string itemId, MoveAgendaItemDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new MoveAgendaItem(organizationId, id, itemId, request.Order), cancellationToken);
         return this.HandleResult(result);
     }
 
