@@ -37,7 +37,8 @@ public record EditOperativeClause(string OrganizationId, int Id, string ItemId, 
             {
                 return Errors.Motions.OperativeClauseNotFound;
             }
-        
+
+            operativeClause.Action = request.Action;
             operativeClause.Text = request.Text;
 
             context.Motions.Update(motion);

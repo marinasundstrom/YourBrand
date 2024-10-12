@@ -1,0 +1,14 @@
+<MudText Typo="Typo.h5" GutterBottom="true" Class="mt-4">@Motion.Text</MudText>
+
+<ul>
+    @foreach(var motion in Motion.OperativeClauses) 
+    {
+        <li class="mb-1">@motion.Order. @motion.Action @motion.Text</li>
+    }
+</ul>
+
+@code 
+{
+    [Parameter]
+    public Motion Motion { get; set; }
+}

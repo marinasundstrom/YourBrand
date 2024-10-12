@@ -2,6 +2,7 @@
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
 @inject IAgendasClient AgendasClient
+@inject IMotionsClient MotionsClient
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
@@ -88,6 +89,11 @@ else
                 {
                     <MudText Typo="Typo.subtitle1">No current agenda item.</MudText>
                 }
+
+                @if(currentMotion is not null) 
+                {
+                    <MotionDisplay Motion="@currentMotion" />
+                }
             </MudCardContent>
 
             <MudCardActions>
@@ -104,13 +110,13 @@ else
                     else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
                     {
                         <!-- Include Debate Component -->
-                        <Debate MotionId="@currentMotionId.GetValueOrDefault()" />
+                        <Debate Motion="@currentMotion" />
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartVoting">Start Voting</MudButton>
                     }
                     else if (currentAgendaItem.State == AgendaItemState.Voting)
                     {
                         <!-- Include Voting Component -->
-                        <VoteComponent MotionId="@currentMotionId.GetValueOrDefault()" />
+                        <VoteComponent Motion="@currentMotion" />
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem">Complete Agenda Item
                         </MudButton>
                     }
@@ -130,7 +136,7 @@ else
 
     private Meeting meeting;
     private AgendaItem? currentAgendaItem;
-    private int? currentMotionId;
+    private Motion? currentMotion;
     private bool lastItem;
 
     protected override async Task OnInitializedAsync()
@@ -160,10 +166,15 @@ else
 
         lastItem = agenda.Items.OrderBy(ai => ai.Order).LastOrDefault()?.Id == currentAgendaItem?.Id;
 
+        currentMotion = null;
+
         if (currentAgendaItem != null)
         {
             // Load the current motion associated with the agenda item
-            //currentMotionId = await MeetingsClient.GetMotionIdByAgendaItemAsync(currentAgendaItem.AgendaItemId);
+            if(currentAgendaItem.MotionId is not null) 
+            {
+                currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
+            }
         }
     }
 

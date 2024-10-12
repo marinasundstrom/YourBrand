@@ -101,7 +101,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         {   
             AgendaItemType.Motion => VotingType.Motion,
             AgendaItemType.Election => VotingType.Election,
-            _ => throw new InvalidOperationException("Invalid agenda item type")
+            _ => VotingType.Motion //throw new InvalidOperationException("Invalid agenda item type")
         });
         VotingSession.OrganizationId = OrganizationId;
 
