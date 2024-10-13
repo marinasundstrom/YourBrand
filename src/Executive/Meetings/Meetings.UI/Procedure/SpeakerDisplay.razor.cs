@@ -10,15 +10,13 @@ using YourBrand.Meetings;
 namespace YourBrand.Meetings.Procedure;
 
 
-public partial class DisplayPage : IMeetingsProcedureHubClient
+public partial class SpeakerDisplay : IDiscussionsHubClient
 {
-    Meeting? meeting;
-    Agenda? agenda;
-    AgendaItem? agendaItem;
-    Motion? currentMotion;
-
     HubConnection hubConnection = null!;
-    IMeetingsProcedureHub hubProxy = default!;
+    IDiscussionsHub hubProxy = default!;
+
+    SpeakerRequest? currentSpeaker;
+    Queue<SpeakerRequest> speakerQueue = new Queue<SpeakerRequest>();
 
     [Parameter]
     public int MeetingId { get; set; }
@@ -31,22 +29,15 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
 
         var currentUserId = await UserContext.GetUserId()!;
 
-        meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
-
-        await LoadAgenda();
-
-        if (meeting.CurrentAgendaItemIndex is not null) 
-        {
-            await LoadAgendaItem();
-        }
-
+       //await LoadAgenda();
+        
         if (hubConnection is not null && hubConnection.State != HubConnectionState.Disconnected)
         {
             await hubConnection.DisposeAsync();
         }
 
         hubConnection = new
-        HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
+        HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/discussions/?organizationId={organization.Id}&meetingId={MeetingId}",
         options =>
         {
             options.AccessTokenProvider = async () =>
@@ -55,8 +46,8 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
             };
         }).WithAutomaticReconnect().Build();
 
-        hubProxy = hubConnection.ServerProxy<IMeetingsProcedureHub>();
-        _ = hubConnection.ClientRegistration<IMeetingsProcedureHubClient>(this);
+        hubProxy = hubConnection.ServerProxy<IDiscussionsHub>();
+        _ = hubConnection.ClientRegistration<IDiscussionsHubClient>(this);
 
         hubConnection.Closed += (error) =>
         {
@@ -97,19 +88,6 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         };
 
         await hubConnection.StartAsync();
-
-        /*
-        Snackbar.Add(T["Connected"], configure: options => {
-        options.Icon = Icons.Material.Filled.Cable;
-        });
-        */
-        /*}
-        catch (Exception exc)
-        {
-            Snackbar.Add(exc.Message.ToString(), Severity.Error);
-
-            throw;
-        }*/
     }
 
     YourBrand.Portal.Services.Organization organization = default!;
@@ -119,54 +97,24 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    public async Task OnMeetingStateChanged()
+    public async Task OnSpeakerRequestRevoked(string id)
     {
-        meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
+        var list = speakerQueue.ToList();
+        list.Remove(speakerQueue.First(x => x.Id == id));
+        speakerQueue = new Queue<SpeakerRequest>(list);
+
+        Console.WriteLine("Removed");
+
+        StateHasChanged();
+    }
+
+    public async Task OnSpeakerRequestAdded(string id, string participantId)
+    {
+        speakerQueue.Enqueue(new SpeakerRequest() { Id = id, ParticipantId = participantId, });
         
-        if(meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Cancelled || meeting.State == MeetingState.Completed)
-        {
-            agendaItem = null;
-        }
+        Console.WriteLine("Added");
 
         StateHasChanged();
-    }
-
-    public async Task OnAgendaItemChanged(string agendaItemId)
-    {
-        await LoadAgendaItem();
-
-        StateHasChanged();
-    }
-
-    public async Task OnAgendaItemStatusChanged(string agendaItemId)
-    {
-        await LoadAgendaItem();
-
-        StateHasChanged();
-    }
-
-    public async Task OnAgendaUpdated()
-    {
-        await LoadAgenda();
-
-        StateHasChanged();
-    }
-
-    private async Task LoadAgenda()
-    {
-        agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
-    }
-
-    private async Task LoadAgendaItem()
-    {
-        agendaItem = await MeetingsClient.GetCurrentAgendaItemAsync(organization.Id, MeetingId);
-
-        currentMotion = null;
-
-        if (agendaItem.MotionId is not null)
-        {
-            currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, agendaItem.MotionId.GetValueOrDefault());
-        }
     }
 
     public void Dispose()

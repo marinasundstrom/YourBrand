@@ -10,7 +10,7 @@ namespace YourBrand.Meetings.Features.Procedure.Discussions;
 
 public sealed record RevokeSpeakerTime(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<DiscussionsHub, IDiscussionsHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
     {
         public async Task<Result> Handle(RevokeSpeakerTime request, CancellationToken cancellationToken)
         {

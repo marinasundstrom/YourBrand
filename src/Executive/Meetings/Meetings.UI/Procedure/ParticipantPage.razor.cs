@@ -10,15 +10,16 @@ using YourBrand.Meetings;
 namespace YourBrand.Meetings.Procedure;
 
 
-public partial class DisplayPage : IMeetingsProcedureHubClient
+public partial class ParticipantPage : IMeetingsProcedureHubClient
 {
     Meeting? meeting;
     Agenda? agenda;
     AgendaItem? agendaItem;
     Motion? currentMotion;
 
-    HubConnection hubConnection = null!;
-    IMeetingsProcedureHub hubProxy = default!;
+    HubConnection procedureHub = null!;
+    HubConnection discussionsHub = null!;
+    IDiscussionsHub hubProxy = default!;
 
     [Parameter]
     public int MeetingId { get; set; }
@@ -35,18 +36,16 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
 
         await LoadAgenda();
 
-        if (meeting.CurrentAgendaItemIndex is not null) 
+        if (meeting.CurrentAgendaItemIndex is not null)
         {
             await LoadAgendaItem();
         }
-
-        if (hubConnection is not null && hubConnection.State != HubConnectionState.Disconnected)
+        if (discussionsHub is not null && discussionsHub.State != HubConnectionState.Disconnected)
         {
-            await hubConnection.DisposeAsync();
+            await discussionsHub.DisposeAsync();
         }
 
-        hubConnection = new
-        HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
+        procedureHub = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
         options =>
         {
             options.AccessTokenProvider = async () =>
@@ -55,10 +54,8 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
             };
         }).WithAutomaticReconnect().Build();
 
-        hubProxy = hubConnection.ServerProxy<IMeetingsProcedureHub>();
-        _ = hubConnection.ClientRegistration<IMeetingsProcedureHubClient>(this);
 
-        hubConnection.Closed += (error) =>
+        procedureHub.Closed += (error) =>
         {
             if (error is not null)
             {
@@ -76,7 +73,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
             return Task.CompletedTask;
         };
 
-        hubConnection.Reconnected += (error) =>
+        procedureHub.Reconnected += (error) =>
         {
             Snackbar.Add(T["Reconnected"], configure: options =>
             {
@@ -86,7 +83,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
             return Task.CompletedTask;
         };
 
-        hubConnection.Reconnecting += (error) =>
+        procedureHub.Reconnecting += (error) =>
         {
             Snackbar.Add(T["Reconnecting"], configure: options =>
             {
@@ -96,20 +93,58 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
             return Task.CompletedTask;
         };
 
-        await hubConnection.StartAsync();
-
-        /*
-        Snackbar.Add(T["Connected"], configure: options => {
-        options.Icon = Icons.Material.Filled.Cable;
-        });
-        */
-        /*}
-        catch (Exception exc)
+        discussionsHub = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/discussions/?organizationId={organization.Id}&meetingId={MeetingId}",
+        options =>
         {
-            Snackbar.Add(exc.Message.ToString(), Severity.Error);
+            options.AccessTokenProvider = async () =>
+            {
+                return await AccessTokenProvider.GetAccessTokenAsync();
+            };
+        }).WithAutomaticReconnect().Build();
 
-            throw;
-        }*/
+        hubProxy = discussionsHub.ServerProxy<IDiscussionsHub>();
+        _ = procedureHub.ClientRegistration<IMeetingsProcedureHubClient>(this);
+
+        discussionsHub.Closed += (error) =>
+        {
+            if (error is not null)
+            {
+                Snackbar.Add($"{error.Message}", Severity.Error, configure: options =>
+                {
+                    options.Icon = Icons.Material.Filled.Cable;
+                });
+            }
+
+            Snackbar.Add(T["Disconnected"], configure: options =>
+            {
+                options.Icon = Icons.Material.Filled.Cable;
+            });
+
+            return Task.CompletedTask;
+        };
+
+        discussionsHub.Reconnected += (error) =>
+        {
+            Snackbar.Add(T["Reconnected"], configure: options =>
+            {
+                options.Icon = Icons.Material.Filled.Cable;
+            });
+
+            return Task.CompletedTask;
+        };
+
+        discussionsHub.Reconnecting += (error) =>
+        {
+            Snackbar.Add(T["Reconnecting"], configure: options =>
+            {
+                options.Icon = Icons.Material.Filled.Cable;
+            });
+
+            return Task.CompletedTask;
+        };
+
+        await procedureHub.StartAsync();
+        await discussionsHub.StartAsync();
     }
 
     YourBrand.Portal.Services.Organization organization = default!;
@@ -122,8 +157,8 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     public async Task OnMeetingStateChanged()
     {
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
-        
-        if(meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Cancelled || meeting.State == MeetingState.Completed)
+
+        if (meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Cancelled || meeting.State == MeetingState.Completed)
         {
             agendaItem = null;
         }

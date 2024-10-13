@@ -8,7 +8,4 @@ public interface IMeetingsProcedureHubClient
 
     Task OnAgendaItemChanged(string agendaItemId);
     Task OnAgendaItemStatusChanged(string agendaItemId);
-
-    Task OnSpeakerRequestRevoked(string id);
-    Task OnSpeakerRequestAdded(string id);
 }

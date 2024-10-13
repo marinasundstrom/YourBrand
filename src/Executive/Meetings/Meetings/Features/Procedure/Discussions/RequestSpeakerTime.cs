@@ -10,7 +10,7 @@ namespace YourBrand.Meetings.Features.Procedure.Discussions;
 
 public sealed record RequestSpeakerTime(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<RequestSpeakerTime, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<DiscussionsHub, IDiscussionsHubClient> hubContext) : IRequestHandler<RequestSpeakerTime, Result>
     {
         public async Task<Result> Handle(RequestSpeakerTime request, CancellationToken cancellationToken)
         {
@@ -57,7 +57,7 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id) : IReques
 
             await hubContext.Clients
                .Group($"meeting-{meeting.Id}")
-               .OnSpeakerRequestAdded(speakerRequest.Id);
+               .OnSpeakerRequestAdded(speakerRequest.Id, speakerRequest.ParticipantId);
 
             return Result.Success;
         }

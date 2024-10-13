@@ -1,0 +1,86 @@
+@page "/meetings/{MeetingId:int}/participant"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@using YourBrand.Portal.Services
+@using YourBrand.Meetings
+@attribute [Authorize]
+@inject IStringLocalizer<DisplayPage> T
+@inject IMeetingsClient MeetingsClient
+@inject IAgendasClient AgendasClient
+@inject IMotionsClient MotionsClient
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IUserContext UserContext
+@inject ISnackbar Snackbar
+@implements IDisposable
+@implements IMeetingsProcedureHubClient
+
+@if (meeting == null)
+{
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <AppPageTitle>@meeting?.Title</AppPageTitle>
+
+    <MudPaper Class="pa-8 mb-4" Elevation="25">
+        <MudText Typo="@Typo.h2" GutterBottom="true">@meeting?.Title</MudText>
+
+        @if (meeting.State == MeetingState.Draft)
+        {
+            <MudText Typo="@Typo.body1" GutterBottom="true">Meeting is in draft state</MudText>
+        }
+        else if (meeting.State == MeetingState.Scheduled)
+        {
+            <MudText Typo="@Typo.body1" GutterBottom="true">Waiting for the meeting start</MudText>
+        }
+        else if (meeting.State == MeetingState.InProgress)
+        {
+            @if (agendaItem is not null)
+            {
+                <MudText Typo="@Typo.h4" GutterBottom="true">@agendaItem?.Order. @agendaItem?.Title</MudText>
+
+                <MudText Typo="@Typo.body1" GutterBottom="true">@agendaItem.State</MudText>
+            }
+        }
+        else if (meeting.State == MeetingState.Completed)
+        {
+            <MudText Typo="@Typo.body1" GutterBottom="true">Meeting has concluded</MudText>
+        }
+        else if (meeting.State == MeetingState.Cancelled)
+        {
+            <MudText Typo="@Typo.body1" GutterBottom="true">Meeting is canceled</MudText>
+        }
+        </MudPaper>
+
+    @if (agenda is not null)
+    {
+        <MudPaper Class="pa-8 mb-4" Elevation="25">
+    <MudText Typo="@Typo.h4" GutterBottom="true">Agenda</MudText>
+
+    <AgendaDisplay Agenda="@agenda" AgendaItemId="@agendaItem?.Id" />
+</MudPaper>
+    }
+
+    @if (agendaItem?.State == AgendaItemState.UnderDiscussion)
+    {
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+    <MudText Typo="@Typo.h4" GutterBottom="true">Discussions</MudText>
+
+    <MudButton Variant="Variant.Filled" Class="me-2" OnClick="async () => await hubProxy.RequestSpeakerTime()">Request
+        to speak</MudButton>
+
+    <MudButton Variant="Variant.Filled" OnClick="async () => await hubProxy.RevokeSpeakerTime()">Revoke</MudButton>
+
+</MudPaper>
+
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+
+            <MudText Typo="@Typo.h4" GutterBottom="true">Speakers queue</MudText>
+
+            <SpeakerDisplay MeetingId="@MeetingId" />
+
+        </MudPaper>
+    }
+}

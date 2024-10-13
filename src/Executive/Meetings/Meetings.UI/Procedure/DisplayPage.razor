@@ -84,21 +84,7 @@ else
 
             <MudText Typo="@Typo.h6" GutterBottom="true">Speaker Queue</MudText>
 
-            <ul>
-                @foreach (var speakerRequest in speakerQueue)
-                {
-                    <li @key="speakerRequest.Id">
-                    @if (speakerRequest.Id == currentSpeaker.Id)
-                    {
-                        <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.ParticipantId</b></MudText>
-                    }
-                    else
-                    {
-                        <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.ParticipantId</MudText>
-                    }
-                    </li>
-                }
-            </ul>
+            <SpeakerDisplay MeetingId="@MeetingId" />
 
         </MudPaper>
     } 

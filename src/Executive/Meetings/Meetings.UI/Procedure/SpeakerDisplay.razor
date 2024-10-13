@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@using YourBrand.Portal.Services
+@using YourBrand.Meetings
+@attribute [Authorize]
+@inject IStringLocalizer<DisplayPage> T
+@inject IMeetingsClient MeetingsClient
+@inject IAgendasClient AgendasClient
+@inject IMotionsClient MotionsClient
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject IUserContext UserContext
+@inject ISnackbar Snackbar
+@implements IDisposable
+@implements IDiscussionsHubClient
+
+<ul>
+    @foreach (var speakerRequest in speakerQueue)
+    {
+        <li @key="speakerRequest.Id">
+            @if (speakerRequest.Id == currentSpeaker?.Id)
+            {
+                <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.ParticipantId</b></MudText>
+            }
+            else
+            {
+                <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.ParticipantId</MudText>
+            }
+        </li>
+    }
+</ul>

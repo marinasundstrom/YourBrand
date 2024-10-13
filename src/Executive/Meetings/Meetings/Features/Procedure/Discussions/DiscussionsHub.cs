@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.SignalR;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
-namespace YourBrand.Meetings.Features.Procedure.Command;
+namespace YourBrand.Meetings.Features.Procedure.Discussions;
 
 public record ConnectionState(string TenantId, string OrganizationId, int MeetingId);
 
 [Authorize]
-public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContext userContext, ISettableTenantContext tenantContext) : Hub<IMeetingsProcedureHubClient>, IMeetingsProcedureHub
+public sealed class DiscussionsHub(IMediator mediator, ISettableUserContext userContext, ISettableTenantContext tenantContext) : Hub<IDiscussionsHubClient>, IDiscussionsHub
 {
     private readonly static Dictionary<string, ConnectionState> state = new Dictionary<string, ConnectionState>();
 
@@ -38,7 +38,7 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
         return base.OnConnectedAsync();
     }
 
-    public async Task ChangeAgendaItem(string agendaItemId)
+    public async Task RequestSpeakerTime()
     {
         var s = state[Context.ConnectionId];
 
@@ -46,8 +46,20 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
         userContext.SetCurrentUser(Context.User!);
         userContext.SetConnectionId(Context.ConnectionId);
 
-        //return (string)await mediator.Send(
-        //    new PostMessage(s.OrganizationId, channelId, replyTo, content));
+        await mediator.Send(
+            new RequestSpeakerTime(s.OrganizationId, s.MeetingId));    
+    }
+
+    public async Task RevokeSpeakerTime()
+    {
+        var s = state[Context.ConnectionId];
+
+        tenantContext.SetTenantId(s.TenantId);
+        userContext.SetCurrentUser(Context.User!);
+        userContext.SetConnectionId(Context.ConnectionId);
+
+        await mediator.Send(
+              new RevokeSpeakerTime(s.OrganizationId, s.MeetingId));
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
