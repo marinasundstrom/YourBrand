@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 
-namespace YourBrand.Meetings.Features.Procedure.Command;
+namespace YourBrand.Meetings.Features.Procedure.Voting;
 
 public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) : IRequest<Result>
 {
@@ -26,10 +26,14 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
             var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
             if (participant is null)
-                throw new UnauthorizedAccessException("You are not a participant of this meeting.");
+            {
+                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+            }
 
             if (!participant.HasVotingRights)
-                throw new UnauthorizedAccessException("You have no voting rights.");
+            {
+                return Errors.Meetings.YouHaveNoVotingRights;
+            }
 
             var agendaItem = meeting.GetCurrentAgendaItem();
 
@@ -39,7 +43,9 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
             }
 
             if (agendaItem.VotingSession is null)
-                throw new InvalidOperationException("No active voting session.");
+            {
+                return Errors.Meetings.NoOngoingVotingSession;
+            }
 
             agendaItem.VotingSession!.AddVote(new Vote
             {

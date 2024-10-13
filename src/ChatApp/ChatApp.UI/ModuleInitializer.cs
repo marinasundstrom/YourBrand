@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 
 using MudBlazor;
@@ -21,7 +22,7 @@ public class ModuleInitializer : IModuleInitializer
 
         services.AddSingleton<ITimeViewService, TimeViewService>();
 
-        services.AddTransient<CustomAuthorizationMessageHandler>();
+        services.TryAddTransient<CustomAuthorizationMessageHandler>();
 
         services.AddChatAppClients((sp, http) =>
         {

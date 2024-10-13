@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.JSInterop;
 
 using MudBlazor.Services;
@@ -26,7 +27,7 @@ public static class ServiceExtensions
 
         services.AddSingleton<IFilePickerService, FilePickerService>();
 
-        services.AddTransient<CustomAuthorizationMessageHandler>();
+        services.TryAddTransient<CustomAuthorizationMessageHandler>();
 
         services.AddClients();
 

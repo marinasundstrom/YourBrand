@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 
 using YourBrand.Portal;
@@ -15,7 +16,7 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddTransient<CustomAuthorizationMessageHandler>();
+        services.TryAddTransient<CustomAuthorizationMessageHandler>();
 
         services.AddTicketingClients((sp, httpClient) =>
         {

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Procedure.Command;
+namespace YourBrand.Meetings.Features.Procedure.Voting;
 
-public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequest<Result<AgendaItemDto?>>
+public sealed record GetAgendaItemVotingSession(string OrganizationId, int Id) : IRequest<Result<VotingSessionDto?>>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetCurrentAgendaItem, Result<AgendaItemDto?>>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetAgendaItemVotingSession, Result<VotingSessionDto?>>
     {
-        public async Task<Result<AgendaItemDto?>> Handle(GetCurrentAgendaItem request, CancellationToken cancellationToken)
+        public async Task<Result<VotingSessionDto?>> Handle(GetAgendaItemVotingSession request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -31,7 +31,12 @@ public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequ
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            return agendaItem?.ToDto();
+            if (agendaItem.VotingSession is null) 
+            {
+                return Errors.Meetings.NoOngoingVotingSession;
+            }
+
+            return agendaItem.VotingSession?.ToDto();
         }
     }
 }

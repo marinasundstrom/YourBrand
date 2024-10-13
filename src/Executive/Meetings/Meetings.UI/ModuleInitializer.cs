@@ -7,6 +7,7 @@ using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Widgets;
 using YourBrand.Meetings.Client;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace YourBrand.Meetings;
 
@@ -14,7 +15,8 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddTransient<CustomAuthorizationMessageHandler>();
+        services.TryAddTransient<CustomAuthorizationMessageHandler>();
+        services.TryAddTransient<ErrorHandler>();
 
         services.AddMeetingsClients((sp, httpClient) =>
         {
@@ -23,8 +25,8 @@ public class ModuleInitializer : IModuleInitializer
         }, builder =>
         {
             builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+            builder.AddHttpMessageHandler<ErrorHandler>();
         });
-
 
         services.AddKeyedScoped<IUserSearchProvider, UserSearchProvider>(ServiceKeys.UserSearchProviderKey);
         //services.AddKeyedScoped<IOrganizationSearchProvider, OrganizationSearchProvider>(ServiceKeys.OrganizationSearchProviderKey);

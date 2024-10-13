@@ -24,7 +24,7 @@ else
 {
     <AppPageTitle>@meeting?.Title</AppPageTitle>
 
-    <MudPaper Class="pa-4">
+    <MudPaper Class="pa-4" Elevation="25">
         <MudText Typo="@Typo.h2" GutterBottom="true">@meeting?.Title</MudText>
 
         @if (meeting.State == MeetingState.Draft)

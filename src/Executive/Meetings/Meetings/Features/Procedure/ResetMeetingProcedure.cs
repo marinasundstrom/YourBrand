@@ -19,7 +19,7 @@ public record ResetMeetingProcedure(string OrganizationId, int Id) : IRequest<Re
         }
     }
 
-    public class Handler(IApplicationDbContext context, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<ResetMeetingProcedure, Result<MeetingDto>>
+    public class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<ResetMeetingProcedure, Result<MeetingDto>>
     {
         public async Task<Result<MeetingDto>> Handle(ResetMeetingProcedure request, CancellationToken cancellationToken)
         {
@@ -32,6 +32,18 @@ public record ResetMeetingProcedure(string OrganizationId, int Id) : IRequest<Re
             if (meeting is null)
             {
                 return Errors.Meetings.MeetingNotFound;
+            }
+
+            var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+
+            if (participant is null)
+            {
+                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+            }
+
+            if (participant.Role != ParticipantRole.Chairperson)
+            {
+                return Errors.Meetings.OnlyChairpersonCanResetTheMeetingProcedure;
             }
 
             meeting.ResetProcedure();

@@ -28,12 +28,21 @@ public sealed record StartAgendaItemDiscussion(string OrganizationId, int Id) : 
             var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
             if (participant is null)
-                throw new UnauthorizedAccessException("You are not a participant of this meeting.");
-
-            if (participant.Role != ParticipantRole.Chairperson)
-                throw new UnauthorizedAccessException("Only the Chairperson can start the meeting.");
+            {
+                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+            }
 
             var agendaItem = meeting.GetCurrentAgendaItem();
+
+            if (agendaItem is null)
+            {
+                return Errors.Meetings.NoActiveAgendaItem;
+            }
+            
+            if (participant.Role != ParticipantRole.Chairperson)
+            {
+                return Errors.Meetings.OnlyChairpersonCanStartDiscussion;
+            }
 
             agendaItem.StartDiscussion();
 

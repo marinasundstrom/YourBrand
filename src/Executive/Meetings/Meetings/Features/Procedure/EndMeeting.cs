@@ -25,10 +25,14 @@ public sealed record EndMeeting(string OrganizationId, int Id) : IRequest<Result
             var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
             if (participant is null)
-                throw new UnauthorizedAccessException("You are not a participant of this meeting.");
+            {
+                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+            }
 
             if (participant.Role != ParticipantRole.Chairperson)
-                throw new UnauthorizedAccessException("Only the Chairperson can start the meeting.");
+            {
+                return Errors.Meetings.OnlyChairpersonCanEndTheMeeting;
+            }
 
             meeting.EndMeeting();
 

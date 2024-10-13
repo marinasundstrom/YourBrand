@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using YourBrand.Portal;
 using YourBrand.Portal.Modules;
@@ -12,7 +13,7 @@ public class ModuleInitializer : IModuleInitializer
 {
     public static void Initialize(IServiceCollection services)
     {
-        services.AddTransient<CustomAuthorizationMessageHandler>();
+        services.TryAddTransient<CustomAuthorizationMessageHandler>();
 
         services.AddSalesClients((sp, httpClient) =>
         {

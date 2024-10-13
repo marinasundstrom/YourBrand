@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
+using MudBlazor;
+
 namespace YourBrand.Portal;
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
