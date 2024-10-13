@@ -85,9 +85,16 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await ReloadAsync();
+    }
+
+    public async Task ReloadAsync() 
+    {
         agenda = await MeetingsClient.GetMeetingAgendaAsync(OrganizationId, MeetingId.GetValueOrDefault());
 
         if (agenda is null) return;
+        
+        if (Items.Any()) Items.Clear();
 
         Items.AddRange(agenda.Items.Select(item => new AgendaItemViewModel()
             {
@@ -99,6 +106,8 @@
                 Description = item.Description
                 //Motion = item.Motion
             }));
+
+        await InvokeAsync(StateHasChanged);
     }
 
     async Task CreateAgenda()

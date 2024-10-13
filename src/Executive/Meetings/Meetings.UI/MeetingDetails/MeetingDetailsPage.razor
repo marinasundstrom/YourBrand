@@ -119,11 +119,13 @@
 
 @if(organization is not null) 
 {
-    <AgendaSection OrganizationId="@organization?.Id" MeetingId="@Id" />
+    <AgendaSection @ref="agendaSection" OrganizationId="@organization?.Id" MeetingId="@Id" />
 }
 
 @code
 {
+    AgendaSection agendaSection;
+
     EditContext context = null!;
 
     [Parameter]
@@ -160,6 +162,11 @@
 
         OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
 
+        await LoadMeeting();
+    }
+
+    private async Task LoadMeeting() 
+    {
         var meeting = await MeetingsClient.GetMeetingByIdAsync(organization!.Id, Id);
         Title = meeting.Title;
         Date = meeting.ScheduledAt?.Date;
@@ -169,6 +176,8 @@
         QuorumRequiredNumber = meeting.Quorum.RequiredNumber;
         State = meeting.State;
         oldState = State;
+
+        if(Participants.Any()) Participants.Clear();
 
         Participants.AddRange(meeting.Participants.Select(participant => new ParticipantViewModel ()
             {
@@ -359,6 +368,10 @@
     async Task ResetMeetingProcedure() 
     {
         await MeetingsClient.ResetMeetingProcedureAsync(organization.Id, Id);
+
+        await LoadMeeting();
+
+        await agendaSection.ReloadAsync();
 
         Snackbar.Add("Procedure was reset");
     }
