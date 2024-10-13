@@ -1,9 +1,24 @@
-<MudText Typo="Typo.h5" GutterBottom="true" Class="mt-4">@Motion.Text</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">@Motion.Title</MudText>
+
+<MudText Typo="Typo.body1">@Motion.Text</MudText>
+
+
+<MudText Typo="Typo.h6" GutterBottom="true" Class="mt-4">Clauses</MudText>
 
 <ul>
-    @foreach(var motion in Motion.OperativeClauses) 
+    @foreach(var clause in Motion.OperativeClauses) 
     {
-        <li class="mb-1">@motion.Order. @motion.Action @motion.Text</li>
+        <li class="mb-2">
+            @if (clause.Id == OperativeClauseId)
+            {
+                <MudText Typo="@Typo.body1" Class="mb-2"><b>@clause.Order. @clause.Action @clause.Text</b></MudText>
+
+            }
+            else
+            {
+                <MudText Typo="@Typo.body1" Class="mb-2">@clause.Order. @clause.Action @clause.Text</MudText>
+            }
+        </li>
     }
 </ul>
 
@@ -11,4 +26,7 @@
 {
     [Parameter]
     public Motion Motion { get; set; }
+
+    [Parameter]
+    public string? OperativeClauseId { get; set; }
 }

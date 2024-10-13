@@ -93,10 +93,12 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("No more agenda items.");
         }
 
+        /*
         if(CurrentAgendaItemIndex is not null) 
         {
             agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault()).State = AgendaItemState.Completed;
         }
+        */
 
         CurrentAgendaItemIndex++;
 

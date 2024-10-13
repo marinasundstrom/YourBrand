@@ -13,6 +13,7 @@ namespace YourBrand.Meetings.Procedure;
 public partial class DisplayPage : IMeetingsProcedureHubClient
 {
     Meeting? meeting;
+    Agenda? agenda;
     AgendaItem? agendaItem;
     Motion? currentMotion;
 
@@ -32,7 +33,9 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
 
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
 
-        if(meeting.CurrentAgendaItemIndex is not null) 
+        await LoadAgenda();
+
+        if (meeting.CurrentAgendaItemIndex is not null) 
         {
             await LoadAgendaItem();
         }
@@ -121,6 +124,11 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     public async Task OnMeetingStateChanged()
     {
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
+        
+        if(meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Cancelled || meeting.State == MeetingState.Completed)
+        {
+            agendaItem = null;
+        }
 
         StateHasChanged();
     }
@@ -137,6 +145,18 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         await LoadAgendaItem();
 
         StateHasChanged();
+    }
+
+    public async Task OnAgendaUpdated()
+    {
+        await LoadAgenda();
+
+        StateHasChanged();
+    }
+
+    private async Task LoadAgenda()
+    {
+        agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
     }
 
     private async Task LoadAgendaItem()

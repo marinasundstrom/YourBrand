@@ -2,9 +2,11 @@ using FluentValidation;
 
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Procedure.Command;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
@@ -18,7 +20,7 @@ public record EditAgendaItem(string OrganizationId, int Id, string ItemId, Agend
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<EditAgendaItem, Result<AgendaItemDto>>
+    public class Handler(IApplicationDbContext context, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EditAgendaItem, Result<AgendaItemDto>>
     {
         public async Task<Result<AgendaItemDto>> Handle(EditAgendaItem request, CancellationToken cancellationToken)
         {
@@ -55,6 +57,10 @@ public record EditAgendaItem(string OrganizationId, int Id, string ItemId, Agend
             {
                 return Errors.Agendas.AgendaNotFound;
             }
+
+            await hubContext.Clients
+                .Group($"meeting-{agenda.MeetingId}")
+                .OnAgendaUpdated();
 
             return agendaItem.ToDto();
         }
