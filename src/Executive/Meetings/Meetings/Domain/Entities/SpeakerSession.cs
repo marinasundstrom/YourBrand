@@ -23,18 +23,25 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
     public IReadOnlyCollection<SpeakerRequest> SpeakerQueue => _speakerQueue;
     public TimeSpan? SpeakingTimeLimit { get; set; }
 
-    public void AddSpeaker(MeetingParticipant participant)
+    public SpeakerRequest AddSpeaker(MeetingParticipant participant)
     {
-        _speakerQueue.Add(new SpeakerRequest
+        var request = new SpeakerRequest
         {
+            OrganizationId = OrganizationId,
             ParticipantId = participant.Id,
             RequestedTime = DateTimeOffset.UtcNow
-        });
+        };
+
+        _speakerQueue.Add(request);
+
+        return request;
     }
 
-    public void RemoveSpeaker(MeetingParticipant participant)
+    public SpeakerRequestId RemoveSpeaker(MeetingParticipant participant)
     {
-        _speakerQueue.RemoveWhere(s => s.ParticipantId == participant.Id);
+        var request = _speakerQueue.First(s => s.ParticipantId == participant.Id);
+        _speakerQueue.Remove(request);
+        return request.Id;
     }
 
     public User? CreatedBy { get; set; } = null!;

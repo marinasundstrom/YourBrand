@@ -38,7 +38,8 @@ public sealed record MarkParticipantAsPresentDto(bool IsPresent);
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
-public sealed class MeetingsController(IMediator mediator) : ControllerBase
+[Authorize]
+public sealed partial class MeetingsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<MeetingDto>))]
@@ -48,7 +49,6 @@ public sealed class MeetingsController(IMediator mediator) : ControllerBase
         => await mediator.Send(new GetMeetings(organizationId,page, pageSize, searchTerm, sortBy, sortDirection), cancellationToken);
 
     [HttpPost]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]

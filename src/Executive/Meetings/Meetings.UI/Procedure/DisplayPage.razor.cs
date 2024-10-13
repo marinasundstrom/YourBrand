@@ -20,6 +20,9 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     HubConnection hubConnection = null!;
     IMeetingsProcedureHub hubProxy = default!;
 
+    SpeakerRequest? currentSpeaker;
+    Queue<SpeakerRequest> speakerQueue = new Queue<SpeakerRequest>();
+
     [Parameter]
     public int MeetingId { get; set; }
     
@@ -174,5 +177,21 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     public void Dispose()
     {
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+
+    public async Task OnSpeakerRequestRevoked(string id)
+    {
+        var list = speakerQueue.ToList();
+        list.Remove(speakerQueue.First(x => x.Id == id));
+        speakerQueue = new Queue<SpeakerRequest>(list);
+
+        Console.WriteLine("Removed");
+    }
+
+    public async Task OnSpeakerRequestAdded(string id)
+    {
+        speakerQueue.Enqueue(new SpeakerRequest() { Id = id });
+        
+        Console.WriteLine("Added");
     }
 }

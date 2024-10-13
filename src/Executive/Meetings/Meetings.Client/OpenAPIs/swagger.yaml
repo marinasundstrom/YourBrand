@@ -70,6 +70,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
     post:
       tags:
       - Meetings
@@ -146,6 +148,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/title:
     put:
       tags:
@@ -191,6 +195,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/description:
     put:
       tags:
@@ -236,6 +242,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/location:
     put:
       tags:
@@ -281,6 +289,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/scheduledDate:
     put:
       tags:
@@ -326,6 +336,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/quorum:
     put:
       tags:
@@ -371,6 +383,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/state:
     put:
       tags:
@@ -416,6 +430,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/participants:
     post:
       tags:
@@ -461,6 +477,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/participants/{participantId}:
     put:
       tags:
@@ -512,6 +530,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
     delete:
       tags:
       - Meetings
@@ -550,6 +570,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/participants/{participantId}/IsPresent:
     put:
       tags:
@@ -601,6 +623,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Start:
     post:
       tags:
@@ -634,6 +658,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda:
     get:
       tags:
@@ -671,6 +697,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/NextItem:
     post:
       tags:
@@ -708,6 +736,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/Item/Complete:
     post:
       tags:
@@ -741,6 +771,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/Item/Postpone:
     post:
       tags:
@@ -774,6 +806,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/Item/Cancel:
     post:
       tags:
@@ -807,6 +841,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/Item:
     get:
       tags:
@@ -844,6 +880,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/StartDiscussion:
     post:
       tags:
@@ -877,6 +915,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/StartVoting:
     post:
       tags:
@@ -910,6 +950,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/End:
     post:
       tags:
@@ -943,6 +985,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Procedure/Reset:
     post:
       tags:
@@ -976,6 +1020,133 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/speakers:
+    get:
+      tags:
+      - Meetings
+      operationId: Meetings_GetSpeakerSession
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpeakerSession'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/speakers/request:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_RequestSpeakerTime
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMeetingParticipant'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/speakers/revoke:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_RevokeSpeakerTime
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMeetingParticipant'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Users:
     get:
       tags:
@@ -2290,6 +2461,24 @@ components:
       - 3
       - 4
       - 5
+    SpeakerSession:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        speakerQueue:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpeakerRequest'
+    SpeakerRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        participantId:
+          type: string
     PagedResultOfUser:
       type: object
       additionalProperties: false
