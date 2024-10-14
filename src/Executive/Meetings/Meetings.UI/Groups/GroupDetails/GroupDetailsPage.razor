@@ -1,0 +1,275 @@
+@page "/meetings/groups/{id:int}"
+
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Meetings.MeetingDetails.Agenda
+@using YourBrand.Portal.Services
+@inject IMeetingGroupsClient MeetingGroupsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<AppPageTitle>@Title</AppPageTitle>
+
+<MudText Typo="@Typo.h2" GutterBottom="true">@Title</MudText>
+
+<MudGrid Class="mb-4">
+
+    <MudItem xs="12" md="6">
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>
+
+            <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+
+                <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
+                    For="@(() => Title)"  Immediate="true" />
+                <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
+                    For="@(() => Description)" Immediate="true" Lines="5" />
+                <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
+                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of members"  />
+
+                <div class="mt-4 d-flex">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                        Save
+                    </MudButton>
+
+                    @if(isDetailsModified) 
+                    {
+                        <MudText Typo="@Typo.body1" Class="ms-2">Modified</MudText>        
+                    }
+                </div>
+
+            </EditForm>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+
+        <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudText Typo="@Typo.h4" GutterBottom="true">Members</MudText>
+
+            <MudTable T="MemberViewModel" Items="Members" Hover="true" Elevation="0"
+                Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+                OnRowClick="async (e) => await EditMember(e.Item)">
+                <ToolBarContent>
+                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
+                        OnClick="AddMember" Class="mb-2">Add member</MudButton>
+                </ToolBarContent>
+
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Role</MudTh>
+                    <MudTh>Email</MudTh>
+                    <MudTh>UserId</MudTh>
+                    <MudTh>Has Voting Rights</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate Context="member">
+                    <MudTd DataLabel="Name">@member.Name</MudTd>
+                    <MudTd DataLabel="Role">@member.Role</MudTd>
+                    <MudTd DataLabel="Email">@member.Email</MudTd>
+                    <MudTd DataLabel="UserId">@member.User?.Id</MudTd>
+                    <MudTd DataLabel="HasVotingRights">@(member.HasVotingRights ? "Yes" : "No")</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                            OnClick="() => EditMember(member)">
+                        </MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                            OnClick="() => RemoveMember(member)">
+                        </MudIconButton>
+                    </MudTd>
+                </RowTemplate>
+                <LoadingContent>
+                    <MudText>Loading...</MudText>
+                </LoadingContent>
+            </MudTable>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+@code
+{
+    AgendaSection agendaSection;
+
+    EditContext context = null!;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [Required]
+    public string Title { get; set; }
+
+    public string Description { get; set; }
+
+    [Required]
+    public int QuorumRequiredNumber { get; set; }
+
+    public List<MemberViewModel> Members { get; set; } = new List<MemberViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        await LoadMeetingGroup();
+    }
+
+    private async Task LoadMeetingGroup() 
+    {
+        var meeting = await MeetingGroupsClient.GetMeetingGroupByIdAsync(organization!.Id, Id);
+        Title = meeting.Title;
+        Description = meeting.Description;
+        QuorumRequiredNumber = meeting.Quorum.RequiredNumber;
+
+        if(Members.Any()) Members.Clear();
+
+        Members.AddRange(meeting.Members.Select(member => new MemberViewModel ()
+            {
+                Id = member.Id,
+                Role = member.Role,
+                Name = member.Name,
+                Email = member.Email,
+                //User = x.User,
+                HasVotingRights = member.HasVotingRights,
+            }));
+    
+        context.OnFieldChanged += OnFieldChanged;
+        context.MarkAsUnmodified();
+
+        isDetailsModified = false;
+    }
+
+    bool isDetailsModified = false;
+
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e) 
+    {
+        isDetailsModified = context.IsModified();
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        if(context.IsModified(() => Title)) 
+        {
+            var meeting = await MeetingGroupsClient.UpdateMeetingGroupTitleAsync(organization.Id, Id, new UpdateMeetingGroupTitle
+            {
+                Title = Title
+            });
+
+            Snackbar.Add("Title updated");      
+        }
+
+        if(context.IsModified(() => Description)) 
+        {
+            var meeting = await MeetingGroupsClient.UpdateMeetingGroupDescriptionAsync(organization.Id, Id, new UpdateMeetingGroupDescription
+            {
+                Description = Description
+            });
+
+            Snackbar.Add("Description updated");      
+        }
+
+        if(context.IsModified(() => QuorumRequiredNumber)) 
+        {
+            var meeting = await MeetingGroupsClient.ChangeMeetingGroupQuorumAsync(organization.Id, Id, new ChangeMeetingGroupQuorum
+            {
+                RequiredNumber = QuorumRequiredNumber
+            });
+
+            Snackbar.Add("Quorum updated");  
+        }
+
+        context.MarkAsUnmodified();
+    }
+
+    async Task AddMember()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddMemberDialog.OrganizationId), organization.Id);
+
+        var modalRef = DialogService.Show<AddMemberDialog>("Add member", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var memberModel = (MemberViewModel)result.Data;
+
+        var dto = new AddMeetingGroupMember
+        {
+            Name = memberModel.Name,
+            Role = memberModel.Role,
+            Email = memberModel.Email,
+            UserId = memberModel.User?.Id,
+            HasVotingRights = memberModel.HasVotingRights,
+        };
+
+        var model = await MeetingGroupsClient.AddMemberAsync(organization.Id, Id, dto);
+
+        memberModel.Id = model.Id;
+
+        Members.Add(memberModel);
+    }
+
+    async Task EditMember(MemberViewModel member)
+    {
+        var originalMember = member;
+
+        DialogParameters parameters = new();
+        parameters.Add(nameof(EditMemberDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(EditMemberDialog.Model), originalMember.Clone());
+
+        var modalRef = DialogService.Show<EditMemberDialog>("Edit member", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var editedModel = (MemberViewModel)result.Data;
+
+        var dto = new EditMeetingGroupMember
+        {
+            Name = editedModel.Name,
+            Role = editedModel.Role,
+            Email = editedModel.Email,
+            UserId = editedModel.User?.Id,
+            HasVotingRights = editedModel.HasVotingRights
+        };
+        
+        await MeetingGroupsClient.EditMemberAsync(organization.Id, Id, member.Id, dto);
+
+        var index = Members.IndexOf(originalMember);
+        Members[index] = editedModel;
+    }
+
+    async Task RemoveMember(MemberViewModel member)
+    {
+        var r = await DialogService.ShowMessageBox("Delete member?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await MeetingGroupsClient.RemoveMemberAsync(organization.Id, Id, member.Id);
+        Members.Remove(member);
+    }
+
+    public void Dispose()
+    {
+        context.OnFieldChanged -= OnFieldChanged;
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

@@ -127,6 +127,8 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<SpeakerRequestId>().HaveConversion<SpeakerRequestIdConverter>();
         configurationBuilder.Properties<MinutesId>().HaveConversion<MinutesIdConverter>();
         configurationBuilder.Properties<MinutesItemId>().HaveConversion<MinutesItemIdConverter>();
+        configurationBuilder.Properties<MeetingGroupId>().HaveConversion<MeetingGroupIdConverter>();
+        configurationBuilder.Properties<MeetingGroupMemberId>().HaveConversion<MeetingGroupMemberIdConverter>();
 
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
@@ -142,6 +144,8 @@ public sealed class ApplicationDbContext(
     public DbSet<Domain.Entities.Minutes> Minutes { get; set; }
 
     public DbSet<Motion> Motions { get; set; }
+
+    public DbSet<MeetingGroup> MeetingGroups { get; set; }
 
     public DbSet<User> Users { get; set; }
 

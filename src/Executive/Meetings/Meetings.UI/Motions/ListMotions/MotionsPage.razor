@@ -1,11 +1,10 @@
-﻿@inject IMotionsClient MotionsClient
+﻿@page "/meetings/motions"
+@using YourBrand.Portal.Services
+@inject IMotionsClient MotionsClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
-
-@page "/meetings/motions"
-@using YourBrand.Portal.Services
 
 <AppPageTitle>Motions</AppPageTitle>
 

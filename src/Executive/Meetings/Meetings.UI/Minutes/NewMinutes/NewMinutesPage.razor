@@ -9,15 +9,14 @@
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
 
-<MudText Typo="@Typo.h2" GutterBottom="true">Create motion</MudText>
+<AppPageTitle>Create minutes</AppPageTitle>
+
+<MudText Typo="@Typo.h2" GutterBottom="true">Create minutes</MudText>
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
     <MudGrid>
-
-       
-
         <MudItem xs="12" md="6">
             <MudPaper Elevation="25" Class="pa-4 mb-4">
                 <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>

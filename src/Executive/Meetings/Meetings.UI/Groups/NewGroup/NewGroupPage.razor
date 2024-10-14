@@ -1,17 +1,17 @@
-@page "/meetings/new"
+@page "/meetings/groups/new"
 
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Portal.Services
-@inject IMeetingsClient MeetingsClient
+@inject IMeetingGroupsClient MeetingGroupsClient
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
 
-<AppPageTitle>Create meeting</AppPageTitle>
+<AppPageTitle>Create group</AppPageTitle>
 
-<MudText Typo="@Typo.h2" GutterBottom="true">Create meeting</MudText>
+<MudText Typo="@Typo.h2" GutterBottom="true">Create group</MudText>
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -24,14 +24,6 @@
 
                 <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
                     For="@(() => Title)" Immediate="true" />
-                <div class="d-flex gap-4">
-                    <MudDatePicker Label="Date" Variant="Variant.Outlined" Class="mt-4" @bind-Date="Date"
-                        For="@(() => Date)" />
-                    <MudTimePicker Label="Time" Variant="Variant.Outlined" Class="mt-4" @bind-Time="Time"
-                        For="@(() => Time)" />
-                </div>
-                <MudTextField Label="Location" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Location"
-                    For="@(() => Location)"  Immediate="true" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
                     For="@(() => Description)" Immediate="true" Lines="5" />
                 <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
@@ -41,14 +33,14 @@
 
         <MudItem xs="12" md="6">
             <MudPaper Elevation="25" Class="pa-4 mb-4">
-                <MudText Typo="@Typo.h4" GutterBottom="true">Participants</MudText>
+                <MudText Typo="@Typo.h4" GutterBottom="true">Members</MudText>
 
-                <MudTable T="AddEditParticipantViewModel" Items="Participants" Dense="true" Hover="true" Elevation="0"
+                <MudTable T="AddEditMemberViewModel" Items="Members" Dense="true" Hover="true" Elevation="0"
                     Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-                    OnRowClick="async (e) => await EditParticipant(e.Item)">
+                    OnRowClick="async (e) => await EditMember(e.Item)">
                     <ToolBarContent>
                         <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-                            OnClick="AddParticipant" Class="mb-2">Add participant</MudButton>
+                            OnClick="AddMember" Class="mb-2">Add member</MudButton>
                     </ToolBarContent>
 
                     <HeaderContent>
@@ -65,10 +57,10 @@
                         <MudTd DataLabel="HasVotingRights">@(participant.HasVotingRights ? "Yes" : "No")</MudTd>
                         <MudTd>
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                                OnClick="() => EditParticipant(participant)">
+                                OnClick="() => EditMember(participant)">
                             </MudIconButton>
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                                OnClick="() => RemoveParticipant(participant)">
+                                OnClick="() => RemoveMember(participant)">
                             </MudIconButton>
                         </MudTd>
                     </RowTemplate>
@@ -94,21 +86,12 @@
     [Required]
     public string Title { get; set; }
 
-    [Required]
-    public DateTime? Date { get; set; } = DateTime.Now;
-
-    [Required]
-    public TimeSpan? Time { get; set; } = DateTime.Now.TimeOfDay;
-
-    [Required]
-    public string Location { get; set; }
-
     public string Description { get; set; }
 
     [Required]
     public int QuorumRequiredNumber { get; set; }
 
-    public List<AddEditParticipantViewModel> Participants { get; set; } = new List<AddEditParticipantViewModel>();
+    public List<AddEditMemberViewModel> Members { get; set; } = new List<AddEditMemberViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -128,18 +111,16 @@
 
     public async Task OnValidSubmit()
     {
-        var meeting = await MeetingsClient.CreateMeetingAsync(organization.Id, new CreateMeeting
+        var meeting = await MeetingGroupsClient.CreateMeetingGroupAsync(organization.Id, new CreateMeetingGroup
             {
                 Title = Title,
-                ScheduledAt = Date.GetValueOrDefault().Add(Time.GetValueOrDefault()),
-                Location = Location,
                 Description = Description,
-                Quorum = new CreateMeetingQuorum
+                Quorum = new CreateMeetingGroupQuorum
                 {
                     RequiredNumber = QuorumRequiredNumber
                 },
-                Participants = Participants.Select(model => {
-                    return new CreateMeetingParticipant
+                Members = Members.Select(model => {
+                    return new CreateMeetingGroupMember
                     {
                         Name = model.Name,
                         Role = model.Role,
@@ -150,55 +131,55 @@
                 }).ToList()
             });
 
-        NavigationManager.NavigateTo($"/meetings/{meeting.Id}");
+        NavigationManager.NavigateTo($"/meetings/groups/{meeting.Id}");
     }
 
-    async Task AddParticipant()
+    async Task AddMember()
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddEditParticipantDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditMemberDialog.OrganizationId), organization.Id);
 
-        var modalRef = DialogService.Show<AddEditParticipantDialog>("Add participant", parameters);
+        var modalRef = DialogService.Show<AddEditMemberDialog>("Add member", parameters);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var model = (AddEditParticipantViewModel)result.Data;
+        var model = (AddEditMemberViewModel)result.Data;
 
-        Participants.Add(model);
+        Members.Add(model);
     }
 
-    async Task EditParticipant(AddEditParticipantViewModel participant)
+    async Task EditMember(AddEditMemberViewModel participant)
     {
-        var originalParticipant = participant;
+        var originalMember = participant;
 
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddEditParticipantDialog.OrganizationId), organization.Id);
-        parameters.Add(nameof(AddEditParticipantDialog.Model), originalParticipant.Clone());
+        parameters.Add(nameof(AddEditMemberDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditMemberDialog.Model), originalMember.Clone());
 
-        var modalRef = DialogService.Show<AddEditParticipantDialog>("Edit participant", parameters);
+        var modalRef = DialogService.Show<AddEditMemberDialog>("Edit member", parameters);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var updatedModel = (AddEditParticipantViewModel)result.Data;
+        var updatedModel = (AddEditMemberViewModel)result.Data;
 
-        var index = Participants.IndexOf(originalParticipant);
-        Participants[index] = updatedModel;
+        var index = Members.IndexOf(originalMember);
+        Members[index] = updatedModel;
     }
 
-    async Task RemoveParticipant(AddEditParticipantViewModel participant)
+    async Task RemoveMember(AddEditMemberViewModel participant)
     {
-        var r = await DialogService.ShowMessageBox("Delete participant?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+        var r = await DialogService.ShowMessageBox("Delete member?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
 
         if(!r.GetValueOrDefault()) 
         {
             return;
         }
 
-        Participants.Remove(participant);
+        Members.Remove(participant);
     }
 
     public void Dispose()

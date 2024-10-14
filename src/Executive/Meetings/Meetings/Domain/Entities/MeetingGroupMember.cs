@@ -5,41 +5,32 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum ParticipantRole
+public class MeetingGroupMember : Entity<MeetingGroupMemberId>, IAuditable, IHasTenant, IHasOrganization
 {
-    Chairperson,
-    Secretary,
-    Participant,
-    Observer
-}
-
-public class MeetingParticipant : Entity<MeetingParticipantId>, IAuditable, IHasTenant, IHasOrganization
-{
-    public MeetingParticipant()
-        : base(new MeetingParticipantId())
+    public MeetingGroupMember(string name, string email, ParticipantRole role, UserId? userId, bool hasVotingRights)
+        : base(new MeetingGroupMemberId())
     {
-
+        Name = name;
+        Email = email;
+        Role = role;
+        UserId = userId;
+        HasVotingRights = hasVotingRights;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
+    public MeetingGroupId MeetingGroupId { get; set; }
 
-    public MeetingId MeetingId { get; set; }
+    public int Order { get; set; }
 
     public string? Name { get; set; }
-    public UserId? UserId { get; set; }
-
-    public MeetingGroupId? MeetingGroupId { get; set; }
-    public MeetingGroupMemberId? MeetingGroupMemberId { get; set; }
-
     public string? Email { get; set; }
 
-    public DateTimeOffset? InvitedAt { get; set; }
-    public DateTimeOffset? InviteAcceptedAt { get; set; }
+    public UserId? UserId { get; set; }
 
-    public bool IsPresent { get; set; }
+    public ParticipantRole Role { get; set; } = ParticipantRole.Participant;
+
     public bool HasVotingRights { get; set; }
-    public ParticipantRole Role { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

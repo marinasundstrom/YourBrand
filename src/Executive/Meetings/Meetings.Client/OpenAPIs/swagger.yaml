@@ -2103,6 +2103,431 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+  /v1/MeetingGroups:
+    get:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_GetMeetingGroups
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfMeetingGroup'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_CreateMeetingGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMeetingGroup'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroup'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/MeetingGroups/{id}:
+    get:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_GetMeetingGroupById
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroup'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/MeetingGroups/{id}/title:
+    put:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_UpdateMeetingGroupTitle
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeetingGroupTitle'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroup'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/MeetingGroups/{id}/description:
+    put:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_UpdateMeetingGroupDescription
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeetingGroupDescription'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroup'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/MeetingGroups/{id}/quorum:
+    put:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_ChangeMeetingGroupQuorum
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMeetingGroupQuorum'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroup'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/MeetingGroups/{id}/members:
+    post:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_AddMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMeetingGroupMember'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroupMember'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/MeetingGroups/{id}/members/{memberId}:
+    put:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_EditMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMeetingGroupMember'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroupMember'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_RemoveMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Agendas:
     get:
       tags:
@@ -3153,8 +3578,10 @@ components:
         agendaId:
           type: integer
           format: int32
+          nullable: true
         agendaItemId:
           type: string
+          nullable: true
         type:
           $ref: '#/components/schemas/MinutesItemType'
         title:
@@ -3171,8 +3598,10 @@ components:
         agendaId:
           type: integer
           format: int32
+          nullable: true
         agendaItemId:
           type: string
+          nullable: true
         type:
           $ref: '#/components/schemas/MinutesItemType'
         title:
@@ -3208,6 +3637,144 @@ components:
         order:
           type: integer
           format: int32
+    PagedResultOfMeetingGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeetingGroup'
+        total:
+          type: integer
+          format: int32
+    MeetingGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        description:
+          type: string
+        quorum:
+          $ref: '#/components/schemas/MeetingGroupQuorum'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeetingGroupMember'
+    MeetingGroupQuorum:
+      type: object
+      additionalProperties: false
+      properties:
+        requiredNumber:
+          type: integer
+          format: int32
+    MeetingGroupMember:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
+        email:
+          type: string
+          nullable: true
+        userId:
+          type: string
+          nullable: true
+        hasVotingRights:
+          type: boolean
+    CreateMeetingGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        quorum:
+          $ref: '#/components/schemas/CreateMeetingGroupQuorum'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateMeetingGroupMember'
+    CreateMeetingGroupQuorum:
+      type: object
+      additionalProperties: false
+      properties:
+        requiredNumber:
+          type: integer
+          format: int32
+    CreateMeetingGroupMember:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+          nullable: true
+        email:
+          type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
+        hasVotingRights:
+          type: boolean
+    UpdateMeetingGroupTitle:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+    UpdateMeetingGroupDescription:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+    ChangeMeetingGroupQuorum:
+      type: object
+      additionalProperties: false
+      properties:
+        requiredNumber:
+          type: integer
+          format: int32
+    AddMeetingGroupMember:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+          nullable: true
+        email:
+          type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
+        hasVotingRights:
+          type: boolean
+    EditMeetingGroupMember:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+          nullable: true
+        email:
+          type: string
+        role:
+          $ref: '#/components/schemas/ParticipantRole'
+        hasVotingRights:
+          type: boolean
     PagedResultOfAgenda:
       type: object
       additionalProperties: false

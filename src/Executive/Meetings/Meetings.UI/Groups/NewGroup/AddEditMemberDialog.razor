@@ -1,0 +1,61 @@
+@using System.ComponentModel.DataAnnotations
+@inject IMeetingGroupsClient MeetingGroupsClient
+@inject ISnackbar Snackbar
+
+<EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Name"
+                    For="@(() => Model.Name)" />
+                <MudSelect T="ParticipantRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
+                    Class="mt-4">
+                    @foreach (var type in Enum.GetValues<ParticipantRole>())
+                    {
+                        <MudSelectItem T="ParticipantRole" Value="@type">@Enum.GetName(typeof(ParticipantRole), type)
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+                <MudTextField Label="Email" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Email"
+                    For="@(() => Model.Email)" />
+                <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Class="mt-4" Label="User"
+                    Variant="Variant.Outlined" @bind-Value="Model.User" For="() => Model.User" />
+                <MudCheckBox Label="Has voting rights" @bind-Value="Model.HasVotingRights" Class="mt-4"></MudCheckBox>
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                Update
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? OrganizationId { get; set; } = null!;
+
+    [Parameter]
+    public AddEditMemberViewModel? Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(Model is null) 
+        {
+            Model = new AddEditMemberViewModel();
+        }
+    }
+
+    public void OnValidSubmit()
+    {
+        Dialog.Close(Model);
+    }
+}

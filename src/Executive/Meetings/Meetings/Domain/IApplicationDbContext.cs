@@ -14,6 +14,8 @@ public interface IApplicationDbContext
 
     DbSet<Motion> Motions { get; }
 
+    DbSet<MeetingGroup> MeetingGroups { get; }
+
     DbSet<User> Users { get; }
 
     DbSet<Organization> Organizations { get; }

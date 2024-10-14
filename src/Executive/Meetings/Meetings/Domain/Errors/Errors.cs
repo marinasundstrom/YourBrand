@@ -63,6 +63,13 @@ public static partial class Errors
         public static readonly Error OperativeClauseNotFound = new Error(nameof(OperativeClauseNotFound), "Motions item not found", string.Empty);
     }
 
+    public static class MeetingGroups
+    {
+        public static readonly Error MeetingGroupNotFound = new Error(nameof(MeetingGroupNotFound), "Meeting group not found", string.Empty);
+
+        public static readonly Error MeetingGroupMemberNotFound = new Error(nameof(MeetingGroupMemberNotFound), "Meeting group member not found", string.Empty);
+    }
+
     public static class Users
     {
         public static readonly Error UserNotFound = new Error(nameof(UserNotFound), "User not found", string.Empty);
