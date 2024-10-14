@@ -97,7 +97,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    public async Task OnSpeakerRequestRevoked(string id)
+    public async Task OnSpeakerRequestRevoked(string agendaItemId, string id)
     {
         var list = speakerQueue.ToList();
         list.Remove(speakerQueue.First(x => x.Id == id));
@@ -108,7 +108,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         StateHasChanged();
     }
 
-    public async Task OnSpeakerRequestAdded(string id, string participantId)
+    public async Task OnSpeakerRequestAdded(string agendaItemId, string id, string participantId)
     {
         speakerQueue.Enqueue(new SpeakerRequest() { Id = id, ParticipantId = participantId, });
         

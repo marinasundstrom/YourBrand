@@ -2,6 +2,6 @@ namespace YourBrand.Meetings;
 
 public interface IDiscussionsHub
 {
-    Task RequestSpeakerTime();
-    Task RevokeSpeakerTime();
+    Task RequestSpeakerTime(string agendaItemId);
+    Task RevokeSpeakerTime(string agendaItemId);
 }

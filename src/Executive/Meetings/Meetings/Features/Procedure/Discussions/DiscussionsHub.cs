@@ -38,7 +38,7 @@ public sealed class DiscussionsHub(IMediator mediator, ISettableUserContext user
         return base.OnConnectedAsync();
     }
 
-    public async Task RequestSpeakerTime()
+    public async Task RequestSpeakerTime(string agendaItemId)
     {
         var s = state[Context.ConnectionId];
 
@@ -47,10 +47,10 @@ public sealed class DiscussionsHub(IMediator mediator, ISettableUserContext user
         userContext.SetConnectionId(Context.ConnectionId);
 
         await mediator.Send(
-            new RequestSpeakerTime(s.OrganizationId, s.MeetingId));    
+            new RequestSpeakerTime(s.OrganizationId, s.MeetingId, agendaItemId));    
     }
 
-    public async Task RevokeSpeakerTime()
+    public async Task RevokeSpeakerTime(string agendaItemId)
     {
         var s = state[Context.ConnectionId];
 
@@ -59,7 +59,7 @@ public sealed class DiscussionsHub(IMediator mediator, ISettableUserContext user
         userContext.SetConnectionId(Context.ConnectionId);
 
         await mediator.Send(
-              new RevokeSpeakerTime(s.OrganizationId, s.MeetingId));
+              new RevokeSpeakerTime(s.OrganizationId, s.MeetingId, agendaItemId));
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)

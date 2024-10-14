@@ -16,7 +16,9 @@ using YourBrand.Meetings.Models;
 
 namespace YourBrand.Meetings.Features;
 
-public sealed record RequestSpeakerTimeDto();
+public sealed record RequestSpeakerTimeDto(string AgendaItemId);
+
+public sealed record RevokeSpeakerTimeDto(string AgendaItemId);
 
 partial class MeetingsController : ControllerBase
 {
@@ -34,9 +36,9 @@ partial class MeetingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> RequestSpeakerTime(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult> RequestSpeakerTime(string organizationId, int id, RequestSpeakerTimeDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RequestSpeakerTime(organizationId, id), cancellationToken);
+        var result = await mediator.Send(new RequestSpeakerTime(organizationId, id, request.AgendaItemId), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -44,9 +46,9 @@ partial class MeetingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> RevokeSpeakerTime(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult> RevokeSpeakerTime(string organizationId, int id, RevokeSpeakerTimeDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RevokeSpeakerTime(organizationId, id), cancellationToken);
+        var result = await mediator.Send(new RevokeSpeakerTime(organizationId, id, request.AgendaItemId), cancellationToken);
         return this.HandleResult(result);
     }
 }

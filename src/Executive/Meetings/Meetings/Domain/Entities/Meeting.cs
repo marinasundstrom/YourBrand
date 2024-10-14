@@ -119,6 +119,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             .ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());
     }
 
+    public AgendaItem? GetAgendaItem(string id)
+    {
+        return Agenda?.Items.FirstOrDefault(x => x.Id == id);
+    }
+
     public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights)
     {
         var participant = new MeetingParticipant

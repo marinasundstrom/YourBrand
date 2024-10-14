@@ -8,7 +8,7 @@ using YourBrand.Meetings.Features.Procedure.Command;
 
 namespace YourBrand.Meetings.Features.Procedure.Discussions;
 
-public sealed record RevokeSpeakerTime(string OrganizationId, int Id) : IRequest<Result>
+public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string AgendaItemId) : IRequest<Result>
 {
     public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<DiscussionsHub, IDiscussionsHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
     {
@@ -37,16 +37,16 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id) : IRequest
                 return Errors.Meetings.YouHaveNoVotingRights;
             }
 
-            var agendaItem = meeting.GetCurrentAgendaItem();
+            var agendaItem = meeting.GetAgendaItem(request.AgendaItemId);
 
             if (agendaItem is null)
             {
-                return Errors.Meetings.NoActiveAgendaItem;
+                return Errors.Meetings.AgendaItemNotFound;
             }
 
-            if (agendaItem.VotingSession is null)
+            if (agendaItem.SpeakerSession is null)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingSpeakerSession;
             }
 
             var id = agendaItem.SpeakerSession!.RemoveSpeaker(participant);
@@ -57,7 +57,7 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id) : IRequest
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-                .OnSpeakerRequestRevoked(id);
+                .OnSpeakerRequestRevoked(agendaItem.Id, id);
 
             return Result.Success;
         }

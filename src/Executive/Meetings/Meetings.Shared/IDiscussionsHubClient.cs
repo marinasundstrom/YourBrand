@@ -2,6 +2,6 @@ namespace YourBrand.Meetings;
 
 public interface IDiscussionsHubClient
 {
-    Task OnSpeakerRequestRevoked(string id);
-    Task OnSpeakerRequestAdded(string id, string participantId);
+    Task OnSpeakerRequestRevoked(string agendaItemId, string id);
+    Task OnSpeakerRequestAdded(string agendaItemId, string id, string participantId);
 }
