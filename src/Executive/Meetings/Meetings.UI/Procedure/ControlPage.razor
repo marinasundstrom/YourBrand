@@ -144,6 +144,8 @@ else
             }
         </MudItem>
     </MudGrid>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ResetProcedure">Reset procedure</MudButton>
 }
 
 @code {
@@ -161,6 +163,13 @@ else
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
 
         OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        await LoadMeetingDetails();
+    }
+
+    private async Task ResetProcedure() 
+    {
+        await MeetingsClient.ResetMeetingProcedureAsync(organization.Id, MeetingId);
 
         await LoadMeetingDetails();
     }
