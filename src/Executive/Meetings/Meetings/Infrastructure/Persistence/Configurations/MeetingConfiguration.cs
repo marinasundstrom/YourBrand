@@ -25,6 +25,12 @@ public sealed class MeetingConfiguration : IEntityTypeConfiguration<Meeting>
 
         builder.Navigation(x => x.Agenda).AutoInclude();
 
+        builder.HasOne(x => x.Minutes)
+            .WithOne()
+            .HasForeignKey<Domain.Entities.Minutes>(x => new { x.OrganizationId, x.MeetingId });
+
+        builder.Navigation(x => x.Minutes).AutoInclude();
+
         builder.OwnsOne(x => x.Quorum);
 
         builder.HasOne(x => x.CreatedBy)

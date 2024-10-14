@@ -1084,7 +1084,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddMeetingParticipant'
+              $ref: '#/components/schemas/RequestSpeakerTime'
         required: true
         x-position: 3
       responses:
@@ -1127,7 +1127,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddMeetingParticipant'
+              $ref: '#/components/schemas/RevokeSpeakerTime'
         required: true
         x-position: 3
       responses:
@@ -1714,6 +1714,383 @@ paths:
       responses:
         200:
           description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes:
+    get:
+      tags:
+      - Minutes
+      operationId: Minutes_GetMinutes
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: meetingId
+        in: query
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfMinutes'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    post:
+      tags:
+      - Minutes
+      operationId: Minutes_CreateMinutes
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMinutes'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Minutes'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Minutes/{id}:
+    get:
+      tags:
+      - Minutes
+      operationId: Minutes_GetMinutesById
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Minutes'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes/{id}/details:
+    put:
+      tags:
+      - Minutes
+      operationId: Minutes_EditMinutesDetails
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMinuteDetails'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Minutes'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes/{id}/items:
+    post:
+      tags:
+      - Minutes
+      operationId: Minutes_AddMinutesItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMinutesItem'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinutesItem'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes/{id}/items/{itemId}:
+    put:
+      tags:
+      - Minutes
+      operationId: Minutes_EditMinutesItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMinutesItem'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinutesItem'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    delete:
+      tags:
+      - Minutes
+      operationId: Minutes_RemoveMinutesItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes/{id}/items/{itemId}/order:
+    put:
+      tags:
+      - Minutes
+      operationId: Minutes_MoveMinutesItem
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveMinutesItem'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinutesItem'
         404:
           description: ''
           content:
@@ -2479,6 +2856,18 @@ components:
           type: string
         participantId:
           type: string
+    RequestSpeakerTime:
+      type: object
+      additionalProperties: false
+      properties:
+        agendaItemId:
+          type: string
+    RevokeSpeakerTime:
+      type: object
+      additionalProperties: false
+      properties:
+        agendaItemId:
+          type: string
     PagedResultOfUser:
       type: object
       additionalProperties: false
@@ -2664,6 +3053,161 @@ components:
           $ref: '#/components/schemas/OperativeAction'
         text:
           type: string
+    PagedResultOfMinutes:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Minutes'
+        total:
+          type: integer
+          format: int32
+    Minutes:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        meetingId:
+          type: integer
+          format: int32
+        state:
+          $ref: '#/components/schemas/MinutesState'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinutesItem'
+    MinutesState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Drafting
+      - Reviewing
+      - Approved
+      enum:
+      - 0
+      - 1
+      - 2
+    MinutesItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        order:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/MinutesItemType'
+        agendaId:
+          type: integer
+          format: int32
+        agendaItemId:
+          type: string
+        title:
+          type: string
+        state:
+          $ref: '#/components/schemas/MinutesItemState'
+        description:
+          type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
+    MinutesItemType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Default
+      enum:
+      - 0
+    MinutesItemState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Created
+      - Reviewing
+      - Approved
+      enum:
+      - 0
+      - 1
+      - 2
+    CreateMinutes:
+      type: object
+      additionalProperties: false
+      properties:
+        meetingId:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateMinutesItem'
+    CreateMinutesItem:
+      type: object
+      additionalProperties: false
+      properties:
+        agendaId:
+          type: integer
+          format: int32
+        agendaItemId:
+          type: string
+        type:
+          $ref: '#/components/schemas/MinutesItemType'
+        title:
+          type: string
+        description:
+          type: string
+    EditMinuteDetails:
+      type: object
+      additionalProperties: false
+    AddMinutesItem:
+      type: object
+      additionalProperties: false
+      properties:
+        agendaId:
+          type: integer
+          format: int32
+        agendaItemId:
+          type: string
+        type:
+          $ref: '#/components/schemas/MinutesItemType'
+        title:
+          type: string
+        description:
+          type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
+        order:
+          type: integer
+          format: int32
+          nullable: true
+    EditMinutesItem:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/MinutesItemType'
+        title:
+          type: string
+        description:
+          type: string
+        motionId:
+          type: integer
+          format: int32
+          nullable: true
+    MoveMinutesItem:
+      type: object
+      additionalProperties: false
+      properties:
+        order:
+          type: integer
+          format: int32
     PagedResultOfAgenda:
       type: object
       additionalProperties: false

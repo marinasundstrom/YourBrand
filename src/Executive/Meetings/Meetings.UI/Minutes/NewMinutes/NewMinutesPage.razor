@@ -1,0 +1,187 @@
+@page "/meetings/minutes/new"
+
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
+@inject IMinutesClient MinutesClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+<MudText Typo="@Typo.h2" GutterBottom="true">Create motion</MudText>
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <MudGrid>
+
+       
+
+        <MudItem xs="12" md="6">
+            <MudPaper Elevation="25" Class="pa-4 mb-4">
+                <MudText Typo="@Typo.h4" GutterBottom="true">Details</MudText>
+
+                <MeetingSelector OrganizationId="@organization.Id" Label="Motion" Variant="Variant.Outlined" Class="mt-4"
+                    @bind-Value="Meeting" For="@(() => Meeting)" />
+
+             @*
+             <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Title"
+                    For="@(() => Title)"  Immediate="true" />
+
+                <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
+                    For="@(() => Description)"  Immediate="true" Lines="10" />
+                    *@
+            </MudPaper>        
+        </MudItem>
+
+
+
+        <MudItem xs="12" md="6">
+            <MudPaper Elevation="25" Class="pa-4 mb-4">
+                <MudText Typo="@Typo.h4" GutterBottom="true">Items</MudText>
+
+                <MudTable T="AddEditMinutesItemViewModel" Items="Items" Dense="true" Hover="true" Elevation="0"
+                    Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
+                    OnRowClick="async (e) => await EditMinutesItem(e.Item)">
+                    <ToolBarContent>
+                        <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
+                            OnClick="AddMinutesItem" Class="mb-2">Add item</MudButton>
+                    </ToolBarContent>
+
+                    <HeaderContent>
+                        <MudTh>#</MudTh>
+                        <MudTh>Type</MudTh>
+                        <MudTh>Title</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="item">
+                        <MudTd DataLabel="Order">@item.Order</MudTd>
+                        <MudTd DataLabel="Type">@item.Type</MudTd>
+                        <MudTd DataLabel="Title">@item.Title</MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                                OnClick="() => EditMinutesItem(item)">
+                            </MudIconButton>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                                OnClick="() => RemoveMinutesItem(item)">
+                            </MudIconButton>
+                        </MudTd>
+                    </RowTemplate>
+                    <LoadingContent>
+                        <MudText>Loading...</MudText>
+                    </LoadingContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="() => {}">Cancel</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+        Create
+    </MudButton>
+</EditForm>
+
+@code
+{
+    EditContext context = null!;
+
+    [Required]
+    public Meeting Meeting { get; set; }
+
+    public List<AddEditMinutesItemViewModel> Items { get; set; } = new List<AddEditMinutesItemViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var motion = await MinutesClient.CreateMinutesAsync(organization.Id, new CreateMinutes
+            {
+                MeetingId = Meeting.Id,
+                Items = Items.Select(model => {
+                    return new CreateMinutesItem
+                    {
+                        Type = model.Type,
+                        Title = model.Title,
+                        Description = model.Description,
+                        AgendaId = model.AgendaId,
+                        AgendaItemId = model.AgendaItemId
+                    };
+                }).ToList()
+            });
+
+        NavigationManager.NavigateTo($"/meetings/minutes/{motion.Id}");
+    }
+
+    async Task AddMinutesItem()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddEditItemDialog.OrganizationId), organization.Id);
+
+        var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var modalRef = DialogService.Show<AddEditItemDialog>("Add item", parameters, dialogOptions);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var model = (AddEditMinutesItemViewModel)result.Data;
+
+        Items.Add(model);
+    }
+
+    async Task EditMinutesItem(AddEditMinutesItemViewModel item)
+    {
+        var originalMinutesItem = item;
+
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddEditItemDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditItemDialog.Model), originalMinutesItem.Clone());
+
+        var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var modalRef = DialogService.Show<AddEditItemDialog>("Edit item", parameters, dialogOptions);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var updatedModel = (AddEditMinutesItemViewModel)result.Data;
+
+        var index = Items.IndexOf(originalMinutesItem);
+        Items[index] = updatedModel;
+    }
+
+    async Task RemoveMinutesItem(AddEditMinutesItemViewModel item)
+    {
+        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        Items.Remove(item);
+    }
+
+    public void Dispose()
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

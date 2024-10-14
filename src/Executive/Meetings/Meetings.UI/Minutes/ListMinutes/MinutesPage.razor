@@ -1,0 +1,118 @@
+﻿@inject IMinutesClient MinutesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+@implements IDisposable
+
+@page "/meetings/minutes"
+@using YourBrand.Portal.Services
+
+<AppPageTitle>Minutes</AppPageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Minutes</MudText>
+
+<MudButton Variant="Variant.Filled" Href="/meetings/minutes/new" Class="mb-2">New minutes</MudButton>
+
+<MudTable T="Minutes" @ref="table" ServerData="ServerReload" Dense="true" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+    <ToolBarContent>
+
+    </ToolBarContent>
+    
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>State</MudTh>
+        <MudTh>Items</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="motion">
+        <MudTd DataLabel="Id">@motion.Id</MudTd>
+        <MudTd DataLabel="State">@motion.State</MudTd>
+        <MudTd DataLabel="Items">@motion.Items.Count</MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code
+{
+    MudTable<Minutes> table;
+    bool loading = false;
+    MinutesState? Status;
+
+    protected override async Task OnInitializedAsync()
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+
+        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+    }
+
+    YourBrand.Portal.Services.Organization organization = default!;
+
+    private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev)
+    {
+        organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
+    }
+
+    private async Task<TableData<Minutes>> ServerReload(TableState state)
+    {
+        loading = true;
+
+        try
+        {
+            var result = await MinutesClient.GetMinutesAsync(organization.Id, null, state.Page + 1, state.PageSize, null, null, null);
+
+            return new TableData<Minutes>() { TotalItems = result.Total, Items = result.Items };
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+@*
+    public async Task NewMinutes()
+    {
+        var dialogRef = DialogService.Show<NewMinutesDialog>("New motion");
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+    *@
+
+    public async Task GoTo(Minutes motion)
+    {
+        NavigationManager.NavigateTo($"/meetings/minutes/{motion.Id}");
+    }
+
+    @*
+    private async Task OnSelectedValuesChanged(IEnumerable<MinutesState?> selectedValues)
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+
+    private async Task DeleteMinutes(Minutes motion)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft motion", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await MinutesClient.DeleteMinutesAsync(organization.Id, motion.Id);
+        await table.ReloadServerData();
+    }
+    *@
+
+    public void Dispose() 
+    {
+        OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+}

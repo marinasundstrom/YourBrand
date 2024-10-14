@@ -1,0 +1,99 @@
+@using System.Linq.Expressions
+@inject IMeetingsClient MeetingsClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="Meeting" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchMeetings" ToStringFunc="(x) => x.Title"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Title</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Title</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddMeeting" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Meeting";
+
+    [Parameter]
+    public Meeting Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Meeting> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<Meeting>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string? OrganizationId { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async Task<IEnumerable<Meeting>> SearchMeetings(string text)
+    {
+        try
+        {
+            var results = await MeetingsClient.GetMeetingsAsync(OrganizationId, null, null, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task AddMeeting() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Meetings.UI")
+            .GetType("YourBrand.Meetings.Meetings.Add");
+
+            var dialogReference = DialogService.Show(type, "New Meeting", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (Meeting)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

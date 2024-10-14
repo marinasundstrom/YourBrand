@@ -48,6 +48,8 @@ public class ModuleInitializer : IModuleInitializer
 
         group2.CreateItem("motions", () => t["Motions"], MudBlazor.Icons.Material.Filled.FilePresent, "/Meetings/Motions");
 
+        group2.CreateItem("minutes", () => t["Minutes"], MudBlazor.Icons.Material.Filled.FileOpen, "/Meetings/Minutes");
+
         group2.CreateItem("groups", () => t["Groups"], MudBlazor.Icons.Material.Filled.Group, "/Meetings/Groups");
 
         /*

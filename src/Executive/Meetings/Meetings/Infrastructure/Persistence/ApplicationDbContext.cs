@@ -125,6 +125,8 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<VoteId>().HaveConversion<VoteIdConverter>();
         configurationBuilder.Properties<SpeakerSessionId>().HaveConversion<SpeakerSessionIdConverter>();
         configurationBuilder.Properties<SpeakerRequestId>().HaveConversion<SpeakerRequestIdConverter>();
+        configurationBuilder.Properties<MinutesId>().HaveConversion<MinutesIdConverter>();
+        configurationBuilder.Properties<MinutesItemId>().HaveConversion<MinutesItemIdConverter>();
 
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
@@ -136,6 +138,8 @@ public sealed class ApplicationDbContext(
     public DbSet<Meeting> Meetings { get; set; }
 
     public DbSet<Agenda> Agendas { get; set; }
+
+    public DbSet<Domain.Entities.Minutes> Minutes { get; set; }
 
     public DbSet<Motion> Motions { get; set; }
 

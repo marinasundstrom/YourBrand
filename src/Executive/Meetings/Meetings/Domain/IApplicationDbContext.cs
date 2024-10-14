@@ -10,6 +10,8 @@ public interface IApplicationDbContext
     
     DbSet<Agenda> Agendas { get; }
 
+    DbSet<Entities.Minutes> Minutes { get; }
+
     DbSet<Motion> Motions { get; }
 
     DbSet<User> Users { get; }

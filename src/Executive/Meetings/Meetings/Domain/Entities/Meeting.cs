@@ -40,6 +40,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public Agenda? Agenda { get; set; }
     public int? CurrentAgendaItemIndex { get; private set; } = null;
     public Quorum Quorum { get; set; } = new Quorum();
+    public Minutes? Minutes { get; set; }
 
     public bool IsQuorumMet()
     {

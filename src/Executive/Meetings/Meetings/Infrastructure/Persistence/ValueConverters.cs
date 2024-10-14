@@ -108,3 +108,19 @@ internal sealed class SpeakerRequestIdConverter : ValueConverter<SpeakerRequestI
     {
     }
 }
+
+internal sealed class MinutesIdConverter : ValueConverter<MinutesId, int>
+{
+    public MinutesIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
+internal sealed class MinutesItemIdConverter : ValueConverter<MinutesItemId, string>
+{
+    public MinutesItemIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
