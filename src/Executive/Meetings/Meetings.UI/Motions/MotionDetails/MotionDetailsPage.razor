@@ -9,7 +9,9 @@
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
 
-<MudText Typo="@Typo.h2" GutterBottom="true">@Title</MudText>
+<AppPageTitle>@Id. @Title</AppPageTitle>
+
+<MudText Typo="@Typo.h2" GutterBottom="true">@Id. @Title</MudText>
 
 <MudGrid Class="mb-4">
 
@@ -147,6 +149,8 @@
         Snackbar.Add("Details saved");
 
         context.MarkAsUnmodified();
+
+        isDetailsModified = false;
     }
 
     async Task AddOperativeClause()
