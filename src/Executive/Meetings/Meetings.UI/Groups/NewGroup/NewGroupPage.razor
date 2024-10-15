@@ -27,7 +27,7 @@
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
                     For="@(() => Description)" Immediate="true" Lines="5" />
                 <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
-                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of participants" />
+                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of attendees" />
             </MudPaper>
         </MudItem>
 
@@ -50,17 +50,17 @@
                         <MudTh>Has Voting Rights</MudTh>
                         <MudTh></MudTh>
                     </HeaderContent>
-                    <RowTemplate Context="participant">
-                        <MudTd DataLabel="Name">@participant.Name</MudTd>
-                        <MudTd DataLabel="Email">@participant.Email</MudTd>
-                        <MudTd DataLabel="UserId">@participant.User?.Id</MudTd>
-                        <MudTd DataLabel="HasVotingRights">@(participant.HasVotingRights ? "Yes" : "No")</MudTd>
+                    <RowTemplate Context="attendee">
+                        <MudTd DataLabel="Name">@attendee.Name</MudTd>
+                        <MudTd DataLabel="Email">@attendee.Email</MudTd>
+                        <MudTd DataLabel="UserId">@attendee.User?.Id</MudTd>
+                        <MudTd DataLabel="HasVotingRights">@(attendee.HasVotingRights ? "Yes" : "No")</MudTd>
                         <MudTd>
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                                OnClick="() => EditMember(participant)">
+                                OnClick="() => EditMember(attendee)">
                             </MudIconButton>
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                                OnClick="() => RemoveMember(participant)">
+                                OnClick="() => RemoveMember(attendee)">
                             </MudIconButton>
                         </MudTd>
                     </RowTemplate>
@@ -150,9 +150,9 @@
         Members.Add(model);
     }
 
-    async Task EditMember(AddEditMemberViewModel participant)
+    async Task EditMember(AddEditMemberViewModel attendee)
     {
-        var originalMember = participant;
+        var originalMember = attendee;
 
         DialogParameters parameters = new();
         parameters.Add(nameof(AddEditMemberDialog.OrganizationId), organization.Id);
@@ -170,7 +170,7 @@
         Members[index] = updatedModel;
     }
 
-    async Task RemoveMember(AddEditMemberViewModel participant)
+    async Task RemoveMember(AddEditMemberViewModel attendee)
     {
         var r = await DialogService.ShowMessageBox("Delete member?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
 
@@ -179,7 +179,7 @@
             return;
         }
 
-        Members.Remove(participant);
+        Members.Remove(attendee);
     }
 
     public void Dispose()

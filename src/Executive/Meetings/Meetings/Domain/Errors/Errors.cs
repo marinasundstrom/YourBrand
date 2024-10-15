@@ -6,7 +6,7 @@ public static partial class Errors
     {
         public static readonly Error MeetingNotFound = new Error(nameof(MeetingNotFound), "Meeting not found", string.Empty);
 
-        public static readonly Error ParticipantNotFound = new Error(nameof(ParticipantNotFound), "Participant not found", string.Empty);
+        public static readonly Error AttendeeNotFound = new Error(nameof(AttendeeNotFound), "Attendee not found", string.Empty);
 
         public static readonly Error AgendaItemNotFound = new Error(nameof(AgendaItemNotFound), "Agenda item not found", string.Empty);
 
@@ -16,7 +16,7 @@ public static partial class Errors
 
         public static readonly Error NoOngoingVotingSession = new Error(nameof(NoOngoingVotingSession), "No on-going voting session", string.Empty);
 
-        public static readonly Error YouAreNotParticipantOfMeeting = new Error(nameof(YouAreNotParticipantOfMeeting), "You are not a participant of this meeting.", string.Empty);
+        public static readonly Error YouAreNotAttendeeOfMeeting = new Error(nameof(YouAreNotAttendeeOfMeeting), "You are not a attendee of this meeting.", string.Empty);
 
         public static readonly Error YouAreNotChairpersonOfMeeting = new Error(nameof(YouAreNotChairpersonOfMeeting), "You are not the chairperson of this meeting.", string.Empty);
 

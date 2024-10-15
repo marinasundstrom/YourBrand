@@ -35,20 +35,20 @@
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
                     For="@(() => Description)" Immediate="true" Lines="5" />
                 <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
-                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of participants" />
+                    For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of attendees" />
             </MudPaper>
         </MudItem>
 
         <MudItem xs="12" md="6">
             <MudPaper Elevation="25" Class="pa-4 mb-4">
-                <MudText Typo="@Typo.h4" GutterBottom="true">Participants</MudText>
+                <MudText Typo="@Typo.h4" GutterBottom="true">Attendees</MudText>
 
-                <MudTable T="AddEditParticipantViewModel" Items="Participants" Dense="true" Hover="true" Elevation="0"
+                <MudTable T="AddEditAttendeeViewModel" Items="Attendees" Dense="true" Hover="true" Elevation="0"
                     Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-                    OnRowClick="async (e) => await EditParticipant(e.Item)">
+                    OnRowClick="async (e) => await EditAttendee(e.Item)">
                     <ToolBarContent>
                         <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-                            OnClick="AddParticipant" Class="mb-2">Add participant</MudButton>
+                            OnClick="AddAttendee" Class="mb-2">Add attendee</MudButton>
                     </ToolBarContent>
 
                     <HeaderContent>
@@ -58,17 +58,17 @@
                         <MudTh>Has Voting Rights</MudTh>
                         <MudTh></MudTh>
                     </HeaderContent>
-                    <RowTemplate Context="participant">
-                        <MudTd DataLabel="Name">@participant.Name</MudTd>
-                        <MudTd DataLabel="Email">@participant.Email</MudTd>
-                        <MudTd DataLabel="UserId">@participant.User?.Id</MudTd>
-                        <MudTd DataLabel="HasVotingRights">@(participant.HasVotingRights ? "Yes" : "No")</MudTd>
+                    <RowTemplate Context="attendee">
+                        <MudTd DataLabel="Name">@attendee.Name</MudTd>
+                        <MudTd DataLabel="Email">@attendee.Email</MudTd>
+                        <MudTd DataLabel="UserId">@attendee.User?.Id</MudTd>
+                        <MudTd DataLabel="HasVotingRights">@(attendee.HasVotingRights ? "Yes" : "No")</MudTd>
                         <MudTd>
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                                OnClick="() => EditParticipant(participant)">
+                                OnClick="() => EditAttendee(attendee)">
                             </MudIconButton>
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                                OnClick="() => RemoveParticipant(participant)">
+                                OnClick="() => RemoveAttendee(attendee)">
                             </MudIconButton>
                         </MudTd>
                     </RowTemplate>
@@ -108,7 +108,7 @@
     [Required]
     public int QuorumRequiredNumber { get; set; }
 
-    public List<AddEditParticipantViewModel> Participants { get; set; } = new List<AddEditParticipantViewModel>();
+    public List<AddEditAttendeeViewModel> Attendees { get; set; } = new List<AddEditAttendeeViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -138,8 +138,8 @@
                 {
                     RequiredNumber = QuorumRequiredNumber
                 },
-                Participants = Participants.Select(model => {
-                    return new CreateMeetingParticipant
+                Attendees = Attendees.Select(model => {
+                    return new CreateMeetingAttendee
                     {
                         Name = model.Name,
                         Role = model.Role,
@@ -153,52 +153,52 @@
         NavigationManager.NavigateTo($"/meetings/{meeting.Id}");
     }
 
-    async Task AddParticipant()
+    async Task AddAttendee()
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddEditParticipantDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditAttendeeDialog.OrganizationId), organization.Id);
 
-        var modalRef = DialogService.Show<AddEditParticipantDialog>("Add participant", parameters);
+        var modalRef = DialogService.Show<AddEditAttendeeDialog>("Add attendee", parameters);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var model = (AddEditParticipantViewModel)result.Data;
+        var model = (AddEditAttendeeViewModel)result.Data;
 
-        Participants.Add(model);
+        Attendees.Add(model);
     }
 
-    async Task EditParticipant(AddEditParticipantViewModel participant)
+    async Task EditAttendee(AddEditAttendeeViewModel attendee)
     {
-        var originalParticipant = participant;
+        var originalAttendee = attendee;
 
         DialogParameters parameters = new();
-        parameters.Add(nameof(AddEditParticipantDialog.OrganizationId), organization.Id);
-        parameters.Add(nameof(AddEditParticipantDialog.Model), originalParticipant.Clone());
+        parameters.Add(nameof(AddEditAttendeeDialog.OrganizationId), organization.Id);
+        parameters.Add(nameof(AddEditAttendeeDialog.Model), originalAttendee.Clone());
 
-        var modalRef = DialogService.Show<AddEditParticipantDialog>("Edit participant", parameters);
+        var modalRef = DialogService.Show<AddEditAttendeeDialog>("Edit attendee", parameters);
 
         var result = await modalRef.Result;
 
         if (result.Canceled) return;
 
-        var updatedModel = (AddEditParticipantViewModel)result.Data;
+        var updatedModel = (AddEditAttendeeViewModel)result.Data;
 
-        var index = Participants.IndexOf(originalParticipant);
-        Participants[index] = updatedModel;
+        var index = Attendees.IndexOf(originalAttendee);
+        Attendees[index] = updatedModel;
     }
 
-    async Task RemoveParticipant(AddEditParticipantViewModel participant)
+    async Task RemoveAttendee(AddEditAttendeeViewModel attendee)
     {
-        var r = await DialogService.ShowMessageBox("Delete participant?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+        var r = await DialogService.ShowMessageBox("Delete attendee?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
 
         if(!r.GetValueOrDefault()) 
         {
             return;
         }
 
-        Participants.Remove(participant);
+        Attendees.Remove(attendee);
     }
 
     public void Dispose()

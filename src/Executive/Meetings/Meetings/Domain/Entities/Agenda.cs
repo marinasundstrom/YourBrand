@@ -8,9 +8,9 @@ namespace YourBrand.Meetings.Domain.Entities;
 public enum AgendaState 
 {
     Drafting,           // Agenda is being drafted, can still be modified.
-    Reviewing,          // Agenda is under review by participants or stakeholders.
+    Reviewing,          // Agenda is under review by attendees or stakeholders.
     Approved,           // Agenda is finalized and approved for the meeting.
-    Distributed,        // Agenda has been sent to all participants.
+    Distributed,        // Agenda has been sent to all attendees.
     InProgress,         // The meeting is happening, and the agenda is being followed.
     //Adjusted,           // The agenda has been adjusted during the meeting.
     Completed,          // The meeting is finished, and all agenda items have been covered.

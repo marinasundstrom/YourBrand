@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Meetings.NewMeeting;
 
-public class AddEditParticipantViewModel
+public class AddEditAttendeeViewModel
 {
     [Required]
     public string Name { get; set; }
 
-    public ParticipantRole Role { get; set; } = ParticipantRole.Participant;
+    public AttendeeRole Role { get; set; } = AttendeeRole.Participant;
 
     [Required]
     [EmailAddress]
@@ -17,9 +17,9 @@ public class AddEditParticipantViewModel
 
     public bool HasVotingRights { get; set; }
 
-    public AddEditParticipantViewModel Clone() 
+    public AddEditAttendeeViewModel Clone() 
     {
-        return new AddEditParticipantViewModel 
+        return new AddEditAttendeeViewModel 
         { 
             Name = Name,
             Role = Role,

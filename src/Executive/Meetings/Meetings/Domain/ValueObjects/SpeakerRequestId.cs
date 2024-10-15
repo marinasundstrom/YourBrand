@@ -36,20 +36,20 @@ public struct SpeakerRequestId
 
     public static implicit operator string(SpeakerRequestId id) => id.Value;
 
-    public static bool TryParse(string? value, out SpeakerRequestId channelParticipantId)
+    public static bool TryParse(string? value, out SpeakerRequestId channelAttendeeId)
     {
-        return TryParse(value, CultureInfo.CurrentCulture, out channelParticipantId);
+        return TryParse(value, CultureInfo.CurrentCulture, out channelAttendeeId);
     }
 
-    public static bool TryParse(string? value, IFormatProvider? provider, out SpeakerRequestId channelParticipantId)
+    public static bool TryParse(string? value, IFormatProvider? provider, out SpeakerRequestId channelAttendeeId)
     {
         if (value is null)
         {
-            channelParticipantId = default;
+            channelAttendeeId = default;
             return false;
         }
 
-        channelParticipantId = value;
+        channelAttendeeId = value;
         return true;
     }
 }

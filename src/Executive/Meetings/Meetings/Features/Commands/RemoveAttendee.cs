@@ -8,9 +8,9 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public record RemoveParticipant(string OrganizationId, int Id, string ParticipantId) : IRequest<Result<MeetingDto>>
+public record RemoveAttendee(string OrganizationId, int Id, string AttendeeId) : IRequest<Result<MeetingDto>>
 {
-    public class Validator : AbstractValidator<RemoveParticipant>
+    public class Validator : AbstractValidator<RemoveAttendee>
     {
         public Validator()
         {
@@ -18,9 +18,9 @@ public record RemoveParticipant(string OrganizationId, int Id, string Participan
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<RemoveParticipant, Result<MeetingDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<RemoveAttendee, Result<MeetingDto>>
     {
-        public async Task<Result<MeetingDto>> Handle(RemoveParticipant request, CancellationToken cancellationToken)
+        public async Task<Result<MeetingDto>> Handle(RemoveAttendee request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -31,14 +31,14 @@ public record RemoveParticipant(string OrganizationId, int Id, string Participan
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var participant = meeting.Participants.FirstOrDefault(x => x.Id == request.ParticipantId);
+            var attendee = meeting.Attendees.FirstOrDefault(x => x.Id == request.AttendeeId);
 
-            if (participant is null)
+            if (attendee is null)
             {
-                return Errors.Meetings.ParticipantNotFound;
+                return Errors.Meetings.AttendeeNotFound;
             }
 
-            meeting.RemoveParticipant(participant);
+            meeting.RemoveAttendee(attendee);
 
             context.Meetings.Update(meeting);
 

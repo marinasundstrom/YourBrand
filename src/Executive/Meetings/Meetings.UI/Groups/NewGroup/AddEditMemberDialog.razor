@@ -9,11 +9,11 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Name"
                     For="@(() => Model.Name)" />
-                <MudSelect T="ParticipantRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
+                <MudSelect T="AttendeeRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
                     Class="mt-4">
-                    @foreach (var type in Enum.GetValues<ParticipantRole>())
+                    @foreach (var type in Enum.GetValues<AttendeeRole>())
                     {
-                        <MudSelectItem T="ParticipantRole" Value="@type">@Enum.GetName(typeof(ParticipantRole), type)
+                        <MudSelectItem T="AttendeeRole" Value="@type">@Enum.GetName(typeof(AttendeeRole), type)
                         </MudSelectItem>
                     }
                 </MudSelect>

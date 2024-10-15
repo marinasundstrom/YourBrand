@@ -432,11 +432,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/participants:
+  /v1/Meetings/{id}/attendees:
     post:
       tags:
       - Meetings
-      operationId: Meetings_AddParticipant
+      operationId: Meetings_AddAttendee
       parameters:
       - name: organizationId
         in: query
@@ -455,7 +455,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddMeetingParticipant'
+              $ref: '#/components/schemas/AddMeetingAttendee'
         required: true
         x-position: 3
       responses:
@@ -464,7 +464,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MeetingParticipant'
+                $ref: '#/components/schemas/MeetingAttendee'
         404:
           description: ''
           content:
@@ -479,11 +479,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/participants/fromgroup:
+  /v1/Meetings/{id}/attendees/fromgroup:
     post:
       tags:
       - Meetings
-      operationId: Meetings_AddParticipantsFromGroup
+      operationId: Meetings_AddAttendeesFromGroup
       parameters:
       - name: organizationId
         in: query
@@ -502,7 +502,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddParticipantsFromGroup'
+              $ref: '#/components/schemas/AddAttendeesFromGroup'
         required: true
         x-position: 3
       responses:
@@ -526,11 +526,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/participants/{participantId}:
+  /v1/Meetings/{id}/attendees/{attendeeId}:
     put:
       tags:
       - Meetings
-      operationId: Meetings_EditParticipant
+      operationId: Meetings_EditAttendee
       parameters:
       - name: organizationId
         in: query
@@ -544,7 +544,7 @@ paths:
           type: integer
           format: int32
         x-position: 2
-      - name: participantId
+      - name: attendeeId
         in: path
         required: true
         schema:
@@ -555,7 +555,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditMeetingParticipant'
+              $ref: '#/components/schemas/EditMeetingAttendee'
         required: true
         x-position: 4
       responses:
@@ -564,7 +564,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MeetingParticipant'
+                $ref: '#/components/schemas/MeetingAttendee'
         404:
           description: ''
           content:
@@ -582,7 +582,7 @@ paths:
     delete:
       tags:
       - Meetings
-      operationId: Meetings_RemoveParticipant
+      operationId: Meetings_RemoveAttendee
       parameters:
       - name: organizationId
         in: query
@@ -596,7 +596,7 @@ paths:
           type: integer
           format: int32
         x-position: 2
-      - name: participantId
+      - name: attendeeId
         in: path
         required: true
         schema:
@@ -619,11 +619,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/participants/{participantId}/IsPresent:
+  /v1/Meetings/{id}/attendees/{attendeeId}/IsPresent:
     put:
       tags:
       - Meetings
-      operationId: Meetings_MarkParticipantAsPresent
+      operationId: Meetings_MarkAttendeeAsPresent
       parameters:
       - name: organizationId
         in: query
@@ -637,7 +637,7 @@ paths:
           type: integer
           format: int32
         x-position: 2
-      - name: participantId
+      - name: attendeeId
         in: path
         required: true
         schema:
@@ -648,7 +648,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MarkParticipantAsPresent'
+              $ref: '#/components/schemas/MarkAttendeeAsPresent'
         required: true
         x-position: 4
       responses:
@@ -657,7 +657,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MeetingParticipant'
+                $ref: '#/components/schemas/MeetingAttendee'
         404:
           description: ''
           content:
@@ -3027,10 +3027,10 @@ components:
           type: string
         quorum:
           $ref: '#/components/schemas/MeetingQuorum'
-        participants:
+        attendees:
           type: array
           items:
-            $ref: '#/components/schemas/MeetingParticipant'
+            $ref: '#/components/schemas/MeetingAttendee'
         currentAgendaItemIndex:
           type: integer
           format: int32
@@ -3057,7 +3057,7 @@ components:
         requiredNumber:
           type: integer
           format: int32
-    MeetingParticipant:
+    MeetingAttendee:
       type: object
       additionalProperties: false
       properties:
@@ -3066,18 +3066,20 @@ components:
         name:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
         email:
           type: string
           nullable: true
         userId:
           type: string
           nullable: true
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
         isPresent:
           type: boolean
-    ParticipantRole:
+    AttendeeRole:
       type: integer
       description: ''
       x-enumNames:
@@ -3136,10 +3138,10 @@ components:
           type: string
         quorum:
           $ref: '#/components/schemas/CreateMeetingQuorum'
-        participants:
+        attendees:
           type: array
           items:
-            $ref: '#/components/schemas/CreateMeetingParticipant'
+            $ref: '#/components/schemas/CreateMeetingAttendee'
     CreateMeetingQuorum:
       type: object
       additionalProperties: false
@@ -3147,7 +3149,7 @@ components:
         requiredNumber:
           type: integer
           format: int32
-    CreateMeetingParticipant:
+    CreateMeetingAttendee:
       type: object
       additionalProperties: false
       properties:
@@ -3159,7 +3161,9 @@ components:
         email:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
     UpdateMeetingTitle:
@@ -3200,7 +3204,7 @@ components:
       properties:
         state:
           $ref: '#/components/schemas/MeetingState'
-    AddMeetingParticipant:
+    AddMeetingAttendee:
       type: object
       additionalProperties: false
       properties:
@@ -3212,17 +3216,19 @@ components:
         email:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
-    AddParticipantsFromGroup:
+    AddAttendeesFromGroup:
       type: object
       additionalProperties: false
       properties:
         groupId:
           type: integer
           format: int32
-    EditMeetingParticipant:
+    EditMeetingAttendee:
       type: object
       additionalProperties: false
       properties:
@@ -3234,10 +3240,12 @@ components:
         email:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
-    MarkParticipantAsPresent:
+    MarkAttendeeAsPresent:
       type: object
       additionalProperties: false
       properties:
@@ -3368,7 +3376,7 @@ components:
       properties:
         id:
           type: string
-        participantId:
+        attendeeId:
           type: string
     RequestSpeakerTime:
       type: object
@@ -3770,13 +3778,15 @@ components:
         name:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
         email:
           type: string
           nullable: true
         userId:
           type: string
           nullable: true
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
     CreateMeetingGroup:
@@ -3812,7 +3822,9 @@ components:
         email:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
     UpdateMeetingGroupTitle:
@@ -3846,7 +3858,9 @@ components:
         email:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
     EditMeetingGroupMember:
@@ -3861,7 +3875,9 @@ components:
         email:
           type: string
         role:
-          $ref: '#/components/schemas/ParticipantRole'
+          $ref: '#/components/schemas/AttendeeRole'
+        hasSpeakingRights:
+          type: boolean
         hasVotingRights:
           type: boolean
     PagedResultOfAgenda:

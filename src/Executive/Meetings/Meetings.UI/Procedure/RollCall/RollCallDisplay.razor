@@ -1,15 +1,15 @@
 @inject IMeetingsClient MeetingsClient
 
-<MudTable T="ParticipantViewModel" Items="Participants" Hover="true" Elevation="0"
+<MudTable T="AttendeeViewModel" Items="Attendees" Hover="true" Elevation="0"
     Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
     OnRowClick="async (e) => {}">
 
     @*
     <ToolBarContent>
         <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-            OnClick="AddParticipant" Class="mb-2 me-2">Add participant</MudButton>
+            OnClick="AddAttendee" Class="mb-2 me-2">Add attendee</MudButton>
         <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-            OnClick="AddParticipantGroup" Class="mb-2">Add group</MudButton>
+            OnClick="AddAttendeeGroup" Class="mb-2">Add group</MudButton>
     </ToolBarContent>*@
 
     <HeaderContent>
@@ -21,22 +21,22 @@
         <MudTh>Present</MudTh>
         @* <MudTh></MudTh> *@
     </HeaderContent>
-    <RowTemplate Context="participant">
-        <MudTd DataLabel="Name">@participant.Name</MudTd>
-        <MudTd DataLabel="Role">@participant.Role</MudTd>
-        <MudTd DataLabel="Email">@participant.Email</MudTd>
-        <MudTd DataLabel="UserId">@participant.User?.Id</MudTd>
-        <MudTd DataLabel="HasVotingRights">@(participant.HasVotingRights ? "Yes" : "No")</MudTd>
+    <RowTemplate Context="attendee">
+        <MudTd DataLabel="Name">@attendee.Name</MudTd>
+        <MudTd DataLabel="Role">@attendee.Role</MudTd>
+        <MudTd DataLabel="Email">@attendee.Email</MudTd>
+        <MudTd DataLabel="UserId">@attendee.User?.Id</MudTd>
+        <MudTd DataLabel="HasVotingRights">@(attendee.HasVotingRights ? "Yes" : "No")</MudTd>
         <MudTd DataLabel="IsPresent">
-            <MudCheckBox T="bool" Value="participant.IsPresent" ValueChanged="@(async (s) => { await  MarkParticipantAsPresent(participant, s); })"/>
+            <MudCheckBox T="bool" Value="attendee.IsPresent" ValueChanged="@(async (s) => { await  MarkAttendeeAsPresent(attendee, s); })"/>
         </MudTd>
         @*
         <MudTd>
             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                OnClick="() => EditParticipant(participant)">
+                OnClick="() => EditAttendee(attendee)">
             </MudIconButton>
             <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                OnClick="() => RemoveParticipant(participant)">
+                OnClick="() => RemoveAttendee(attendee)">
             </MudIconButton>
         </MudTd>*@
     </RowTemplate>
@@ -53,31 +53,31 @@
     [Parameter]
     public Meeting Meeting { get; set; }
 
-    public List<ParticipantViewModel> Participants { get; set; } = new List<ParticipantViewModel>();
+    public List<AttendeeViewModel> Attendees { get; set; } = new List<AttendeeViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        if (Participants.Any()) Participants.Clear();
+        if (Attendees.Any()) Attendees.Clear();
 
-        Participants.AddRange(Meeting.Participants.Select(participant => new ParticipantViewModel()
+        Attendees.AddRange(Meeting.Attendees.Select(attendee => new AttendeeViewModel()
             {
-                Id = participant.Id,
-                Role = participant.Role,
-                Name = participant.Name,
-                Email = participant.Email,
+                Id = attendee.Id,
+                Role = attendee.Role,
+                Name = attendee.Name,
+                Email = attendee.Email,
                 //User = x.User,
-                HasVotingRights = participant.HasVotingRights,
-                IsPresent = participant.IsPresent
+                HasVotingRights = attendee.HasVotingRights,
+                IsPresent = attendee.IsPresent
             }));
     }
 
-    async Task MarkParticipantAsPresent(ParticipantViewModel participant, bool isChecked)
+    async Task MarkAttendeeAsPresent(AttendeeViewModel attendee, bool isChecked)
     {
-        await MeetingsClient.MarkParticipantAsPresentAsync(OrganizationId, Meeting.Id, participant.Id, new MarkParticipantAsPresent
+        await MeetingsClient.MarkAttendeeAsPresentAsync(OrganizationId, Meeting.Id, attendee.Id, new MarkAttendeeAsPresent
             {
                 IsPresent = isChecked
             });
 
-        participant.IsPresent = isChecked;
+        attendee.IsPresent = isChecked;
     }
 }

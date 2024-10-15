@@ -19,9 +19,9 @@ public sealed record UpdateMeetingGroupDescriptionDto(string Description);
 
 public sealed record ChangeMeetingGroupQuorumDto(int RequiredNumber);
 
-public sealed record AddMeetingGroupMemberDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+public sealed record AddMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights);
 
-public sealed record EditMeetingGroupMemberDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+public sealed record EditMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights);
 
 [ApiController]
 [ApiVersion("1")]
@@ -92,7 +92,7 @@ public sealed class MeetingGroupsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<MeetingGroupMemberDto>> AddMember(string organizationId, int id, AddMeetingGroupMemberDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddMember(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
+        var result = await mediator.Send(new AddMember(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights), cancellationToken);
         return this.HandleResult(result);
     }
 

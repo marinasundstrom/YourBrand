@@ -30,7 +30,7 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
 
     public IReadOnlyCollection<MeetingGroupMember> Members => _members;
 
-    public MeetingGroupMember AddMember(string name, string email, ParticipantRole role, UserId? userId, bool hasVotingRights) 
+    public MeetingGroupMember AddMember(string name, string email, AttendeeRole role, UserId? userId, bool hasSpeakingRights, bool hasVotingRights) 
     {
         int order = 1;
 
@@ -41,7 +41,7 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
         }
         catch {}
 
-        var item = new MeetingGroupMember(name, email, role, userId, hasVotingRights);
+        var item = new MeetingGroupMember(name, email, role, userId, hasSpeakingRights, hasVotingRights);
         item.Order = order;
         _members.Add(item);
         return item;

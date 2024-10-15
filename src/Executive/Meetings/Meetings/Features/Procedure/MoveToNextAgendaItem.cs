@@ -25,14 +25,14 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
 
-            if (participant is null)
+            if (attendee is null)
             {
-                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+                return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (participant.Role != ParticipantRole.Chairperson)
+            if (attendee.Role != AttendeeRole.Chairperson)
             {
                 return Errors.Meetings.OnlyChairpersonCanMoveToNextAgendaItem;
             }

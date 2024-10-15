@@ -13,7 +13,7 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditable,
 
     }
 
-    public ElectionCandidate(MeetingParticipantId id, string statement)
+    public ElectionCandidate(MeetingAttendeeId id, string statement)
         : base(new ElectionCandidateId())
     {
     }
@@ -22,7 +22,7 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditable,
     public OrganizationId OrganizationId { get; set; }
     public AgendaItemId AgendaItemId { get; set; }
 
-    public MeetingParticipantId NomineeId { get; set; }
+    public MeetingAttendeeId NomineeId { get; set; }
     public string Statement { get; set; }
 
     public User? CreatedBy { get; set; } = null!;

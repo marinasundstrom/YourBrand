@@ -115,7 +115,7 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<AgendaId>().HaveConversion<AgendaIdConverter>();
         configurationBuilder.Properties<AgendaItemId>().HaveConversion<AgendaItemIdConverter>();
         configurationBuilder.Properties<MeetingId>().HaveConversion<MeetingIdConverter>();
-        configurationBuilder.Properties<MeetingParticipantId>().HaveConversion<MeetingParticipantIdConverter>();
+        configurationBuilder.Properties<MeetingAttendeeId>().HaveConversion<MeetingAttendeeIdConverter>();
         configurationBuilder.Properties<DebateId>().HaveConversion<DebateIdConverter>();
         configurationBuilder.Properties<DebateEntryId>().HaveConversion<DebateEntryIdConverter>();
         configurationBuilder.Properties<MotionId>().HaveConversion<MotionIdConverter>();

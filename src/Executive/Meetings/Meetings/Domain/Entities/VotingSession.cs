@@ -40,7 +40,7 @@ public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditable, 
     public void AddVote(Vote vote)
     {
         if (_votes.Any(v => v.VoterId == vote.VoterId))
-            throw new InvalidOperationException("Participant has already voted.");
+            throw new InvalidOperationException("Attendee has already voted.");
 
         _votes.Add(vote);
     }

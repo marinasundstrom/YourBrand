@@ -13,7 +13,7 @@ public class DebateEntry : AggregateRoot<DebateEntryId>, IAuditable, IHasTenant,
     public OrganizationId OrganizationId { get; set; }
 
     public DebateId DebateId { get; set; }
-    public MeetingParticipantId ParticipantId { get; set; }
+    public MeetingAttendeeId AttendeeId { get; set; }
     public string Content { get; set; }
     public DateTimeOffset Timestamp { get; set; }
     public DebateEntryId ReplyToEntryId { get; set; }

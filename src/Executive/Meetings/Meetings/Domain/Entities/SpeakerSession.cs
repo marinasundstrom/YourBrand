@@ -23,12 +23,12 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
     public IReadOnlyCollection<SpeakerRequest> SpeakerQueue => _speakerQueue;
     public TimeSpan? SpeakingTimeLimit { get; set; }
 
-    public SpeakerRequest AddSpeaker(MeetingParticipant participant)
+    public SpeakerRequest AddSpeaker(MeetingAttendee attendee)
     {
         var request = new SpeakerRequest
         {
             OrganizationId = OrganizationId,
-            ParticipantId = participant.Id,
+            AttendeeId = attendee.Id,
             RequestedTime = DateTimeOffset.UtcNow
         };
 
@@ -37,9 +37,9 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
         return request;
     }
 
-    public SpeakerRequestId RemoveSpeaker(MeetingParticipant participant)
+    public SpeakerRequestId RemoveSpeaker(MeetingAttendee attendee)
     {
-        var request = _speakerQueue.First(s => s.ParticipantId == participant.Id);
+        var request = _speakerQueue.First(s => s.AttendeeId == attendee.Id);
         _speakerQueue.Remove(request);
         return request.Id;
     }

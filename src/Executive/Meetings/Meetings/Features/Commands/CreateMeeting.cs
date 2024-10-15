@@ -8,11 +8,11 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public sealed record CreateMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+public sealed record CreateMeetingAttendeeDto(string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights);
 
 public sealed record CreateMeetingQuorumDto(int RequiredNumber);
 
-public record CreateMeeting(string OrganizationId, string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants) : IRequest<Result<MeetingDto>>
+public record CreateMeeting(string OrganizationId, string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingAttendeeDto> Attendees) : IRequest<Result<MeetingDto>>
 {
     public class Validator : AbstractValidator<CreateMeeting>
     {
@@ -20,7 +20,7 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
         {
             RuleFor(x => x.Title).NotEmpty().MaximumLength(60);
 
-            RuleFor(x => x.Participants).NotEmpty();
+            RuleFor(x => x.Attendees).NotEmpty();
         }
     }
 
@@ -48,9 +48,9 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
                 meeting.ScheduledAt = request.ScheduledAt.GetValueOrDefault();
             }
 
-            foreach (var participant in request.Participants) 
+            foreach (var attendee in request.Attendees) 
             {
-                meeting.AddParticipant(participant.Name, participant.UserId, participant.Email, participant.Role, participant.HasVotingRights);
+                meeting.AddAttendee(attendee.Name, attendee.UserId, attendee.Email, attendee.Role, attendee.HasSpeakingRights, attendee.HasVotingRights);
             }
 
             context.Meetings.Add(meeting);

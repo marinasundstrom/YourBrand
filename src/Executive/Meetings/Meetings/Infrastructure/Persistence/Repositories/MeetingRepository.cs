@@ -21,7 +21,7 @@ public sealed class MeetingRepository(ApplicationDbContext context) : IMeetingRe
         return await dbSet
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)
-            .Include(i => i.Participants)
+            .Include(i => i.Attendees)
             .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }
 
@@ -30,7 +30,7 @@ public sealed class MeetingRepository(ApplicationDbContext context) : IMeetingRe
         return dbSet
             .Include(i => i.CreatedBy)
             .Include(i => i.LastModifiedBy)
-            .Include(i => i.Participants)
+            .Include(i => i.Attendees)
             .Where(specification.Criteria);
     }
 

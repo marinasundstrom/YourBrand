@@ -2,14 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Meetings.Procedure.RollCall;
 
-public class ParticipantViewModel
+public class AttendeeViewModel
 {
     public string Id { get; set; }
 
     [Required]
     public string Name { get; set; }
 
-    public ParticipantRole Role { get; set; } = ParticipantRole.Participant;
+    public AttendeeRole Role { get; set; } = AttendeeRole.Participant;
 
     [Required]
     [EmailAddress]
@@ -21,9 +21,9 @@ public class ParticipantViewModel
 
     public bool IsPresent { get; set; }
 
-    public ParticipantViewModel Clone()
+    public AttendeeViewModel Clone()
     {
-        return new ParticipantViewModel
+        return new AttendeeViewModel
         {
             Name = Name,
             Role = Role,

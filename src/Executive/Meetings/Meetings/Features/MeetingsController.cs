@@ -15,7 +15,7 @@ using YourBrand.Meetings.Models;
 
 namespace YourBrand.Meetings.Features;
 
-public sealed record CreateMeetingDto(string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingParticipantDto> Participants);
+public sealed record CreateMeetingDto(string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingAttendeeDto> Attendees);
 
 public sealed record UpdateMeetingTitleDto(string Title);
 
@@ -29,13 +29,13 @@ public sealed record ChangeMeetingQuorumDto(int RequiredNumber);
 
 public sealed record ChangeMeetingStateDto(MeetingState State);
 
-public sealed record AddMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights);
 
-public sealed record EditMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
+public sealed record EditMeetingAttendeeDto(string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights);
 
-public sealed record AddParticipantsFromGroupDto(int GroupId);
+public sealed record AddAttendeesFromGroupDto(int GroupId);
 
-public sealed record MarkParticipantAsPresentDto(bool IsPresent);
+public sealed record MarkAttendeeAsPresentDto(bool IsPresent);
 
 [ApiController]
 [ApiVersion("1")]
@@ -56,7 +56,7 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     [ProducesDefaultResponseType]
     public async Task<ActionResult<MeetingDto>> CreateMeeting(string organizationId, CreateMeetingDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.Description, request.ScheduledAt, request.Location, request.Quorum, request.Participants), cancellationToken);
+        var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.Description, request.ScheduledAt, request.Location, request.Quorum, request.Attendees), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -130,53 +130,53 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
         return this.HandleResult(result);
     }
 
-    [HttpPost("{id}/participants")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingParticipantDto))]
+    [HttpPost("{id}/attendees")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingAttendeeDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingParticipantDto>> AddParticipant(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingAttendeeDto>> AddAttendee(string organizationId, int id, AddMeetingAttendeeDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddParticipant(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
+        var result = await mediator.Send(new AddAttendee(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpPost("{id}/participants/fromgroup")]
+    [HttpPost("{id}/attendees/fromgroup")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingDto>> AddParticipantsFromGroup(string organizationId, int id, AddParticipantsFromGroupDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingDto>> AddAttendeesFromGroup(string organizationId, int id, AddAttendeesFromGroupDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddParticipantsFromGroup(organizationId, id, request.GroupId), cancellationToken);
+        var result = await mediator.Send(new AddAttendeesFromGroup(organizationId, id, request.GroupId), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpPut("{id}/participants/{participantId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingParticipantDto))]
+    [HttpPut("{id}/attendees/{attendeeId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingAttendeeDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingParticipantDto>> EditParticipant(string organizationId, int id, string participantId, EditMeetingParticipantDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingAttendeeDto>> EditAttendee(string organizationId, int id, string attendeeId, EditMeetingAttendeeDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new EditParticipant(organizationId, id, participantId, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
+        var result = await mediator.Send(new EditAttendee(organizationId, id, attendeeId, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpPut("{id}/participants/{participantId}/IsPresent")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingParticipantDto))]
+    [HttpPut("{id}/attendees/{attendeeId}/IsPresent")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingAttendeeDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<MeetingParticipantDto>> MarkParticipantAsPresent(string organizationId, int id, string participantId, MarkParticipantAsPresentDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<MeetingAttendeeDto>> MarkAttendeeAsPresent(string organizationId, int id, string attendeeId, MarkAttendeeAsPresentDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new MarkParticipantAsPresent(organizationId, id, participantId, request.IsPresent), cancellationToken);
+        var result = await mediator.Send(new MarkAttendeeAsPresent(organizationId, id, attendeeId, request.IsPresent), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpDelete("{id}/participants/{participantId}")]
+    [HttpDelete("{id}/attendees/{attendeeId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> RemoveParticipant(string organizationId, int id, string participantId, CancellationToken cancellationToken)
+    public async Task<ActionResult> RemoveAttendee(string organizationId, int id, string attendeeId, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RemoveParticipant(organizationId, id, participantId), cancellationToken);
+        var result = await mediator.Send(new RemoveAttendee(organizationId, id, attendeeId), cancellationToken);
         return this.HandleResult(result);
     }
 

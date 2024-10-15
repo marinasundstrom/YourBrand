@@ -108,9 +108,9 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         StateHasChanged();
     }
 
-    public async Task OnSpeakerRequestAdded(string agendaItemId, string id, string participantId)
+    public async Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
     {
-        speakerQueue.Enqueue(new SpeakerRequest() { Id = id, ParticipantId = participantId, });
+        speakerQueue.Enqueue(new SpeakerRequest() { Id = id, AttendeeId = attendeeId, });
         
         Console.WriteLine("Added");
 

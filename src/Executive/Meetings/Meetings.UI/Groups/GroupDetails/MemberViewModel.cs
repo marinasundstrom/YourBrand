@@ -9,7 +9,7 @@ public class MemberViewModel
     [Required]
     public string Name { get; set; }
 
-    public ParticipantRole Role { get; set; } = ParticipantRole.Participant;
+    public AttendeeRole Role { get; set; } = AttendeeRole.Participant;
 
     [Required]
     [EmailAddress]

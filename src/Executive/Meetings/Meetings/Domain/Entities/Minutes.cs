@@ -8,7 +8,7 @@ namespace YourBrand.Meetings.Domain.Entities;
 public enum MinutesState 
 {
     Drafting,           // Minute is being drafted, can still be modified.
-    Reviewing,          // Minute is under review by participants or stakeholders.
+    Reviewing,          // Minute is under review by attendees or stakeholders.
     Approved           // Minute is finalized and approved for the meeting.
 }
 

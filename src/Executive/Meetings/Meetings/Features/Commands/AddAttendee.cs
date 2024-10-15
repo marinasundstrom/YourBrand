@@ -8,9 +8,9 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public record AddParticipant(string OrganizationId, int Id, string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights) : IRequest<Result<MeetingParticipantDto>>
+public record AddAttendee(string OrganizationId, int Id, string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights) : IRequest<Result<MeetingAttendeeDto>>
 {
-    public class Validator : AbstractValidator<AddParticipant>
+    public class Validator : AbstractValidator<AddAttendee>
     {
         public Validator()
         {
@@ -18,9 +18,9 @@ public record AddParticipant(string OrganizationId, int Id, string Name, string?
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<AddParticipant, Result<MeetingParticipantDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<AddAttendee, Result<MeetingAttendeeDto>>
     {
-        public async Task<Result<MeetingParticipantDto>> Handle(AddParticipant request, CancellationToken cancellationToken)
+        public async Task<Result<MeetingAttendeeDto>> Handle(AddAttendee request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -31,13 +31,13 @@ public record AddParticipant(string OrganizationId, int Id, string Name, string?
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var participant = meeting.AddParticipant(request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights);
+            var attendee = meeting.AddAttendee(request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights);
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
             
-            return participant.ToDto();
+            return attendee.ToDto();
         }
     }
 }

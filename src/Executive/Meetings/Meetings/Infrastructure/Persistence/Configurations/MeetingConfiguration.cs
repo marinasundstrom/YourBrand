@@ -13,11 +13,11 @@ public sealed class MeetingConfiguration : IEntityTypeConfiguration<Meeting>
 
         builder.HasIndex(x => x.TenantId);
 
-        builder.HasMany(x => x.Participants)
+        builder.HasMany(x => x.Attendees)
             .WithOne()
             .HasForeignKey(x => new { x.OrganizationId, x.MeetingId });
 
-        builder.Navigation(x => x.Participants).AutoInclude();
+        builder.Navigation(x => x.Attendees).AutoInclude();
 
         builder.HasOne(x => x.Agenda)
             .WithOne()

@@ -25,14 +25,14 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string Age
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
 
-            if (participant is null)
+            if (attendee is null)
             {
-                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+                return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!participant.HasVotingRights)
+            if (!attendee.HasVotingRights)
             {
                 return Errors.Meetings.YouHaveNoVotingRights;
             }
@@ -49,7 +49,7 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string Age
                 return Errors.Meetings.NoOngoingSpeakerSession;
             }
 
-            var id = agendaItem.SpeakerSession!.RemoveSpeaker(participant);
+            var id = agendaItem.SpeakerSession!.RemoveSpeaker(attendee);
 
             context.Meetings.Update(meeting);
 

@@ -8,12 +8,12 @@
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Name"
-                    For="@(() =>Model.Name)" />
-                <MudSelect T="ParticipantRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
+                    For="@(() => Model.Name)" />
+                <MudSelect T="AttendeeRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
                     Class="mt-4">
-                    @foreach (var type in Enum.GetValues<ParticipantRole>())
+                    @foreach (var type in Enum.GetValues<AttendeeRole>())
                     {
-                        <MudSelectItem T="ParticipantRole" Value="@type">@Enum.GetName(typeof(ParticipantRole), type)
+                        <MudSelectItem T="AttendeeRole" Value="@type">@Enum.GetName(typeof(AttendeeRole), type)
                         </MudSelectItem>
                     }
                 </MudSelect>
@@ -28,7 +28,7 @@
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
-                Create
+                Update
             </MudButton>
         </DialogActions>
     </MudDialog>
@@ -37,30 +37,25 @@
 
 @code
 {
-    EditContext context = null!;
-
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
     public string? OrganizationId { get; set; } = null!;
 
-    [Required]
-    public ParticipantViewModel Model { get; set; } = new ParticipantViewModel();
+    [Parameter]
+    public AddEditAttendeeViewModel? Model { get; set; }
 
     protected override void OnInitialized()
     {
-
+        if(Model is null) 
+        {
+            Model = new AddEditAttendeeViewModel();
+        }
     }
 
     public void OnValidSubmit()
     {
-        Dialog.Close(new ParticipantViewModel {
-            Name = Model.Name,
-            Role = Model.Role,
-            Email = Model.Email,
-            User = Model.User,
-            HasVotingRights = Model.HasVotingRights
-        });
+        Dialog.Close(Model);
     }
 }

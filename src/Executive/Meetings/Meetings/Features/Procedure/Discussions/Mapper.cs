@@ -7,5 +7,5 @@ public static partial class Mappings
 {
     public static SpeakerSessionDto ToDto(this SpeakerSession speakerSession) => new(speakerSession.Id, speakerSession.SpeakerQueue.Select(x => x.ToDto()));
 
-    public static SpeakerRequestDto ToDto(this SpeakerRequest speakerRequest) => new(speakerRequest.Id, speakerRequest.ParticipantId);
+    public static SpeakerRequestDto ToDto(this SpeakerRequest speakerRequest) => new(speakerRequest.Id, speakerRequest.AttendeeId);
 }

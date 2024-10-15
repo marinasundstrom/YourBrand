@@ -24,7 +24,7 @@ public sealed class Vote : Entity<VoteId>, IAuditable, IHasTenant, IHasOrganizat
     public OrganizationId OrganizationId { get; set; }
     public VotingSessionId VotingSessionId { get; set; }
 
-    public MeetingParticipantId VoterId { get; set; }
+    public MeetingAttendeeId VoterId { get; set; }
     public DateTimeOffset TimeCast { get; set; }
 
     // For motions

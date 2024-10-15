@@ -10,7 +10,7 @@ using YourBrand.Meetings;
 namespace YourBrand.Meetings.Procedure;
 
 
-public partial class ParticipantPage : IMeetingsProcedureHubClient
+public partial class AttendeePage : IMeetingsProcedureHubClient
 {
     Meeting? meeting;
     Agenda? agenda;

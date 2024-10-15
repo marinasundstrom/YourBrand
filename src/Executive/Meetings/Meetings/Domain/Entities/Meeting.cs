@@ -16,7 +16,7 @@ public enum MeetingState
 
 public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrganization
 {
-    readonly HashSet<MeetingParticipant> _participants = new HashSet<MeetingParticipant>();
+    readonly HashSet<MeetingAttendee> _attendees = new HashSet<MeetingAttendee>();
 
     protected Meeting()
     {
@@ -36,7 +36,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public string Location { get; set; }
     public string? Description { get; set; }
     public MeetingState State { get; set; } = MeetingState.Draft;
-    public IReadOnlyCollection<MeetingParticipant> Participants => _participants;
+    public IReadOnlyCollection<MeetingAttendee> Attendees => _attendees;
     public Agenda? Agenda { get; set; }
     public int? CurrentAgendaItemIndex { get; private set; } = null;
     public Quorum Quorum { get; set; } = new Quorum();
@@ -49,8 +49,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool IsQuorumMet()
     {
-        int presentParticipants = Participants.Count(p => p.IsPresent && p.HasVotingRights);
-        return presentParticipants >= Quorum.RequiredNumber;
+        int presentAttendees = Attendees.Count(p => p.IsPresent && p.HasVotingRights);
+        return presentAttendees >= Quorum.RequiredNumber;
     }
 
     public void StartMeeting()
@@ -157,19 +157,19 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return Agenda?.Items.FirstOrDefault(x => x.Id == id);
     }
 
-    public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights, 
+    public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool hasSpeakingRights, bool hasVotingRights, 
     MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
         int order = 1;
 
         try
         {
-            var last = _participants.OrderByDescending(x => x.Order).First();
+            var last = _attendees.OrderByDescending(x => x.Order).First();
             order = last.Order + 1;
         }
         catch { }
 
-        var participant = new MeetingParticipant
+        var attendee = new MeetingAttendee
         {
             OrganizationId = OrganizationId,
             MeetingId = Id,
@@ -177,20 +177,21 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             UserId = userId,
             Email = email,
             Role = role,
-            HasVotingRights = HasVotingRights,
+            HasSpeakingRights = hasSpeakingRights,
+            HasVotingRights = hasVotingRights,
             MeetingGroupId = meetingGroupId,
             MeetingGroupMemberId = meetingGroupMemberId
         };
-        participant.Order = order;
+        attendee.Order = order;
 
-        _participants.Add(participant);
+        _attendees.Add(attendee);
 
-        return participant;
+        return attendee;
     }
 
-    public bool RemoveParticipant(MeetingParticipant participant)
+    public bool RemoveAttendee(MeetingAttendee attendee)
     {
-        return _participants.Remove(participant);
+        return _attendees.Remove(attendee);
     }
 
     public void ResetProcedure()

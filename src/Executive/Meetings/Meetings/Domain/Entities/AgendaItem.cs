@@ -69,10 +69,10 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public string? Position { get; set; }
     public IReadOnlyCollection<ElectionCandidate> Candidates => _candidates;
 
-    public void AddCandidate(MeetingParticipant candidate, string statement)
+    public void AddCandidate(MeetingAttendee candidate, string statement)
     {
         if (_candidates.Any(v => v.NomineeId == candidate.Id))
-            throw new InvalidOperationException("Participant is already a candidate.");
+            throw new InvalidOperationException("Attendee is already a candidate.");
 
         _candidates.Add(new ElectionCandidate(candidate.Id, statement));
     }

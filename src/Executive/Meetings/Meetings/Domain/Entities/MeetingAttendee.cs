@@ -5,7 +5,7 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum ParticipantRole
+public enum AttendeeRole
 {
     Chairperson,
     Secretary,
@@ -13,10 +13,10 @@ public enum ParticipantRole
     Observer
 }
 
-public class MeetingParticipant : Entity<MeetingParticipantId>, IAuditable, IHasTenant, IHasOrganization
+public class MeetingAttendee : Entity<MeetingAttendeeId>, IAuditable, IHasTenant, IHasOrganization
 {
-    public MeetingParticipant()
-        : base(new MeetingParticipantId())
+    public MeetingAttendee()
+        : base(new MeetingAttendeeId())
     {
 
     }
@@ -40,8 +40,9 @@ public class MeetingParticipant : Entity<MeetingParticipantId>, IAuditable, IHas
     public DateTimeOffset? InviteAcceptedAt { get; set; }
 
     public bool IsPresent { get; set; }
+    public bool HasSpeakingRights { get; set; }
     public bool HasVotingRights { get; set; }
-    public ParticipantRole Role { get; set; }
+    public AttendeeRole Role { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

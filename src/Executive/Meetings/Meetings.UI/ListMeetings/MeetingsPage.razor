@@ -24,14 +24,14 @@
         <MudTh>Title</MudTh>
         <MudTh>State</MudTh>
         <MudTh>Scheduled</MudTh>
-        <MudTh>Participants</MudTh>
+        <MudTh>Attendees</MudTh>
     </HeaderContent>
     <RowTemplate Context="meeting">
         <MudTd DataLabel="Id">@meeting.Id</MudTd>
         <MudTd DataLabel="Title">@meeting.Title</MudTd>
         <MudTd DataLabel="State">@meeting.State</MudTd>
         <MudTd DataLabel="ScheduledAt">@meeting.ScheduledAt.GetValueOrDefault().ToString("g")</MudTd>
-        <MudTd DataLabel="Participants">@meeting.Participants.Count</MudTd>
+        <MudTd DataLabel="Attendees">@meeting.Attendees.Count</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

@@ -3,11 +3,11 @@ using System.Globalization;
 
 namespace YourBrand.Meetings.Domain.ValueObjects;
 
-public struct MeetingParticipantId
+public struct MeetingAttendeeId
 {
-    public MeetingParticipantId(string value) => Value = value;
+    public MeetingAttendeeId(string value) => Value = value;
 
-    public MeetingParticipantId() => Value = Guid.NewGuid().ToString();
+    public MeetingAttendeeId() => Value = Guid.NewGuid().ToString();
 
     public string Value { get; set; }
 
@@ -26,30 +26,30 @@ public struct MeetingParticipantId
         return (Value ?? string.Empty).ToString();
     }
 
-    public static bool operator ==(MeetingParticipantId lhs, MeetingParticipantId rhs) => lhs.Value == rhs.Value;
+    public static bool operator ==(MeetingAttendeeId lhs, MeetingAttendeeId rhs) => lhs.Value == rhs.Value;
 
-    public static bool operator !=(MeetingParticipantId lhs, MeetingParticipantId rhs) => lhs.Value != rhs.Value;
+    public static bool operator !=(MeetingAttendeeId lhs, MeetingAttendeeId rhs) => lhs.Value != rhs.Value;
 
-    public static implicit operator MeetingParticipantId(string id) => new MeetingParticipantId(id);
+    public static implicit operator MeetingAttendeeId(string id) => new MeetingAttendeeId(id);
 
-    public static implicit operator MeetingParticipantId?(string? id) => id is null ? (MeetingParticipantId?)null : new MeetingParticipantId(id);
+    public static implicit operator MeetingAttendeeId?(string? id) => id is null ? (MeetingAttendeeId?)null : new MeetingAttendeeId(id);
 
-    public static implicit operator string(MeetingParticipantId id) => id.Value;
+    public static implicit operator string(MeetingAttendeeId id) => id.Value;
 
-    public static bool TryParse(string? value, out MeetingParticipantId channelParticipantId)
+    public static bool TryParse(string? value, out MeetingAttendeeId channelAttendeeId)
     {
-        return TryParse(value, CultureInfo.CurrentCulture, out channelParticipantId);
+        return TryParse(value, CultureInfo.CurrentCulture, out channelAttendeeId);
     }
 
-    public static bool TryParse(string? value, IFormatProvider? provider, out MeetingParticipantId channelParticipantId)
+    public static bool TryParse(string? value, IFormatProvider? provider, out MeetingAttendeeId channelAttendeeId)
     {
         if (value is null)
         {
-            channelParticipantId = default;
+            channelAttendeeId = default;
             return false;
         }
 
-        channelParticipantId = value;
+        channelAttendeeId = value;
         return true;
     }
 }

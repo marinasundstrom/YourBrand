@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Meetings.Infrastructure.Persistence.Configurations;
 
-public sealed class MeetingParticipantConfiguration : IEntityTypeConfiguration<MeetingParticipant>
+public sealed class MeetingAttendeeConfiguration : IEntityTypeConfiguration<MeetingAttendee>
 {
-    public void Configure(EntityTypeBuilder<MeetingParticipant> builder)
+    public void Configure(EntityTypeBuilder<MeetingAttendee> builder)
     {
-        builder.ToTable("MeetingParticipants");
+        builder.ToTable("MeetingAttendees");
 
         builder.HasKey(x => new { x.OrganizationId, x.MeetingId, x.Id });
 

@@ -23,14 +23,14 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var participant = meeting.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
 
-            if (participant is null)
+            if (attendee is null)
             {
-                return Errors.Meetings.YouAreNotParticipantOfMeeting;
+                return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!participant.HasVotingRights)
+            if (!attendee.HasVotingRights)
             {
                 return Errors.Meetings.YouHaveNoVotingRights;
             }
@@ -50,7 +50,7 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
             agendaItem.VotingSession!.AddVote(new Vote
             {
                 OrganizationId = request.OrganizationId,
-                VoterId = participant.Id,
+                VoterId = attendee.Id,
                 Option = request.Option,
                 TimeCast = DateTimeOffset.UtcNow
             });

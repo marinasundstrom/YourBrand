@@ -28,9 +28,9 @@ internal sealed class MeetingIdConverter : ValueConverter<MeetingId, int>
     }
 }
 
-internal sealed class MeetingParticipantIdConverter : ValueConverter<MeetingParticipantId, string>
+internal sealed class MeetingAttendeeIdConverter : ValueConverter<MeetingAttendeeId, string>
 {
-    public MeetingParticipantIdConverter()
+    public MeetingAttendeeIdConverter()
         : base(v => v.Value, v => new(v))
     {
     }

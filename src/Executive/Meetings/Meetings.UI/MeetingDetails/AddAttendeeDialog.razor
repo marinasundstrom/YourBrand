@@ -8,18 +8,19 @@
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Name"
-                    For="@(() => Model.Name)" />
-                <MudSelect T="ParticipantRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
+                    For="@(() =>Model.Name)" />
+                <MudSelect T="AttendeeRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
                     Class="mt-4">
-                    @foreach (var type in Enum.GetValues<ParticipantRole>())
+                    @foreach (var type in Enum.GetValues<AttendeeRole>())
                     {
-                        <MudSelectItem T="ParticipantRole" Value="@type">@Enum.GetName(typeof(ParticipantRole), type)
+                        <MudSelectItem T="AttendeeRole" Value="@type">@Enum.GetName(typeof(AttendeeRole), type)
                         </MudSelectItem>
                     }
                 </MudSelect>
                 <MudTextField Label="Email" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Email"
                     For="@(() => Model.Email)" />
-                <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Class="mt-4" Label="User" Variant="Variant.Outlined" @bind-Value="Model.User" For="() => Model.User" />
+                <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Class="mt-4" Label="User"
+                    Variant="Variant.Outlined" @bind-Value="Model.User" For="() => Model.User" />
                 <MudCheckBox Label="Has voting rights" @bind-Value="Model.HasVotingRights" Class="mt-4"></MudCheckBox>
             </MudContainer>
         </DialogContent>
@@ -27,7 +28,7 @@
         <DialogActions>
             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
-                Save
+                Create
             </MudButton>
         </DialogActions>
     </MudDialog>
@@ -36,14 +37,16 @@
 
 @code
 {
+    EditContext context = null!;
+
     [CascadingParameter]
     public MudDialogInstance Dialog { get; set; } = null!;
 
     [Parameter]
     public string? OrganizationId { get; set; } = null!;
 
-    [Parameter]
-    public ParticipantViewModel? Model { get; set; }
+    [Required]
+    public AttendeeViewModel Model { get; set; } = new AttendeeViewModel();
 
     protected override void OnInitialized()
     {
@@ -52,13 +55,12 @@
 
     public void OnValidSubmit()
     {
-        Dialog.Close(new ParticipantViewModel
-            {
-                Name = Model.Name,
-                Role = Model.Role,
-                Email = Model.Email,
-                User = Model.User,
-                HasVotingRights = Model.HasVotingRights
-            });
+        Dialog.Close(new AttendeeViewModel {
+            Name = Model.Name,
+            Role = Model.Role,
+            Email = Model.Email,
+            User = Model.User,
+            HasVotingRights = Model.HasVotingRights
+        });
     }
 }
