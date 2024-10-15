@@ -270,6 +270,16 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
         return this.HandleResult(result);
     }
 
+    [HttpPost("{id}/Cancel")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> CancelMeeting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new CancelMeeting(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
     [HttpPost("{id}/End")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]

@@ -3,6 +3,7 @@
 @inject IMeetingsClient MeetingsClient
 @inject IAgendasClient AgendasClient
 @inject IMotionsClient MotionsClient
+@inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
@@ -47,9 +48,19 @@ else
                         }
                         else if (meeting.State == MeetingState.InProgress)
                         {
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2" OnClick="MoveToNextAgendaItem"
-                                Disabled="@(lastItem || currentAgendaItem?.State == AgendaItemState.Pending)">Next Agenda Item</MudButton>
-                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="EndMeeting">End Meeting</MudButton>
+                            <div class="d-flex justify-space-between flex-grow-1 gap-4">
+                                <div>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2" OnClick="MoveToNextAgendaItem"
+                                        Disabled="@(lastItem || currentAgendaItem?.State == AgendaItemState.Pending)">Next Agenda Item</MudButton>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2"  OnClick="ResetProcedure">Reset procedure</MudButton>
+                                </div>
+                                <div>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="me-2" OnClick="EndMeeting"
+                                        Disabled="@(!lastItem || currentAgendaItem?.State != AgendaItemState.Completed)">End Meeting</MudButton>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="me-2" OnClick="CancelMeeting" 
+                                        Disabled="@(lastItem && currentAgendaItem?.State == AgendaItemState.Completed)">Cancel Meeting</MudButton>
+                                </div>
+                            </div>
                         }
                         else if (meeting.State == MeetingState.Completed)
                         {
@@ -144,8 +155,6 @@ else
             }
         </MudItem>
     </MudGrid>
-
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ResetProcedure">Reset procedure</MudButton>
 }
 
 @code {
@@ -169,6 +178,13 @@ else
 
     private async Task ResetProcedure() 
     {
+        var r = await DialogService.ShowMessageBox("Reset the procedure?", "This can't be undone.", "Yes", "No");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
         await MeetingsClient.ResetMeetingProcedureAsync(organization.Id, MeetingId);
 
         await LoadMeetingDetails();
@@ -219,6 +235,19 @@ else
     private async Task EndMeeting()
     {
         await MeetingsClient.EndMeetingAsync(organization.Id, MeetingId);
+        await LoadMeetingDetails();
+    }
+
+    private async Task CancelMeeting()
+    {
+        var r = await DialogService.ShowMessageBox("Cancel the meeting?", "This can't be undone.", "Yes", "No");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await MeetingsClient.CancelMeetingAsync(organization.Id, MeetingId);
         await LoadMeetingDetails();
     }
 

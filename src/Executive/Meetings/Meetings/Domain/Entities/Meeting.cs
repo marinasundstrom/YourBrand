@@ -42,6 +42,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public Quorum Quorum { get; set; } = new Quorum();
     public Minutes? Minutes { get; set; }
 
+    public DateTimeOffset? Started { get; set; }
+    public DateTimeOffset? Canceled { get; set; }
+    public DateTimeOffset? Ended { get; set; }
+
+
     public bool IsQuorumMet()
     {
         int presentParticipants = Participants.Count(p => p.IsPresent && p.HasVotingRights);
@@ -60,6 +65,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Quorum not met.");
         }
 
+        Started = DateTimeOffset.UtcNow;
+
         State = MeetingState.InProgress;
 
         CurrentAgendaItemIndex = 0;
@@ -69,12 +76,37 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         //agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.UnderDiscussion;
     }
 
+    public void CancelMeeting()
+    {
+        /*
+        if (State != MeetingState.InProgress)
+        {
+            throw new InvalidOperationException("Meeting is not in progress.");
+        }
+        */
+
+        Canceled = DateTimeOffset.UtcNow;
+
+        State = MeetingState.Cancelled;
+
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+
+        foreach(var item in agendaItems.Skip(CurrentAgendaItemIndex.GetValueOrDefault())) 
+        {
+            item.Cancel();
+        }
+
+        CurrentAgendaItemIndex = null;
+    }
+
     public void EndMeeting()
     {
         if (State != MeetingState.InProgress)
         {
             throw new InvalidOperationException("Meeting is not in progress.");
         }
+
+        Ended = DateTimeOffset.UtcNow;
 
         State = MeetingState.Completed;
 
@@ -162,8 +194,6 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             agendaItem.State = AgendaItemState.Pending;
         }
     }
-
-    // ...
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

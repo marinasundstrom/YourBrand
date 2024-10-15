@@ -999,6 +999,41 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}/Cancel:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_CancelMeeting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/End:
     post:
       tags:
