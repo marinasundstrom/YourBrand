@@ -16,7 +16,11 @@ public enum OperativeAction
     Authorizes,
     CallsFor,
     Acknowledges,
-    Endorses
+    Endorses,
+    Adopts,
+    Amends,
+    Rejects,
+    Elects
 }
 
 public class MotionOperativeClause : Entity<MotionOperativeClauseId>, IAuditable, IHasTenant, IHasOrganization

@@ -3485,8 +3485,14 @@ components:
       description: ''
       x-enumNames:
       - Proposed
+      - Adopted
+      - Rejected
+      - Amended
       enum:
       - 0
+      - 1
+      - 2
+      - 3
     MotionOperativeClause:
       type: object
       additionalProperties: false
@@ -3514,6 +3520,10 @@ components:
       - CallsFor
       - Acknowledges
       - Endorses
+      - Adopts
+      - Amends
+      - Rejects
+      - Elects
       enum:
       - 0
       - 1
@@ -3525,6 +3535,10 @@ components:
       - 7
       - 8
       - 9
+      - 10
+      - 11
+      - 12
+      - 13
     CreateMotion:
       type: object
       additionalProperties: false

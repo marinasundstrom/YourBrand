@@ -5,7 +5,13 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum MotionStatus { Proposed }
+public enum MotionStatus
+{
+    Proposed,
+    Adopted,
+    Rejected,
+    Amended
+}
 
 public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrganization
 {
