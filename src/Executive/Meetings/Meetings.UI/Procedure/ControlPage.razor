@@ -136,6 +136,19 @@ else
                     </MudCardActions>
                 </MudCard>
 
+                @if (currentAgendaItem?.Type == AgendaItemType.RollCall 
+                    && currentAgendaItem?.State != AgendaItemState.Voting 
+                    && currentAgendaItem?.State != AgendaItemState.Completed)
+                {
+                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                        <MudText Typo="@Typo.h4" GutterBottom="true">Roll call</MudText>
+
+                        <YourBrand.Meetings.Procedure.RollCall.RollCallDisplay OrganizationId="@organization.Id" Meeting="@meeting" />
+
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="CompleteAgendaItem">Complete Agenda Item</MudButton>
+                    </MudPaper>
+                }
+
                 @if (currentMotion is not null)
                 {
                     <MudPaper Class="pa-8 mb-4" Elevation="25">
