@@ -94,12 +94,12 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("No more agenda items.");
         }
 
-        /*
-        if(CurrentAgendaItemIndex is not null) 
+        var currentItem = agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault());
+
+        if (currentItem.State == AgendaItemState.Pending)
         {
-            agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault()).State = AgendaItemState.Completed;
+            throw new InvalidOperationException("Can't skip item that is in pending state.");
         }
-        */
 
         CurrentAgendaItemIndex++;
 

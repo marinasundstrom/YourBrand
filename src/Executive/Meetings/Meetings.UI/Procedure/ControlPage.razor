@@ -48,7 +48,7 @@ else
                         else if (meeting.State == MeetingState.InProgress)
                         {
                             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2" OnClick="MoveToNextAgendaItem"
-                                Disabled="@lastItem">Next Agenda Item</MudButton>
+                                Disabled="@(lastItem || currentAgendaItem?.State == AgendaItemState.Pending)">Next Agenda Item</MudButton>
                             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="EndMeeting">End Meeting</MudButton>
                         }
                         else if (meeting.State == MeetingState.Completed)
