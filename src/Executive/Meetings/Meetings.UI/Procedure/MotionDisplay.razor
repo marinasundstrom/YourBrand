@@ -11,12 +11,12 @@
         <li class="mb-2">
             @if (clause.Id == OperativeClauseId)
             {
-                <MudText Typo="@Typo.body1" Class="mb-2"><b>@clause.Order. @clause.Action @clause.Text</b></MudText>
+                <MudText Typo="@Typo.body1" Class="mb-2"><b>@clause.Order. @clause.Text</b></MudText>
 
             }
             else
             {
-                <MudText Typo="@Typo.body1" Class="mb-2">@clause.Order. @clause.Action @clause.Text</MudText>
+                <MudText Typo="@Typo.body1" Class="mb-2">@clause.Order. @clause.Text</MudText>
             }
         </li>
     }
