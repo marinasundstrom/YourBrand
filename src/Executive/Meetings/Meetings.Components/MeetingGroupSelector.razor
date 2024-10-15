@@ -1,0 +1,99 @@
+@using System.Linq.Expressions
+@inject IMeetingGroupsClient MeetingGroupsClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="MeetingGroup" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchMeetingGroups" ToStringFunc="(x) => x.Title"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Title</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Title</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddMeetingGroup" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Meeting Group";
+
+    [Parameter]
+    public MeetingGroup Value { get; set; }
+
+    [Parameter]
+    public EventCallback<MeetingGroup> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<MeetingGroup>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string? OrganizationId { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async Task<IEnumerable<MeetingGroup>> SearchMeetingGroups(string text)
+    {
+        try
+        {
+            var results = await MeetingGroupsClient.GetMeetingGroupsAsync(OrganizationId, 1, 10, text, null, null);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async Task AddMeetingGroup() 
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Meetings.UI")
+            .GetType("YourBrand.Meetings.MeetingGroups.Add");
+
+            var dialogReference = DialogService.Show(type, "New Group", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            Value = (MeetingGroup)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

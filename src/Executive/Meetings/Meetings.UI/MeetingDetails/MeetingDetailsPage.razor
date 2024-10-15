@@ -70,7 +70,9 @@
                 OnRowClick="async (e) => await EditParticipant(e.Item)">
                 <ToolBarContent>
                     <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-                        OnClick="AddParticipant" Class="mb-2">Add participant</MudButton>
+                        OnClick="AddParticipant" Class="mb-2 me-2">Add participant</MudButton>
+                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
+                        OnClick="AddParticipantGroup" Class="mb-2">Add group</MudButton>
                 </ToolBarContent>
 
                 <HeaderContent>
@@ -310,6 +312,38 @@
         participantModel.Id = model.Id;
 
         Participants.Add(participantModel);
+    }
+
+    async Task AddParticipantGroup()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddParticipantsFromGroupDialog.OrganizationId), organization.Id);
+
+        var modalRef = DialogService.Show<AddParticipantsFromGroupDialog>("Add group", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var meetingGroup = (MeetingGroup)result.Data;
+
+        var meeting = await MeetingsClient.AddParticipantsFromGroupAsync(organization.Id, Id, new AddParticipantsFromGroup {
+            GroupId = meetingGroup.Id
+        });
+
+        foreach(var participant in meeting.Participants) 
+        {
+            Participants.Add(new ParticipantViewModel ()
+            {
+                Id = participant.Id,
+                Role = participant.Role,
+                Name = participant.Name,
+                Email = participant.Email,
+                //User = x.User,
+                HasVotingRights = participant.HasVotingRights,
+                IsPresent = participant.IsPresent
+            });
+        }
     }
 
     async Task EditParticipant(ParticipantViewModel participant)

@@ -479,6 +479,53 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}/participants/fromgroup:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_AddParticipantsFromGroup
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddParticipantsFromGroup'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/participants/{participantId}:
     put:
       tags:
@@ -3133,6 +3180,13 @@ components:
           $ref: '#/components/schemas/ParticipantRole'
         hasVotingRights:
           type: boolean
+    AddParticipantsFromGroup:
+      type: object
+      additionalProperties: false
+      properties:
+        groupId:
+          type: integer
+          format: int32
     EditMeetingParticipant:
       type: object
       additionalProperties: false

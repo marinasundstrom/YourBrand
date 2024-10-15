@@ -33,6 +33,8 @@ public sealed record AddMeetingParticipantDto(string Name, string? UserId, strin
 
 public sealed record EditMeetingParticipantDto(string Name, string? UserId, string Email, ParticipantRole Role, bool HasVotingRights);
 
+public sealed record AddParticipantsFromGroupDto(int GroupId);
+
 public sealed record MarkParticipantAsPresentDto(bool IsPresent);
 
 [ApiController]
@@ -135,6 +137,16 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     public async Task<ActionResult<MeetingParticipantDto>> AddParticipant(string organizationId, int id, AddMeetingParticipantDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new AddParticipant(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasVotingRights), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/participants/fromgroup")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingDto>> AddParticipantsFromGroup(string organizationId, int id, AddParticipantsFromGroupDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new AddParticipantsFromGroup(organizationId, id, request.GroupId), cancellationToken);
         return this.HandleResult(result);
     }
 

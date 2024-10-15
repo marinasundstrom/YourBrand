@@ -125,7 +125,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return Agenda?.Items.FirstOrDefault(x => x.Id == id);
     }
 
-    public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights)
+    public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights, 
+    MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
         var participant = new MeetingParticipant
         {
@@ -135,7 +136,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             UserId = userId,
             Email = email,
             Role = role,
-            HasVotingRights = HasVotingRights
+            HasVotingRights = HasVotingRights,
+            MeetingGroupId = meetingGroupId,
+            MeetingGroupMemberId = meetingGroupMemberId
         };
 
         _participants.Add(participant);
