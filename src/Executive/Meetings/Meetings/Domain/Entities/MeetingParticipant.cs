@@ -29,6 +29,8 @@ public class MeetingParticipant : Entity<MeetingParticipantId>, IAuditable, IHas
     public string? Name { get; set; }
     public UserId? UserId { get; set; }
 
+    public int Order { get; set; }
+
     public MeetingGroupId? MeetingGroupId { get; set; }
     public MeetingGroupMemberId? MeetingGroupMemberId { get; set; }
 

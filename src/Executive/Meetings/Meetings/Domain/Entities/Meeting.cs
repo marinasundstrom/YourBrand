@@ -160,6 +160,15 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public MeetingParticipant AddParticipant(string name, string? userId, string email, ParticipantRole role, bool HasVotingRights, 
     MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
+        int order = 1;
+
+        try
+        {
+            var last = _participants.OrderByDescending(x => x.Order).First();
+            order = last.Order + 1;
+        }
+        catch { }
+
         var participant = new MeetingParticipant
         {
             OrganizationId = OrganizationId,
@@ -172,6 +181,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             MeetingGroupId = meetingGroupId,
             MeetingGroupMemberId = meetingGroupMemberId
         };
+        participant.Order = order;
 
         _participants.Add(participant);
 
