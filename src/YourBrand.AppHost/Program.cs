@@ -1,3 +1,5 @@
+using Aspire.Hosting;
+
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -32,8 +34,7 @@ var sqlServerPassword = builder.AddParameter("sqlServerPassword", true);
 
 var sqlServer = builder.AddSqlServer("sql", password: sqlServerPassword, port: 1433)
     .WithBindMount("../../data/sql-edge", "/var/opt/mssql")
-    .WithEnvironment("MSSQL_PID", "Developer")
-    .WithHealthCheck();
+    .WithEnvironment("MSSQL_PID", "Developer");
 
 var hangfireDb = sqlServer.AddDatabase("hangfireDb", "HangfireDB");
 
