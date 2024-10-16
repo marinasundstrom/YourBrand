@@ -3401,19 +3401,29 @@ components:
       - RollCall
       - ApprovalOfMinutes
       - ApprovalOfAgenda
+      - ConsentAgenda
       - ChairpersonRemarks
       - PublicComment
       - Reports
+      - FinancialReport
       - SpecialPresentations
       - OldBusiness
+      - UnfinishedBusiness
       - NewBusiness
       - Announcements
       - Motion
       - Discussion
+      - StrategicDiscussion
       - Voting
       - Election
       - ExecutiveSession
+      - RecognitionAwards
+      - ActionItemsReview
+      - Recess
+      - GuestSpeakers
+      - FollowUpItems
       - Adjournment
+      - ClosingRemarks
       enum:
       - 0
       - 1
@@ -3432,6 +3442,16 @@ components:
       - 14
       - 15
       - 16
+      - 17
+      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
     AgendaItemState:
       type: integer
       description: ''
@@ -3748,7 +3768,7 @@ components:
           type: integer
           format: int32
         type:
-          $ref: '#/components/schemas/MinutesItemType'
+          $ref: '#/components/schemas/AgendaItemType'
         agendaId:
           type: integer
           format: int32
@@ -3764,13 +3784,6 @@ components:
           type: integer
           format: int32
           nullable: true
-    MinutesItemType:
-      type: integer
-      description: ''
-      x-enumNames:
-      - General
-      enum:
-      - 0
     MinutesItemState:
       type: integer
       description: ''
@@ -3805,7 +3818,7 @@ components:
           type: string
           nullable: true
         type:
-          $ref: '#/components/schemas/MinutesItemType'
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         description:
@@ -3825,7 +3838,7 @@ components:
           type: string
           nullable: true
         type:
-          $ref: '#/components/schemas/MinutesItemType'
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         description:
@@ -3843,7 +3856,7 @@ components:
       additionalProperties: false
       properties:
         type:
-          $ref: '#/components/schemas/MinutesItemType'
+          $ref: '#/components/schemas/AgendaItemType'
         title:
           type: string
         description:

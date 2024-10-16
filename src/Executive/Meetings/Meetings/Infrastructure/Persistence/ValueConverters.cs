@@ -117,6 +117,14 @@ internal sealed class MinutesIdConverter : ValueConverter<MinutesId, int>
     }
 }
 
+internal sealed class MinutesAttendeeIdConverter : ValueConverter<MinutesAttendeeId, string>
+{
+    public MinutesAttendeeIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
 internal sealed class MinutesItemIdConverter : ValueConverter<MinutesItemId, string>
 {
     public MinutesItemIdConverter()

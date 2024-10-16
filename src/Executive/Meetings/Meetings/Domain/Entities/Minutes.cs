@@ -15,6 +15,9 @@ public enum MinutesState
 public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<MinutesItem> _items = new HashSet<MinutesItem>();
+    readonly HashSet<MinutesAttendee> _attendees = new HashSet<MinutesAttendee>();
+
+    // Apologies / Absentees
 
     protected Minutes()
     {
@@ -29,8 +32,59 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
     public OrganizationId OrganizationId { get; set; }
     public MeetingId MeetingId { get; set; }
 
-    public MinutesState State { get; set;} = MinutesState.Draft;
-    
+
+    public string Title { get; set; }
+    public DateTimeOffset? Date { get; set; } = DateTimeOffset.UtcNow;
+    public string Location { get; set; }
+    public string? Description { get; set; }
+
+    public MinutesState State { get; set; } = MinutesState.Draft;
+
+    public Agenda? Agenda { get; set; }
+
+    public IReadOnlyCollection<MinutesAttendee> Attendees => _attendees;
+
+    public MinutesAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights,
+        MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
+    {
+        int order = 1;
+
+        try
+        {
+            var last = _attendees.OrderByDescending(x => x.Order).First();
+            order = last.Order + 1;
+        }
+        catch { }
+
+        var attendee = new MinutesAttendee
+        {
+            OrganizationId = OrganizationId,
+            MinutesId = Id,
+            Name = name,
+            UserId = userId,
+            Email = email,
+            Role = role,
+            HasSpeakingRights = hasSpeakingRights,
+            HasVotingRights = hasVotingRights,
+            MeetingGroupId = meetingGroupId,
+            MeetingGroupMemberId = meetingGroupMemberId
+        };
+        attendee.Order = order;
+
+        _attendees.Add(attendee);
+
+        return attendee;
+    }
+
+    public bool RemoveAttendee(MinutesAttendee attendee)
+    {
+        return _attendees.Remove(attendee);
+    }
+
+    public DateTimeOffset? Started { get; set; }
+    public DateTimeOffset? Canceled { get; set; }
+    public DateTimeOffset? Ended { get; set; }
+
     /*
     public bool? IsApproved { get; set; }
     public DateTimeOffset? ApprovedAt { get; set; }
@@ -42,7 +96,7 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
 
     public IReadOnlyCollection<MinutesItem> Items => _items;
 
-    public MinutesItem AddItem(MinutesItemType type, AgendaId? agendaId, string? agendaItemId, string title, string description) 
+    public MinutesItem AddItem(AgendaItemType type, AgendaId? agendaId, string? agendaItemId, string title, string description) 
     {
         int order = 1;
 

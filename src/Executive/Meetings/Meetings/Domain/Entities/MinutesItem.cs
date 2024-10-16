@@ -5,11 +5,6 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum MinutesItemType
-{
-    General,
-}
-
 public enum MinutesItemState
 {
     Created,
@@ -21,7 +16,7 @@ public class MinutesItem : Entity<MinutesItemId>, IAuditable, IHasTenant, IHasOr
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
 
-    public MinutesItem(MinutesItemType type, string heading, string details)
+    public MinutesItem(AgendaItemType type, string heading, string details)
     : base(new MinutesItemId())
     {
         Type = type;
@@ -36,7 +31,7 @@ public class MinutesItem : Entity<MinutesItemId>, IAuditable, IHasTenant, IHasOr
     public AgendaId? AgendaId { get; set; }
     public AgendaItemId? AgendaItemId { get; set; }
 
-    public MinutesItemType Type { get; set; }
+    public AgendaItemType Type { get; set; }
 
     public string Heading { get; set; }
     public string Details { get; set; }

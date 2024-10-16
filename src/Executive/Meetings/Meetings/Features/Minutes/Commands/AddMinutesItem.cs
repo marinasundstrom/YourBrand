@@ -10,7 +10,7 @@ using YourBrand.Meetings.Features.Procedure.Command;
 
 namespace YourBrand.Meetings.Features.Minutes.Command;
 
-public record AddMinutesItem(string OrganizationId, int Id, int? AgendaId, string? AgendaItemId, MinutesItemType Type, string Title, string Description, int? MotionId, int? Order) : IRequest<Result<MinutesItemDto>>
+public record AddMinutesItem(string OrganizationId, int Id, int? AgendaId, string? AgendaItemId, AgendaItemType Type, string Title, string Description, int? MotionId, int? Order) : IRequest<Result<MinutesItemDto>>
 {
     public class Validator : AbstractValidator<AddMinutesItem>
     {

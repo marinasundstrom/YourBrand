@@ -7,11 +7,11 @@
     <MudDialog DisableSidePadding="true">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudSelect T="MinutesItemType" Label="Type" Variant="Variant.Outlined" @bind-Value="Model.Type"
+                <MudSelect T="AgendaItemType" Label="Type" Variant="Variant.Outlined" @bind-Value="Model.Type"
                     Class="mt-4">
-                    @foreach (var type in Enum.GetValues<MinutesItemType>())
+                    @foreach (var type in Enum.GetValues<AgendaItemType>())
                     {
-                        <MudSelectItem T="MinutesItemType" Value="@type">@Enum.GetName(typeof(MinutesItemType), type)
+                        <MudSelectItem T="AgendaItemType" Value="@type">@Enum.GetName(typeof(AgendaItemType), type)
                         </MudSelectItem>
                     }
                 </MudSelect>

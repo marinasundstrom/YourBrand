@@ -7,7 +7,7 @@ public class AddEditMinutesItemViewModel
     public int Order { get; set; }
 
     [Required]
-    public MinutesItemType Type { get; set; }
+    public AgendaItemType Type { get; set; }
 
     [Required]
     public string Title { get; set; }

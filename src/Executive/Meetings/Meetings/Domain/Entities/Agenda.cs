@@ -45,6 +45,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
     public MeetingId MeetingId { get; set; }
+    public MinutesId? MinutesId { get; set; }
 
     public AgendaState State { get; set;} = AgendaState.InDraft;
 

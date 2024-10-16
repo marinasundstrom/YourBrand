@@ -7,8 +7,8 @@ namespace YourBrand.Meetings.Domain.Entities;
 
 public enum MotionStatus
 {
-    Proposal,     // Instead of Proposed
-    Adopted,
+    Proposal,
+    Adopted,// Approved
     Rejected,
     Amended
 }

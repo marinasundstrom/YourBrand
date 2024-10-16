@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Minutes.Command;
 
-public sealed record CreateMinutesItemDto(int? AgendaId, string? AgendaItemId, MinutesItemType Type, string Title, string Description);
+public sealed record CreateMinutesItemDto(int? AgendaId, string? AgendaItemId, AgendaItemType Type, string Title, string Description);
 
 public record CreateMinutes(string OrganizationId, int MeetingId, IEnumerable<CreateMinutesItemDto> Items) : IRequest<Result<MinutesDto>>
 {
